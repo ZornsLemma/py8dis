@@ -3,7 +3,6 @@ from __future__ import print_function
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
 def signed8(i):
-    print(i)
     assert 0 <= i <= 255
     if i >= 0x80:
         return i - 256
@@ -31,7 +30,7 @@ def conditional_branch(addr, operand):
 opcodes = {
     0x20: Opcode("JSR", 2, lambda addr, operand: [addr + 3, operand]),
     0x48: Opcode("PHA", 0),
-    0x4c: Opcode("JMP", 2, lambda addr, operand: [operand]),
+    0x4c: Opcode("JMP", 2, lambda addr, operand: [None, operand]),
     0x68: Opcode("PLA", 0),
     0xc9: Opcode("CMP", 1, immediate),
     0xd0: Opcode("BNE", 1, conditional_branch),
@@ -45,12 +44,12 @@ def disassemble_instruction(addr):
     opcode_value = memory[addr]
     print(hex(opcode_value))
     if opcode_value not in opcodes:
-        return []
+        return [None]
     opcode = opcodes[opcode_value]
     for i in range(opcode.operand_length):
         if what[addr + 1 + i] is not None:
             # TODO: Warn?
-            return []
+            return [None]
         # TODO: check for memory[addr + 1 + i] being None?
     what[addr] = WHAT_OPCODE
     operand = 0
@@ -64,12 +63,14 @@ WHAT_OPCODE = 1
 WHAT_OPERAND = 2
 
 memory = [None] * 64*1024
-labels = [None] * 64*1024
+labels = {}
 what = [None] * 64*1024
 
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
     memory[0x8000:] = bytearray(f.read())
 assert all(x is None or (0 <= x <= 255) for x in memory)
+start_addr = 0x8000
+end_addr = 0xc000
 
 entry_points = [0x8003]
 
@@ -77,4 +78,28 @@ while len(entry_points) > 0:
     entry_point = entry_points.pop(0)
     if what[entry_point] is None:
         print(hex(entry_point))
-        entry_points.extend(disassemble_instruction(entry_point))
+        new_entry_points = disassemble_instruction(entry_point)
+        assert len(new_entry_points) >= 1
+        implied_entry_point = new_entry_points.pop(0)
+        if implied_entry_point is not None:
+            entry_points.append(implied_entry_point)
+        for new_entry_point in new_entry_points:
+            if new_entry_point not in labels:
+                labels[new_entry_point] = "L%04X" % new_entry_point
+            entry_points.append(new_entry_point)
+
+addr = start_addr
+while addr < end_addr:
+    if addr in labels:
+        print(".%s" % labels[addr])
+    # TODO: "Concatenate" adjacent EQUBs with no intervening labels
+    # TODO: String as opposed to raw data
+    if what[addr] is None:
+        print("    EQUB &%02X", memory[addr])
+        addr += 1
+    else:
+        assert what[addr] == WHAT_OPCODE
+        opcode = opcodes[memory[addr]]
+        print("    %s TODO!" % opcode.mnemonic)
+        addr += 1 + opcode.operand_length
+    # TODO: Handle labels occuring "inside" an instruction
