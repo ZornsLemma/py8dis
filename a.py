@@ -9,32 +9,57 @@ def signed8(i):
     else:
         return i
 
-class Opcode(object):
-    def __init__(self, mnemonic, operand_length, control_targets = None):
+def get_abs(i):
+    assert memory[i] is not None and memory[i+1] is not None
+    return memory[i] + (memory[i+1] << 8)
+
+class OpcodeImmediate(object):
+    def __init__(self, mnemonic):
         self.mnemonic = mnemonic
-        self.operand_length = operand_length
-        if control_targets is None:
-            self.control_targets = lambda addr, operand: [addr + 1]
-        else:
-            self.control_targets = control_targets
+        self.operand_length = 0
 
-def immediate(addr, operand):
-    return [addr + 2]
+    def disassemble(self, addr):
+        return [addr + 1]
 
-def conditional_branch(addr, operand):
-    return [addr + 2, addr + 2 + signed8(operand)]
+    def as_string(self, addr):
+        return self.mnemonic
+
+class OpcodeAbs(object):
+    def as_string(self, addr):
+        operand = get_abs(addr + 1)
+        assert operand in labels
+        return "%s %s" % (self.mnemonic, labels[operand])
+
+class OpcodeJmpAbs(OpcodeAbs):
+    def __init__(self):
+        self.mnemonic = "JMP"
+        self.operand_length = 2
+
+    def disassemble(self, addr):
+        return [None, get_abs(addr + 1)]
+
+class OpcodeJsr(OpcodeAbs):
+    def __init__(self):
+        self.mnemonic = "JSR"
+        self.operand_length = 2
+
+    def disassemble(self, addr):
+        return [addr + 3, get_abs(addr + 1)]
+
+#def conditional_branch(addr, operand):
+#    return [addr + 2, addr + 2 + signed8(operand)]
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
 # TODO: Fill in gaps!
 # TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
 # TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
-    0x20: Opcode("JSR", 2, lambda addr, operand: [addr + 3, operand]),
-    0x48: Opcode("PHA", 0),
-    0x4c: Opcode("JMP", 2, lambda addr, operand: [None, operand]),
-    0x68: Opcode("PLA", 0),
-    0xc9: Opcode("CMP", 1, immediate),
-    0xd0: Opcode("BNE", 1, conditional_branch),
+    0x20: OpcodeJsr(),
+    0x48: OpcodeImmediate("PHA"),
+    0x4c: OpcodeJmpAbs(),
+    0x68: OpcodeImmediate("PLA"),
+    #0xc9: Opcode("CMP", 1, immediate),
+    #0xd0: Opcode("BNE", 1, conditional_branch),
 }
 
 def reverse_range(length):
@@ -55,11 +80,9 @@ def disassemble_instruction(addr):
     # Up to this point we hadn't decided addr contains an instruction; we now
     # have.
     what[addr] = (WHAT_OPCODE, 1 + opcode.operand_length)
-    operand = 0
     for i in reverse_range(opcode.operand_length):
         what[addr + 1 + i] = (WHAT_OPERAND, 1) # length a bit irrelevant
-        operand = (operand << 8) | memory[addr + 1 + i]
-    return opcode.control_targets(addr, operand)
+    return opcode.disassemble(addr)
 
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
@@ -136,7 +159,7 @@ while addr < end_addr:
             print(s)
     elif what_type == WHAT_OPCODE:
         opcode = opcodes[memory[addr]]
-        print("    %s TODO!" % opcode.mnemonic)
+        print("    %s" % opcode.as_string(addr))
         addr += 1 + opcode.operand_length
     else:
         assert False
