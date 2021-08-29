@@ -1,5 +1,15 @@
 from __future__ import print_function
 
+# TODO: Completely ignoring wrapping at top and bottom of memory for now...
+
+def signed8(i):
+    print(i)
+    assert 0 <= i <= 255
+    if i >= 0x80:
+        return i - 256
+    else:
+        return i
+
 class Opcode(object):
     def __init__(self, mnemonic, operand_length, control_targets = None):
         self.mnemonic = mnemonic
@@ -9,11 +19,20 @@ class Opcode(object):
         else:
             self.control_targets = control_targets
 
+def immediate(addr, operand):
+    return [addr + 2]
+
+def conditional_branch(addr, operand):
+    return [addr + 2, addr + 2 + signed8(operand)]
+
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
 # TODO: Fill in gaps!
+# TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
 opcodes = {
     0x48: Opcode("PHA", 0),
     0x4c: Opcode("JMP", 2, lambda addr, operand: [operand]),
+    0xc9: Opcode("CMP", 1, immediate),
+    0xd0: Opcode("BNE", 1, conditional_branch),
 }
 
 def reverse_range(length):
