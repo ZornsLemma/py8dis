@@ -39,26 +39,41 @@ class OpcodeImmediate(object):
     def as_string(self, addr):
         return "%s #&%02X" % (self.mnemonic, get_u8(addr + 1))
 
+def add_default_label(addr):
+    if addr not in labels:
+        labels[addr] = "L%04X" % addr
+
 def get_label(addr):
     assert addr in labels
     return labels[addr]
 
 class OpcodeAbs(object):
+    def __init__(self, mnemonic):
+        self.mnemonic = mnemonic
+        self.operand_length = 2
+
     def as_string(self, addr):
         return "%s %s" % (self.mnemonic, get_label(get_abs(addr + 1)))
 
+class OpcodeDataAbs(OpcodeAbs):
+    def __init__(self, mnemonic):
+        super(OpcodeDataAbs, self).__init__(mnemonic)
+
+    def disassemble(self, addr):
+        # TODO: Should we *always* do this in disassemble() instead of special-casing non-consecutive instructions? ie call add_default_label in control flow affecting instructions
+        add_default_label(get_abs(addr + 1))
+        return [addr + 3]
+
 class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
-        self.mnemonic = "JMP"
-        self.operand_length = 2
+        super(OpcodeJmpAbs, self).__init__("JMP")
 
     def disassemble(self, addr):
         return [None, get_abs(addr + 1)]
 
 class OpcodeJsr(OpcodeAbs):
     def __init__(self):
-        self.mnemonic = "JSR"
-        self.operand_length = 2
+        super(OpcodeJsr, self).__init__("JSR")
 
     def disassemble(self, addr):
         return [addr + 3, get_abs(addr + 1)]
@@ -66,7 +81,7 @@ class OpcodeJsr(OpcodeAbs):
 class OpcodeConditionalBranch(object):
     def __init__(self, mnemonic):
         self.mnemonic = mnemonic
-        self.operand_length = 2
+        self.operand_length = 1
 
     def _target(self, addr):
         return addr + 2 + signed8(get_u8(addr + 1))
@@ -89,6 +104,7 @@ opcodes = {
     0x48: OpcodeImplied("PHA"),
     0x4c: OpcodeJmpAbs(),
     0x68: OpcodeImplied("PLA"),
+    0xad: OpcodeDataAbs("LDA"),
     0xc9: OpcodeImmediate("CMP"),
     0xd0: OpcodeConditionalBranch("BNE"),
 }
@@ -143,8 +159,7 @@ while len(entry_points) > 0:
         if implied_entry_point is not None:
             entry_points.append(implied_entry_point)
         for new_entry_point in new_entry_points:
-            if new_entry_point not in labels:
-                labels[new_entry_point] = "L%04X" % new_entry_point
+            add_default_label(new_entry_point)
             entry_points.append(new_entry_point)
 
 # Convert anything not explicitly disassembled into data.
@@ -176,12 +191,12 @@ while addr < end_addr:
         # TODO: This isn't handling instructions with labels in the middle
         if (addr + i) in labels:
             assert what[addr][0] != WHAT_OPCODE
-            print("Z")
             what[addr + i] = (what[addr][0], what[addr][1] - i)
             what[addr] = (what[addr][0], i)
             break
-    print("Q")
     addr += what[addr][1]
+
+# TODO: Emit "constant labels" which aren't addresses in the start_addr/end_addr range
 
 addr = start_addr
 while addr < end_addr:
