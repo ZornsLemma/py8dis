@@ -47,6 +47,18 @@ def get_label(addr):
     assert addr in labels
     return labels[addr]
 
+class OpcodeZp(object):
+    def __init__(self, mnemonic):
+        self.mnemonic = mnemonic
+        self.operand_length = 1
+
+    def disassemble(self, addr):
+        add_default_label(get_u8(addr + 1))
+        return [addr + 1]
+
+    def as_string(self, addr):
+        return "%s %s" % (self.mnemonic, get_label(get_u8(addr + 1)))
+
 class OpcodeAbs(object):
     def __init__(self, mnemonic):
         self.mnemonic = mnemonic
@@ -100,13 +112,21 @@ class OpcodeConditionalBranch(object):
 # TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
 # TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
+    0x08: OpcodeImplied("PHP"),
     0x20: OpcodeJsr(),
     0x48: OpcodeImplied("PHA"),
     0x4c: OpcodeJmpAbs(),
     0x68: OpcodeImplied("PLA"),
+    0x8a: OpcodeImplied("TXA"),
+    0x98: OpcodeImplied("TYA"),
+    0xa2: OpcodeImmediate("LDX"),
+    0xa6: OpcodeZp("LDX"),
+    0xa9: OpcodeImmediate("LDA"),
     0xad: OpcodeDataAbs("LDA"),
     0xc9: OpcodeImmediate("CMP"),
+    0xe0: OpcodeImmediate("CPX"),
     0xd0: OpcodeConditionalBranch("BNE"),
+    0xf0: OpcodeConditionalBranch("BEQ"),
 }
 
 def reverse_range(length):
@@ -151,7 +171,7 @@ entry_points = [0x8003]
 
 while len(entry_points) > 0:
     entry_point = entry_points.pop(0)
-    if what[entry_point] is None:
+    if what[entry_point] is None and start_addr <= entry_point < end_addr:
         print(hex(entry_point))
         new_entry_points = disassemble_instruction(entry_point)
         assert len(new_entry_points) >= 1
