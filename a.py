@@ -54,22 +54,26 @@ class OpcodeZp(object):
 
     def disassemble(self, addr):
         add_default_label(get_u8(addr + 1))
-        return [addr + 1]
+        return [addr + 2]
 
     def as_string(self, addr):
         return "%s %s" % (self.mnemonic, get_label(get_u8(addr + 1)))
 
 class OpcodeAbs(object):
-    def __init__(self, mnemonic):
+    def __init__(self, mnemonic, suffix = None):
         self.mnemonic = mnemonic
+        if suffix is None:
+            self.suffix = ""
+        else:
+            self.suffix = suffix
         self.operand_length = 2
 
     def as_string(self, addr):
-        return "%s %s" % (self.mnemonic, get_label(get_abs(addr + 1)))
+        return "%s %s%s" % (self.mnemonic, get_label(get_abs(addr + 1)), self.suffix)
 
 class OpcodeDataAbs(OpcodeAbs):
-    def __init__(self, mnemonic):
-        super(OpcodeDataAbs, self).__init__(mnemonic)
+    def __init__(self, mnemonic, suffix = None):
+        super(OpcodeDataAbs, self).__init__(mnemonic, suffix)
 
     def disassemble(self, addr):
         # TODO: Should we *always* do this in disassemble() instead of special-casing non-consecutive instructions? ie call add_default_label in control flow affecting instructions
@@ -114,17 +118,20 @@ class OpcodeConditionalBranch(object):
 opcodes = {
     0x08: OpcodeImplied("PHP"),
     0x20: OpcodeJsr(),
+    0x28: OpcodeImplied("PLP"),
     0x48: OpcodeImplied("PHA"),
     0x4c: OpcodeJmpAbs(),
     0x68: OpcodeImplied("PLA"),
     0x8a: OpcodeImplied("TXA"),
     0x98: OpcodeImplied("TYA"),
+    0x9d: OpcodeDataAbs("STA", ",X"),
     0xa2: OpcodeImmediate("LDX"),
     0xa6: OpcodeZp("LDX"),
     0xa9: OpcodeImmediate("LDA"),
     0xad: OpcodeDataAbs("LDA"),
     0xc9: OpcodeImmediate("CMP"),
     0xe0: OpcodeImmediate("CPX"),
+    0xe8: OpcodeImplied("INX"),
     0xd0: OpcodeConditionalBranch("BNE"),
     0xf0: OpcodeConditionalBranch("BEQ"),
 }
