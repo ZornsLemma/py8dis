@@ -27,6 +27,7 @@ def conditional_branch(addr, operand):
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
 # TODO: Fill in gaps!
 # TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
+# TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
     0x20: Opcode("JSR", 2, lambda addr, operand: [addr + 3, operand]),
     0x48: Opcode("PHA", 0),
@@ -75,6 +76,7 @@ assert all(x is None or (0 <= x <= 255) for x in memory)
 start_addr = 0x8000
 end_addr = 0xc000
 
+labels[0x8003] = "service_entry"
 entry_points = [0x8003]
 
 while len(entry_points) > 0:
@@ -96,6 +98,22 @@ for addr in range(len(what)):
     if what[addr] is None:
         what[addr] = (WHAT_DATA, 1)
 
+# Merge adjacent items of data.
+addr = start_addr
+while addr < end_addr:
+    if what[addr][0] == WHAT_DATA:
+        new_addr = addr + what[addr][1]
+        #print("X", hex(addr), hex(new_addr), what[new_addr])
+        while new_addr < end_addr and what[new_addr][0] == WHAT_DATA:
+            new_addr += what[new_addr][1]
+            #print("Y", hex(addr), hex(new_addr), what[new_addr])
+        what[addr] = (WHAT_DATA, new_addr - addr)
+        for i in range(addr + 1, new_addr):
+            what[i] = None
+        addr = new_addr
+    else:
+        addr = addr + 1
+
 # TODO: A data concatenation pass
 # TODO: A label splitting pass for where labels appear in middle of data/string/instruction
 
@@ -107,8 +125,17 @@ while addr < end_addr:
     # TODO: String as opposed to raw data
     what_type = what[addr][0]
     if what_type == WHAT_DATA:
-        print("    EQUB &%02X" % memory[addr])
-        addr += 1
+        data_len = what[addr][1]
+        while data_len > 0:
+            s = "    EQUB "
+            sep = ""
+            for i in range(8):
+                if data_len > 0:
+                    s += sep + "&%02X" % memory[addr]
+                    sep = ","
+                    addr += 1
+                    data_len -= 1
+            print(s)
     elif what_type == WHAT_OPCODE:
         opcode = opcodes[memory[addr]]
         print("    %s TODO!" % opcode.mnemonic)
