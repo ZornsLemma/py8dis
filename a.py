@@ -39,11 +39,13 @@ class OpcodeImmediate(object):
     def as_string(self, addr):
         return "%s #&%02X" % (self.mnemonic, get_u8(addr + 1))
 
+def get_label(addr):
+    assert addr in labels
+    return labels[addr]
+
 class OpcodeAbs(object):
     def as_string(self, addr):
-        operand = get_abs(addr + 1)
-        assert operand in labels
-        return "%s %s" % (self.mnemonic, labels[operand])
+        return "%s %s" % (self.mnemonic, get_label(get_abs(addr + 1)))
 
 class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
@@ -61,6 +63,20 @@ class OpcodeJsr(OpcodeAbs):
     def disassemble(self, addr):
         return [addr + 3, get_abs(addr + 1)]
 
+class OpcodeConditionalBranch(object):
+    def __init__(self, mnemonic):
+        self.mnemonic = mnemonic
+        self.operand_length = 2
+
+    def _target(self, addr):
+        return addr + 2 + signed8(get_u8(addr + 1))
+
+    def disassemble(self, addr):
+        return [addr + 2, self._target(addr)]
+
+    def as_string(self, addr):
+        return "%s %s" % (self.mnemonic, get_label(self._target(addr)))
+
 #def conditional_branch(addr, operand):
 #    return [addr + 2, addr + 2 + signed8(operand)]
 
@@ -74,7 +90,7 @@ opcodes = {
     0x4c: OpcodeJmpAbs(),
     0x68: OpcodeImplied("PLA"),
     0xc9: OpcodeImmediate("CMP"),
-    #0xd0: Opcode("BNE", 1, conditional_branch),
+    0xd0: OpcodeConditionalBranch("BNE"),
 }
 
 def reverse_range(length):
