@@ -169,6 +169,19 @@ while addr < end_addr:
         addr = addr + 1
 
 # TODO: A label splitting pass for where labels appear in middle of data/string/instruction
+addr = start_addr
+while addr < end_addr:
+    print(hex(addr), what[addr])
+    for i in range(1, what[addr][1]):
+        # TODO: This isn't handling instructions with labels in the middle
+        if (addr + i) in labels:
+            assert what[addr][0] != WHAT_OPCODE
+            print("Z")
+            what[addr + i] = (what[addr][0], what[addr][1] - i)
+            what[addr] = (what[addr][0], i)
+            break
+    print("Q")
+    addr += what[addr][1]
 
 addr = start_addr
 while addr < end_addr:
