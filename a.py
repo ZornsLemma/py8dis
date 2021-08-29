@@ -94,6 +94,16 @@ class OpcodeJsr(OpcodeAbs):
     def disassemble(self, addr):
         return [addr + 3, get_abs(addr + 1)]
 
+class OpcodeRts(object):
+    def __init__(self):
+        self.operand_length = 0
+
+    def disassemble(self, addr):
+        return [None]
+
+    def as_string(self, addr):
+        return "RTS"
+
 class OpcodeConditionalBranch(object):
     def __init__(self, mnemonic):
         self.mnemonic = mnemonic
@@ -117,18 +127,26 @@ class OpcodeConditionalBranch(object):
 # TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
     0x08: OpcodeImplied("PHP"),
+    0x0a: OpcodeImplied("ASL A"),
     0x20: OpcodeJsr(),
     0x28: OpcodeImplied("PLP"),
+    0x29: OpcodeImmediate("AND"),
+    0x38: OpcodeImplied("SEC"),
+    0x3e: OpcodeDataAbs("ROL", ",X"),
     0x48: OpcodeImplied("PHA"),
     0x4c: OpcodeJmpAbs(),
+    0x60: OpcodeRts(),
     0x68: OpcodeImplied("PLA"),
+    0x7e: OpcodeDataAbs("ROR", ",X"),
     0x8a: OpcodeImplied("TXA"),
+    0x90: OpcodeConditionalBranch("BCC"),
     0x98: OpcodeImplied("TYA"),
     0x9d: OpcodeDataAbs("STA", ",X"),
     0xa2: OpcodeImmediate("LDX"),
     0xa6: OpcodeZp("LDX"),
     0xa9: OpcodeImmediate("LDA"),
     0xad: OpcodeDataAbs("LDA"),
+    0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc9: OpcodeImmediate("CMP"),
     0xe0: OpcodeImmediate("CPX"),
     0xe8: OpcodeImplied("INX"),
@@ -174,6 +192,7 @@ start_addr = 0x8000
 end_addr = 0xc000
 
 labels[0x8003] = "service_entry"
+labels[0xfff4] = "osbyte"
 entry_points = [0x8003]
 
 while len(entry_points) > 0:
@@ -256,3 +275,5 @@ while addr < end_addr:
 # - maybe make what[x] a tuple something like (instruction, 3) or (string, 22) or (data, 19), i.e. a "type to emit" and the number of bytes it occupies. A cleaning up pass immediately before emitting could concatenate single data bytes and split strings/data with labels in the middle of them.
 # - some sort of support for saying "immediate operand at addr xxxx has symbolic value '<L5332'" (we must *verify* this is correct, not just roll with it)
 # - a standard helper function to diassemble a ROM header
+
+# TODO: Option to output lower case mnemonics, perhaps also default labels including lower case hex
