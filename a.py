@@ -29,8 +29,10 @@ def conditional_branch(addr, operand):
 # TODO: Fill in gaps!
 # TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
 opcodes = {
+    0x20: Opcode("JSR", 2, lambda addr, operand: [addr + 3, operand]),
     0x48: Opcode("PHA", 0),
     0x4c: Opcode("JMP", 2, lambda addr, operand: [operand]),
+    0x68: Opcode("PLA", 0),
     0xc9: Opcode("CMP", 1, immediate),
     0xd0: Opcode("BNE", 1, conditional_branch),
 }
