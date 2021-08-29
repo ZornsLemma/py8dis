@@ -9,11 +9,15 @@ def signed8(i):
     else:
         return i
 
+def get_u8(i):
+    assert memory[i] is not None
+    return memory[i]
+
 def get_abs(i):
     assert memory[i] is not None and memory[i+1] is not None
     return memory[i] + (memory[i+1] << 8)
 
-class OpcodeImmediate(object):
+class OpcodeImplied(object):
     def __init__(self, mnemonic):
         self.mnemonic = mnemonic
         self.operand_length = 0
@@ -23,6 +27,17 @@ class OpcodeImmediate(object):
 
     def as_string(self, addr):
         return self.mnemonic
+
+class OpcodeImmediate(object):
+    def __init__(self, mnemonic):
+        self.mnemonic = mnemonic
+        self.operand_length = 1
+
+    def disassemble(self, addr):
+        return [addr + 2]
+
+    def as_string(self, addr):
+        return "%s #&%02X" % (self.mnemonic, get_u8(addr + 1))
 
 class OpcodeAbs(object):
     def as_string(self, addr):
@@ -55,10 +70,10 @@ class OpcodeJsr(OpcodeAbs):
 # TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
     0x20: OpcodeJsr(),
-    0x48: OpcodeImmediate("PHA"),
+    0x48: OpcodeImplied("PHA"),
     0x4c: OpcodeJmpAbs(),
-    0x68: OpcodeImmediate("PLA"),
-    #0xc9: Opcode("CMP", 1, immediate),
+    0x68: OpcodeImplied("PLA"),
+    0xc9: OpcodeImmediate("CMP"),
     #0xd0: Opcode("BNE", 1, conditional_branch),
 }
 
