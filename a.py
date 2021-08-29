@@ -95,7 +95,7 @@ while addr < end_addr:
     # TODO: "Concatenate" adjacent EQUBs with no intervening labels
     # TODO: String as opposed to raw data
     if what[addr] is None:
-        print("    EQUB &%02X", memory[addr])
+        print("    EQUB &%02X" % memory[addr])
         addr += 1
     else:
         assert what[addr] == WHAT_OPCODE
