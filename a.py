@@ -1,13 +1,18 @@
 from __future__ import print_function
 
 class Opcode(object):
-    def __init__(self, mnemonic, operand_length, control_targets):
+    def __init__(self, mnemonic, operand_length, control_targets = None):
         self.mnemonic = mnemonic
         self.operand_length = operand_length
-        self.control_targets = control_targets
+        if control_targets is None:
+            self.control_targets = lambda addr, operand: [addr + 1]
+        else:
+            self.control_targets = control_targets
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
+# TODO: Fill in gaps!
 opcodes = {
+    0x48: Opcode("PHA", 0),
     0x4c: Opcode("JMP", 2, lambda addr, operand: [operand]),
 }
 
@@ -17,6 +22,7 @@ def reverse_range(length):
 def disassemble_instruction(addr):
     assert what[addr] is None
     opcode_value = memory[addr]
+    print(hex(opcode_value))
     if opcode_value not in opcodes:
         return []
     opcode = opcodes[opcode_value]
