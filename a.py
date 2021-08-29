@@ -51,14 +51,17 @@ def disassemble_instruction(addr):
             # TODO: Warn?
             return [None]
         # TODO: check for memory[addr + 1 + i] being None?
-    what[addr] = WHAT_OPCODE
+    # Up to this point we hadn't decided addr contains an instruction; we now
+    # have.
+    what[addr] = (WHAT_OPCODE, 1 + opcode.operand_length)
     operand = 0
     for i in reverse_range(opcode.operand_length):
-        what[addr + 1 + i] = WHAT_OPERAND
+        what[addr + 1 + i] = (WHAT_OPERAND, 1) # length a bit irrelevant
         operand = (operand << 8) | memory[addr + 1 + i]
     return opcode.control_targets(addr, operand)
 
 # TODO: What's best way to do this "enum"?
+WHAT_DATA = 0
 WHAT_OPCODE = 1
 WHAT_OPERAND = 2
 
@@ -88,22 +91,33 @@ while len(entry_points) > 0:
                 labels[new_entry_point] = "L%04X" % new_entry_point
             entry_points.append(new_entry_point)
 
+# Convert anything not explicitly disassembled into data.
+for addr in range(len(what)):
+    if what[addr] is None:
+        what[addr] = (WHAT_DATA, 1)
+
+# TODO: A data concatenation pass
+# TODO: A label splitting pass for where labels appear in middle of data/string/instruction
+
 addr = start_addr
 while addr < end_addr:
     if addr in labels:
         print(".%s" % labels[addr])
     # TODO: "Concatenate" adjacent EQUBs with no intervening labels
     # TODO: String as opposed to raw data
-    if what[addr] is None:
+    what_type = what[addr][0]
+    if what_type == WHAT_DATA:
         print("    EQUB &%02X" % memory[addr])
         addr += 1
-    else:
-        assert what[addr] == WHAT_OPCODE
+    elif what_type == WHAT_OPCODE:
         opcode = opcodes[memory[addr]]
         print("    %s TODO!" % opcode.mnemonic)
         addr += 1 + opcode.operand_length
+    else:
+        assert False
     # TODO: Handle labels occuring "inside" an instruction
 
 
 # TODO/thoughts:
 # - maybe make what[x] a tuple something like (instruction, 3) or (string, 22) or (data, 19), i.e. a "type to emit" and the number of bytes it occupies. A cleaning up pass immediately before emitting could concatenate single data bytes and split strings/data with labels in the middle of them.
+# - some sort of support for saying "immediate operand at addr xxxx has symbolic value '<L5332'" (we must *verify* this is correct, not just roll with it)
