@@ -114,14 +114,12 @@ while addr < end_addr:
     else:
         addr = addr + 1
 
-# TODO: A data concatenation pass
 # TODO: A label splitting pass for where labels appear in middle of data/string/instruction
 
 addr = start_addr
 while addr < end_addr:
     if addr in labels:
         print(".%s" % labels[addr])
-    # TODO: "Concatenate" adjacent EQUBs with no intervening labels
     # TODO: String as opposed to raw data
     what_type = what[addr][0]
     if what_type == WHAT_DATA:
@@ -148,3 +146,4 @@ while addr < end_addr:
 # TODO/thoughts:
 # - maybe make what[x] a tuple something like (instruction, 3) or (string, 22) or (data, 19), i.e. a "type to emit" and the number of bytes it occupies. A cleaning up pass immediately before emitting could concatenate single data bytes and split strings/data with labels in the middle of them.
 # - some sort of support for saying "immediate operand at addr xxxx has symbolic value '<L5332'" (we must *verify* this is correct, not just roll with it)
+# - a standard helper function to diassemble a ROM header
