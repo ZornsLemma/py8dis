@@ -103,3 +103,7 @@ while addr < end_addr:
         print("    %s TODO!" % opcode.mnemonic)
         addr += 1 + opcode.operand_length
     # TODO: Handle labels occuring "inside" an instruction
+
+
+# TODO/thoughts:
+# - maybe make what[x] a tuple something like (instruction, 3) or (string, 22) or (data, 19), i.e. a "type to emit" and the number of bytes it occupies. A cleaning up pass immediately before emitting could concatenate single data bytes and split strings/data with labels in the middle of them.
