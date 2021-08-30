@@ -307,16 +307,51 @@ def inline_nul_string_hook(target, addr):
         addr += 1
     return addr + 1
 
-def string_cr(addr):
+def string_terminated(addr, terminator):
+    initial_addr = addr
     while True:
         what[addr] = (WHAT_STRING, 1)
-        if memory[addr] == 0x0d:
+        if memory[addr] == terminator:
             break
-        addr +=1
+        addr += 1
+    return addr + 1
+
+def string_cr(addr):
+    return string_terminated(addr, 13)
+
+def string_nul(addr):
+    return string_terminated(addr, 0)
 
 def string_n(addr, n):
     for i in range(n):
         what[addr + i] = (WHAT_STRING, 1)
+
+def is_sideways_rom():
+    def check_entry(addr, entry_type):
+        jmp_abs_opcode = 0x4c
+        labels[addr] = entry_type + "_entry"
+        if memory[addr] == jmp_abs_opcode:
+            entry_points.append(addr)
+            labels[get_abs(addr + 1)] = entry_type + "_handler"
+        else:
+            what[addr    ] = (WHAT_DATA, 1)
+            what[addr + 1] = (WHAT_DATA, 1)
+            what[addr + 2] = (WHAT_DATA, 1)
+    check_entry(0x8000, "language")
+    check_entry(0x8003, "service")
+    labels[0x8006] = "rom_type"
+    labels[0x8007] = "copyright_offset"
+    copyright_offset = memory[0x8007]
+    expressions[0x8007] = "copyright - language_entry"
+    labels[0x8008] = "binary_version"
+    labels[0x8009] = "title"
+    nul_at_title_end = string_nul(0x8009) - 1
+    if nul_at_title_end < (0x8000 + copyright_offset):
+        labels[nul_at_title_end] = "version"
+        string_nul(nul_at_title_end + 1)
+    labels[0x8000 + copyright_offset] = "copyright"
+    string_nul(0x8000 + copyright_offset + 1)
+    # TODO: We could recognise tube transfer/relocation data in header
 
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
@@ -329,6 +364,7 @@ labels = {}
 what = [None] * 64*1024
 expressions = {}
 jsr_hooks = {}
+entry_points = []
 
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
     memory[0x8000:] = bytearray(f.read())
@@ -336,8 +372,8 @@ assert all(x is None or (0 <= x <= 255) for x in memory)
 start_addr = 0x8000
 end_addr = 0xc000
 
-labels[0x8003] = "service_entry"
-labels[0x8a15] = "service_handler"
+is_sideways_rom()
+
 labels[0x9611] = "sta_e09_if_d6c_b7_set"
 labels[0x96b4] = "error_template_minus_1"
 what[0x96b5] = (WHAT_STRING, 1) # TODO: REPETITIVE, NEED HELPER FN
@@ -374,7 +410,6 @@ jsr_hooks[0x96b8] = generate_error_inline_hook
 jsr_hooks[0x96d4] = generate_error_inline_hook
 jsr_hooks[0x96d1] = generate_error_inline_hook
 
-entry_points = [0x8003]
 
 def split_jump_table_entry(low_addr, high_addr):
     # +1 as the jump table entry is pushed onto stack and entered via RTS.
