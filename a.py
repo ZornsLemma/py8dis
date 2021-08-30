@@ -174,6 +174,7 @@ opcodes = {
     0x30: OpcodeConditionalBranch("BMI"),
     0x38: OpcodeImplied("SEC"),
     0x3e: OpcodeDataAbs("ROL", ",X"),
+    0x46: OpcodeZp("LSR"),
     0x48: OpcodeImplied("PHA"),
     0x49: OpcodeImmediate("EOR"),
     0x4c: OpcodeJmpAbs(),
@@ -217,14 +218,18 @@ opcodes = {
     0xb9: OpcodeDataAbs("LDA", ",Y"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc0: OpcodeImmediate("CPY"),
+    0xc4: OpcodeZp("CPY"),
     0xc6: OpcodeZp("DEC"),
     0xc8: OpcodeImplied("INY"),
     0xc9: OpcodeImmediate("CMP"),
     0xca: OpcodeImplied("DEX"),
     0xd1: OpcodeZp("CMP", "),Y"),
+    0xdd: OpcodeDataAbs("CMP", ",X"),
     0xe0: OpcodeImmediate("CPX"),
+    0xe4: OpcodeZp("CPX"),
     0xe6: OpcodeZp("INC"),
     0xe8: OpcodeImplied("INX"),
+    0xe9: OpcodeImmediate("SBC"),
     0xea: OpcodeImplied("NOP"),
     0xd0: OpcodeConditionalBranch("BNE"),
     0xf0: OpcodeConditionalBranch("BEQ"),
@@ -296,6 +301,7 @@ def print_inline_top_bit_clear_hook(target, addr):
 jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 
 # This subroutine generates an error using the following NUL-terminated string.
+# TODO: I think it may actually return in some cases - need to study its code more
 labels[0x96b8] = "generate_error_inline"
 def generate_error_inline_hook(target, addr):
     inline_nul_string_hook(target, addr) # discard return address
