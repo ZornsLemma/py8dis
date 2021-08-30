@@ -250,8 +250,9 @@ def disassemble_instruction(addr):
 
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
-WHAT_OPCODE = 1
-WHAT_OPERAND = 2
+WHAT_STRING = 1
+WHAT_OPCODE = 2
+WHAT_OPERAND = 3
 
 memory = [None] * 64*1024
 labels = {}
@@ -276,6 +277,7 @@ labels[0x9145] = "print_inline_top_bit_clear"
 def print_inline_top_bit_clear_hook(target, addr):
     addr += 3
     while memory[addr] & 0x80 == 0:
+        what[addr] = (WHAT_STRING, 1)
         addr += 1
     return addr
 jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
@@ -316,13 +318,13 @@ for addr in range(len(what)):
 # Merge adjacent items of data.
 addr = start_addr
 while addr < end_addr:
-    if what[addr][0] == WHAT_DATA:
+    if what[addr][0] in (WHAT_DATA, WHAT_STRING):
         new_addr = addr + what[addr][1]
         #print("X", hex(addr), hex(new_addr), what[new_addr])
-        while new_addr < end_addr and what[new_addr][0] == WHAT_DATA:
+        while new_addr < end_addr and what[new_addr][0] == what[addr][0]:
             new_addr += what[new_addr][1]
             #print("Y", hex(addr), hex(new_addr), what[new_addr])
-        what[addr] = (WHAT_DATA, new_addr - addr)
+        what[addr] = (what[addr][0], new_addr - addr)
         for i in range(addr + 1, new_addr):
             what[i] = None
         addr = new_addr
@@ -381,6 +383,28 @@ while addr < end_addr:
                     addr += 1
                     data_len -= 1
             print(s)
+    elif what_type == WHAT_STRING:
+        # TODO: This should wrap long strings across multiple lines
+        data_len = what[addr][1]
+        s = "    EQUS "
+        in_quote = False
+        while data_len > 0:
+            # TODO: Assumes ASCII (not e.g. PETSCII)
+            if 32 <= memory[addr] <= 126 and memory[addr] != ord('"'):
+                if not in_quote:
+                    s += '"'
+                    in_quote = True
+                s += chr(memory[addr])
+            else:
+                if in_quote:
+                    s += '"'
+                    in_quote = False
+                s += get_constant8(addr)
+            addr += 1
+            data_len -= 1
+        if in_quote:
+            s += '"'
+        print(s)
     elif what_type == WHAT_OPCODE:
         opcode = opcodes[memory[addr]]
         print("    %s" % opcode.as_string(addr))
