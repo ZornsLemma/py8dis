@@ -19,9 +19,13 @@ def is_classified(addr, length):
 
 def add_classification(addr, classification):
     assert not is_classified(addr, classification.length())
+    assert classification is not None
     classifications[addr] = classification
     for i in range(1, classification.length()):
         classifications[addr+i] = 0 # TODO: slightly ugly dummy value
+
+def emit(start_addr, end_addr):
+    assert False # SFTODO
 
 
 class Label(object):
