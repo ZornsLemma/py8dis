@@ -448,12 +448,12 @@ for i in range(6):
     pc = string_hi(pc)
     pc += 2
 
-# TODO: At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y
-# TODO: I don't think the 22 to 22+8-ish range is correct now I am taking the L8600 thing into account
+# TODO: At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection.
+min_y = 0x81
 for i in range(8): # TODO
-    if i < 5 or i == 7:
-        split_jump_table_entry(0x8869 + 22 + i, 0x8861 + 22 + i, 0)
-        rts_low_addr = 0x8600 + 22 + i
+    if True:
+        split_jump_table_entry(0x8869 + min_y + i, 0x8861 + min_y + i, 0)
+        rts_low_addr = 0x8600 + min_y + i
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
         labelled_entry_point(target_addr)
         print("XK", hex(target_addr))
