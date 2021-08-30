@@ -204,6 +204,7 @@ WHAT_OPERAND = 2
 memory = [None] * 64*1024
 labels = {}
 what = [None] * 64*1024
+expressions = {}
 
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
     memory[0x8000:] = bytearray(f.read())
@@ -222,10 +223,13 @@ def split_jump_table_entry(low_addr, high_addr):
     entry_point = (memory[high_addr] << 8) + memory[low_addr] + 1
     entry_points.append(entry_point)
     add_default_label(entry_point)
+    expressions[high_addr] = "hi(%s-1)" % labels[entry_point]
+    expressions[low_addr]  = "lo(%s-1)" % labels[entry_point]
     # TODO: "ENCODE" THE JUMP TABLE ENTRY AS CALCULATED FROM LABEL
 
 for i in range(2): # TODO: MUCH HIGHER
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i)
+print("XXX", expressions)
 
 while len(entry_points) > 0:
     entry_point = entry_points.pop(0)
