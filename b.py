@@ -48,6 +48,8 @@ class Instruction(object):
         print("    instruction at &%04X" % self.addr)
         return self.length
 
+def sorted_annotations(annotations):
+    return sorted(annotations, key=lambda x: x.priority)
 
 # There is at most one classification for any address; in practice by the end of
 # disassembly there will be exactly one for all addresses in the target range,
@@ -85,10 +87,10 @@ annotations[0x8000].append(Comment("ROM header in standard format for Acorn MOS"
 addr = 0x8000
 while addr < 0x8006:
     # TODO: We might want to sort annotations, e.g. so comments appear before labels.
-    for annotation in sorted(annotations[addr], key=lambda x: x.priority):
+    for annotation in sorted_annotations(annotations[addr]):
         annotation.emit(0)
     classification_length = classifications[addr].emit()
     for i in range(1, classification_length):
-        for annotation in annotations[addr + i]:
+        for annotation in sorted_annotations(annotations[addr + i]):
             annotation.emit(classification_length - i)
     addr += classification_length
