@@ -130,15 +130,16 @@ class OpcodeJsr(OpcodeAbs):
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, get_abs(addr + 1)]
 
-class OpcodeRts(object):
-    def __init__(self):
+class OpcodeReturn(object):
+    def __init__(self, mnemonic):
+        self.mnemonic = mnemonic
         self.operand_length = 0
 
     def disassemble(self, addr):
         return [None]
 
     def as_string(self, addr):
-        return "RTS"
+        return self.mnemonic
 
 class OpcodeConditionalBranch(object):
     def __init__(self, mnemonic):
@@ -185,6 +186,7 @@ opcodes = {
     0x38: OpcodeImplied("SEC"),
     0x3d: OpcodeDataAbs("AND", ",X"),
     0x3e: OpcodeDataAbs("ROL", ",X"),
+    0x40: OpcodeReturn("RTI"),
     0x45: OpcodeZp("EOR"),
     0x46: OpcodeZp("LSR"),
     0x48: OpcodeImplied("PHA"),
@@ -197,7 +199,7 @@ opcodes = {
     0x55: OpcodeZp("EOR", ",X"),
     0x58: OpcodeImplied("CLI"),
     0x59: OpcodeDataAbs("EOR", ",Y"),
-    0x60: OpcodeRts(),
+    0x60: OpcodeReturn("RTS"),
     0x65: OpcodeZp("ADC"),
     0x66: OpcodeZp("ROR"),
     0x68: OpcodeImplied("PLA"),
@@ -397,6 +399,9 @@ what[0xaefb] = (WHAT_DATA, 1)
 
 labels[(0x421-0x400)+0xbf04] = 'copied_to_421'
 entry_points.append((0x421-0x400)+0xbf04)
+
+labelled_entry_point(0x89a7)
+labelled_entry_point(0x89b5)
 
 labelled_entry_point(0xbf04)
 labelled_entry_point(0xbf07)
