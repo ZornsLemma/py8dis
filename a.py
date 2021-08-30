@@ -217,6 +217,16 @@ labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
 entry_points = [0x8003]
 
+def split_jump_table_entry(low_addr, high_addr):
+    # +1 as the jump table entry is pushed onto stack and entered via RTS.
+    entry_point = (memory[high_addr] << 8) + memory[low_addr] + 1
+    entry_points.append(entry_point)
+    add_default_label(entry_point)
+    # TODO: "ENCODE" THE JUMP TABLE ENTRY AS CALCULATED FROM LABEL
+
+for i in range(2): # TODO: MUCH HIGHER
+    split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i)
+
 while len(entry_points) > 0:
     entry_point = entry_points.pop(0)
     if what[entry_point] is None and start_addr <= entry_point < end_addr:
