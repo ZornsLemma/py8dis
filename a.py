@@ -37,7 +37,7 @@ class OpcodeImmediate(object):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "%s #&%02X" % (self.mnemonic, get_u8(addr + 1))
+        return "%s #%s" % (self.mnemonic, get_constant8(addr + 1))
 
 def add_default_label(addr):
     if addr not in labels:
@@ -46,6 +46,28 @@ def add_default_label(addr):
 def get_label(addr):
     assert addr in labels
     return labels[addr]
+
+def get_expression(addr, expected_value):
+    expression = expressions[addr]
+    # TODO: We should evaluate "expression" and check it evaluates to expected_value
+    return expression
+
+def get_constant8(addr):
+    if addr not in expressions:
+        return "&%02X" % memory[addr]
+    return get_expression(addr, memory[addr])
+
+def get_address8(addr):
+    operand = memory[addr]
+    if addr not in expressions:
+        return get_label(operand)
+    return get_expression(addr, operand)
+
+def get_address16(addr):
+    operand = get_abs(addr)
+    if addr not in expressions:
+        return get_label(operand)
+    return get_expression(addr, operand)
 
 class OpcodeZp(object):
     def __init__(self, mnemonic, suffix = None):
@@ -58,7 +80,7 @@ class OpcodeZp(object):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "%s %s%s" % (self.mnemonic, get_label(get_u8(addr + 1)), self.suffix)
+        return "%s %s%s" % (self.mnemonic, get_address8(addr + 1), self.suffix)
 
 class OpcodeAbs(object):
     def __init__(self, mnemonic, suffix = None):
@@ -67,7 +89,7 @@ class OpcodeAbs(object):
         self.operand_length = 2
 
     def as_string(self, addr):
-        return "%s %s%s" % (self.mnemonic, get_label(get_abs(addr + 1)), self.suffix)
+        return "%s %s%s" % (self.mnemonic, get_address16(addr + 1), self.suffix)
 
 class OpcodeDataAbs(OpcodeAbs):
     def __init__(self, mnemonic, suffix = None):
@@ -293,7 +315,7 @@ while addr < end_addr:
             sep = ""
             for i in range(8):
                 if data_len > 0:
-                    s += sep + "&%02X" % memory[addr]
+                    s += sep + get_constant8(addr)
                     sep = ","
                     addr += 1
                     data_len -= 1
