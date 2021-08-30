@@ -334,6 +334,10 @@ def string_hi(addr):
     while True:
         what[addr] = (WHAT_STRING, 1)
         if memory[addr] & 0x80 != 0:
+            if False: # TODO: Works but not that helpful so save it for a case where it is
+                c = memory[addr] & 0x7f
+                if 32 <= c <= 126 and c != 34:
+                    expressions[addr] = "&80+'%s'" % chr(c)
             break
         addr += 1
     return addr + 1
@@ -415,10 +419,22 @@ labels[0xffee] = "oswrch"
 
 # TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
 pc = 0xa3f0
-for i in range(28):
+for i in range(10):
     pc = string_hi(pc)
     pc = rts_address(pc)
-# TODO: There is more in this table, I think, but the next bit is "different" - note the next would-be-hi-terminated string has just a high byte straight away.
+pc += 1
+for i in range(17):
+    pc = string_hi(pc)
+    pc = rts_address(pc)
+pc += 1
+pc = rts_address(pc) # TODO: ?
+for i in range(2):
+    pc = string_hi(pc)
+    pc = rts_address(pc)
+pc += 1
+for i in range(6):
+    pc = string_hi(pc)
+    pc += 2
 
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
