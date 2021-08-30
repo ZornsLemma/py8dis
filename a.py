@@ -330,6 +330,21 @@ def string_n(addr, n):
     for i in range(n):
         what[addr + i] = (WHAT_STRING, 1)
 
+def string_hi(addr):
+    while True:
+        what[addr] = (WHAT_STRING, 1)
+        if memory[addr] & 0x80 != 0:
+            break
+        addr += 1
+    return addr + 1
+
+# TODO: RENAME DWORD TO WORD...
+def rts_address(addr):
+    labelled_entry_point(get_abs(addr) + 1)
+    expressions[addr] = "%s-1" % labels[get_abs(addr) + 1]
+    what[addr] = (WHAT_DWORD, 2)
+    what[addr + 1] = (WHAT_DWORD, 1) # TODO!?
+
 def is_sideways_rom():
     def check_entry(addr, entry_type):
         jmp_abs_opcode = 0x4c
@@ -369,6 +384,7 @@ WHAT_DATA = 0
 WHAT_STRING = 1
 WHAT_OPCODE = 2
 WHAT_OPERAND = 3
+WHAT_DWORD = 4
 
 memory = [None] * 64*1024
 labels = {}
@@ -395,6 +411,9 @@ labels[0xfff4] = "osbyte"
 labels[0xffe3] = "osasci"
 labels[0xffe7] = "osnewl"
 labels[0xffee] = "oswrch"
+
+# TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful
+rts_address(string_hi(0xa3f0))
 
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
@@ -538,6 +557,10 @@ while addr < end_addr:
                     addr += 1
                     data_len -= 1
             print(s)
+    elif what_type == WHAT_DWORD:
+        assert what[addr][1] == 2
+        print("    EQUW %s" % get_address16(addr))
+        addr += what[addr][1]
     elif what_type == WHAT_STRING:
         # TODO: This should wrap long strings across multiple lines
         data_len = what[addr][1]
