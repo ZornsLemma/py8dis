@@ -162,6 +162,7 @@ class OpcodeConditionalBranch(object):
 # TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
 # TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
+    0x06: OpcodeZp("ASL"),
     0x08: OpcodeImplied("PHP"),
     0x09: OpcodeImmediate("ORA"),
     0x0a: OpcodeImplied("ASL A"),
@@ -249,6 +250,7 @@ opcodes = {
     0xbe: OpcodeDataAbs("LDX", ",Y"),
     0xc0: OpcodeImmediate("CPY"),
     0xc4: OpcodeZp("CPY"),
+    0xc5: OpcodeZp("CMP"),
     0xc6: OpcodeZp("DEC"),
     0xc8: OpcodeImplied("INY"),
     0xc9: OpcodeImmediate("CMP"),
@@ -353,6 +355,13 @@ def is_sideways_rom():
     string_nul(0x8000 + copyright_offset + 1)
     # TODO: We could recognise tube transfer/relocation data in header
 
+# TODO: Use this in more places
+# TODO: Take optional non-default label
+# TODO: Rename code_label or something?
+def labelled_entry_point(addr):
+    entry_points.append(addr)
+    add_default_label(addr)
+
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
 WHAT_STRING = 1
@@ -385,6 +394,16 @@ labels[0xfff4] = "osbyte"
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
 #string_n(0xaefb, 4)
+
+labels[(0x421-0x400)+0xbf04] = 'copied_to_421'
+entry_points.append((0x421-0x400)+0xbf04)
+
+labelled_entry_point(0xbf04)
+labelled_entry_point(0xbf07)
+labelled_entry_point(0xbf0a)
+labelled_entry_point(0xbf2c)
+labelled_entry_point(0xbf88)
+labelled_entry_point(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
