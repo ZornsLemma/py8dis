@@ -180,11 +180,13 @@ opcodes = {
     0x4c: OpcodeJmpAbs(),
     0x51: OpcodeZp("EOR", "),Y"),
     0x60: OpcodeRts(),
+    0x65: OpcodeZp("ADC"),
     0x68: OpcodeImplied("PLA"),
     0x69: OpcodeImmediate("ADC"),
     0x6c: OpcodeJmpInd(),
     0x6d: OpcodeDataAbs("ADC"),
     0x6e: OpcodeDataAbs("ROR"),
+    0x70: OpcodeConditionalBranch("BVS"),
     0x71: OpcodeZp("ADC", "),Y"),
     0x79: OpcodeDataAbs("ADC", ",Y"),
     0x7e: OpcodeDataAbs("ROR", ",X"),
@@ -215,6 +217,7 @@ opcodes = {
     0xae: OpcodeDataAbs("LDX"),
     0xb0: OpcodeConditionalBranch("BCS"),
     0xb1: OpcodeZp("LDA", "),Y"),
+    0xb8: OpcodeImplied("CLV"),
     0xb9: OpcodeDataAbs("LDA", ",Y"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc0: OpcodeImmediate("CPY"),
@@ -227,6 +230,7 @@ opcodes = {
     0xdd: OpcodeDataAbs("CMP", ",X"),
     0xe0: OpcodeImmediate("CPX"),
     0xe4: OpcodeZp("CPX"),
+    0xe5: OpcodeZp("SBC"),
     0xe6: OpcodeZp("INC"),
     0xe8: OpcodeImplied("INX"),
     0xe9: OpcodeImmediate("SBC"),
@@ -286,6 +290,12 @@ end_addr = 0xc000
 
 labels[0x8003] = "service_entry"
 labels[0x8a15] = "service_handler"
+labels[0x9611] = "sta_e09_if_d6c_b7_set"
+labels[0x96b4] = "error_template"
+what[0x96b4] = (WHAT_DATA, 1)
+what[0x96b5] = (WHAT_STRING, 1) # TODO: REPETITIVE, NEED HELPER FN
+what[0x96b6] = (WHAT_STRING, 1)
+what[0x96b7] = (WHAT_STRING, 1)
 labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
 
