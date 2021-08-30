@@ -165,9 +165,13 @@ opcodes = {
     0x08: OpcodeImplied("PHP"),
     0x09: OpcodeImmediate("ORA"),
     0x0a: OpcodeImplied("ASL A"),
+    0x0d: OpcodeDataAbs("ORA"),
     0x10: OpcodeConditionalBranch("BPL"),
     0x18: OpcodeImplied("CLC"),
+    0x1d: OpcodeDataAbs("ORA", ",X"),
     0x20: OpcodeJsr(),
+    0x24: OpcodeZp("BIT"),
+    0x25: OpcodeZp("AND"),
     0x28: OpcodeImplied("PLP"),
     0x29: OpcodeImmediate("AND"),
     0x2a: OpcodeImplied("ROL A"),
@@ -229,6 +233,7 @@ opcodes = {
     0xba: OpcodeImplied("TSX"),
     0xbc: OpcodeDataAbs("LDY", ",X"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
+    0xbe: OpcodeDataAbs("LDX", ",Y"),
     0xc0: OpcodeImmediate("CPY"),
     0xc4: OpcodeZp("CPY"),
     0xc6: OpcodeZp("DEC"),
@@ -237,6 +242,7 @@ opcodes = {
     0xca: OpcodeImplied("DEX"),
     0xcd: OpcodeDataAbs("CMP"),
     0xd1: OpcodeZp("CMP", "),Y"),
+    0xd9: OpcodeDataAbs("CMP", ",Y"),
     0xdd: OpcodeDataAbs("CMP", ",X"),
     0xde: OpcodeDataAbs("DEC", ",X"),
     0xe0: OpcodeImmediate("CPX"),
@@ -281,6 +287,13 @@ def inline_nul_string_hook(target, addr):
         addr += 1
     return addr + 1
 
+def cr_string(addr):
+    while True:
+        what[addr] = (WHAT_STRING, 1)
+        if memory[addr] == 0x0d:
+            break
+        addr +=1
+
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
 WHAT_STRING = 1
@@ -309,6 +322,8 @@ what[0x96b7] = (WHAT_STRING, 1)
 labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
 
+cr_string(0xa17c) # preceding BNE is always taken
+
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
 labels[0x9145] = "print_inline_top_bit_clear"
@@ -325,11 +340,13 @@ jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 # TODO: The fact there are two entry points also suggests something slightly cleverer going on
 labels[0x96b8] = "generate_error_inline"
 labels[0x96d4] = "generate_error_inline2"
+labels[0x96d1] = "generate_error_inline3"
 def generate_error_inline_hook(target, addr):
     inline_nul_string_hook(target, addr) # discard return address
     return None
 jsr_hooks[0x96b8] = generate_error_inline_hook
 jsr_hooks[0x96d4] = generate_error_inline_hook
+jsr_hooks[0x96d1] = generate_error_inline_hook
 
 entry_points = [0x8003]
 
