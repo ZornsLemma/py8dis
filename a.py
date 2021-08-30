@@ -127,7 +127,9 @@ class OpcodeConditionalBranch(object):
 # TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
     0x08: OpcodeImplied("PHP"),
+    0x09: OpcodeImmediate("ORA"),
     0x0a: OpcodeImplied("ASL A"),
+    0x10: OpcodeConditionalBranch("BPL"),
     0x20: OpcodeJsr(),
     0x28: OpcodeImplied("PLP"),
     0x29: OpcodeImmediate("AND"),
@@ -139,21 +141,34 @@ opcodes = {
     0x60: OpcodeRts(),
     0x68: OpcodeImplied("PLA"),
     0x7e: OpcodeDataAbs("ROR", ",X"),
+    0x84: OpcodeZp("STY"),
     0x85: OpcodeZp("STA"),
+    0x88: OpcodeImplied("DEY"),
     0x8a: OpcodeImplied("TXA"),
+    0x8d: OpcodeDataAbs("STA"),
     0x8e: OpcodeDataAbs("STX"),
     0x90: OpcodeConditionalBranch("BCC"),
     0x98: OpcodeImplied("TYA"),
+    0x99: OpcodeDataAbs("STA", ",Y"),
     0x9d: OpcodeDataAbs("STA", ",X"),
+    0xa0: OpcodeImmediate("LDY"),
     0xa2: OpcodeImmediate("LDX"),
+    0xa4: OpcodeZp("LDY"),
+    0xa5: OpcodeZp("LDA"),
     0xa6: OpcodeZp("LDX"),
     0xa9: OpcodeImmediate("LDA"),
+    0xa8: OpcodeImplied("TAY"),
+    0xaa: OpcodeImplied("TAX"),
     0xad: OpcodeDataAbs("LDA"),
     0xae: OpcodeDataAbs("LDX"),
+    0xb9: OpcodeDataAbs("LDA", ",Y"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc0: OpcodeImmediate("CPY"),
+    0xc6: OpcodeZp("DEC"),
     0xc9: OpcodeImmediate("CMP"),
     0xe0: OpcodeImmediate("CPX"),
+    0xe6: OpcodeZp("INC"),
+    0xe9: OpcodeImmediate("SBC"),
     0xe8: OpcodeImplied("INX"),
     0xd0: OpcodeConditionalBranch("BNE"),
     0xf0: OpcodeConditionalBranch("BEQ"),
@@ -198,6 +213,7 @@ end_addr = 0xc000
 
 labels[0x8003] = "service_entry"
 labels[0x8a15] = "service_handler"
+labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
 entry_points = [0x8003]
 
@@ -289,3 +305,4 @@ while addr < end_addr:
 # TODO: Goals:
 # - "programmable" - the disassembly is controlled by a custom python program which imports the core disassembler utils and any other custom utils it like - it can contain arbitrary python code
 # - "annotatable" - postpone as long as possible the temptation to start hand-editing the output, because as soon as you do that it gets difficult to get further assistance from disassembler if you (e.g.) discover a chunk of data which you want to annotate as a jump table
+# - "anchored" - no matter how mangled or useless the disassembly is, it should always re-build the input correctly and no bytes should be lost
