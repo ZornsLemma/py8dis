@@ -197,6 +197,7 @@ opcodes = {
     0x59: OpcodeDataAbs("EOR", ",Y"),
     0x60: OpcodeRts(),
     0x65: OpcodeZp("ADC"),
+    0x66: OpcodeZp("ROR"),
     0x68: OpcodeImplied("PLA"),
     0x69: OpcodeImmediate("ADC"),
     0x6a: OpcodeImplied("ROR A"),
@@ -205,6 +206,7 @@ opcodes = {
     0x6e: OpcodeDataAbs("ROR"),
     0x70: OpcodeConditionalBranch("BVS"),
     0x71: OpcodeZp("ADC", "),Y"),
+    0x78: OpcodeImplied("SEI"),
     0x79: OpcodeDataAbs("ADC", ",Y"),
     0x7d: OpcodeDataAbs("ADC", ",X"),
     0x7e: OpcodeDataAbs("ROR", ",X"),
@@ -421,6 +423,7 @@ while addr < end_addr:
         addr = addr + 1
 
 # Replace any labels which fall mid-instruction with derived labels
+# TODO: Smallish detail but it might be nice to derive labels using a label *after* the instruction they overlap - in practice they are quite likely to refer to tables following the instruction and this avoids forcing a label in before it
 derived_labels = {}
 derived_labels2 = collections.defaultdict(list) # TODO: NAMING
 addr = start_addr
