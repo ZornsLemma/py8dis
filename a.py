@@ -77,7 +77,7 @@ class OpcodeZp(object):
     def __init__(self, mnemonic, suffix = None):
         self.mnemonic = mnemonic
         self.suffix = suffix if suffix is not None else ""
-        self.prefix = "(" if self.suffix.startswith(")") else ""
+        self.prefix = "(" if ")" in self.suffix else ""
         self.operand_length = 1
 
     def disassemble(self, addr):
@@ -190,6 +190,7 @@ opcodes = {
     0x71: OpcodeZp("ADC", "),Y"),
     0x79: OpcodeDataAbs("ADC", ",Y"),
     0x7e: OpcodeDataAbs("ROR", ",X"),
+    0x81: OpcodeZp("STA", ",X)"),
     0x84: OpcodeZp("STY"),
     0x85: OpcodeZp("STA"),
     0x86: OpcodeZp("STX"),
@@ -205,6 +206,7 @@ opcodes = {
     0x99: OpcodeDataAbs("STA", ",Y"),
     0x9d: OpcodeDataAbs("STA", ",X"),
     0xa0: OpcodeImmediate("LDY"),
+    0xa1: OpcodeZp("LDA", ",X)"),
     0xa2: OpcodeImmediate("LDX"),
     0xa4: OpcodeZp("LDY"),
     0xa5: OpcodeZp("LDA"),
@@ -219,6 +221,8 @@ opcodes = {
     0xb1: OpcodeZp("LDA", "),Y"),
     0xb8: OpcodeImplied("CLV"),
     0xb9: OpcodeDataAbs("LDA", ",Y"),
+    0xba: OpcodeImplied("TSX"),
+    0xbc: OpcodeDataAbs("LDY", ",X"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc0: OpcodeImmediate("CPY"),
     0xc4: OpcodeZp("CPY"),
@@ -226,8 +230,10 @@ opcodes = {
     0xc8: OpcodeImplied("INY"),
     0xc9: OpcodeImmediate("CMP"),
     0xca: OpcodeImplied("DEX"),
+    0xcd: OpcodeDataAbs("CMP"),
     0xd1: OpcodeZp("CMP", "),Y"),
     0xdd: OpcodeDataAbs("CMP", ",X"),
+    0xde: OpcodeDataAbs("DEC", ",X"),
     0xe0: OpcodeImmediate("CPX"),
     0xe4: OpcodeZp("CPX"),
     0xe5: OpcodeZp("SBC"),
@@ -291,8 +297,7 @@ end_addr = 0xc000
 labels[0x8003] = "service_entry"
 labels[0x8a15] = "service_handler"
 labels[0x9611] = "sta_e09_if_d6c_b7_set"
-labels[0x96b4] = "error_template"
-what[0x96b4] = (WHAT_DATA, 1)
+labels[0x96b4] = "error_template_minus_1"
 what[0x96b5] = (WHAT_STRING, 1) # TODO: REPETITIVE, NEED HELPER FN
 what[0x96b6] = (WHAT_STRING, 1)
 what[0x96b7] = (WHAT_STRING, 1)
