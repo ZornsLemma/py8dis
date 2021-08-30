@@ -392,6 +392,9 @@ what[0x96b6] = (WHAT_STRING, 1)
 what[0x96b7] = (WHAT_STRING, 1)
 labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
+labels[0xffe3] = "osasci"
+labels[0xffe7] = "osnewl"
+labels[0xffee] = "oswrch"
 
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
