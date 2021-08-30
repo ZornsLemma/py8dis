@@ -1,4 +1,5 @@
 from __future__ import print_function
+import collections
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
@@ -44,8 +45,10 @@ def add_default_label(addr):
         labels[addr] = "L%04X" % addr
 
 def get_label(addr):
-    assert addr in labels
-    return labels[addr]
+    if addr in labels:
+        return labels[addr]
+    assert addr in derived_labels
+    return derived_labels[addr]
 
 def get_expression(addr, expected_value):
     expression = expressions[addr]
@@ -169,7 +172,7 @@ opcodes = {
     0x8d: OpcodeDataAbs("STA"),
     0x8e: OpcodeDataAbs("STX"),
     0x90: OpcodeConditionalBranch("BCC"),
-#    0x91: OpcodeZp("STA", "),Y"),
+    0x91: OpcodeZp("STA", "),Y"),
     0x95: OpcodeZp("STA", ",X"),
     0x98: OpcodeImplied("TYA"),
     0x99: OpcodeDataAbs("STA", ",Y"),
@@ -292,13 +295,29 @@ while addr < end_addr:
     else:
         addr = addr + 1
 
+# Replace any labels which fall mid-instruction with derived labels
+derived_labels = {}
+derived_labels2 = collections.defaultdict(list) # TODO: NAMING
+addr = start_addr
+while addr < end_addr:
+    if what[addr][0] == WHAT_OPCODE:
+        for i in range(1, what[addr][1]):
+            if (addr + i) in labels:
+                add_default_label(addr)
+                derived_labels[addr + i] = labels[addr + i]
+                derived_labels2[addr].append((labels[addr + i], "%s+%d" % (labels[addr], i)))
+                del labels[addr + i]
+    addr += what[addr][1]
+print("XXX", derived_labels)
+
 # TODO: A label splitting pass for where labels appear in middle of data/string/instruction
 addr = start_addr
 while addr < end_addr:
     print(hex(addr), what[addr])
     for i in range(1, what[addr][1]):
-        # TODO: This isn't handling instructions with labels in the middle
+        # TODO: This isn't handling instructions with labels in the middle - which is fine now we deal with them above
         if (addr + i) in labels:
+            print("XXX2", i)
             assert what[addr][0] != WHAT_OPCODE
             what[addr + i] = (what[addr][0], what[addr][1] - i)
             what[addr] = (what[addr][0], i)
@@ -311,6 +330,9 @@ addr = start_addr
 while addr < end_addr:
     if addr in labels:
         print(".%s" % labels[addr])
+    if addr in derived_labels2:
+        for name, definition in derived_labels2[addr]:
+            print("%s = %s" % (name, definition))
     # TODO: String as opposed to raw data
     what_type = what[addr][0]
     if what_type == WHAT_DATA:
