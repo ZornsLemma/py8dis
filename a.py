@@ -73,6 +73,7 @@ class OpcodeZp(object):
     def __init__(self, mnemonic, suffix = None):
         self.mnemonic = mnemonic
         self.suffix = suffix if suffix is not None else ""
+        self.prefix = "(" if self.suffix.startswith(")") else ""
         self.operand_length = 1
 
     def disassemble(self, addr):
@@ -80,7 +81,7 @@ class OpcodeZp(object):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "%s %s%s" % (self.mnemonic, get_address8(addr + 1), self.suffix)
+        return "%s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix)
 
 class OpcodeAbs(object):
     def __init__(self, mnemonic, suffix = None):
@@ -168,6 +169,7 @@ opcodes = {
     0x8d: OpcodeDataAbs("STA"),
     0x8e: OpcodeDataAbs("STX"),
     0x90: OpcodeConditionalBranch("BCC"),
+#    0x91: OpcodeZp("STA", "),Y"),
     0x95: OpcodeZp("STA", ",X"),
     0x98: OpcodeImplied("TYA"),
     0x99: OpcodeDataAbs("STA", ",Y"),
@@ -180,12 +182,15 @@ opcodes = {
     0xa9: OpcodeImmediate("LDA"),
     0xa8: OpcodeImplied("TAY"),
     0xaa: OpcodeImplied("TAX"),
+    0xac: OpcodeDataAbs("LDY"),
     0xad: OpcodeDataAbs("LDA"),
     0xae: OpcodeDataAbs("LDX"),
+    0xb0: OpcodeConditionalBranch("BCS"),
     0xb9: OpcodeDataAbs("LDA", ",Y"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc0: OpcodeImmediate("CPY"),
     0xc6: OpcodeZp("DEC"),
+    0xc8: OpcodeImplied("INY"),
     0xc9: OpcodeImmediate("CMP"),
     0xca: OpcodeImplied("DEX"),
     0xe0: OpcodeImmediate("CPX"),
@@ -249,7 +254,7 @@ def split_jump_table_entry(low_addr, high_addr):
     expressions[low_addr]  = "lo(%s-1)" % labels[entry_point]
     # TODO: "ENCODE" THE JUMP TABLE ENTRY AS CALCULATED FROM LABEL
 
-for i in range(2): # TODO: MUCH HIGHER
+for i in range(4): # TODO: MUCH HIGHER
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i)
 print("XXX", expressions)
 
