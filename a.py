@@ -124,7 +124,9 @@ class OpcodeJsr(OpcodeAbs):
         super(OpcodeJsr, self).__init__("JSR")
 
     def disassemble(self, addr):
-        return [addr + 3, get_abs(addr + 1)]
+        target = get_abs(addr + 1)
+        return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
+        return [return_addr, get_abs(addr + 1)]
 
 class OpcodeRts(object):
     def __init__(self):
@@ -218,8 +220,8 @@ opcodes = {
     0xd1: OpcodeZp("CMP", "),Y"),
     0xe0: OpcodeImmediate("CPX"),
     0xe6: OpcodeZp("INC"),
-
     0xe8: OpcodeImplied("INX"),
+    0xea: OpcodeImplied("NOP"),
     0xd0: OpcodeConditionalBranch("BNE"),
     0xf0: OpcodeConditionalBranch("BEQ"),
 }
@@ -255,6 +257,7 @@ memory = [None] * 64*1024
 labels = {}
 what = [None] * 64*1024
 expressions = {}
+jsr_hooks = {}
 
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
     memory[0x8000:] = bytearray(f.read())
@@ -266,6 +269,17 @@ labels[0x8003] = "service_entry"
 labels[0x8a15] = "service_handler"
 labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
+
+# This subroutine prints non-top-bit-set characters following it, then continues
+# execution at the first top-bit-set byte following it.
+labels[0x9145] = "print_inline_top_bit_clear"
+def print_inline_top_bit_clear_hook(target, addr):
+    addr += 3
+    while memory[addr] & 0x80 == 0:
+        addr += 1
+    return addr
+jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
+
 entry_points = [0x8003]
 
 def split_jump_table_entry(low_addr, high_addr):
