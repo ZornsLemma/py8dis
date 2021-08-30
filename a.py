@@ -384,6 +384,15 @@ def labelled_entry_point(addr):
     entry_points.append(addr)
     add_default_label(addr)
 
+
+def split_jump_table_entry(low_addr, high_addr, offset):
+    entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
+    entry_points.append(entry_point)
+    add_default_label(entry_point)
+    # TODO: Don't show offset if it's 0
+    expressions[high_addr] = "hi(%s-%d)" % (labels[entry_point], offset)
+    expressions[low_addr]  = "lo(%s-%d)" % (labels[entry_point], offset)
+
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
 WHAT_STRING = 1
@@ -417,6 +426,9 @@ labels[0xffe3] = "osasci"
 labels[0xffe7] = "osnewl"
 labels[0xffee] = "oswrch"
 
+string_cr(0x8d0f)
+string_nul(0x8d38)
+
 # TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
 pc = 0xa3f0
 for i in range(10):
@@ -435,6 +447,11 @@ pc += 1
 for i in range(6):
     pc = string_hi(pc)
     pc += 2
+
+# TODO: At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing.
+for i in range(8): # TODO
+    if i < 5 or i == 7:
+        split_jump_table_entry(0x8869 + 22 + i, 0x8861 + 22 + i, 0)
 
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
@@ -477,18 +494,8 @@ jsr_hooks[0x96b8] = generate_error_inline_hook
 jsr_hooks[0x96d4] = generate_error_inline_hook
 jsr_hooks[0x96d1] = generate_error_inline_hook
 
-
-def split_jump_table_entry(low_addr, high_addr):
-    # +1 as the jump table entry is pushed onto stack and entered via RTS.
-    entry_point = (memory[high_addr] << 8) + memory[low_addr] + 1
-    entry_points.append(entry_point)
-    add_default_label(entry_point)
-    expressions[high_addr] = "hi(%s-1)" % labels[entry_point]
-    expressions[low_addr]  = "lo(%s-1)" % labels[entry_point]
-    # TODO: "ENCODE" THE JUMP TABLE ENTRY AS CALCULATED FROM LABEL
-
 for i in range(36):
-    split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i)
+    split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 print("XXX", expressions)
 
 while len(entry_points) > 0:
