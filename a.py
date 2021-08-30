@@ -183,11 +183,13 @@ opcodes = {
     0x30: OpcodeConditionalBranch("BMI"),
     0x38: OpcodeImplied("SEC"),
     0x3e: OpcodeDataAbs("ROL", ",X"),
+    0x45: OpcodeZp("EOR"),
     0x46: OpcodeZp("LSR"),
     0x48: OpcodeImplied("PHA"),
     0x49: OpcodeImmediate("EOR"),
     0x4a: OpcodeImplied("LSR A"),
     0x4c: OpcodeJmpAbs(),
+    0x4d: OpcodeDataAbs("EOR"),
     0x50: OpcodeConditionalBranch("BVC"),
     0x51: OpcodeZp("EOR", "),Y"),
     0x58: OpcodeImplied("CLI"),
@@ -259,6 +261,7 @@ opcodes = {
     0xe8: OpcodeImplied("INX"),
     0xe9: OpcodeImmediate("SBC"),
     0xea: OpcodeImplied("NOP"),
+    0xec: OpcodeDataAbs("CPX"),
     0xed: OpcodeDataAbs("SBC"),
     0xee: OpcodeDataAbs("INC"),
     0xd0: OpcodeConditionalBranch("BNE"),
@@ -299,12 +302,16 @@ def inline_nul_string_hook(target, addr):
         addr += 1
     return addr + 1
 
-def cr_string(addr):
+def string_cr(addr):
     while True:
         what[addr] = (WHAT_STRING, 1)
         if memory[addr] == 0x0d:
             break
         addr +=1
+
+def string_n(addr, n):
+    for i in range(n):
+        what[addr + i] = (WHAT_STRING, 1)
 
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
@@ -334,7 +341,9 @@ what[0x96b7] = (WHAT_STRING, 1)
 labels[0xffb9] = "osrdrm"
 labels[0xfff4] = "osbyte"
 
-cr_string(0xa17c) # preceding BNE is always taken
+string_cr(0xa17c) # preceding BNE is always taken
+what[0xaefb] = (WHAT_DATA, 1)
+#string_n(0xaefb, 4)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
