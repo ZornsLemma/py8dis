@@ -344,6 +344,7 @@ def rts_address(addr):
     expressions[addr] = "%s-1" % labels[get_abs(addr) + 1]
     what[addr] = (WHAT_DWORD, 2)
     what[addr + 1] = (WHAT_DWORD, 1) # TODO!?
+    return addr + 2
 
 def is_sideways_rom():
     def check_entry(addr, entry_type):
@@ -412,8 +413,12 @@ labels[0xffe3] = "osasci"
 labels[0xffe7] = "osnewl"
 labels[0xffee] = "oswrch"
 
-# TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful
-rts_address(string_hi(0xa3f0))
+# TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
+pc = 0xa3f0
+for i in range(28):
+    pc = string_hi(pc)
+    pc = rts_address(pc)
+# TODO: There is more in this table, I think, but the next bit is "different" - note the next would-be-hi-terminated string has just a high byte straight away.
 
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
