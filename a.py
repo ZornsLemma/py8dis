@@ -90,10 +90,11 @@ class OpcodeAbs(object):
     def __init__(self, mnemonic, suffix = None):
         self.mnemonic = mnemonic
         self.suffix = suffix if suffix is not None else ""
+        self.prefix = "(" if self.suffix.startswith(")") else ""
         self.operand_length = 2
 
     def as_string(self, addr):
-        return "%s %s%s" % (self.mnemonic, get_address16(addr + 1), self.suffix)
+        return "%s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix)
 
 class OpcodeDataAbs(OpcodeAbs):
     def __init__(self, mnemonic, suffix = None):
@@ -110,6 +111,13 @@ class OpcodeJmpAbs(OpcodeAbs):
 
     def disassemble(self, addr):
         return [None, get_abs(addr + 1)]
+
+class OpcodeJmpInd(OpcodeAbs):
+    def __init__(self):
+        super(OpcodeJmpInd, self).__init__("JMP", ")")
+
+    def disassemble(self, addr):
+        return [None]
 
 class OpcodeJsr(OpcodeAbs):
     def __init__(self):
@@ -167,6 +175,7 @@ opcodes = {
     0x4c: OpcodeJmpAbs(),
     0x60: OpcodeRts(),
     0x68: OpcodeImplied("PLA"),
+    0x6c: OpcodeJmpInd(),
     0x6d: OpcodeDataAbs("ADC"),
     0x6e: OpcodeDataAbs("ROR"),
     0x71: OpcodeZp("ADC", "),Y"),
@@ -198,6 +207,7 @@ opcodes = {
     0xad: OpcodeDataAbs("LDA"),
     0xae: OpcodeDataAbs("LDX"),
     0xb0: OpcodeConditionalBranch("BCS"),
+    0xb1: OpcodeZp("LDA", "),Y"),
     0xb9: OpcodeDataAbs("LDA", ",Y"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xc0: OpcodeImmediate("CPY"),
