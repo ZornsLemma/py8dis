@@ -48,8 +48,9 @@ def get_label(addr):
     return labels[addr]
 
 class OpcodeZp(object):
-    def __init__(self, mnemonic):
+    def __init__(self, mnemonic, suffix = None):
         self.mnemonic = mnemonic
+        self.suffix = suffix if suffix is not None else ""
         self.operand_length = 1
 
     def disassemble(self, addr):
@@ -57,15 +58,12 @@ class OpcodeZp(object):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "%s %s" % (self.mnemonic, get_label(get_u8(addr + 1)))
+        return "%s %s%s" % (self.mnemonic, get_label(get_u8(addr + 1)), self.suffix)
 
 class OpcodeAbs(object):
     def __init__(self, mnemonic, suffix = None):
         self.mnemonic = mnemonic
-        if suffix is None:
-            self.suffix = ""
-        else:
-            self.suffix = suffix
+        self.suffix = suffix if suffix is not None else ""
         self.operand_length = 2
 
     def as_string(self, addr):
@@ -148,6 +146,7 @@ opcodes = {
     0x8d: OpcodeDataAbs("STA"),
     0x8e: OpcodeDataAbs("STX"),
     0x90: OpcodeConditionalBranch("BCC"),
+    0x95: OpcodeZp("STA", ",X"),
     0x98: OpcodeImplied("TYA"),
     0x99: OpcodeDataAbs("STA", ",Y"),
     0x9d: OpcodeDataAbs("STA", ",X"),
@@ -166,6 +165,7 @@ opcodes = {
     0xc0: OpcodeImmediate("CPY"),
     0xc6: OpcodeZp("DEC"),
     0xc9: OpcodeImmediate("CMP"),
+    0xca: OpcodeImplied("DEX"),
     0xe0: OpcodeImmediate("CPX"),
     0xe6: OpcodeZp("INC"),
     0xe9: OpcodeImmediate("SBC"),
