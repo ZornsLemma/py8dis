@@ -310,7 +310,7 @@ def split_jump_table_entry(low_addr, high_addr):
     expressions[low_addr]  = "lo(%s-1)" % labels[entry_point]
     # TODO: "ENCODE" THE JUMP TABLE ENTRY AS CALCULATED FROM LABEL
 
-for i in range(4): # TODO: MUCH HIGHER
+for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i)
 print("XXX", expressions)
 
