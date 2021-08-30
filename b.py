@@ -25,7 +25,19 @@ def add_classification(addr, classification):
         classifications[addr+i] = 0 # TODO: slightly ugly dummy value
 
 def emit(start_addr, end_addr):
-    assert False # SFTODO
+    addr = start_addr
+    while addr < end_addr:
+        # TODO: We might want to sort annotations, e.g. so comments appear before labels.
+        for annotation in sorted_annotations(annotations[addr]):
+            annotation.emit(0)
+        classifications[addr].emit()
+        classification_length = classifications[addr].length()
+        for i in range(1, classification_length):
+            for annotation in sorted_annotations(annotations[addr + i]):
+                annotation.emit(classification_length - i)
+        addr += classification_length
+
+# TODO: Idea is below here is just implementation detail, perhaps prefix things e.g. class names with _
 
 
 class Label(object):
@@ -103,14 +115,4 @@ annotations[0x8000].append(Comment("ROM header in standard format for Acorn MOS"
 # derived form to assign the label the right value without it just being defined via
 # implicitly at the current assembly pointer.
 
-addr = 0x8000
-while addr < 0x8006:
-    # TODO: We might want to sort annotations, e.g. so comments appear before labels.
-    for annotation in sorted_annotations(annotations[addr]):
-        annotation.emit(0)
-    classifications[addr].emit()
-    classification_length = classifications[addr].length()
-    for i in range(1, classification_length):
-        for annotation in sorted_annotations(annotations[addr + i]):
-            annotation.emit(classification_length - i)
-    addr += classification_length
+emit(0x8000, 0x8006)
