@@ -193,6 +193,7 @@ opcodes = {
     0x4d: OpcodeDataAbs("EOR"),
     0x50: OpcodeConditionalBranch("BVC"),
     0x51: OpcodeZp("EOR", "),Y"),
+    0x55: OpcodeZp("EOR", ",X"),
     0x58: OpcodeImplied("CLI"),
     0x59: OpcodeDataAbs("EOR", ",Y"),
     0x60: OpcodeRts(),
