@@ -248,6 +248,15 @@ def disassemble_instruction(addr):
         what[addr + 1 + i] = (WHAT_OPERAND, 1) # length a bit irrelevant
     return opcode.disassemble(addr)
 
+def inline_nul_string_hook(target, addr):
+    addr += 3
+    while True:
+        what[addr] = (WHAT_STRING, 1)
+        if memory[addr] == 0:
+            break
+        addr += 1
+    return addr + 1
+
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
 WHAT_STRING = 1
@@ -281,6 +290,14 @@ def print_inline_top_bit_clear_hook(target, addr):
         addr += 1
     return addr
 jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
+
+# This subroutine generates an error using the following NUL-terminated string.
+labels[0x96b8] = "generate_error_inline"
+def generate_error_inline_hook(target, addr):
+    inline_nul_string_hook(target, addr) # discard return address
+    return None
+    SFTODO
+jsr_hooks[0x96b8] = generate_error_inline_hook
 
 entry_points = [0x8003]
 
@@ -387,22 +404,30 @@ while addr < end_addr:
         # TODO: This should wrap long strings across multiple lines
         data_len = what[addr][1]
         s = "    EQUS "
-        in_quote = False
+        state = 0
         while data_len > 0:
             # TODO: Assumes ASCII (not e.g. PETSCII)
             if 32 <= memory[addr] <= 126 and memory[addr] != ord('"'):
-                if not in_quote:
+                if state == 0:
                     s += '"'
-                    in_quote = True
+                elif state == 1:
+                    pass
+                elif state == 2:
+                    s += ', "'
+                state = 1
                 s += chr(memory[addr])
             else:
-                if in_quote:
-                    s += '"'
-                    in_quote = False
+                if state == 0:
+                    pass
+                elif state == 1:
+                    s += '", '
+                elif state == 2:
+                    s += ","
+                state = 2
                 s += get_constant8(addr)
             addr += 1
             data_len -= 1
-        if in_quote:
+        if state == 1:
             s += '"'
         print(s)
     elif what_type == WHAT_OPCODE:
