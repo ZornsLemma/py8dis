@@ -47,6 +47,7 @@ def add_default_label(addr):
 def get_label(addr):
     if addr in labels:
         return labels[addr]
+    print("OO2", hex(addr))
     assert addr in derived_labels
     return derived_labels[addr]
 
@@ -117,6 +118,7 @@ class OpcodeJmpInd(OpcodeAbs):
         super(OpcodeJmpInd, self).__init__("JMP", ")")
 
     def disassemble(self, addr):
+        add_default_label(get_abs(addr + 1))
         return [None]
 
 class OpcodeJsr(OpcodeAbs):
@@ -175,8 +177,10 @@ opcodes = {
     0x48: OpcodeImplied("PHA"),
     0x49: OpcodeImmediate("EOR"),
     0x4c: OpcodeJmpAbs(),
+    0x51: OpcodeZp("EOR", "),Y"),
     0x60: OpcodeRts(),
     0x68: OpcodeImplied("PLA"),
+    0x69: OpcodeImmediate("ADC"),
     0x6c: OpcodeJmpInd(),
     0x6d: OpcodeDataAbs("ADC"),
     0x6e: OpcodeDataAbs("ROR"),
