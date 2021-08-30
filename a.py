@@ -322,12 +322,14 @@ jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
+# TODO: The fact there are two entry points also suggests something slightly cleverer going on
 labels[0x96b8] = "generate_error_inline"
+labels[0x96d4] = "generate_error_inline2"
 def generate_error_inline_hook(target, addr):
     inline_nul_string_hook(target, addr) # discard return address
     return None
-    SFTODO
 jsr_hooks[0x96b8] = generate_error_inline_hook
+jsr_hooks[0x96d4] = generate_error_inline_hook
 
 entry_points = [0x8003]
 
