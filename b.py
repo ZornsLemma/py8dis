@@ -2,8 +2,11 @@ from __future__ import print_function
 import collections
 
 def add_label(addr, name):
+    # An address has one "primary" label, which is the first label we see; this
+    # will be used for references to the address in the disassembly.
     if labels[addr] is None:
        labels[addr] = name
+    # An address can have multiple labels as annotations.
     annotations[addr].append(Label(addr, name))
 
 def ensure_addr_labelled(addr):
