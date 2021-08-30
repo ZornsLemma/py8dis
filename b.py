@@ -9,6 +9,16 @@ def add_label(addr, name):
 def ensure_addr_labelled(addr):
     if labels[addr] is None:
         add_label(addr, "L%04X" % addr)
+    return labels[addr]
+
+def is_classified(addr, length):
+    return any(x is not None for x in classifications[addr:addr+length])
+
+def add_classification(addr, classification):
+    assert not is_classified(addr, classification.length())
+    classifications[addr] = classification
+    for i in range(1, classification.length()):
+        classifications[addr+i] = 0 # TODO: slightly ugly dummy value
 
 
 class Label(object):
@@ -23,8 +33,8 @@ class Label(object):
         if offset == 0:
             print(".%s" % self.name)
         else:
-            ensure_addr_labelled(self.addr + offset)
-            print("%s = %s-%d" % (self.name, labels[self.addr + offset], offset))
+            label = ensure_addr_labelled(self.addr + offset)
+            print("%s = %s-%d" % (self.name, label, offset))
 
 
 
@@ -41,12 +51,14 @@ class Comment(object):
 class Instruction(object):
     def __init__(self, addr):
         # TODO: length would be worked out from the opcode at addr
-        self.addr = addr
-        self.length = 3
+        self._addr = addr
+        self._length = 3
 
     def emit(self):
-        print("    instruction at &%04X" % self.addr)
-        return self.length
+        print("    instruction at &%04X" % self._addr)
+
+    def length(self):
+        return self._length
 
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
@@ -66,8 +78,8 @@ labels = [None] * 64*1024
 # order for any particular annotation type.
 annotations = collections.defaultdict(list)
 
-classifications[0x8000] = Instruction(0x8000)
-classifications[0x8003] = Instruction(0x8003)
+add_classification(0x8000, Instruction(0x8000))
+add_classification(0x8003, Instruction(0x8003))
 
 # TODO: In practice (for ease of doing lookups like label[addr]) we'd probably track
 # labels via a separate data structure during disassembly, but we'd dump them into
@@ -89,7 +101,8 @@ while addr < 0x8006:
     # TODO: We might want to sort annotations, e.g. so comments appear before labels.
     for annotation in sorted_annotations(annotations[addr]):
         annotation.emit(0)
-    classification_length = classifications[addr].emit()
+    classifications[addr].emit()
+    classification_length = classifications[addr].length()
     for i in range(1, classification_length):
         for annotation in sorted_annotations(annotations[addr + i]):
             annotation.emit(classification_length - i)
