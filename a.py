@@ -26,11 +26,19 @@ class Data(object):
         assert length > 0
         self._length = length
 
+    def is_variable_length(self):
+        return True
+
     def length(self):
         return self._length
 
+    def set_length(self, length):
+        assert length > 0
+        self._length = length
+
     def emit(self, addr):
         # TODO: Need to re-implement expressions support, multiple bytes per line, merging of adjacent data (not in this fn)
+        print(";XXX %d" % self._length)
         for i in range(self._length):
             print("    EQUB %s" % get_constant8(addr + i))
 
@@ -170,6 +178,9 @@ def emit2(start_addr, end_addr): # TODO POOR NAME
         if not disassembly.is_classified(addr, 1):
             disassembly.add_classification(addr, Data(1))
         addr += disassembly.get_classification(addr).length()
+
+    # TODO: Not sure if this "clean up" logic belongs here or not...
+    disassembly.merge_classifications(start_addr, end_addr)
 
     disassembly.emit(start_addr, end_addr)
 

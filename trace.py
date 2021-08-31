@@ -8,6 +8,9 @@ class Opcode(object):
         self.prefix = "(" if ")" in self.suffix else ""
         self.operand_length = operand_length
 
+    def is_variable_length(self):
+        return False
+
     def length(self):
         return 1 + self.operand_length
 

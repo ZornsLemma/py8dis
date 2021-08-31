@@ -32,6 +32,16 @@ def add_classification(addr, classification):
 def get_classification(addr):
     return classifications[addr]
 
+def merge_classifications(start_addr, end_addr):
+    addr = start_addr
+    while addr < end_addr:
+        if classifications[addr].is_variable_length():
+            addr2 = addr + classifications[addr].length()
+            while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]):
+                classifications[addr].set_length(classifications[addr].length() + classifications[addr2].length())
+                classifications[addr2] = 0 # TODO: slightly ugly dummy value
+        addr += classifications[addr].length()
+
 def emit(start_addr, end_addr):
     addr = start_addr
     while addr < end_addr:
