@@ -21,6 +21,12 @@ def get_abs(i):
     assert memory[i] is not None and memory[i+1] is not None
     return memory[i] + (memory[i+1] << 8)
 
+# https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
 class Data(object):
     def __init__(self, length):
         assert length > 0
@@ -37,10 +43,19 @@ class Data(object):
         self._length = length
 
     def emit(self, addr):
-        # TODO: Need to re-implement expressions support, multiple bytes per line, merging of adjacent data (not in this fn)
-        print(";XXX %d" % self._length)
-        for i in range(self._length):
-            print("    EQUB %s" % get_constant8(addr + i))
+        # TODO: Would be good if this output an ASCII dump (xxd style) in comments aligned at right
+        data = list(get_constant8(addr + i) for i in range(self._length))
+        longest_item = max(len(x) for x in data)
+        items_per_line = min(max(1, 50 // (longest_item + 2)), 8)
+        item_min_width = min(longest_item, 70 // items_per_line)
+        print("QQ", longest_item, items_per_line, item_min_width)
+        for chunk in chunks(data, items_per_line):
+            s = ""
+            sep = ""
+            for item in chunk:
+                s += sep + "%-*s" % (item_min_width, item)
+                sep = ", "
+            print("    EQUB %s" % s)
 
 class String(Data): # SFTODO: TEMP HACK RE-USING DATA
     pass
