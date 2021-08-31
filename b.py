@@ -41,8 +41,10 @@ def merge_classifications(start_addr, end_addr):
         if classifications[addr].is_variable_length():
             addr2 = addr + classifications[addr].length()
             while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_variable_length():
-                classifications[addr].set_length(classifications[addr].length() + classifications[addr2].length())
+                addr2_length = classifications[addr2].length()
+                classifications[addr].set_length(classifications[addr].length() + addr2_length)
                 classifications[addr2] = 0 # TODO: slightly ugly dummy value
+                addr2 += addr2_length
         addr += classifications[addr].length()
 
 # Split variable-length classifications at labels to minimise the number of
@@ -61,6 +63,8 @@ def split_classifications(start_addr, end_addr):
         addr += classifications[addr].length()
 
 def emit(start_addr, end_addr):
+    print("AZA1", classifications[0x80db])
+    print("AZA2", classifications[0x80dd])
     addr = start_addr
     while addr < end_addr:
         # TODO: We might want to sort annotations, e.g. so comments appear before labels.
