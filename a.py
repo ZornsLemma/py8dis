@@ -414,114 +414,19 @@ expressions = {}
 jsr_hooks = {}
 entry_points = []
 
-with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
-    memory[0x8000:] = bytearray(f.read())
-assert all(x is None or (0 <= x <= 255) for x in memory)
-start_addr = 0x8000
-end_addr = 0xc000
-
-is_sideways_rom()
-
-disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
-disassembly.add_label(0x96b4, "error_template_minus_1")
-disassembly.add_classification(0x96b5, String(3))
-disassembly.add_label(0xffb9, "osrdrm")
-disassembly.add_label(0xfff4, "osbyte")
-disassembly.add_label(0xffe3, "osasci")
-disassembly.add_label(0xffe7, "osnewl")
-disassembly.add_label(0xffee, "oswrch")
-
-string_cr(0x8d0f)
-string_nul(0x8d38)
-
-# TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
-pc = 0xa3f0
-for i in range(10):
-    pc = string_hi(pc)
-    pc = rts_address(pc)
-pc += 1
-for i in range(17):
-    pc = string_hi(pc)
-    pc = rts_address(pc)
-pc += 1
-pc = rts_address(pc) # TODO: ?
-for i in range(2):
-    pc = string_hi(pc)
-    pc = rts_address(pc)
-pc += 1
-for i in range(6):
-    pc = string_hi(pc)
-    pc += 2
-
-# At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection.
-min_y = 0x81
-for i in range(8):
-    if True:
-        split_jump_table_entry(0x8869 + min_y + i, 0x8861 + min_y + i, 0)
-        rts_low_addr = 0x8600 + min_y + i
-        target_addr = (0x8600 + memory[rts_low_addr]) + 1
-        labelled_entry_point(target_addr)
-        print("XK", hex(target_addr))
-        expressions[rts_low_addr] = "lo(%s)-1" % disassembly.get_label(target_addr)
-
-string_cr(0xa17c) # preceding BNE is always taken
-disassembly.add_classification(0xaefb, Data(1))
-#string_n(0xaefb, 4)
-
-disassembly.add_label((0x421-0x400)+0xbf04, "copied_to_421")
-entry_points.append((0x421-0x400)+0xbf04)
-
-labelled_entry_point(0x89a7)
-labelled_entry_point(0x89b5)
-
-labelled_entry_point(0xbf04)
-labelled_entry_point(0xbf07)
-labelled_entry_point(0xbf0a)
-labelled_entry_point(0xbf2c)
-labelled_entry_point(0xbf88)
-labelled_entry_point(0xbfd2)
-
-# This subroutine prints non-top-bit-set characters following it, then continues
-# execution at the first top-bit-set byte following it.
-disassembly.add_label(0x9145, "print_inline_top_bit_clear")
-def print_inline_top_bit_clear_hook(target, addr):
-    addr += 3
-    initial_addr = addr
-    while memory[addr] & 0x80 == 0:
-        addr += 1
-    disassembly.add_classification(initial_addr, String(addr - initial_addr))
-    return addr
-jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
-
-# This subroutine generates an error using the following NUL-terminated string.
-# TODO: I think it may actually return in some cases - need to study its code more
-# TODO: The fact there are two entry points also suggests something slightly cleverer going on
-disassembly.add_label(0x96b8, "generate_error_inline")
-disassembly.add_label(0x96d4, "generate_error_inline2")
-disassembly.add_label(0x96d1, "generate_error_inline3")
-def generate_error_inline_hook(target, addr):
-    inline_nul_string_hook(target, addr) # discard return address
-    return None
-jsr_hooks[0x96b8] = generate_error_inline_hook
-jsr_hooks[0x96d4] = generate_error_inline_hook
-jsr_hooks[0x96d1] = generate_error_inline_hook
-
-for i in range(36):
-    split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
-print("XXX", expressions)
-
-while len(entry_points) > 0:
-    entry_point = entry_points.pop(0)
-    if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:
-        print(hex(entry_point))
-        new_entry_points = disassemble_instruction(entry_point)
-        assert len(new_entry_points) >= 1
-        implied_entry_point = new_entry_points.pop(0)
-        if implied_entry_point is not None:
-            entry_points.append(implied_entry_point)
-        for new_entry_point in new_entry_points:
-            disassembly.ensure_addr_labelled(new_entry_point)
-            entry_points.append(new_entry_point)
+def trace(start_addr, end_addr):
+    while len(entry_points) > 0:
+        entry_point = entry_points.pop(0)
+        if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:
+            print(hex(entry_point))
+            new_entry_points = disassemble_instruction(entry_point)
+            assert len(new_entry_points) >= 1
+            implied_entry_point = new_entry_points.pop(0)
+            if implied_entry_point is not None:
+                entry_points.append(implied_entry_point)
+            for new_entry_point in new_entry_points:
+                disassembly.ensure_addr_labelled(new_entry_point)
+                entry_points.append(new_entry_point)
 
 if False:
     # Convert anything not explicitly disassembled into data.
@@ -546,81 +451,81 @@ if False:
             addr = addr + 1
 
 
+def emit2(start_addr, end_addr): # TODO POOR NAME
+    # TODO: Emit "constant labels" which aren't addresses in the start_addr/end_addr range
 
+    # TODO: Not sure if this "clean up" logic belongs here or not...
+    addr = start_addr
+    while addr < end_addr:
+        if not disassembly.is_classified(addr, 1):
+            disassembly.add_classification(addr, Data(1))
+        addr += disassembly.get_classification(addr).length()
 
-# TODO: Emit "constant labels" which aren't addresses in the start_addr/end_addr range
+    disassembly.emit(start_addr, end_addr)
 
-# TODO: Not sure if this "clean up" logic belongs here or not...
-addr = start_addr
-while addr < end_addr:
-    if not disassembly.is_classified(addr, 1):
-        disassembly.add_classification(addr, Data(1))
-    addr += disassembly.get_classification(addr).length()
-
-disassembly.emit(start_addr, end_addr)
-sys.exit(0) # TODO: TEMP
-addr = start_addr
-while addr < end_addr:
-    if addr in labels:
-        print(".%s" % labels[addr])
-    if addr in derived_labels2:
-        for name, definition in derived_labels2[addr]:
-            print("%s = %s" % (name, definition))
-    # TODO: String as opposed to raw data
-    what_type = what[addr][0]
-    if what_type == WHAT_DATA:
-        data_len = what[addr][1]
-        while data_len > 0:
-            s = "    EQUB "
-            sep = ""
-            for i in range(8):
-                if data_len > 0:
-                    s += sep + get_constant8(addr)
-                    sep = ", "
-                    addr += 1
-                    data_len -= 1
+if False: # TODO!
+    addr = start_addr
+    while addr < end_addr:
+        if addr in labels:
+            print(".%s" % labels[addr])
+        if addr in derived_labels2:
+            for name, definition in derived_labels2[addr]:
+                print("%s = %s" % (name, definition))
+        # TODO: String as opposed to raw data
+        what_type = what[addr][0]
+        if what_type == WHAT_DATA:
+            data_len = what[addr][1]
+            while data_len > 0:
+                s = "    EQUB "
+                sep = ""
+                for i in range(8):
+                    if data_len > 0:
+                        s += sep + get_constant8(addr)
+                        sep = ", "
+                        addr += 1
+                        data_len -= 1
+                print(s)
+        elif what_type == WHAT_DWORD:
+            assert what[addr][1] == 2
+            print("    EQUW %s" % get_address16(addr))
+            addr += what[addr][1]
+        elif what_type == WHAT_STRING:
+            # TODO: This should wrap long strings across multiple lines
+            data_len = what[addr][1]
+            s = "    EQUS "
+            state = 0
+            while data_len > 0:
+                # TODO: Assumes ASCII (not e.g. PETSCII)
+                if 32 <= memory[addr] <= 126 and memory[addr] != ord('"'):
+                    if state == 0:
+                        s += '"'
+                    elif state == 1:
+                        pass
+                    elif state == 2:
+                        s += ', "'
+                    state = 1
+                    s += chr(memory[addr])
+                else:
+                    if state == 0:
+                        pass
+                    elif state == 1:
+                        s += '", '
+                    elif state == 2:
+                        s += ", "
+                    state = 2
+                    s += get_constant8(addr)
+                addr += 1
+                data_len -= 1
+            if state == 1:
+                s += '"'
             print(s)
-    elif what_type == WHAT_DWORD:
-        assert what[addr][1] == 2
-        print("    EQUW %s" % get_address16(addr))
-        addr += what[addr][1]
-    elif what_type == WHAT_STRING:
-        # TODO: This should wrap long strings across multiple lines
-        data_len = what[addr][1]
-        s = "    EQUS "
-        state = 0
-        while data_len > 0:
-            # TODO: Assumes ASCII (not e.g. PETSCII)
-            if 32 <= memory[addr] <= 126 and memory[addr] != ord('"'):
-                if state == 0:
-                    s += '"'
-                elif state == 1:
-                    pass
-                elif state == 2:
-                    s += ', "'
-                state = 1
-                s += chr(memory[addr])
-            else:
-                if state == 0:
-                    pass
-                elif state == 1:
-                    s += '", '
-                elif state == 2:
-                    s += ", "
-                state = 2
-                s += get_constant8(addr)
-            addr += 1
-            data_len -= 1
-        if state == 1:
-            s += '"'
-        print(s)
-    elif what_type == WHAT_OPCODE:
-        opcode = opcodes[memory[addr]]
-        print("    %s" % opcode.as_string(addr))
-        addr += 1 + opcode.operand_length
-    else:
-        assert False
-    # TODO: Handle labels occuring "inside" an instruction
+        elif what_type == WHAT_OPCODE:
+            opcode = opcodes[memory[addr]]
+            print("    %s" % opcode.as_string(addr))
+            addr += 1 + opcode.operand_length
+        else:
+            assert False
+        # TODO: Handle labels occuring "inside" an instruction
 
 
 # TODO/thoughts:
