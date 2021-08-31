@@ -138,7 +138,7 @@ def split_jump_table_entry(low_addr, high_addr, offset):
 
 jsr_hooks = {}
 
-if False:
+if False: # TODO!
     # Convert anything not explicitly disassembled into data.
     for addr in range(len(what)):
         if what[addr] is None:
