@@ -18,10 +18,19 @@ disassembly.add_label(0x0f, "service_vectors_changed")
 expressions[0x8a17] = "service_vectors_changed"
 expressions[0x8a42] = "service_claim_absolute_workspace"
 expressions[0x8ed9] = "service_claim_absolute_workspace"
-disassembly.add_comment(0x8a45, "Handle absolute workspace claim service call")
-disassembly.add_label(0x8a3c, "service_handler_not_vectors_changed")
+disassembly.add_comment(0x8a1a, "Extra processing for vectors changed service call")
+disassembly.add_comment(0x8a45, "Extra processing for absolute workspace claim service call")
+disassembly.add_label(0x8a3c, "service_handler_common1")
 disassembly.add_label(0xbe62, "service_handler_tube_service_calls")
+expressions[0x8a63] = "service_vectors_changed"
+disassembly.add_label(0x8a5a, "service_handler_common2")
+disassembly.add_label(0x8aa7, "service_handler_not_vectors_changed")
+disassembly.add_comment(0x8aae,
+    "Call dispatch table entry X for service calls 1<=X<&D.\n" +
+    "Call dispatch table entry &D for service call &12.\n" +
+    "Don't handle any other service call.")
 
+disassembly.add_label(0x8e49, "jump_table_dispatch_x_plus_y")
 disassembly.add_label(0x8eac, "clamp_absolute_workspace_and_save")
 
 disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")

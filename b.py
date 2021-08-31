@@ -138,7 +138,7 @@ class Comment(object):
         print(self.as_string(emit_addr))
 
     def as_string(self, emit_addr):
-        return("; %s" % self.text)
+        return("\n".join("; %s" % line for line in self.text.split("\n")))
 
 
 def sorted_annotations(annotations):
