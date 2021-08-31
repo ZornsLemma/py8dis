@@ -1,6 +1,6 @@
 from a import * # TODO?
-# TODO? import b as disassembly
 
+# TODO: This open and read should be done via a utility function in a.py
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
     memory[0x8000:] = bytearray(f.read())
 assert all(x is None or (0 <= x <= 255) for x in memory)
