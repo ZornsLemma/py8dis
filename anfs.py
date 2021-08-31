@@ -46,7 +46,7 @@ for i in range(8):
         rts_low_addr = 0x8600 + min_y + i
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
         labelled_entry_point(target_addr)
-        print("XK", hex(target_addr))
+        #print("XK", hex(target_addr))
         expressions[rts_low_addr] = "lo(%s)-1" % disassembly.get_label(target_addr)
 
 string_cr(0xa17c) # preceding BNE is always taken
@@ -93,7 +93,7 @@ jsr_hooks[0x96d1] = generate_error_inline_hook
 
 for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
-print("XXX", expressions)
+#print("XXX", expressions)
 
 trace.trace(start_addr, end_addr)
 emit2(start_addr, end_addr)

@@ -247,7 +247,7 @@ opcodes = {
 def disassemble_instruction(addr):
     assert not disassembly.is_classified(addr, 1)
     opcode_value = memory[addr]
-    print(hex(opcode_value))
+    #print(hex(opcode_value))
     if opcode_value not in opcodes:
         return [None]
     opcode = opcodes[opcode_value]
@@ -265,7 +265,7 @@ def trace(start_addr, end_addr):
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)
         if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:
-            print(hex(entry_point))
+            #print(hex(entry_point))
             new_entry_points = disassemble_instruction(entry_point)
             assert len(new_entry_points) >= 1
             implied_entry_point = new_entry_points.pop(0)
