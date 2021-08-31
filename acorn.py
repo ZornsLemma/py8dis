@@ -25,6 +25,7 @@ def label_os_entry_points():
 
 # TODO: This and other Acorn-specific stuff should be moved into an acorn.py file
 def is_sideways_rom():
+    disassembly.add_comment(0x8000, "Sideways ROM header")
     disassembly.add_label(0x8000, "rom_header")
     def check_entry(addr, entry_type):
         jmp_abs_opcode = 0x4c

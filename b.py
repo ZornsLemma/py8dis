@@ -2,6 +2,9 @@ from __future__ import print_function
 import collections
 import copy
 
+def add_comment(addr, text):
+    annotations[addr].append(Comment(text))
+
 def add_label(addr, name):
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
@@ -78,6 +81,9 @@ def emit(start_addr, end_addr):
     print(".pydis_start")
     addr = start_addr
     while addr < end_addr:
+        # We need to emit any annotations that are "due" part-way through the
+        # classification output first. This may involve creating a label at
+        # the point before the classification output.
         classification_length = classifications[addr].length()
         pending_annotations = []
         for i in range(1, classification_length):
@@ -87,6 +93,7 @@ def emit(start_addr, end_addr):
             annotation.emit(addr)
         for annotation in pending_annotations:
             print(annotation)
+        # We can now emit the classification output.
         classifications[addr].emit(addr)
         addr += classification_length
     print(".pydis_end")
@@ -127,8 +134,11 @@ class Comment(object):
     def __init__(self, text):
         self.text = text
 
-    def emit(self, offset):
-        print("; %s" % self.text)
+    def emit(self, emit_addr):
+        print(self.as_string(emit_addr))
+
+    def as_string(self, emit_addr):
+        return("; %s" % self.text)
 
 
 def sorted_annotations(annotations):
