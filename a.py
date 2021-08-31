@@ -358,8 +358,7 @@ def string_nul(addr):
     return string_terminated(addr, 0)
 
 def string_n(addr, n):
-    for i in range(n):
-        what[addr + i] = (WHAT_STRING, 1)
+    disassembly.add_classification(addr, String(n))
 
 def string_hi(addr):
     initial_addr = addr
