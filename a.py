@@ -1,6 +1,7 @@
 from __future__ import print_function
 import collections
 import sys # TODO: TEMP?
+from memory import * # TODO?
 import b as disassembly
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
@@ -367,33 +368,6 @@ def rts_address(addr):
     disassembly.add_classification(addr, Word(2))
     return addr + 2
 
-# TODO: This and other Acorn-specific stuff should be moved into an acorn.py file
-def is_sideways_rom():
-    disassembly.add_label(0x8000, "rom_header")
-    def check_entry(addr, entry_type):
-        jmp_abs_opcode = 0x4c
-        disassembly.add_label(addr, entry_type + "_entry")
-        if memory[addr] == jmp_abs_opcode:
-            entry_points.append(addr)
-            disassembly.add_label(get_abs(addr + 1), entry_type + "_handler")
-        else:
-            disassembly.add_classification(addr, Data(3))
-    check_entry(0x8000, "language")
-    check_entry(0x8003, "service")
-    disassembly.add_label(0x8006, "rom_type")
-    disassembly.add_label(0x8007, "copyright_offset")
-    copyright_offset = memory[0x8007]
-    expressions[0x8007] = "copyright - rom_header"
-    disassembly.add_label(0x8008, "binary_version")
-    disassembly.add_label(0x8009, "title")
-    nul_at_title_end = string_nul(0x8009) - 1
-    if nul_at_title_end < (0x8000 + copyright_offset):
-        disassembly.add_label(nul_at_title_end, "version")
-        string_nul(nul_at_title_end + 1)
-    disassembly.add_label(0x8000 + copyright_offset, "copyright")
-    string_nul(0x8000 + copyright_offset + 1)
-    # TODO: We could recognise tube transfer/relocation data in header
-
 # TODO: Use this in more places
 # TODO: Take optional non-default label
 # TODO: Rename code_label or something?
@@ -410,10 +384,7 @@ def split_jump_table_entry(low_addr, high_addr, offset):
     expressions[high_addr] = "hi(%s-%d)" % (disassembly.get_label(entry_point), offset)
     expressions[low_addr]  = "lo(%s-%d)" % (disassembly.get_label(entry_point), offset)
 
-memory = [None] * 64*1024
-expressions = {}
 jsr_hooks = {}
-entry_points = []
 
 def trace(start_addr, end_addr):
     while len(entry_points) > 0:

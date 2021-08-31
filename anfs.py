@@ -1,4 +1,5 @@
 from a import * # TODO?
+import acorn
 
 # TODO: This open and read should be done via a utility function in a.py
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
@@ -7,7 +8,7 @@ assert all(x is None or (0 <= x <= 255) for x in memory)
 start_addr = 0x8000
 end_addr = 0xc000
 
-is_sideways_rom()
+acorn.is_sideways_rom()
 
 disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
 disassembly.add_label(0x96b4, "error_template_minus_1")
