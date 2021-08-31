@@ -26,11 +26,22 @@ expressions[0x8a63] = "service_vectors_changed"
 disassembly.add_label(0x8a5a, "service_handler_common2")
 disassembly.add_label(0x8aa7, "service_handler_not_vectors_changed")
 disassembly.add_comment(0x8aae,
-    "Call dispatch table entry X for service calls 1<=X<&D.\n" +
-    "Call dispatch table entry &D for service call &12.\n" +
-    "Don't handle any other service call.")
+    "Call dispatch table entry X+1 for service calls 1<=X<&D.\n" +
+    "Call dispatch table entry &D+1 for service call &12.\n" +
+    "Don't handle any other service call.\n" +
+    "(+1 because jump_table_dispatch-x_plus_y adds 1 if Y=0.)")
 
+# TODO: Jump table entry 0 is probably irrelevant.
+# Jump table entries 1-&D inclusive are for service call handlers.
+# There are probably some more given the use of Y by jump_table_dispatch_x_plus_y
+disassembly.add_comment(0x8e49, "Note that if Y=0, this will add 1 instead of 0.")
 disassembly.add_label(0x8e49, "jump_table_dispatch_x_plus_y")
+disassembly.add_label(0x89ef, "jump_table_high")
+disassembly.add_label(0x89ca, "jump_table_low")
+disassembly.add_label(0x8e58, "just_rts")
+disassembly.add_label(0x8ea5, "service_handler_claim_absolute_workspace")
+disassembly.add_label(0x8eb8, "service_handler_claim_private_workspace")
+
 disassembly.add_label(0x8eac, "clamp_absolute_workspace_and_save")
 
 disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
