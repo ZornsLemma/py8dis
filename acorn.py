@@ -3,11 +3,25 @@ import b as disassembly
 from memory import * # TODO?
 
 def label_os_entry_points():
+    # TODO: Ideally we wouldn't show any labels in the output that aren't referenced
     disassembly.add_label(0xffb9, "osrdrm")
+    disassembly.add_label(0xffbf, "osevent")
+    disassembly.add_label(0xffc2, "gsinit")
+    disassembly.add_label(0xffc5, "gsread")
+    disassembly.add_label(0xffc8, "nvrdch")
+    disassembly.add_label(0xffcb, "nvwrch")
+    disassembly.add_label(0xffce, "osfind")
+    disassembly.add_label(0xffd4, "osbput")
+    disassembly.add_label(0xffd7, "osbget")
+    disassembly.add_label(0xffda, "osargs")
+    disassembly.add_label(0xffdd, "osfile")
+    disassembly.add_label(0xfff1, "osword")
     disassembly.add_label(0xfff4, "osbyte")
+    disassembly.add_label(0xffe0, "osrdch")
     disassembly.add_label(0xffe3, "osasci")
     disassembly.add_label(0xffe7, "osnewl")
     disassembly.add_label(0xffee, "oswrch")
+    disassembly.add_label(0xfff7, "oscli")
 
 # TODO: This and other Acorn-specific stuff should be moved into an acorn.py file
 def is_sideways_rom():

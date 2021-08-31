@@ -63,8 +63,19 @@ def split_classifications(start_addr, end_addr):
         addr += classifications[addr].length()
 
 def emit(start_addr, end_addr):
-    print("AZA1", classifications[0x80db])
-    print("AZA2", classifications[0x80dd])
+    sep = ""
+    for addr in sorted(annotations.keys()):
+        if addr < start_addr or addr >= end_addr:
+            for annotation in sorted_annotations(annotations[addr]):
+                if isinstance(annotation, Label):
+                    annotation.emit_assignment()
+                    sep = "\n"
+    print(sep, end="")
+
+    print("    ORG &%04X" % start_addr)
+    print("    GUARD &%04X\n" % end_addr)
+
+    print(".pydis_start")
     addr = start_addr
     while addr < end_addr:
         # TODO: We might want to sort annotations, e.g. so comments appear before labels.
@@ -77,6 +88,10 @@ def emit(start_addr, end_addr):
             for annotation in sorted_annotations(annotations[addr + i]):
                 annotation.emit(classification_length - i)
         addr += classification_length
+    print(".pydis_end")
+
+    # TODO: Filename should be specified by user program
+    print('\nSAVE "OUT", pydis_start, pydis_end')
 
 # TODO: Idea is below here is just implementation detail, perhaps prefix things e.g. class names with _
 
@@ -95,6 +110,9 @@ class Label(object):
         else:
             label = ensure_addr_labelled(self.addr + offset)
             print("%s = %s-%d" % (self.name, label, offset))
+
+    def emit_assignment(self):
+        print("%s = &%04X" % (self.name, self.addr))
 
 
 
