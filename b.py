@@ -1,5 +1,6 @@
 from __future__ import print_function
 import collections
+import copy
 
 def add_label(addr, name):
     # An address has one "primary" label, which is the first label we see; this
@@ -32,14 +33,31 @@ def add_classification(addr, classification):
 def get_classification(addr):
     return classifications[addr]
 
+# Combine adjacent variable-length classifications.
+# TODO: Worth noting that although at the moment classification objects respond to is_variable_length() consistently, it would be perfectly possible to tweak this code and have some strings/data blocks marked by the user as non-variable-length while other ones are still variable length
 def merge_classifications(start_addr, end_addr):
     addr = start_addr
     while addr < end_addr:
         if classifications[addr].is_variable_length():
             addr2 = addr + classifications[addr].length()
-            while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]):
+            while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_variable_length():
                 classifications[addr].set_length(classifications[addr].length() + classifications[addr2].length())
                 classifications[addr2] = 0 # TODO: slightly ugly dummy value
+        addr += classifications[addr].length()
+
+# Split variable-length classifications at labels to minimise the number of
+# labels assigned via expressions instead of simple "label here" definitions.
+def split_classifications(start_addr, end_addr):
+    addr = start_addr
+    while addr < end_addr:
+        c = classifications[addr]
+        if c.is_variable_length() and c.length() > 1:
+            for i in range(1, c.length()):
+                if labels[addr + i] is not None:
+                    classifications[addr + i] = copy.copy(c)
+                    classifications[addr + i].set_length(c.length() - i)
+                    c.set_length(i)
+                    break
         addr += classifications[addr].length()
 
 def emit(start_addr, end_addr):

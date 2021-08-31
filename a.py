@@ -181,6 +181,7 @@ def emit2(start_addr, end_addr): # TODO POOR NAME
 
     # TODO: Not sure if this "clean up" logic belongs here or not...
     disassembly.merge_classifications(start_addr, end_addr)
+    disassembly.split_classifications(start_addr, end_addr)
 
     disassembly.emit(start_addr, end_addr)
 
