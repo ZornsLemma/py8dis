@@ -74,8 +74,55 @@ class Data(object):
         for directive, comment in zip(directives, comments):
             print("%-*s%s" % (comment_indent, directive, comment))
 
-class String(Data): # SFTODO: TEMP HACK RE-USING DATA
-    pass
+class String(object):
+    def __init__(self, length):
+        assert length > 0
+        self._length = length
+
+    def is_variable_length(self):
+        return True
+
+    def length(self):
+        return self._length
+
+    def set_length(self, length):
+        assert length > 0
+        self._length = length
+
+    def emit(self, addr):
+        prefix = "    EQUS "
+        s = prefix
+        state = 0
+        for i in range(self._length):
+            c = memory[addr + i]
+            if 32 <= c <= 126 and c != ord('"'):
+                if state == 0:
+                    s += '"'
+                elif state == 2:
+                    s += ', "'
+                state = 1
+                s += chr(c)
+            else:
+                if state == 1:
+                    s += '", '
+                elif state == 2:
+                    s += ", "
+                state = 2
+                if c == ord('"'):
+                    s += "'\"'"
+                else:
+                    # TODO: Maybe don't allow for expressions here?
+                    s += get_constant8(addr + i)
+            if len(s) > 70:
+                if state == 1:
+                    s += '"'
+                print(s)
+                s = prefix
+                state = 0
+        if s != prefix:
+            if state == 1:
+                s += '"'
+            print(s)
 
 class Word(Data): # SFTODO: TEMP HACK RE-USING DATA
     pass
