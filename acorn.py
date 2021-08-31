@@ -2,6 +2,13 @@ import a as SFTODOA
 import b as disassembly
 from memory import * # TODO?
 
+def label_os_entry_points():
+    disassembly.add_label(0xffb9, "osrdrm")
+    disassembly.add_label(0xfff4, "osbyte")
+    disassembly.add_label(0xffe3, "osasci")
+    disassembly.add_label(0xffe7, "osnewl")
+    disassembly.add_label(0xffee, "oswrch")
+
 # TODO: This and other Acorn-specific stuff should be moved into an acorn.py file
 def is_sideways_rom():
     disassembly.add_label(0x8000, "rom_header")

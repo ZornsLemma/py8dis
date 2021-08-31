@@ -8,16 +8,12 @@ assert all(x is None or (0 <= x <= 255) for x in memory)
 start_addr = 0x8000
 end_addr = 0xc000
 
+acorn.label_os_entry_points()
 acorn.is_sideways_rom()
 
 disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
 disassembly.add_label(0x96b4, "error_template_minus_1")
 disassembly.add_classification(0x96b5, String(3))
-disassembly.add_label(0xffb9, "osrdrm")
-disassembly.add_label(0xfff4, "osbyte")
-disassembly.add_label(0xffe3, "osasci")
-disassembly.add_label(0xffe7, "osnewl")
-disassembly.add_label(0xffee, "oswrch")
 
 string_cr(0x8d0f)
 string_nul(0x8d38)
