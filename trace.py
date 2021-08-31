@@ -1,35 +1,5 @@
 from a import * # TODO?
 
-# TODO: USE OPCODE BASE CLASS
-class OpcodeImplied(object):
-    def __init__(self, mnemonic):
-        self.mnemonic = mnemonic
-        self.operand_length = 0
-
-    def disassemble(self, addr):
-        return [addr + 1]
-
-    # SFTODO: We are repeating this all over the place
-    def length(self):
-        return 1 + self.operand_length
-
-    def emit(self, addr):
-        print("    %s" % self.mnemonic)
-
-# TODO: USE OPCODE BASE CLASS
-class OpcodeImmediate(object):
-    def __init__(self, mnemonic):
-        self.mnemonic = mnemonic
-        self.operand_length = 1
-
-    def disassemble(self, addr):
-        return [addr + 2]
-
-    def length(self):
-        return 1 + self.operand_length
-
-    def emit(self, addr):
-        print("    %s #%s" % (self.mnemonic, get_constant8(addr + 1)))
 
 class Opcode(object):
     def __init__(self, mnemonic, operand_length, suffix = None):
@@ -40,6 +10,31 @@ class Opcode(object):
 
     def length(self):
         return 1 + self.operand_length
+
+
+class OpcodeImplied(Opcode):
+    def __init__(self, mnemonic):
+        super(OpcodeImplied, self).__init__(mnemonic, 0)
+        self.mnemonic = mnemonic
+        self.operand_length = 0
+
+    def disassemble(self, addr):
+        return [addr + 1]
+
+    def emit(self, addr):
+        print("    %s" % self.mnemonic)
+
+
+class OpcodeImmediate(Opcode):
+    def __init__(self, mnemonic):
+        super(OpcodeImmediate, self).__init__(mnemonic, 1)
+
+    def disassemble(self, addr):
+        return [addr + 2]
+
+    def emit(self, addr):
+        print("    %s #%s" % (self.mnemonic, get_constant8(addr + 1)))
+
 
 class OpcodeZp(Opcode):
     def __init__(self, mnemonic, suffix = None):
@@ -52,12 +47,14 @@ class OpcodeZp(Opcode):
     def emit(self, addr):
         print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix))
 
+
 class OpcodeAbs(Opcode):
     def __init__(self, mnemonic, suffix = None):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
     def emit(self, addr):
         print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix))
+
 
 class OpcodeDataAbs(OpcodeAbs):
     def __init__(self, mnemonic, suffix = None):
@@ -68,12 +65,14 @@ class OpcodeDataAbs(OpcodeAbs):
         disassembly.ensure_addr_labelled(get_abs(addr + 1))
         return [addr + 3]
 
+
 class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpAbs, self).__init__("JMP")
 
     def disassemble(self, addr):
         return [None, get_abs(addr + 1)]
+
 
 class OpcodeJmpInd(OpcodeAbs):
     def __init__(self):
@@ -82,6 +81,7 @@ class OpcodeJmpInd(OpcodeAbs):
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(get_abs(addr + 1))
         return [None]
+
 
 class OpcodeJsr(OpcodeAbs):
     def __init__(self):
@@ -92,6 +92,7 @@ class OpcodeJsr(OpcodeAbs):
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, get_abs(addr + 1)]
 
+
 class OpcodeReturn(Opcode):
     def __init__(self, mnemonic):
         super(OpcodeReturn, self).__init__(mnemonic, 0)
@@ -101,6 +102,7 @@ class OpcodeReturn(Opcode):
 
     def emit(self, addr):
         print("    %s" % self.mnemonic)
+
 
 class OpcodeConditionalBranch(Opcode):
     def __init__(self, mnemonic):
@@ -255,6 +257,7 @@ def disassemble_instruction(addr):
     disassembly.add_classification(addr, opcode)
     return opcode.disassemble(addr)
 
+# TODO: Make start_addr/end_addr globals like entry_points? Trouble is that they have to be inited by the user, although to be fair our load() function (not yet implemented) could set them
 def trace(start_addr, end_addr):
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)
