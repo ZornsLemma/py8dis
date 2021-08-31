@@ -43,19 +43,36 @@ class Data(object):
         self._length = length
 
     def emit(self, addr):
-        # TODO: Would be good if this output an ASCII dump (xxd style) in comments aligned at right
+        # TODO: ASCII output should be optional
         data = list(get_constant8(addr + i) for i in range(self._length))
+        def asciify(n):
+            if n in expressions:
+                return "."
+            c = memory[n]
+            if 32 <= c <= 126:
+                return chr(c)
+            return "."
+        ascii = list(asciify(addr + i) for i in range(self._length))
         longest_item = max(len(x) for x in data)
         items_per_line = min(max(1, 50 // (longest_item + 2)), 8)
         item_min_width = min(longest_item, 70 // items_per_line)
-        print("QQ", longest_item, items_per_line, item_min_width)
+        #print("QQ", longest_item, items_per_line, item_min_width)
+        #print("QQ2", ascii)
+        directives = []
+        comments = []
         for chunk in chunks(data, items_per_line):
             s = ""
             sep = ""
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            print("    EQUB %s" % s)
+            directives.append("    EQUB %s" % s)
+        for chunk in chunks(ascii, items_per_line):
+            comments.append(" ; " + "".join(chunk))
+        max_directive_len = max(len(x) for x in directives)
+        comment_indent = max(60, max_directive_len)
+        for directive, comment in zip(directives, comments):
+            print("%-*s%s" % (comment_indent, directive, comment))
 
 class String(Data): # SFTODO: TEMP HACK RE-USING DATA
     pass
