@@ -1,5 +1,6 @@
 from a import * # TODO?
 import acorn
+import trace
 
 # TODO: This open and read should be done via a utility function in a.py
 with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
@@ -94,5 +95,5 @@ for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 print("XXX", expressions)
 
-trace(start_addr, end_addr)
+trace.trace(start_addr, end_addr)
 emit2(start_addr, end_addr)
