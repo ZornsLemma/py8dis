@@ -32,8 +32,8 @@ class OpcodeImplied(object):
     def length(self):
         return 1 + self.operand_length
 
-    def as_string(self, addr):
-        return self.mnemonic
+    def emit(self, addr):
+        print("    %s" % self.mnemonic)
 
 class OpcodeImmediate(object):
     def __init__(self, mnemonic):
@@ -46,8 +46,8 @@ class OpcodeImmediate(object):
     def length(self):
         return 1 + self.operand_length
 
-    def as_string(self, addr):
-        return "%s #%s" % (self.mnemonic, get_constant8(addr + 1))
+    def emit(self, addr):
+        print("    %s #%s" % (self.mnemonic, get_constant8(addr + 1)))
 
 def get_expression(addr, expected_value):
     expression = expressions[addr]
@@ -62,7 +62,7 @@ def get_constant8(addr):
 def get_address8(addr):
     operand = memory[addr]
     if addr not in expressions:
-        return get_label(operand)
+        return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
 def get_address16(addr):
@@ -85,8 +85,8 @@ class OpcodeZp(object):
     def length(self):
         return 1 + self.operand_length
 
-    def as_string(self, addr):
-        return "%s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix)
+    def emit(self, addr):
+        print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix))
 
 class OpcodeAbs(object):
     def __init__(self, mnemonic, suffix = None):
@@ -98,8 +98,8 @@ class OpcodeAbs(object):
     def length(self):
         return 1 + self.operand_length
 
-    def as_string(self, addr):
-        return "%s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix)
+    def emit(self, addr):
+        print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix))
 
 class OpcodeDataAbs(OpcodeAbs):
     def __init__(self, mnemonic, suffix = None):
@@ -148,8 +148,8 @@ class OpcodeReturn(object):
     def length(self):
         return 1 + self.operand_length
 
-    def as_string(self, addr):
-        return self.mnemonic
+    def emit(self, addr):
+        print("    %s" % self.mnemonic)
 
 class OpcodeConditionalBranch(object):
     def __init__(self, mnemonic):
@@ -165,8 +165,8 @@ class OpcodeConditionalBranch(object):
     def length(self):
         return 1 + self.operand_length
 
-    def as_string(self, addr):
-        return "%s %s" % (self.mnemonic, get_label(self._target(addr)))
+    def emit(self, addr):
+        print("    %s %s" % (self.mnemonic, disassembly.get_label(self._target(addr))))
 
 #def conditional_branch(addr, operand):
 #    return [addr + 2, addr + 2 + signed8(operand)]
@@ -559,7 +559,7 @@ class Data(object):
     def emit(self, addr):
         assert self._length == 1 # TODO!
         # TODO: Need to re-implement expressions support, multiple bytes per line, merging of adjacent data (not in this fn)
-        print("    EQUB &%02X" % memory[addr])
+        print("    EQUB %s" % get_constant8(addr))
 
 
 

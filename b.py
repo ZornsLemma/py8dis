@@ -38,7 +38,7 @@ def emit(start_addr, end_addr):
         # TODO: We might want to sort annotations, e.g. so comments appear before labels.
         for annotation in sorted_annotations(annotations[addr]):
             annotation.emit(0)
-        print("XXX", hex(addr))
+        #print("XXX", hex(addr))
         classifications[addr].emit(addr)
         classification_length = classifications[addr].length()
         for i in range(1, classification_length):
