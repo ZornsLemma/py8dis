@@ -1,5 +1,7 @@
 from __future__ import print_function
 import collections
+import sys # TODO: TEMP?
+import b as disassembly
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
@@ -26,6 +28,10 @@ class OpcodeImplied(object):
     def disassemble(self, addr):
         return [addr + 1]
 
+    # SFTODO: We are repeating this all over the place
+    def length(self):
+        return 1 + self.operand_length
+
     def as_string(self, addr):
         return self.mnemonic
 
@@ -37,19 +43,11 @@ class OpcodeImmediate(object):
     def disassemble(self, addr):
         return [addr + 2]
 
+    def length(self):
+        return 1 + self.operand_length
+
     def as_string(self, addr):
         return "%s #%s" % (self.mnemonic, get_constant8(addr + 1))
-
-def add_default_label(addr):
-    if addr not in labels:
-        labels[addr] = "L%04X" % addr
-
-def get_label(addr):
-    if addr in labels:
-        return labels[addr]
-    print("OO2", hex(addr))
-    assert addr in derived_labels
-    return derived_labels[addr]
 
 def get_expression(addr, expected_value):
     expression = expressions[addr]
@@ -70,7 +68,7 @@ def get_address8(addr):
 def get_address16(addr):
     operand = get_abs(addr)
     if addr not in expressions:
-        return get_label(operand)
+        return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
 class OpcodeZp(object):
@@ -81,8 +79,11 @@ class OpcodeZp(object):
         self.operand_length = 1
 
     def disassemble(self, addr):
-        add_default_label(get_u8(addr + 1))
+        disassembly.ensure_addr_labelled(get_u8(addr + 1))
         return [addr + 2]
+
+    def length(self):
+        return 1 + self.operand_length
 
     def as_string(self, addr):
         return "%s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix)
@@ -94,6 +95,9 @@ class OpcodeAbs(object):
         self.prefix = "(" if self.suffix.startswith(")") else ""
         self.operand_length = 2
 
+    def length(self):
+        return 1 + self.operand_length
+
     def as_string(self, addr):
         return "%s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix)
 
@@ -103,7 +107,7 @@ class OpcodeDataAbs(OpcodeAbs):
 
     def disassemble(self, addr):
         # TODO: Should we *always* do this in disassemble() instead of special-casing non-consecutive instructions? ie call add_default_label in control flow affecting instructions
-        add_default_label(get_abs(addr + 1))
+        disassembly.ensure_addr_labelled(get_abs(addr + 1))
         return [addr + 3]
 
 class OpcodeJmpAbs(OpcodeAbs):
@@ -113,12 +117,15 @@ class OpcodeJmpAbs(OpcodeAbs):
     def disassemble(self, addr):
         return [None, get_abs(addr + 1)]
 
+    def emit(self, addr):
+        print("    %s %s" % (self.mnemonic, get_address16(addr + 1)))
+
 class OpcodeJmpInd(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpInd, self).__init__("JMP", ")")
 
     def disassemble(self, addr):
-        add_default_label(get_abs(addr + 1))
+        disassembly.ensure_addr_labelled(get_abs(addr + 1))
         return [None]
 
 class OpcodeJsr(OpcodeAbs):
@@ -138,6 +145,9 @@ class OpcodeReturn(object):
     def disassemble(self, addr):
         return [None]
 
+    def length(self):
+        return 1 + self.operand_length
+
     def as_string(self, addr):
         return self.mnemonic
 
@@ -151,6 +161,9 @@ class OpcodeConditionalBranch(object):
 
     def disassemble(self, addr):
         return [addr + 2, self._target(addr)]
+
+    def length(self):
+        return 1 + self.operand_length
 
     def as_string(self, addr):
         return "%s %s" % (self.mnemonic, get_label(self._target(addr)))
@@ -290,16 +303,13 @@ def disassemble_instruction(addr):
     if opcode_value not in opcodes:
         return [None]
     opcode = opcodes[opcode_value]
-    for i in range(opcode.operand_length):
-        if what[addr + 1 + i] is not None:
-            # TODO: Warn?
-            return [None]
-        # TODO: check for memory[addr + 1 + i] being None?
+    if disassembly.is_classified(addr, 1 + opcode.operand_length):
+        # TODO: Warn?
+        return [None]
     # Up to this point we hadn't decided addr contains an instruction; we now
     # have.
-    what[addr] = (WHAT_OPCODE, 1 + opcode.operand_length)
-    for i in reverse_range(opcode.operand_length):
-        what[addr + 1 + i] = (WHAT_OPERAND, 1) # length a bit irrelevant
+    # TODO: The "disassemble" function on opcodes is really more of a "possible targets" function - rename?
+    disassembly.add_classification(addr, opcode)
     return opcode.disassemble(addr)
 
 def inline_nul_string_hook(target, addr):
@@ -345,35 +355,36 @@ def string_hi(addr):
 # TODO: RENAME DWORD TO WORD...
 def rts_address(addr):
     labelled_entry_point(get_abs(addr) + 1)
-    expressions[addr] = "%s-1" % labels[get_abs(addr) + 1]
+    expressions[addr] = "%s-1" % disassembly.get_label(get_abs(addr) + 1)
     what[addr] = (WHAT_DWORD, 2)
     what[addr + 1] = (WHAT_DWORD, 1) # TODO!?
     return addr + 2
 
 def is_sideways_rom():
+    disassembly.add_label(0x8000, "rom_header")
     def check_entry(addr, entry_type):
         jmp_abs_opcode = 0x4c
-        labels[addr] = entry_type + "_entry"
+        disassembly.add_label(addr, entry_type + "_entry")
         if memory[addr] == jmp_abs_opcode:
             entry_points.append(addr)
-            labels[get_abs(addr + 1)] = entry_type + "_handler"
+            disassembly.add_label(get_abs(addr + 1), entry_type + "_handler")
         else:
             what[addr    ] = (WHAT_DATA, 1)
             what[addr + 1] = (WHAT_DATA, 1)
             what[addr + 2] = (WHAT_DATA, 1)
     check_entry(0x8000, "language")
     check_entry(0x8003, "service")
-    labels[0x8006] = "rom_type"
-    labels[0x8007] = "copyright_offset"
+    disassembly.add_label(0x8006, "rom_type")
+    disassembly.add_label(0x8007, "copyright_offset")
     copyright_offset = memory[0x8007]
-    expressions[0x8007] = "copyright - language_entry"
-    labels[0x8008] = "binary_version"
-    labels[0x8009] = "title"
+    expressions[0x8007] = "copyright - rom_header"
+    disassembly.add_label(0x8008, "binary_version")
+    disassembly.add_label(0x8009, "title")
     nul_at_title_end = string_nul(0x8009) - 1
     if nul_at_title_end < (0x8000 + copyright_offset):
-        labels[nul_at_title_end] = "version"
+        disassembly.add_label(nul_at_title_end, "version")
         string_nul(nul_at_title_end + 1)
-    labels[0x8000 + copyright_offset] = "copyright"
+    disassembly.add_label(0x8000 + copyright_offset, "copyright")
     string_nul(0x8000 + copyright_offset + 1)
     # TODO: We could recognise tube transfer/relocation data in header
 
@@ -382,16 +393,16 @@ def is_sideways_rom():
 # TODO: Rename code_label or something?
 def labelled_entry_point(addr):
     entry_points.append(addr)
-    add_default_label(addr)
+    disassembly.ensure_addr_labelled(addr)
 
 
 def split_jump_table_entry(low_addr, high_addr, offset):
     entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
     entry_points.append(entry_point)
-    add_default_label(entry_point)
+    disassembly.ensure_addr_labelled(entry_point)
     # TODO: Don't show offset if it's 0
-    expressions[high_addr] = "hi(%s-%d)" % (labels[entry_point], offset)
-    expressions[low_addr]  = "lo(%s-%d)" % (labels[entry_point], offset)
+    expressions[high_addr] = "hi(%s-%d)" % (disassembly.get_label(entry_point), offset)
+    expressions[low_addr]  = "lo(%s-%d)" % (disassembly.get_label(entry_point), offset)
 
 # TODO: What's best way to do this "enum"?
 WHAT_DATA = 0
@@ -401,7 +412,6 @@ WHAT_OPERAND = 3
 WHAT_DWORD = 4
 
 memory = [None] * 64*1024
-labels = {}
 what = [None] * 64*1024
 expressions = {}
 jsr_hooks = {}
@@ -415,16 +425,16 @@ end_addr = 0xc000
 
 is_sideways_rom()
 
-labels[0x9611] = "sta_e09_if_d6c_b7_set"
-labels[0x96b4] = "error_template_minus_1"
+disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
+disassembly.add_label(0x96b4, "error_template_minus_1")
 what[0x96b5] = (WHAT_STRING, 1) # TODO: REPETITIVE, NEED HELPER FN
 what[0x96b6] = (WHAT_STRING, 1)
 what[0x96b7] = (WHAT_STRING, 1)
-labels[0xffb9] = "osrdrm"
-labels[0xfff4] = "osbyte"
-labels[0xffe3] = "osasci"
-labels[0xffe7] = "osnewl"
-labels[0xffee] = "oswrch"
+disassembly.add_label(0xffb9, "osrdrm")
+disassembly.add_label(0xfff4, "osbyte")
+disassembly.add_label(0xffe3, "osasci")
+disassembly.add_label(0xffe7, "osnewl")
+disassembly.add_label(0xffee, "oswrch")
 
 string_cr(0x8d0f)
 string_nul(0x8d38)
@@ -457,13 +467,13 @@ for i in range(8):
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
         labelled_entry_point(target_addr)
         print("XK", hex(target_addr))
-        expressions[rts_low_addr] = "lo(%s)-1" % labels[target_addr]
+        expressions[rts_low_addr] = "lo(%s)-1" % disassembly.get_label(target_addr)
 
 string_cr(0xa17c) # preceding BNE is always taken
 what[0xaefb] = (WHAT_DATA, 1)
 #string_n(0xaefb, 4)
 
-labels[(0x421-0x400)+0xbf04] = 'copied_to_421'
+disassembly.add_label((0x421-0x400)+0xbf04, "copied_to_421")
 entry_points.append((0x421-0x400)+0xbf04)
 
 labelled_entry_point(0x89a7)
@@ -478,7 +488,7 @@ labelled_entry_point(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
-labels[0x9145] = "print_inline_top_bit_clear"
+disassembly.add_label(0x9145, "print_inline_top_bit_clear")
 def print_inline_top_bit_clear_hook(target, addr):
     addr += 3
     while memory[addr] & 0x80 == 0:
@@ -490,9 +500,9 @@ jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
 # TODO: The fact there are two entry points also suggests something slightly cleverer going on
-labels[0x96b8] = "generate_error_inline"
-labels[0x96d4] = "generate_error_inline2"
-labels[0x96d1] = "generate_error_inline3"
+disassembly.add_label(0x96b8, "generate_error_inline")
+disassembly.add_label(0x96d4, "generate_error_inline2")
+disassembly.add_label(0x96d1, "generate_error_inline3")
 def generate_error_inline_hook(target, addr):
     inline_nul_string_hook(target, addr) # discard return address
     return None
@@ -514,7 +524,7 @@ while len(entry_points) > 0:
         if implied_entry_point is not None:
             entry_points.append(implied_entry_point)
         for new_entry_point in new_entry_points:
-            add_default_label(new_entry_point)
+            disassembly.ensure_addr_labelled(new_entry_point)
             entry_points.append(new_entry_point)
 
 # Convert anything not explicitly disassembled into data.
@@ -538,38 +548,33 @@ while addr < end_addr:
     else:
         addr = addr + 1
 
-# Replace any labels which fall mid-instruction with derived labels
-# TODO: Smallish detail but it might be nice to derive labels using a label *after* the instruction they overlap - in practice they are quite likely to refer to tables following the instruction and this avoids forcing a label in before it
-derived_labels = {}
-derived_labels2 = collections.defaultdict(list) # TODO: NAMING
-addr = start_addr
-while addr < end_addr:
-    if what[addr][0] == WHAT_OPCODE:
-        for i in range(1, what[addr][1]):
-            if (addr + i) in labels:
-                add_default_label(addr)
-                derived_labels[addr + i] = labels[addr + i]
-                derived_labels2[addr].append((labels[addr + i], "%s+%d" % (labels[addr], i)))
-                del labels[addr + i]
-    addr += what[addr][1]
-print("XXX", derived_labels)
 
-# TODO: A label splitting pass for where labels appear in middle of data/string/instruction
-addr = start_addr
-while addr < end_addr:
-    print(hex(addr), what[addr])
-    for i in range(1, what[addr][1]):
-        # TODO: This isn't handling instructions with labels in the middle - which is fine now we deal with them above
-        if (addr + i) in labels:
-            print("XXX2", i)
-            assert what[addr][0] != WHAT_OPCODE
-            what[addr + i] = (what[addr][0], what[addr][1] - i)
-            what[addr] = (what[addr][0], i)
-            break
-    addr += what[addr][1]
+class Data(object):
+    def __init__(self, length):
+        self._length = length
+
+    def length(self):
+        return self._length
+
+    def emit(self, addr):
+        assert self._length == 1 # TODO!
+        # TODO: Need to re-implement expressions support, multiple bytes per line, merging of adjacent data (not in this fn)
+        print("    EQUB &%02X" % memory[addr])
+
+
+
 
 # TODO: Emit "constant labels" which aren't addresses in the start_addr/end_addr range
 
+# TODO: Not sure if this "clean up" logic belongs here or not...
+addr = start_addr
+while addr < end_addr:
+    if not disassembly.is_classified(addr, 1):
+        disassembly.add_classification(addr, Data(1))
+    addr += disassembly.get_classification(addr).length()
+
+disassembly.emit(start_addr, end_addr)
+sys.exit(0) # TODO: TEMP
 addr = start_addr
 while addr < end_addr:
     if addr in labels:
