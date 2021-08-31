@@ -20,6 +20,26 @@ def get_abs(i):
     assert memory[i] is not None and memory[i+1] is not None
     return memory[i] + (memory[i+1] << 8)
 
+class Data(object):
+    def __init__(self, length):
+        assert length > 0
+        self._length = length
+
+    def length(self):
+        return self._length
+
+    def emit(self, addr):
+        # TODO: Need to re-implement expressions support, multiple bytes per line, merging of adjacent data (not in this fn)
+        for i in range(self._length):
+            print("    EQUB %s" % get_constant8(addr + i))
+
+class String(Data): # SFTODO: TEMP HACK RE-USING DATA
+    pass
+
+class Word(Data): # SFTODO: TEMP HACK RE-USING DATA
+    pass
+
+
 class OpcodeImplied(object):
     def __init__(self, mnemonic):
         self.mnemonic = mnemonic
@@ -297,7 +317,7 @@ def reverse_range(length):
     return range(length - 1, -1, -1)
 
 def disassemble_instruction(addr):
-    assert what[addr] is None
+    assert not disassembly.is_classified(addr, 1)
     opcode_value = memory[addr]
     print(hex(opcode_value))
     if opcode_value not in opcodes:
@@ -314,20 +334,21 @@ def disassemble_instruction(addr):
 
 def inline_nul_string_hook(target, addr):
     addr += 3
+    initial_addr = addr
     while True:
-        what[addr] = (WHAT_STRING, 1)
         if memory[addr] == 0:
             break
         addr += 1
+    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
     return addr + 1
 
 def string_terminated(addr, terminator):
     initial_addr = addr
     while True:
-        what[addr] = (WHAT_STRING, 1)
         if memory[addr] == terminator:
             break
         addr += 1
+    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
     return addr + 1
 
 def string_cr(addr):
@@ -341,8 +362,8 @@ def string_n(addr, n):
         what[addr + i] = (WHAT_STRING, 1)
 
 def string_hi(addr):
+    initial_addr = addr
     while True:
-        what[addr] = (WHAT_STRING, 1)
         if memory[addr] & 0x80 != 0:
             if False: # TODO: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
@@ -350,14 +371,14 @@ def string_hi(addr):
                     expressions[addr] = "&80+'%s'" % chr(c)
             break
         addr += 1
+    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
     return addr + 1
 
 # TODO: RENAME DWORD TO WORD...
 def rts_address(addr):
     labelled_entry_point(get_abs(addr) + 1)
     expressions[addr] = "%s-1" % disassembly.get_label(get_abs(addr) + 1)
-    what[addr] = (WHAT_DWORD, 2)
-    what[addr + 1] = (WHAT_DWORD, 1) # TODO!?
+    disassembly.add_classification(addr, Word(2))
     return addr + 2
 
 def is_sideways_rom():
@@ -369,9 +390,7 @@ def is_sideways_rom():
             entry_points.append(addr)
             disassembly.add_label(get_abs(addr + 1), entry_type + "_handler")
         else:
-            what[addr    ] = (WHAT_DATA, 1)
-            what[addr + 1] = (WHAT_DATA, 1)
-            what[addr + 2] = (WHAT_DATA, 1)
+            disassembly.add_classification(addr, Data(3))
     check_entry(0x8000, "language")
     check_entry(0x8003, "service")
     disassembly.add_label(0x8006, "rom_type")
@@ -404,15 +423,7 @@ def split_jump_table_entry(low_addr, high_addr, offset):
     expressions[high_addr] = "hi(%s-%d)" % (disassembly.get_label(entry_point), offset)
     expressions[low_addr]  = "lo(%s-%d)" % (disassembly.get_label(entry_point), offset)
 
-# TODO: What's best way to do this "enum"?
-WHAT_DATA = 0
-WHAT_STRING = 1
-WHAT_OPCODE = 2
-WHAT_OPERAND = 3
-WHAT_DWORD = 4
-
 memory = [None] * 64*1024
-what = [None] * 64*1024
 expressions = {}
 jsr_hooks = {}
 entry_points = []
@@ -427,9 +438,7 @@ is_sideways_rom()
 
 disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
 disassembly.add_label(0x96b4, "error_template_minus_1")
-what[0x96b5] = (WHAT_STRING, 1) # TODO: REPETITIVE, NEED HELPER FN
-what[0x96b6] = (WHAT_STRING, 1)
-what[0x96b7] = (WHAT_STRING, 1)
+disassembly.add_classification(0x96b5, String(3))
 disassembly.add_label(0xffb9, "osrdrm")
 disassembly.add_label(0xfff4, "osbyte")
 disassembly.add_label(0xffe3, "osasci")
@@ -470,7 +479,7 @@ for i in range(8):
         expressions[rts_low_addr] = "lo(%s)-1" % disassembly.get_label(target_addr)
 
 string_cr(0xa17c) # preceding BNE is always taken
-what[0xaefb] = (WHAT_DATA, 1)
+disassembly.add_classification(0xaefb, Data(1))
 #string_n(0xaefb, 4)
 
 disassembly.add_label((0x421-0x400)+0xbf04, "copied_to_421")
@@ -491,9 +500,10 @@ labelled_entry_point(0xbfd2)
 disassembly.add_label(0x9145, "print_inline_top_bit_clear")
 def print_inline_top_bit_clear_hook(target, addr):
     addr += 3
+    initial_addr = addr
     while memory[addr] & 0x80 == 0:
-        what[addr] = (WHAT_STRING, 1)
         addr += 1
+    disassembly.add_classification(initial_addr, String(addr - initial_addr))
     return addr
 jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 
@@ -516,7 +526,7 @@ print("XXX", expressions)
 
 while len(entry_points) > 0:
     entry_point = entry_points.pop(0)
-    if what[entry_point] is None and start_addr <= entry_point < end_addr:
+    if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:
         print(hex(entry_point))
         new_entry_points = disassemble_instruction(entry_point)
         assert len(new_entry_points) >= 1
@@ -527,39 +537,27 @@ while len(entry_points) > 0:
             disassembly.ensure_addr_labelled(new_entry_point)
             entry_points.append(new_entry_point)
 
-# Convert anything not explicitly disassembled into data.
-for addr in range(len(what)):
-    if what[addr] is None:
-        what[addr] = (WHAT_DATA, 1)
+if False:
+    # Convert anything not explicitly disassembled into data.
+    for addr in range(len(what)):
+        if what[addr] is None:
+            what[addr] = (WHAT_DATA, 1)
 
-# Merge adjacent items of data.
-addr = start_addr
-while addr < end_addr:
-    if what[addr][0] in (WHAT_DATA, WHAT_STRING):
-        new_addr = addr + what[addr][1]
-        #print("X", hex(addr), hex(new_addr), what[new_addr])
-        while new_addr < end_addr and what[new_addr][0] == what[addr][0]:
-            new_addr += what[new_addr][1]
-            #print("Y", hex(addr), hex(new_addr), what[new_addr])
-        what[addr] = (what[addr][0], new_addr - addr)
-        for i in range(addr + 1, new_addr):
-            what[i] = None
-        addr = new_addr
-    else:
-        addr = addr + 1
-
-
-class Data(object):
-    def __init__(self, length):
-        self._length = length
-
-    def length(self):
-        return self._length
-
-    def emit(self, addr):
-        assert self._length == 1 # TODO!
-        # TODO: Need to re-implement expressions support, multiple bytes per line, merging of adjacent data (not in this fn)
-        print("    EQUB %s" % get_constant8(addr))
+    # Merge adjacent items of data.
+    addr = start_addr
+    while addr < end_addr:
+        if what[addr][0] in (WHAT_DATA, WHAT_STRING):
+            new_addr = addr + what[addr][1]
+            #print("X", hex(addr), hex(new_addr), what[new_addr])
+            while new_addr < end_addr and what[new_addr][0] == what[addr][0]:
+                new_addr += what[new_addr][1]
+                #print("Y", hex(addr), hex(new_addr), what[new_addr])
+            what[addr] = (what[addr][0], new_addr - addr)
+            for i in range(addr + 1, new_addr):
+                what[i] = None
+            addr = new_addr
+        else:
+            addr = addr + 1
 
 
 
@@ -652,3 +650,6 @@ while addr < end_addr:
 # - "programmable" - the disassembly is controlled by a custom python program which imports the core disassembler utils and any other custom utils it like - it can contain arbitrary python code
 # - "annotatable" - postpone as long as possible the temptation to start hand-editing the output, because as soon as you do that it gets difficult to get further assistance from disassembler if you (e.g.) discover a chunk of data which you want to annotate as a jump table
 # - "anchored" - no matter how mangled or useless the disassembly is, it should always re-build the input correctly and no bytes should be lost
+
+
+# TODO: At the moment, strings (and probably other things) are not chopped up by labels; they probably should be
