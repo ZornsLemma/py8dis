@@ -91,32 +91,30 @@ def get_address16(addr):
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
-class OpcodeZp(object):
-    def __init__(self, mnemonic, suffix = None):
+class Opcode(object):
+    def __init__(self, mnemonic, operand_length, suffix = None):
         self.mnemonic = mnemonic
         self.suffix = suffix if suffix is not None else ""
         self.prefix = "(" if ")" in self.suffix else ""
-        self.operand_length = 1
+        self.operand_length = operand_length
+
+    def length(self):
+        return 1 + self.operand_length
+
+class OpcodeZp(Opcode):
+    def __init__(self, mnemonic, suffix = None):
+        super(OpcodeZp, self).__init__(mnemonic, 1, suffix)
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(get_u8(addr + 1))
         return [addr + 2]
 
-    def length(self):
-        return 1 + self.operand_length
-
     def emit(self, addr):
         print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix))
 
-class OpcodeAbs(object):
+class OpcodeAbs(Opcode):
     def __init__(self, mnemonic, suffix = None):
-        self.mnemonic = mnemonic
-        self.suffix = suffix if suffix is not None else ""
-        self.prefix = "(" if self.suffix.startswith(")") else ""
-        self.operand_length = 2
-
-    def length(self):
-        return 1 + self.operand_length
+        super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
     def emit(self, addr):
         print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix))
@@ -137,9 +135,6 @@ class OpcodeJmpAbs(OpcodeAbs):
     def disassemble(self, addr):
         return [None, get_abs(addr + 1)]
 
-    def emit(self, addr):
-        print("    %s %s" % (self.mnemonic, get_address16(addr + 1)))
-
 class OpcodeJmpInd(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpInd, self).__init__("JMP", ")")
@@ -157,33 +152,25 @@ class OpcodeJsr(OpcodeAbs):
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, get_abs(addr + 1)]
 
-class OpcodeReturn(object):
+class OpcodeReturn(Opcode):
     def __init__(self, mnemonic):
-        self.mnemonic = mnemonic
-        self.operand_length = 0
+        super(OpcodeReturn, self).__init__(mnemonic, 0)
 
     def disassemble(self, addr):
         return [None]
 
-    def length(self):
-        return 1 + self.operand_length
-
     def emit(self, addr):
         print("    %s" % self.mnemonic)
 
-class OpcodeConditionalBranch(object):
+class OpcodeConditionalBranch(Opcode):
     def __init__(self, mnemonic):
-        self.mnemonic = mnemonic
-        self.operand_length = 1
+        super(OpcodeConditionalBranch, self).__init__(mnemonic, 1)
 
     def _target(self, addr):
         return addr + 2 + signed8(get_u8(addr + 1))
 
     def disassemble(self, addr):
         return [addr + 2, self._target(addr)]
-
-    def length(self):
-        return 1 + self.operand_length
 
     def emit(self, addr):
         print("    %s %s" % (self.mnemonic, disassembly.get_label(self._target(addr))))
