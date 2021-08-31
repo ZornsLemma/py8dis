@@ -78,15 +78,16 @@ def emit(start_addr, end_addr):
     print(".pydis_start")
     addr = start_addr
     while addr < end_addr:
-        # TODO: We might want to sort annotations, e.g. so comments appear before labels.
-        for annotation in sorted_annotations(annotations[addr]):
-            annotation.emit(0)
-        #print("XXX", hex(addr))
-        classifications[addr].emit(addr)
         classification_length = classifications[addr].length()
+        pending_annotations = []
         for i in range(1, classification_length):
             for annotation in sorted_annotations(annotations[addr + i]):
-                annotation.emit(classification_length - i)
+                pending_annotations.append(annotation.as_string(addr))
+        for annotation in sorted_annotations(annotations[addr]):
+            annotation.emit(addr)
+        for annotation in pending_annotations:
+            print(annotation)
+        classifications[addr].emit(addr)
         addr += classification_length
     print(".pydis_end")
 
@@ -103,13 +104,17 @@ class Label(object):
         self.addr = addr
         self.name = name
 
-    def emit(self, offset):
+    def emit(self, emit_addr):
+        print(self.as_string(emit_addr))
+
+    def as_string(self, emit_addr): # TODO: ARG IS MISNAMED NOW
+        offset = self.addr - emit_addr
         assert offset >= 0
         if offset == 0:
-            print(".%s" % self.name)
+            return ".%s" % self.name
         else:
-            label = ensure_addr_labelled(self.addr + offset)
-            print("%s = %s-%d" % (self.name, label, offset))
+            label = ensure_addr_labelled(emit_addr)
+            return "%s = %s+%d" % (self.name, label, offset)
 
     def emit_assignment(self):
         print("%s = &%04X" % (self.name, self.addr))
