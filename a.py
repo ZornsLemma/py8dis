@@ -345,3 +345,5 @@ if False: # TODO!
 
 
 # TODO: At the moment, strings (and probably other things) are not chopped up by labels; they probably should be
+
+# TODO: At the moment the table around LA3F2 has "half expression" values, gut feeling is this is just due to lack of "word" support but it needs fixing one way or another
