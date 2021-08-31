@@ -74,6 +74,37 @@ class Data(object):
         for directive, comment in zip(directives, comments):
             print("%-*s%s" % (comment_indent, directive, comment))
 
+class Word(Data): # SFTODO: TEMP HACK RE-USING DATA
+    def __init__(self, length):
+        self.set_length(length)
+
+    def is_variable_length(self):
+        return True
+
+    def length(self):
+        return self._length
+
+    def set_length(self, length):
+        assert length > 0
+        assert length % 2 == 0
+        self._length = length
+
+    def emit(self, addr):
+        # TODO: COPY AND PASTE OF DATA'S EMIT()
+        data = list(get_address16(addr + i) for i in range(0, self._length, 2))
+        longest_item = max(len(x) for x in data)
+        items_per_line = min(max(1, 50 // (longest_item + 2)), 8)
+        item_min_width = min(longest_item, 70 // items_per_line)
+        #print("QQ", longest_item, items_per_line, item_min_width)
+        #print("QQ2", ascii)
+        for chunk in chunks(data, items_per_line):
+            s = ""
+            sep = ""
+            for item in chunk:
+                s += sep + "%-*s" % (item_min_width, item)
+                sep = ", "
+            print("    EQUW %s" % s)
+
 class String(object):
     def __init__(self, length):
         assert length > 0
@@ -124,9 +155,6 @@ class String(object):
                 s += '"'
             print(s)
 
-class Word(Data): # SFTODO: TEMP HACK RE-USING DATA
-    pass
-
 
 
 def get_expression(addr, expected_value):
@@ -147,6 +175,7 @@ def get_address8(addr):
 
 def get_address16(addr):
     operand = get_abs(addr)
+    # TODO: Not entirely sure if it's a good idea to handle 16-bit expressions like this. Should we at a minimum assert a Word is used to classify this address?
     if addr not in expressions:
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
