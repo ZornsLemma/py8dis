@@ -140,6 +140,7 @@ class String(object):
         prefix = "    EQUS "
         s = prefix
         state = 0
+        s_i = 0
         for i in range(self._length):
             c = memory[addr + i]
             if 32 <= c <= 126 and c != ord('"'):
@@ -160,16 +161,17 @@ class String(object):
                 else:
                     # TODO: Maybe don't allow for expressions here?
                     s += get_constant8(addr + i)
-            if len(s) > (inline_comment_column - 2):
+            if len(s) > (inline_comment_column - 3):
                 if state == 1:
                     s += '"'
-                print(s)
+                print(add_hex_dump(s, addr + s_i, i - s_i))
                 s = prefix
+                s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            print(add_hex_dump(s, addr, self._length))
+            print(add_hex_dump(s, addr + s_i, self._length - s_i))
 
 
 
