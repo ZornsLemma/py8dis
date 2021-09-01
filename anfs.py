@@ -14,12 +14,15 @@ def comment(addr, text):
 def expr(addr, s):
     expressions[addr] = s
 
+def data(addr, n): # TODO: Default n=1?
+    add_classification(addr, Data(n))
+
 # TODO: End of "to move" black
 
 load("anfs418.orig", 0x8000)
 
-acorn.label_os_entry_points()
-acorn.is_sideways_rom()
+acorn.label_os_entry_points() # TODO: label_os_api()?
+acorn.is_sideways_rom() # TODO: rename?
 
 label(0x01, "service_claim_absolute_workspace")
 label(0x0f, "service_vectors_changed")
@@ -90,13 +93,13 @@ for i in range(8):
         expr(rts_low_addr, "lo(%s)-1" % get_label(target_addr))
 
 string_cr(0xa17c) # preceding BNE is always taken
-add_classification(0xaefb, Data(1))
+data(0xaefb, 1)
 #string_n(0xaefb, 4)
 
 label((0x421-0x400)+0xbf04, "copied_to_421")
 entry_points.append((0x421-0x400)+0xbf04)
 
-labelled_entry_point(0x89a7)
+labelled_entry_point(0x89a7) # TODO: rename routine()?
 labelled_entry_point(0x89b5)
 
 labelled_entry_point(0xbf04)
