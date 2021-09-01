@@ -291,7 +291,6 @@ def emit2(): # TODO POOR NAME
     end_addr = disassembly_range[1]
     assert start_addr is not None
     assert end_addr is not None
-    # TODO: Emit "constant labels" which aren't addresses in the start_addr/end_addr range
 
     # TODO: Not sure if this "clean up" logic belongs here or not...
     addr = start_addr
