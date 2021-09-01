@@ -39,7 +39,11 @@ class OpcodeImmediate(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        return  "    %s #%s" % (self.mnemonic, get_constant8(addr + 1))
+        s = "    %s #%s" % (self.mnemonic, get_constant8(addr + 1))
+        c = memory[addr + 1]
+        if 32 <= c <= 126:
+            s += " ; " + chr(c)
+        return s
 
 
 class OpcodeZp(Opcode):

@@ -29,7 +29,7 @@ disassembly.add_comment(0x8aae,
     "Call dispatch table entry X+1 for service calls 1<=X<&D.\n" +
     "Call dispatch table entry &D+1 for service call &12.\n" +
     "Don't handle any other service call.\n" +
-    "(+1 because jump_table_dispatch-x_plus_y adds 1 if Y=0.)")
+    "(+1 because jump_table_dispatch_x_plus_y adds 1 if Y=0.)")
 
 # TODO: Jump table entry 0 is probably irrelevant.
 # Jump table entries 1-&D inclusive are for service call handlers.
