@@ -17,7 +17,7 @@ def expr(addr, s):
 def data(addr, n): # TODO: Default n=1?
     add_classification(addr, Data(n))
 
-def hook_subroutine(addr, name, hook):
+def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     routine(addr, name)
     jsr_hooks[addr] = hook
 
@@ -116,7 +116,6 @@ routine(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
-label(0x9145, "print_inline_top_bit_clear")
 def print_inline_top_bit_clear_hook(target, addr):
     addr += 3
     initial_addr = addr
@@ -124,7 +123,7 @@ def print_inline_top_bit_clear_hook(target, addr):
         addr += 1
     add_classification(initial_addr, String(addr - initial_addr))
     return addr
-jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
+hook_subroutine(0x9145, "print_inline_top_bit_clear", print_inline_top_bit_clear_hook)
 
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
