@@ -138,4 +138,8 @@ hook_subroutine(0x96d1, "generate_error_inline3", generate_error_inline_hook)
 for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 
+pc = 0x9022
+for i in range(12): # TODO RANGE
+    pc = string_nul(pc)
+
 go()
