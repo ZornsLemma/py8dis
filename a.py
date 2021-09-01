@@ -285,28 +285,6 @@ def split_jump_table_entry(low_addr, high_addr, offset):
 
 jsr_hooks = {}
 
-if False: # TODO!
-    # Convert anything not explicitly disassembled into data.
-    for addr in range(len(what)):
-        if what[addr] is None:
-            what[addr] = (WHAT_DATA, 1)
-
-    # Merge adjacent items of data.
-    addr = start_addr
-    while addr < end_addr:
-        if what[addr][0] in (WHAT_DATA, WHAT_STRING):
-            new_addr = addr + what[addr][1]
-            #print("X", hex(addr), hex(new_addr), what[new_addr])
-            while new_addr < end_addr and what[new_addr][0] == what[addr][0]:
-                new_addr += what[new_addr][1]
-                #print("Y", hex(addr), hex(new_addr), what[new_addr])
-            what[addr] = (what[addr][0], new_addr - addr)
-            for i in range(addr + 1, new_addr):
-                what[i] = None
-            addr = new_addr
-        else:
-            addr = addr + 1
-
 
 def emit2(): # TODO POOR NAME
     start_addr = disassembly_range[0]
