@@ -116,6 +116,7 @@ routine(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
+# TODO: Probably rename and move this into "standard library"
 def print_inline_top_bit_clear_hook(target, addr):
     addr += 3
     initial_addr = addr
