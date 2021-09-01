@@ -14,6 +14,9 @@ class Opcode(object):
     def length(self):
         return 1 + self.operand_length
 
+    def emit(self, addr):
+        print(self.as_string(addr))
+
 
 class OpcodeImplied(Opcode):
     def __init__(self, mnemonic):
@@ -24,8 +27,8 @@ class OpcodeImplied(Opcode):
     def disassemble(self, addr):
         return [addr + 1]
 
-    def emit(self, addr):
-        print("    %s" % self.mnemonic)
+    def as_string(self, addr):
+        return "    %s" % self.mnemonic
 
 
 class OpcodeImmediate(Opcode):
@@ -35,8 +38,8 @@ class OpcodeImmediate(Opcode):
     def disassemble(self, addr):
         return [addr + 2]
 
-    def emit(self, addr):
-        print("    %s #%s" % (self.mnemonic, get_constant8(addr + 1)))
+    def as_string(self, addr):
+        return  "    %s #%s" % (self.mnemonic, get_constant8(addr + 1))
 
 
 class OpcodeZp(Opcode):
@@ -47,16 +50,16 @@ class OpcodeZp(Opcode):
         disassembly.ensure_addr_labelled(get_u8(addr + 1))
         return [addr + 2]
 
-    def emit(self, addr):
-        print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix))
+    def as_string(self, addr):
+        return "    %s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix)
 
 
 class OpcodeAbs(Opcode):
     def __init__(self, mnemonic, suffix = None):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
-    def emit(self, addr):
-        print("    %s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix))
+    def as_string(self, addr):
+        return "    %s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix)
 
 
 class OpcodeDataAbs(OpcodeAbs):
@@ -103,8 +106,8 @@ class OpcodeReturn(Opcode):
     def disassemble(self, addr):
         return [None]
 
-    def emit(self, addr):
-        print("    %s" % self.mnemonic)
+    def as_string(self, addr):
+        return "    %s" % self.mnemonic
 
 
 class OpcodeConditionalBranch(Opcode):
@@ -117,8 +120,8 @@ class OpcodeConditionalBranch(Opcode):
     def disassemble(self, addr):
         return [addr + 2, self._target(addr)]
 
-    def emit(self, addr):
-        print("    %s %s" % (self.mnemonic, disassembly.get_label(self._target(addr))))
+    def as_string(self, addr):
+        return "    %s %s" % (self.mnemonic, disassembly.get_label(self._target(addr)))
 
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
