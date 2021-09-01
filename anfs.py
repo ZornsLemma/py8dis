@@ -17,6 +17,10 @@ def expr(addr, s):
 def data(addr, n): # TODO: Default n=1?
     add_classification(addr, Data(n))
 
+def hook_subroutine(addr, name, hook):
+    routine(addr, name)
+    jsr_hooks[addr] = hook
+
 # TODO: End of "to move" black
 
 load("anfs418.orig", 0x8000)
@@ -88,7 +92,7 @@ for i in range(8):
         split_jump_table_entry(0x8869 + min_y + i, 0x8861 + min_y + i, 0)
         rts_low_addr = 0x8600 + min_y + i
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
-        labelled_entry_point(target_addr)
+        routine(target_addr)
         #print("XK", hex(target_addr))
         expr(rts_low_addr, "lo(%s)-1" % get_label(target_addr))
 
@@ -96,18 +100,19 @@ string_cr(0xa17c) # preceding BNE is always taken
 data(0xaefb, 1)
 #string_n(0xaefb, 4)
 
-label((0x421-0x400)+0xbf04, "copied_to_421")
-entry_points.append((0x421-0x400)+0xbf04)
+routine((0x421-0x400)+0xbf04, "copied_to_421")
 
-labelled_entry_point(0x89a7) # TODO: rename routine()?
-labelled_entry_point(0x89b5)
+# TODO: have an instruction()? function to put a single value in entry_points?
 
-labelled_entry_point(0xbf04)
-labelled_entry_point(0xbf07)
-labelled_entry_point(0xbf0a)
-labelled_entry_point(0xbf2c)
-labelled_entry_point(0xbf88)
-labelled_entry_point(0xbfd2)
+routine(0x89a7)
+routine(0x89b5)
+
+routine(0xbf04)
+routine(0xbf07)
+routine(0xbf0a)
+routine(0xbf2c)
+routine(0xbf88)
+routine(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
@@ -124,15 +129,12 @@ jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
 # TODO: The fact there are two entry points also suggests something slightly cleverer going on
-label(0x96b8, "generate_error_inline")
-label(0x96d4, "generate_error_inline2")
-label(0x96d1, "generate_error_inline3")
 def generate_error_inline_hook(target, addr):
     inline_nul_string_hook(target, addr) # discard return address
     return None
-jsr_hooks[0x96b8] = generate_error_inline_hook
-jsr_hooks[0x96d4] = generate_error_inline_hook
-jsr_hooks[0x96d1] = generate_error_inline_hook
+hook_subroutine(0x96b8, "generate_error_inline", generate_error_inline_hook)
+hook_subroutine(0x96d4, "generate_error_inline2", generate_error_inline_hook)
+hook_subroutine(0x96d1, "generate_error_inline3", generate_error_inline_hook)
 
 for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)

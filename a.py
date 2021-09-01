@@ -259,7 +259,7 @@ def string_hi(addr):
 
 # TODO: RENAME DWORD TO WORD...
 def rts_address(addr):
-    labelled_entry_point(get_abs(addr) + 1)
+    routine(get_abs(addr) + 1)
     expressions[addr] = "%s-1" % disassembly.get_label(get_abs(addr) + 1)
     disassembly.add_classification(addr, Word(2))
     return addr + 2
@@ -267,9 +267,12 @@ def rts_address(addr):
 # TODO: Use this in more places
 # TODO: Take optional non-default label
 # TODO: Rename code_label or something?
-def labelled_entry_point(addr):
+def routine(addr, label=None): # TODO: rename?
     entry_points.append(addr)
-    disassembly.ensure_addr_labelled(addr)
+    if label is None:
+        disassembly.ensure_addr_labelled(addr)
+    else:
+        disassembly.add_label(addr, label)
 
 
 def split_jump_table_entry(low_addr, high_addr, offset):
