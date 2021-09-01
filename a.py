@@ -89,7 +89,7 @@ class Data(object):
         for directive, comment in zip(directives, comments):
             print("%-*s%s" % (comment_indent, directive, comment))
 
-class Word(Data): # SFTODO: TEMP HACK RE-USING DATA
+class Word(object):
     def __init__(self, length):
         self.set_length(length)
 
