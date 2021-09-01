@@ -132,12 +132,13 @@ class Word(object):
             i += len(chunk)
 
 class String(object):
-    def __init__(self, length):
+    def __init__(self, length, is_variable_length=True):
         assert length > 0
         self._length = length
+        self._is_variable_length = is_variable_length
 
     def is_variable_length(self):
-        return True
+        return self._is_variable_length
 
     def length(self):
         return self._length
@@ -171,7 +172,7 @@ class String(object):
                 else:
                     # TODO: Maybe don't allow for expressions here?
                     s += get_constant8(addr + i)
-            if len(s) > (inline_comment_column - 3):
+            if len(s) > (inline_comment_column - 5):
                 if state == 1:
                     s += '"'
                 print(add_hex_dump(s, addr + s_i, i - s_i))
@@ -232,7 +233,7 @@ def string_terminated(addr, terminator):
         if memory[addr] == terminator:
             break
         addr += 1
-    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
+    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr, False))
     return addr + 1
 
 def string_cr(addr):

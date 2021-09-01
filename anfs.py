@@ -139,7 +139,7 @@ for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 
 pc = 0x9022
-for i in range(12): # TODO RANGE
+for i in range(12):
     pc = string_nul(pc)
 
 go()
