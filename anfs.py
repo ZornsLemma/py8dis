@@ -1,4 +1,4 @@
-from a import * # TODO?
+from commands import * # TODO?
 import acorn
 import trace
 
@@ -12,20 +12,20 @@ end_addr = 0xc000
 acorn.label_os_entry_points()
 acorn.is_sideways_rom()
 
-disassembly.add_label(0x01, "service_claim_absolute_workspace")
-disassembly.add_label(0x0f, "service_vectors_changed")
+add_label(0x01, "service_claim_absolute_workspace")
+add_label(0x0f, "service_vectors_changed")
 # TODO: Option to annotate .asm output with hex dump for classifications
 expressions[0x8a17] = "service_vectors_changed"
 expressions[0x8a42] = "service_claim_absolute_workspace"
 expressions[0x8ed9] = "service_claim_absolute_workspace"
-disassembly.add_comment(0x8a1a, "Extra processing for vectors changed service call")
-disassembly.add_comment(0x8a45, "Extra processing for absolute workspace claim service call")
-disassembly.add_label(0x8a3c, "service_handler_common1")
-disassembly.add_label(0xbe62, "service_handler_tube_service_calls")
+add_comment(0x8a1a, "Extra processing for vectors changed service call")
+add_comment(0x8a45, "Extra processing for absolute workspace claim service call")
+add_label(0x8a3c, "service_handler_common1")
+add_label(0xbe62, "service_handler_tube_service_calls")
 expressions[0x8a63] = "service_vectors_changed"
-disassembly.add_label(0x8a5a, "service_handler_common2")
-disassembly.add_label(0x8aa7, "service_handler_not_vectors_changed")
-disassembly.add_comment(0x8aae,
+add_label(0x8a5a, "service_handler_common2")
+add_label(0x8aa7, "service_handler_not_vectors_changed")
+add_comment(0x8aae,
     "Call dispatch table entry X+1 for service calls 1<=X<&D.\n" +
     "Call dispatch table entry &D+1 for service call &12.\n" +
     "Don't handle any other service call.\n" +
@@ -34,19 +34,19 @@ disassembly.add_comment(0x8aae,
 # TODO: Jump table entry 0 is probably irrelevant.
 # Jump table entries 1-&D inclusive are for service call handlers.
 # There are probably some more given the use of Y by jump_table_dispatch_x_plus_y
-disassembly.add_comment(0x8e49, "Note that if Y=0, this will add 1 instead of 0.")
-disassembly.add_label(0x8e49, "jump_table_dispatch_x_plus_y")
-disassembly.add_label(0x89ef, "jump_table_high")
-disassembly.add_label(0x89ca, "jump_table_low")
-disassembly.add_label(0x8e58, "just_rts")
-disassembly.add_label(0x8ea5, "service_handler_claim_absolute_workspace")
-disassembly.add_label(0x8eb8, "service_handler_claim_private_workspace")
+add_comment(0x8e49, "Note that if Y=0, this will add 1 instead of 0.")
+add_label(0x8e49, "jump_table_dispatch_x_plus_y")
+add_label(0x89ef, "jump_table_high")
+add_label(0x89ca, "jump_table_low")
+add_label(0x8e58, "just_rts")
+add_label(0x8ea5, "service_handler_claim_absolute_workspace")
+add_label(0x8eb8, "service_handler_claim_private_workspace")
 
-disassembly.add_label(0x8eac, "clamp_absolute_workspace_and_save")
+add_label(0x8eac, "clamp_absolute_workspace_and_save")
 
-disassembly.add_label(0x9611, "sta_e09_if_d6c_b7_set")
-disassembly.add_label(0x96b4, "error_template_minus_1")
-disassembly.add_classification(0x96b5, String(3))
+add_label(0x9611, "sta_e09_if_d6c_b7_set")
+add_label(0x96b4, "error_template_minus_1")
+add_classification(0x96b5, String(3))
 
 string_cr(0x8d0f)
 string_nul(0x8d38)
@@ -79,13 +79,13 @@ for i in range(8):
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
         labelled_entry_point(target_addr)
         #print("XK", hex(target_addr))
-        expressions[rts_low_addr] = "lo(%s)-1" % disassembly.get_label(target_addr)
+        expressions[rts_low_addr] = "lo(%s)-1" % get_label(target_addr)
 
 string_cr(0xa17c) # preceding BNE is always taken
-disassembly.add_classification(0xaefb, Data(1))
+add_classification(0xaefb, Data(1))
 #string_n(0xaefb, 4)
 
-disassembly.add_label((0x421-0x400)+0xbf04, "copied_to_421")
+add_label((0x421-0x400)+0xbf04, "copied_to_421")
 entry_points.append((0x421-0x400)+0xbf04)
 
 labelled_entry_point(0x89a7)
@@ -100,22 +100,22 @@ labelled_entry_point(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
-disassembly.add_label(0x9145, "print_inline_top_bit_clear")
+add_label(0x9145, "print_inline_top_bit_clear")
 def print_inline_top_bit_clear_hook(target, addr):
     addr += 3
     initial_addr = addr
     while memory[addr] & 0x80 == 0:
         addr += 1
-    disassembly.add_classification(initial_addr, String(addr - initial_addr))
+    add_classification(initial_addr, String(addr - initial_addr))
     return addr
 jsr_hooks[0x9145] = print_inline_top_bit_clear_hook
 
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
 # TODO: The fact there are two entry points also suggests something slightly cleverer going on
-disassembly.add_label(0x96b8, "generate_error_inline")
-disassembly.add_label(0x96d4, "generate_error_inline2")
-disassembly.add_label(0x96d1, "generate_error_inline3")
+add_label(0x96b8, "generate_error_inline")
+add_label(0x96d4, "generate_error_inline2")
+add_label(0x96d1, "generate_error_inline3")
 def generate_error_inline_hook(target, addr):
     inline_nul_string_hook(target, addr) # discard return address
     return None
