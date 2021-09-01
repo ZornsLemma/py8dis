@@ -1,6 +1,5 @@
 from commands import * # TODO?
 import acorn
-import trace
 
 load("anfs418.orig", 0x8000)
 
@@ -9,7 +8,6 @@ acorn.is_sideways_rom()
 
 add_label(0x01, "service_claim_absolute_workspace")
 add_label(0x0f, "service_vectors_changed")
-# TODO: Option to annotate .asm output with hex dump for classifications
 expressions[0x8a17] = "service_vectors_changed"
 expressions[0x8a42] = "service_claim_absolute_workspace"
 expressions[0x8ed9] = "service_claim_absolute_workspace"
@@ -122,5 +120,4 @@ for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 #print("XXX", expressions)
 
-trace.trace()
-emit2()
+go()
