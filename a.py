@@ -108,17 +108,18 @@ class Word(Data): # SFTODO: TEMP HACK RE-USING DATA
         # TODO: COPY AND PASTE OF DATA'S EMIT()
         data = list(get_address16(addr + i) for i in range(0, self._length, 2))
         longest_item = max(len(x) for x in data)
-        items_per_line = min(max(1, 50 // (longest_item + 2)), 8)
-        item_min_width = min(longest_item, 70 // items_per_line)
-        #print("QQ", longest_item, items_per_line, item_min_width)
-        #print("QQ2", ascii)
+        available_width = inline_comment_column - 10
+        items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
+        item_min_width = min(longest_item, available_width // items_per_line)
+        i = 0
         for chunk in chunks(data, items_per_line):
             s = ""
             sep = ""
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            print("    EQUW %s" % s)
+            print(add_hex_dump("    EQUW %s" % s, addr + i, len(chunk) * 2))
+            i += len(chunk)
 
 class String(object):
     def __init__(self, length):
@@ -307,70 +308,6 @@ def emit2(start_addr, end_addr): # TODO POOR NAME
     disassembly.split_classifications(start_addr, end_addr)
 
     disassembly.emit(start_addr, end_addr)
-
-if False: # TODO!
-    addr = start_addr
-    while addr < end_addr:
-        if addr in labels:
-            print(".%s" % labels[addr])
-        if addr in derived_labels2:
-            for name, definition in derived_labels2[addr]:
-                print("%s = %s" % (name, definition))
-        # TODO: String as opposed to raw data
-        what_type = what[addr][0]
-        if what_type == WHAT_DATA:
-            data_len = what[addr][1]
-            while data_len > 0:
-                s = "    EQUB "
-                sep = ""
-                for i in range(8):
-                    if data_len > 0:
-                        s += sep + get_constant8(addr)
-                        sep = ", "
-                        addr += 1
-                        data_len -= 1
-                print(s)
-        elif what_type == WHAT_DWORD:
-            assert what[addr][1] == 2
-            print("    EQUW %s" % get_address16(addr))
-            addr += what[addr][1]
-        elif what_type == WHAT_STRING:
-            # TODO: This should wrap long strings across multiple lines
-            data_len = what[addr][1]
-            s = "    EQUS "
-            state = 0
-            while data_len > 0:
-                # TODO: Assumes ASCII (not e.g. PETSCII)
-                if 32 <= memory[addr] <= 126 and memory[addr] != ord('"'):
-                    if state == 0:
-                        s += '"'
-                    elif state == 1:
-                        pass
-                    elif state == 2:
-                        s += ', "'
-                    state = 1
-                    s += chr(memory[addr])
-                else:
-                    if state == 0:
-                        pass
-                    elif state == 1:
-                        s += '", '
-                    elif state == 2:
-                        s += ", "
-                    state = 2
-                    s += get_constant8(addr)
-                addr += 1
-                data_len -= 1
-            if state == 1:
-                s += '"'
-            print(s)
-        elif what_type == WHAT_OPCODE:
-            opcode = opcodes[memory[addr]]
-            print("    %s" % opcode.as_string(addr))
-            addr += 1 + opcode.operand_length
-        else:
-            assert False
-        # TODO: Handle labels occuring "inside" an instruction
 
 
 # TODO/thoughts:
