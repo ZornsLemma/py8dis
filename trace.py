@@ -268,7 +268,11 @@ def disassemble_instruction(addr):
     return opcode.disassemble(addr)
 
 # TODO: Make start_addr/end_addr globals like entry_points? Trouble is that they have to be inited by the user, although to be fair our load() function (not yet implemented) could set them
-def trace(start_addr, end_addr):
+def trace():
+    start_addr = disassembly_range[0]
+    end_addr = disassembly_range[1]
+    assert start_addr is not None
+    assert end_addr is not None
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)
         if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:

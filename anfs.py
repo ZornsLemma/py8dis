@@ -2,12 +2,7 @@ from commands import * # TODO?
 import acorn
 import trace
 
-# TODO: This open and read should be done via a utility function in a.py
-with open("/home/steven/src/anfs-disassembly/roms/anfs418.orig", "rb") as f:
-    memory[0x8000:] = bytearray(f.read())
-assert all(x is None or (0 <= x <= 255) for x in memory)
-start_addr = 0x8000
-end_addr = 0xc000
+load("anfs418.orig", 0x8000)
 
 acorn.label_os_entry_points()
 acorn.is_sideways_rom()
@@ -127,5 +122,5 @@ for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 #print("XXX", expressions)
 
-trace.trace(start_addr, end_addr)
-emit2(start_addr, end_addr)
+trace.trace()
+emit2()

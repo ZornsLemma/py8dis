@@ -8,6 +8,16 @@ import b as disassembly
 
 inline_comment_column = 60 # TODO: use this for EQUB inline comments
 
+def load(filename, addr):
+    # TODO: Don't allow multiple load()s (given we have a single global start/end addr)
+    with open(filename, "rb") as f:
+        data = bytearray(f.read())
+        if addr + len(data) > 0xffff:
+            assert False # TODO: proper error
+        memory[addr:] = data
+    disassembly_range[0] = addr
+    disassembly_range[1] = addr + len(data)
+
 def add_hex_dump(s, addr, length):
     assert length > 0
     # TODO: This should be controlled via a bool flag
@@ -295,7 +305,11 @@ if False: # TODO!
             addr = addr + 1
 
 
-def emit2(start_addr, end_addr): # TODO POOR NAME
+def emit2(): # TODO POOR NAME
+    start_addr = disassembly_range[0]
+    end_addr = disassembly_range[1]
+    assert start_addr is not None
+    assert end_addr is not None
     # TODO: Emit "constant labels" which aren't addresses in the start_addr/end_addr range
 
     # TODO: Not sure if this "clean up" logic belongs here or not...
