@@ -6,6 +6,19 @@ import b as disassembly
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
+inline_comment_column = 60 # TODO: use this for EQUB inline comments
+
+def add_hex_dump(s, addr, length):
+    assert length > 0
+    # TODO: This should be controlled via a bool flag
+    s = "%-*s" % (inline_comment_column, s)
+    s += "; %04X: " % addr
+    capped_length = min(length, 3)
+    s += " ".join("%02X" % x for x in memory[addr:addr+capped_length])
+    if capped_length < length:
+        s += " ..."
+    return s
+
 def signed8(i):
     assert 0 <= i <= 255
     if i >= 0x80:
@@ -54,8 +67,9 @@ class Data(object):
             return "."
         ascii = list(asciify(addr + i) for i in range(self._length))
         longest_item = max(len(x) for x in data)
-        items_per_line = min(max(1, 50 // (longest_item + 2)), 8)
-        item_min_width = min(longest_item, 70 // items_per_line)
+        available_width = inline_comment_column - 10
+        items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
+        item_min_width = min(longest_item, available_width // items_per_line)
         #print("QQ", longest_item, items_per_line, item_min_width)
         #print("QQ2", ascii)
         directives = []
@@ -67,10 +81,11 @@ class Data(object):
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
             directives.append("    EQUB %s" % s)
+        i = 0
         for chunk in chunks(ascii, items_per_line):
-            comments.append(" ; " + "".join(chunk))
-        max_directive_len = max(len(x) for x in directives)
-        comment_indent = max(60, max_directive_len)
+            comments.append(("; %04X: " % (addr+i)) + "".join(chunk))
+            i += len(chunk)
+        comment_indent = inline_comment_column
         for directive, comment in zip(directives, comments):
             print("%-*s%s" % (comment_indent, directive, comment))
 
@@ -144,7 +159,7 @@ class String(object):
                 else:
                     # TODO: Maybe don't allow for expressions here?
                     s += get_constant8(addr + i)
-            if len(s) > 70:
+            if len(s) > (inline_comment_column - 2):
                 if state == 1:
                     s += '"'
                 print(s)
@@ -153,7 +168,7 @@ class String(object):
         if s != prefix:
             if state == 1:
                 s += '"'
-            print(s)
+            print(add_hex_dump(s, addr, self._length))
 
 
 

@@ -15,7 +15,7 @@ class Opcode(object):
         return 1 + self.operand_length
 
     def emit(self, addr):
-        print(self.as_string(addr))
+        print(add_hex_dump(self.as_string(addr), addr, self.length()))
 
 
 class OpcodeImplied(Opcode):
