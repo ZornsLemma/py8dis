@@ -102,7 +102,7 @@ data(0xaefb, 1)
 
 routine((0x421-0x400)+0xbf04, "copied_to_421")
 
-# TODO: have an instruction()? function to put a single value in entry_points?
+# TODO: have an instruction()? function to put a single value in entry_points? Perhaps call it code() to "match" data()?
 
 routine(0x89a7)
 routine(0x89b5)
@@ -147,3 +147,5 @@ string_nul_block(0x9022, 12)
 string_nul_block(0x97b9, 10)
 
 go()
+
+# TODO: Should user-marked data be non-mergeable (non-variable-length) like strings?
