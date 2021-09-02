@@ -11,7 +11,7 @@ def set_output_filename(filename):
     global output_filename
     output_filename = filename
 
-def ourhex4(n):
+def hex4(n):
     # TODO: Need to make upper or lower case user configurable
     return "&%04x" % n
 
@@ -19,15 +19,15 @@ def inline_label(name):
     return ".%s" % name
 
 def explicit_label(name, value, offset=None):
-    print("%s = %s%s" % (name, value, "" if offset is None else "+%d" % offset))
+    return "%s = %s%s" % (name, value, "" if offset is None else "+%d" % offset)
 
 def comment(text):
     return "\n".join("; %s" % line for line in text.split("\n"))
 
 def code_start(start_addr, end_addr):
     return (
-        "    org %s\n" % ourhex4(start_addr) +
-        "    guard %s\n" % ourhex4(end_addr) +
+        "    org %s\n" % hex4(start_addr) +
+        "    guard %s\n" % hex4(end_addr) +
         ".pydis_start\n")
 
 def code_end():

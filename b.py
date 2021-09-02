@@ -123,7 +123,8 @@ class Label(object):
             return formatter.explicit_label(self.name, label, offset)
 
     def emit_assignment(self):
-        print("%s = &%04X" % (self.name, self.addr))
+        formatter = memory.formatter[0]
+        print(formatter.explicit_label(self.name, formatter.hex4(self.addr)))
 
 
 
