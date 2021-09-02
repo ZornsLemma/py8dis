@@ -8,6 +8,8 @@ memory.formatter[0] = sys.modules[__name__]
 
 output_filename = None
 
+explicit_a = True
+
 def set_output_filename(filename):
     global output_filename
     output_filename = filename

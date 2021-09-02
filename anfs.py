@@ -1,11 +1,15 @@
 from commands import * # TODO?
 import acorn
-import beebasm
 import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES CLASHES WITH "MEMORY" ARRAY IMPORTED FROM COMMANDS
 
-beebasm.set_output_filename("anfs418.rom")
-#config.set_lower_case(False)
+use_beebasm = True
+if use_beebasm:
+    import beebasm
+    beebasm.set_output_filename("anfs418.rom")
+else:
+    import acme
 
+#config.set_lower_case(False)
 
 # TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
 def string_n(addr, n):
@@ -100,7 +104,7 @@ for i in range(8):
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
         routine(target_addr)
         #print("XK", hex(target_addr))
-        expr(rts_low_addr, "lo(%s)-1" % get_label(target_addr))
+        expr(rts_low_addr, "(<%s)-1" % get_label(target_addr))
 
 string_cr(0xa17c) # preceding BNE is always taken
 data(0xaefb, 1)

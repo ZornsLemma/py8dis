@@ -1,4 +1,5 @@
 from a import * # TODO?
+import memory as config # TODO!!
 
 
 class Opcode(object):
@@ -28,7 +29,10 @@ class OpcodeImplied(Opcode):
         return [addr + 1]
 
     def as_string(self, addr):
-        return "    %s" % force_case(self.mnemonic)
+        mnemonic = self.mnemonic
+        if (not config.formatter[0].explicit_a) and mnemonic.endswith(" A"):
+            mnemonic = mnemonic[:-2]
+        return "    %s" % force_case(mnemonic)
 
 
 class OpcodeImmediate(Opcode):

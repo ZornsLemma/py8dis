@@ -295,8 +295,8 @@ def split_jump_table_entry(low_addr, high_addr, offset):
     entry_points.append(entry_point)
     disassembly.ensure_addr_labelled(entry_point)
     offset_string = "" if offset ==0 else ("-%d" % offset)
-    expressions[high_addr] = "hi(%s%s)" % (disassembly.get_label(entry_point), offset_string)
-    expressions[low_addr]  = "lo(%s%s)" % (disassembly.get_label(entry_point), offset_string)
+    expressions[high_addr] = ">(%s%s)" % (disassembly.get_label(entry_point), offset_string)
+    expressions[low_addr]  = "<(%s%s)" % (disassembly.get_label(entry_point), offset_string)
 
 jsr_hooks = {}
 
