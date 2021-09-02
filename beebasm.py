@@ -24,17 +24,19 @@ def emit_explicit_label(name, value):
 def emit_comment(text):
     print("    %s" % text)
 
-def emit_code_start(start_addr, end_addr):
-    print("    org %s" % ourhex4(start_addr))
-    print("    guard %s" % ourhex4(end_addr))
-    print(".pydis_start")
-    print()
+def code_start(start_addr, end_addr):
+    return (
+        "    org %s\n" % ourhex4(start_addr) +
+        "    guard %s\n" % ourhex4(end_addr) +
+        ".pydis_start\n")
 
-def emit_code_end():
-    print()
-    print(".pydis_end")
-    print()
+def code_end():
+    s = (
+        "\n" +
+        ".pydis_end\n" +
+        "\n")
     if output_filename is None:
-        print("save pydis_start, pydis_end")
+        s += "save pydis_start, pydis_end"
     else:
-        print('save "%s", pydis_start, pydis_end' % output_filename)
+        s += 'save "%s", pydis_start, pydis_end' % output_filename
+    return s

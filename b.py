@@ -79,7 +79,7 @@ def emit(start_addr, end_addr):
                     sep = "\n"
     print(sep, end="")
 
-    formatter.emit_code_start(start_addr, end_addr)
+    print(formatter.code_start(start_addr, end_addr))
     addr = start_addr
     while addr < end_addr:
         # We need to emit any annotations that are "due" part-way through the
@@ -97,7 +97,7 @@ def emit(start_addr, end_addr):
         # We can now emit the classification output.
         classifications[addr].emit(addr)
         addr += classification_length
-    formatter.emit_code_end()
+    print(formatter.code_end())
 
 # TODO: Idea is below here is just implementation detail, perhaps prefix things e.g. class names with _
 
