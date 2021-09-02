@@ -24,7 +24,7 @@ def add_hex_dump(s, addr, length):
     s = "%-*s" % (inline_comment_column, s)
     s += "; %s: " % plainhex4(addr)
     capped_length = min(length, 3)
-    s += " ".join("%02X" % x for x in memory[addr:addr+capped_length])
+    s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
     if capped_length < length:
         s += " ..."
     return s

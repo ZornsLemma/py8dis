@@ -22,7 +22,8 @@ def get_label(addr):
 
 def ensure_addr_labelled(addr):
     if labels[addr] is None:
-        add_label(addr, "L%04X" % addr)
+        label = ("l%04x" if memory.lower_case[0] else "L%04X") % addr
+        add_label(addr, label)
     return labels[addr]
 
 def is_classified(addr, length):

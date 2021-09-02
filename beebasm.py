@@ -42,7 +42,7 @@ def code_end():
         "\n" +
         ".pydis_end\n" +
         "\n")
-    s += force_case("save")
+    s += SFTODOA.force_case("save")
     if output_filename is None:
         s += " pydis_start, pydis_end"
     else:

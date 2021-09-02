@@ -7,3 +7,6 @@ disassembly_range = [None, None]
 
 formatter = [None]
 lower_case = [True]
+
+def set_lower_case(b):
+    lower_case[0] = b
