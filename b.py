@@ -141,7 +141,7 @@ class Comment(object):
 
     def as_string(self, emit_addr):
         formatter = memory.formatter[0]
-        return formatter.comment(self.text)
+        return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
 
 
 def sorted_annotations(annotations):
