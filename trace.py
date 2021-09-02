@@ -28,7 +28,7 @@ class OpcodeImplied(Opcode):
         return [addr + 1]
 
     def as_string(self, addr):
-        return "    %s" % self.mnemonic
+        return "    %s" % force_case(self.mnemonic)
 
 
 class OpcodeImmediate(Opcode):
@@ -39,7 +39,7 @@ class OpcodeImmediate(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        s = "    %s #%s" % (self.mnemonic, get_constant8(addr + 1))
+        s = "    %s #%s" % (force_case(self.mnemonic), get_constant8(addr + 1))
         c = memory[addr + 1]
         if 32 <= c <= 126:
             s += " ; " + chr(c)
@@ -55,7 +55,7 @@ class OpcodeZp(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (self.mnemonic, self.prefix, get_address8(addr + 1), self.suffix)
+        return "    %s %s%s%s" % (force_case(self.mnemonic), self.prefix, get_address8(addr + 1), self.suffix)
 
 
 class OpcodeAbs(Opcode):
@@ -63,7 +63,7 @@ class OpcodeAbs(Opcode):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (self.mnemonic, self.prefix, get_address16(addr + 1), self.suffix)
+        return "    %s %s%s%s" % (force_case(self.mnemonic), self.prefix, get_address16(addr + 1), self.suffix)
 
 
 class OpcodeDataAbs(OpcodeAbs):
@@ -111,7 +111,7 @@ class OpcodeReturn(Opcode):
         return [None]
 
     def as_string(self, addr):
-        return "    %s" % self.mnemonic
+        return "    %s" % force_case(self.mnemonic)
 
 
 class OpcodeConditionalBranch(Opcode):
@@ -125,7 +125,7 @@ class OpcodeConditionalBranch(Opcode):
         return [addr + 2, self._target(addr)]
 
     def as_string(self, addr):
-        return "    %s %s" % (self.mnemonic, disassembly.get_label(self._target(addr)))
+        return "    %s %s" % (force_case(self.mnemonic), disassembly.get_label(self._target(addr)))
 
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable

@@ -8,9 +8,6 @@ memory.formatter[0] = sys.modules[__name__]
 
 output_filename = None
 
-def force_case(s):
-    return s.lower() if memory.lower_case[0] else s.upper()
-
 def set_output_filename(filename):
     global output_filename
     output_filename = filename
@@ -35,7 +32,7 @@ def comment_prefix():
     return ";"
 
 def code_start(start_addr, end_addr):
-    return (force_case(
+    return (SFTODOA.force_case(
         "    org %s\n" % hex4(start_addr) +
         "    guard %s\n" % hex4(end_addr)) +
         ".pydis_start\n")
@@ -53,10 +50,10 @@ def code_end():
     return s
 
 def byte_prefix():
-    return force_case("    equb ")
+    return SFTODOA.force_case("    equb ")
 
 def word_prefix():
-    return force_case("    equw ")
+    return SFTODOA.force_case("    equw ")
 
 def string_prefix():
-    return force_case("    equs ")
+    return SFTODOA.force_case("    equs ")

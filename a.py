@@ -29,6 +29,9 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
+def force_case(s):
+    return s.lower() if lower_case[0] else s.upper()
+
 def plainhex2(i):
     return ("%02x" if lower_case[0] else "%02X") % i
 
