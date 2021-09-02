@@ -113,13 +113,14 @@ class Label(object):
         print(self.as_string(emit_addr))
 
     def as_string(self, emit_addr): # TODO: ARG IS MISNAMED NOW
+        formatter = memory.formatter[0]
         offset = self.addr - emit_addr
         assert offset >= 0
         if offset == 0:
-            return ".%s" % self.name
+            return formatter.inline_label(self.name)
         else:
             label = ensure_addr_labelled(emit_addr)
-            return "%s = %s+%d" % (self.name, label, offset)
+            return formatter.explicit_label(self.name, label, offset)
 
     def emit_assignment(self):
         print("%s = &%04X" % (self.name, self.addr))
@@ -132,6 +133,7 @@ class Comment(object):
     def __init__(self, text):
         self.text = text
 
+    # TODO: Do the emit() functions add any value any more or should callers just use as_string?
     def emit(self, emit_addr):
         print(self.as_string(emit_addr))
 

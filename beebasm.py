@@ -15,11 +15,11 @@ def ourhex4(n):
     # TODO: Need to make upper or lower case user configurable
     return "&%04x" % n
 
-def emit_inline_label(name):
-    print(".%s" % name)
+def inline_label(name):
+    return ".%s" % name
 
-def emit_explicit_label(name, value):
-    print("%s = %s" % (name, value))
+def explicit_label(name, value, offset=None):
+    print("%s = %s%s" % (name, value, "" if offset is None else "+%d" % offset))
 
 def comment(text):
     return "\n".join("; %s" % line for line in text.split("\n"))
