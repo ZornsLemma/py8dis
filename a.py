@@ -29,9 +29,11 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
+def plainhex2(i):
+    return ("%02x" if lower_case[0] else "%02X") % i
+
 def plainhex4(i):
-    # TODO: allow user to control upper/lower case
-    return "%04x" % i
+    return ("%04x" if lower_case[0] else "%04X") % i
 
 def signed8(i):
     assert 0 <= i <= 255

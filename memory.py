@@ -6,3 +6,4 @@ expressions = {}
 disassembly_range = [None, None]
 
 formatter = [None]
+lower_case = [True]
