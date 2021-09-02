@@ -54,3 +54,6 @@ def byte_prefix():
 
 def word_prefix():
     return "    equw "
+
+def string_prefix():
+    return "    equs "

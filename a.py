@@ -153,7 +153,7 @@ class String(object):
         self._length = length
 
     def emit(self, addr):
-        prefix = "    EQUS "
+        prefix = formatter[0].string_prefix()
         s = prefix
         state = 0
         s_i = 0
@@ -238,10 +238,11 @@ def string_terminated(addr, terminator, terminator_is_data=False):
         if memory[addr] == terminator:
             break
         addr += 1
+    string_length = (addr + 1) - initial_addr
     if terminator_is_data:
-        disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
-    else:
-        disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr, False))
+        string_length -= 1
+    if string_length > 0:
+        disassembly.add_classification(initial_addr, String(string_length, False))
     return addr + 1
 
 def string_cr(addr, terminator_is_data=False):

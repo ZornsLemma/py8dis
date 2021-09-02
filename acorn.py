@@ -46,7 +46,7 @@ def is_sideways_rom():
     nul_at_title_end = SFTODOA.string_nul(0x8009, True) - 1
     if nul_at_title_end < (0x8000 + copyright_offset):
         disassembly.add_label(nul_at_title_end, "version")
-        SFTODOA.string_nul(nul_at_title_end + 1)
+        SFTODOA.string_nul(nul_at_title_end + 1, True)
     disassembly.add_label(0x8000 + copyright_offset, "copyright")
     SFTODOA.string_nul(0x8000 + copyright_offset + 1)
     # TODO: We could recognise tube transfer/relocation data in header
