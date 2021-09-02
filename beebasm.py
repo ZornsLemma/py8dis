@@ -21,8 +21,8 @@ def emit_inline_label(name):
 def emit_explicit_label(name, value):
     print("%s = %s" % (name, value))
 
-def emit_comment(text):
-    print("    %s" % text)
+def comment(text):
+    return "\n".join("; %s" % line for line in text.split("\n"))
 
 def code_start(start_addr, end_addr):
     return (
