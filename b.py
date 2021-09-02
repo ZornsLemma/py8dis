@@ -2,6 +2,8 @@ from __future__ import print_function
 import collections
 import copy
 
+import memory
+
 def add_comment(addr, text):
     annotations[addr].append(Comment(text))
 
@@ -66,6 +68,8 @@ def split_classifications(start_addr, end_addr):
         addr += classifications[addr].length()
 
 def emit(start_addr, end_addr):
+    formatter = memory.formatter[0]
+
     sep = ""
     for addr in sorted(annotations.keys()):
         if addr < start_addr or addr >= end_addr:
@@ -75,10 +79,7 @@ def emit(start_addr, end_addr):
                     sep = "\n"
     print(sep, end="")
 
-    print("    ORG &%04X" % start_addr)
-    print("    GUARD &%04X\n" % end_addr)
-
-    print(".pydis_start")
+    formatter.emit_code_start(start_addr, end_addr)
     addr = start_addr
     while addr < end_addr:
         # We need to emit any annotations that are "due" part-way through the
@@ -96,10 +97,7 @@ def emit(start_addr, end_addr):
         # We can now emit the classification output.
         classifications[addr].emit(addr)
         addr += classification_length
-    print(".pydis_end")
-
-    # TODO: Filename should be specified by user program
-    print('\nSAVE "OUT", pydis_start, pydis_end')
+    formatter.emit_code_end()
 
 # TODO: Idea is below here is just implementation detail, perhaps prefix things e.g. class names with _
 

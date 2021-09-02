@@ -1,5 +1,8 @@
 from commands import * # TODO?
 import acorn
+import beebasm
+
+beebasm.set_output_filename("anfs418.rom")
 
 # TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
 def string_n(addr, n):
