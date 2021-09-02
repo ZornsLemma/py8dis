@@ -232,20 +232,23 @@ def inline_nul_string_hook(target, addr):
     disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
     return addr + 1
 
-def string_terminated(addr, terminator):
+def string_terminated(addr, terminator, terminator_is_data=False):
     initial_addr = addr
     while True:
         if memory[addr] == terminator:
             break
         addr += 1
-    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr, False))
+    if terminator_is_data:
+        disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
+    else:
+        disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr, False))
     return addr + 1
 
-def string_cr(addr):
-    return string_terminated(addr, 13)
+def string_cr(addr, terminator_is_data=False):
+    return string_terminated(addr, 13, terminator_is_data)
 
-def string_nul(addr):
-    return string_terminated(addr, 0)
+def string_nul(addr, terminator_is_data=False):
+    return string_terminated(addr, 0, terminator_is_data)
 
 def string_n(addr, n):
     disassembly.add_classification(addr, String(n))
