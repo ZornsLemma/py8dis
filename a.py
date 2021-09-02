@@ -22,12 +22,16 @@ def add_hex_dump(s, addr, length):
     assert length > 0
     # TODO: This should be controlled via a bool flag
     s = "%-*s" % (inline_comment_column, s)
-    s += "; %04X: " % addr
+    s += "; %s: " % plainhex4(addr)
     capped_length = min(length, 3)
     s += " ".join("%02X" % x for x in memory[addr:addr+capped_length])
     if capped_length < length:
         s += " ..."
     return s
+
+def plainhex4(i):
+    # TODO: allow user to control upper/lower case
+    return "%04x" % i
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -66,6 +70,7 @@ class Data(object):
         self._length = length
 
     def emit(self, addr):
+        byte_prefix = formatter[0].byte_prefix()
         # TODO: ASCII output should be optional
         data = list(get_constant8(addr + i) for i in range(self._length))
         def asciify(n):
@@ -77,7 +82,7 @@ class Data(object):
             return "."
         ascii = list(asciify(addr + i) for i in range(self._length))
         longest_item = max(len(x) for x in data)
-        available_width = inline_comment_column - 10
+        available_width = inline_comment_column - len(byte_prefix)
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)
         #print("QQ", longest_item, items_per_line, item_min_width)
@@ -90,10 +95,10 @@ class Data(object):
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            directives.append("    EQUB %s" % s)
+            directives.append("%s%s" % (byte_prefix, s))
         i = 0
         for chunk in chunks(ascii, items_per_line):
-            comments.append(("; %04X: " % (addr+i)) + "".join(chunk))
+            comments.append(("%s %s: " % (formatter[0].comment_prefix(), plainhex4(addr+i))) + "".join(chunk))
             i += len(chunk)
         comment_indent = inline_comment_column
         for directive, comment in zip(directives, comments):
@@ -193,7 +198,7 @@ def get_expression(addr, expected_value):
 
 def get_constant8(addr):
     if addr not in expressions:
-        return "&%02X" % memory[addr]
+        return formatter[0].hex2(memory[addr])
     return get_expression(addr, memory[addr])
 
 def get_address8(addr):
