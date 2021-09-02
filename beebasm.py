@@ -51,3 +51,6 @@ def code_end():
 
 def byte_prefix():
     return "    equb "
+
+def word_prefix():
+    return "    equw "
