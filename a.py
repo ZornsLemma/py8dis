@@ -320,22 +320,8 @@ def emit2(): # TODO POOR NAME
 
     disassembly.emit(start_addr, end_addr)
 
-
-# TODO/thoughts:
-# - maybe make what[x] a tuple something like (instruction, 3) or (string, 22) or (data, 19), i.e. a "type to emit" and the number of bytes it occupies. A cleaning up pass immediately before emitting could concatenate single data bytes and split strings/data with labels in the middle of them.
-# - some sort of support for saying "immediate operand at addr xxxx has symbolic value '<L5332'" (we must *verify* this is correct, not just roll with it)
-# - a standard helper function to diassemble a ROM header
-
-# TODO: Option to output lower case mnemonics, perhaps also default labels including lower case hex
-
-# TODO: Ability to add comments just before labels? perhaps attach comments to labels is better way of putting it. Or maybe to attach comments to arbitrary addresses????
-
 # TODO: Goals:
 # - "programmable" - the disassembly is controlled by a custom python program which imports the core disassembler utils and any other custom utils it like - it can contain arbitrary python code
 # - "annotatable" - postpone as long as possible the temptation to start hand-editing the output, because as soon as you do that it gets difficult to get further assistance from disassembler if you (e.g.) discover a chunk of data which you want to annotate as a jump table
 # - "anchored" - no matter how mangled or useless the disassembly is, it should always re-build the input correctly and no bytes should be lost
 
-
-# TODO: At the moment, strings (and probably other things) are not chopped up by labels; they probably should be
-
-# TODO: At the moment the table around LA3F2 has "half expression" values, gut feeling is this is just due to lack of "word" support but it needs fixing one way or another
