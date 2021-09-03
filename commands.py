@@ -28,7 +28,9 @@ def load(addr, filename, md5sum=None):
     disassembly_range[0] = addr
     disassembly_range[1] = addr + len(data)
 
-# TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
+# These wrappers rename the verb-included longer names for some functions to
+# give shorter, easier-to-type beebdis-style names for "user" code; we use the
+# longer names in core disassembler code.
 
 # TODO: Swap arguments round to match usual "foo = 4" syntax? But everything else takes address first...
 def constant(value, name):
@@ -55,8 +57,6 @@ def word(addr, n=1):
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
     jsr_hooks[addr] = hook # TODO: call a function in trace.py to do this?
-
-# TODO: End of "to move" black
 
 def go():
     trace.trace()
