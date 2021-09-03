@@ -22,10 +22,6 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
-def get_u8(i):
-    assert memory[i] is not None
-    return memory[i]
-
 def get_abs(i):
     assert memory[i] is not None and memory[i+1] is not None
     return memory[i] + (memory[i+1] << 8)

@@ -8,6 +8,10 @@ def signed8(i):
     else:
         return i
 
+def get_u8(i):
+    assert memory[i] is not None
+    return memory[i]
+
 
 
 class Opcode(object):
