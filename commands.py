@@ -3,7 +3,7 @@
 import argparse
 
 # TODO: Not too sure about exposing get_label
-from disassembly import add_label, add_comment, add_classification, get_label
+from disassembly import add_constant, add_label, add_comment, add_classification, get_label
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
 from classification import string, stringterm, stringcr, stringz, string_hi, rts_address, split_jump_table_entry, entry, jsr_hooks, inline_nul_string_hook
 from memory import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
@@ -28,6 +28,10 @@ def load(addr, filename, md5sum=None):
     disassembly_range[1] = addr + len(data)
 
 # TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
+
+# TODO: Swap arguments round to match usual "foo = 4" syntax? But everything else takes address first...
+def constant(value, name):
+    add_constant(value, name)
 
 def label(addr, name):
     add_label(addr, name)

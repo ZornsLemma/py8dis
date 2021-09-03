@@ -7,6 +7,9 @@ import memory
 def add_comment(addr, text):
     annotations[addr].append(Comment(text))
 
+def add_constant(value, name):
+    constants.append((value, name))
+
 def add_label(addr, name):
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
@@ -69,6 +72,11 @@ def split_classifications(start_addr, end_addr):
 
 def emit(start_addr, end_addr):
     formatter = memory.formatter[0]
+
+    if len(constants) > 0:
+        for value, name in sorted(constants, key=lambda x: x[0]):
+            print(formatter.explicit_label(name, value))
+        print()
 
     sep = ""
     for addr in sorted(annotations.keys()):
@@ -155,6 +163,7 @@ def sorted_annotations(annotations):
 classifications = [None] * 64*1024
 # TODO: COMMENT
 labels = [None] * 64*1024 # TODO: Any reason not to just use a dictionary for labels?
+constants = []
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.
 # By using a list we preserve the relative order of additions; we do sort this
