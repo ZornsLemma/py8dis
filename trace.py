@@ -1,3 +1,5 @@
+# TODO: Rename trace6502? And perhaps have a trace65c02 which builds on that but adds CMOS instructions?
+
 from classification import * # TODO?
 import memory as config # TODO!!
 
@@ -71,7 +73,7 @@ class OpcodeZp(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address8(addr + 1), self.suffix)
+        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address8(addr + 1), utils.force_case(self.suffix))
 
 
 class OpcodeAbs(Opcode):
@@ -79,7 +81,7 @@ class OpcodeAbs(Opcode):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address16(addr + 1), self.suffix)
+        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address16(addr + 1), utils.force_case(self.suffix))
 
 
 class OpcodeDataAbs(OpcodeAbs):
