@@ -29,13 +29,23 @@ def go():
 parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")
 parser.add_argument("-a", "--acme", action="store_true", help="generate acme-style output")
+parser.add_argument("-l", "--lower", action="store_true", help="generate lower-case output (default)")
+parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output (default)")
 args = parser.parse_args()
 
 if args.beebasm and args.acme:
     assert False # TODO: Proper error
+if args.lower and args.upper:
+    assert False # TODO: Proper error
+
 if args.acme:
     import acme
     set_output_filename = acme.set_output_filename
 else:
     import beebasm
     set_output_filename = beebasm.set_output_filename
+
+if args.upper:
+    set_lower_case(False)
+else:
+    set_lower_case(True)
