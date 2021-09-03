@@ -6,11 +6,13 @@ import argparse
 from disassembly import add_constant, add_label, add_optional_label, add_comment, add_classification, get_label
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
 from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook, add_expression
-from config import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
+import config
 from trace import add_entry, jsr_hooks
 
 import trace
 import classification
+
+memory = config.memory
 
 def load(addr, filename, md5sum=None):
     # TODO: Don't allow multiple load()s (given we have a single global start/end addr)
@@ -25,8 +27,8 @@ def load(addr, filename, md5sum=None):
         hash.update(data)
         if md5sum != hash.hexdigest():
             assert False # TODO: proper error
-    disassembly_range[0] = addr
-    disassembly_range[1] = addr + len(data)
+    config.disassembly_range[0] = addr
+    config.disassembly_range[1] = addr + len(data)
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -86,6 +88,6 @@ else:
     set_output_filename = beebasm.set_output_filename
 
 if args.upper:
-    set_lower_case(False)
+    config.set_lower_case(False)
 else:
-    set_lower_case(True)
+    config.set_lower_case(True)
