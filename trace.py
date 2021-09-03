@@ -23,6 +23,7 @@ class Opcode(object):
         self.prefix = "(" if ")" in self.suffix else ""
         self.operand_length = operand_length
 
+    # TODO: General, not just here - rename is_mergeable()?
     def is_variable_length(self):
         return False
 
@@ -148,8 +149,6 @@ class OpcodeConditionalBranch(Opcode):
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
 # TODO: Fill in gaps!
-# TODO: Some redundancy between operand length and the target parsing fn?! I should maybe have eg ConditionalBranchOpcode() class and ImpliedOpcode() classes to simplify this table
-# TODO: We need a hook for calling user fns when we disassemble a JSR, to handle things like inline prints
 opcodes = {
     0x06: OpcodeZp("ASL"),
     0x08: OpcodeImplied("PHP"),
