@@ -10,6 +10,7 @@ import classification
 import config
 import disassembly
 import trace
+import utils
 
 memory = config.memory
 
@@ -18,14 +19,14 @@ def load(addr, filename, md5sum=None):
     with open(filename, "rb") as f:
         data = bytearray(f.read())
         if addr + len(data) > 0xffff:
-            assert False # TODO: proper error
+            utils.die("load() would overflow memory")
         memory[addr:] = data
     if md5sum is not None:
         import hashlib
         hash = hashlib.md5()
         hash.update(data)
         if md5sum != hash.hexdigest():
-            assert False # TODO: proper error
+            utils.die("load() md5sum doesn't match")
     config.disassembly_range[0] = addr
     config.disassembly_range[1] = addr + len(data)
 

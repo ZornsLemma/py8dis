@@ -1,6 +1,13 @@
+from __future__ import print_function
+import sys
+
 import config
 
 memory = config.memory
+
+def die(s):
+    print(s, file=sys.stderr)
+    sys.exit(1)
 
 def force_case(s):
     return s.lower() if config.lower_case[0] else s.upper()
