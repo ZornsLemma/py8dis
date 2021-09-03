@@ -45,10 +45,10 @@ def is_sideways_rom():
     expressions[0x8007] = "copyright - rom_header"
     disassembly.add_label(0x8008, "binary_version")
     disassembly.add_label(0x8009, "title")
-    nul_at_title_end = classification.string_nul(0x8009, True) - 1
+    nul_at_title_end = classification.stringz(0x8009, True) - 1
     if nul_at_title_end < (0x8000 + copyright_offset):
         disassembly.add_label(nul_at_title_end, "version")
-        classification.string_nul(nul_at_title_end + 1, True)
+        classification.stringz(nul_at_title_end + 1, True)
     disassembly.add_label(0x8000 + copyright_offset, "copyright")
-    classification.string_nul(0x8000 + copyright_offset + 1)
+    classification.stringz(0x8000 + copyright_offset + 1)
     # TODO: We could recognise tube transfer/relocation data in header

@@ -67,8 +67,8 @@ label(0x9611, "sta_e09_if_d6c_b7_set")
 label(0x96b4, "error_template_minus_1")
 string_n(0x96b5, 3)
 
-string_cr(0x8d0f)
-string_nul(0x8d38)
+stringcr(0x8d0f)
+stringz(0x8d38)
 
 # TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
 pc = 0xa3f0
@@ -100,7 +100,7 @@ for i in range(8):
         #print("XK", hex(target_addr))
         expr(rts_low_addr, "(<%s)-1" % get_label(target_addr))
 
-string_cr(0xa17c) # preceding BNE is always taken
+stringcr(0xa17c) # preceding BNE is always taken
 # TODO: beebdis style would be data(addr, n) and word(addr, n), and word() counts n in words not bytes - both default to n=1
 data(0xaefb, 1)
 #string_n(0xaefb, 4)
@@ -151,12 +151,12 @@ hook_subroutine(0x96d1, "generate_error_inline3", generate_error_inline_hook)
 for i in range(36):
     split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
 
-def string_nul_block(pc, n):
+def stringz_block(pc, n):
     for i in range(n):
-        pc = string_nul(pc)
+        pc = stringz(pc)
 
-string_nul_block(0x9022, 12)
-string_nul_block(0x97b9, 10)
+stringz_block(0x9022, 12)
+stringz_block(0x97b9, 10)
 
 go()
 
