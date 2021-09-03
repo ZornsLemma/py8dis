@@ -1,8 +1,10 @@
 from __future__ import print_function
 import collections
 import sys # TODO: TEMP?
+
 from memory import * # TODO?
 import disassembly
+import utils
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
@@ -22,21 +24,12 @@ def add_hex_dump(s, addr, length):
     assert length > 0
     # TODO: This should be controlled via a bool flag
     s = "%-*s" % (inline_comment_column, s)
-    s += "; %s: " % plainhex4(addr)
+    s += "; %s: " % utils.plainhex4(addr)
     capped_length = min(length, 3)
-    s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
+    s += " ".join(utils.plainhex2(x) for x in memory[addr:addr+capped_length])
     if capped_length < length:
         s += " ..."
     return s
-
-def force_case(s):
-    return s.lower() if lower_case[0] else s.upper()
-
-def plainhex2(i):
-    return ("%02x" if lower_case[0] else "%02X") % i
-
-def plainhex4(i):
-    return ("%04x" if lower_case[0] else "%04X") % i
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -103,7 +96,7 @@ class Data(object):
             directives.append("%s%s" % (byte_prefix, s))
         i = 0
         for chunk in chunks(ascii, items_per_line):
-            comments.append(("%s %s: " % (formatter[0].comment_prefix(), plainhex4(addr+i))) + "".join(chunk))
+            comments.append(("%s %s: " % (formatter[0].comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
             i += len(chunk)
         comment_indent = inline_comment_column
         for directive, comment in zip(directives, comments):
