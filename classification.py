@@ -220,7 +220,7 @@ def string(addr, n=None):
     disassembly.add_classification(addr, String(n))
 
 # TODO: I should perhaps provide two variants on this, one which considers the top bit set byte as not part of the string and one which consider it part of it. this would also make the "decompose top bit set chars in equs" stuff (currently if-ed out) useful.
-def string_hi(addr):
+def stringhi(addr):
     initial_addr = addr
     while True:
         if memory[addr] & 0x80 != 0:
@@ -230,8 +230,8 @@ def string_hi(addr):
                     expressions[addr] = "&80+'%s'" % chr(c) # TODO: use formatter not &
             break
         addr += 1
-    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
-    return addr + 1
+    disassembly.add_classification(initial_addr, String(addr - initial_addr))
+    return addr
 
 def rts_address(addr):
     entry(utils.get_abs(addr) + 1)

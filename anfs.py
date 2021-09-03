@@ -50,22 +50,22 @@ stringz(0x8d38)
 
 # TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
 pc = 0xa3f0
-for i in range(10):
-    pc = string_hi(pc)
-    pc = rts_address(pc)
+def stringhi_rts_address_block(n):
+    global pc
+    for i in range(n):
+        pc = stringhi(pc)
+        pc += 1
+        pc = rts_address(pc)
+stringhi_rts_address_block(10)
 pc += 1
-for i in range(17):
-    pc = string_hi(pc)
-    pc = rts_address(pc)
+stringhi_rts_address_block(17)
 pc += 1
 pc = rts_address(pc) # TODO: ?
-for i in range(2):
-    pc = string_hi(pc)
-    pc = rts_address(pc)
+stringhi_rts_address_block(2)
 pc += 1
 for i in range(6):
-    pc = string_hi(pc)
-    pc += 2
+    pc = stringhi(pc)
+    pc += 3
 
 # At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection.
 min_y = 0x81
