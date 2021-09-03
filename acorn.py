@@ -39,7 +39,7 @@ def is_sideways_rom():
     label(0x8006, "rom_type")
     label(0x8007, "copyright_offset")
     copyright_offset = memory[0x8007]
-    expressions[0x8007] = "copyright - rom_header"
+    expr(0x8007, "copyright - rom_header")
     label(0x8008, "binary_version")
     label(0x8009, "title")
     nul_at_title_end = stringz(0x8009, True) - 1

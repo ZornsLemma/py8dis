@@ -6,7 +6,7 @@ import argparse
 from disassembly import add_label, add_comment, add_classification, get_label
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
 from classification import string, stringterm, stringcr, stringz, string_hi, rts_address, split_jump_table_entry, entry, jsr_hooks, inline_nul_string_hook
-from memory import * # TODO: maybe don't expose these to user directly
+from memory import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
 
 import trace
 import classification
