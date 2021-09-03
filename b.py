@@ -161,24 +161,3 @@ labels = [None] * 64*1024 # TODO: Any reason not to just use a dictionary for la
 # based on the annotation priorities but this is a stable sort and preserves
 # order for any particular annotation type.
 annotations = collections.defaultdict(list)
-
-if False: # TODO
-    add_classification(0x8000, Instruction(0x8000))
-    add_classification(0x8003, Instruction(0x8003))
-
-    # TODO: In practice (for ease of doing lookups like label[addr]) we'd probably track
-    # labels via a separate data structure during disassembly, but we'd dump them into
-    # annotations prior to generating the final output.
-    add_label(0x8000, "rom_header")
-    add_label(0x8000, "foo")
-    add_label(0x8001, "bar")
-    #add_label(0x8003, "baz")
-    annotations[0x8000].append(Comment("ROM header in standard format for Acorn MOS"))
-
-    # annotations implement an emit(offset) method, which emits the annotation accounting
-    # for the fact that it may be offset bytes "in the assembly" later than it wants to be.
-    # For things like pure comments this is irrelevant, for labels we need to emit a
-    # derived form to assign the label the right value without it just being defined via
-    # implicitly at the current assembly pointer.
-
-    emit(0x8000, 0x8006)
