@@ -6,7 +6,16 @@ import disassembly
 import utils
 
 memory = config.memory
+entry_points = []
 jsr_hooks = {}
+
+# TODO: Use this in more places
+def entry(addr, label=None):
+    entry_points.append(addr)
+    if label is None:
+        disassembly.ensure_addr_labelled(addr)
+    else:
+        disassembly.add_label(addr, label)
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -293,7 +302,6 @@ def disassemble_instruction(addr):
 def trace():
     start_addr = config.disassembly_range[0]
     end_addr = config.disassembly_range[1]
-    entry_points = config.entry_points
     assert start_addr is not None
     assert end_addr is not None
     while len(entry_points) > 0:
@@ -310,7 +318,7 @@ def trace():
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
-                classification.entry(new_entry_point)
+                entry(new_entry_point)
 
 # TODO: I can't help thinking entry_points and its associated functions belong
 # in here, but I won't move it now as I think it would be clearer where it

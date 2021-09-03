@@ -5,9 +5,9 @@ import argparse
 # TODO: Not too sure about exposing get_label
 from disassembly import add_constant, add_label, add_optional_label, add_comment, add_classification, get_label
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
-from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, entry, inline_nul_string_hook, add_expression
+from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook, add_expression
 from config import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
-from trace import jsr_hooks
+from trace import entry, jsr_hooks
 
 import trace
 import classification

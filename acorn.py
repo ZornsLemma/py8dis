@@ -79,7 +79,7 @@ def is_sideways_rom():
         jmp_abs_opcode = 0x4c
         label(addr, entry_type + "_entry")
         if memory[addr] == jmp_abs_opcode:
-            entry_points.append(addr)
+            entry(addr)
             label(utils.get_abs(addr + 1), entry_type + "_handler")
         else:
             byte(addr, 3)
