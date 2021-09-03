@@ -6,6 +6,7 @@ import disassembly
 import utils
 
 memory = config.memory
+jsr_hooks = {}
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -123,7 +124,7 @@ class OpcodeJsr(OpcodeAbs):
         # TODO: In principle a subroutine might implement some sort of
         # conditional return; to that end it might be nice if a jsr hook could
         # return more than one address if it wanted to.
-        return_addr = classification.jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
+        return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, utils.get_abs(addr + 1)]
 
 

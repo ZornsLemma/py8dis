@@ -5,7 +5,6 @@ import config
 import disassembly
 import utils
 
-jsr_hooks = {} # TODO: shouldn't this really go into trace.py???
 expressions = {}
 memory = config.memory
 formatter = config.formatter

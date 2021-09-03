@@ -5,8 +5,9 @@ import argparse
 # TODO: Not too sure about exposing get_label
 from disassembly import add_constant, add_label, add_optional_label, add_comment, add_classification, get_label
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
-from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, entry, jsr_hooks, inline_nul_string_hook, add_expression
+from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, entry, inline_nul_string_hook, add_expression
 from config import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
+from trace import jsr_hooks
 
 import trace
 import classification
@@ -53,7 +54,7 @@ def word(addr, n=1):
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
-    jsr_hooks[addr] = hook
+    jsr_hooks[addr] = hook # TODO: call a function in trace.py to do this?
 
 # TODO: End of "to move" black
 
