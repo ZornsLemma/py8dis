@@ -45,7 +45,7 @@ class Data(object):
             if n in expressions:
                 return "."
             c = memory[n]
-            if 32 <= c <= 126:
+            if utils.isprint(c):
                 return chr(c)
             return "."
         ascii = list(asciify(addr + i) for i in range(self._length))
@@ -127,7 +127,7 @@ class String(object):
         s_i = 0
         for i in range(self._length):
             c = memory[addr + i]
-            if 32 <= c <= 126 and c != ord('"'):
+            if utils.isprint(c) and c != ord('"'):
                 if state == 0:
                     s += '"'
                 elif state == 2:
@@ -223,7 +223,7 @@ def string_hi(addr):
         if memory[addr] & 0x80 != 0:
             if False: # TODO: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
-                if 32 <= c <= 126 and c != 34:
+                if utils.isprint(c) and c != ord('"'):
                     expressions[addr] = "&80+'%s'" % chr(c) # TODO: use formatter not &
             break
         addr += 1
