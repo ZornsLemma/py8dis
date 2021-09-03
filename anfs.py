@@ -97,12 +97,7 @@ entry(0xbfd2)
 # execution at the first top-bit-set byte following it.
 # TODO: Probably rename and move this into "standard library" - maybe not, as this is quite unusual (the top bit set character is *not* stripped-and-printed, we return to it)
 def print_inline_top_bit_clear_hook(target, addr):
-    addr += 3
-    initial_addr = addr
-    while memory[addr] & 0x80 == 0:
-        addr += 1
-    add_classification(initial_addr, String(addr - initial_addr))
-    return addr
+    return stringhi(addr + 3)
 hook_subroutine(0x9145, "print_inline_top_bit_clear", print_inline_top_bit_clear_hook)
 
 # TODO: temp beebdis notes:
