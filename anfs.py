@@ -15,8 +15,11 @@ def comment(addr, text):
 def expr(addr, s):
     expressions[addr] = s
 
-def data(addr, n): # TODO: Default n=1?
+def byte(addr, n=1):
     add_classification(addr, Data(n))
+
+def word(addr, n=1):
+    add_classification(addr, Word(n * 2))
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
@@ -98,9 +101,7 @@ for i in range(8):
         expr(rts_low_addr, "(<%s)-1" % get_label(target_addr))
 
 stringcr(0xa17c) # preceding BNE is always taken
-# TODO: beebdis style would be data(addr, n) and word(addr, n), and word() counts n in words not bytes - both default to n=1
-data(0xaefb, 1)
-#string_n(0xaefb, 4)
+byte(0xaefb) # preceding BNE is always taken
 
 entry((0x421-0x400)+0xbf04, "copied_to_421")
 

@@ -19,6 +19,7 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
+# TODO: Rename Byte to match Word?
 class Data(object):
     def __init__(self, length):
         assert length > 0
