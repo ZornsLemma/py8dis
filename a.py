@@ -272,7 +272,6 @@ def string_hi(addr):
     disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
     return addr + 1
 
-# TODO: RENAME DWORD TO WORD...
 def rts_address(addr):
     routine(get_abs(addr) + 1)
     expressions[addr] = "%s-1" % disassembly.get_label(get_abs(addr) + 1)
