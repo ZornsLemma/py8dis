@@ -88,7 +88,7 @@ class OpcodeDataAbs(OpcodeAbs):
 
     def disassemble(self, addr):
         # TODO: Should we *always* do this in disassemble() instead of special-casing non-consecutive instructions? ie call add_default_label in control flow affecting instructions
-        disassembly.ensure_addr_labelled(get_abs(addr + 1))
+        disassembly.ensure_addr_labelled(utils.get_abs(addr + 1))
         return [addr + 3]
 
 
@@ -97,7 +97,7 @@ class OpcodeJmpAbs(OpcodeAbs):
         super(OpcodeJmpAbs, self).__init__("JMP")
 
     def disassemble(self, addr):
-        return [None, get_abs(addr + 1)]
+        return [None, utils.get_abs(addr + 1)]
 
 
 class OpcodeJmpInd(OpcodeAbs):
@@ -105,7 +105,7 @@ class OpcodeJmpInd(OpcodeAbs):
         super(OpcodeJmpInd, self).__init__("JMP", ")")
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(get_abs(addr + 1))
+        disassembly.ensure_addr_labelled(utils.get_abs(addr + 1))
         return [None]
 
 
@@ -114,9 +114,9 @@ class OpcodeJsr(OpcodeAbs):
         super(OpcodeJsr, self).__init__("JSR")
 
     def disassemble(self, addr):
-        target = get_abs(addr + 1)
+        target = utils.get_abs(addr + 1)
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
-        return [return_addr, get_abs(addr + 1)]
+        return [return_addr, utils.get_abs(addr + 1)]
 
 
 class OpcodeReturn(Opcode):

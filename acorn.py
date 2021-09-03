@@ -1,5 +1,7 @@
+# TODO: Since this is more of a "user-level library", it should maybe do import commands and be written more like anfs.py rather than using "internal names"
 import classification
 import disassembly
+import utils
 from memory import * # TODO?
 
 def label_os_entry_points():
@@ -32,7 +34,7 @@ def is_sideways_rom():
         disassembly.add_label(addr, entry_type + "_entry")
         if memory[addr] == jmp_abs_opcode:
             entry_points.append(addr)
-            disassembly.add_label(classification.get_abs(addr + 1), entry_type + "_handler")
+            disassembly.add_label(utils.get_abs(addr + 1), entry_type + "_handler")
         else:
             disassembly.add_classification(addr, classification.Data(3))
     check_entry(0x8000, "language")

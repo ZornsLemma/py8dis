@@ -22,10 +22,6 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
-def get_abs(i):
-    assert memory[i] is not None and memory[i+1] is not None
-    return memory[i] + (memory[i+1] << 8)
-
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -174,6 +170,8 @@ def get_expression(addr, expected_value):
     # TODO: We should evaluate "expression" and check it evaluates to expected_value
     return expression
 
+# TODO: Rename following three functions to make their expression-possibility more obvious
+
 def get_constant8(addr):
     if addr not in expressions:
         return formatter[0].hex2(memory[addr])
@@ -186,7 +184,7 @@ def get_address8(addr):
     return get_expression(addr, operand)
 
 def get_address16(addr):
-    operand = get_abs(addr)
+    operand = utils.get_abs(addr)
     # TODO: Not entirely sure if it's a good idea to handle 16-bit expressions like this. Should we at a minimum assert a Word is used to classify this address?
     if addr not in expressions:
         return disassembly.get_label(operand)
@@ -242,8 +240,8 @@ def string_hi(addr):
     return addr + 1
 
 def rts_address(addr):
-    routine(get_abs(addr) + 1)
-    expressions[addr] = "%s-1" % disassembly.get_label(get_abs(addr) + 1)
+    routine(utils.get_abs(addr) + 1)
+    expressions[addr] = "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1)
     disassembly.add_classification(addr, Word(2))
     return addr + 2
 
