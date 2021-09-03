@@ -18,6 +18,9 @@ def add_label(addr, name):
     # An address can have multiple labels as annotations.
     annotations[addr].append(Label(addr, name))
 
+def add_optional_label(addr, name):
+    optional_labels[addr] = name
+
 # TODO: This could maybe just do ensure_addr_labelled()??? And then no longer expose that???
 def get_label(addr):
     assert addr in labels
@@ -25,7 +28,7 @@ def get_label(addr):
 
 def ensure_addr_labelled(addr):
     if addr not in labels:
-        label = ("l%04x" if memory.lower_case[0] else "L%04X") % addr
+        label = optional_labels.get(addr, ("l%04x" if memory.lower_case[0] else "L%04X") % addr)
         add_label(addr, label)
     return labels[addr]
 
@@ -163,6 +166,7 @@ def sorted_annotations(annotations):
 classifications = [None] * 64*1024
 # TODO: COMMENT
 labels = {}
+optional_labels = {}
 constants = []
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.
