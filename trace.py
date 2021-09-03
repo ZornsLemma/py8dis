@@ -300,5 +300,4 @@ def trace():
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
-                disassembly.ensure_addr_labelled(new_entry_point)
-                entry_points.append(new_entry_point)
+                entry(new_entry_point)
