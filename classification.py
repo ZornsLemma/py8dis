@@ -12,8 +12,6 @@ formatter = config.formatter
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
-def add_expression(addr, s):
-    expressions[addr] = s
 
 class Byte(object):
     def __init__(self, length):
@@ -153,6 +151,9 @@ class String(object):
             print(utils.add_hex_dump(s, addr + s_i, self._length - s_i))
 
 
+def add_expression(addr, s):
+    expressions[addr] = s
+
 def get_expression(addr, expected_value):
     expression = expressions[addr]
     # TODO: We should evaluate "expression" and check it evaluates to expected_value
@@ -178,7 +179,7 @@ def get_address16(addr):
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
-
+# TODO: rename?
 def inline_nul_string_hook(target, addr):
     addr += 3
     initial_addr = addr
