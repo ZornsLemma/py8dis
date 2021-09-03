@@ -36,7 +36,7 @@ def is_sideways_rom():
             entry_points.append(addr)
             disassembly.add_label(utils.get_abs(addr + 1), entry_type + "_handler")
         else:
-            disassembly.add_classification(addr, classification.Data(3))
+            disassembly.add_classification(addr, classification.Byte(3))
     check_entry(0x8000, "language")
     check_entry(0x8003, "service")
     disassembly.add_label(0x8006, "rom_type")

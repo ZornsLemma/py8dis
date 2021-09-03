@@ -19,8 +19,7 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
-# TODO: Rename Byte to match Word?
-class Data(object):
+class Byte(object):
     def __init__(self, length):
         assert length > 0
         self._length = length
@@ -270,7 +269,7 @@ def emit2(): # TODO POOR NAME
     addr = start_addr
     while addr < end_addr:
         if not disassembly.is_classified(addr, 1):
-            disassembly.add_classification(addr, Data(1))
+            disassembly.add_classification(addr, Byte(1))
         addr += disassembly.get_classification(addr).length()
 
     # TODO: Not sure if this "clean up" logic belongs here or not...

@@ -16,7 +16,7 @@ def expr(addr, s):
     expressions[addr] = s
 
 def byte(addr, n=1):
-    add_classification(addr, Data(n))
+    add_classification(addr, Byte(n))
 
 def word(addr, n=1):
     add_classification(addr, Word(n * 2))
