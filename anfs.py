@@ -5,8 +5,6 @@ import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES 
 set_output_filename("anfs418.rom") # TODO: remove "set_" from name?
 
 # TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
-def string_n(addr, n):
-    add_classification(addr, String(n))
 
 def label(addr, name):
     add_label(addr, name)
@@ -64,7 +62,7 @@ label(0x8eac, "clamp_absolute_workspace_and_save")
 
 label(0x9611, "sta_e09_if_d6c_b7_set")
 label(0x96b4, "error_template_minus_1")
-string_n(0x96b5, 3)
+string(0x96b5, 3)
 
 stringcr(0x8d0f)
 stringz(0x8d38)
