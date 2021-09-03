@@ -26,8 +26,7 @@ def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not
 
 # TODO: End of "to move" black
 
-# TODO: Switch parameter order? Would match beebdis and would be more like other address-taking functions like label() and expr()
-load("anfs418.orig", 0x8000)
+load(0x8000, "anfs418.orig")
 
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?

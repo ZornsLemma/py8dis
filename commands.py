@@ -11,7 +11,7 @@ from memory import * # TODO: maybe don't expose these to user directly
 import trace
 import classification
 
-def load(filename, addr):
+def load(addr, filename):
     # TODO: Don't allow multiple load()s (given we have a single global start/end addr)
     with open(filename, "rb") as f:
         data = bytearray(f.read())
