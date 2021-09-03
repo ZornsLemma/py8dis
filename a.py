@@ -266,7 +266,7 @@ def string_hi(addr):
             if False: # TODO: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
                 if 32 <= c <= 126 and c != 34:
-                    expressions[addr] = "&80+'%s'" % chr(c)
+                    expressions[addr] = "&80+'%s'" % chr(c) # TODO: use formatter not &
             break
         addr += 1
     disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
