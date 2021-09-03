@@ -1,6 +1,14 @@
 from classification import * # TODO?
 import memory as config # TODO!!
 
+def signed8(i):
+    assert 0 <= i <= 255
+    if i >= 0x80:
+        return i - 256
+    else:
+        return i
+
+
 
 class Opcode(object):
     def __init__(self, mnemonic, operand_length, suffix = None):

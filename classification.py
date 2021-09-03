@@ -22,13 +22,6 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
-def signed8(i):
-    assert 0 <= i <= 255
-    if i >= 0x80:
-        return i - 256
-    else:
-        return i
-
 def get_u8(i):
     assert memory[i] is not None
     return memory[i]
@@ -202,10 +195,6 @@ def get_address16(addr):
     if addr not in expressions:
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
-
-
-#def conditional_branch(addr, operand):
-#    return [addr + 2, addr + 2 + signed8(operand)]
 
 
 def reverse_range(length):
