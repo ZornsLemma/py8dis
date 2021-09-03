@@ -5,7 +5,7 @@ import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES 
 set_output_filename("anfs418.rom") # TODO: remove "set_" from name?
 
 
-load(0x8000, "anfs418.orig")
+load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?

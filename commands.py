@@ -11,13 +11,19 @@ from memory import * # TODO: maybe don't expose these to user directly - or just
 import trace
 import classification
 
-def load(addr, filename):
+def load(addr, filename, md5sum=None):
     # TODO: Don't allow multiple load()s (given we have a single global start/end addr)
     with open(filename, "rb") as f:
         data = bytearray(f.read())
         if addr + len(data) > 0xffff:
             assert False # TODO: proper error
         memory[addr:] = data
+    if md5sum is not None:
+        import hashlib
+        hash = hashlib.md5()
+        hash.update(data)
+        if md5sum != hash.hexdigest():
+            assert False # TODO: proper error
     disassembly_range[0] = addr
     disassembly_range[1] = addr + len(data)
 
