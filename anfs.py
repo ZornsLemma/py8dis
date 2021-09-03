@@ -10,6 +10,7 @@ load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?
 
+# TODO: Using label() for things like this is wrong - they cause references to these addresses to use them automatically - we need something like constant() which defines a label for emit-only purposes and which can then be used by expressions at the user's discretion
 label(0x01, "service_claim_absolute_workspace")
 label(0x0f, "service_vectors_changed")
 expr(0x8a17, "service_vectors_changed")
