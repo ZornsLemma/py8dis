@@ -2,7 +2,7 @@ from __future__ import print_function
 import collections
 import sys # TODO: TEMP?
 from memory import * # TODO?
-import b as disassembly
+import disassembly
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 

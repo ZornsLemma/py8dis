@@ -1,5 +1,5 @@
 import a as SFTODOA
-import b as disassembly
+import disassembly
 from memory import * # TODO?
 
 def label_os_entry_points():
