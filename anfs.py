@@ -2,7 +2,7 @@ from commands import * # TODO?
 import acorn
 import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES CLASHES WITH "MEMORY" ARRAY IMPORTED FROM COMMANDS
 
-set_output_filename("anfs418.rom")
+set_output_filename("anfs418.rom") # TODO: remove "set_" from name?
 
 # TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
 def string_n(addr, n):
