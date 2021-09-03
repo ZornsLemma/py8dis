@@ -2,7 +2,7 @@
 
 import argparse
 
-from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook, add_expression
+from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 
@@ -47,7 +47,7 @@ def comment(addr, text):
     disassembly.add_comment(addr, text)
 
 def expr(addr, s):
-    add_expression(addr, s)
+    classification.add_expression(addr, s)
 
 def byte(addr, n=1):
     disassembly.add_classification(addr, classification.Byte(n))
