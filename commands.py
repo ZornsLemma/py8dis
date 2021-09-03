@@ -2,10 +2,13 @@
 
 import argparse
 
+# These functions/objects are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 
+# These modules are used to implement things in this file but aren't intended
+# for direct use by the user.
 import classification
 import config
 import disassembly
