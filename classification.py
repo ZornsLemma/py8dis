@@ -239,6 +239,7 @@ def entry(addr, label=None):
     else:
         disassembly.add_label(addr, label)
 
+# TODO: RENAME?
 def split_jump_table_entry(low_addr, high_addr, offset):
     entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
     entry(entry_point)
@@ -246,6 +247,7 @@ def split_jump_table_entry(low_addr, high_addr, offset):
     expressions[high_addr] = ">(%s%s)" % (disassembly.get_label(entry_point), offset_string)
     expressions[low_addr]  = "<(%s%s)" % (disassembly.get_label(entry_point), offset_string)
 
+# TODO: Maybe move this into commands.py, perhaps inlining it as part of go()? Or perhaps it should be all in disassembly.emit???
 def emit2(): # TODO POOR NAME
     start_addr = config.disassembly_range[0]
     end_addr = config.disassembly_range[1]
