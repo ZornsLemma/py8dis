@@ -19,7 +19,6 @@ def get_u8(i):
     return memory[i]
 
 
-
 class Opcode(object):
     def __init__(self, mnemonic, operand_length, suffix = None):
         self.mnemonic = mnemonic
@@ -95,7 +94,6 @@ class OpcodeDataAbs(OpcodeAbs):
         super(OpcodeDataAbs, self).__init__(mnemonic, suffix)
 
     def disassemble(self, addr):
-        # TODO: Should we *always* do this in disassemble() instead of special-casing non-consecutive instructions? ie call add_default_label in control flow affecting instructions
         disassembly.ensure_addr_labelled(utils.get_abs(addr + 1))
         return [addr + 3]
 
@@ -288,7 +286,7 @@ def disassemble_instruction(addr):
         return [None]
     # Up to this point we hadn't decided addr contains an instruction; we now
     # have.
-    # TODO: The "disassemble" function on opcodes is really more of a "possible targets" function - rename?
+    # TODO: The "disassemble" function on opcodes is really more of a "possible targets" function - rename? - not quite so fast, it does do more sometimes (labelling data address, for example)
     disassembly.add_classification(addr, opcode)
     return opcode.disassemble(addr)
 
@@ -303,9 +301,18 @@ def trace():
         if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:
             #print(hex(entry_point))
             new_entry_points = disassemble_instruction(entry_point)
+            # The first element of new_entry_points is the implicit next
+            # instruction (if there is one; it might be None) which is handled
+            # slightly differently, as it *isn't* automatically assigned a
+            # label.
             assert len(new_entry_points) >= 1
             implied_entry_point = new_entry_points.pop(0)
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 classification.entry(new_entry_point)
+
+# TODO: I can't help thinking entry_points and its associated functions belong
+# in here, but I won't move it now as I think it would be clearer where it
+# should live when/if other CPUs are supported and "core" tracing is split out
+# from CPU-specific tracing.
