@@ -15,7 +15,8 @@ import utils
 memory = config.memory
 
 def load(addr, filename, md5sum=None):
-    # TODO: Don't allow multiple load()s (given we have a single global start/end addr)
+    if config.disassembly_range[0] is not None:
+        utils.die("load() can only be used once")
     with open(filename, "rb") as f:
         data = bytearray(f.read())
         if addr + len(data) > 0xffff:
