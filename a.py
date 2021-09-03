@@ -138,7 +138,7 @@ class Word(object):
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            print(add_hex_dump("%s %s" % (formatter[0].word_prefix(), s), addr + i, len(chunk) * 2))
+            print(add_hex_dump("%s%s" % (formatter[0].word_prefix(), s), addr + i, len(chunk) * 2))
             i += len(chunk)
 
 class String(object):
