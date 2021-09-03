@@ -1,7 +1,11 @@
 # TODO: Rename trace6502? And perhaps have a trace65c02 which builds on that but adds CMOS instructions?
 
-from classification import * # TODO?
+import classification
 import config
+import disassembly
+import utils
+
+memory = config.memory
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -31,7 +35,8 @@ class Opcode(object):
         return 1 + self.operand_length
 
     def emit(self, addr):
-        print(add_hex_dump(self.as_string(addr), addr, self.length()))
+        # TODO: Maybe move add_hex_dump into utils???
+        print(classification.add_hex_dump(self.as_string(addr), addr, self.length()))
 
 
 class OpcodeImplied(Opcode):
@@ -58,7 +63,7 @@ class OpcodeImmediate(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        s = "    %s #%s" % (utils.force_case(self.mnemonic), get_constant8(addr + 1))
+        s = "    %s #%s" % (utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
         c = memory[addr + 1]
         if utils.isprint(c):
             s += " %s %s" % (config.formatter[0].comment_prefix(), chr(c))
@@ -74,7 +79,7 @@ class OpcodeZp(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address8(addr + 1), utils.force_case(self.suffix))
+        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
 
 
 class OpcodeAbs(Opcode):
@@ -82,7 +87,7 @@ class OpcodeAbs(Opcode):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address16(addr + 1), utils.force_case(self.suffix))
+        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
 
 
 class OpcodeDataAbs(OpcodeAbs):
@@ -118,7 +123,7 @@ class OpcodeJsr(OpcodeAbs):
 
     def disassemble(self, addr):
         target = utils.get_abs(addr + 1)
-        return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
+        return_addr = classification.jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, utils.get_abs(addr + 1)]
 
 
@@ -285,8 +290,9 @@ def disassemble_instruction(addr):
     return opcode.disassemble(addr)
 
 def trace():
-    start_addr = disassembly_range[0]
-    end_addr = disassembly_range[1]
+    start_addr = config.disassembly_range[0]
+    end_addr = config.disassembly_range[1]
+    entry_points = config.entry_points
     assert start_addr is not None
     assert end_addr is not None
     while len(entry_points) > 0:
@@ -299,4 +305,4 @@ def trace():
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
-                entry(new_entry_point)
+                classification.entry(new_entry_point)
