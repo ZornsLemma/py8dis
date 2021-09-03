@@ -1,6 +1,5 @@
 from __future__ import print_function
 import collections
-import sys # TODO: TEMP?
 
 import config
 import disassembly
@@ -63,6 +62,7 @@ class Byte(object):
         for directive, comment in zip(directives, comments):
             print("%-*s%s" % (comment_indent, directive, comment))
 
+
 class Word(object):
     def __init__(self, length):
         self.set_length(length)
@@ -94,6 +94,7 @@ class Word(object):
                 sep = ", "
             print(utils.add_hex_dump("%s%s" % (formatter[0].word_prefix(), s), addr + i, len(chunk) * 2))
             i += len(chunk)
+
 
 class String(object):
     def __init__(self, length, is_variable_length=True):
@@ -147,7 +148,6 @@ class String(object):
             if state == 1:
                 s += '"'
             print(utils.add_hex_dump(s, addr + s_i, self._length - s_i))
-
 
 
 def get_expression(addr, expected_value):
