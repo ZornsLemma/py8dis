@@ -40,7 +40,6 @@ def get_classification(addr):
     return classifications[addr]
 
 # Combine adjacent variable-length classifications.
-# TODO: Worth noting that although at the moment classification objects respond to is_variable_length() consistently, it would be perfectly possible to tweak this code and have some strings/data blocks marked by the user as non-variable-length while other ones are still variable length
 def merge_classifications(start_addr, end_addr):
     addr = start_addr
     while addr < end_addr:
