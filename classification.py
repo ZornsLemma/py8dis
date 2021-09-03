@@ -34,6 +34,10 @@ class Byte(object):
         assert length > 0
         self._length = length
 
+    def labels_used(self, addr):
+        # We either use expressions (which don't count here) or literals.
+        return set()
+
     def emit(self, addr):
         byte_prefix = formatter[0].byte_prefix()
         # TODO: ASCII output should be optional
@@ -84,6 +88,14 @@ class Word(object):
         assert length % 2 == 0
         self._length = length
 
+    def labels_used(self, addr):
+        result = set()
+        for i in range(0, self._length, 2):
+            sub_result = get_address16_label(addr + i)
+            if sub_result is not None:
+                result.update(sub_result)
+        return result
+
     def emit(self, addr):
         # TODO: COPY AND PASTE OF DATA'S EMIT()
         data = list(get_address16(addr + i) for i in range(0, self._length, 2))
@@ -116,6 +128,10 @@ class String(object):
     def set_length(self, length):
         assert length > 0
         self._length = length
+
+    def labels_used(self, addr):
+        # We either use expressions (which don't count here) or literals.
+        return set()
 
     def emit(self, addr):
         prefix = formatter[0].string_prefix()
@@ -174,12 +190,26 @@ def get_address8(addr):
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
+def get_address8_label(addr):
+    operand = memory[addr]
+    if addr not in expressions:
+        return set([disassembly.get_label(operand)])
+    return set()
+
 def get_address16(addr):
     operand = utils.get_abs(addr)
+    # TODO: Implementation seems a little circuitous
     # TODO: Not entirely sure if it's a good idea to handle 16-bit expressions like this. Should we at a minimum assert a Word is used to classify this address?
     if addr not in expressions:
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
+
+def get_address16_label(addr): # TODO!?
+    operand = utils.get_abs(addr)
+    if addr not in expressions:
+        return set([disassembly.get_label(operand)])
+    return set()
+
 
 
 def inline_nul_string_hook(target, addr):
@@ -266,11 +296,36 @@ def emit2(): # TODO POOR NAME
     assert end_addr is not None
 
     # TODO: Not sure if this "clean up" logic belongs here or not...
+    # Classify anything not already classified as individual bytes of data and
+    # prune unused labels.
+    labels_used = set()
     addr = start_addr
     while addr < end_addr:
         if not disassembly.is_classified(addr, 1):
             disassembly.add_classification(addr, Byte(1))
-        addr += disassembly.get_classification(addr).length()
+        c = disassembly.get_classification(addr)
+        #print("QQQ", c.labels_used(addr))
+        labels_used.update(c.labels_used(addr))
+        addr += c.length()
+    # Since we can't parse expressions, we simply say that any label which
+    # appears as a substring of an expression is used. This is a bit crude but
+    # should work well in practice.
+    # TODO: Note we need to use disassembly. prefix in following - should this code move into disassembly module?
+    possibly_unused_labels = set(disassembly.labels.values()) - labels_used
+    #print("XXX", possibly_unused_labels)
+    #print("YYY", labels_used)
+    #assert False
+    for label in possibly_unused_labels:
+        if any(label in expression for expression in expressions.values()):
+            labels_used.add(label)
+    unused_labels = set(disassembly.labels.values()) - labels_used
+    pending_label_deletions = []
+    for addr, name in disassembly.labels.items():
+        if name in unused_labels:
+            print("QQQ", name, addr)
+            pending_label_deletions.append(addr)
+    for addr in pending_label_deletions:
+        pass # del disassembly.labels[addr]
 
     # TODO: Not sure if this "clean up" logic belongs here or not...
     disassembly.merge_classifications(start_addr, end_addr)

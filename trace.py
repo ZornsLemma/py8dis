@@ -42,6 +42,9 @@ class OpcodeImplied(Opcode):
     def disassemble(self, addr):
         return [addr + 1]
 
+    def labels_used(self, addr):
+        return set()
+
     def as_string(self, addr):
         mnemonic = self.mnemonic
         if (not config.formatter[0].explicit_a) and mnemonic.endswith(" A"):
@@ -55,6 +58,9 @@ class OpcodeImmediate(Opcode):
 
     def disassemble(self, addr):
         return [addr + 2]
+
+    def labels_used(self, addr):
+        return set()
 
     def as_string(self, addr):
         s = "    %s #%s" % (utils.force_case(self.mnemonic), get_constant8(addr + 1))
@@ -72,6 +78,9 @@ class OpcodeZp(Opcode):
         disassembly.ensure_addr_labelled(get_u8(addr + 1))
         return [addr + 2]
 
+    def labels_used(self, addr):
+        return get_address8_label(addr + 1)
+
     def as_string(self, addr):
         return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address8(addr + 1), utils.force_case(self.suffix))
 
@@ -79,6 +88,9 @@ class OpcodeZp(Opcode):
 class OpcodeAbs(Opcode):
     def __init__(self, mnemonic, suffix = None):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
+
+    def labels_used(self, addr):
+        return get_address16_label(addr + 1)
 
     def as_string(self, addr):
         return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, get_address16(addr + 1), utils.force_case(self.suffix))
@@ -128,6 +140,9 @@ class OpcodeReturn(Opcode):
     def disassemble(self, addr):
         return [None]
 
+    def labels_used(self, addr):
+        return set()
+
     def as_string(self, addr):
         return "    %s" % utils.force_case(self.mnemonic)
 
@@ -141,6 +156,9 @@ class OpcodeConditionalBranch(Opcode):
 
     def disassemble(self, addr):
         return [addr + 2, self._target(addr)]
+
+    def labels_used(self, addr):
+        return set([disassembly.get_label(self._target(addr))])
 
     def as_string(self, addr):
         return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr)))

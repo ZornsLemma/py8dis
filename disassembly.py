@@ -13,18 +13,18 @@ def add_constant(value, name):
 def add_label(addr, name):
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
-    if labels[addr] is None:
+    if addr not in labels:
        labels[addr] = name
     # An address can have multiple labels as annotations.
     annotations[addr].append(Label(addr, name))
 
 # TODO: This could maybe just do ensure_addr_labelled()??? And then no longer expose that???
 def get_label(addr):
-    assert labels[addr] is not None
+    assert addr in labels
     return labels[addr]
 
 def ensure_addr_labelled(addr):
-    if labels[addr] is None:
+    if addr not in labels:
         label = ("l%04x" if memory.lower_case[0] else "L%04X") % addr
         add_label(addr, label)
     return labels[addr]
@@ -63,7 +63,7 @@ def split_classifications(start_addr, end_addr):
         c = classifications[addr]
         if c.is_variable_length() and c.length() > 1:
             for i in range(1, c.length()):
-                if labels[addr + i] is not None:
+                if (addr + i) in labels:
                     classifications[addr + i] = copy.copy(c)
                     classifications[addr + i].set_length(c.length() - i)
                     c.set_length(i)
@@ -162,7 +162,7 @@ def sorted_annotations(annotations):
 # TODO: Could this in fact be a dictionary?
 classifications = [None] * 64*1024
 # TODO: COMMENT
-labels = [None] * 64*1024 # TODO: Any reason not to just use a dictionary for labels?
+labels = {}
 constants = []
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.
