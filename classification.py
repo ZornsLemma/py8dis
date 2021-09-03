@@ -5,12 +5,15 @@ import config
 import disassembly
 import utils
 
-jsr_hooks = {}
+jsr_hooks = {} # TODO: shouldn't this really go into trace.py???
+expressions = {}
 memory = config.memory
-expressions = config.expressions
 formatter = config.formatter
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
+
+def add_expression(addr, s):
+    expressions[addr] = s
 
 class Byte(object):
     def __init__(self, length):

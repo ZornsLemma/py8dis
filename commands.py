@@ -5,7 +5,7 @@ import argparse
 # TODO: Not too sure about exposing get_label
 from disassembly import add_constant, add_label, add_optional_label, add_comment, add_classification, get_label
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
-from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, entry, jsr_hooks, inline_nul_string_hook
+from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, entry, jsr_hooks, inline_nul_string_hook, add_expression
 from config import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
 
 import trace
@@ -43,7 +43,7 @@ def comment(addr, text):
     add_comment(addr, text)
 
 def expr(addr, s):
-    expressions[addr] = s
+    add_expression(addr, s)
 
 def byte(addr, n=1):
     add_classification(addr, Byte(n))
