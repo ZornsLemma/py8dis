@@ -8,17 +8,8 @@ import utils
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
+# TODO: move to config (aka memory.py)?
 inline_comment_column = 60 # TODO: use this for EQUB inline comments
-
-def load(filename, addr):
-    # TODO: Don't allow multiple load()s (given we have a single global start/end addr)
-    with open(filename, "rb") as f:
-        data = bytearray(f.read())
-        if addr + len(data) > 0xffff:
-            assert False # TODO: proper error
-        memory[addr:] = data
-    disassembly_range[0] = addr
-    disassembly_range[1] = addr + len(data)
 
 def add_hex_dump(s, addr, length):
     assert length > 0
