@@ -21,7 +21,7 @@ def data(addr, n): # TODO: Default n=1?
     add_classification(addr, Data(n))
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
-    routine(addr, name)
+    entry(addr, name)
     jsr_hooks[addr] = hook
 
 # TODO: End of "to move" black
@@ -96,7 +96,7 @@ for i in range(8):
         split_jump_table_entry(0x8869 + min_y + i, 0x8861 + min_y + i, 0)
         rts_low_addr = 0x8600 + min_y + i
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
-        routine(target_addr)
+        entry(target_addr)
         #print("XK", hex(target_addr))
         expr(rts_low_addr, "(<%s)-1" % get_label(target_addr))
 
@@ -105,19 +105,19 @@ string_cr(0xa17c) # preceding BNE is always taken
 data(0xaefb, 1)
 #string_n(0xaefb, 4)
 
-routine((0x421-0x400)+0xbf04, "copied_to_421")
+entry((0x421-0x400)+0xbf04, "copied_to_421")
 
 # TODO: have an instruction()? function to put a single value in entry_points? Perhaps call it code() to "match" data()?
 
-routine(0x89a7)
-routine(0x89b5)
+entry(0x89a7)
+entry(0x89b5)
 
-routine(0xbf04)
-routine(0xbf07)
-routine(0xbf0a)
-routine(0xbf2c)
-routine(0xbf88)
-routine(0xbfd2)
+entry(0xbf04)
+entry(0xbf07)
+entry(0xbf0a)
+entry(0xbf2c)
+entry(0xbf88)
+entry(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.

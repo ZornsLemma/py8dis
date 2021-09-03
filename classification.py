@@ -229,15 +229,13 @@ def string_hi(addr):
     return addr + 1
 
 def rts_address(addr):
-    routine(utils.get_abs(addr) + 1)
+    entry(utils.get_abs(addr) + 1)
     expressions[addr] = "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1)
     disassembly.add_classification(addr, Word(2))
     return addr + 2
 
 # TODO: Use this in more places
-# TODO: Take optional non-default label
-# TODO: Rename code_label or something?
-def routine(addr, label=None): # TODO: rename?
+def entry(addr, label=None):
     entry_points.append(addr)
     if label is None:
         disassembly.ensure_addr_labelled(addr)
