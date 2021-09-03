@@ -2,13 +2,13 @@
 
 import argparse
 
-# TODO: Not too sure about exposing get_label
-from disassembly import add_constant, add_label, add_optional_label, add_comment, add_classification, get_label
 from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook, add_expression
+from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 
 import classification
 import config
+import disassembly
 import trace
 
 memory = config.memory
@@ -35,25 +35,26 @@ def load(addr, filename, md5sum=None):
 
 # TODO: Swap arguments round to match usual "foo = 4" syntax? But everything else takes address first...
 def constant(value, name):
-    add_constant(value, name)
+    disassembly.add_constant(value, name)
 
 def label(addr, name):
-    add_label(addr, name)
+    disassembly.add_label(addr, name)
 
 def optional_label(addr, name):
-    add_optional_label(addr, name)
+    disassembly.add_optional_label(addr, name)
 
 def comment(addr, text):
-    add_comment(addr, text)
+    disassembly.add_comment(addr, text)
 
 def expr(addr, s):
     add_expression(addr, s)
 
 def byte(addr, n=1):
-    add_classification(addr, classification.Byte(n))
+    disassembly.add_classification(addr, classification.Byte(n))
 
 def word(addr, n=1):
-    add_classification(addr, classification.Word(n * 2))
+    # TODO: I don't think this is actually tested yet...
+    disassembly.add_classification(addr, classification.Word(n * 2))
 
 def entry(addr, label=None):
     add_entry(addr, label)
