@@ -4,13 +4,12 @@ import argparse
 
 # TODO: Not too sure about exposing get_label
 from disassembly import add_constant, add_label, add_optional_label, add_comment, add_classification, get_label
-from classification import Byte, Word, String # TODO: maybe don't expose these directly?
 from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook, add_expression
-import config
 from trace import add_entry, jsr_hooks
 
-import trace
 import classification
+import config
+import trace
 
 memory = config.memory
 
@@ -51,10 +50,10 @@ def expr(addr, s):
     add_expression(addr, s)
 
 def byte(addr, n=1):
-    add_classification(addr, Byte(n))
+    add_classification(addr, classification.Byte(n))
 
 def word(addr, n=1):
-    add_classification(addr, Word(n * 2))
+    add_classification(addr, classification.Word(n * 2))
 
 def entry(addr, label=None):
     add_entry(addr, label)
