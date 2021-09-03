@@ -1,6 +1,6 @@
 from commands import * # TODO?
 import acorn
-import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES CLASHES WITH "MEMORY" ARRAY IMPORTED FROM COMMANDS
+import config # TODO: DO WE HAVE TO IMPORT THIS EXPLICITLY HERE IN USER-LEVEL CODE? NICE TO AVOID I THINK...
 
 set_output_filename("anfs418.rom") # TODO: remove "set_" from name?
 

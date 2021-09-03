@@ -1,4 +1,4 @@
-import memory as config # TODO!
+import config
 
 def force_case(s):
     return s.lower() if config.lower_case[0] else s.upper()

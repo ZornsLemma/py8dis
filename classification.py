@@ -2,7 +2,7 @@ from __future__ import print_function
 import collections
 import sys # TODO: TEMP?
 
-from memory import * # TODO?
+from config import * # TODO?
 import disassembly
 import utils
 

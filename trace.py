@@ -1,7 +1,7 @@
 # TODO: Rename trace6502? And perhaps have a trace65c02 which builds on that but adds CMOS instructions?
 
 from classification import * # TODO?
-import memory as config # TODO!!
+import config
 
 def signed8(i):
     assert 0 <= i <= 255

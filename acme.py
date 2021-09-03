@@ -2,10 +2,10 @@ from __future__ import print_function
 import sys
 
 import classification
-import memory
+import config
 import utils
 
-memory.formatter[0] = sys.modules[__name__]
+config.formatter[0] = sys.modules[__name__]
 
 explicit_a = False
 

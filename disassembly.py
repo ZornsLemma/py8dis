@@ -2,7 +2,7 @@ from __future__ import print_function
 import collections
 import copy
 
-import memory
+import config
 
 def add_comment(addr, text):
     annotations[addr].append(Comment(text))
@@ -28,7 +28,7 @@ def get_label(addr):
 
 def ensure_addr_labelled(addr):
     if addr not in labels:
-        label = optional_labels.get(addr, ("l%04x" if memory.lower_case[0] else "L%04X") % addr)
+        label = optional_labels.get(addr, ("l%04x" if config.lower_case[0] else "L%04X") % addr)
         add_label(addr, label)
     return labels[addr]
 
@@ -74,7 +74,7 @@ def split_classifications(start_addr, end_addr):
         addr += classifications[addr].length()
 
 def emit(start_addr, end_addr):
-    formatter = memory.formatter[0]
+    formatter = config.formatter[0]
 
     if len(constants) > 0:
         for value, name in sorted(constants, key=lambda x: x[0]):
@@ -124,7 +124,7 @@ class Label(object):
         print(self.as_string(emit_addr))
 
     def as_string(self, emit_addr): # TODO: ARG IS MISNAMED NOW
-        formatter = memory.formatter[0]
+        formatter = config.formatter[0]
         offset = self.addr - emit_addr
         assert offset >= 0
         if offset == 0:
@@ -134,7 +134,7 @@ class Label(object):
             return formatter.explicit_label(self.name, label, offset)
 
     def emit_assignment(self):
-        formatter = memory.formatter[0]
+        formatter = config.formatter[0]
         print(formatter.explicit_label(self.name, formatter.hex4(self.addr)))
 
 
@@ -150,7 +150,7 @@ class Comment(object):
         print(self.as_string(emit_addr))
 
     def as_string(self, emit_addr):
-        formatter = memory.formatter[0]
+        formatter = config.formatter[0]
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
 
 
