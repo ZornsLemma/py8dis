@@ -46,7 +46,7 @@ class OpcodeImmediate(Opcode):
         s = "    %s #%s" % (force_case(self.mnemonic), get_constant8(addr + 1))
         c = memory[addr + 1]
         if 32 <= c <= 126:
-            s += " ; " + chr(c)
+            s += " %s %s" % (config.formatter[0].comment_prefix(), chr(c))
         return s
 
 
