@@ -1,4 +1,4 @@
-import a as SFTODOA
+import classification
 import disassembly
 from memory import * # TODO?
 
@@ -32,9 +32,9 @@ def is_sideways_rom():
         disassembly.add_label(addr, entry_type + "_entry")
         if memory[addr] == jmp_abs_opcode:
             entry_points.append(addr)
-            disassembly.add_label(SFTODOA.get_abs(addr + 1), entry_type + "_handler")
+            disassembly.add_label(classification.get_abs(addr + 1), entry_type + "_handler")
         else:
-            disassembly.add_classification(addr, SFTODOA.Data(3))
+            disassembly.add_classification(addr, classification.Data(3))
     check_entry(0x8000, "language")
     check_entry(0x8003, "service")
     disassembly.add_label(0x8006, "rom_type")
@@ -43,10 +43,10 @@ def is_sideways_rom():
     expressions[0x8007] = "copyright - rom_header"
     disassembly.add_label(0x8008, "binary_version")
     disassembly.add_label(0x8009, "title")
-    nul_at_title_end = SFTODOA.string_nul(0x8009, True) - 1
+    nul_at_title_end = classification.string_nul(0x8009, True) - 1
     if nul_at_title_end < (0x8000 + copyright_offset):
         disassembly.add_label(nul_at_title_end, "version")
-        SFTODOA.string_nul(nul_at_title_end + 1, True)
+        classification.string_nul(nul_at_title_end + 1, True)
     disassembly.add_label(0x8000 + copyright_offset, "copyright")
-    SFTODOA.string_nul(0x8000 + copyright_offset + 1)
+    classification.string_nul(0x8000 + copyright_offset + 1)
     # TODO: We could recognise tube transfer/relocation data in header
