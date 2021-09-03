@@ -1,4 +1,7 @@
 # TODO: Rename this file? Perhaps core.py???
+
+import argparse
+
 # TODO: Not too sure about exposing get_label
 from disassembly import add_label, add_comment, add_classification, get_label
 from classification import String, Data # TODO: maybe don't expose these directly?
@@ -21,3 +24,18 @@ def load(filename, addr):
 def go():
     trace.trace()
     classification.emit2()
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")
+parser.add_argument("-a", "--acme", action="store_true", help="generate acme-style output")
+args = parser.parse_args()
+
+if args.beebasm and args.acme:
+    assert False # TODO: Proper error
+if args.acme:
+    import acme
+    set_output_filename = acme.set_output_filename
+else:
+    import beebasm
+    set_output_filename = beebasm.set_output_filename

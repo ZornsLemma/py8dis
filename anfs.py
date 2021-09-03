@@ -2,12 +2,7 @@ from commands import * # TODO?
 import acorn
 import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES CLASHES WITH "MEMORY" ARRAY IMPORTED FROM COMMANDS
 
-use_beebasm = True
-if use_beebasm:
-    import beebasm
-    beebasm.set_output_filename("anfs418.rom")
-else:
-    import acme
+set_output_filename("anfs418.rom")
 
 #config.set_lower_case(False)
 
