@@ -4,28 +4,6 @@ import memory as config # TODO: "MEMORY" POOR NAME IN THIS CONTEXT, ALSO CAUSES 
 
 set_output_filename("anfs418.rom") # TODO: remove "set_" from name?
 
-# TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
-
-def label(addr, name):
-    add_label(addr, name)
-
-def comment(addr, text):
-    add_comment(addr, text)
-
-def expr(addr, s):
-    expressions[addr] = s
-
-def byte(addr, n=1):
-    add_classification(addr, Byte(n))
-
-def word(addr, n=1):
-    add_classification(addr, Word(n * 2))
-
-def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
-    entry(addr, name)
-    jsr_hooks[addr] = hook
-
-# TODO: End of "to move" black
 
 load(0x8000, "anfs418.orig")
 
@@ -104,8 +82,6 @@ stringcr(0xa17c) # preceding BNE is always taken
 byte(0xaefb) # preceding BNE is always taken
 
 entry((0x421-0x400)+0xbf04, "copied_to_421")
-
-# TODO: have an instruction()? function to put a single value in entry_points? Perhaps call it code() to "match" data()?
 
 entry(0x89a7)
 entry(0x89b5)

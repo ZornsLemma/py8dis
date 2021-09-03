@@ -21,6 +21,29 @@ def load(addr, filename):
     disassembly_range[0] = addr
     disassembly_range[1] = addr + len(data)
 
+# TODO: Move the following into other files or rename stuff to implement this directly - this is just to experiment
+
+def label(addr, name):
+    add_label(addr, name)
+
+def comment(addr, text):
+    add_comment(addr, text)
+
+def expr(addr, s):
+    expressions[addr] = s
+
+def byte(addr, n=1):
+    add_classification(addr, Byte(n))
+
+def word(addr, n=1):
+    add_classification(addr, Word(n * 2))
+
+def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
+    entry(addr, name)
+    jsr_hooks[addr] = hook
+
+# TODO: End of "to move" black
+
 def go():
     trace.trace()
     classification.emit2()
