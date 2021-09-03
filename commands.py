@@ -7,7 +7,7 @@ from disassembly import add_constant, add_label, add_optional_label, add_comment
 from classification import Byte, Word, String # TODO: maybe don't expose these directly?
 from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook, add_expression
 from config import * # TODO: maybe don't expose these to user directly - or just expose memory and nothing else?
-from trace import entry, jsr_hooks
+from trace import add_entry, jsr_hooks
 
 import trace
 import classification
@@ -53,6 +53,9 @@ def byte(addr, n=1):
 
 def word(addr, n=1):
     add_classification(addr, Word(n * 2))
+
+def entry(addr, label=None):
+    add_entry(addr, label)
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)

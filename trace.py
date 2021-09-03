@@ -10,7 +10,7 @@ entry_points = []
 jsr_hooks = {}
 
 # TODO: Use this in more places
-def entry(addr, label=None):
+def add_entry(addr, label=None):
     entry_points.append(addr)
     if label is None:
         disassembly.ensure_addr_labelled(addr)
@@ -318,7 +318,7 @@ def trace():
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
-                entry(new_entry_point)
+                add_entry(new_entry_point)
 
 # TODO: I can't help thinking entry_points and its associated functions belong
 # in here, but I won't move it now as I think it would be clearer where it

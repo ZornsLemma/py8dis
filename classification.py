@@ -227,7 +227,7 @@ def inline_nul_string_hook(target, addr):
 # TODO: should this be in trace.py? it is kind of 6502-ish, for a start
 # TODO: rename?
 def rts_address(addr):
-    trace.entry(utils.get_abs(addr) + 1)
+    trace.add_entry(utils.get_abs(addr) + 1)
     expressions[addr] = "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1)
     disassembly.add_classification(addr, Word(2))
     return addr + 2
@@ -236,7 +236,7 @@ def rts_address(addr):
 # TODO: RENAME?
 def split_jump_table_entry(low_addr, high_addr, offset):
     entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
-    trace.entry(entry_point)
+    trace.add_entry(entry_point)
     offset_string = "" if offset == 0 else ("-%d" % offset)
     expressions[high_addr] = ">(%s%s)" % (disassembly.get_label(entry_point), offset_string)
     expressions[low_addr]  = "<(%s%s)" % (disassembly.get_label(entry_point), offset_string)
