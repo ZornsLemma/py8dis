@@ -26,6 +26,7 @@ def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not
 
 # TODO: End of "to move" black
 
+# TODO: Switch parameter order? Would match beebdis and would be more like other address-taking functions like label() and expr()
 load("anfs418.orig", 0x8000)
 
 acorn.label_os_entry_points() # TODO: label_os_api()?
@@ -100,6 +101,7 @@ for i in range(8):
         expr(rts_low_addr, "(<%s)-1" % get_label(target_addr))
 
 string_cr(0xa17c) # preceding BNE is always taken
+# TODO: beebdis style would be data(addr, n) and word(addr, n), and word() counts n in words not bytes - both default to n=1
 data(0xaefb, 1)
 #string_n(0xaefb, 4)
 
