@@ -131,6 +131,13 @@ def print_inline_top_bit_clear_hook(target, addr):
     return addr
 hook_subroutine(0x9145, "print_inline_top_bit_clear", print_inline_top_bit_clear_hook)
 
+# TODO: temp beebdis notes:
+# - "string" looks ahead but does *not* include the terminator in the string
+# - "stringterm" *does* include the terminator in the string
+# - "stringz" is like stringterm AFAICS except terminator is always 0
+# - "stringhi" does not seem to include terminator (even when the terminator is ascii-with-top-bit set)
+# - "stringhiz" does not include the terminator in the string
+
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
 # TODO: The fact there are two entry points also suggests something slightly cleverer going on
