@@ -1,6 +1,7 @@
 from commands import *
 import utils
 
+# TODO: Do this automatically just from "import acorn"?
 def label_os_entry_points():
     # TODO: Ideally we wouldn't show any labels in the output that aren't referenced
     label(0xffb9, "osrdrm")
