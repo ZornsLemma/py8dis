@@ -179,17 +179,6 @@ def get_address16(addr):
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
-# TODO: rename?
-def inline_nul_string_hook(target, addr):
-    addr += 3
-    initial_addr = addr
-    while True:
-        if memory[addr] == 0:
-            break
-        addr += 1
-    disassembly.add_classification(initial_addr, String((addr + 1) - initial_addr))
-    return addr + 1
-
 # TODO: Rename terminator_is_data to terminator_part_of_string?
 def stringterm(addr, terminator, terminator_is_data=False):
     initial_addr = addr
@@ -230,6 +219,10 @@ def stringhi(addr):
         addr += 1
     disassembly.add_classification(initial_addr, String(addr - initial_addr))
     return addr
+
+# TODO: rename? do we even need this if its implementation is so simple? (probably)
+def inline_nul_string_hook(target, addr):
+    return stringz(addr + 3)
 
 # TODO: rename?
 def rts_address(addr):
