@@ -34,8 +34,7 @@ class Opcode(object):
         return 1 + self.operand_length
 
     def emit(self, addr):
-        # TODO: Maybe move add_hex_dump into utils???
-        print(classification.add_hex_dump(self.as_string(addr), addr, self.length()))
+        print(utils.add_hex_dump(self.as_string(addr), addr, self.length()))
 
 
 class OpcodeImplied(Opcode):

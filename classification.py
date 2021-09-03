@@ -13,17 +13,6 @@ formatter = config.formatter
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
-def add_hex_dump(s, addr, length):
-    assert length > 0
-    # TODO: This should be controlled via a bool flag
-    s = "%-*s" % (config.inline_comment_column[0], s)
-    s += "; %s: " % utils.plainhex4(addr)
-    capped_length = min(length, 3)
-    s += " ".join(utils.plainhex2(x) for x in memory[addr:addr+capped_length])
-    if capped_length < length:
-        s += " ..."
-    return s
-
 class Byte(object):
     def __init__(self, length):
         assert length > 0
@@ -103,7 +92,7 @@ class Word(object):
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            print(add_hex_dump("%s%s" % (formatter[0].word_prefix(), s), addr + i, len(chunk) * 2))
+            print(utils.add_hex_dump("%s%s" % (formatter[0].word_prefix(), s), addr + i, len(chunk) * 2))
             i += len(chunk)
 
 class String(object):
@@ -150,14 +139,14 @@ class String(object):
             if len(s) > (config.inline_comment_column[0] - 5):
                 if state == 1:
                     s += '"'
-                print(add_hex_dump(s, addr + s_i, i - s_i))
+                print(utils.add_hex_dump(s, addr + s_i, i - s_i))
                 s = prefix
                 s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            print(add_hex_dump(s, addr + s_i, self._length - s_i))
+            print(utils.add_hex_dump(s, addr + s_i, self._length - s_i))
 
 
 
