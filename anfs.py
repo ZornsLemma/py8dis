@@ -1,6 +1,6 @@
-from commands import * # TODO?
+from commands import *
 import acorn
-import config # TODO: DO WE HAVE TO IMPORT THIS EXPLICITLY HERE IN USER-LEVEL CODE? NICE TO AVOID I THINK...
+#import config # TODO: DO WE HAVE TO IMPORT THIS EXPLICITLY HERE IN USER-LEVEL CODE? NICE TO AVOID I THINK...
 
 set_output_filename("anfs418.rom") # TODO: remove "set_" from name?
 
