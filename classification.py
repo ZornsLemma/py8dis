@@ -2,16 +2,21 @@ from __future__ import print_function
 import collections
 import sys # TODO: TEMP?
 
-from config import * # TODO?
+import config
 import disassembly
 import utils
+
+jsr_hooks = {}
+memory = config.memory
+expressions = config.expressions
+formatter = config.formatter
 
 # TODO: Completely ignoring wrapping at top and bottom of memory for now...
 
 def add_hex_dump(s, addr, length):
     assert length > 0
     # TODO: This should be controlled via a bool flag
-    s = "%-*s" % (inline_comment_column[0], s)
+    s = "%-*s" % (config.inline_comment_column[0], s)
     s += "; %s: " % utils.plainhex4(addr)
     capped_length = min(length, 3)
     s += " ".join(utils.plainhex2(x) for x in memory[addr:addr+capped_length])
@@ -47,7 +52,7 @@ class Byte(object):
             return "."
         ascii = list(asciify(addr + i) for i in range(self._length))
         longest_item = max(len(x) for x in data)
-        available_width = inline_comment_column[0] - len(byte_prefix)
+        available_width = config.inline_comment_column[0] - len(byte_prefix)
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)
         #print("QQ", longest_item, items_per_line, item_min_width)
@@ -65,7 +70,7 @@ class Byte(object):
         for chunk in utils.chunks(ascii, items_per_line):
             comments.append(("%s %s: " % (formatter[0].comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
             i += len(chunk)
-        comment_indent = inline_comment_column[0]
+        comment_indent = config.inline_comment_column[0]
         for directive, comment in zip(directives, comments):
             print("%-*s%s" % (comment_indent, directive, comment))
 
@@ -88,7 +93,7 @@ class Word(object):
         # TODO: COPY AND PASTE OF DATA'S EMIT()
         data = list(get_address16(addr + i) for i in range(0, self._length, 2))
         longest_item = max(len(x) for x in data)
-        available_width = inline_comment_column[0] - 10
+        available_width = config.inline_comment_column[0] - 10
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)
         i = 0
@@ -142,7 +147,7 @@ class String(object):
                 else:
                     # TODO: Maybe don't allow for expressions here?
                     s += get_constant8(addr + i)
-            if len(s) > (inline_comment_column[0] - 5):
+            if len(s) > (config.inline_comment_column[0] - 5):
                 if state == 1:
                     s += '"'
                 print(add_hex_dump(s, addr + s_i, i - s_i))
@@ -233,6 +238,7 @@ def stringhi(addr):
     disassembly.add_classification(initial_addr, String(addr - initial_addr))
     return addr
 
+# TODO: rename?
 def rts_address(addr):
     entry(utils.get_abs(addr) + 1)
     expressions[addr] = "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1)
@@ -241,27 +247,22 @@ def rts_address(addr):
 
 # TODO: Use this in more places
 def entry(addr, label=None):
-    entry_points.append(addr)
+    config.entry_points.append(addr)
     if label is None:
         disassembly.ensure_addr_labelled(addr)
     else:
         disassembly.add_label(addr, label)
 
-
 def split_jump_table_entry(low_addr, high_addr, offset):
     entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
-    entry_points.append(entry_point)
-    disassembly.ensure_addr_labelled(entry_point)
+    entry(entry_point)
     offset_string = "" if offset == 0 else ("-%d" % offset)
     expressions[high_addr] = ">(%s%s)" % (disassembly.get_label(entry_point), offset_string)
     expressions[low_addr]  = "<(%s%s)" % (disassembly.get_label(entry_point), offset_string)
 
-jsr_hooks = {}
-
-
 def emit2(): # TODO POOR NAME
-    start_addr = disassembly_range[0]
-    end_addr = disassembly_range[1]
+    start_addr = config.disassembly_range[0]
+    end_addr = config.disassembly_range[1]
     assert start_addr is not None
     assert end_addr is not None
 
