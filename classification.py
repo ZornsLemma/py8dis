@@ -22,12 +22,6 @@ def add_hex_dump(s, addr, length):
         s += " ..."
     return s
 
-# https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
-
 class Data(object):
     def __init__(self, length):
         assert length > 0
@@ -63,7 +57,7 @@ class Data(object):
         #print("QQ2", ascii)
         directives = []
         comments = []
-        for chunk in chunks(data, items_per_line):
+        for chunk in utils.chunks(data, items_per_line):
             s = ""
             sep = ""
             for item in chunk:
@@ -71,7 +65,7 @@ class Data(object):
                 sep = ", "
             directives.append("%s%s" % (byte_prefix, s))
         i = 0
-        for chunk in chunks(ascii, items_per_line):
+        for chunk in utils.chunks(ascii, items_per_line):
             comments.append(("%s %s: " % (formatter[0].comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
             i += len(chunk)
         comment_indent = inline_comment_column
@@ -101,7 +95,7 @@ class Word(object):
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)
         i = 0
-        for chunk in chunks(data, items_per_line):
+        for chunk in utils.chunks(data, items_per_line):
             s = ""
             sep = ""
             for item in chunk:
@@ -190,9 +184,6 @@ def get_address16(addr):
         return disassembly.get_label(operand)
     return get_expression(addr, operand)
 
-
-def reverse_range(length):
-    return range(length - 1, -1, -1)
 
 def inline_nul_string_hook(target, addr):
     addr += 3
