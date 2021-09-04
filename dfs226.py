@@ -66,7 +66,8 @@ Carry is always clear on exit.""")
 def print_inline_top_bit_clear_hook(target, addr): # TODO: Is there a standard fn for this? should there be?
     return stringhi(addr + 3)
 
-hook_subroutine(0x8077, "print_inline_top_bit_clear", print_inline_top_bit_clear_hook)
+hook_subroutine(0x8077, "print_inline_l809f_top_bit_clear", print_inline_top_bit_clear_hook)
+hook_subroutine(0xa99c, "print_inline_osasci_top_bit_clear", print_inline_top_bit_clear_hook)
 
 comment(0x8048,
 """Generate an OS error using inline data. Called as either:
@@ -125,5 +126,7 @@ pc += 2 # XXX
 SFTODO(7)
 pc += 2 # XXX
 SFTODO(2)
+
+# XXX: Some sort of string table at lba30
 
 go()
