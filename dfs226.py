@@ -37,6 +37,16 @@ label(0x9e4d, "osbyte_write_0")
 
 comment(0x8057, "XXX: Redundant lda l00b3? Is sta l00b3 above redundant too?")
 
+comment(0x8077,
+"""Print (XXX: using l809f, which seems to be quite fancy) an inline string
+terminated by a top-bit set instruction to execute after printing the string.
+Carry is always clear on exit.""")
+
+def print_inline_top_bit_clear_hook(target, addr): # TODO: Is there a standard fn for this? should there be?
+    return stringhi(addr + 3)
+
+hook_subroutine(0x8077, "print_inline_top_bit_clear", print_inline_top_bit_clear_hook)
+
 comment(0x8048,
 """Generate an OS error using inline data. Called as either:
     jsr XXX:equb errnum, "error message", 0
@@ -61,7 +71,7 @@ def generate_error_hook(target, addr):
         # will transfer control to the following address to finish it.
         string(init_addr, addr - init_addr)
         word(addr)
-        continue_at = utils.get_abs(addr)
+        continue_at = utils.get_abs(addr) # SFTODO: Just do entry() and don't assign to this var which is only used once?
         # SFTODO: We return None because we don't have an "implicit" control transfer
         # to just after the jsr which entered the subroutine, so we prefer to explicit
         # label it via entry(). Is this OK/reasonable?
