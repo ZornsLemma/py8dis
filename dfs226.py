@@ -58,7 +58,7 @@ always clear on exit.""")
 
 def generate_error_hook(target, addr):
     # addr + 3 is the error number
-    addr = addr + 4
+    addr += 4
     init_addr = addr
     while memory[addr] != 0 and (memory[addr] & 0x80) == 0:
         addr += 1
@@ -69,13 +69,18 @@ def generate_error_hook(target, addr):
     else:
         # A partial OS error will be constructed on the stack and the subroutine
         # will transfer control to the instruction following the partial error.
-        string(init_addr, addr - init_addr)
+        print("; XXX %s" % init_addr)
+        if addr > init_addr:
+            string(init_addr, addr - init_addr)
         return addr
 
 # XXX: "precheck" because it does *something* using &10DD/&9E30 first, probably
 # a better name available with more understanding.
+hook_subroutine(0x8023, "generate_error_precheck_disc", generate_error_hook)
+hook_subroutine(0x802e, "generate_error_precheck_bad", generate_error_hook)
 hook_subroutine(0x8038, "generate_error_precheck", generate_error_hook)
 hook_subroutine(0x8048, "generate_error", generate_error_hook)
+
 
 stringcr(0x9546)
 stringcr(0x954e)
