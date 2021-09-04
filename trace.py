@@ -259,6 +259,7 @@ opcodes = {
     0xc8: OpcodeImplied("INY"),
     0xc9: OpcodeImmediate("CMP"),
     0xca: OpcodeImplied("DEX"),
+    0xcc: OpcodeDataAbs("CPY"),
     0xcd: OpcodeDataAbs("CMP"),
     0xce: OpcodeDataAbs("DEC"),
     0xd1: OpcodeZp("CMP", "),Y"),
