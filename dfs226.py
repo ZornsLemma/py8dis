@@ -12,7 +12,9 @@ constant(0x01, "service_claim_absolute_workspace")
 constant(0x02, "service_claim_private_workspace")
 constant(0x03, "service_boot")
 constant(0x04, "service_unrecognised_command")
+constant(0x08, "service_unrecognised_osword")
 constant(0x09, "service_help")
+constant(0x0a, "service_absolute_workspace_claimed")
 constant(0x12, "service_select_filing_system")
 constant(0x2b, "service_check_swr_presence")
 constant(0xfe, "service_tube_post_init")
@@ -47,7 +49,11 @@ expr(0x967b, "service_claim_absolute_workspace")
 expr(0x9684, "service_claim_private_workspace")
 expr(0x96c7, "service_boot")
 expr(0x96ed, "service_unrecognised_command")
-expr(0x66f6, "service_select_filing_system")
+expr(0x96f6, "service_select_filing_system")
+expr(0x9701, "service_help")
+expr(0x9718, "service_absolute_workspace_claimed")
+expr(0x973e, "service_unrecognised_osword")
+label(0x874c, "clc_jmp_gsinit")
 label(0x9104, "set_c_iff_have_fdc") # XXX: guessing, it is touching FDC memory-mapped I/O
 
 comment(0x8057, "XXX: Redundant lda l00b3? Is sta l00b3 above redundant too?")
@@ -95,8 +101,28 @@ hook_subroutine(0x802e, "generate_error_precheck_bad", generate_error_hook)
 hook_subroutine(0x8038, "generate_error_precheck", generate_error_hook)
 hook_subroutine(0x8048, "generate_error", generate_error_hook)
 
-
 stringcr(0x9546)
 stringcr(0x954e)
+
+def get_abs_be(addr): # TODO: Should be standard routine, poss under different name
+    return (memory[addr] << 8) | memory[addr + 1]
+
+pc = 0x861c
+def SFTODO(n):
+    global pc
+    for i in range(n):
+        pc = stringhi(pc)
+        handler = get_abs_be(pc) + 1
+        entry(handler)
+        # TODO: Should following be standard fn? Should we have a word_be() fn?
+        expr(pc, ">(" + get_label(handler) + "-1)")
+        expr(pc + 1, "<(" + get_label(handler) + "-1)")
+        pc += 2
+        pc += 1 # XXX: what are we skipping here?
+SFTODO(20)
+pc += 2 # XXX
+SFTODO(7)
+pc += 2 # XXX
+SFTODO(2)
 
 go()
