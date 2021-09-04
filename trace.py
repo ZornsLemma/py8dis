@@ -204,6 +204,7 @@ class OpcodeConditionalBranch(Opcode):
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
 # TODO: Fill in gaps!
 opcodes = {
+    0x05: OpcodeZp("ORA"),
     0x06: OpcodeZp("ASL"),
     0x08: OpcodeImplied("PHP"),
     0x09: OpcodeImmediate("ORA"),
@@ -213,10 +214,12 @@ opcodes = {
     0x10: OpcodeConditionalBranch("BPL"),
     0x11: OpcodeZp("ORA", "),Y"),
     0x18: OpcodeImplied("CLC"),
+    0x19: OpcodeDataAbs("ORA", ",Y"),
     0x1d: OpcodeDataAbs("ORA", ",X"),
     0x20: OpcodeJsr(),
     0x24: OpcodeZp("BIT"),
     0x25: OpcodeZp("AND"),
+    0x26: OpcodeZp("ROL"),
     0x28: OpcodeImplied("PLP"),
     0x29: OpcodeImmediate("AND"),
     0x2a: OpcodeImplied("ROL A"),
@@ -241,6 +244,7 @@ opcodes = {
     0x55: OpcodeZp("EOR", ",X"),
     0x58: OpcodeImplied("CLI"),
     0x59: OpcodeDataAbs("EOR", ",Y"),
+    0x5d: OpcodeDataAbs("EOR", ",X"),
     0x60: OpcodeReturn("RTS"),
     0x65: OpcodeZp("ADC"),
     0x66: OpcodeZp("ROR"),
@@ -303,6 +307,7 @@ opcodes = {
     0xcd: OpcodeDataAbs("CMP"),
     0xce: OpcodeDataAbs("DEC"),
     0xd1: OpcodeZp("CMP", "),Y"),
+    0xd8: OpcodeImplied("CLD"),
     0xd9: OpcodeDataAbs("CMP", ",Y"),
     0xdd: OpcodeDataAbs("CMP", ",X"),
     0xde: OpcodeDataAbs("DEC", ",X"),
@@ -319,6 +324,7 @@ opcodes = {
     0xd0: OpcodeConditionalBranch("BNE"),
     0xf0: OpcodeConditionalBranch("BEQ"),
     0xf1: OpcodeZp("SBC", "),Y"),
+    0xf8: OpcodeImplied("SED"),
     0xf9: OpcodeDataAbs("SBC", ",Y"),
     0xfe: OpcodeDataAbs("INC", ",X"),
 }

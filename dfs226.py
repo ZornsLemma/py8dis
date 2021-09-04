@@ -100,6 +100,7 @@ hook_subroutine(0x8023, "generate_error_precheck_disc", generate_error_hook)
 hook_subroutine(0x802e, "generate_error_precheck_bad", generate_error_hook)
 hook_subroutine(0x8038, "generate_error_precheck", generate_error_hook)
 hook_subroutine(0x8048, "generate_error", generate_error_hook)
+hook_subroutine(0x804f, "generate_error2", generate_error_hook)
 
 stringcr(0x9546)
 stringcr(0x954e)
