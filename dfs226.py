@@ -9,7 +9,11 @@ acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?
 
 constant(0x01, "service_claim_absolute_workspace")
+constant(0x02, "service_claim_private_workspace")
+constant(0x03, "service_boot")
+constant(0x04, "service_unrecognised_command")
 constant(0x09, "service_help")
+constant(0x12, "service_select_filing_system")
 constant(0x2b, "service_check_swr_presence")
 constant(0xfe, "service_tube_post_init")
 
@@ -39,6 +43,12 @@ label(0x9e4d, "osbyte_write_0")
 label(0x96c1, "pla_rts")
 expr(0x9668, "service_claim_absolute_workspace")
 expr(0xbec9, "service_claim_absolute_workspace")
+expr(0x967b, "service_claim_absolute_workspace")
+expr(0x9684, "service_claim_private_workspace")
+expr(0x96c7, "service_boot")
+expr(0x96ed, "service_unrecognised_command")
+expr(0x66f6, "service_select_filing_system")
+label(0x9104, "set_c_iff_have_fdc") # XXX: guessing, it is touching FDC memory-mapped I/O
 
 comment(0x8057, "XXX: Redundant lda l00b3? Is sta l00b3 above redundant too?")
 
