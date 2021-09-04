@@ -8,12 +8,16 @@ set_output_filename("dfs226.rom")
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?
 
+constant(0x09, "service_help")
 constant(0x2b, "service_check_swr_presence")
+constant(0xfe, "service_tube_post_init")
 
 constant(0x8f, "osbyte_issue_service_call")
 constant(0xc6, "osbyte_rw_exec_handle")
 constant(0xc7, "osbyte_rw_spool_handle")
 
+expr(0xaeaa, "service_help")
+expr(0xaed8, "service_tube_post_init")
 expr(0xbed0, "osbyte_issue_service_call")
 expr(0xbed2, "service_check_swr_presence")
 expr(0xbee1, "service_check_swr_presence")
@@ -23,6 +27,10 @@ expr(0x9e40, "osbyte_rw_exec_handle")
 expr(0x9e42, "osbyte_rw_spool_handle")
 expr(0x9e4c, "osbyte_rw_spool_handle")
 
+label(0xaf37, "just_rts")
+label(0xaef8, "service_handler_tube_main_init")
+label(0xb1b1, "general_service_handler")
+label(0xbedd, "general_service_handler_indirect")
 label(0x83dc, "inc16_ae")
 label(0x9ae5, "osbyte_read")
 label(0x9e4d, "osbyte_write_0")
