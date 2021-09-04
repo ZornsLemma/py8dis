@@ -1,5 +1,6 @@
 from commands import *
 import acorn
+import utils # TODO!? Don't like needing to do this
 
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
 set_output_filename("dfs226.rom")
@@ -18,5 +19,40 @@ expr(0x9e4c, "osbyte_rw_spool_handle")
 label(0x83dc, "inc16_ae")
 label(0x9ae5, "osbyte_read")
 label(0x9e4d, "osbyte_write_0")
+
+comment(0x8057, "XXX: Redundant lda l00b3? Is sta l00b3 above redundant too?")
+
+comment(0x8048,
+"""Generate an OS error using inline data. Called as either:
+    jsr XXX:equb errnum, "error message", 0
+to actually generate an error now, or as:
+    jsr XXX:equb errnum, "partial error message", addr
+to partially construct an error (on the stack) and transfer control to
+'addr' to finish constructing the error; the low byte of addr must have
+its top bit set.""")
+
+def generate_error_hook(target, addr):
+    # addr + 3 is the error number
+    addr = addr + 4
+    init_addr = addr
+    while memory[addr] != 0 and (memory[addr] & 0x80) == 0:
+        addr += 1
+    if memory[addr] == 0:
+        # An OS error will be generated and the subroutine won't return.
+        string(init_addr, (addr + 1) - init_addr)
+        return None
+    else:
+        # A partial OS error will be constructed on the stack and the subroutine
+        # will transfer control to the following address to finish it.
+        string(init_addr, addr - init_addr)
+        word(addr)
+        continue_at = utils.get_abs(addr)
+        # SFTODO: We return None because we don't have an "implicit" control transfer
+        # to just after the jsr which entered the subroutine, so we prefer to explicit
+        # label it via entry(). Is this OK/reasonable?
+        entry(continue_at)
+        return None
+
+hook_subroutine(0x8048, "generate_error", generate_error_hook)
 
 go()
