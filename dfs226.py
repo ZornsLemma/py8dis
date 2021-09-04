@@ -51,10 +51,10 @@ comment(0x8048,
 """Generate an OS error using inline data. Called as either:
     jsr XXX:equb errnum, "error message", 0
 to actually generate an error now, or as:
-    jsr XXX:equb errnum, "partial error message", addr
-to partially construct an error (on the stack) and transfer control to
-'addr' to finish constructing the error; the low byte of addr must have
-its top bit set.""")
+    jsr XXX:equb errnum, "partial error message", instruction...
+to partially construct an error (on the stack) and continue executing
+'instruction' afterwards; its opcode must have its top bit set. Carry is
+always clear on exit.""")
 
 def generate_error_hook(target, addr):
     # addr + 3 is the error number
@@ -68,15 +68,9 @@ def generate_error_hook(target, addr):
         return None
     else:
         # A partial OS error will be constructed on the stack and the subroutine
-        # will transfer control to the following address to finish it.
+        # will transfer control to the instruction following the partial error.
         string(init_addr, addr - init_addr)
-        word(addr)
-        continue_at = utils.get_abs(addr) # SFTODO: Just do entry() and don't assign to this var which is only used once?
-        # SFTODO: We return None because we don't have an "implicit" control transfer
-        # to just after the jsr which entered the subroutine, so we prefer to explicit
-        # label it via entry(). Is this OK/reasonable?
-        entry(continue_at)
-        return None
+        return addr
 
 # XXX: "precheck" because it does *something* using &10DD/&9E30 first, probably
 # a better name available with more understanding.
