@@ -48,6 +48,9 @@ def code_end():
         s += ' "%s", pydis_start, pydis_end' % output_filename
     return s
 
+def abs_suffix():
+    return ""
+
 def byte_prefix():
     return utils.force_case("    equb ")
 

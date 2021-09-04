@@ -94,8 +94,38 @@ class OpcodeAbs(Opcode):
     def __init__(self, mnemonic, suffix = None):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
+    def has_zp_version(self):
+        # TODO: It might be too simplistic to always return True here; we could
+        # use a proper lookup table or similar. It's "safe" to return True in
+        # all cases, it just might cause ugly force-abs-addressing code to be
+        # emitted when there's no need.
+        return True
+
     def as_string(self, addr):
-        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+        # We need to avoid misassembly of absolute instructions with zero-page
+        # operands. These are relatively rare in real code, but apart from the
+        # fact we should still handle them even if they're rare, they can also
+        # happen when the disassembly is imperfect and data is interpreted as
+        # code. If we don't cope with them, bytes get lost and the disassembly
+        # can't be correctly reassembled into a binary matching the input.
+        result1 = utils.force_case(self.mnemonic)
+        result2 = "%s%s%s" % (self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+        if not self.has_zp_version() or utils.get_abs(addr + 1) >= 0x100:
+            return "    %s %s" % (result1, result2)
+
+        # This is an absolute instruction with a zero-page operand which could
+        # be misassembled. If the assembler has a way to explicitly request
+        # absolute addressing, we use that.
+        abs_suffix = config.formatter[0].abs_suffix()
+        if abs_suffix != "":
+            return "    %s%s %s" % (result1, abs_suffix, result2)
+
+        # This assembler has no way to force absolute addressing, so emit the
+        # instruction as data with a comment showing what it is; the comment
+        # includes an acme-style "+2" suffix to help indicate what's going on.
+        operand = classification.get_address16(addr + 1)
+        data = [classification.get_constant8(addr), "<(%s)" % operand, ">(%s)" % operand]
+        return "%s%s ; %s+2 %s" % (config.formatter[0].byte_prefix(), ", ".join(data), result1, result2)
 
 
 class OpcodeDataAbs(OpcodeAbs):
@@ -111,6 +141,9 @@ class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpAbs, self).__init__("JMP")
 
+    def has_zp_version(self):
+        return False
+
     def disassemble(self, addr):
         return [None, utils.get_abs(addr + 1)]
 
@@ -118,6 +151,9 @@ class OpcodeJmpAbs(OpcodeAbs):
 class OpcodeJmpInd(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpInd, self).__init__("JMP", ")")
+
+    def has_zp_version(self):
+        return False
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(utils.get_abs(addr + 1))
@@ -127,6 +163,9 @@ class OpcodeJmpInd(OpcodeAbs):
 class OpcodeJsr(OpcodeAbs):
     def __init__(self):
         super(OpcodeJsr, self).__init__("JSR")
+
+    def has_zp_version(self):
+        return False
 
     def disassemble(self, addr):
         target = utils.get_abs(addr + 1)
