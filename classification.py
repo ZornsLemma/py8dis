@@ -30,7 +30,6 @@ class Byte(object):
 
     def emit(self, addr):
         byte_prefix = formatter[0].byte_prefix()
-        # TODO: ASCII output should be optional
         data = list(get_constant8(addr + i) for i in range(self._length))
         def asciify(n):
             if n in expressions:
@@ -61,7 +60,10 @@ class Byte(object):
             i += len(chunk)
         comment_indent = config.inline_comment_column[0]
         for directive, comment in zip(directives, comments):
-            print("%-*s%s" % (comment_indent, directive, comment))
+            if config.bytes_as_ascii():
+                print("%-*s%s" % (comment_indent, directive, comment))
+            else:
+                print(directive)
 
 
 class Word(object):

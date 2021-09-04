@@ -5,6 +5,7 @@ disassembly_range = [None, None]
 
 formatter = [None]
 lower_case = [True]
+_bytes_as_ascii = True
 
 inline_comment_column = [60]
 
@@ -13,3 +14,10 @@ inline_comment_column = [60]
 # which saves a character and is probably less confusing.
 def set_lower_case(b):
     lower_case[0] = b
+
+def bytes_as_ascii():
+    return _bytes_as_ascii
+
+def set_bytes_as_ascii(b):
+    global _bytes_as_ascii
+    _bytes_as_ascii = b
