@@ -74,6 +74,8 @@ class OpcodeImmediate(Opcode):
         s = "    %s #%s" % (utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
         c = memory[addr + 1]
         if utils.isprint(c):
+            # TODO: Put single quotes around the character? If it's a single quote just do it
+            # all the same, it's a comment, not an actual assembler input.
             s += " %s %s" % (config.formatter[0].comment_prefix(), chr(c))
         return s
 
