@@ -16,6 +16,7 @@ constant(0xc7, "osbyte_rw_spool_handle")
 
 expr(0xbed0, "osbyte_issue_service_call")
 expr(0xbed2, "service_check_swr_presence")
+expr(0xbee1, "service_check_swr_presence")
 expr(0x9e31, "osbyte_rw_exec_handle")
 expr(0x9e3e, "osbyte_rw_exec_handle")
 expr(0x9e40, "osbyte_rw_exec_handle")

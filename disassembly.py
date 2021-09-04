@@ -78,6 +78,7 @@ def emit(start_addr, end_addr):
 
     if len(constants) > 0:
         for value, name in sorted(constants, key=lambda x: x[0]):
+            # TODO: Are constants always numbers (not expressions)? Should we output them in hex?
             print(formatter.explicit_label(name, value))
         print()
 
