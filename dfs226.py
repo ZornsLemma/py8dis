@@ -53,6 +53,9 @@ def generate_error_hook(target, addr):
         entry(continue_at)
         return None
 
+# XXX: "precheck" because it does *something* using &10DD/&9E30 first, probably
+# a better name available with more understanding.
+hook_subroutine(0x8038, "generate_error_precheck", generate_error_hook)
 hook_subroutine(0x8048, "generate_error", generate_error_hook)
 
 go()
