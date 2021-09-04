@@ -224,6 +224,7 @@ opcodes = {
     0x2d: OpcodeDataAbs("AND"),
     0x2e: OpcodeDataAbs("ROL"),
     0x30: OpcodeConditionalBranch("BMI"),
+    0x31: OpcodeZp("AND", "),Y"),
     0x38: OpcodeImplied("SEC"),
     0x3d: OpcodeDataAbs("AND", ",X"),
     0x3e: OpcodeDataAbs("ROL", ",X"),
