@@ -59,3 +59,6 @@ def word_prefix():
 
 def string_prefix():
     return utils.force_case("    equs ")
+
+def string_chr(c):
+    return chr(c)

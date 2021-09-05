@@ -128,7 +128,7 @@ class String(object):
                 elif state == 2:
                     s += ', "'
                 state = 1
-                s += chr(c)
+                s += formatter[0].string_chr(c)
             else:
                 if state == 1:
                     s += '", '

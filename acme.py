@@ -53,3 +53,8 @@ def word_prefix():
 
 def string_prefix():
     return utils.force_case("    !text ")
+
+def string_chr(c):
+    if c == ord('\\'):
+        return '\\\\'
+    return chr(c)
