@@ -106,10 +106,13 @@ hook_subroutine(0x804f, "generate_error2", generate_error_hook)
 stringcr(0x9546)
 stringcr(0x954e)
 
+
 def get_abs_be(addr): # TODO: Should be standard routine, poss under different name
     return (memory[addr] << 8) | memory[addr + 1]
 
 pc = 0x861c
+label(pc, "command_table")
+label(pc + 1, "command_table_plus_1") # TODO: "expr label" would be mildly useful here
 def SFTODO(n):
     global pc
     for i in range(n):
@@ -127,6 +130,24 @@ SFTODO(7)
 pc += 2 # XXX
 SFTODO(2)
 
+# TODO: lba30 is an rts jump table
+pc = 0xba30
+label(pc, "sram_table")
+label(pc + 1, "sram_table_plus_1") # TODO: expr label?
+def SFTODO2(n):
+    global pc
+    for i in range(n):
+        pc = stringhi(pc)
+        handler = get_abs_be(pc) + 1
+        if handler <= 0xffff:
+            entry(handler)
+            # TODO: Should following be standard fn? Should we have a word_be() fn?
+            expr(pc, ">(" + get_label(handler) + "-1)")
+            expr(pc + 1, "<(" + get_label(handler) + "-1)")
+        pc += 2
+SFTODO2(7)
+
+# SFTODO: The "hex dump" for equbs in command_table shows the addresses of the routines as thpough these are strings (equs) rather than data (equb) - why?
 # XXX: Some sort of string table at lba30
 
 go()
