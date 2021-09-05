@@ -248,6 +248,8 @@ def inline_nul_string_hook(target, addr):
 # TODO: should this be in trace.py? it is kind of 6502-ish, for a start
 # TODO: rename?
 def rts_address(addr):
+    # TODO: Not just this function, but from a user POV it's perhaps better if these
+    # move into a sort of pseudo-library and use function names like expr() and entry() instead of add_expression() and add_entry(), to make it more obvious they are just code a user could write but put somewhere re-usable.
     trace.add_entry(utils.get_abs(addr) + 1)
     add_expression(addr, "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1))
     disassembly.add_classification(addr, Word(2))
