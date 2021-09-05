@@ -196,13 +196,6 @@ entry(0xb047) # XXX: how is this code reached?
 entry(0xb736) # XXX: how is this code reached?
 entry(0xbf8b) # XXX: how is this code reached?
 
-# TODO: string table at la1d3
-# TODO: string table at b075
-# TODO: Strings at b283
-# TODO: strings at b872/b87e
-# TODO: string at lb924
-# TODO: string at bf4f
-
 pc = 0x85d3
 label(pc, "opt4_table")
 for i in range(4):
