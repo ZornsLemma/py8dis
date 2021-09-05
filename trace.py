@@ -327,6 +327,7 @@ opcodes = {
     0xed: OpcodeDataAbs("SBC"),
     0xee: OpcodeDataAbs("INC"),
     0xd0: OpcodeConditionalBranch("BNE"),
+    0xd5: OpcodeZp("CMP", ",X"),
     0xf0: OpcodeConditionalBranch("BEQ"),
     0xf1: OpcodeZp("SBC", "),Y"),
     0xf5: OpcodeZp("SBC", ",X"),

@@ -172,6 +172,36 @@ entry(0x881b) # XXX: how is this code reached?
 entry(0x8870) # XXX: how is this code reached?
 entry(0x8a32) # XXX: how is this code reached?
 entry(0x9030) # XXX: how is this code reached?
+entry(0x9785) # XXX: how is this code reached?
+entry(0x97b6) # XXX: how is this code reached?
+entry(0x97c9) # XXX: how is this code reached?
+entry(0x988b) # XXX: how is this code reached?
+entry(0x98d7) # XXX: how is this code reached?
+entry(0x9906) # XXX: how is this code reached?
+entry(0x9980) # XXX: how is this code reached?
+entry(0x999b) # XXX: how is this code reached?
+entry(0x99be) # XXX: how is this code reached?
+entry(0x9c0c) # XXX: how is this code reached?
+entry(0x9d72) # XXX: how is this code reached?
+entry(0x9d9b) # XXX: how is this code reached?
+entry(0x9e5d) # XXX: how is this code reached?
+entry(0xac3b) # XXX: how is this code reached?
+entry(0xacb2) # XXX: how is this code reached?
+entry(0xaf38) # XXX: how is this code reached?
+entry(0xaf79) # XXX: how is this code reached?
+entry(0xaf7c) # XXX: how is this code reached?
+entry(0xaf7f) # XXX: how is this code reached?
+entry(0xaffd) # XXX: how is this code reached?
+entry(0xb047) # XXX: how is this code reached?
+entry(0xb736) # XXX: how is this code reached?
+entry(0xbf8b) # XXX: how is this code reached?
+
+# TODO: string table at la1d3
+# TODO: string table at b075
+# TODO: Strings at b283
+# TODO: strings at b872/b87e
+# TODO: string at lb924
+# TODO: string at bf4f
 
 pc = 0x85d3
 label(pc, "opt4_table")
