@@ -221,7 +221,7 @@ def stringhi(addr):
             if False: # TODO: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
                 if utils.isprint(c) and c != ord('"'):
-                    expressions[addr] = "&80+'%s'" % chr(c) # TODO: use formatter not &
+                    add_expression(addr, "&80+'%s'" % chr(c)) # TODO: use formatter not &
             break
         addr += 1
     disassembly.add_classification(initial_addr, String(addr - initial_addr))
@@ -249,7 +249,7 @@ def inline_nul_string_hook(target, addr):
 # TODO: rename?
 def rts_address(addr):
     trace.add_entry(utils.get_abs(addr) + 1)
-    expressions[addr] = "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1)
+    add_expression(addr, "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1))
     disassembly.add_classification(addr, Word(2))
     return addr + 2
 
@@ -259,8 +259,8 @@ def split_jump_table_entry(low_addr, high_addr, offset):
     entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
     trace.add_entry(entry_point)
     offset_string = "" if offset == 0 else ("-%d" % offset)
-    expressions[high_addr] = ">(%s%s)" % (disassembly.get_label(entry_point), offset_string)
-    expressions[low_addr]  = "<(%s%s)" % (disassembly.get_label(entry_point), offset_string)
+    add_expression(high_addr, ">(%s%s)" % (disassembly.get_label(entry_point), offset_string))
+    add_expression(low_addr, "<(%s%s)" % (disassembly.get_label(entry_point), offset_string))
 
 # TODO: Maybe move this into commands.py, perhaps inlining it as part of go()? Or perhaps it should be all in disassembly.emit???
 def emit2(): # TODO POOR NAME
