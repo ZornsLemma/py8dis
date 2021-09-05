@@ -223,6 +223,20 @@ def stringhi(addr):
     disassembly.add_classification(initial_addr, String(addr - initial_addr))
     return addr
 
+def autostring(min_length=3):
+    assert min_length >= 2
+    start_addr = config.disassembly_range[0]
+    end_addr = config.disassembly_range[1]
+    assert start_addr is not None
+    assert end_addr is not None
+    for i in range(0, (end_addr - min_length) - start_addr):
+        if not disassembly.is_classified(start_addr + i,  min_length):
+            n = 0
+            while not disassembly.is_classified(start_addr + i + n, 1) and utils.isprint(memory[start_addr + i + n]):
+                n += 1
+            if n >= min_length:
+                string(start_addr + i, n)
+
 # TODO: rename? do we even need this if its implementation is so simple? (probably)
 def inline_nul_string_hook(target, addr):
     return stringz(addr + 3)

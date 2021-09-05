@@ -208,4 +208,6 @@ label(pc, "opt4_table")
 for i in range(4):
     pc = string(pc, 4)
 
-go()
+trace.trace() # TODO: If we keep this style, trace() should be imported so we don't need "trace." prefix
+autostring()
+go2()

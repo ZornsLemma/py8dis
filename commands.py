@@ -3,7 +3,7 @@
 import argparse
 
 # These functions/objects are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, rts_address, split_jump_table_entry, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
+from classification import string, stringterm, stringcr, stringz, stringhi, autostring, rts_address, split_jump_table_entry, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 
@@ -70,6 +70,9 @@ def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not
 
 def go():
     trace.trace()
+    classification.emit2()
+
+def go2(): # SFTODO: HACK TO MAKE AUTOSTRING WORK, MAYBE ALWAYS MAKE GO DO THIS, NOT SURE YET
     classification.emit2()
 
 
