@@ -245,24 +245,6 @@ def autostring(min_length=3):
 def inline_nul_string_hook(target, addr):
     return stringz(addr + 3)
 
-# TODO: should this be in trace.py? it is kind of 6502-ish, for a start
-# TODO: rename?
-def rts_address(addr):
-    # TODO: Not just this function, but from a user POV it's perhaps better if these
-    # move into a sort of pseudo-library and use function names like expr() and entry() instead of add_expression() and add_entry(), to make it more obvious they are just code a user could write but put somewhere re-usable.
-    trace.add_entry(utils.get_abs(addr) + 1)
-    add_expression(addr, "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1))
-    disassembly.add_classification(addr, Word(2))
-    return addr + 2
-
-# TODO: less obvious, but maybe this should be in trace.py if rts_address() should
-# TODO: RENAME?
-def split_jump_table_entry(low_addr, high_addr, offset):
-    entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
-    trace.add_entry(entry_point)
-    offset_string = "" if offset == 0 else ("-%d" % offset)
-    add_expression(high_addr, ">(%s%s)" % (disassembly.get_label(entry_point), offset_string))
-    add_expression(low_addr, "<(%s%s)" % (disassembly.get_label(entry_point), offset_string))
 
 # TODO: Maybe move this into commands.py, perhaps inlining it as part of go()? Or perhaps it should be all in disassembly.emit???
 def emit2(): # TODO POOR NAME

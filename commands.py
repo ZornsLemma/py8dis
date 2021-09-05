@@ -3,7 +3,7 @@
 import argparse
 
 # These functions/objects are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, autostring, rts_address, split_jump_table_entry, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
+from classification import string, stringterm, stringcr, stringz, stringhi, autostring, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 
@@ -67,6 +67,25 @@ def entry(addr, label=None):
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
     jsr_hooks[addr] = hook # TODO: call a function in trace.py to do this?
+
+# TODO: should this be in trace.py? it is kind of 6502-ish, for a start. I do kind of think it works better here in commands.py.
+# TODO: rename?
+def rts_address(addr):
+    # TODO: Not just this function, but from a user POV it's perhaps better if these
+    # move into a sort of pseudo-library and use function names like expr() and entry() instead of add_expression() and add_entry(), to make it more obvious they are just code a user could write but put somewhere re-usable.
+    entry(utils.get_abs(addr) + 1)
+    expr(addr, "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1))
+    word(addr)
+    return addr + 2
+
+# TODO: less obvious, but maybe this should be in trace.py if rts_address() should - ditto, prob quite good here in commands.py
+# TODO: RENAME?
+def split_jump_table_entry(low_addr, high_addr, offset):
+    entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
+    entry(entry_point)
+    offset_string = "" if offset == 0 else ("-%d" % offset)
+    expr(high_addr, ">(%s%s)" % (disassembly.get_label(entry_point), offset_string))
+    expr(low_addr, "<(%s%s)" % (disassembly.get_label(entry_point), offset_string))
 
 def go():
     trace.trace()
