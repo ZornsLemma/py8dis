@@ -8,6 +8,12 @@ set_output_filename("dfs226.rom")
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?
 
+# These two options default to True (on) and are probably helpful during the
+# initial stages of a disassembly, but you might want to turn them off
+# eventually, particularly the hex dump.
+# config.set_bytes_as_ascii(False) # True => show "equb" data as ASCII in a comment
+# config.set_hex_dump(False) # True => show code/equs data as hex in a comment
+
 constant(0x01, "service_claim_absolute_workspace")
 constant(0x02, "service_claim_private_workspace")
 constant(0x03, "service_boot")

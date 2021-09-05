@@ -25,7 +25,8 @@ def get_abs(i):
 
 def add_hex_dump(s, addr, length):
     assert length > 0
-    # TODO: This should be controlled via a bool flag
+    if not config.hex_dump():
+        return s
     s = "%-*s" % (config.inline_comment_column[0], s)
     s += "; %s: " % plainhex4(addr)
     capped_length = min(length, 3)

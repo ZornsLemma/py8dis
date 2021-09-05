@@ -6,6 +6,7 @@ disassembly_range = [None, None]
 formatter = [None]
 lower_case = [True]
 _bytes_as_ascii = True
+_hex_dump = True
 
 inline_comment_column = [60]
 
@@ -21,3 +22,10 @@ def bytes_as_ascii():
 def set_bytes_as_ascii(b):
     global _bytes_as_ascii
     _bytes_as_ascii = b
+
+def hex_dump():
+    return _hex_dump
+
+def set_hex_dump(b):
+    global _hex_dump
+    _hex_dump = b
