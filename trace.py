@@ -75,7 +75,8 @@ class OpcodeImmediate(Opcode):
         c = memory[addr + 1]
         if utils.isprint(c):
             # TODO: Put single quotes around the character? If it's a single quote just do it
-            # all the same, it's a comment, not an actual assembler input.
+            # all the same, it's a comment, not an actual assembler input. I only haven't done
+            # this yet as it will break diffs of disassembly which I am using as pseudo-regression tests.
             s += " %s %s" % (config.formatter().comment_prefix(), chr(c))
         return s
 
@@ -173,7 +174,8 @@ class OpcodeJsr(OpcodeAbs):
         target = utils.get_abs(addr + 1)
         # TODO: In principle a subroutine might implement some sort of
         # conditional return; to that end it might be nice if a jsr hook could
-        # return more than one address if it wanted to.
+        # return more than one address if it wanted to. But a subroutine can
+        # already call entry() itself and just return None, so probably OK.
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, utils.get_abs(addr + 1)]
 
@@ -347,7 +349,6 @@ def disassemble_instruction(addr):
         return [None]
     opcode = opcodes[opcode_value]
     if disassembly.is_classified(addr, 1 + opcode.operand_length):
-        # TODO: Warn?
         return [None]
     # Up to this point we hadn't decided addr contains an instruction; we now
     # have.

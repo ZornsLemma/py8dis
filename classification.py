@@ -10,8 +10,9 @@ expressions = {}
 memory = config.memory
 formatter = config.formatter
 
-# TODO: Completely ignoring wrapping at top and bottom of memory for now...
-
+# ENHANCE: At the moment there's no support for wrapping round at the top of
+# memory and we might just crash (probably with an out-of-bounds error) if
+# disassembling right up to the top of memory.
 
 class Byte(object):
     def __init__(self, length):
@@ -158,7 +159,10 @@ def add_expression(addr, s):
 
 def get_expression(addr, expected_value):
     expression = expressions[addr]
-    # TODO: We should evaluate "expression" and check it evaluates to expected_value
+    # ENHANCE: It would be good to at least try to evaluate "expression" and generate
+    # an error if it doesn't match expected_value. In reality most expressions will
+    # be fairly simple combinations of labels and basic integer arithmetic, mixed with
+    # the < and > operators to get the low and high bytes of a 16-bit word.
     return expression
 
 # TODO: Rename following three functions to make their expression-possibility more obvious
@@ -277,9 +281,3 @@ def emit2(): # TODO POOR NAME
     disassembly.split_classifications(start_addr, end_addr)
 
     disassembly.emit(start_addr, end_addr)
-
-# TODO: Goals:
-# - "programmable" - the disassembly is controlled by a custom python program which imports the core disassembler utils and any other custom utils it like - it can contain arbitrary python code
-# - "annotatable" - postpone as long as possible the temptation to start hand-editing the output, because as soon as you do that it gets difficult to get further assistance from disassembler if you (e.g.) discover a chunk of data which you want to annotate as a jump table
-# - "anchored" - no matter how mangled or useless the disassembly is, it should always re-build the input correctly and no bytes should be lost
-

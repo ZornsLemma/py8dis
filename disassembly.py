@@ -163,7 +163,6 @@ def sorted_annotations(annotations):
 # because we'll classify anything left over as data. Classifications are effectively
 # "things in the assembler input which generate direct output", like instructions
 # or data.
-# TODO: Could this in fact be a dictionary?
 classifications = [None] * 64*1024
 # TODO: COMMENT
 labels = {}
