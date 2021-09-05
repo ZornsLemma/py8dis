@@ -152,5 +152,9 @@ SFTODO2(7)
 
 entry(0x8fd2, "nmi_handler_rom_start")
 label(0x8fd2 + 0x5d + 1, "nmi_handler_rom_end")
+comment(0x8ff5, 'This sta modifies the RAM copy of the operand of "lda #&2f" at 901e.')
+comment(0x901f, 'This sta modifies the RAM copy of the operand of "beq l900b" at 8fdb.')
+comment(0x901e, 'The operand of this "lda #" is modified at runtime.')
+comment(0x8fda, 'The operand of this "beq" is modified at runtime.')
 
 go()
