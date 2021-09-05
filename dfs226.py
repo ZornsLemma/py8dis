@@ -161,4 +161,8 @@ comment(0x900e, 'The operand of this "sta" is modified at runtime.')
 entry(0x9024) # XXX: how is this code reached? beq modification?
 entry(0x9029) # XXX: how is this code reached? beq modification?
 
+entry(0x80d3) # XXX: how is this code reached?
+entry(0x8441) # XXX: how is this code reached?
+entry(0x8483) # XXX: how is this code reached?
+
 go()

@@ -333,6 +333,7 @@ opcodes = {
     0xf6: OpcodeZp("INC", ",X"),
     0xf8: OpcodeImplied("SED"),
     0xf9: OpcodeDataAbs("SBC", ",Y"),
+    0xfd: OpcodeDataAbs("SBC", ",X"),
     0xfe: OpcodeDataAbs("INC", ",X"),
 }
 
