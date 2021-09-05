@@ -147,7 +147,6 @@ def SFTODO2(n):
         pc += 2
 SFTODO2(7)
 
-# SFTODO: The "hex dump" for equbs in command_table shows the addresses of the routines as thpough these are strings (equs) rather than data (equb) - why?
 # XXX: Some sort of string table at lba30
 
 entry(0x8fd2, "nmi_handler_rom_start")
