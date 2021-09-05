@@ -8,7 +8,7 @@ lower_case = [True]
 _bytes_as_ascii = True
 _hex_dump = True
 
-inline_comment_column = [60]
+_inline_comment_column = 60
 
 # TODO: Perhaps provide foo() [get] and set_foo(x) functions for all the
 # config, then I can avoid things like formatter[0].blah() and write formatter().blah() instead,
@@ -29,3 +29,10 @@ def hex_dump():
 def set_hex_dump(b):
     global _hex_dump
     _hex_dump = b
+
+def inline_comment_column():
+    return _inline_comment_column
+
+def set_inline_comment_column(n):
+    global _inline_comment_column
+    _inline_comment_column = n

@@ -40,7 +40,7 @@ class Byte(object):
             return "."
         ascii = list(asciify(addr + i) for i in range(self._length))
         longest_item = max(len(x) for x in data)
-        available_width = config.inline_comment_column[0] - len(byte_prefix)
+        available_width = config.inline_comment_column() - len(byte_prefix)
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)
         #print("QQ", longest_item, items_per_line, item_min_width)
@@ -58,7 +58,7 @@ class Byte(object):
         for chunk in utils.chunks(ascii, items_per_line):
             comments.append(("%s %s: " % (formatter[0].comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
             i += len(chunk)
-        comment_indent = config.inline_comment_column[0]
+        comment_indent = config.inline_comment_column()
         for directive, comment in zip(directives, comments):
             if config.bytes_as_ascii():
                 print("%-*s%s" % (comment_indent, directive, comment))
@@ -85,7 +85,7 @@ class Word(object):
         # TODO: COPY AND PASTE OF DATA'S EMIT()
         data = list(get_address16(addr + i) for i in range(0, self._length, 2))
         longest_item = max(len(x) for x in data)
-        available_width = config.inline_comment_column[0] - 10
+        available_width = config.inline_comment_column() - 10
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)
         i = 0
@@ -140,7 +140,7 @@ class String(object):
                 else:
                     # TODO: Maybe don't allow for expressions here?
                     s += get_constant8(addr + i)
-            if len(s) > (config.inline_comment_column[0] - 5):
+            if len(s) > (config.inline_comment_column() - 5):
                 if state == 1:
                     s += '"'
                 print(utils.add_hex_dump(s, addr + s_i, i - s_i))
