@@ -160,9 +160,18 @@ comment(0x900e, 'The operand of this "sta" is modified at runtime.')
 entry(0x9024) # XXX: how is this code reached? beq modification?
 entry(0x9029) # XXX: how is this code reached? beq modification?
 
+label(0x9066, "nmi_handler2_rom_start_minus_1")
+entry(0x9067, "nmi_handler2_rom_start")
+entry(0x907c) # XXX: how is this code reached?
+label(0x90fb, "nmi_handler2_rom_end")
+
 entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?
 entry(0x8483) # XXX: how is this code reached?
+entry(0x881b) # XXX: how is this code reached?
+entry(0x8870) # XXX: how is this code reached?
+entry(0x8a32) # XXX: how is this code reached?
+entry(0x9030) # XXX: how is this code reached?
 
 pc = 0x85d3
 label(pc, "opt4_table")
