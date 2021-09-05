@@ -165,4 +165,9 @@ entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?
 entry(0x8483) # XXX: how is this code reached?
 
+pc = 0x85d3
+label(pc, "opt4_table")
+for i in range(4):
+    pc = string(pc, 4)
+
 go()

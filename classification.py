@@ -206,7 +206,8 @@ def string(addr, n=None):
         n = 0
         while utils.isprint(memory[addr + n]):
             n += 1
-    disassembly.add_classification(addr, String(n))
+    disassembly.add_classification(addr, String(n, False))
+    return addr + n
 
 # TODO: I should perhaps provide two variants on this, one which considers the top bit set byte as not part of the string and one which consider it part of it. this would also make the "decompose top bit set chars in equs" stuff (currently if-ed out) useful.
 def stringhi(addr):
