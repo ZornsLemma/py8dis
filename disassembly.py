@@ -28,7 +28,7 @@ def get_label(addr):
 
 def ensure_addr_labelled(addr):
     if addr not in labels:
-        label = optional_labels.get(addr, ("l%04x" if config.lower_case[0] else "L%04X") % addr)
+        label = optional_labels.get(addr, ("l%04x" if config.lower_case() else "L%04X") % addr)
         add_label(addr, label)
     return labels[addr]
 
