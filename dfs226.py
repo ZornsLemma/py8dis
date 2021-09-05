@@ -130,7 +130,6 @@ SFTODO(7)
 pc += 2 # XXX
 SFTODO(2)
 
-# TODO: lba30 is an rts jump table
 pc = 0xba30
 label(pc, "sram_table")
 label(pc + 1, "sram_table_plus_1") # TODO: expr label?
@@ -146,8 +145,6 @@ def SFTODO2(n):
             expr(pc + 1, "<(" + get_label(handler) + "-1)")
         pc += 2
 SFTODO2(7)
-
-# XXX: Some sort of string table at lba30
 
 entry(0x8fd2, "nmi_handler_rom_start")
 label(0x8fd2 + 0x5d + 1, "nmi_handler_rom_end")
