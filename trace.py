@@ -58,7 +58,7 @@ class OpcodeImplied(Opcode):
 
     def as_string(self, addr):
         mnemonic = self.mnemonic
-        if (not config.formatter[0].explicit_a) and mnemonic.endswith(" A"):
+        if (not config.formatter().explicit_a) and mnemonic.endswith(" A"):
             mnemonic = mnemonic[:-2]
         return "    %s" % utils.force_case(mnemonic)
 
@@ -76,7 +76,7 @@ class OpcodeImmediate(Opcode):
         if utils.isprint(c):
             # TODO: Put single quotes around the character? If it's a single quote just do it
             # all the same, it's a comment, not an actual assembler input.
-            s += " %s %s" % (config.formatter[0].comment_prefix(), chr(c))
+            s += " %s %s" % (config.formatter().comment_prefix(), chr(c))
         return s
 
 
@@ -118,7 +118,7 @@ class OpcodeAbs(Opcode):
         # This is an absolute instruction with a zero-page operand which could
         # be misassembled. If the assembler has a way to explicitly request
         # absolute addressing, we use that.
-        abs_suffix = config.formatter[0].abs_suffix()
+        abs_suffix = config.formatter().abs_suffix()
         if abs_suffix != "":
             return "    %s%s %s" % (result1, abs_suffix, result2)
 
@@ -127,7 +127,7 @@ class OpcodeAbs(Opcode):
         # includes an acme-style "+2" suffix to help indicate what's going on.
         operand = classification.get_address16(addr + 1)
         data = [classification.get_constant8(addr), "<(%s)" % operand, ">(%s)" % operand]
-        return "%s%s ; %s+2 %s" % (config.formatter[0].byte_prefix(), ", ".join(data), result1, result2)
+        return "%s%s ; %s+2 %s" % (config.formatter().byte_prefix(), ", ".join(data), result1, result2)
 
 
 class OpcodeDataAbs(OpcodeAbs):

@@ -74,7 +74,7 @@ def split_classifications(start_addr, end_addr):
         addr += classifications[addr].length()
 
 def emit(start_addr, end_addr):
-    formatter = config.formatter[0]
+    formatter = config.formatter()
 
     if len(constants) > 0:
         for value, name in sorted(constants, key=lambda x: x[0]):
@@ -125,7 +125,7 @@ class Label(object):
         print(self.as_string(emit_addr))
 
     def as_string(self, emit_addr): # TODO: ARG IS MISNAMED NOW
-        formatter = config.formatter[0]
+        formatter = config.formatter()
         offset = self.addr - emit_addr
         assert offset >= 0
         if offset == 0:
@@ -135,7 +135,7 @@ class Label(object):
             return formatter.explicit_label(self.name, label, offset)
 
     def emit_assignment(self):
-        formatter = config.formatter[0]
+        formatter = config.formatter()
         print(formatter.explicit_label(self.name, formatter.hex4(self.addr)))
 
 
@@ -151,7 +151,7 @@ class Comment(object):
         print(self.as_string(emit_addr))
 
     def as_string(self, emit_addr):
-        formatter = config.formatter[0]
+        formatter = config.formatter()
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
 
 

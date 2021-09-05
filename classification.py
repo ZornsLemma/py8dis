@@ -29,7 +29,7 @@ class Byte(object):
         self._length = length
 
     def emit(self, addr):
-        byte_prefix = formatter[0].byte_prefix()
+        byte_prefix = formatter().byte_prefix()
         data = list(get_constant8(addr + i) for i in range(self._length))
         def asciify(n):
             if n in expressions:
@@ -56,7 +56,7 @@ class Byte(object):
             directives.append("%s%s" % (byte_prefix, s))
         i = 0
         for chunk in utils.chunks(ascii, items_per_line):
-            comments.append(("%s %s: " % (formatter[0].comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
+            comments.append(("%s %s: " % (formatter().comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
             i += len(chunk)
         comment_indent = config.inline_comment_column()
         for directive, comment in zip(directives, comments):
@@ -95,7 +95,7 @@ class Word(object):
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            print(utils.add_hex_dump("%s%s" % (formatter[0].word_prefix(), s), addr + i, len(chunk) * 2))
+            print(utils.add_hex_dump("%s%s" % (formatter().word_prefix(), s), addr + i, len(chunk) * 2))
             i += len(chunk)
 
 
@@ -116,7 +116,7 @@ class String(object):
         self._length = length
 
     def emit(self, addr):
-        prefix = formatter[0].string_prefix()
+        prefix = formatter().string_prefix()
         s = prefix
         state = 0
         s_i = 0
@@ -128,7 +128,7 @@ class String(object):
                 elif state == 2:
                     s += ', "'
                 state = 1
-                s += formatter[0].string_chr(c)
+                s += formatter().string_chr(c)
             else:
                 if state == 1:
                     s += '", '
@@ -165,7 +165,7 @@ def get_expression(addr, expected_value):
 
 def get_constant8(addr):
     if addr not in expressions:
-        return formatter[0].hex2(memory[addr])
+        return formatter().hex2(memory[addr])
     return get_expression(addr, memory[addr])
 
 def get_address8(addr):

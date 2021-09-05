@@ -5,7 +5,7 @@ import classification
 import config
 import utils
 
-config.formatter[0] = sys.modules[__name__]
+config.set_formatter(sys.modules[__name__])
 
 output_filename = None
 
