@@ -108,11 +108,13 @@ def code_ptr(addr, addr_high=None, offset=0):
 def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
-def go(final_steps=None):
+def go(final_steps=None, autostring_min_length=3):
     trace.trace()
+    # autostring() really needs to be invoked after trace() has done its classification,
+    # so we wrap it up in here by default rather than expecting the user to call it.
     if final_steps is None:
         def final_steps():
-            autostring()
+            autostring(autostring_min_length)
     final_steps()
     classification.emit2()
 
