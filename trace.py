@@ -373,7 +373,6 @@ def disassemble_instruction(addr):
         return [None]
     # Up to this point we hadn't decided addr contains an instruction; we now
     # have.
-    # TODO: The "disassemble" function on opcodes is really more of a "possible targets" function - rename? - not quite so fast, it does do more sometimes (labelling data address, for example)
     disassembly.add_classification(addr, opcode)
     return opcode.disassemble(addr)
 
@@ -398,7 +397,7 @@ def trace():
             for new_entry_point in new_entry_points:
                 add_entry(new_entry_point)
 
-# TODO: I can't help thinking entry_points and its associated functions belong
-# in here, but I won't move it now as I think it would be clearer where it
-# should live when/if other CPUs are supported and "core" tracing is split out
-# from CPU-specific tracing.
+# ENHANCE: I can't help thinking entry_points and its associated functions
+# belong in here, but I won't move them now as I think it would be clearer where
+# they should live when/if other CPUs are supported and "core" tracing is split
+# out from CPU-specific tracing.
