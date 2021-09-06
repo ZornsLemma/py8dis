@@ -108,11 +108,12 @@ def code_ptr(addr, addr_high=None, offset=0):
 def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
-def go():
+def go(final_steps=None):
     trace.trace()
-    classification.emit2()
-
-def go2(): # SFTODO: HACK TO MAKE AUTOSTRING WORK, MAYBE ALWAYS MAKE GO DO THIS, NOT SURE YET
+    if final_steps is None:
+        def final_steps():
+            autostring()
+    final_steps()
     classification.emit2()
 
 

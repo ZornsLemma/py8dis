@@ -27,7 +27,7 @@ Call dispatch table entry &D+1 for service call &12.
 Don't handle any other service call.
 (+1 because jump_table_dispatch_x_plus_y adds 1 if Y=0.)""")
 
-# TODO: Jump table entry 0 is probably irrelevant.
+# XXX: Jump table entry 0 is probably irrelevant.
 # Jump table entries 1-&D inclusive are for service call handlers.
 # There are probably some more given the use of Y by jump_table_dispatch_x_plus_y
 comment(0x8e49, "Note that if Y=0, this will add 1 instead of 0.")
@@ -65,7 +65,14 @@ for i in range(6):
     pc = stringhi(pc)
     pc += 3
 
-# At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection. TODO: TIDY THIS COMMENT, SET CONTEXT FOR BUT DON'T DUPLICATE COMMENTS IN LOOP BELOW
+# XXX: At &864D there's some code to patch an address (probably a JMP/JSR
+# operand) at &D3E/D3F using a pair of tables at &8869 (low byte) and &8861
+# (high byte). abs,Y addressing is used and I don't currently know what range of
+# values Y can have. The fact &8869 and &8861 are eight bytes apart suggests
+# there are 8 possible values of Y. There's a table of RTS-compatible low bytes
+# accessed via &8600,Y as well and looking at the data in the disassembly seems
+# to suggest 8 possible values again and allows us to infer the first acceptable
+# Y value is &81.
 min_y = 0x81
 for i in range(8):
     # There's a split table of code pointers for use via LDA:PHA:LDA:PHA:RTS at
@@ -99,16 +106,8 @@ entry(0xbfd2)
 # execution at the first top-bit-set byte following it.
 hook_subroutine(0x9145, "print_inline_top_bit_clear", stringhi_hook)
 
-# TODO: temp beebdis notes:
-# - "string" looks ahead but does *not* include the terminator in the string
-# - "stringterm" *does* include the terminator in the string
-# - "stringz" is like stringterm AFAICS except terminator is always 0
-# - "stringhi" does not seem to include terminator (even when the terminator is ascii-with-top-bit set)
-# - "stringhiz" does not include the terminator in the string
-
 # This subroutine generates an error using the following NUL-terminated string.
-# TODO: I think it may actually return in some cases - need to study its code more
-# TODO: The fact there are two entry points also suggests something slightly cleverer going on
+# XXX: The fact there are two entry points suggests something slightly clever going on
 def stringz_no_return_hook(target, addr):
     stringz_hook(target, addr) # discard return address
     return None
