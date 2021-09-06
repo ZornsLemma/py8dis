@@ -128,6 +128,12 @@ SFTODO(2)
 
 pc = 0xba30
 label(pc, "sram_table")
+# ENHANCE: It would be nice if we could do something like:
+#     label(pc + 1, "sram_table+1")
+# This is not necessarily all that hard, but it would probably force us to wrap label
+# names in brackets sometimes, or always to be on the safe side (which would be a bit
+# ugly).
+# TODO: Maybe this isn't actually too hard to do and would help clean up the code.
 label(pc + 1, "sram_table_plus_1") # TODO: expr label?
 def SFTODO2(n):
     global pc
