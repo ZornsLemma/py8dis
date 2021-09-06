@@ -172,10 +172,12 @@ class OpcodeJsr(OpcodeAbs):
 
     def disassemble(self, addr):
         target = utils.get_u16(addr + 1)
-        # TODO: In principle a subroutine might implement some sort of
-        # conditional return; to that end it might be nice if a jsr hook could
-        # return more than one address if it wanted to. But a subroutine can
-        # already call entry() itself and just return None, so probably OK.
+        # A hook only gets to return the "straight line" address to continue
+        # tracing from (if there is one; it can return None if it wishes). Some
+        # subroutines (e.g. jsr is_yx_zero:equw target_if_true, target_if_false)
+        # might have no "straight line" case and want to return some labelled
+        # entry points. This is supported by having the hook simply return None
+        # and call entry() itself for the labelled entry points.
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
         return [return_addr, utils.get_u16(addr + 1)]
 
