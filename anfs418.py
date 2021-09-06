@@ -94,10 +94,7 @@ entry(0xbfd2)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
-# TODO: Probably rename and move this into "standard library" - maybe not, as this is quite unusual (the top bit set character is *not* stripped-and-printed, we return to it)
-def print_inline_top_bit_clear_hook(target, addr):
-    return stringhi(addr + 3)
-hook_subroutine(0x9145, "print_inline_top_bit_clear", print_inline_top_bit_clear_hook)
+hook_subroutine(0x9145, "print_inline_top_bit_clear", stringhi_hook)
 
 # TODO: temp beebdis notes:
 # - "string" looks ahead but does *not* include the terminator in the string
@@ -109,12 +106,12 @@ hook_subroutine(0x9145, "print_inline_top_bit_clear", print_inline_top_bit_clear
 # This subroutine generates an error using the following NUL-terminated string.
 # TODO: I think it may actually return in some cases - need to study its code more
 # TODO: The fact there are two entry points also suggests something slightly cleverer going on
-def generate_error_inline_hook(target, addr):
-    inline_nul_string_hook(target, addr) # discard return address
+def stringz_no_return_hook(target, addr):
+    stringz_hook(target, addr) # discard return address
     return None
-hook_subroutine(0x96b8, "generate_error_inline", generate_error_inline_hook)
-hook_subroutine(0x96d4, "generate_error_inline2", generate_error_inline_hook)
-hook_subroutine(0x96d1, "generate_error_inline3", generate_error_inline_hook)
+hook_subroutine(0x96b8, "generate_error_inline", stringz_no_return_hook)
+hook_subroutine(0x96d4, "generate_error_inline2", stringz_no_return_hook)
+hook_subroutine(0x96d1, "generate_error_inline3", stringz_no_return_hook)
 
 for i in range(36):
     rts_code_ptr(0x89ca + 1 + i, 0x89ef + 1 + i)

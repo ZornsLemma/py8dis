@@ -241,10 +241,6 @@ def autostring(min_length=3):
             if n >= min_length:
                 string(start_addr + i, n)
 
-# TODO: rename? do we even need this if its implementation is so simple? (probably)
-def inline_nul_string_hook(target, addr):
-    return stringz(addr + 3)
-
 
 # TODO: Maybe move this into commands.py, perhaps inlining it as part of go()? Or perhaps it should be all in disassembly.emit???
 def emit2(): # TODO POOR NAME

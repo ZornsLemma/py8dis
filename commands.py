@@ -3,7 +3,7 @@
 import argparse
 
 # These functions/objects are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, autostring, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
+from classification import string, stringterm, stringcr, stringz, stringhi, autostring # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 from utils import get_u16, get_u16_be
@@ -65,6 +65,16 @@ def word(addr, n=1):
 
 def entry(addr, label=None):
     return add_entry(addr, label)
+
+def stringhi_hook(target, addr):
+    return stringhi(addr + 3)
+
+def stringcr_hook(target, addr):
+    return stringcr(addr + 3)
+
+def stringz_hook(target, addr):
+    return stringz(addr + 3)
+
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
