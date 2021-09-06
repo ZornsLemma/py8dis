@@ -42,10 +42,6 @@ label(0x8eac, "clamp_absolute_workspace_and_save")
 
 label(0x9611, "sta_e09_if_d6c_b7_set")
 label(0x96b4, "error_template_minus_1")
-string(0x96b5, 3)
-
-stringcr(0x8d0f)
-stringz(0x8d38)
 
 pc = 0xa3f0
 def stringhi_rts_code_ptr_block(n):
@@ -121,10 +117,6 @@ for i in range(36):
 def stringz_block(pc, n):
     for i in range(n):
         pc = stringz(pc)
-
-# TODO: This and other manual string identification may be redundant now we have autostring (make sure we use it!)
-stringz_block(0x9022, 12)
-stringz_block(0x97b9, 10)
 
 go()
 
