@@ -113,9 +113,6 @@ stringcr(0x9546)
 stringcr(0x954e)
 
 
-def get_u16_be(addr): # TODO: Should be standard routine, poss under different name
-    return (memory[addr] << 8) | memory[addr + 1]
-
 pc = 0x861c
 label(pc, "command_table")
 label(pc + 1, "command_table_plus_1") # TODO: "expr label" would be mildly useful here

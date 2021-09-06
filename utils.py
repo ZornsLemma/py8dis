@@ -18,9 +18,13 @@ def plainhex2(i):
 def plainhex4(i):
     return ("%04x" if config.lower_case() else "%04X") % i
 
-def get_u16(i):
-    assert memory[i] is not None and memory[i+1] is not None
-    return memory[i] + (memory[i+1] << 8)
+def get_u16(addr):
+    assert memory[addr] is not None and memory[addr+1] is not None
+    return memory[addr] + (memory[addr+1] << 8)
+
+def get_u16_be(addr):
+    assert memory[addr] is not None and memory[addr+1] is not None
+    return (memory[addr] << 8) | memory[addr+1]
 
 def add_hex_dump(s, addr, length):
     assert length > 0

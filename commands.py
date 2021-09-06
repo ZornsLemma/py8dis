@@ -6,7 +6,7 @@ import argparse
 from classification import string, stringterm, stringcr, stringz, stringhi, autostring, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
-from utils import get_u16
+from utils import get_u16, get_u16_be
 
 # These modules are used to implement things in this file but aren't intended
 # for direct use by the user.
