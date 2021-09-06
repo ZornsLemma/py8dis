@@ -98,8 +98,8 @@ class OpcodeAbs(Opcode):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
 
     def has_zp_version(self):
-        # TODO: It might be too simplistic to always return True here; we could
-        # use a proper lookup table or similar. It's "safe" to return True in
+        # ENHANCE: It might be too simplistic to always return True here; we could
+        # use a proper lookup table or similar. It's safe to return True in
         # all cases, it just might cause ugly force-abs-addressing code to be
         # emitted when there's no need.
         return True
