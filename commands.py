@@ -63,42 +63,39 @@ def word(addr, n=1):
     disassembly.add_classification(addr, classification.Word(n * 2))
 
 def entry(addr, label=None):
-    add_entry(addr, label)
+    return add_entry(addr, label)
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
     jsr_hooks[addr] = hook # TODO: call a function in trace.py to do this?
 
-# TODO: should this be in trace.py? it is kind of 6502-ish, for a start. I do kind of think it works better here in commands.py.
-# TODO: rename?
-def rts_address(addr):
-    # TODO: Not just this function, but from a user POV it's perhaps better if these
-    # move into a sort of pseudo-library and use function names like expr() and entry() instead of add_expression() and add_entry(), to make it more obvious they are just code a user could write but put somewhere re-usable.
-    handler = get_u16(addr) + 1 # TODO: rename "handler"
-    entry(handler)
-    word(addr)
-    expr(addr, "%s-1" % disassembly.get_label(get_u16(addr) + 1))
-    return addr + 2
+def code_ptr(addr, addr_high=None, offset=0):
+    if addr_high is None:
+        addr_high = addr + 1
+    assert memory[addr] is not None
+    assert memory[addr_high] is not None
+    code_at = ((memory[addr_high] << 8) | memory[addr]) + offset
+    # Label and trace the code at code_at
+    label = entry(code_at) # TODO: allow optional user-specified label?
+    # Reference that label at addr/addr_high.
+    offset_string = "" if offset == 0 else ("%+d" % -offset)
+    if addr_high == addr + 1:
+        # The general code in the "else" branch would work for this case as
+        # well, but since the assembler has support for emitting a little-endian
+        # 16-bit word it's nice to use it when we can.
+        word(addr)
+        expr(addr, "%s%s" % (label, offset_string))
+    else:
+        byte(addr)
+        expr(addr, "<(%s%s)" % (label, offset_string))
+        byte(addr_high)
+        expr(addr_high, ">(%s%s)" % (label, offset_string))
+    if abs(addr_high - addr) == 1:
+        return max(addr, addr_high) + 1
+    return None
 
-# TODO: Perhaps this _be variant should take two arguments and also be used for split rts addresses?
-def rts_address_be(addr): # TODO: rename
-    handler = get_u16_be(addr) + 1 # TODO: rename "handler"
-    entry(handler)
-    # TODO: Should following be standard fn? Should we have a word_be() fn?
-    byte(addr, 2)
-    expr(addr, ">(" + get_label(handler) + "-1)")
-    expr(addr + 1, "<(" + get_label(handler) + "-1)")
-    return addr + 2
-
-
-# TODO: less obvious, but maybe this should be in trace.py if rts_address() should - ditto, prob quite good here in commands.py
-# TODO: RENAME?
-def split_jump_table_entry(low_addr, high_addr, offset):
-    entry_point = (memory[high_addr] << 8) + memory[low_addr] + offset
-    entry(entry_point)
-    offset_string = "" if offset == 0 else ("-%d" % offset)
-    expr(high_addr, ">(%s%s)" % (disassembly.get_label(entry_point), offset_string))
-    expr(low_addr, "<(%s%s)" % (disassembly.get_label(entry_point), offset_string))
+def rts_code_ptr(addr, addr_high=None):
+    return code_ptr(addr, addr_high, offset=1)
 
 def go():
     trace.trace()

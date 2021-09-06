@@ -49,18 +49,18 @@ stringz(0x8d38)
 
 # TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
 pc = 0xa3f0
-def stringhi_rts_address_block(n):
+def stringhi_rts_code_ptr_block(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
         pc += 1
-        pc = rts_address(pc)
-stringhi_rts_address_block(10)
+        pc = rts_code_ptr(pc)
+stringhi_rts_code_ptr_block(10)
 pc += 1
-stringhi_rts_address_block(17)
+stringhi_rts_code_ptr_block(17)
 pc += 1
-pc = rts_address(pc) # TODO: ?
-stringhi_rts_address_block(2)
+pc = rts_code_ptr(pc) # TODO: ?
+stringhi_rts_code_ptr_block(2)
 pc += 1
 for i in range(6):
     pc = stringhi(pc)
@@ -70,7 +70,7 @@ for i in range(6):
 min_y = 0x81
 for i in range(8):
     if True:
-        split_jump_table_entry(0x8869 + min_y + i, 0x8861 + min_y + i, 0)
+        code_ptr(0x8869 + min_y + i, 0x8861 + min_y + i)
         rts_low_addr = 0x8600 + min_y + i
         target_addr = (0x8600 + memory[rts_low_addr]) + 1
         entry(target_addr)
@@ -117,7 +117,7 @@ hook_subroutine(0x96d4, "generate_error_inline2", generate_error_inline_hook)
 hook_subroutine(0x96d1, "generate_error_inline3", generate_error_inline_hook)
 
 for i in range(36):
-    split_jump_table_entry(0x89ca + 1 + i, 0x89ef + 1 + i, 1)
+    rts_code_ptr(0x89ca + 1 + i, 0x89ef + 1 + i)
 
 def stringz_block(pc, n):
     for i in range(n):

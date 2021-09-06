@@ -16,6 +16,7 @@ def add_entry(addr, label=None):
         disassembly.ensure_addr_labelled(addr)
     else:
         disassembly.add_label(addr, label)
+    return disassembly.get_label(addr)
 
 def signed8(i):
     assert 0 <= i <= 255

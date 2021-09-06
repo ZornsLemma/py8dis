@@ -120,7 +120,7 @@ def SFTODO(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
-        pc = rts_address_be(pc)
+        pc = rts_code_ptr(pc + 1, pc)
         pc += 1 # XXX: what are we skipping here?
 SFTODO(20)
 pc += 2 # XXX
