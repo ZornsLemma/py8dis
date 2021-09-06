@@ -3,7 +3,7 @@
 import argparse
 
 # These functions/objects are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, autostring # TODO: get rid of stuff in this list which isn't directly user-exposed
+from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, autostring # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 from utils import get_u16, get_u16_be

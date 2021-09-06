@@ -210,7 +210,8 @@ def string(addr, n=None):
         n = 0
         while utils.isprint(memory[addr + n]):
             n += 1
-    disassembly.add_classification(addr, String(n, False))
+    if n > 0:
+        disassembly.add_classification(addr, String(n, False))
     return addr + n
 
 # TODO: I should perhaps provide two variants on this, one which considers the top bit set byte as not part of the string and one which consider it part of it. this would also make the "decompose top bit set chars in equs" stuff (currently if-ed out) useful.
@@ -224,10 +225,19 @@ def stringhi(addr):
                     add_expression(addr, "&80+'%s'" % chr(c)) # TODO: use formatter not &
             break
         addr += 1
-    disassembly.add_classification(initial_addr, String(addr - initial_addr))
+    if addr > initial_addr:
+        disassembly.add_classification(initial_addr, String(addr - initial_addr))
     return addr
 
-# TODO: stringhiz? Don't forget to import in commands.py if we add it
+def stringhiz(addr):
+    initial_addr = addr
+    while True:
+        if memory[addr] == 0 or (memory[addr] & 0x80) != 0:
+            break
+        addr += 1
+    if addr > initial_addr:
+        disassembly.add_classification(initial_addr, String(addr - initial_addr))
+    return addr
 
 def autostring(min_length=3):
     assert min_length >= 2

@@ -82,21 +82,14 @@ always clear on exit.""")
 
 def generate_error_hook(target, addr):
     # addr + 3 is the error number
-    addr += 4
-    init_addr = addr
-    # TODO: Should I rewrite this to use stringhiz?
-    while memory[addr] != 0 and (memory[addr] & 0x80) == 0:
-        addr += 1
-    if memory[addr] == 0:
+    pc = stringhiz(addr + 4)
+    if memory[pc] == 0:
         # An OS error will be generated and the subroutine won't return.
-        string(init_addr, (addr + 1) - init_addr)
         return None
     else:
         # A partial OS error will be constructed on the stack and the subroutine
         # will transfer control to the instruction following the partial error.
-        if addr > init_addr:
-            string(init_addr, addr - init_addr)
-        return addr
+        return pc
 
 # XXX: "precheck" because it does *something* using &10DD/&9E30 first, probably
 # a better name available with more understanding.
