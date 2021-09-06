@@ -208,8 +208,9 @@ class OpcodeConditionalBranch(Opcode):
 
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
-# TODO: Fill in gaps!
 opcodes = {
+    # TODO: 0x00
+    # TODO: 0x01
     0x05: OpcodeZp("ORA"),
     0x06: OpcodeZp("ASL"),
     0x08: OpcodeImplied("PHP"),
@@ -219,10 +220,14 @@ opcodes = {
     0x0e: OpcodeDataAbs("ASL"),
     0x10: OpcodeConditionalBranch("BPL"),
     0x11: OpcodeZp("ORA", "),Y"),
+    # TODO: 0x15
+    # TODO: 0x16
     0x18: OpcodeImplied("CLC"),
     0x19: OpcodeDataAbs("ORA", ",Y"),
     0x1d: OpcodeDataAbs("ORA", ",X"),
+    # TODO: 0x1e
     0x20: OpcodeJsr(),
+    # TODO: 0x21
     0x24: OpcodeZp("BIT"),
     0x25: OpcodeZp("AND"),
     0x26: OpcodeZp("ROL"),
@@ -234,11 +239,14 @@ opcodes = {
     0x2e: OpcodeDataAbs("ROL"),
     0x30: OpcodeConditionalBranch("BMI"),
     0x31: OpcodeZp("AND", "),Y"),
+    # TODO: 0x35
+    # TODO: 0x36
     0x38: OpcodeImplied("SEC"),
     0x39: OpcodeDataAbs("AND", ",Y"),
     0x3d: OpcodeDataAbs("AND", ",X"),
     0x3e: OpcodeDataAbs("ROL", ",X"),
     0x40: OpcodeReturn("RTI"),
+    # TODO: 0x41
     0x45: OpcodeZp("EOR"),
     0x46: OpcodeZp("LSR"),
     0x48: OpcodeImplied("PHA"),
@@ -246,13 +254,17 @@ opcodes = {
     0x4a: OpcodeImplied("LSR A"),
     0x4c: OpcodeJmpAbs(),
     0x4d: OpcodeDataAbs("EOR"),
+    # TODO: 0x4e
     0x50: OpcodeConditionalBranch("BVC"),
     0x51: OpcodeZp("EOR", "),Y"),
     0x55: OpcodeZp("EOR", ",X"),
+    # TODO: 0x56
     0x58: OpcodeImplied("CLI"),
     0x59: OpcodeDataAbs("EOR", ",Y"),
     0x5d: OpcodeDataAbs("EOR", ",X"),
+    # TODO: 0x5e
     0x60: OpcodeReturn("RTS"),
+    # TODO: 0x61
     0x65: OpcodeZp("ADC"),
     0x66: OpcodeZp("ROR"),
     0x68: OpcodeImplied("PLA"),
@@ -263,6 +275,8 @@ opcodes = {
     0x6e: OpcodeDataAbs("ROR"),
     0x70: OpcodeConditionalBranch("BVS"),
     0x71: OpcodeZp("ADC", "),Y"),
+    # TODO: 0x75
+    # TODO: 0x76
     0x78: OpcodeImplied("SEI"),
     0x79: OpcodeDataAbs("ADC", ",Y"),
     0x7d: OpcodeDataAbs("ADC", ",X"),
@@ -278,7 +292,9 @@ opcodes = {
     0x8e: OpcodeDataAbs("STX"),
     0x90: OpcodeConditionalBranch("BCC"),
     0x91: OpcodeZp("STA", "),Y"),
+    # TODO: 0x94
     0x95: OpcodeZp("STA", ",X"),
+    # TODO: 0x96
     0x98: OpcodeImplied("TYA"),
     0x99: OpcodeDataAbs("STA", ",Y"),
     0x9a: OpcodeImplied("TXS"),
@@ -289,8 +305,8 @@ opcodes = {
     0xa4: OpcodeZp("LDY"),
     0xa5: OpcodeZp("LDA"),
     0xa6: OpcodeZp("LDX"),
-    0xa9: OpcodeImmediate("LDA"),
     0xa8: OpcodeImplied("TAY"),
+    0xa9: OpcodeImmediate("LDA"),
     0xaa: OpcodeImplied("TAX"),
     0xac: OpcodeDataAbs("LDY"),
     0xad: OpcodeDataAbs("LDA"),
@@ -306,6 +322,7 @@ opcodes = {
     0xbd: OpcodeDataAbs("LDA", ",X"),
     0xbe: OpcodeDataAbs("LDX", ",Y"),
     0xc0: OpcodeImmediate("CPY"),
+    # TODO: 0xc1
     0xc4: OpcodeZp("CPY"),
     0xc5: OpcodeZp("CMP"),
     0xc6: OpcodeZp("DEC"),
@@ -315,12 +332,16 @@ opcodes = {
     0xcc: OpcodeDataAbs("CPY"),
     0xcd: OpcodeDataAbs("CMP"),
     0xce: OpcodeDataAbs("DEC"),
+    0xd0: OpcodeConditionalBranch("BNE"),
     0xd1: OpcodeZp("CMP", "),Y"),
+    0xd5: OpcodeZp("CMP", ",X"),
+    # TODO: 0xd6
     0xd8: OpcodeImplied("CLD"),
     0xd9: OpcodeDataAbs("CMP", ",Y"),
     0xdd: OpcodeDataAbs("CMP", ",X"),
     0xde: OpcodeDataAbs("DEC", ",X"),
     0xe0: OpcodeImmediate("CPX"),
+    # TODO: 0xe1
     0xe4: OpcodeZp("CPX"),
     0xe5: OpcodeZp("SBC"),
     0xe6: OpcodeZp("INC"),
@@ -330,8 +351,6 @@ opcodes = {
     0xec: OpcodeDataAbs("CPX"),
     0xed: OpcodeDataAbs("SBC"),
     0xee: OpcodeDataAbs("INC"),
-    0xd0: OpcodeConditionalBranch("BNE"),
-    0xd5: OpcodeZp("CMP", ",X"),
     0xf0: OpcodeConditionalBranch("BEQ"),
     0xf1: OpcodeZp("SBC", "),Y"),
     0xf5: OpcodeZp("SBC", ",X"),
