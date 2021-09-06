@@ -65,7 +65,7 @@ for i in range(6):
     pc = stringhi(pc)
     pc += 3
 
-# At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection.
+# At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection. TODO: TIDY THIS COMMENT, SET CONTEXT FOR BUT DON'T DUPLICATE COMMENTS IN LOOP BELOW
 min_y = 0x81
 for i in range(8):
     # There's a split table of code pointers for use via LDA:PHA:LDA:PHA:RTS at

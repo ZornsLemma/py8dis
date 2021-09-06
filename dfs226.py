@@ -1,6 +1,5 @@
 from commands import *
 import acorn
-import utils # TODO!? Don't like needing to do this
 
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
 set_output_filename("dfs226.rom")

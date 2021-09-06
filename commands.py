@@ -8,8 +8,9 @@ from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
 from utils import get_u16, get_u16_be
 
-# These modules are used to implement things in this file but aren't intended
-# for direct use by the user.
+# These modules are used to implement things in this file and aren't so directly
+# exposed to the user. The user can still access them using the qualified names
+# if they wish, since a control file will usually do import * from this module.
 import classification
 import config
 import disassembly
@@ -74,7 +75,6 @@ def stringcr_hook(target, addr):
 
 def stringz_hook(target, addr):
     return stringz(addr + 3)
-
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
