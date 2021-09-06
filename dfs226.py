@@ -106,17 +106,17 @@ stringcr(0x954e)
 pc = 0x861c
 label(pc, "command_table")
 label(pc + 1, "command_table_plus_1") # TODO: "expr label" would be mildly useful here
-def SFTODO(n):
+def command_table_entries(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
         pc = rts_code_ptr(pc + 1, pc)
         pc += 1 # XXX: what are we skipping here?
-SFTODO(20)
+command_table_entries(20)
 pc += 2 # XXX
-SFTODO(7)
+command_table_entries(7)
 pc += 2 # XXX
-SFTODO(2)
+command_table_entries(2)
 
 pc = 0xba30
 label(pc, "sram_table")
@@ -127,19 +127,16 @@ label(pc, "sram_table")
 # ugly).
 # TODO: Maybe this isn't actually too hard to do and would help clean up the code.
 label(pc + 1, "sram_table_plus_1") # TODO: expr label?
-def SFTODO2(n):
-    global pc
-    for i in range(n):
-        pc = stringhi(pc)
-        # We could almost just call rts_code_ptr() but there's a &FFFF in the table
-        # which doesn't correspond to a valid address. (We could obviously cope with
-        # this in other ways, such as disassembling the first part of the table
-        # separately.)
-        code_at = get_u16_be(pc) + 1
-        if code_at <= 0xffff:
-            rts_code_ptr(pc + 1, pc)
-        pc += 2
-SFTODO2(7)
+for i in range(7):
+    pc = stringhi(pc)
+    # We could almost just call rts_code_ptr() but there's a &FFFF in the table
+    # which doesn't correspond to a valid address. (We could obviously cope with
+    # this in other ways, such as disassembling the first part of the table
+    # separately.)
+    code_at = get_u16_be(pc) + 1
+    if code_at <= 0xffff:
+        rts_code_ptr(pc + 1, pc)
+    pc += 2
 
 entry(0x8fd2, "nmi_handler_rom_start")
 label(0x8fd2 + 0x5d + 1, "nmi_handler_rom_end")
