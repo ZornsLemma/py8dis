@@ -15,13 +15,13 @@ formatter = config.formatter
 # disassembling right up to the top of memory.
 
 class Byte(object):
-    def __init__(self, length, is_variable_length=True):
+    def __init__(self, length, is_mergeable=True):
         assert length > 0
         self._length = length
-        self._is_variable_length = is_variable_length
+        self._is_mergeable = is_mergeable
 
-    def is_variable_length(self):
-        return self._is_variable_length
+    def is_mergeable(self):
+        return self._is_mergeable
 
     def length(self):
         return self._length
@@ -69,12 +69,12 @@ class Byte(object):
 
 
 class Word(object):
-    def __init__(self, length, is_variable_length=True):
+    def __init__(self, length, is_mergeable=True):
         self.set_length(length)
-        self._is_variable_length = is_variable_length
+        self._is_mergeable = is_mergeable
 
-    def is_variable_length(self):
-        return self._is_variable_length
+    def is_mergeable(self):
+        return self._is_mergeable
 
     def length(self):
         return self._length
@@ -103,13 +103,13 @@ class Word(object):
 
 
 class String(object):
-    def __init__(self, length, is_variable_length=True):
+    def __init__(self, length, is_mergeable=True):
         assert length > 0
         self._length = length
-        self._is_variable_length = is_variable_length
+        self._is_mergeable = is_mergeable
 
-    def is_variable_length(self):
-        return self._is_variable_length
+    def is_mergeable(self):
+        return self._is_mergeable
 
     def length(self):
         return self._length

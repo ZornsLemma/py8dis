@@ -13,7 +13,6 @@ def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
     jsr_hooks[addr] = hook
 
-# TODO: Use this in more places
 def add_entry(addr, label=None):
     entry_points.append(addr)
     if label is None:
@@ -41,8 +40,7 @@ class Opcode(object):
         self.prefix = "(" if ")" in self.suffix else ""
         self.operand_length = operand_length
 
-    # TODO: General, not just here - rename is_mergeable()?
-    def is_variable_length(self):
+    def is_mergeable(self):
         return False
 
     def length(self):

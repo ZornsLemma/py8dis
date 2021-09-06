@@ -46,13 +46,13 @@ def add_classification(addr, classification):
 def get_classification(addr):
     return classifications[addr]
 
-# Combine adjacent variable-length classifications.
+# Combine adjacent mergeable classifications of the same type.
 def merge_classifications(start_addr, end_addr):
     addr = start_addr
     while addr < end_addr:
-        if classifications[addr].is_variable_length():
+        if classifications[addr].is_mergeable():
             addr2 = addr + classifications[addr].length()
-            while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_variable_length():
+            while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_mergeable():
                 addr2_length = classifications[addr2].length()
                 classifications[addr].set_length(classifications[addr].length() + addr2_length)
                 classifications[addr2] = 0 # TODO: slightly ugly dummy value
@@ -65,7 +65,7 @@ def split_classifications(start_addr, end_addr):
     addr = start_addr
     while addr < end_addr:
         c = classifications[addr]
-        if c.is_variable_length() and c.length() > 1:
+        if c.is_mergeable() and c.length() > 1:
             for i in range(1, c.length()):
                 if (addr + i) in labels:
                     classifications[addr + i] = copy.copy(c)
