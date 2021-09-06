@@ -47,19 +47,18 @@ string(0x96b5, 3)
 stringcr(0x8d0f)
 stringz(0x8d38)
 
-# TODO: Something analogous to beebdis's "pc" to avoid counting bytes would probably be helpful - or will I just make more of an effort to return "pc" and let user code handle it itself?
 pc = 0xa3f0
 def stringhi_rts_code_ptr_block(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
-        pc += 1
+        pc += 1 # XXX: What's this byte mean?
         pc = rts_code_ptr(pc)
 stringhi_rts_code_ptr_block(10)
-pc += 1
+pc += 1 # XXX: ?
 stringhi_rts_code_ptr_block(17)
-pc += 1
-pc = rts_code_ptr(pc) # TODO: ?
+pc += 1 # XXX: ?
+pc = rts_code_ptr(pc) # XXX: ?
 stringhi_rts_code_ptr_block(2)
 pc += 1
 for i in range(6):
@@ -69,13 +68,17 @@ for i in range(6):
 # At L864D there is some code to patch what is probably a target address using L8869,Y and L8861,Y, although I don't know what values Y can have, so I'm guessing. This code also does an RTS transfer to "RTS address" &86xx using a table at L8600 with the same values of Y. The fact L8869 and L8861 are 8 bytes apart suggest there are 8 values here, and this seems to fill in a group of otherwise dead data/code when combined with the L8600 connection.
 min_y = 0x81
 for i in range(8):
-    if True:
-        code_ptr(0x8869 + min_y + i, 0x8861 + min_y + i)
-        rts_low_addr = 0x8600 + min_y + i
-        target_addr = (0x8600 + memory[rts_low_addr]) + 1
-        entry(target_addr)
-        #print("XK", hex(target_addr))
-        expr(rts_low_addr, "(<%s)-1" % get_label(target_addr))
+    # There's a split table of code pointers for use via LDA:PHA:LDA:PHA:RTS at
+    # &8869+x (low byte) and &8861+x (high byte).
+    code_ptr(0x8869 + min_y + i, 0x8861 + min_y + i)
+    # There's also a low byte only table of code pointers at &8600+x; the high
+    # byte of &86 is hard-coded at &8679. We manually do half of what code_ptr()
+    # does; this could obviously be moved into commands.py as a standard
+    # function but I am not sure it's useful enough.
+    addr = 0x8600 + min_y + i
+    code_at = (0x8600 + memory[addr]) + 1
+    entry(code_at)
+    expr(addr, "<(%s-1)" % get_label(code_at))
 
 stringcr(0xa17c) # preceding BNE is always taken
 byte(0xaefb) # preceding BNE is always taken
