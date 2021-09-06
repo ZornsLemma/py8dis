@@ -11,6 +11,7 @@ def add_constant(value, name):
     constants.append((value, name))
 
 def add_label(addr, name):
+    # TODO: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
     if addr not in labels:

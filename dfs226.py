@@ -133,12 +133,13 @@ def SFTODO2(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
-        handler = get_u16_be(pc) + 1
-        if handler <= 0xffff:
-            entry(handler)
-            # TODO: Should following be standard fn? Should we have a word_be() fn?
-            expr(pc, ">(" + get_label(handler) + "-1)")
-            expr(pc + 1, "<(" + get_label(handler) + "-1)")
+        # We could almost just call rts_code_ptr() but there's a &FFFF in the table
+        # which doesn't correspond to a valid address. (We could obviously cope with
+        # this in other ways, such as disassembling the first part of the table
+        # separately.)
+        code_at = get_u16_be(pc) + 1
+        if code_at <= 0xffff:
+            rts_code_ptr(pc + 1, pc)
         pc += 2
 SFTODO2(7)
 
