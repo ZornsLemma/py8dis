@@ -113,7 +113,7 @@ class OpcodeAbs(Opcode):
         # can't be correctly reassembled into a binary matching the input.
         result1 = utils.force_case(self.mnemonic)
         result2 = "%s%s%s" % (self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
-        if not self.has_zp_version() or utils.get_abs(addr + 1) >= 0x100:
+        if not self.has_zp_version() or utils.get_u16(addr + 1) >= 0x100:
             return "    %s %s" % (result1, result2)
 
         # This is an absolute instruction with a zero-page operand which could
@@ -136,7 +136,7 @@ class OpcodeDataAbs(OpcodeAbs):
         super(OpcodeDataAbs, self).__init__(mnemonic, suffix)
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(utils.get_abs(addr + 1))
+        disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
         return [addr + 3]
 
 
@@ -148,7 +148,7 @@ class OpcodeJmpAbs(OpcodeAbs):
         return False
 
     def disassemble(self, addr):
-        return [None, utils.get_abs(addr + 1)]
+        return [None, utils.get_u16(addr + 1)]
 
 
 class OpcodeJmpInd(OpcodeAbs):
@@ -159,7 +159,7 @@ class OpcodeJmpInd(OpcodeAbs):
         return False
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(utils.get_abs(addr + 1))
+        disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
         return [None]
 
 
@@ -171,13 +171,13 @@ class OpcodeJsr(OpcodeAbs):
         return False
 
     def disassemble(self, addr):
-        target = utils.get_abs(addr + 1)
+        target = utils.get_u16(addr + 1)
         # TODO: In principle a subroutine might implement some sort of
         # conditional return; to that end it might be nice if a jsr hook could
         # return more than one address if it wanted to. But a subroutine can
         # already call entry() itself and just return None, so probably OK.
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
-        return [return_addr, utils.get_abs(addr + 1)]
+        return [return_addr, utils.get_u16(addr + 1)]
 
 
 class OpcodeReturn(Opcode):

@@ -113,7 +113,7 @@ stringcr(0x9546)
 stringcr(0x954e)
 
 
-def get_abs_be(addr): # TODO: Should be standard routine, poss under different name
+def get_u16_be(addr): # TODO: Should be standard routine, poss under different name
     return (memory[addr] << 8) | memory[addr + 1]
 
 pc = 0x861c
@@ -123,12 +123,7 @@ def SFTODO(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
-        handler = get_abs_be(pc) + 1
-        entry(handler)
-        # TODO: Should following be standard fn? Should we have a word_be() fn?
-        expr(pc, ">(" + get_label(handler) + "-1)")
-        expr(pc + 1, "<(" + get_label(handler) + "-1)")
-        pc += 2
+        pc = rts_address_be(pc)
         pc += 1 # XXX: what are we skipping here?
 SFTODO(20)
 pc += 2 # XXX
@@ -143,7 +138,7 @@ def SFTODO2(n):
     global pc
     for i in range(n):
         pc = stringhi(pc)
-        handler = get_abs_be(pc) + 1
+        handler = get_u16_be(pc) + 1
         if handler <= 0xffff:
             entry(handler)
             # TODO: Should following be standard fn? Should we have a word_be() fn?

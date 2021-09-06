@@ -179,7 +179,7 @@ def get_address8(addr):
     return get_expression(addr, operand)
 
 def get_address16(addr):
-    operand = utils.get_abs(addr)
+    operand = utils.get_u16(addr)
     # TODO: Not entirely sure if it's a good idea to handle 16-bit expressions like this. Should we at a minimum assert a Word is used to classify this address?
     if addr not in expressions:
         return disassembly.get_label(operand)

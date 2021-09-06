@@ -6,6 +6,7 @@ import argparse
 from classification import string, stringterm, stringcr, stringz, stringhi, autostring, inline_nul_string_hook # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
 from trace import add_entry, jsr_hooks
+from utils import get_u16
 
 # These modules are used to implement things in this file but aren't intended
 # for direct use by the user.
@@ -73,10 +74,22 @@ def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not
 def rts_address(addr):
     # TODO: Not just this function, but from a user POV it's perhaps better if these
     # move into a sort of pseudo-library and use function names like expr() and entry() instead of add_expression() and add_entry(), to make it more obvious they are just code a user could write but put somewhere re-usable.
-    entry(utils.get_abs(addr) + 1)
-    expr(addr, "%s-1" % disassembly.get_label(utils.get_abs(addr) + 1))
+    handler = get_u16(addr) + 1 # TODO: rename "handler"
+    entry(handler)
     word(addr)
+    expr(addr, "%s-1" % disassembly.get_label(get_u16(addr) + 1))
     return addr + 2
+
+# TODO: Perhaps this _be variant should take two arguments and also be used for split rts addresses?
+def rts_address_be(addr): # TODO: rename
+    handler = get_u16_be(addr) + 1 # TODO: rename "handler"
+    entry(handler)
+    # TODO: Should following be standard fn? Should we have a word_be() fn?
+    byte(addr, 2)
+    expr(addr, ">(" + get_label(handler) + "-1)")
+    expr(addr + 1, "<(" + get_label(handler) + "-1)")
+    return addr + 2
+
 
 # TODO: less obvious, but maybe this should be in trace.py if rts_address() should - ditto, prob quite good here in commands.py
 # TODO: RENAME?
