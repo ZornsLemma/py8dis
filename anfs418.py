@@ -123,6 +123,7 @@ def stringz_block(pc, n):
     for i in range(n):
         pc = stringz(pc)
 
+# TODO: This and other manual string identification may be redundant now we have autostring (make sure we use it!)
 stringz_block(0x9022, 12)
 stringz_block(0x97b9, 10)
 
