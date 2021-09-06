@@ -119,5 +119,3 @@ def stringz_block(pc, n):
         pc = stringz(pc)
 
 go()
-
-# TODO: Should user-marked data be non-mergeable (non-variable-length) like strings?

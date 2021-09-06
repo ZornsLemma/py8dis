@@ -58,11 +58,11 @@ def expr(addr, s):
     classification.add_expression(addr, s)
 
 def byte(addr, n=1):
-    disassembly.add_classification(addr, classification.Byte(n))
+    disassembly.add_classification(addr, classification.Byte(n, False))
 
 def word(addr, n=1):
     # TODO: I don't think this is actually tested yet...
-    disassembly.add_classification(addr, classification.Word(n * 2))
+    disassembly.add_classification(addr, classification.Word(n * 2, False))
 
 def entry(addr, label=None):
     return add_entry(addr, label)

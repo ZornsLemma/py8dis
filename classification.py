@@ -15,12 +15,13 @@ formatter = config.formatter
 # disassembling right up to the top of memory.
 
 class Byte(object):
-    def __init__(self, length):
+    def __init__(self, length, is_variable_length=True):
         assert length > 0
         self._length = length
+        self._is_variable_length = is_variable_length
 
     def is_variable_length(self):
-        return True
+        return self._is_variable_length
 
     def length(self):
         return self._length
@@ -68,11 +69,12 @@ class Byte(object):
 
 
 class Word(object):
-    def __init__(self, length):
+    def __init__(self, length, is_variable_length=True):
         self.set_length(length)
+        self._is_variable_length = is_variable_length
 
     def is_variable_length(self):
-        return True
+        return self._is_variable_length
 
     def length(self):
         return self._length
@@ -226,7 +228,7 @@ def stringhi(addr):
             break
         addr += 1
     if addr > initial_addr:
-        disassembly.add_classification(initial_addr, String(addr - initial_addr))
+        disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
     return addr
 
 def stringhiz(addr):
@@ -236,7 +238,7 @@ def stringhiz(addr):
             break
         addr += 1
     if addr > initial_addr:
-        disassembly.add_classification(initial_addr, String(addr - initial_addr))
+        disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
     return addr
 
 def autostring(min_length=3):
