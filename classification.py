@@ -227,6 +227,8 @@ def stringhi(addr):
     disassembly.add_classification(initial_addr, String(addr - initial_addr))
     return addr
 
+# TODO: stringhiz? Don't forget to import in commands.py if we add it
+
 def autostring(min_length=3):
     assert min_length >= 2
     start_addr = config.disassembly_range[0]

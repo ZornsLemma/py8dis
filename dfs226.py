@@ -69,11 +69,8 @@ comment(0x8077,
 terminated by a top-bit set instruction to execute after printing the string.
 Carry is always clear on exit.""")
 
-def print_inline_top_bit_clear_hook(target, addr): # TODO: Is there a standard fn for this? should there be?
-    return stringhi(addr + 3)
-
-hook_subroutine(0x8077, "print_inline_l809f_top_bit_clear", print_inline_top_bit_clear_hook)
-hook_subroutine(0xa99c, "print_inline_osasci_top_bit_clear", print_inline_top_bit_clear_hook)
+hook_subroutine(0x8077, "print_inline_l809f_top_bit_clear", stringhi_hook)
+hook_subroutine(0xa99c, "print_inline_osasci_top_bit_clear", stringhi_hook)
 
 comment(0x8048,
 """Generate an OS error using inline data. Called as either:
@@ -88,6 +85,7 @@ def generate_error_hook(target, addr):
     # addr + 3 is the error number
     addr += 4
     init_addr = addr
+    # TODO: Should I rewrite this to use stringhiz?
     while memory[addr] != 0 and (memory[addr] & 0x80) == 0:
         addr += 1
     if memory[addr] == 0:
