@@ -43,6 +43,7 @@ def load(addr, filename, md5sum=None):
 def constant(value, name):
     disassembly.add_constant(value, name)
 
+# TODO: Should (can?) we arrange that if there is already an auto-generated label at this address, the user one takes precedence? This may not be the case as standard if the user uses code_ptr() and then label()s the taret address afterwards. They can always do it the other way round so this isn't a huge deal I suppose.
 def label(addr, name):
     disassembly.add_label(addr, name)
 
