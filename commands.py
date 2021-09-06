@@ -61,7 +61,6 @@ def byte(addr, n=1):
     disassembly.add_classification(addr, classification.Byte(n, False))
 
 def word(addr, n=1):
-    # TODO: I don't think this is actually tested yet...
     disassembly.add_classification(addr, classification.Word(n * 2, False))
 
 def entry(addr, label=None):
@@ -78,7 +77,7 @@ def stringz_hook(target, addr):
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
     entry(addr, name)
-    jsr_hooks[addr] = hook # TODO: call a function in trace.py to do this?
+    trace.add_jsr_hook(addr, hook)
 
 def code_ptr(addr, addr_high=None, offset=0):
     if addr_high is None:

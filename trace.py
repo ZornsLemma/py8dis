@@ -9,6 +9,10 @@ memory = config.memory
 entry_points = []
 jsr_hooks = {}
 
+def add_jsr_hook(addr, hook):
+    assert addr not in jsr_hooks
+    jsr_hooks[addr] = hook
+
 # TODO: Use this in more places
 def add_entry(addr, label=None):
     entry_points.append(addr)
