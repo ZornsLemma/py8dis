@@ -106,7 +106,6 @@ stringcr(0x954e)
 pc = 0x861c
 label(pc, "command_table")
 expr_label(pc + 1, "command_table+1")
-#label(pc + 1, "command_table_plus_1") # TODO: "expr label" would be mildly useful here
 def command_table_entries(n):
     global pc
     for i in range(n):
@@ -121,13 +120,7 @@ command_table_entries(2)
 
 pc = 0xba30
 label(pc, "sram_table")
-# ENHANCE: It would be nice if we could do something like:
-#     label(pc + 1, "sram_table+1")
-# This is not necessarily all that hard, but it would probably force us to wrap label
-# names in brackets sometimes, or always to be on the safe side (which would be a bit
-# ugly).
-# TODO: Maybe this isn't actually too hard to do and would help clean up the code.
-label(pc + 1, "sram_table_plus_1") # TODO: expr label?
+expr_label(pc + 1, "sram_table+1")
 for i in range(7):
     pc = stringhi(pc)
     # We could almost just call rts_code_ptr() but there's a &FFFF in the table
