@@ -11,15 +11,11 @@ TODO
 
 Although the whole point of py8dis is that it's programmable/user-extendable, standard Python functions are provided for common disassembly tasks. If these don't do quite what you want, you can always copy them and tweak the definitions; alternatively, feature requests or submissions of new "standard" functions to add are welcome.
 
-TODO: FORMATTING FOR "CODE"
-
-### load
+TODO: DESCRIBE A CONVENTION FOR INDICATING RETURN VALUE IF ANY - I SUSPECT I WILL WRITE "-> FOO" IF THERE IS AN INTERESTING RETURN VALUE AND OMIT THIS IF THERE ISN'T
 
 `load(addr, filename, md5sum=None)`
 
 Load the contents of `filename` into the disassembler's memory at address `addr`. If the optional `md5sum` argument is provided, disassembly will fail if the md5sum of `filename`'s contents doesn't match; this allows you to detect if a disassembly is being used against a different version of a program by accident.
-
-### constant
 
 `constant(value, name)`
 
@@ -33,15 +29,11 @@ Constants are never used automatically by py8dis, which is what makes them diffe
 
 Simple rule of thumb: use `label` only for addresses, use `constant` for everything else.
 
-### label
-
 `label(addr, name)`
 
 Define a label `name` for address `addr`. Labels will be used automatically when disassembling instructions which reference address `addr`; see `constant` for more details on this. If an instruction references an address which doesn't have a label defined with `label`, a default label (of the form "lxxxx") will be automatically defined.
 
 Labels defined with `label` are always included in the disassembly even if they're never referenced; see `optional_label` if you don't want this behaviour.
-
-### optional_label
 
 `optional_label(addr, name)`
 
