@@ -85,7 +85,8 @@ class Word(object):
         self._length = length
 
     def emit(self, addr):
-        # TODO: COPY AND PASTE OF DATA'S EMIT()
+        # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
+        # should probably all be cleaned up and factored out.
         data = list(get_address16(addr + i) for i in range(0, self._length, 2))
         longest_item = max(len(x) for x in data)
         available_width = config.inline_comment_column() - 10
@@ -216,15 +217,17 @@ def string(addr, n=None):
         disassembly.add_classification(addr, String(n, False))
     return addr + n
 
-# TODO: I should perhaps provide two variants on this, one which considers the top bit set byte as not part of the string and one which consider it part of it. this would also make the "decompose top bit set chars in equs" stuff (currently if-ed out) useful.
+# ENHANCE: A variant on this which considers the top-bit-set byte as part of the
+# string might be useful. The if-ed out code to decompose the last character
+# into a readable form would then potentially be useful too.
 def stringhi(addr):
     initial_addr = addr
     while True:
         if memory[addr] & 0x80 != 0:
-            if False: # TODO: Works but not that helpful so save it for a case where it is
+            if False: # ENHANCE: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
                 if utils.isprint(c) and c != ord('"'):
-                    add_expression(addr, "&80+'%s'" % chr(c)) # TODO: use formatter not &
+                    add_expression(addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c))
             break
         addr += 1
     if addr > initial_addr:
