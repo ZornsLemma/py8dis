@@ -16,8 +16,8 @@ def label_os_entry_points():
     # identify multi-byte regions where this could be used.
 
     def ol2(addr, name):
-        optional_label(addr    , name + "l")
-        optional_label(addr + 1, name + "h")
+        optional_label(addr    , name)
+        optional_label(addr + 1, "%s+1" % name, addr)
 
     ol2(0x0200, "userv")
     ol2(0x0202, "brkv")

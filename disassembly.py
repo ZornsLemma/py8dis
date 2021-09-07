@@ -10,17 +10,20 @@ def add_comment(addr, text):
 def add_constant(value, name):
     constants.append((value, name))
 
-def add_label(addr, name):
+def add_label(addr, name, expr=False):
     # TODO: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
     if addr not in labels:
        labels[addr] = name
-    # An address can have multiple labels as annotations.
-    annotations[addr].append(Label(addr, name))
+       is_expr_label[addr] = expr
+    if not expr:
+        # An address can have multiple labels as annotations.
+        annotations[addr].append(Label(addr, name))
 
-def add_optional_label(addr, name):
-    optional_labels[addr] = name
+def add_optional_label(addr, name, base_addr=None):
+    assert base_addr is None or addr != base_addr
+    optional_labels[addr] = (name, base_addr)
 
 # TODO: This could maybe just do ensure_addr_labelled()??? And then no longer expose that???
 def get_label(addr):
@@ -29,8 +32,16 @@ def get_label(addr):
 
 def ensure_addr_labelled(addr):
     if addr not in labels:
-        label = optional_labels.get(addr, ("l%04x" if config.lower_case() else "L%04X") % addr)
-        add_label(addr, label)
+        if addr in optional_labels:
+            label, base_addr = optional_labels.get(addr)
+            if base_addr is None:
+                add_label(addr, label)
+            else:
+                ensure_addr_labelled(base_addr)
+                add_label(addr, label, True)
+        else:
+            label = ("l%04x" if config.lower_case() else "L%04X") % addr
+            add_label(addr, label)
     return labels[addr]
 
 def is_classified(addr, length):
@@ -167,6 +178,7 @@ def sorted_annotations(annotations):
 classifications = [None] * 64*1024
 # TODO: COMMENT
 labels = {}
+is_expr_label = {}
 optional_labels = {}
 constants = []
 # An address can have an arbitrary number of annotations; we may need to slide

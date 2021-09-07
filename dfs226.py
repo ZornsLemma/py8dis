@@ -105,7 +105,8 @@ stringcr(0x954e)
 
 pc = 0x861c
 label(pc, "command_table")
-label(pc + 1, "command_table_plus_1") # TODO: "expr label" would be mildly useful here
+expr_label(pc + 1, "command_table+1")
+#label(pc + 1, "command_table_plus_1") # TODO: "expr label" would be mildly useful here
 def command_table_entries(n):
     global pc
     for i in range(n):

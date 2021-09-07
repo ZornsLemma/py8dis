@@ -81,7 +81,7 @@ for i in range(8):
     addr = 0x8600 + min_y + i
     code_at = (0x8600 + memory[addr]) + 1
     entry(code_at)
-    expr(addr, "<(%s-1)" % get_label(code_at))
+    expr(addr, "<((%s)-1)" % get_label(code_at))
 
 stringcr(0xa17c) # preceding BNE is always taken
 byte(0xaefb) # preceding BNE is always taken
