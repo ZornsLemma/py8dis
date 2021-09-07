@@ -41,4 +41,10 @@ Labels defined with `label` are always included in the disassembly even if they'
 
 This is like `label`, but the disassembly will omit the label if it isn't referenced. This is intended for use in re-usable library functions like `acorn.TODOWHATEVEROSAPIFNISCALLED`; if an OS entry point or special memory address is used in the code it's good to have it referred to by a recognisable name, but it's not good to bloat the disassembly with labels for perhaps hundreds of special addresses that aren't used.
 
+`expr(addr, s)`
+
+When disassembling the byte at `addr`, use the string `s` instead of the literal value of that byte. Note that `addr` is the address of the byte itself, not the address of the instruction whose operand it is. (`addr` might not even be part of an instruction; it might be data of some kind.)
+
+**py8dis makes no attempt to verify that `s` actually does evaluate to the literal value of the byte at `addr`.** This might change in the future, but for now, careless use of expr() can cause py8dis to generate output which will not correctly re-assemble into its input.
+
 TODO: DOCUMENT ALL OF THEM
