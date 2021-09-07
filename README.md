@@ -11,6 +11,8 @@ TODO
 
 Although the whole point of py8dis is that it's programmable/user-extendable, standard Python functions are provided for common disassembly tasks. If these don't do quite what you want, you can always copy them and tweak the definitions; alternatively, feature requests or submissions of new "standard" functions to add are welcome.
 
+TODO: PUT THESE IN ALPHABETICAL ORDER?
+
 TODO: DESCRIBE A CONVENTION FOR INDICATING RETURN VALUE IF ANY - I SUSPECT I WILL WRITE "-> FOO" IF THERE IS AN INTERESTING RETURN VALUE AND OMIT THIS IF THERE ISN'T
 
 `load(addr, filename, md5sum=None)`
