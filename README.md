@@ -33,4 +33,18 @@ Constants are never used automatically by py8dis, which is what makes them diffe
 
 Simple rule of thumb: use `label` only for addresses, use `constant` for everything else.
 
+### label
+
+`label(addr, name)`
+
+Define a label `name` for address `addr`. Labels will be used automatically when disassembling instructions which reference address `addr`; see `constant` for more details on this. If an instruction references an address which doesn't have a label defined with `label`, a default label (of the form "lxxxx") will be automatically defined.
+
+Labels defined with `label` are always included in the disassembly even if they're never referenced; see `optional_label` if you don't want this behaviour.
+
+### optional_label
+
+`optional_label(addr, name)`
+
+This is like `label`, but the disassembly will omit the label if it isn't referenced. This is intended for use in re-usable library functions like `acorn.TODOWHATEVEROSAPIFNISCALLED`; if an OS entry point or special memory address is used in the code it's good to have it referred to by a recognisable name, but it's not good to bloat the disassembly with labels for perhaps hundreds of special addresses that aren't used.
+
 TODO: DOCUMENT ALL OF THEM
