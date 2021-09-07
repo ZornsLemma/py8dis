@@ -115,6 +115,8 @@ def go(final_steps=None, autostring_min_length=3):
         def final_steps():
             autostring(autostring_min_length)
     final_steps()
+    # TODO: Am kind of thinking emit2() should be renamed finalise() or something, and then
+    # this code should call disassembly.emit() after classification.emit2-renamed(), rather than classification.emit2() calling disassembly.emit()
     classification.emit2()
 
 
