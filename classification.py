@@ -227,7 +227,7 @@ def stringhi(addr):
             if False: # ENHANCE: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
                 if utils.isprint(c) and c != ord('"'):
-                    add_expression(addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c))
+                    add_expression(addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c)))
             break
         addr += 1
     if addr > initial_addr:
