@@ -9,12 +9,6 @@ def label_os_entry_points():
     optional_label(0x00f4, "romsel_copy")
     optional_label(0x00f6, "osrdsc_ptr")
 
-    # TODO: We could potentially add support for a blend of expressions and
-    # labels which would allow (e.g.) an address of &201 to be disassembled as
-    # "userv + 1". However, this isn't a huge benefit - it would mainly be for
-    # the use of this function, as the disassembly process in general won't
-    # identify multi-byte regions where this could be used.
-
     def ol2(addr, name):
         optional_label(addr    , name)
         optional_label(addr + 1, "%s+1" % name, addr)
@@ -97,4 +91,4 @@ def is_sideways_rom():
         stringz(nul_at_title_end + 1, True)
     label(0x8000 + copyright_offset, "copyright")
     stringz(0x8000 + copyright_offset + 1)
-    # TODO: We could recognise tube transfer/relocation data in header
+    # ENHANCE: We could recognise tube transfer/relocation data in header
