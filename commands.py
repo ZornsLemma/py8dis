@@ -130,9 +130,9 @@ parser.add_argument("-u", "--upper", action="store_true", help="generate upper-c
 args = parser.parse_args()
 
 if args.beebasm and args.acme:
-    assert False # TODO: Proper error
+    utils.die("--beebasm and --acme arguments are incompatible")
 if args.lower and args.upper:
-    assert False # TODO: Proper error
+    utils.die("--lower and --upper arguments are incompatible")
 
 if args.acme:
     import acme
