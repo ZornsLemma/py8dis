@@ -142,7 +142,6 @@ class String(object):
                 if c == ord('"'):
                     s += "'\"'"
                 else:
-                    # TODO: Maybe don't allow for expressions here?
                     s += get_constant8(addr + i)
             if len(s) > (config.inline_comment_column() - 5):
                 if state == 1:
@@ -181,30 +180,29 @@ def get_address8(addr):
 
 def get_address16(addr):
     operand = utils.get_u16(addr)
-    # TODO: Not entirely sure if it's a good idea to handle 16-bit expressions like this. Should we at a minimum assert a Word is used to classify this address?
     if addr not in expressions:
         return disassembly.get_label(operand)
+    assert isinstance(disassembly.get_classification(addr), Word)
     return get_expression(addr, operand)
 
-# TODO: Rename terminator_is_data to terminator_part_of_string?
-def stringterm(addr, terminator, terminator_is_data=False):
+def stringterm(addr, terminator, exclude_terminator=False):
     initial_addr = addr
     while True:
         if memory[addr] == terminator:
             break
         addr += 1
     string_length = (addr + 1) - initial_addr
-    if terminator_is_data:
+    if exclude_terminator:
         string_length -= 1
     if string_length > 0:
         disassembly.add_classification(initial_addr, String(string_length, False))
     return addr + 1
 
-def stringcr(addr, terminator_is_data=False):
-    return stringterm(addr, 13, terminator_is_data)
+def stringcr(addr, exclude_terminator=False):
+    return stringterm(addr, 13, exclude_terminator)
 
-def stringz(addr, terminator_is_data=False):
-    return stringterm(addr, 0, terminator_is_data)
+def stringz(addr, exclude_terminator=False):
+    return stringterm(addr, 0, exclude_terminator)
 
 def string(addr, n=None):
     if n is None:

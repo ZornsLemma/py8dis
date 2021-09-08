@@ -1,5 +1,3 @@
-# TODO: RENAME THIS FILE? MAYBE SPLIT OFF THE MORE DISASSEMBLERY NOT-REALLY-CONFIG THINGS?
-
 memory = [None] * 64*1024
 _disassembly_range = [None, None]
 
