@@ -244,11 +244,7 @@ def stringhiz(addr):
 
 def autostring(min_length=3):
     assert min_length >= 2
-    # TODO: Next 2/4 lines appear quite often - perhaps have a disassembly_range() function on config which returns both of these and also does the asserts?
-    start_addr = config.disassembly_range[0]
-    end_addr = config.disassembly_range[1]
-    assert start_addr is not None
-    assert end_addr is not None
+    start_addr, end_addr = config.disassembly_range()
     for i in range(0, (end_addr - min_length) - start_addr):
         if not disassembly.is_classified(start_addr + i,  min_length):
             n = 0
@@ -259,10 +255,7 @@ def autostring(min_length=3):
 
 
 def finalise():
-    start_addr = config.disassembly_range[0]
-    end_addr = config.disassembly_range[1]
-    assert start_addr is not None
-    assert end_addr is not None
+    start_addr, end_addr = config.disassembly_range()
 
     addr = start_addr
     while addr < end_addr:

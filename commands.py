@@ -20,7 +20,7 @@ import utils
 memory = config.memory
 
 def load(addr, filename, md5sum=None):
-    if config.disassembly_range[0] is not None:
+    if config.disassembly_range(allow_none=True)[0] is not None:
         utils.die("load() can only be used once")
     with open(filename, "rb") as f:
         data = bytearray(f.read())
@@ -33,8 +33,7 @@ def load(addr, filename, md5sum=None):
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    config.disassembly_range[0] = addr
-    config.disassembly_range[1] = addr + len(data)
+    config.set_disassembly_range(addr, addr + len(data))
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -120,8 +119,7 @@ def go(final_steps=None, autostring_min_length=3):
             autostring(autostring_min_length)
     final_steps()
     classification.finalise()
-    start_addr = config.disassembly_range[0]
-    end_addr = config.disassembly_range[1]
+    start_addr, end_addr = config.disassembly_range()
     disassembly.emit(start_addr, end_addr)
 
 parser = argparse.ArgumentParser()

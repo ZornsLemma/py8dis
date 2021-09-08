@@ -377,10 +377,7 @@ def disassemble_instruction(addr):
     return opcode.disassemble(addr)
 
 def trace():
-    start_addr = config.disassembly_range[0]
-    end_addr = config.disassembly_range[1]
-    assert start_addr is not None
-    assert end_addr is not None
+    start_addr, end_addr = config.disassembly_range()
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)
         if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:

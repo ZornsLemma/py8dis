@@ -1,7 +1,7 @@
 # TODO: RENAME THIS FILE? MAYBE SPLIT OFF THE MORE DISASSEMBLERY NOT-REALLY-CONFIG THINGS?
 
 memory = [None] * 64*1024
-disassembly_range = [None, None]
+_disassembly_range = [None, None]
 
 _formatter = None
 _lower_case = True
@@ -9,6 +9,17 @@ _bytes_as_ascii = True
 _hex_dump = True
 
 _inline_comment_column = 60
+
+def disassembly_range(allow_none=False):
+    assert allow_none or _disassembly_range[0] is not None
+    assert allow_none or _disassembly_range[1] is not None
+    return _disassembly_range
+
+def set_disassembly_range(start, end):
+    assert start is not None
+    assert end is not None
+    global _disassembly_range
+    _disassembly_range = (start, end)
 
 def formatter():
     return _formatter
