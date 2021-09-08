@@ -4,6 +4,11 @@ import copy
 
 import config
 
+# We assign this to elements of classification which are for second and
+# subequent bytes of a multi-byte classifcation. Its value doesn't really
+# matter, as long as it's not None so we know these bytes have been classified.
+partial_classification = 0
+
 def add_comment(addr, text):
     annotations[addr].append(Comment(text))
 
@@ -52,7 +57,7 @@ def add_classification(addr, classification):
     assert not is_classified(addr, classification.length())
     classifications[addr] = classification
     for i in range(1, classification.length()):
-        classifications[addr+i] = 0 # TODO: slightly ugly dummy value
+        classifications[addr+i] = partial_classification
 
 def get_classification(addr):
     return classifications[addr]
@@ -66,7 +71,7 @@ def merge_classifications(start_addr, end_addr):
             while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_mergeable():
                 addr2_length = classifications[addr2].length()
                 classifications[addr].set_length(classifications[addr].length() + addr2_length)
-                classifications[addr2] = 0 # TODO: slightly ugly dummy value
+                classifications[addr2] = partial_classification
                 addr2 += addr2_length
         addr += classifications[addr].length()
 
