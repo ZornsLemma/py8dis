@@ -107,7 +107,7 @@ def emit(start_addr, end_addr):
         if addr < start_addr or addr >= end_addr:
             for annotation in sorted_annotations(annotations[addr]):
                 if isinstance(annotation, Label):
-                    annotation.emit_assignment()
+                    print(annotation.as_string_assignment())
                     sep = "\n"
     print(sep, end="")
 
@@ -123,7 +123,7 @@ def emit(start_addr, end_addr):
             for annotation in sorted_annotations(annotations[addr + i]):
                 pending_annotations.append(annotation.as_string(addr))
         for annotation in sorted_annotations(annotations[addr]):
-            annotation.emit(addr)
+            print(annotation.as_string(addr))
         for annotation in pending_annotations:
             print(annotation)
         # We can now emit the classification output.
@@ -139,9 +139,6 @@ class Label(object):
         self.addr = addr
         self.name = name
 
-    def emit(self, addr):
-        print(self.as_string(addr))
-
     def as_string(self, addr):
         formatter = config.formatter()
         offset = self.addr - addr
@@ -152,9 +149,9 @@ class Label(object):
             label = ensure_addr_labelled(addr)
             return formatter.explicit_label(self.name, label, offset)
 
-    def emit_assignment(self):
+    def as_string_assignment(self):
         formatter = config.formatter()
-        print(formatter.explicit_label(self.name, formatter.hex4(self.addr)))
+        return formatter.explicit_label(self.name, formatter.hex4(self.addr))
 
 
 class Comment(object):
@@ -162,10 +159,6 @@ class Comment(object):
 
     def __init__(self, text):
         self.text = text
-
-    # TODO: Do the emit() functions add any value any more or should callers just use as_string?
-    def emit(self, addr):
-        print(self.as_string(addr))
 
     def as_string(self, addr):
         formatter = config.formatter()
