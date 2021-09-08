@@ -78,8 +78,7 @@ def split_classifications(start_addr, end_addr):
         c = classifications[addr]
         if c.is_mergeable() and c.length() > 1:
             for i in range(1, c.length()):
-                # TODO: Does this need to ignore expr labels? We don't need to split for them.
-                if (addr + i) in labels:
+                if (addr + i) in labels and not is_expr_label[addr + i]:
                     classifications[addr + i] = copy.copy(c)
                     classifications[addr + i].set_length(c.length() - i)
                     c.set_length(i)
