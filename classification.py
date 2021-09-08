@@ -168,8 +168,6 @@ def get_expression(addr, expected_value):
     # the < and > operators to get the low and high bytes of a 16-bit word.
     return expression
 
-# TODO: Rename following three functions to make their expression-possibility more obvious
-
 def get_constant8(addr):
     if addr not in expressions:
         return formatter().hex2(memory[addr])
