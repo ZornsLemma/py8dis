@@ -78,12 +78,16 @@ def split_classifications(start_addr, end_addr):
         c = classifications[addr]
         if c.is_mergeable() and c.length() > 1:
             for i in range(1, c.length()):
+                # TODO: Does this need to ignore expr labels? We don't need to split for them.
                 if (addr + i) in labels:
                     classifications[addr + i] = copy.copy(c)
                     classifications[addr + i].set_length(c.length() - i)
                     c.set_length(i)
                     break
         addr += classifications[addr].length()
+
+def sorted_annotations(annotations):
+    return sorted(annotations, key=lambda x: x.priority)
 
 def emit(start_addr, end_addr):
     formatter = config.formatter()
@@ -123,8 +127,6 @@ def emit(start_addr, end_addr):
         addr += classification_length
     print(formatter.code_end())
 
-# TODO: Idea is below here is just implementation detail, perhaps prefix things e.g. class names with _
-
 
 class Label(object):
     priority = 1000
@@ -151,7 +153,6 @@ class Label(object):
         print(formatter.explicit_label(self.name, formatter.hex4(self.addr)))
 
 
-
 class Comment(object):
     priority = 0
 
@@ -166,9 +167,6 @@ class Comment(object):
         formatter = config.formatter()
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
 
-
-def sorted_annotations(annotations):
-    return sorted(annotations, key=lambda x: x.priority)
 
 # There is at most one classification for any address; in practice by the end of
 # disassembly there will be exactly one for all addresses in the target range,
