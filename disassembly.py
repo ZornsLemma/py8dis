@@ -178,11 +178,17 @@ class Comment(object):
 # "things in the assembler input which generate direct output", like instructions
 # or data.
 classifications = [None] * 64*1024
-# TODO: COMMENT
+
+# labels are named addresses which are used automatically when disassembling.
+# Some labels are expression labels and are defined in terms of other labels;
+# the expression is used directly to represent the address. Optional labels are
+# pruned away if they aren't used. Constants are named values which are not used
+# automatically, only when specifically indicated for a particular address.
 labels = {}
 is_expr_label = {}
 optional_labels = {}
 constants = []
+
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.
 # By using a list we preserve the relative order of additions; we do sort this
