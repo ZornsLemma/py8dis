@@ -16,7 +16,7 @@ def add_constant(value, name):
     constants.append((value, name))
 
 def add_label(addr, name, expr=False):
-    # TODO: die_rt() that addr is in 0-&ffff inclusive?
+    # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
     if addr not in labels:
@@ -139,17 +139,17 @@ class Label(object):
         self.addr = addr
         self.name = name
 
-    def emit(self, emit_addr):
-        print(self.as_string(emit_addr))
+    def emit(self, addr):
+        print(self.as_string(addr))
 
-    def as_string(self, emit_addr): # TODO: ARG IS MISNAMED NOW
+    def as_string(self, addr):
         formatter = config.formatter()
-        offset = self.addr - emit_addr
+        offset = self.addr - addr
         assert offset >= 0
         if offset == 0:
             return formatter.inline_label(self.name)
         else:
-            label = ensure_addr_labelled(emit_addr)
+            label = ensure_addr_labelled(addr)
             return formatter.explicit_label(self.name, label, offset)
 
     def emit_assignment(self):
@@ -164,10 +164,10 @@ class Comment(object):
         self.text = text
 
     # TODO: Do the emit() functions add any value any more or should callers just use as_string?
-    def emit(self, emit_addr):
-        print(self.as_string(emit_addr))
+    def emit(self, addr):
+        print(self.as_string(addr))
 
-    def as_string(self, emit_addr):
+    def as_string(self, addr):
         formatter = config.formatter()
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
 
