@@ -244,6 +244,7 @@ def stringhiz(addr):
 
 def autostring(min_length=3):
     assert min_length >= 2
+    # TODO: Next 2/4 lines appear quite often - perhaps have a disassembly_range() function on config which returns both of these and also does the asserts?
     start_addr = config.disassembly_range[0]
     end_addr = config.disassembly_range[1]
     assert start_addr is not None
@@ -257,22 +258,17 @@ def autostring(min_length=3):
                 string(start_addr + i, n)
 
 
-# TODO: Maybe move this into commands.py, perhaps inlining it as part of go()? Or perhaps it should be all in disassembly.emit???
-def emit2(): # TODO POOR NAME
+def finalise():
     start_addr = config.disassembly_range[0]
     end_addr = config.disassembly_range[1]
     assert start_addr is not None
     assert end_addr is not None
 
-    # TODO: Not sure if this "clean up" logic belongs here or not...
     addr = start_addr
     while addr < end_addr:
         if not disassembly.is_classified(addr, 1):
             disassembly.add_classification(addr, Byte(1))
         addr += disassembly.get_classification(addr).length()
 
-    # TODO: Not sure if this "clean up" logic belongs here or not...
     disassembly.merge_classifications(start_addr, end_addr)
     disassembly.split_classifications(start_addr, end_addr)
-
-    disassembly.emit(start_addr, end_addr)

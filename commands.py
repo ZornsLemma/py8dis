@@ -110,6 +110,7 @@ def code_ptr(addr, addr_high=None, offset=0):
 def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
+# TODO: Rename "final_steps"? We do some other stuff after it which isn't part of it (and which I don't want to be, as I want to do that other final stuff even if user supplies own final_steps)
 def go(final_steps=None, autostring_min_length=3):
     trace.trace()
     # autostring() really needs to be invoked after trace() has done its classification,
@@ -118,10 +119,10 @@ def go(final_steps=None, autostring_min_length=3):
         def final_steps():
             autostring(autostring_min_length)
     final_steps()
-    # TODO: Am kind of thinking emit2() should be renamed finalise() or something, and then
-    # this code should call disassembly.emit() after classification.emit2-renamed(), rather than classification.emit2() calling disassembly.emit()
-    classification.emit2()
-
+    classification.finalise()
+    start_addr = config.disassembly_range[0]
+    end_addr = config.disassembly_range[1]
+    disassembly.emit(start_addr, end_addr)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")
