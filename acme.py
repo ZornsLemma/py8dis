@@ -16,16 +16,19 @@ def set_output_filename(filename):
 def hex2(n):
     return "$%s" % utils.plainhex2(n)
 
+def hex(n):
+    if n <= 0xff:
+        return hex2(n)
+    else:
+        return "$%s" % utils.plainhex4(n)
+
 def hex4(n):
     # At least one version of acme doesn't like things like:
     #     L00A4 = $00A4
     #     LDA (L00A4),Y
     # because the label's value is defined with a four digit value, so we avoid
     # this unless it's necessary.
-    if n <= 0xff:
-        return hex2(n)
-    else:
-        return "$%s" % utils.plainhex4(n)
+    return hex(n)
 
 def inline_label(name):
     return "%s" % name

@@ -1,6 +1,7 @@
 from __future__ import print_function
 import collections
 import copy
+import six
 
 import config
 
@@ -30,7 +31,6 @@ def add_optional_label(addr, name, base_addr=None):
     assert base_addr is None or addr != base_addr
     optional_labels[addr] = (name, base_addr)
 
-# TODO: This could maybe just do ensure_addr_labelled()??? And then no longer expose that???
 def get_label(addr):
     assert addr in labels
     return labels[addr]
@@ -98,7 +98,8 @@ def emit(start_addr, end_addr):
 
     if len(constants) > 0:
         for value, name in sorted(constants, key=lambda x: x[0]):
-            # TODO: Are constants always numbers (not expressions)? Should we output them in hex?
+            if isinstance(value, six.integer_types):
+                value = formatter.hex(value)
             print(formatter.explicit_label(name, value))
         print()
 

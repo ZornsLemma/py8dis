@@ -21,6 +21,12 @@ def hex2(n):
 def hex4(n):
     return "&%s" % utils.plainhex4(n)
 
+def hex(n):
+    if n <= 0xff:
+        return hex2(n)
+    else:
+        return hex4(n)
+
 def inline_label(name):
     return ".%s" % name
 
