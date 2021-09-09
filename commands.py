@@ -14,8 +14,6 @@ from utils import get_u16, get_u16_be
 import classification
 import config
 import disassembly
-#TODOimport trace
-import trace6502 # TODO!?!?
 import utils
 
 memory = config.memory
