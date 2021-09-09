@@ -252,7 +252,7 @@ opcodes = {
     0x4a: OpcodeImplied("LSR A"),
     0x4c: OpcodeJmpAbs(),
     0x4d: OpcodeDataAbs("EOR"),
-    # TODO: 0x4e
+    0x4e: OpcodeDataAbs("LSR"),
     0x50: OpcodeConditionalBranch("BVC"),
     0x51: OpcodeZp("EOR", "),Y"),
     0x55: OpcodeZp("EOR", ",X"),
