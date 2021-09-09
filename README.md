@@ -47,4 +47,42 @@ When disassembling the byte at `addr`, use the string `s` instead of the literal
 
 **py8dis makes no attempt to verify that `s` actually does evaluate to the literal value of the byte at `addr`.** This might change in the future, but for now, careless use of expr() can cause py8dis to generate output which will not correctly re-assemble into its input.
 
+`expr_label(addr, s)`
+
+TODO
+
+`comment(addr, text)`
+
+Include `text` as a comment at address `addr` in the disassembly.
+
+`byte(addr, n=1)`
+
+Mark `n` bytes at address `addr` as byte data.
+
+`word(addr, n=1)`
+
+Mark 2*`n` bytes at address `addr` as (16-bit little-endian) word data.
+
+`entry(addr, label=None)`
+
+TODO
+
+`wordentry(addr, n=1)`
+
+TODO
+
+`stringhi_hook(target, addr)`
+`stringcr_hook(target, addr)`
+`stringz_hook(target, addr)`
+
+Wrappers around `stringhi`, `stringcr` and `stringz` respectively for use with `hook_subroutine()`.
+
+`code_ptr(addr, addr_high=None, offset=0)`
+
+TODO
+
+`rts_code_ptr(addr, addr_high=None)`
+
+Like `code_ptr`, but with `offset` set to 1. This is intended for use with jump table entries which are pushed onto the stack and control transferred using `RTS`, which jumps to an address one greater than the address on the stack.
+
 TODO: DOCUMENT ALL OF THEM
