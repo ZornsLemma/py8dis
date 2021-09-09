@@ -8,7 +8,7 @@ load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 set_output_filename("anfs418.rom")
 
 acorn.add_standard_labels()
-acorn.is_sideways_rom() # TODO: rename?
+acorn.is_sideways_rom()
 
 constant(0x01, "service_claim_absolute_workspace")
 constant(0x0f, "service_vectors_changed")

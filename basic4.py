@@ -6,7 +6,7 @@ load(0x8000, "basic4.orig", "e11eed95d1caba8aa9772e9001590585")
 set_output_filename("basic4.rom")
 
 acorn.add_standard_labels()
-acorn.is_sideways_rom() # TODO: rename?
+acorn.is_sideways_rom()
 
 wordentry(0x8826, 121) # XXX: table size is a guess
 
