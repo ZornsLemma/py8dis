@@ -74,7 +74,9 @@ Interpret the 2*`n` bytes at address `addr` as (16-bit little endian) words whic
 TODO
 
 `stringhi_hook(target, addr)`
+
 `stringcr_hook(target, addr)`
+
 `stringz_hook(target, addr)`
 
 Wrappers around `stringhi`, `stringcr` and `stringz` respectively for use with `hook_subroutine()`.
