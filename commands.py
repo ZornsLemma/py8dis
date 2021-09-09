@@ -73,6 +73,12 @@ def word(addr, n=1):
 def entry(addr, label=None):
     return add_entry(addr, label)
 
+def wordentry(addr, n=1):
+    word(addr, n)
+    for i in range(n):
+        expr(addr, entry(get_u16(addr)))
+        addr += 2
+
 def stringhi_hook(target, addr):
     return stringhi(addr + 3)
 

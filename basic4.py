@@ -8,12 +8,7 @@ set_output_filename("basic4.rom")
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?
 
-for i in range(2): # TODO RANGE
-    addr = 0x8826 + i*2
-    # TODO: standard command fn for next two lines together?
-    word(addr)
-    expr(addr, entry(get_u16(addr)))
-
+wordentry(0x8826, 2) # TODO RANGE
 
 trace65c02.trace()
 go() # TODO: rename if we keep trace() outside
