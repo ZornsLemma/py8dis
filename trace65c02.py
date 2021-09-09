@@ -14,6 +14,18 @@ class OpcodeUnconditionalBranch(Opcode):
         return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr)))
 
 
+class OpcodeJmpAbsX(OpcodeAbs):
+    def __init__(self):
+        super(OpcodeJmpAbsX, self).__init__("JMP", ",X)")
+
+    def has_zp_version(self):
+        return False
+
+    def disassemble(self, addr):
+        disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
+        return [None]
+
+
 # TODO: MAKE SURE THIS IS COMPLETE
 opcodes.update({
     0x04: OpcodeZp("TSB"),
@@ -23,6 +35,7 @@ opcodes.update({
     0x5a: OpcodeImplied("PHY"),
     0x64: OpcodeZp("STZ"),
     0x7a: OpcodeImplied("PLY"),
+    0x7c: OpcodeJmpAbsX(),
     0x80: OpcodeUnconditionalBranch("BRA"),
     0x92: OpcodeZp("STA", ")"),
     0x9c: OpcodeDataAbs("STZ"),
