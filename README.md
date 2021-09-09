@@ -13,8 +13,6 @@ Although the whole point of py8dis is that it's programmable/user-extendable, st
 
 TODO: PUT THESE IN ALPHABETICAL ORDER?
 
-TODO: DESCRIBE A CONVENTION FOR INDICATING RETURN VALUE IF ANY - I SUSPECT I WILL WRITE "-> FOO" IF THERE IS AN INTERESTING RETURN VALUE AND OMIT THIS IF THERE ISN'T
-
 `load(addr, filename, md5sum=None)`
 
 Load the contents of `filename` into the disassembler's memory at address `addr`. If the optional `md5sum` argument is provided, disassembly will fail if the md5sum of `filename`'s contents doesn't match; this allows you to detect if a disassembly is being used against a different version of a program by accident.
@@ -83,16 +81,48 @@ Wrappers around `stringhi`, `stringcr` and `stringz` respectively for use with `
 
 `code_ptr(addr, addr_high=None, offset=0)`
 
-TODO
+Mark the 16-bit value whose low byte is at `addr` and whose high byte is at `addr_high` (or `addr`+1 if `addr_high` is None) as an address of a subroutine minus `offset`. This is a more general form of `wordentry()` which doesn't assume the data in memory is stored as a 16-bit little-endian word and is the exact address of the subroutine, so it can be used to handle things like jump tables split into separate high and low byte tables. `code_ptr(addr)` and `wordentry(addr)` are equivalent.
 
 `rts_code_ptr(addr, addr_high=None)`
 
-Like `code_ptr`, but with `offset` set to 1. This is intended for use with jump table entries which are pushed onto the stack and control transferred using `RTS`, which jumps to an address one greater than the address on the stack.
+Syntactic sugar for `code_ptr(..., offset=1)`. This is intended for use with jump table entries which are used by pushing them onto the stack and executing `RTS`.
 
 `trace6502.hook_subroutine(addr, name, hook)`
 
 TODO
 
-TODO: the ones imported at top of commands.py
+`string(addr, n=None)`
 
-TODO: DOCUMENT ALL OF THEM
+If `n` is `None`, mark all the consecutive printable ASCII characters (32-126) at `addr` as a string. If `n` is not `None`, mark the `n` bytes at `addr` as a string. Returns the address of the first byte not marked as a string.
+
+`stringterm(addr, terminator, exclude_terminator=False)`
+
+Search forward from `addr` until `terminator` is found and mark those bytes as a string; `exclude_terminator` controls whether `terminator` is considered part of the string or not. Returns the address of the first byte after the terminator.
+
+`stringcr(addr, exclude_terminator=False)`
+
+`stringz(addr, exclude_terminator=False)`
+
+Syntactic sugar for calling `stringterm()` with `terminator` set to 13 or 0, respectively.
+
+`stringhi(addr)`
+
+Search forward from `addr` until a top-bit-set byte is found and mark the bytes from `addr` up to but not including the top-bit-set byte as a string. Returns the address of the top-bit-set byte.
+
+`stringhiz(addr)`
+
+Search forward from `addr` until a top-bit-set byte or a 0 byte is found and mark the byte from `addr` up to but not including that terminator as a string. Returns the address of the terminator.
+
+`get_label(addr)`
+
+Returns the label associated with address `addr`; it is an error to call this function if there is no such label.
+
+TODO
+
+`get_u16(addr)`
+
+Returns the unsigned little-endian 16-bit word at address `addr`.
+
+`get_u16_be`
+
+Returns the unsigned big-endian 16-bit word at address `addr`.
