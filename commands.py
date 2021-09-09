@@ -37,7 +37,10 @@ def load(addr, filename, md5sum=None):
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
 # longer names in core disassembler code.
 
-# TODO: Swap arguments round to match usual "foo = 4" syntax? But everything else takes address first...
+# ENHANCE: This is "backwards" - in assembler input you'd write "name = value",
+# not "value = name". Should I change it? But it does feel consistent-ish with
+# things like label() taking the "value" as the first argument and it feels
+# right that they use that order.
 def constant(value, name):
     disassembly.add_constant(value, name)
 
