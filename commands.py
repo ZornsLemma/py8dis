@@ -14,6 +14,7 @@ from utils import get_u16, get_u16_be
 import classification
 import config
 import disassembly
+import trace
 import utils
 
 memory = config.memory
@@ -117,7 +118,7 @@ def rts_code_ptr(addr, addr_high=None):
 
 # TODO: Rename "final_steps"? We do some other stuff after it which isn't part of it (and which I don't want to be, as I want to do that other final stuff even if user supplies own final_steps)
 def go(final_steps=None, autostring_min_length=3):
-    config.trace()()
+    trace.trace()
     # autostring() really needs to be invoked after trace() has done its classification,
     # so we wrap it up in here by default rather than expecting the user to call it.
     if final_steps is None:

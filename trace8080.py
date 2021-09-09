@@ -74,7 +74,6 @@ opcodes = {
 }
 
 
-# TODO: We don't really want to be duplicating the next two functions
 def disassemble_instruction(addr):
     assert not disassembly.is_classified(addr, 1)
     opcode_value = memory[addr]
@@ -89,27 +88,4 @@ def disassemble_instruction(addr):
     disassembly.add_classification(addr, opcode)
     return opcode.disassemble(addr)
 
-def trace():
-    start_addr, end_addr = config.disassembly_range()
-    while len(entry_points) > 0:
-        entry_point = entry_points.pop(0)
-        if not disassembly.is_classified(entry_point, 1) and start_addr <= entry_point < end_addr:
-            #print(hex(entry_point))
-            new_entry_points = disassemble_instruction(entry_point)
-            # The first element of new_entry_points is the implicit next
-            # instruction (if there is one; it might be None) which is handled
-            # slightly differently, as it *isn't* automatically assigned a
-            # label.
-            assert len(new_entry_points) >= 1
-            implied_entry_point = new_entry_points.pop(0)
-            if implied_entry_point is not None:
-                entry_points.append(implied_entry_point)
-            for new_entry_point in new_entry_points:
-                add_entry(new_entry_point)
-
-# ENHANCE: I can't help thinking entry_points and its associated functions
-# belong in here, but I won't move them now as I think it would be clearer where
-# they should live when/if other CPUs are supported and "core" tracing is split
-# out from CPU-specific tracing.
-
-config.set_trace(trace)
+config.set_disassemble_instruction(disassemble_instruction)
