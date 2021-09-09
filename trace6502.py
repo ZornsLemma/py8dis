@@ -218,8 +218,8 @@ opcodes = {
     0x0e: OpcodeDataAbs("ASL"),
     0x10: OpcodeConditionalBranch("BPL"),
     0x11: OpcodeZp("ORA", "),Y"),
-    # TODO: 0x15
-    # TODO: 0x16
+    0x15: OpcodeZp("ORA", ",X"),
+    0x16: OpcodeZp("ASL", ",X"),
     0x18: OpcodeImplied("CLC"),
     0x19: OpcodeDataAbs("ORA", ",Y"),
     0x1d: OpcodeDataAbs("ORA", ",X"),
@@ -238,7 +238,7 @@ opcodes = {
     0x30: OpcodeConditionalBranch("BMI"),
     0x31: OpcodeZp("AND", "),Y"),
     # TODO: 0x35
-    # TODO: 0x36
+    0x36: OpcodeZp("ROL", ",X"),
     0x38: OpcodeImplied("SEC"),
     0x39: OpcodeDataAbs("AND", ",Y"),
     0x3d: OpcodeDataAbs("AND", ",X"),
@@ -273,7 +273,7 @@ opcodes = {
     0x6e: OpcodeDataAbs("ROR"),
     0x70: OpcodeConditionalBranch("BVS"),
     0x71: OpcodeZp("ADC", "),Y"),
-    # TODO: 0x75
+    0x75: OpcodeZp("ADC", ",X"),
     # TODO: 0x76
     0x78: OpcodeImplied("SEI"),
     0x79: OpcodeDataAbs("ADC", ",Y"),
@@ -292,7 +292,7 @@ opcodes = {
     0x91: OpcodeZp("STA", "),Y"),
     # TODO: 0x94
     0x95: OpcodeZp("STA", ",X"),
-    # TODO: 0x96
+    0x96: OpcodeZp("STX", ",Y"),
     0x98: OpcodeImplied("TYA"),
     0x99: OpcodeDataAbs("STA", ",Y"),
     0x9a: OpcodeImplied("TXS"),

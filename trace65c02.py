@@ -34,6 +34,8 @@ opcodes.update({
     0x3a: OpcodeImplied("DEC A"),
     0x5a: OpcodeImplied("PHY"),
     0x64: OpcodeZp("STZ"),
+    0x72: OpcodeZp("ADC", ")"),
+    0x74: OpcodeZp("STZ", ",X"),
     0x7a: OpcodeImplied("PLY"),
     0x7c: OpcodeJmpAbsX(),
     0x80: OpcodeUnconditionalBranch("BRA"),
@@ -42,4 +44,5 @@ opcodes.update({
     0xb2: OpcodeZp("LDA", ")"),
     0xd2: OpcodeZp("CMP", ")"),
     0xda: OpcodeImplied("PHX"),
+    0xfa: OpcodeImplied("PLX"),
 })
