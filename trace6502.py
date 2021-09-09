@@ -12,7 +12,7 @@ def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
     jsr_hooks[addr] = hook
 
-def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
+def hook_subroutine(addr, name, hook):
     trace.add_entry(addr, name)
     add_jsr_hook(addr, hook)
 

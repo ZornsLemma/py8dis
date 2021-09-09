@@ -1,5 +1,3 @@
-# TODO: Rename this file? Perhaps core.py??? or py8dis.py?
-
 import argparse
 
 # These functions/objects are directly exposed to the user.

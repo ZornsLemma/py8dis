@@ -19,4 +19,4 @@ wordentry(0x8826, 121) # XXX: table size is a guess
 # OS errors without letting autostring() do it - it's not a big deal, but it
 # can interpret error codes as ASCII.
 
-go() # TODO: rename if we keep trace() outside
+go()

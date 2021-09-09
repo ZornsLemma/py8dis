@@ -8,4 +8,4 @@ config.set_disassembly_range(0x1000, 0x1000 + len(code))
 
 entry(0x1000)
 
-go() # TODO: rename if we keep trace() outside
+go()
