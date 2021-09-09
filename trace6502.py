@@ -1,5 +1,3 @@
-# TODO: Rename trace6502? And perhaps have a trace65c02 which builds on that but adds CMOS instructions?
-
 import config
 import classification
 import config
