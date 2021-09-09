@@ -18,9 +18,15 @@ class OpcodeUnconditionalBranch(Opcode):
 opcodes.update({
     0x04: OpcodeZp("TSB"),
     0x14: OpcodeZp("TRB"),
+    0x1a: OpcodeImplied("INC A"),
     0x3a: OpcodeImplied("DEC A"),
+    0x5a: OpcodeImplied("PHY"),
     0x64: OpcodeZp("STZ"),
+    0x7a: OpcodeImplied("PLY"),
     0x80: OpcodeUnconditionalBranch("BRA"),
+    0x92: OpcodeZp("STA", ")"),
     0x9c: OpcodeDataAbs("STZ"),
     0xb2: OpcodeZp("LDA", ")"),
+    0xd2: OpcodeZp("CMP", ")"),
+    0xda: OpcodeImplied("PHX"),
 })
