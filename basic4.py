@@ -8,7 +8,6 @@ set_output_filename("basic4.rom")
 acorn.label_os_entry_points() # TODO: label_os_api()?
 acorn.is_sideways_rom() # TODO: rename?
 
-wordentry(0x8826, 2) # TODO RANGE
+wordentry(0x8826, 123) # XXX: 123 is a guess
 
-trace65c02.trace()
 go() # TODO: rename if we keep trace() outside

@@ -78,6 +78,7 @@ def wordentry(addr, n=1):
     for i in range(n):
         expr(addr, entry(get_u16(addr)))
         addr += 2
+    return addr
 
 def stringhi_hook(target, addr):
     return stringhi(addr + 3)
