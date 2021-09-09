@@ -206,6 +206,7 @@ class OpcodeConditionalBranch(Opcode):
 
 # TODO: May want to allow 6502 or 65C02 opcode set to be selectable
 opcodes = {
+    0x00: OpcodeReturn("BRK"),
     # TODO: 0x00
     # TODO: 0x01
     0x05: OpcodeZp("ORA"),
