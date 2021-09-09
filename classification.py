@@ -87,7 +87,7 @@ class Word(object):
     def emit(self, addr):
         # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
         # should probably all be cleaned up and factored out.
-        data = list(get_address16(addr + i) for i in range(0, self._length, 2))
+        data = list(get_constant16(addr + i) for i in range(0, self._length, 2))
         longest_item = max(len(x) for x in data)
         available_width = config.inline_comment_column() - 10
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
@@ -171,6 +171,11 @@ def get_constant8(addr):
     if addr not in expressions:
         return formatter().hex2(memory[addr])
     return get_expression(addr, memory[addr])
+
+def get_constant16(addr):
+    if addr not in expressions:
+        return formatter().hex4(utils.get_u16(addr))
+    return get_expression(addr, utils.get_u16(addr))
 
 def get_address8(addr):
     operand = memory[addr]
