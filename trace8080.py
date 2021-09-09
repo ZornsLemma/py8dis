@@ -6,7 +6,6 @@ import config
 import classification
 import config
 import disassembly
-from trace import * # TODO!?
 import utils
 
 memory = config.memory

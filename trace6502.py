@@ -2,7 +2,7 @@ import config
 import classification
 import config
 import disassembly
-from trace import * # TODO!?
+import trace
 import utils
 
 memory = config.memory
@@ -13,7 +13,7 @@ def add_jsr_hook(addr, hook):
     jsr_hooks[addr] = hook
 
 def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
-    add_entry(addr, name)
+    trace.add_entry(addr, name)
     add_jsr_hook(addr, hook)
 
 def signed8(i):
@@ -369,10 +369,5 @@ def disassemble_instruction(addr):
     # have.
     disassembly.add_classification(addr, opcode)
     return opcode.disassemble(addr)
-
-# ENHANCE: I can't help thinking entry_points and its associated functions
-# belong in here, but I won't move them now as I think it would be clearer where
-# they should live when/if other CPUs are supported and "core" tracing is split
-# out from CPU-specific tracing. TODO: Has this already been changed? Review comment.
 
 config.set_disassemble_instruction(disassemble_instruction)
