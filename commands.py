@@ -1,8 +1,8 @@
 import argparse
 
 # These functions/objects are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, autostring # TODO: get rid of stuff in this list which isn't directly user-exposed
-from disassembly import get_label # TODO: not too sure about exposing this
+from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz
+from disassembly import get_label
 from trace import add_entry
 from utils import get_u16, get_u16_be
 
@@ -121,7 +121,7 @@ def go(final_steps=None, autostring_min_length=3):
     # so we wrap it up in here by default rather than expecting the user to call it.
     if final_steps is None:
         def final_steps():
-            autostring(autostring_min_length)
+            classification.autostring(autostring_min_length)
     final_steps()
     classification.finalise()
     start_addr, end_addr = config.disassembly_range()
