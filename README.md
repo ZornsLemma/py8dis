@@ -2,7 +2,7 @@
 
 ## Table of contents
 - [Overview](#overview)
-- [Command/function reference](#command-function-reference)
+- [Command/function reference](#commandfunction-reference)
 
 ## Overview
 
