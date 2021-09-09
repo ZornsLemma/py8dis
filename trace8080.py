@@ -11,18 +11,6 @@ import utils
 
 memory = config.memory
 
-# TODO: DELETE THESE?
-def signed8(i):
-    assert 0 <= i <= 255
-    if i >= 0x80:
-        return i - 256
-    else:
-        return i
-
-def get_u8(i):
-    assert memory[i] is not None
-    return memory[i]
-
 
 class Opcode(object):
     def __init__(self, mnemonic, operand_length, suffix = None):
@@ -59,20 +47,30 @@ class OpcodeImplied(Opcode):
 
 class OpcodeConditionalBranch(Opcode):
     def __init__(self, mnemonic):
-        super(OpcodeConditionalBranch, self).__init__(mnemonic, 1)
+        super(OpcodeConditionalBranch, self).__init__(mnemonic, 2)
 
     def _target(self, addr):
-        return addr + 2 + signed8(get_u8(addr + 1))
+        return utils.get_u16(addr + 1)
 
     def disassemble(self, addr):
-        return [addr + 2, self._target(addr)]
+        return [addr + 3, self._target(addr)]
 
     def as_string(self, addr):
         return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr)))
 
 
 opcodes = {
+    0x0b: OpcodeImplied("DCX B"),
+    0x13: OpcodeImplied("INX D"),
+    0x23: OpcodeImplied("INX H"),
+    0x1a: OpcodeImplied("LDAX D"),
+    0x77: OpcodeImplied("MOV M,A"),
+    0x78: OpcodeImplied("MOV A, B"),
     0x78: OpcodeImplied("MOV A,B"),
+    0xb1: OpcodeImplied("ORA C"),
+    0xc2: OpcodeConditionalBranch("JNZ"),
+    0xc8: OpcodeImplied("RZ"),
+    0xc9: OpcodeImplied("RET"),
 }
 
 
