@@ -26,12 +26,23 @@ class OpcodeJmpAbsX(OpcodeAbs):
         return [None]
 
 
-# TODO: MAKE SURE THIS IS COMPLETE
+# ENHANCE: On a 65C02 undefined opcodes are guaranteed to be NOPs of varying
+# lengths. These are *not* implemented here, since most code probably won't be
+# executing them and it's probably better to reduce the chances of arbitrary
+# data being traced as code. All the same, it might be nice to allow the user to
+# opt in to disassembling these.
 opcodes.update({
     0x04: OpcodeZp("TSB"),
+    # TODO: 0x0c
+    # TODO: 0x12
     0x14: OpcodeZp("TRB"),
     0x1a: OpcodeImplied("INC A"),
+    # TODO: 0x1c
+    # TODO: 0x32
+    # TODO: 0x34
+    # TODO: 0x3c
     0x3a: OpcodeImplied("DEC A"),
+    # TODO: 0x52
     0x5a: OpcodeImplied("PHY"),
     0x64: OpcodeZp("STZ"),
     0x72: OpcodeZp("ADC", ")"),
@@ -46,5 +57,6 @@ opcodes.update({
     0xb2: OpcodeZp("LDA", ")"),
     0xd2: OpcodeZp("CMP", ")"),
     0xda: OpcodeImplied("PHX"),
+    # TODO: 0xf2
     0xfa: OpcodeImplied("PLX"),
 })
