@@ -74,6 +74,7 @@ opcodes = {
 }
 
 
+# TODO: We don't really want to be duplicating the next two functions
 def disassemble_instruction(addr):
     assert not disassembly.is_classified(addr, 1)
     opcode_value = memory[addr]
