@@ -114,15 +114,14 @@ def code_ptr(addr, addr_high=None, offset=0):
 def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
-# TODO: Rename "final_steps"? We do some other stuff after it which isn't part of it (and which I don't want to be, as I want to do that other final stuff even if user supplies own final_steps)
-def go(final_steps=None, autostring_min_length=3):
+def go(post_trace_steps=None, autostring_min_length=3):
     trace.trace()
     # autostring() really needs to be invoked after trace() has done its classification,
     # so we wrap it up in here by default rather than expecting the user to call it.
-    if final_steps is None:
-        def final_steps():
+    if post_trace_steps is None:
+        def post_trace_steps():
             classification.autostring(autostring_min_length)
-    final_steps()
+    post_trace_steps()
     classification.finalise()
     start_addr, end_addr = config.disassembly_range()
     disassembly.emit(start_addr, end_addr)

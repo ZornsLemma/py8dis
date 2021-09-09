@@ -1,9 +1,8 @@
 from commands import *
 import utils
 
-# TODO: Rename now it's not pure entry points
 # ENHANCE: Split this up somehow into "tube or host" and "just host"?
-def label_os_entry_points():
+def add_standard_labels():
     optional_label(0x00f2, "os_text_ptr")
     optional_label(0x00f4, "romsel_copy")
     optional_label(0x00f6, "osrdsc_ptr")

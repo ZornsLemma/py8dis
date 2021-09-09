@@ -7,7 +7,7 @@ import acorn
 load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 set_output_filename("anfs418.rom")
 
-acorn.label_os_entry_points() # TODO: label_os_api()?
+acorn.add_standard_labels()
 acorn.is_sideways_rom() # TODO: rename?
 
 constant(0x01, "service_claim_absolute_workspace")
