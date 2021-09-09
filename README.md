@@ -49,7 +49,7 @@ When disassembling the byte at `addr`, use the string `s` instead of the literal
 
 `expr_label(addr, s)`
 
-TODO
+Associate expression `s` with address `addr`; any reference to `addr` as an instruction operand when disassembling will be replaced with `s`. **py8dis does not currently verify that `s` evaluates to `addr`**; see `expr()` for more on the possible consequences.
 
 `comment(addr, text)`
 
@@ -88,5 +88,9 @@ TODO
 `rts_code_ptr(addr, addr_high=None)`
 
 Like `code_ptr`, but with `offset` set to 1. This is intended for use with jump table entries which are pushed onto the stack and control transferred using `RTS`, which jumps to an address one greater than the address on the stack.
+
+`trace6502.hook_subroutine(addr, name, hook)`
+
+TODO
 
 TODO: DOCUMENT ALL OF THEM

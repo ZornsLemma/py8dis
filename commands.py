@@ -150,3 +150,5 @@ if args.upper:
     config.set_lower_case(False)
 else:
     config.set_lower_case(True)
+
+# TODO: Move stuff into subdirectories in repo
