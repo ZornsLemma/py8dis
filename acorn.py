@@ -1,9 +1,8 @@
 from commands import *
 import utils
 
-# TODO: Do this automatically just from "import acorn"?
 # TODO: Rename now it's not pure entry points
-# TODO: Split this up somehow into "tube or host" and "just host"?
+# ENHANCE: Split this up somehow into "tube or host" and "just host"?
 def label_os_entry_points():
     optional_label(0x00f2, "os_text_ptr")
     optional_label(0x00f4, "romsel_copy")
