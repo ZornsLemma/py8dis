@@ -1,13 +1,14 @@
 # py8dis
 
 ## Table of contents
-TODO
+- [Overview](#overview)
+- [Command/function reference](#command-function-reference)
 
 ## Overview
 
 TODO
 
-## Command reference
+## Command/function reference
 
 Although the whole point of py8dis is that it's programmable/user-extendable, standard Python functions are provided for common disassembly tasks. If these don't do quite what you want, you can always copy them and tweak the definitions; alternatively, feature requests or submissions of new "standard" functions to add are welcome.
 
@@ -27,7 +28,7 @@ Labels defined with `label` are always included in the disassembly even if they'
 
 `optional_label(addr, name)`
 
-This is like `label`, but the disassembly will omit the label if it isn't referenced. This is intended for use in re-usable library functions like `acorn.TODOWHATEVEROSAPIFNISCALLED`; if an OS entry point or special memory address is used in the code it's good to have it referred to by a recognisable name, but it's not good to bloat the disassembly with labels for perhaps hundreds of special addresses that aren't used.
+This is like `label`, but the disassembly will omit the label if it isn't referenced. This is intended for use in re-usable library functions like `acorn.add_standard_labels`; if an OS entry point or special memory address is used in the code it's good to have it referred to by a recognisable name, but it's not good to bloat the disassembly with labels for perhaps hundreds of special addresses that aren't used.
 
 `constant(value, name)`
 
@@ -105,9 +106,11 @@ Syntactic sugar for `code_ptr(..., offset=1)`. This is intended for use with jum
 
 ### Modifying the tracing process
 
-`trace6502.hook_subroutine(addr, name, hook)`
+`trace6502.hook_subroutine(subroutine_addr, name, hook)`
 
-TODO
+Tell the instruction tracing code that `JSR subroutine_addr` will not necessarily return control to the instruction immediately following the `JSR`. When a `JSR subroutine_addr` instruction is disassembled, `hook(subroutine_addr, address of JSR instruction being disassembled)` will be called and the return value will be used as the implicit next instruction. The hook may return `None` to indicate there is no implicit return address, and it may call `entry` to indicate other return addresses.
+
+`name` is used to label `subroutine_addr`, exactly as if `entry(subroutine_addr, name)` were called.
 
 `stringhi_hook(target, addr)`
 
@@ -115,7 +118,7 @@ TODO
 
 `stringz_hook(target, addr)`
 
-Wrappers around `stringhi`, `stringcr` and `stringz` respectively for use with `hook_subroutine`.
+Wrappers around `stringhi`, `stringcr` and `stringz` respectively for use with `hook_subroutine`; these can be used for the common situation where a subroutine is used to print an inline string immediately following the `JSR`.
 
 ### Miscellaneous
 
