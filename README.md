@@ -93,4 +93,6 @@ Like `code_ptr`, but with `offset` set to 1. This is intended for use with jump 
 
 TODO
 
+TODO: the ones imported at top of commands.py
+
 TODO: DOCUMENT ALL OF THEM
