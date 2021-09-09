@@ -65,9 +65,11 @@ Mark 2*`n` bytes at address `addr` as (16-bit little-endian) word data.
 
 `entry(addr, label=None)`
 
-TODO
+Include `addr` in the list of addresses to start tracing instructions at. If specified, `label` will be attached to `addr`; this is just a convenience to save needing to call `label()` explicitly.
 
 `wordentry(addr, n=1)`
+
+Interpret the 2*`n` bytes at address `addr` as (16-bit little endian) words which are the addresses of subroutines.
 
 TODO
 

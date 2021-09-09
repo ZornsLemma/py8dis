@@ -86,6 +86,7 @@ def stringcr_hook(target, addr):
 def stringz_hook(target, addr):
     return stringz(addr + 3)
 
+# TODO: Does this have some overlap with wordentry()? Should it use wordentry???
 def code_ptr(addr, addr_high=None, offset=0):
     if addr_high is None:
         addr_high = addr + 1
