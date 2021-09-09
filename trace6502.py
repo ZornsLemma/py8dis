@@ -393,6 +393,6 @@ def trace():
 # ENHANCE: I can't help thinking entry_points and its associated functions
 # belong in here, but I won't move them now as I think it would be clearer where
 # they should live when/if other CPUs are supported and "core" tracing is split
-# out from CPU-specific tracing.
+# out from CPU-specific tracing. TODO: Has this already been changed? Review comment.
 
 config.set_trace(trace)
