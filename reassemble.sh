@@ -16,4 +16,4 @@ fi
 # by a set_output_filename() command and this isn't overridden by specifying a
 # -o option.
 OUTBASE="$(basename $1 .py)"
-python "$@" --acme > "$OUTBASE.asm" && acme -r "$OUTBASE.lst" -o "$OUTBASE.dat" "$OUTBASE.asm" && diff "$OUTBASE.orig" "$OUTBASE.dat"
+python "$@" --acme > "$OUTBASE.asm" && acme --cpu 65c02 -r "$OUTBASE.lst" -o "$OUTBASE.dat" "$OUTBASE.asm" && diff "$OUTBASE.orig" "$OUTBASE.dat"

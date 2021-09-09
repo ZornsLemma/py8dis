@@ -5,7 +5,7 @@ import argparse
 # These functions/objects are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, autostring # TODO: get rid of stuff in this list which isn't directly user-exposed
 from disassembly import get_label # TODO: not too sure about exposing this
-from trace import add_entry, jsr_hooks
+from trace import add_entry
 from utils import get_u16, get_u16_be
 
 # These modules are used to implement things in this file and aren't so directly
@@ -14,7 +14,8 @@ from utils import get_u16, get_u16_be
 import classification
 import config
 import disassembly
-import trace
+#TODOimport trace
+import trace6502 # TODO!?!?
 import utils
 
 memory = config.memory
@@ -81,10 +82,6 @@ def stringcr_hook(target, addr):
 def stringz_hook(target, addr):
     return stringz(addr + 3)
 
-def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
-    entry(addr, name)
-    trace.add_jsr_hook(addr, hook)
-
 def code_ptr(addr, addr_high=None, offset=0):
     if addr_high is None:
         addr_high = addr + 1
@@ -115,7 +112,7 @@ def rts_code_ptr(addr, addr_high=None):
 
 # TODO: Rename "final_steps"? We do some other stuff after it which isn't part of it (and which I don't want to be, as I want to do that other final stuff even if user supplies own final_steps)
 def go(final_steps=None, autostring_min_length=3):
-    trace.trace()
+    config.trace()()
     # autostring() really needs to be invoked after trace() has done its classification,
     # so we wrap it up in here by default rather than expecting the user to call it.
     if final_steps is None:

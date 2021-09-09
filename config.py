@@ -8,6 +8,8 @@ _hex_dump = True
 
 _inline_comment_column = 60
 
+_trace = None
+
 def disassembly_range(allow_none=False):
     assert allow_none or _disassembly_range[0] is not None
     assert allow_none or _disassembly_range[1] is not None
@@ -53,3 +55,12 @@ def inline_comment_column():
 def set_inline_comment_column(n):
     global _inline_comment_column
     _inline_comment_column = n
+
+def set_trace(t):
+    global _trace
+    assert _trace is None
+    _trace = t
+
+def trace():
+    assert _trace is not None
+    return _trace

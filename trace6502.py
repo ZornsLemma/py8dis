@@ -1,25 +1,22 @@
 # TODO: Rename trace6502? And perhaps have a trace65c02 which builds on that but adds CMOS instructions?
 
+import config
 import classification
 import config
 import disassembly
+from trace import * # TODO!?
 import utils
 
 memory = config.memory
-entry_points = []
 jsr_hooks = {}
 
 def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
     jsr_hooks[addr] = hook
 
-def add_entry(addr, label=None):
-    entry_points.append(addr)
-    if label is None:
-        disassembly.ensure_addr_labelled(addr)
-    else:
-        disassembly.add_label(addr, label)
-    return disassembly.get_label(addr)
+def hook_subroutine(addr, name, hook): # TODO: rename - hook should probably not be quite so prominent in name
+    add_entry(addr, name)
+    add_jsr_hook(addr, hook)
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -398,3 +395,5 @@ def trace():
 # belong in here, but I won't move them now as I think it would be clearer where
 # they should live when/if other CPUs are supported and "core" tracing is split
 # out from CPU-specific tracing.
+
+config.set_trace(trace)
