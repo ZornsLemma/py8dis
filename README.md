@@ -4,6 +4,8 @@
 - [Overview](#overview)
 - [installation](#installation)
 - [Command/function reference](#commandfunction-reference)
+- [Getting help](#getting-help)
+- [Credits and thanks](#credits-and-thanks)
 
 ## Overview
 
@@ -184,3 +186,11 @@ Returns the unsigned little-endian 16-bit word at address `addr`.
 `get_u16_be(addr)`
 
 Returns the unsigned big-endian 16-bit word at address `addr`.
+
+## Getting help
+
+If you have problems or suggestions for improvement, you can raise an issue or submit a pull request in github. Alternatively you may like to post in the [py8dis thread](https://stardot.org.uk/forums/viewtopic.php?f=55&t=23335) on the [stardot](https://stardot.org.uk) forums.
+
+## Credits and thanks
+
+* py8dis is heavily influenced by Phill Harvey-Smith's [BeebDis](https://github.com/prime6809/BeebDis); I've tried to model py8dis commands on BeebDis where possible.
