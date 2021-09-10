@@ -2,11 +2,28 @@
 
 ## Table of contents
 - [Overview](#overview)
+- [installation](#installation)
 - [Command/function reference](#commandfunction-reference)
 
 ## Overview
 
 TODO
+
+## Installation
+
+There's no real installation process as such, but you'll probably want to set PYTHONPATH to the directory containing the py8dis code. On Unix-like systems, something like this:
+
+`export PYTHONPATH=/home/you/src/py8dis/py8dis`
+
+will probably do the trick. On Windows (warning: I haven't tried this) you probably want something like:
+
+`set PYTHONPATH=C:\Users\User\src\py8dis\py8dis`
+
+If you see error like:
+
+`ImportError: No module named ...`
+
+when you try to run a diassembly, PYTHONPATH probably needs adjusting. You can work around this if you just do everything in one directory, i.e. put the Python code you write to control a disassembly in the same directory as the py8dis code (commands.py, trace.py, etc).
 
 ## Command/function reference
 
