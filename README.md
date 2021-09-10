@@ -7,7 +7,7 @@
 
 ## Overview
 
-TODO
+py8dis is a programmable static tracing 6502 disassembler written in Python; the name was chosen out of a) a lack of imagination b) a vague aspiration that it might be extended without too much difficulty to other 8-bit CPUs in the future.
 
 ## Installation
 
