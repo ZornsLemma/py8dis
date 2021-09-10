@@ -1,1 +1,9 @@
 *.pyc
+examples/*.orig
+examples/*.lst
+examples/basic4.dat
+examples/dfs226.dat
+examples/anfs418.dat
+examples/basic4.asm
+examples/dfs226.asm
+examples/anfs418.asm
