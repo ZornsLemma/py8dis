@@ -25,6 +25,40 @@ If you see error like:
 
 when you try to run a disassembly, PYTHONPATH probably needs adjusting. You can work around this if you just do everything in one directory, i.e. put the Python code you write to control a disassembly in the same directory as the py8dis code (commands.py, trace.py, etc).
 
+## Demonstration/test
+
+There is a trivial "Hello, world!" program in the `examples` subdirectory which will allow you to check py8dis is working. It also serves as a starting point you can copy when creating your own disassemblies.
+
+If your PYTHONPATH is correct, you should be able to do:
+``` sh
+cd examples
+python helloworld.py --acme
+
+``` 
+
+and a disassembly of helloworld.dat will be produced:
+
+```
+lffe3 = $ffe3
+
+    * = $2000
+l2000
+    ldx #$00                                                ; 2000: a2 00
+l2002
+    lda l200e,x                                             ; 2002: bd 0e 20
+    jsr lffe3                                               ; 2005: 20 e3 ff
+    inx                                                     ; 2008: e8
+    cpx #$0e                                                ; 2009: e0 0e
+    bne l2002                                               ; 200b: d0 f5
+    rts                                                     ; 200d: 60
+l200e
+    !text "Hello, world!"                                   ; 200e: 48 65 6c ...
+    !byte $0d                                               ; 201b: .
+
+```
+
+This output is suitable for feeding into the acme assembler; you can also produce [beebasm](https://github.com/stardot/beebasm)-style output by specifying "--beebasm" (or just omitting "--acme", as beebasm output is the default).
+
 ## Command/function reference
 
 Although the whole point of py8dis is that it's programmable/user-extendable, standard Python functions are provided for common disassembly tasks. If these don't do quite what you want, you can always copy them and tweak the definitions; alternatively, feature requests or submissions of new "standard" functions to add are welcome.
