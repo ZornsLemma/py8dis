@@ -2,7 +2,7 @@
 
 ## Table of contents
 - [Overview](#overview)
-- [installation](#installation)
+- [Installation](#installation)
 - [Command/function reference](#commandfunction-reference)
 - [Getting help](#getting-help)
 - [Credits and thanks](#credits-and-thanks)
