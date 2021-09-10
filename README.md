@@ -19,7 +19,7 @@ will probably do the trick. On Windows (warning: I haven't tried this) you proba
 
 `set PYTHONPATH=C:\Users\User\src\py8dis\py8dis`
 
-If you see error like:
+If you see errors like:
 
 `ImportError: No module named ...`
 
