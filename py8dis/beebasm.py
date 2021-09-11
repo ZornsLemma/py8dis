@@ -50,7 +50,7 @@ def disassembly_end():
         s += " pydis_start, pydis_end"
     else:
         s += ' "%s", pydis_start, pydis_end' % output_filename
-    return s
+    return s + "\n"
 
 def abs_suffix():
     return ""

@@ -18,8 +18,7 @@ import utils
 memory = config.memory
 
 def load(addr, filename, md5sum=None):
-    if config.disassembly_range(allow_none=True)[0] is not None: # TODO!?
-        utils.die("load() can only be used once")
+    # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
         data = bytearray(f.read())
         if addr + len(data) > 0xffff:
@@ -31,7 +30,7 @@ def load(addr, filename, md5sum=None):
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    config.set_disassembly_range(addr, addr + len(data))
+    config._disassembly_range.append(((addr, addr + len(data))))
     label(addr, "pydis_start")
     label(addr + len(data), "pydis_end")
 

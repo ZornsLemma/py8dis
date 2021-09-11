@@ -1,5 +1,5 @@
 memory = [None] * 64*1024
-_disassembly_range = [None, None]
+_disassembly_range = []
 
 _formatter = None
 _lower_case = True
@@ -10,9 +10,8 @@ _inline_comment_column = 60
 
 _disassemble_instruction = None
 
+# TODO: Now it's a simple list we may not want these fns for disassembly_range access
 def disassembly_range(allow_none=False):
-    assert allow_none or _disassembly_range[0] is not None
-    assert allow_none or _disassembly_range[1] is not None
     return _disassembly_range
 
 # TODO: May want to get rid of this or make it an add_to_list_of_ranges or something
