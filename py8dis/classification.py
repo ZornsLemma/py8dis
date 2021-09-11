@@ -156,6 +156,23 @@ class String(object):
             print(utils.add_hex_dump(s, addr + s_i, self._length - s_i))
 
 
+class Relocation(object): # TODO: !?!!
+    def __init__(self, dest, source, length):
+        assert length > 0
+        self._dest = dest
+        self._source = source
+        self._length = length
+
+    def is_mergeable(self):
+        return False
+
+    def length(self):
+        return self._length
+
+    def emit(self, addr):
+        print("SFTODO!!!")
+
+
 def add_expression(addr, s):
     expressions[addr] = s
 
@@ -247,24 +264,23 @@ def stringhiz(addr):
 
 def autostring(min_length=3):
     assert min_length >= 2
-    start_addr, end_addr = config.disassembly_range()
-    for i in range(0, (end_addr - min_length) - start_addr):
-        if not disassembly.is_classified(start_addr + i,  min_length):
-            n = 0
-            while not disassembly.is_classified(start_addr + i + n, 1) and utils.isprint(memory[start_addr + i + n]):
-                n += 1
-            if n >= min_length:
-                string(start_addr + i, n)
+    for (start_addr, end_addr) in config.disassembly_range():
+        for i in range(0, (end_addr - min_length) - start_addr):
+            if not disassembly.is_classified(start_addr + i,  min_length):
+                n = 0
+                while not disassembly.is_classified(start_addr + i + n, 1) and utils.isprint(memory[start_addr + i + n]):
+                    n += 1
+                if n >= min_length:
+                    string(start_addr + i, n)
 
 
 def finalise():
-    start_addr, end_addr = config.disassembly_range()
+    for start_addr, end_addr in config.disassembly_range():
+        addr = start_addr
+        while addr < end_addr:
+            if not disassembly.is_classified(addr, 1):
+                disassembly.add_classification(addr, Byte(1))
+            addr += disassembly.get_classification(addr).length()
 
-    addr = start_addr
-    while addr < end_addr:
-        if not disassembly.is_classified(addr, 1):
-            disassembly.add_classification(addr, Byte(1))
-        addr += disassembly.get_classification(addr).length()
-
-    disassembly.merge_classifications(start_addr, end_addr)
-    disassembly.split_classifications(start_addr, end_addr)
+        disassembly.merge_classifications(start_addr, end_addr)
+        disassembly.split_classifications(start_addr, end_addr)

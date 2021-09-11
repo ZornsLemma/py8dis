@@ -10,6 +10,8 @@ set_output_filename("anfs418.rom")
 acorn.add_standard_labels()
 acorn.is_sideways_rom()
 
+move(0x400, 0xbf04, 0xbf88-0xbf04) # XXX: length is a guess
+
 constant(0x01, "service_claim_absolute_workspace")
 constant(0x0f, "service_vectors_changed")
 expr(0x8a17, "service_vectors_changed")

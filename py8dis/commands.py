@@ -33,6 +33,13 @@ def load(addr, filename, md5sum=None):
             utils.die("load() md5sum doesn't match")
     config.set_disassembly_range(addr, addr + len(data))
 
+def move(dest, src, length):
+    disassembly.add_classification(src, classification.Relocation(dest, src, length))
+    memory[dest:dest+length] = memory[src:src+length]
+    # TODO: should we zero out the "source" region? that might break things but worth thbinking about
+    config._disassembly_range.append((dest, dest+length)) # TODO!?
+    # TODO: more!?
+
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
 # longer names in core disassembler code.
@@ -126,8 +133,10 @@ def go(post_trace_steps=None, autostring_min_length=3):
             classification.autostring(autostring_min_length)
     post_trace_steps()
     classification.finalise()
-    start_addr, end_addr = config.disassembly_range()
-    disassembly.emit(start_addr, end_addr)
+    # TODO!?
+    for start_addr, end_addr in config.disassembly_range():
+        print("XXX %04x %04x" % (start_addr, end_addr))
+        disassembly.emit(start_addr, end_addr)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")

@@ -15,11 +15,12 @@ def disassembly_range(allow_none=False):
     assert allow_none or _disassembly_range[1] is not None
     return _disassembly_range
 
+# TODO: May want to get rid of this or make it an add_to_list_of_ranges or something
 def set_disassembly_range(start, end):
     assert start is not None
     assert end is not None
     global _disassembly_range
-    _disassembly_range = (start, end)
+    _disassembly_range = [(start, end)]
 
 def formatter():
     return _formatter
