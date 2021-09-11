@@ -184,6 +184,7 @@ class Relocation(object): # TODO: !?!!
         disassembly.ensure_addr_labelled(self._source)
 
     def emit(self, addr):
+        # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
         # TODO: BEEBASM SPECIFIC
         # TODO: IGNORES CASE FORCING
         # Source and destination here are the source and destination for the
