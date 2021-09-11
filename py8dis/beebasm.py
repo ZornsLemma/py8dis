@@ -11,6 +11,8 @@ output_filename = None
 
 explicit_a = True
 
+_disassembly_start = ""
+
 def set_output_filename(filename):
     global output_filename
     output_filename = filename
@@ -35,6 +37,13 @@ def explicit_label(name, value, offset=None):
 
 def comment_prefix():
     return ";"
+
+def set_disassembly_start(s):
+    global _disassembly_start
+    _disassembly_start = s
+
+def disassembly_start():
+    return utils.force_case(_disassembly_start)
 
 def code_start(start_addr, end_addr):
     return (utils.force_case(

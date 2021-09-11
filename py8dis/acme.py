@@ -39,6 +39,9 @@ def explicit_label(name, value, offset=None):
 def comment_prefix():
     return ";"
 
+def disassembly_start():
+    return ""
+
 def code_start(start_addr, end_addr):
     return "    * = %s" % hex4(start_addr)
 

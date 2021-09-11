@@ -97,6 +97,8 @@ def sorted_annotations(annotations):
 def emit():
     formatter = config.formatter()
 
+    print(formatter.disassembly_start(), end="")
+
     disassembled_addresses = set()
     for start_addr, end_addr in config.disassembly_range():
         # We include end_addr in the range because we're going to use the set
