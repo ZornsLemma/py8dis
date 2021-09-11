@@ -94,12 +94,15 @@ def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
 def emit():
-    # TODO: It's not a big deal, but labels at the end of a disassembly range are not omitted as implicit but done as explicit instead - would be nice to fix this.
     formatter = config.formatter()
 
     disassembled_addresses = set()
     for start_addr, end_addr in config.disassembly_range():
-        disassembled_addresses.update(range(start_addr, end_addr))
+        # We include end_addr in the range because we're going to use the set
+        # we're building up to control emission of inline labels - the end
+        # address of a range has no classification, but the assembly pointer
+        # does reach it and we can emit labels inline there.
+        disassembled_addresses.update(range(start_addr, end_addr + 1))
 
     # Emit constants first
     if len(constants) > 0:
@@ -126,11 +129,14 @@ def emit():
         sep = "\n"
         print(formatter.code_start(start_addr, end_addr))
         addr = start_addr
-        while addr < end_addr:
+        while addr <= end_addr:
             # We need to emit any annotations that are "due" part-way through the
             # classification output first. This may involve creating a label at
             # the point before the classification output.
-            classification_length = classifications[addr].length()
+            if addr < end_addr:
+                classification_length = classifications[addr].length()
+            else:
+                classification_length = 1
             pending_annotations = []
             for i in range(1, classification_length):
                 for annotation in sorted_annotations(annotations[addr + i]):
@@ -139,8 +145,9 @@ def emit():
                 print(annotation.as_string(addr))
             for annotation in pending_annotations:
                 print(annotation)
-            # We can now emit the classification output.
-            classifications[addr].emit(addr)
+            if addr < end_addr:
+                # We can now emit the classification output.
+                classifications[addr].emit(addr)
             addr += classification_length
         print(formatter.code_end(), end="")
 
