@@ -10,6 +10,9 @@ class OpcodeUnconditionalBranch(Opcode):
     def _target(self, addr):
         return addr + 2 + signed8(get_u8(addr + 1))
 
+    def update_references(self, addr):
+        trace.references[self._target(addr)].add(addr)
+
     def disassemble(self, addr):
         return [None, self._target(addr)]
 
@@ -23,6 +26,9 @@ class OpcodeJmpAbsX(OpcodeAbs):
 
     def has_zp_version(self):
         return False
+
+    def update_references(self, addr):
+        pass
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))

@@ -54,6 +54,9 @@ class OpcodeImplied(Opcode):
         self.mnemonic = mnemonic
         self.operand_length = 0
 
+    def update_references(self, addr):
+        pass
+
     def disassemble(self, addr):
         return [addr + 1]
 
@@ -67,6 +70,9 @@ class OpcodeImplied(Opcode):
 class OpcodeImmediate(Opcode):
     def __init__(self, mnemonic):
         super(OpcodeImmediate, self).__init__(mnemonic, 1)
+
+    def update_references(self, addr):
+        pass
 
     def disassemble(self, addr):
         return [addr + 2]
@@ -82,6 +88,9 @@ class OpcodeImmediate(Opcode):
 class OpcodeZp(Opcode):
     def __init__(self, mnemonic, suffix = None):
         super(OpcodeZp, self).__init__(mnemonic, 1, suffix)
+
+    def update_references(self, addr):
+        pass
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(get_u8(addr + 1))
@@ -133,6 +142,9 @@ class OpcodeDataAbs(OpcodeAbs):
     def __init__(self, mnemonic, suffix = None):
         super(OpcodeDataAbs, self).__init__(mnemonic, suffix)
 
+    def update_references(self, addr):
+        pass
+
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
         return [addr + 3]
@@ -145,6 +157,9 @@ class OpcodeJmpAbs(OpcodeAbs):
     def has_zp_version(self):
         return False
 
+    def update_references(self, addr):
+        trace.references[utils.get_u16(addr + 1)].add(addr)
+
     def disassemble(self, addr):
         return [None, utils.get_u16(addr + 1)]
 
@@ -155,6 +170,9 @@ class OpcodeJmpInd(OpcodeAbs):
 
     def has_zp_version(self):
         return False
+
+    def update_references(self, addr):
+        pass
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
@@ -167,6 +185,9 @@ class OpcodeJsr(OpcodeAbs):
 
     def has_zp_version(self):
         return False
+
+    def update_references(self, addr):
+        trace.references[utils.get_u16(addr + 1)].add(addr)
 
     def disassemble(self, addr):
         target = utils.get_u16(addr + 1)
@@ -184,6 +205,9 @@ class OpcodeReturn(Opcode):
     def __init__(self, mnemonic):
         super(OpcodeReturn, self).__init__(mnemonic, 0)
 
+    def update_references(self, addr):
+        pass
+
     def disassemble(self, addr):
         return [None]
 
@@ -197,6 +221,9 @@ class OpcodeConditionalBranch(Opcode):
 
     def _target(self, addr):
         return addr + 2 + signed8(get_u8(addr + 1))
+
+    def update_references(self, addr):
+        trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
         return [addr + 2, self._target(addr)]
@@ -371,6 +398,7 @@ def disassemble_instruction(addr):
     # Up to this point we hadn't decided addr contains an instruction; we now
     # have.
     disassembly.add_classification(addr, opcode)
+    opcode.update_references(addr)
     return opcode.disassemble(addr)
 
 config.set_disassemble_instruction(disassemble_instruction)

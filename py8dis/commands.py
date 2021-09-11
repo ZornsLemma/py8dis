@@ -135,6 +135,8 @@ def go(post_trace_steps=None, autostring_min_length=3):
     label(pydis_start, "pydis_start")
     label(pydis_end, "pydis_end")
     trace.trace()
+    if config.label_references():
+        trace.add_references_comments()
     # autostring() really needs to be invoked after trace() has done its classification,
     # so we wrap it up in here by default rather than expecting the user to call it.
     if post_trace_steps is None:

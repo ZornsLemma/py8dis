@@ -1,7 +1,9 @@
+import collections
 import config
 import disassembly
 
 entry_points = []
+references = collections.defaultdict(set)
 
 def add_entry(addr, label=None):
     entry_points.append(addr)
@@ -32,3 +34,8 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 add_entry(new_entry_point)
+
+def add_references_comments():
+    for addr, addr_refs in references.items():
+        count = "%d times" % len(addr_refs) if len(addr_refs) != 1 else "1 time"
+        disassembly.add_comment(addr, "Referenced %s by %s" % (count, ", ".join(config.formatter().hex(addr_ref) for addr_ref in addr_refs)))

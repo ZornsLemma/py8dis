@@ -5,6 +5,7 @@ _formatter = None
 _lower_case = True
 _bytes_as_ascii = True
 _hex_dump = True
+_label_references = True
 
 _inline_comment_column = 60
 
@@ -48,6 +49,13 @@ def hex_dump():
 def set_hex_dump(b):
     global _hex_dump
     _hex_dump = b
+
+def label_references():
+    return _label_references
+
+def set_label_references(b):
+    global _label_references
+    _label_references = b
 
 def inline_comment_column():
     return _inline_comment_column
