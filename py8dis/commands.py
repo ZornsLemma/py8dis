@@ -17,6 +17,9 @@ import utils
 
 memory = config.memory
 
+pydis_start = 0x10000
+pydis_end = -1
+
 def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
@@ -31,15 +34,16 @@ def load(addr, filename, md5sum=None):
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
     config._disassembly_range.append(((addr, addr + len(data))))
-    label(addr, "pydis_start")
-    label(addr + len(data), "pydis_end")
+    global pydis_start, pydis_end
+    pydis_start = min(pydis_start, addr)
+    pydis_end = max(pydis_end, addr + len(data))
 
 def move(dest, src, length):
     disassembly.add_classification(src, classification.Relocation(dest, src, length))
     memory[dest:dest+length] = memory[src:src+length]
-    # TODO: should we zero out the "source" region? that might break things but worth thbinking about
+    # TODO: should we zero out the "source" region? that might break things but worth thinking about
+    # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
     config._disassembly_range.append((dest, dest+length)) # TODO!?
-    # TODO: more!?
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -126,6 +130,8 @@ def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
 def go(post_trace_steps=None, autostring_min_length=3):
+    label(pydis_start, "pydis_start")
+    label(pydis_end, "pydis_end")
     trace.trace()
     # autostring() really needs to be invoked after trace() has done its classification,
     # so we wrap it up in here by default rather than expecting the user to call it.
