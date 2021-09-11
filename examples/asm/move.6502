@@ -1,0 +1,50 @@
+osasci = $ffe3 ; Acorn OS routine to print ASCII character in A
+low_code = $900
+high_code = $2000
+zp = $70
+
+    ; We have a subroutine "print_and_inc_zp" which lives at low_code. It is
+    ; copied there by the main code on startup.
+    org low_code
+.print_and_inc_zp
+    lda zp
+    jsr print_and_inc_a
+    sta zp
+    rts
+.print_and_inc_a
+    jsr osasci
+    clc
+    adc #1
+    rts
+.low_code_end
+
+    org high_code
+
+.main
+    ; Copy code down to low_code
+    ldx #0
+.copy_loop
+    lda copy_of_low_code,x
+    sta low_code,x
+    inx
+    cpx #low_code_end-low_code
+    bne copy_loop
+
+    ; Now we can use print_and_inc_zp.
+    lda #'a'
+    ldx #10
+    sta zp
+.call_loop
+    jsr print_and_inc_zp
+    dex
+    bne call_loop
+    lda #13
+    jmp osasci
+
+.copy_of_low_code
+    skip low_code_end - low_code
+    copyblock low_code, low_code_end, copy_of_low_code
+
+.main_end
+
+save main, main_end
