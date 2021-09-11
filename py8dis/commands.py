@@ -133,10 +133,8 @@ def go(post_trace_steps=None, autostring_min_length=3):
             classification.autostring(autostring_min_length)
     post_trace_steps()
     classification.finalise()
-    # TODO!?
-    for start_addr, end_addr in config.disassembly_range():
-        print("XXX %04x %04x" % (start_addr, end_addr))
-        disassembly.emit(start_addr, end_addr)
+
+    disassembly.emit()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")

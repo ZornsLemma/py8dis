@@ -93,9 +93,14 @@ def split_classifications(start_addr, end_addr):
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
-def emit(start_addr, end_addr):
+def emit():
     formatter = config.formatter()
 
+    disassembled_addresses = set()
+    for start_addr, end_addr in config.disassembly_range():
+        disassembled_addresses.update(range(start_addr, end_addr))
+
+    # Emit constants first
     if len(constants) > 0:
         for value, name in sorted(constants, key=lambda x: x[0]):
             if isinstance(value, six.integer_types):
@@ -103,34 +108,37 @@ def emit(start_addr, end_addr):
             print(formatter.explicit_label(name, value))
         print()
 
+    # Emit labels which aren't within one of the disassembled ranges and which
+    # therefore must be defined explicitly.
     sep = ""
     for addr in sorted(annotations.keys()):
-        if addr < start_addr or addr >= end_addr:
+        if addr not in disassembled_addresses:
             for annotation in sorted_annotations(annotations[addr]):
                 if isinstance(annotation, Label):
                     print(annotation.as_string_assignment())
                     sep = "\n"
     print(sep, end="")
 
-    print(formatter.code_start(start_addr, end_addr))
-    addr = start_addr
-    while addr < end_addr:
-        # We need to emit any annotations that are "due" part-way through the
-        # classification output first. This may involve creating a label at
-        # the point before the classification output.
-        classification_length = classifications[addr].length()
-        pending_annotations = []
-        for i in range(1, classification_length):
-            for annotation in sorted_annotations(annotations[addr + i]):
-                pending_annotations.append(annotation.as_string(addr))
-        for annotation in sorted_annotations(annotations[addr]):
-            print(annotation.as_string(addr))
-        for annotation in pending_annotations:
-            print(annotation)
-        # We can now emit the classification output.
-        classifications[addr].emit(addr)
-        addr += classification_length
-    print(formatter.code_end())
+    for start_addr, end_addr in sorted(config.disassembly_range()):
+        print(formatter.code_start(start_addr, end_addr))
+        addr = start_addr
+        while addr < end_addr:
+            # We need to emit any annotations that are "due" part-way through the
+            # classification output first. This may involve creating a label at
+            # the point before the classification output.
+            classification_length = classifications[addr].length()
+            pending_annotations = []
+            for i in range(1, classification_length):
+                for annotation in sorted_annotations(annotations[addr + i]):
+                    pending_annotations.append(annotation.as_string(addr))
+            for annotation in sorted_annotations(annotations[addr]):
+                print(annotation.as_string(addr))
+            for annotation in pending_annotations:
+                print(annotation)
+            # We can now emit the classification output.
+            classifications[addr].emit(addr)
+            addr += classification_length
+        print(formatter.code_end())
 
 
 class Label(object):
