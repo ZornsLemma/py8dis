@@ -170,7 +170,7 @@ class Relocation(object): # TODO: !?!!
         return self._length
 
     def emit(self, addr):
-        print("SFTODO!!!")
+        print("; SFTODO!!! copy block %04x %04x %04x?" % (self._dest, self._source, self._length))
 
 
 def add_expression(addr, s):
