@@ -190,7 +190,9 @@ class Relocation(object): # TODO: !?!!
         # move which created this Relocation object, so they're "reversed" from
         # the assembly output perspective.
         print("    skip %s-%s" % (disassembly.get_label(self._dest + self._length), disassembly.get_label(self._dest)))
-        print("    copyblock %s, %s, %s" % (disassembly.get_label(self._dest), disassembly.get_label(self._dest + self._length), disassembly.get_label(self._source)))
+        # We must do all the copyblock commands at the end to avoid any assumption
+        # about the order separate blocks of code are assembled in.
+        disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest), disassembly.get_label(self._dest + self._length), disassembly.get_label(self._source)))
 
 
 def add_expression(addr, s):

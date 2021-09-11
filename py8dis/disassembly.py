@@ -5,6 +5,8 @@ import six
 
 import config
 
+_final_commands = []
+
 # We assign this to elements of classification which are for second and
 # subequent bytes of a multi-byte classifcation. Its value doesn't really
 # matter, as long as it's not None so we know these bytes have been classified.
@@ -160,6 +162,11 @@ def emit():
                 classifications[addr].emit(addr)
             addr += classification_length
         print(formatter.code_end(), end="")
+
+    if len(_final_commands) > 0:
+        print()
+        for line in _final_commands:
+            print(line)
 
     print(formatter.disassembly_end(), end="")
 

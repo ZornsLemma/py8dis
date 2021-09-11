@@ -12,4 +12,4 @@ if [ "$#" -lt "1" ]; then
 fi
 
 OUTBASE="$(basename $1 .py)"
-python "$@" > "$OUTBASE.asm" && beebasm -o "$OUTBASE.dat" -i "$OUTBASE.asm" > "$OUTBASE.lst" && diff "$OUTBASE.orig" "$OUTBASE.dat"
+python "$@" > "$OUTBASE.asm" && beebasm -v -o "$OUTBASE.dat" -i "$OUTBASE.asm" > "$OUTBASE.lst" && diff "$OUTBASE.orig" "$OUTBASE.dat"
