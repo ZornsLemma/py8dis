@@ -94,6 +94,7 @@ def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
 def emit():
+    # TODO: It's not a big deal, but labels at the end of a disassembly range are not omitted as implicit but done as explicit instead - would be nice to fix this.
     formatter = config.formatter()
 
     disassembled_addresses = set()
@@ -119,7 +120,10 @@ def emit():
                     sep = "\n"
     print(sep, end="")
 
+    sep = ""
     for start_addr, end_addr in sorted(config.disassembly_range()):
+        print(sep, end="")
+        sep = "\n"
         print(formatter.code_start(start_addr, end_addr))
         addr = start_addr
         while addr < end_addr:
@@ -138,7 +142,9 @@ def emit():
             # We can now emit the classification output.
             classifications[addr].emit(addr)
             addr += classification_length
-        print(formatter.code_end())
+        print(formatter.code_end(), end="")
+
+    print(formatter.disassembly_end(), end="")
 
 
 class Label(object):

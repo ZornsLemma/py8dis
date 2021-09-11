@@ -39,15 +39,13 @@ def comment_prefix():
 def code_start(start_addr, end_addr):
     return (utils.force_case(
         "    org %s\n" % hex4(start_addr) +
-        "    guard %s\n" % hex4(end_addr)) +
-        ".pydis_start\n")
+        "    guard %s\n" % hex4(end_addr)))
 
 def code_end():
-    s = (
-        "\n" +
-        ".pydis_end\n" +
-        "\n")
-    s += utils.force_case("save")
+    return ""
+
+def disassembly_end():
+    s = utils.force_case("\nsave")
     if output_filename is None:
         s += " pydis_start, pydis_end"
     else:

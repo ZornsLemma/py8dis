@@ -162,6 +162,10 @@ class Relocation(object): # TODO: !?!!
         self._dest = dest
         self._source = source
         self._length = length
+        # TODO: Doing these ensure call this early may stop user-provided labels getting first go at being the "definitive" label - may want to do this later (but before we start emitting anything, otherwise it's too late)
+        disassembly.ensure_addr_labelled(self._dest)
+        disassembly.ensure_addr_labelled(self._dest + self._length)
+        disassembly.ensure_addr_labelled(self._source)
 
     def is_mergeable(self):
         return False
@@ -170,7 +174,13 @@ class Relocation(object): # TODO: !?!!
         return self._length
 
     def emit(self, addr):
-        print("; SFTODO!!! copy block %04x %04x %04x?" % (self._dest, self._source, self._length))
+        # TODO: BEEBASM SPECIFIC
+        # TODO: IGNORES CASE FORCING
+        # Source and destination here are the source and destination for the
+        # move which created this Relocation object, so they're "reversed" from
+        # the assembly output perspective.
+        print("    skip %s-%s" % (disassembly.get_label(self._dest + self._length), disassembly.get_label(self._dest)))
+        print("    copyblock %s, %s, %s" % (disassembly.get_label(self._dest), disassembly.get_label(self._dest + self._length), disassembly.get_label(self._source)))
 
 
 def add_expression(addr, s):

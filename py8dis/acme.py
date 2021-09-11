@@ -45,6 +45,9 @@ def code_start(start_addr, end_addr):
 def code_end():
     return ""
 
+def disassembly_end():
+    return ""
+
 def abs_suffix():
     return "+2"
 

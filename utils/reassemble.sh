@@ -11,9 +11,5 @@ if [ "$#" -lt "1" ]; then
     exit 1
 fi
 
-# This uses acme rather than beebasm simply because it's easier to know what
-# the output of the assembly is called with acme. With beebasm it can be changed
-# by a set_output_filename() command and this isn't overridden by specifying a
-# -o option.
 OUTBASE="$(basename $1 .py)"
-python "$@" --acme > "$OUTBASE.asm" && acme --cpu 65c02 -r "$OUTBASE.lst" -o "$OUTBASE.dat" "$OUTBASE.asm" && diff "$OUTBASE.orig" "$OUTBASE.dat"
+python "$@" > "$OUTBASE.asm" && beebasm -o "$OUTBASE.dat" -i "$OUTBASE.asm" > "$OUTBASE.lst" && diff "$OUTBASE.orig" "$OUTBASE.dat"

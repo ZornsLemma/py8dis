@@ -18,7 +18,7 @@ import utils
 memory = config.memory
 
 def load(addr, filename, md5sum=None):
-    if config.disassembly_range(allow_none=True)[0] is not None:
+    if config.disassembly_range(allow_none=True)[0] is not None: # TODO!?
         utils.die("load() can only be used once")
     with open(filename, "rb") as f:
         data = bytearray(f.read())
@@ -32,6 +32,8 @@ def load(addr, filename, md5sum=None):
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
     config.set_disassembly_range(addr, addr + len(data))
+    label(addr, "pydis_start")
+    label(addr + len(data), "pydis_end")
 
 def move(dest, src, length):
     disassembly.add_classification(src, classification.Relocation(dest, src, length))
