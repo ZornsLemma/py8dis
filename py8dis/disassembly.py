@@ -93,6 +93,7 @@ def split_classifications(start_addr, end_addr):
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
+# TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():
     formatter = config.formatter()
 
