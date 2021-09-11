@@ -3,7 +3,7 @@ from trace6502 import hook_subroutine
 import acorn
 
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
-set_output_filename("dfs226.rom")
+#set_output_filename("dfs226.rom")
 
 acorn.add_standard_labels()
 acorn.is_sideways_rom()

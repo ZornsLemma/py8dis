@@ -30,6 +30,9 @@ class Byte(object):
         assert length > 0
         self._length = length
 
+    def finalise(self):
+        pass
+
     def emit(self, addr):
         byte_prefix = formatter().byte_prefix()
         data = list(get_constant8(addr + i) for i in range(self._length))
@@ -84,6 +87,9 @@ class Word(object):
         assert length % 2 == 0
         self._length = length
 
+    def finalise(self):
+        pass
+
     def emit(self, addr):
         # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
         # should probably all be cleaned up and factored out.
@@ -118,6 +124,9 @@ class String(object):
     def set_length(self, length):
         assert length > 0
         self._length = length
+
+    def finalise(self):
+        pass
 
     def emit(self, addr):
         prefix = formatter().string_prefix()
