@@ -17,6 +17,7 @@ import utils
 
 memory = config.memory
 
+# TODO: We need some sort of sanity check to avoid using these if load() never updates them...
 pydis_start = 0x10000
 pydis_end = -1
 
@@ -26,14 +27,15 @@ def load(addr, filename, md5sum=None):
         data = bytearray(f.read())
         if addr + len(data) > 0xffff:
             utils.die("load() would overflow memory")
-        memory[addr:] = data
+        for i, c in enumerate(data):
+            memory[addr+i] = c
     if md5sum is not None:
         import hashlib
         hash = hashlib.md5()
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    config._disassembly_range.append(((addr, addr + len(data))))
+    config._disassembly_range.append((addr, addr + len(data)))
     global pydis_start, pydis_end
     pydis_start = min(pydis_start, addr)
     pydis_end = max(pydis_end, addr + len(data))
