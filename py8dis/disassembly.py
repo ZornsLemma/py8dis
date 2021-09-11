@@ -105,6 +105,13 @@ def emit():
         # does reach it and we can emit labels inline there.
         disassembled_addresses.update(range(start_addr, end_addr + 1))
 
+    # Give every classification a chance to do any last-minute processing (e.g.
+    # creating labels) before we start to emit things and it's too late to
+    # make changes.
+    for classification in classifications:
+        if classification is not None and classification != partial_classification:
+            classification.finalise()
+
     # Emit constants first
     if len(constants) > 0:
         for value, name in sorted(constants, key=lambda x: x[0]):

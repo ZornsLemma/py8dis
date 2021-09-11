@@ -41,6 +41,9 @@ class Opcode(object):
     def length(self):
         return 1 + self.operand_length
 
+    def finalise(self):
+        pass
+
     def emit(self, addr):
         print(utils.add_hex_dump(self.as_string(addr), addr, self.length()))
 

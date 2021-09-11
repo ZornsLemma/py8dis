@@ -162,16 +162,17 @@ class Relocation(object): # TODO: !?!!
         self._dest = dest
         self._source = source
         self._length = length
-        # TODO: Doing these ensure call this early may stop user-provided labels getting first go at being the "definitive" label - may want to do this later (but before we start emitting anything, otherwise it's too late)
-        disassembly.ensure_addr_labelled(self._dest)
-        disassembly.ensure_addr_labelled(self._dest + self._length)
-        disassembly.ensure_addr_labelled(self._source)
 
     def is_mergeable(self):
         return False
 
     def length(self):
         return self._length
+
+    def finalise(self):
+        disassembly.ensure_addr_labelled(self._dest)
+        disassembly.ensure_addr_labelled(self._dest + self._length)
+        disassembly.ensure_addr_labelled(self._source)
 
     def emit(self, addr):
         # TODO: BEEBASM SPECIFIC
