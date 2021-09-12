@@ -171,4 +171,4 @@ if args.upper:
 else:
     config.set_lower_case(True)
 
-# TODO: Move stuff into subdirectories in repo
+# TODO: It would be good if we could use different labels for code (as identified by something like the "label references" stuff). The problem at the moment is that we bake labels into expressions as we trace and so forth, so renaming a label once we've finished tracing isn't all that easy. I don't know if switching to lazy conversion of addresses to names would be a big problem.
