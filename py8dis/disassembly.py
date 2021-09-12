@@ -35,9 +35,10 @@ def add_optional_label(addr, name, base_addr=None):
     assert base_addr is None or addr != base_addr
     optional_labels[addr] = (name, base_addr)
 
-def get_label(addr):
+# TODO: Later it might make sense for context to default to None, but for now don't want this.
+def get_label(addr, context):
     assert addr in labelled_addrs
-    return utils.LazyString("%s", lambda: get_final_label(addr, None))
+    return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 def get_final_label(addr, context):
     assert addr in labels

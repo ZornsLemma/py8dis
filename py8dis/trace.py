@@ -11,7 +11,7 @@ def add_entry(addr, label=None):
         disassembly.ensure_addr_labelled(addr)
     else:
         disassembly.add_label(addr, label)
-    return disassembly.get_label(addr)
+    return disassembly.get_label(addr, addr)
 
 def trace():
     # TODO: copy of code in disassembly.emit(), although the name is wrong here - we are *going* to disassemble, we haven't *disassembled*
@@ -46,5 +46,5 @@ def add_references_comments():
     final_addr = max(end_addr for start_addr, end_addr in config._disassembly_range)
     frequency_table = [(addr, len(addr_refs)) for addr, addr_refs in references.items()]
     frequency_table = sorted(frequency_table, key=lambda x: (x[1], -x[0]), reverse=True)
-    longest_label = max(len(disassembly.get_label(addr)) for addr in references)
-    disassembly.add_comment(final_addr, "Label references by decreasing frequency:\n    " + "\n    ".join(("%-*s %3d" % (longest_label+1, disassembly.get_label(addr)+":", count)) for addr, count in frequency_table))
+    longest_label = max(len(disassembly.get_label(addr, None)) for addr in references)
+    disassembly.add_comment(final_addr, "Label references by decreasing frequency:\n    " + "\n    ".join(("%-*s %3d" % (longest_label+1, disassembly.get_label(addr, None)+":", count)) for addr, count in frequency_table))

@@ -229,7 +229,7 @@ class OpcodeConditionalBranch(Opcode):
         return [addr + 2, self._target(addr)]
 
     def as_string(self, addr):
-        return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr)))
+        return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
 opcodes = {

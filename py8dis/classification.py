@@ -190,10 +190,10 @@ class Relocation(object): # TODO: !?!!
         # Source and destination here are the source and destination for the
         # move which created this Relocation object, so they're "reversed" from
         # the assembly output perspective.
-        print("    skip %s-%s" % (disassembly.get_label(self._dest + self._length), disassembly.get_label(self._dest)))
+        print("    skip %s-%s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
         # We must do all the copyblock commands at the end to avoid any assumption
         # about the order separate blocks of code are assembled in.
-        disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest), disassembly.get_label(self._dest + self._length), disassembly.get_label(self._source)))
+        disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
 
 
 def add_expression(addr, s):
@@ -221,13 +221,13 @@ def get_constant16(addr):
 def get_address8(addr):
     operand = memory[addr]
     if addr not in expressions:
-        return disassembly.get_label(operand)
+        return disassembly.get_label(operand, addr)
     return get_expression(addr, operand)
 
 def get_address16(addr):
     operand = utils.get_u16(addr)
     if addr not in expressions:
-        return disassembly.get_label(operand)
+        return disassembly.get_label(operand, addr)
     assert isinstance(disassembly.get_classification(addr), Word)
     return get_expression(addr, operand)
 
