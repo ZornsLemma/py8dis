@@ -60,7 +60,7 @@ def code_end():
 def disassembly_end():
     s = ""
     if len(_pending_assertions) > 0:
-        for expr, value in _pending_assertions.items():
+        for expr, value in sorted(_pending_assertions.items()):
             s += "!if %s != %s {\n" % (expr, hex(value))
             s += '    !error "Assertion failed: %s == %s"\n' % (expr, hex(value))
             s += "}\n"

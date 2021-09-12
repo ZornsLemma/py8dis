@@ -55,3 +55,20 @@ def check_expr(expr, value):
     # probably be retained even if expression evaluation is supported directly
     # in py8dis.
     config.formatter().assert_expr(expr, value)
+
+
+class LazyString(object):
+    def __init__(self, fmt, *args):
+        self._fmt = fmt
+        self._args = args
+
+    def __str__(self):
+        return self._fmt % tuple(x() if callable(x) else x for x in self._args)
+
+    def __add__(self, other):
+        if isinstance(other, LazyString):
+            return LazyString(self._fmt + other._fmt, *(self._args + other._args))
+        return LazyString(self._fmt + "%s", *(list(self._args) + [other]))
+
+    def __len__(self):
+        return len(str(self))

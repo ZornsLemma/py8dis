@@ -20,6 +20,7 @@ def add_constant(value, name):
     constants.append((value, name))
 
 def add_label(addr, name, expr=False):
+    labelled_addrs.add(addr)
     # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
@@ -35,6 +36,10 @@ def add_optional_label(addr, name, base_addr=None):
     optional_labels[addr] = (name, base_addr)
 
 def get_label(addr):
+    assert addr in labelled_addrs
+    return utils.LazyString("%s", lambda: get_final_label(addr, None))
+
+def get_final_label(addr, context):
     assert addr in labels
     if is_expr_label[addr]:
         utils.check_expr(labels[addr], addr)
@@ -223,6 +228,7 @@ labels = {}
 is_expr_label = {}
 optional_labels = {}
 constants = []
+labelled_addrs = set()
 
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.

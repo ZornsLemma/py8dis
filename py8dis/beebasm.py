@@ -61,7 +61,7 @@ def code_end():
 def disassembly_end():
     s = "\n"
     if len(_pending_assertions) > 0:
-        s += "\n".join(utils.force_case("    assert ") + "%s == %s" % (expr, hex(value)) for expr, value in _pending_assertions.items())
+        s += "\n".join(utils.force_case("    assert ") + "%s == %s" % (expr, hex(value)) for expr, value in sorted(_pending_assertions.items()))
         s += "\n\n"
 
     s += utils.force_case("save")
