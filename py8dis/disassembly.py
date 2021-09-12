@@ -7,6 +7,7 @@ import config
 import utils
 
 _final_commands = []
+_labels_fixed = False
 
 # We assign this to elements of classification which are for second and
 # subequent bytes of a multi-byte classifcation. Its value doesn't really
@@ -20,7 +21,8 @@ def add_constant(value, name):
     constants.append((value, name))
 
 def add_label(addr, name, expr=False):
-    labelled_addrs.add(addr)
+    labelled_addrs[addr].add((name, expr))
+    return # TODO!
     # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
     # will be used for references to the address in the disassembly.
@@ -41,6 +43,7 @@ def get_label(addr, context):
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 def get_final_label(addr, context):
+    assert _labels_fixed
     assert addr in labels
     if is_expr_label[addr]:
         utils.check_expr(labels[addr], addr)
@@ -48,6 +51,7 @@ def get_final_label(addr, context):
 
 def ensure_addr_labelled(addr):
     if addr not in labels:
+        assert not _labels_fixed
         if addr in optional_labels:
             label, base_addr = optional_labels.get(addr)
             if base_addr is None:
@@ -58,7 +62,7 @@ def ensure_addr_labelled(addr):
         else:
             label = ("l%04x" if config.lower_case() else "L%04X") % addr
             add_label(addr, label)
-    return labels[addr]
+    return get_label(addr, None) # TODO: NEED A CONTEXT REALLY
 
 def is_classified(addr, length):
     return any(x is not None for x in classifications[addr:addr+length])
@@ -104,6 +108,18 @@ def split_classifications(start_addr, end_addr):
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
+def fix_labels():
+    global _labels_fixed
+    _labels_fixed = True
+    for addr, label_list in labelled_addrs.items():
+        for name, is_expr in label_list:
+            if addr not in labels:
+               labels[addr] = name
+               is_expr_label[addr] = is_expr
+            if not is_expr:
+                # An address can have multiple labels as annotations.
+                annotations[addr].append(Label(addr, name))
+
 # TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():
     formatter = config.formatter()
@@ -124,6 +140,21 @@ def emit():
     for classification in classifications:
         if classification is not None and classification != partial_classification:
             classification.finalise()
+
+    # If there are labels which fall in the middle of multi-byte classifications,
+    # they will have to be defined via expressions from labels at the start of the
+    # multi-byte classification they fall within. Define those start labels now.
+    for start_addr, end_addr in sorted(config.disassembly_range()):
+        addr = start_addr
+        while addr < end_addr:
+            classification_length = classifications[addr].length()
+            for i in range(1, classification_length):
+                if addr+i in labelled_addrs:
+                    ensure_addr_labelled(addr)
+                    break
+            addr += classification_length
+
+    fix_labels()
 
     # Emit constants first
     if len(constants) > 0:
@@ -153,7 +184,7 @@ def emit():
         while addr <= end_addr:
             # We need to emit any annotations that are "due" part-way through the
             # classification output first. This may involve creating a label at
-            # the point before the classification output.
+            # the point before the classification output. TODO: WE DO AT LEAST PART OF THIS ABOVE NOW, THIS CODE NEEDS A REWORK
             if addr < end_addr:
                 classification_length = classifications[addr].length()
             else:
@@ -229,7 +260,7 @@ labels = {}
 is_expr_label = {}
 optional_labels = {}
 constants = []
-labelled_addrs = set()
+labelled_addrs = collections.defaultdict(set)
 
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.

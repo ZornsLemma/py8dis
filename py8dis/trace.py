@@ -37,6 +37,7 @@ def trace():
 
 # TODO: This code is a bit unreadable!
 def add_references_comments():
+    return # TODO TEMP
     if len(references) == 0:
         return
     for addr, addr_refs in references.items():
