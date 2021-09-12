@@ -1,7 +1,7 @@
-import beebasm
 from trace6502 import *
 
-beebasm.set_disassembly_start("    cpu 1\n\n")
+import config
+config.formatter().set_cmos(True)
 
 class OpcodeUnconditionalBranch(Opcode):
     def __init__(self, mnemonic):

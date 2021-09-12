@@ -46,3 +46,12 @@ def chunks(lst, n):
 
 def isprint(c):
     return 32 <= c <= 126
+
+def check_expr(expr, value):
+    # ENHANCE: It would be good if this could (probably optionally) evaluate
+    # 'expr' itself in the content of the current set of labels and constants.
+    # However, the "assert at assembly time" approach should be absolutely
+    # reliable (it's just not as early a detection as we'd like) so should
+    # probably be retained even if expression evaluation is supported directly
+    # in py8dis.
+    config.formatter().assert_expr(expr, value)

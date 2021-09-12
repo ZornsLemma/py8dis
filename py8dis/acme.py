@@ -9,6 +9,8 @@ config.set_formatter(sys.modules[__name__])
 
 explicit_a = False
 
+_pending_assertions = {}
+
 def set_output_filename(filename):
     # Irrelevant for acme, accepted for compatibility with beebasm.
     pass
@@ -39,6 +41,12 @@ def explicit_label(name, value, offset=None):
 def comment_prefix():
     return ";"
 
+def assert_expr(expr, value):
+    _pending_assertions[expr] = value
+
+def set_cmos(b):
+    pass
+
 def disassembly_start():
     return ""
 
@@ -48,8 +56,16 @@ def code_start(start_addr, end_addr):
 def code_end():
     return ""
 
+# TODO: Not just here, I hate the inline "\n" mess with a lot of these functions. I should convert them to return a list of lines which will be joined with "\n" when finally emitted.
 def disassembly_end():
-    return ""
+    s = ""
+    if len(_pending_assertions) > 0:
+        for expr, value in _pending_assertions.items():
+            s += "!if %s != %s {\n" % (expr, hex(value))
+            s += '    !error "Assertion failed: %s == %s"\n' % (expr, hex(value))
+            s += "}\n"
+        s += "\n"
+    return s
 
 def abs_suffix():
     return "+2"

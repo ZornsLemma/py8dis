@@ -205,6 +205,7 @@ def get_expression(addr, expected_value):
     # an error if it doesn't match expected_value. In reality most expressions will
     # be fairly simple combinations of labels and basic integer arithmetic, mixed with
     # the < and > operators to get the low and high bytes of a 16-bit word.
+    utils.check_expr(expression, expected_value)
     return expression
 
 def get_constant8(addr):

@@ -11,6 +11,7 @@ output_filename = None
 
 explicit_a = True
 
+_pending_assertions = {}
 _disassembly_start = ""
 
 def set_output_filename(filename):
@@ -38,9 +39,13 @@ def explicit_label(name, value, offset=None):
 def comment_prefix():
     return ";"
 
-def set_disassembly_start(s):
+def assert_expr(expr, value):
+    _pending_assertions[expr] = value
+
+def set_cmos(b):
     global _disassembly_start
-    _disassembly_start = s
+    if b:
+        _disassembly_start = "    cpu 1\n\n"
 
 def disassembly_start():
     return utils.force_case(_disassembly_start)
@@ -54,7 +59,12 @@ def code_end():
     return ""
 
 def disassembly_end():
-    s = utils.force_case("\nsave")
+    s = "\n"
+    if len(_pending_assertions) > 0:
+        s += "\n".join(utils.force_case("    assert ") + "%s == %s" % (expr, hex(value)) for expr, value in _pending_assertions.items())
+        s += "\n\n"
+
+    s += utils.force_case("save")
     if output_filename is None:
         s += " pydis_start, pydis_end"
     else:

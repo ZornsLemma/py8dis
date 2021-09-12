@@ -4,6 +4,7 @@ import copy
 import six
 
 import config
+import utils
 
 _final_commands = []
 
@@ -35,6 +36,8 @@ def add_optional_label(addr, name, base_addr=None):
 
 def get_label(addr):
     assert addr in labels
+    if is_expr_label[addr]:
+        utils.check_expr(labels[addr], addr)
     return labels[addr]
 
 def ensure_addr_labelled(addr):
