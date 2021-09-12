@@ -98,11 +98,12 @@ def split_classifications(start_addr, end_addr):
         c = classifications[addr]
         if c.is_mergeable() and c.length() > 1:
             for i in range(1, c.length()):
-                if (addr + i) in labels and not is_expr_label[addr + i]:
-                    classifications[addr + i] = copy.copy(c)
-                    classifications[addr + i].set_length(c.length() - i)
-                    c.set_length(i)
-                    break
+                if (addr + i) in labelled_addrs:
+                    if any(not is_expr for name, is_expr in labelled_addrs[addr+i]):
+                        classifications[addr + i] = copy.copy(c)
+                        classifications[addr + i].set_length(c.length() - i)
+                        c.set_length(i)
+                        break
         addr += classifications[addr].length()
 
 def sorted_annotations(annotations):
