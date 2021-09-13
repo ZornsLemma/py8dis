@@ -198,6 +198,7 @@ def emit():
     # If there are labels which fall in the middle of multi-byte classifications,
     # they will have to be defined via expressions from labels at the start of the
     # multi-byte classification they fall within. Define those start labels now.
+    # TODO: This is a bit pessimistic - those labels might be expression labels, for example.
     for start_addr, end_addr in sorted(config.disassembly_range()):
         addr = start_addr
         while addr < end_addr:
