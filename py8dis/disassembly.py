@@ -168,7 +168,7 @@ def emit():
         addr = start_addr
         while addr < end_addr:
             classification_length = classifications[addr].length()
-            classification_str[addr] = classifications[addr].as_string(addr)
+            classification_str[addr] = classifications[addr].as_string_list(addr)
             addr += classification_length
 
     # Emit constants first
@@ -214,7 +214,7 @@ def emit():
                 print(annotation)
             if addr < end_addr:
                 # We can now emit the classification output.
-                classifications[addr].emit(addr)
+                print("\n".join(classification_str[addr]))
             addr += classification_length
         print(formatter.code_end(), end="")
 

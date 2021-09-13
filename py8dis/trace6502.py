@@ -44,8 +44,11 @@ class Opcode(object):
     def finalise(self):
         pass
 
-    def emit(self, addr):
+    def emit(self, addr): # TODO: redundant?
         print(utils.add_hex_dump(self.as_string(addr), addr, self.length()))
+
+    def as_string_list(self, addr):
+        return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
 
 
 class OpcodeImplied(Opcode):
