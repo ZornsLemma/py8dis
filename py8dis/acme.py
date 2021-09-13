@@ -51,7 +51,7 @@ def disassembly_start():
     return ""
 
 def code_start(start_addr, end_addr):
-    return "    * = %s" % hex4(start_addr)
+    return "    * = %s\n" % hex4(start_addr)
 
 def code_end():
     return ""
