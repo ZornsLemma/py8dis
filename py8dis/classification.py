@@ -30,6 +30,9 @@ class Byte(object):
         assert length > 0
         self._length = length
 
+    def is_code(self, addr):
+        return False
+
     def finalise(self):
         pass
 
@@ -92,6 +95,9 @@ class Word(object):
         assert length % 2 == 0
         self._length = length
 
+    def is_code(self, addr):
+        return False
+
     def finalise(self):
         pass
 
@@ -134,6 +140,9 @@ class String(object):
     def set_length(self, length):
         assert length > 0
         self._length = length
+
+    def is_code(self, addr):
+        return False
 
     def finalise(self):
         pass

@@ -21,9 +21,17 @@ def add_comment(addr, text):
 def add_constant(value, name):
     constants.append((value, name))
 
+expr_labels = {}
+defined_labels = {}
 def add_label(addr, name, expr=False):
     assert not _labels_fixed
-    labelled_addrs[addr].add((name, expr))
+    labelled_addrs[addr] = [] # TODO: THIS SHOULD JUST BE A SET
+    if expr:
+        assert addr not in expr_labels
+        expr_labels[addr] = name
+    else:
+        # TODO: We should support and output multiple labels for addr here, but let's just overwrite for now
+        defined_labels[addr] = name
     return # TODO!
     # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
@@ -45,14 +53,60 @@ def get_label(addr, context):
     assert addr in labelled_addrs
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
+# TODO: May want to expose this to use as it make be useful in a user label maker hook
+def is_code(addr):
+    classification = classifications[addr]
+    if classification is None or classification == partial_classification:
+        return False
+    return classification.is_code(addr)
+
+# TODO: WIP - this creates a name, it doesn't update any data structures (but can ref them of course)
+def label_maker(addr, context):
+    # TODO: This should probably call some kind of user level hook
+    if addr in expr_labels:
+        suggestion = (expr_labels[addr], True)
+    elif addr in defined_labels:
+        suggestion = (defined_labels[addr], False)
+    elif addr in optional_labels:
+        # TODO: We need to respect the base_addr part of optional_labels
+        value, base_addr = optional_labels[addr]
+        if base_addr is None:
+            suggestion = (value, False)
+        else:
+            # TODO: We need to be sure optional_label[base_addr] exists (or we change how optional label expressions work)
+            suggestion = (value, True)
+    else:
+        if is_code(addr):
+            label = "c%04x" % addr
+        else:
+            label = "l%04x" % addr
+        suggestion = (utils.force_case(label), False)
+    if False: # TODO
+        user_suggestion = user_hook(addr, context, suggestion)
+        if user_suggestion is not None:
+            suggestion = user_suggestion
+    return suggestion
+
+all_labels = set()
 def get_final_label(addr, context):
     assert _labels_fixed
-    assert addr in labels
-    if is_expr_label[addr]:
-        utils.check_expr(labels[addr], addr)
-    return labels[addr]
+    assert addr in labelled_addrs
+    label, is_expr = label_maker(addr, context)
+    if is_expr:
+        utils.check_expr(label, addr)
+        return label
+    if label not in all_labels:
+        annotations[addr].append(Label(addr, label))
+        all_labels.add(label)
+    return label
 
+# TODO: WIP - but my current thinking is that all this function is doing is saying "make sure there is a label at address addr, because we will want to refer to it by label - I (the caller) don't care what that label is, I don't have any suggestions to make (though TODO: maybe I could in fact say "code" or "data"?) just make sure there is one"
 def ensure_addr_labelled(addr):
+    if addr not in labelled_addrs:
+        assert not _labels_fixed
+        labelled_addrs[addr] = []
+    return get_label(addr, None) # TODO: NEED A CONTEXT REALLY
+    # TODO!? FOLLOWING REDUNDANT/TO BE MOVED?
     if addr not in labels:
         assert not _labels_fixed
         if addr in optional_labels:
@@ -102,7 +156,8 @@ def split_classifications(start_addr, end_addr):
         if c.is_mergeable() and c.length() > 1:
             for i in range(1, c.length()):
                 if (addr + i) in labelled_addrs:
-                    if any(not is_expr for name, is_expr in labelled_addrs[addr+i]):
+                    # TODO: We need to decide if there are non-expression labels at addr+i, for now we just hack and split even if there is only an expression label
+                    if addr+i in labelled_addrs: # TODO any(not is_expr for name, is_expr in labelled_addrs[addr+i]):
                         classifications[addr + i] = copy.copy(c)
                         classifications[addr + i].set_length(c.length() - i)
                         c.set_length(i)
@@ -115,18 +170,6 @@ def sorted_annotations(annotations):
 def fix_labels():
     global _labels_fixed
     _labels_fixed = True
-    for addr, label_list in labelled_addrs.items():
-        for name, is_expr in label_list:
-            # TODO: Bit of a crappy way to recognise "default" labels
-            if name[0] == 'l' and len(trace.references[addr]) > 0:
-                name = 'c' + name
-
-            if addr not in labels:
-               labels[addr] = name
-               is_expr_label[addr] = is_expr
-            if not is_expr:
-                # An address can have multiple labels as annotations.
-                annotations[addr].append(Label(addr, name))
 
 # TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():
@@ -144,7 +187,8 @@ def emit():
 
     # Give every classification a chance to do any last-minute processing (e.g.
     # creating labels) before we start to emit things and it's too late to
-    # make changes. TODO: This may be redundant if we switch to a model of emitting classifications here but annotations later
+    # make changes. TODO: This may be redundant if we switch to a model of emitting classifications here but annotations later - I think this is only doing anything at all for Relocation classifications anyway
+    # TODO: This code is at best confusing - classification.py has a finalise() function, but here we are "hiding" it behind a variable called classification
     for classification in classifications:
         if classification is not None and classification != partial_classification:
             classification.finalise()

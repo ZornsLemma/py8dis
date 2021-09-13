@@ -9,6 +9,7 @@ def add_standard_labels():
 
     def ol2(addr, name):
         optional_label(addr    , name)
+        # TODO: Next line should probably be using a get_label() lazy label?!
         optional_label(addr + 1, "%s+1" % name, addr)
 
     ol2(0x0200, "userv")
