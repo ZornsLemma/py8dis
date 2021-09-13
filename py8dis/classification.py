@@ -196,21 +196,33 @@ class Relocation(object): # TODO: !?!!
     def is_code(self, addr):
         return False # SFTODO: OK?
 
+    def uses_copy(self):
+        # TODO: crude hack to do beebasm vs acme
+        return config.formatter().explicit_a
+
     def emit(self, addr): # TODO: redundant?
         print("\n".join(self.as_string_list(addr)))
 
     def as_string_list(self, addr):
         result = []
-        # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
-        # TODO: BEEBASM SPECIFIC
-        # TODO: IGNORES CASE FORCING
-        # Source and destination here are the source and destination for the
-        # move which created this Relocation object, so they're "reversed" from
-        # the assembly output perspective.
-        result.append("    skip %s - %s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
-        # We must do all the copyblock commands at the end to avoid any assumption
-        # about the order separate blocks of code are assembled in.
-        disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
+        # TODO: crude hack to do beebasm vs acme
+        if self.uses_copy():
+            # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
+            # TODO: BEEBASM SPECIFIC
+            # TODO: IGNORES CASE FORCING
+            # Source and destination here are the source and destination for the
+            # move which created this Relocation object, so they're "reversed" from
+            # the assembly output perspective.
+            result.append("    skip %s - %s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
+            # We must do all the copyblock commands at the end to avoid any assumption
+            # about the order separate blocks of code are assembled in.
+            # TODO: I am getting this copyblock doubled at the moment in output!
+            disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
+        else:
+            # TODO: Might be more natural for disassembly_range - which does a code_start() call - emit !pseudo pc and braces itself
+            result.append("!pseudopc %s {" % config.formatter().hex(self._dest))
+            result.extend(disassembly.disassemble_range(self._dest, self._dest + self._length))
+            result.append("}")
         return result
 
 

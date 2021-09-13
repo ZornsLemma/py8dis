@@ -41,11 +41,14 @@ def load(addr, filename, md5sum=None):
     pydis_end = max(pydis_end, addr + len(data))
 
 def move(dest, src, length):
-    disassembly.add_classification(src, classification.Relocation(dest, src, length))
+    c = classification.Relocation(dest, src, length)
+    disassembly.add_classification(src, c)
     memory[dest:dest+length] = memory[src:src+length]
     # TODO: should we zero out the "source" region? that might break things but worth thinking about
     # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
     config._disassembly_range.append((dest, dest+length)) # TODO!?
+    if not c.uses_copy():
+        pass # TODO need to do something to stop double output
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
