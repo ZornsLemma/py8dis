@@ -37,7 +37,7 @@ def add_label(addr, name, expr=False):
         assert addr not in expr_labels
         expr_labels[addr] = name
     else:
-        # The first name assigned to an address by this function has "priority"
+        # The first name assigned to an address by this function has priority
         # and will be used by default, but all names will be emitted as labels.
         if addr not in defined_labels:
             defined_labels[addr] = name
