@@ -193,7 +193,9 @@ def emit():
     for start_addr, end_addr in sorted(config.disassembly_range()):
         print(sep, end="")
         sep = "\n"
+        print(formatter.code_start(start_addr, end_addr), end="")
         print("\n".join(disassemble_range(start_addr, end_addr)))
+        print(formatter.code_end(), end="")
 
     if len(_final_commands) > 0:
         print()
@@ -205,8 +207,6 @@ def emit():
 
 def disassemble_range(start_addr, end_addr):
     result = []
-    formatter = config.formatter()
-    result.append(formatter.code_start(start_addr, end_addr)) # TODO: newlines
     addr = start_addr
     while addr <= end_addr:
         if addr < end_addr:
@@ -229,7 +229,6 @@ def disassemble_range(start_addr, end_addr):
             # We can now emit the classification output.
             result.extend(classifications[addr].as_string_list(addr))
         addr += classification_length
-    result.append(formatter.code_end()) # TODO: newlines
     return result
 
 def emitSFTODO():

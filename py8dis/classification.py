@@ -205,6 +205,7 @@ class Relocation(object): # TODO: !?!!
 
     def as_string_list(self, addr):
         result = []
+        # TODO: Do we need to use LazyString here?
         # TODO: crude hack to do beebasm vs acme
         if self.uses_copy():
             # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
@@ -219,7 +220,6 @@ class Relocation(object): # TODO: !?!!
             # TODO: I am getting this copyblock doubled at the moment in output!
             disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
         else:
-            # TODO: Might be more natural for disassembly_range - which does a code_start() call - emit !pseudo pc and braces itself
             result.append("!pseudopc %s {" % config.formatter().hex(self._dest))
             result.extend(disassembly.disassemble_range(self._dest, self._dest + self._length))
             result.append("}")
