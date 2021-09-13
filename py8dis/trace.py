@@ -1,3 +1,4 @@
+import classification # TODO!?
 import collections
 import config
 import disassembly
@@ -16,6 +17,10 @@ def trace():
     disassembled_addresses = set()
     for start_addr, end_addr in config.disassembly_range():
         disassembled_addresses.update(range(start_addr, end_addr))
+    # TODO: Hack - maybe some variant on this is OK, or maybe disassembled_addresses should be built up in parallel with disassembly_range() so it can include these relocated things
+    for c in disassembly.classifications:
+        if isinstance(c, classification.Relocation):
+            disassembled_addresses.update(range(c._dest, c._dest + c._length))
 
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)

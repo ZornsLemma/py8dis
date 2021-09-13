@@ -45,10 +45,9 @@ def move(dest, src, length):
     disassembly.add_classification(src, c)
     memory[dest:dest+length] = memory[src:src+length]
     # TODO: should we zero out the "source" region? that might break things but worth thinking about
-    # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
-    config._disassembly_range.append((dest, dest+length)) # TODO!?
-    if not c.uses_copy():
-        pass # TODO need to do something to stop double output
+    if c.uses_copy():
+        # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
+        config._disassembly_range.append((dest, dest+length)) # TODO!?
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
