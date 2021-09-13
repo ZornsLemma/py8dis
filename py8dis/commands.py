@@ -67,7 +67,7 @@ def label(addr, name):
     disassembly.add_label(addr, name)
 
 def expr_label(addr, s):
-    disassembly.add_label(addr, s, expr=True)
+    disassembly.add_label(addr, s)
 
 def optional_label(addr, name, base_addr=None):
     disassembly.add_optional_label(addr, name, base_addr)

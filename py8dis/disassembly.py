@@ -404,3 +404,6 @@ SFTODOXXXlabelled_addrs = collections.defaultdict(set)
 # based on the annotation priorities but this is a stable sort and preserves
 # order for any particular annotation type.
 annotations = collections.defaultdict(list)
+
+
+# TODO: We seem to assert some simple constants have their own value, instead of that
