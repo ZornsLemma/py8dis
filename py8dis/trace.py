@@ -13,18 +13,9 @@ def add_entry(addr, label=None):
     return disassembly.get_label(addr, addr)
 
 def trace():
-    # TODO: copy of code in disassembly.emit(), although the name is wrong here - we are *going* to disassemble, we haven't *disassembled*
-    disassembled_addresses = set()
-    for start_addr, end_addr in config.disassembly_range():
-        disassembled_addresses.update(range(start_addr, end_addr))
-    # TODO: Hack - maybe some variant on this is OK, or maybe disassembled_addresses should be built up in parallel with disassembly_range() so it can include these relocated things
-    for c in disassembly.classifications:
-        if isinstance(c, classification.Relocation):
-            disassembled_addresses.update(range(c._dest, c._dest + c._length))
-
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)
-        if not disassembly.is_classified(entry_point, 1) and entry_point in disassembled_addresses:
+        if not disassembly.is_classified(entry_point, 1):
             #print(hex(entry_point))
             new_entry_points = config.disassemble_instruction()(entry_point)
             # The first element of new_entry_points is the implicit next
