@@ -41,9 +41,6 @@ class Opcode(object):
     def length(self):
         return 1 + self.operand_length
 
-    def finalise(self):
-        pass
-
     def is_code(self, addr):
         return True
 

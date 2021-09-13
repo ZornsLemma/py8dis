@@ -33,9 +33,6 @@ class Byte(object):
     def is_code(self, addr):
         return False
 
-    def finalise(self):
-        pass
-
     def emit(self, addr): # todo: redundant?
         print("\n".join(self.as_string_list(addr)))
 
@@ -98,9 +95,6 @@ class Word(object):
     def is_code(self, addr):
         return False
 
-    def finalise(self):
-        pass
-
     def emit(self, addr): # todo: redundant?
         print("\n".join(self.as_string_list(addr)))
 
@@ -143,9 +137,6 @@ class String(object):
 
     def is_code(self, addr):
         return False
-
-    def finalise(self):
-        pass
 
     def emit(self, addr): # TODO: redundant?
         print("\n".join(self.as_string_list(addr)))
@@ -201,11 +192,6 @@ class Relocation(object): # TODO: !?!!
 
     def length(self):
         return self._length
-
-    def finalise(self):
-        disassembly.ensure_addr_labelled(self._dest)
-        disassembly.ensure_addr_labelled(self._dest + self._length)
-        disassembly.ensure_addr_labelled(self._source)
 
     def emit(self, addr):
         # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
