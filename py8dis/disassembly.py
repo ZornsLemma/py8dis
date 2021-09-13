@@ -11,6 +11,10 @@ _final_commands = []
 _labels_fixed = False
 _user_label_hook = None
 
+primary_labels = {}
+all_simple_labels = {}
+simple_labelled_addrs = set()
+
 # We assign this to elements of classification which are for second and
 # subsequent bytes of a multi-byte classifcation. Its value doesn't really
 # matter, as long as it's not None so we know these bytes have been classified.
@@ -27,9 +31,44 @@ def add_comment(addr, text):
 def add_constant(value, name):
     constants.append((value, name))
 
+def is_simple_name(s):
+    assert len(s) > 0
+    assert isinstance(s, six.string_types)
+    def valid_first(c):
+        return c.isalpha() or c == "_"
+    def valid_later(c):
+        return c.isalnum() or c == "_"
+    return valid_first(s[0]) and all(valid_later(c) for c in s)
+
+def ensure_annotation(addr, s): # TODO: rename "ensure_simple_label"?
+    assert is_simple_name(s)
+    if s in all_simple_labels:
+        assert all_simple_labels[s] == addr
+    else:
+        all_simple_labels[s] = addr
+        simple_labelled_addrs.add(addr)
+        annotations[addr].append(Label(addr, s))
+
+def add_label(addr, s):
+    assert 0 <= addr <= 0xffff
+    if addr not in primary_labels:
+        primary_labels[addr] = s
+    if is_simple_name(s):
+        ensure_annotation(addr, s)
+
+def add_optional_label(addr, s, base_addr=None):
+    assert 0 <= addr <= 0xffff
+    if base_addr is not None:
+        assert addr != base_addr
+        assert 0 <= base_addr <= 0xffff
+        assert base_addr in optional_labels
+        assert optional_labels[base_addr][1] is None
+    assert addr not in optional_labels
+    optional_labels[addr] = (s, base_addr)
+
 expr_labels = {}
 defined_labels = {}
-def add_label(addr, name, expr=False):
+def SFTODOOLDadd_label(addr, name, expr=False):
     # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
     assert not _labels_fixed
     labelled_addrs[addr] = [] # TODO: THIS SHOULD JUST BE A SET
@@ -45,14 +84,14 @@ def add_label(addr, name, expr=False):
             annotations[addr].append(Label(addr, name))
             all_labels.add(name)
 
-def add_optional_label(addr, name, base_addr=None):
+def SFTODOOLDadd_optional_label(addr, name, base_addr=None):
     assert not _labels_fixed
     assert base_addr is None or addr != base_addr
     optional_labels[addr] = (name, base_addr)
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 def get_label(addr, context):
-    assert addr in labelled_addrs
+    #SFTODODELETEassert addr in labelled_addrs
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 # TODO: May want to expose this to use as it make be useful in a user label maker hook
@@ -62,8 +101,35 @@ def is_code(addr):
         return False
     return classification.is_code(addr)
 
-# TODO: WIP - this creates a name, it doesn't update any data structures (but can ref them of course)
+# TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
+# TODO: If the is expr return is always is_simple_name-ish then we don't need it
+def our_label_maker(addr, context):
+    if addr in primary_labels:
+        s = primary_labels[addr]
+        return (s, not is_simple_name(s))
+    if addr in optional_labels:
+        s, base_addr = optional_labels[addr]
+        if base_addr is not None:
+            # TODO: *If* our "suggestion" is not acted on, we will have added
+            # this base label unnecessarily. I don't think this is a big deal,
+            # but ideally we wouldn't do it.
+            add_label(base_addr, optional_labels[base_addr][0])
+        return (s, not is_simple_name(s))
+    return (utils.force_case(("c%04x" if is_code(addr) else "l%04x") % addr), False)
+
 def label_maker(addr, context):
+    suggestion = our_label_maker(addr, context)
+    if _user_label_hook is not None:
+        user_suggestion = _user_label_hook(addr, context, suggestion)
+        if user_suggestion is not None:
+            return user_suggestion
+    return suggestion
+
+
+
+
+# TODO: WIP - this creates a name, it doesn't update any data structures (but can ref them of course)
+def SFTODOOLDlabel_maker(addr, context):
     # TODO: This should probably call some kind of user level hook
     if addr in expr_labels:
         suggestion = (expr_labels[addr], True)
@@ -91,19 +157,15 @@ def label_maker(addr, context):
 
 all_labels = set()
 def get_final_label(addr, context):
-    assert _labels_fixed
-    assert addr in labelled_addrs
+    #SFTODOOLDassert _labels_fixed
+    #SFTODOOLDassert addr in labelled_addrs
     label, is_expr = label_maker(addr, context)
-    if is_expr:
-        utils.check_expr(label, addr)
-        return label
-    if label not in all_labels:
-        annotations[addr].append(Label(addr, label))
-        all_labels.add(label)
+    add_label(addr, label)
     return label
 
 # TODO: WIP - but my current thinking is that all this function is doing is saying "make sure there is a label at address addr, because we will want to refer to it by label - I (the caller) don't care what that label is, I don't have any suggestions to make (though TODO: maybe I could in fact say "code" or "data"?) just make sure there is one"
 def ensure_addr_labelled(addr):
+    return # TODO!?
     if addr not in labelled_addrs:
         assert not _labels_fixed
         labelled_addrs[addr] = []
@@ -152,6 +214,7 @@ def merge_classifications(start_addr, end_addr):
 # Split variable-length classifications at labels to minimise the number of
 # labels assigned via expressions instead of simple "label here" definitions.
 def split_classifications(start_addr, end_addr):
+    return # SFTODO!? THINK WE HAVE THIS DONE ELSEWHERE NOW
     addr = start_addr
     while addr < end_addr:
         c = classifications[addr]
@@ -187,13 +250,8 @@ def emit():
         # does reach it and we can emit labels inline there.
         disassembled_addresses.update(range(start_addr, end_addr + 1))
 
-    # Give every classification a chance to do any last-minute processing (e.g.
-    # creating labels) before we start to emit things and it's too late to
-    # make changes. TODO: This may be redundant if we switch to a model of emitting classifications here but annotations later - I think this is only doing anything at all for Relocation classifications anyway
-    # TODO: This code is at best confusing - classification.py has a finalise() function, but here we are "hiding" it behind a variable called classification
-    for classification in classifications:
-        if classification is not None and classification != partial_classification:
-            classification.finalise()
+    # TODO!?
+    classification_str = emitSFTODO()
 
     # If there are labels which fall in the middle of multi-byte classifications,
     # they will have to be defined via expressions from labels at the start of the
@@ -204,20 +262,9 @@ def emit():
         while addr < end_addr:
             classification_length = classifications[addr].length()
             for i in range(1, classification_length):
-                if addr+i in labelled_addrs:
+                if addr+i in simple_labelled_addrs:
                     ensure_addr_labelled(addr)
                     break
-            addr += classification_length
-
-    fix_labels()
-
-    # TODO!?
-    classification_str = [None]*64*1024
-    for start_addr, end_addr in sorted(config.disassembly_range()):
-        addr = start_addr
-        while addr < end_addr:
-            classification_length = classifications[addr].length()
-            classification_str[addr] = classifications[addr].as_string_list(addr)
             addr += classification_length
 
     # Emit constants first
@@ -246,9 +293,6 @@ def emit():
         print(formatter.code_start(start_addr, end_addr))
         addr = start_addr
         while addr <= end_addr:
-            # We need to emit any annotations that are "due" part-way through the
-            # classification output first. This may involve creating a label at
-            # the point before the classification output. TODO: WE DO AT LEAST PART OF THIS ABOVE NOW, THIS CODE NEEDS A REWORK
             if addr < end_addr:
                 classification_length = classifications[addr].length()
             else:
@@ -275,6 +319,34 @@ def emit():
     print(formatter.disassembly_end(), end="")
 
 
+def emitSFTODO():
+    c_str = {}
+
+    for start_addr, end_addr in sorted(config.disassembly_range()):
+        addr = start_addr
+        while addr < end_addr:
+            c = classifications[addr]
+            c_str[addr] = c.as_string_list(addr)
+            addr += c.length()
+
+    for start_addr, end_addr in sorted(config.disassembly_range()):
+        addr = start_addr
+        while addr < end_addr:
+            c = classifications[addr]
+            if c.is_mergeable() and c.length() > 1:
+                for i in range(1, c.length()):
+                    if addr+i in simple_labelled_addrs:
+                        classifications[addr + i] = copy.copy(c)
+                        classifications[addr + i].set_length(c.length() - i)
+                        c.set_length(i)
+                        c_str[addr] = c.as_string_list(addr)
+                        c_str[addr + i] = classifications[addr + i].as_string_list(addr + i)
+                        break
+            addr += c.length()
+
+    return c_str
+
+
 class Label(object):
     priority = 1000
 
@@ -289,7 +361,7 @@ class Label(object):
         if offset == 0:
             return formatter.inline_label(self.name)
         else:
-            label = ensure_addr_labelled(addr)
+            label = get_label(addr, None) # TODO NEED CONTEXT IDEALLY? MAYBE NOT HERE
             return formatter.explicit_label(self.name, label, offset)
 
     def as_string_assignment(self):
@@ -324,7 +396,7 @@ labels = {}
 is_expr_label = {}
 optional_labels = {}
 constants = []
-labelled_addrs = collections.defaultdict(set)
+SFTODOXXXlabelled_addrs = collections.defaultdict(set)
 
 # An address can have an arbitrary number of annotations; we may need to slide
 # them around in the code slight to fit them round multi-byte classifications.

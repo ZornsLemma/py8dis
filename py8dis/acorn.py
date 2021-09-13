@@ -58,7 +58,7 @@ def add_standard_labels():
     optional_label(0xffe0, "osrdch")
     optional_label(0xffe3, "osasci")
     optional_label(0xffe7, "osnewl")
-    optional_label(0xffee, "oswrcr")
+    optional_label(0xffec, "oswrcr")
     optional_label(0xffee, "oswrch")
     optional_label(0xfff1, "osword")
     optional_label(0xfff4, "osbyte")
