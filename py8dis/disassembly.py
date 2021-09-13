@@ -14,6 +14,24 @@ primary_labels = {}
 all_simple_labels = {}
 simple_labelled_addrs = set()
 
+
+# There is at most one classification for any address; in practice by the end of
+# disassembly there will be exactly one for all addresses in the target range,
+# because we'll classify anything left over as data. Classifications are effectively
+# "things in the assembler input which generate direct output", like instructions
+# or data.
+classifications = [None] * 64*1024
+
+optional_labels = {}
+constants = []
+
+# An address can have an arbitrary number of annotations; we may need to slide
+# them around in the code slight to fit them round multi-byte classifications.
+# By using a list we preserve the relative order of additions; we do sort this
+# based on the annotation priorities but this is a stable sort and preserves
+# order for any particular annotation type.
+annotations = collections.defaultdict(list)
+
 # We assign this to elements of classification which are for second and
 # subsequent bytes of a multi-byte classifcation. Its value doesn't really
 # matter, as long as it's not None so we know these bytes have been classified.
@@ -266,32 +284,5 @@ class Comment(object):
     def as_string(self, addr):
         formatter = config.formatter()
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
-
-
-# There is at most one classification for any address; in practice by the end of
-# disassembly there will be exactly one for all addresses in the target range,
-# because we'll classify anything left over as data. Classifications are effectively
-# "things in the assembler input which generate direct output", like instructions
-# or data.
-classifications = [None] * 64*1024
-
-# labels are named addresses which are used automatically when disassembling.
-# Some labels are expression labels and are defined in terms of other labels;
-# the expression is used directly to represent the address. Optional labels are
-# pruned away if they aren't used. Constants are named values which are not used
-# automatically, only when specifically indicated for a particular address.
-labels = {}
-is_expr_label = {}
-optional_labels = {}
-constants = []
-SFTODOXXXlabelled_addrs = collections.defaultdict(set)
-
-# An address can have an arbitrary number of annotations; we may need to slide
-# them around in the code slight to fit them round multi-byte classifications.
-# By using a list we preserve the relative order of additions; we do sort this
-# based on the annotation priorities but this is a stable sort and preserves
-# order for any particular annotation type.
-annotations = collections.defaultdict(list)
-
 
 # TODO: We seem to assert some simple constants have their own value, instead of that
