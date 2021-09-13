@@ -31,8 +31,8 @@ def add_constant(value, name):
     constants.append((value, name))
 
 def is_simple_name(s):
-    assert len(s) > 0
     assert isinstance(s, six.string_types)
+    assert len(s) > 0
     def valid_first(c):
         return c.isalpha() or c == "_"
     def valid_later(c):
@@ -57,6 +57,7 @@ def add_label(addr, s):
 
 def add_optional_label(addr, s, base_addr=None):
     assert 0 <= addr <= 0xffff
+    assert addr not in optional_labels
     if base_addr is not None:
         assert addr != base_addr
         assert 0 <= base_addr <= 0xffff
@@ -64,7 +65,6 @@ def add_optional_label(addr, s, base_addr=None):
         assert optional_labels[base_addr][1] is None
     else:
         assert is_simple_name(s)
-    assert addr not in optional_labels
     optional_labels[addr] = (s, base_addr)
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
@@ -79,15 +79,13 @@ def is_code(addr):
     return classification.is_code(addr)
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
-# TODO: If the is expr return is always is_simple_name-ish then we don't need it
 def our_label_maker(addr, context):
     if addr in primary_labels:
-        s = primary_labels[addr]
-        return s
+        return primary_labels[addr]
     if addr in optional_labels:
         s, base_addr = optional_labels[addr]
         if base_addr is not None:
-            # TODO: *If* our "suggestion" is not acted on, we will have added
+            # TODO: If our "suggestion" is not acted on, we will have added
             # this base label unnecessarily. I don't think this is a big deal,
             # but ideally we wouldn't do it.
             add_label(base_addr, optional_labels[base_addr][0])
@@ -133,30 +131,8 @@ def merge_classifications(start_addr, end_addr):
                 addr2 += addr2_length
         addr += classifications[addr].length()
 
-# Split variable-length classifications at labels to minimise the number of
-# labels assigned via expressions instead of simple "label here" definitions.
-def split_classifications(start_addr, end_addr):
-    return # SFTODO!? THINK WE HAVE THIS DONE ELSEWHERE NOW
-    addr = start_addr
-    while addr < end_addr:
-        c = classifications[addr]
-        if c.is_mergeable() and c.length() > 1:
-            for i in range(1, c.length()):
-                if (addr + i) in labelled_addrs:
-                    # TODO: We need to decide if there are non-expression labels at addr+i, for now we just hack and split even if there is only an expression label
-                    if addr+i in labelled_addrs: # TODO any(not is_expr for name, is_expr in labelled_addrs[addr+i]):
-                        classifications[addr + i] = copy.copy(c)
-                        classifications[addr + i].set_length(c.length() - i)
-                        c.set_length(i)
-                        break
-        addr += classifications[addr].length()
-
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
-
-def fix_labels():
-    global _labels_fixed
-    _labels_fixed = True
 
 # TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():

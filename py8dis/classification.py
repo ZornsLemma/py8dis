@@ -331,4 +331,3 @@ def finalise():
             addr += disassembly.get_classification(addr).length()
 
         disassembly.merge_classifications(start_addr, end_addr)
-        disassembly.split_classifications(start_addr, end_addr)
