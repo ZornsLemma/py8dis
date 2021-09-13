@@ -23,6 +23,7 @@ def add_constant(value, name):
 
 expr_labels = {}
 defined_labels = {}
+# TODO: WIP - I believe now it's possible for a label to not be defined via add_label(), if the user hook decides to create it
 def add_label(addr, name, expr=False):
     assert not _labels_fixed
     labelled_addrs[addr] = [] # TODO: THIS SHOULD JUST BE A SET
@@ -31,7 +32,11 @@ def add_label(addr, name, expr=False):
         expr_labels[addr] = name
     else:
         # TODO: We should support and output multiple labels for addr here, but let's just overwrite for now
-        defined_labels[addr] = name
+        if addr not in defined_labels:
+            defined_labels[addr] = name
+        if name not in all_labels:
+            annotations[addr].append(Label(addr, name))
+            all_labels.add(name)
     return # TODO!
     # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
     # An address has one "primary" label, which is the first label we see; this
