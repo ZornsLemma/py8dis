@@ -11,7 +11,7 @@ _final_commands = []
 _labels_fixed = False
 
 # We assign this to elements of classification which are for second and
-# subequent bytes of a multi-byte classifcation. Its value doesn't really
+# subsequent bytes of a multi-byte classifcation. Its value doesn't really
 # matter, as long as it's not None so we know these bytes have been classified.
 partial_classification = 0
 
