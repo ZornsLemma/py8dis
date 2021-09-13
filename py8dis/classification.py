@@ -193,17 +193,25 @@ class Relocation(object): # TODO: !?!!
     def length(self):
         return self._length
 
-    def emit(self, addr):
+    def is_code(self, addr):
+        return False # SFTODO: OK?
+
+    def emit(self, addr): # TODO: redundant?
+        print("\n".join(self.as_string_list(addr)))
+
+    def as_string_list(self, addr):
+        result = []
         # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
         # TODO: BEEBASM SPECIFIC
         # TODO: IGNORES CASE FORCING
         # Source and destination here are the source and destination for the
         # move which created this Relocation object, so they're "reversed" from
         # the assembly output perspective.
-        print("    skip %s-%s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
+        result.append("    skip %s - %s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
         # We must do all the copyblock commands at the end to avoid any assumption
         # about the order separate blocks of code are assembled in.
         disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
+        return result
 
 
 def add_expression(addr, s):
