@@ -142,7 +142,7 @@ def emit():
 
     # Give every classification a chance to do any last-minute processing (e.g.
     # creating labels) before we start to emit things and it's too late to
-    # make changes.
+    # make changes. TODO: This may be redundant if we switch to a model of emitting classifications here but annotations later
     for classification in classifications:
         if classification is not None and classification != partial_classification:
             classification.finalise()
@@ -161,6 +161,15 @@ def emit():
             addr += classification_length
 
     fix_labels()
+
+    # TODO!?
+    classification_str = [None]*64*1024
+    for start_addr, end_addr in sorted(config.disassembly_range()):
+        addr = start_addr
+        while addr < end_addr:
+            classification_length = classifications[addr].length()
+            classification_str[addr] = classifications[addr].as_string(addr)
+            addr += classification_length
 
     # Emit constants first
     if len(constants) > 0:

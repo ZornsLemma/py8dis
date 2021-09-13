@@ -33,7 +33,11 @@ class Byte(object):
     def finalise(self):
         pass
 
-    def emit(self, addr):
+    def emit(self, addr): # TODO: redundant?
+        print(self.as_string(addr), end="")
+
+    def as_string(self, addr):
+        result = ""
         byte_prefix = formatter().byte_prefix()
         data = list(get_constant8(addr + i) for i in range(self._length))
         def asciify(n):
@@ -66,9 +70,10 @@ class Byte(object):
         comment_indent = config.inline_comment_column()
         for directive, comment in zip(directives, comments):
             if config.bytes_as_ascii():
-                print("%-*s%s" % (comment_indent, directive, comment))
+                result += ("%-*s%s" % (comment_indent, directive, comment)) + "\n"
             else:
-                print(directive)
+                result += directive + "\n"
+        return result
 
 
 class Word(object):
@@ -90,9 +95,13 @@ class Word(object):
     def finalise(self):
         pass
 
-    def emit(self, addr):
+    def emit(self, addr): # TODO: redundant?
+        print(self.as_string(addr), end="")
+
+    def as_string(self, addr):
         # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
         # should probably all be cleaned up and factored out.
+        result = ""
         data = list(get_constant16(addr + i) for i in range(0, self._length, 2))
         longest_item = max(len(x) for x in data)
         available_width = config.inline_comment_column() - 10
@@ -105,8 +114,9 @@ class Word(object):
             for item in chunk:
                 s += sep + "%-*s" % (item_min_width, item)
                 sep = ", "
-            print(utils.add_hex_dump("%s%s" % (formatter().word_prefix(), s), addr + i, len(chunk) * 2))
+            result += (utils.add_hex_dump("%s%s" % (formatter().word_prefix(), s), addr + i, len(chunk) * 2)) + "\n"
             i += len(chunk)
+        return result
 
 
 class String(object):
@@ -128,7 +138,11 @@ class String(object):
     def finalise(self):
         pass
 
-    def emit(self, addr):
+    def emit(self, addr): # TODO: redundant?
+        print(self.as_string(addr), end="")
+
+    def as_string(self, addr):
+        result = ""
         prefix = formatter().string_prefix()
         s = prefix
         state = 0
@@ -155,14 +169,15 @@ class String(object):
             if len(s) > (config.inline_comment_column() - 5):
                 if state == 1:
                     s += '"'
-                print(utils.add_hex_dump(s, addr + s_i, i - s_i))
+                result += utils.add_hex_dump(s, addr + s_i, i - s_i) + "\n"
                 s = prefix
                 s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            print(utils.add_hex_dump(s, addr + s_i, self._length - s_i))
+            result += utils.add_hex_dump(s, addr + s_i, self._length - s_i) + "\n"
+        return result
 
 
 class Relocation(object): # TODO: !?!!
