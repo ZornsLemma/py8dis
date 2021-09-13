@@ -22,6 +22,7 @@ def add_constant(value, name):
     constants.append((value, name))
 
 def add_label(addr, name, expr=False):
+    assert not _labels_fixed
     labelled_addrs[addr].add((name, expr))
     return # TODO!
     # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
@@ -35,6 +36,7 @@ def add_label(addr, name, expr=False):
         annotations[addr].append(Label(addr, name))
 
 def add_optional_label(addr, name, base_addr=None):
+    assert not _labels_fixed
     assert base_addr is None or addr != base_addr
     optional_labels[addr] = (name, base_addr)
 
