@@ -4,6 +4,7 @@ import copy
 import six
 
 import config
+import trace # SFTODO TEMP?
 import utils
 
 _final_commands = []
@@ -114,6 +115,10 @@ def fix_labels():
     _labels_fixed = True
     for addr, label_list in labelled_addrs.items():
         for name, is_expr in label_list:
+            # TODO: Bit of a crappy way to recognise "default" labels
+            if name[0] == 'l' and len(trace.references[addr]) > 0:
+                name = 'c' + name
+
             if addr not in labels:
                labels[addr] = name
                is_expr_label[addr] = is_expr
