@@ -182,6 +182,10 @@ def emit():
             else:
                 classification_length = 1
             pending_annotations = []
+            # We queue up annotations for addresses >addr (i.e. those
+            # "within" a multi-byte classification) first because their
+            # as_string() method might cause new annotations to appear at
+            # address addr.
             for i in range(1, classification_length):
                 for annotation in sorted_annotations(annotations[addr + i]):
                     pending_annotations.append(annotation.as_string(addr))
