@@ -9,11 +9,17 @@ import utils
 
 _final_commands = []
 _labels_fixed = False
+_user_label_hook = None
 
 # We assign this to elements of classification which are for second and
 # subsequent bytes of a multi-byte classifcation. Its value doesn't really
 # matter, as long as it's not None so we know these bytes have been classified.
 partial_classification = 0
+
+def set_user_label_hook(hook):
+    global _user_label_hook
+    assert _user_label_hook is None
+    _user_label_hook = hook
 
 def add_comment(addr, text):
     annotations[addr].append(Comment(text))
@@ -86,8 +92,8 @@ def label_maker(addr, context):
         else:
             label = "l%04x" % addr
         suggestion = (utils.force_case(label), False)
-    if False: # TODO
-        user_suggestion = user_hook(addr, context, suggestion)
+    if _user_label_hook is not None: # TODO
+        user_suggestion = _user_label_hook(addr, context, suggestion)
         if user_suggestion is not None:
             suggestion = user_suggestion
     return suggestion

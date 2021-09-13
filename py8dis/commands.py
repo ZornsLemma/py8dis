@@ -131,6 +131,9 @@ def code_ptr(addr, addr_high=None, offset=0):
 def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
+def set_label_hook(hook): # TODO: Rename to include "label_maker_hook" or similar?
+    disassembly.set_user_label_hook(hook)
+
 def go(post_trace_steps=None, autostring_min_length=3):
     label(pydis_start, "pydis_start")
     label(pydis_end, "pydis_end")

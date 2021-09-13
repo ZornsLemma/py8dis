@@ -10,6 +10,14 @@ acorn.is_sideways_rom()
 
 wordentry(0x8826, 121) # XXX: table size is a guess
 
+# This is pointless as used, but notice that a label hook can introduce a
+# label indepdently of the standard label() command.
+def our_label_hook(addr, context, suggestion):
+    if addr == 0x80b6:
+        return ("copy_to_stack_loop", False)
+    return suggestion
+set_label_hook(our_label_hook)
+
 # XXX: l907d has a jsr which is followed by a BRA opcode, but it isn't
 # disassembled because the BRA operand is already being disassembled as
 # a tsb. This may well be a deliberate coding trick rather than a glitch
