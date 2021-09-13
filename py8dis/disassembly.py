@@ -167,6 +167,7 @@ def emit():
         disassembled_addresses.update(range(start_addr, end_addr + 1))
 
     # TODO!?
+    global classification_str
     classification_str = emitSFTODO()
 
     # Emit constants first
@@ -192,30 +193,7 @@ def emit():
     for start_addr, end_addr in sorted(config.disassembly_range()):
         print(sep, end="")
         sep = "\n"
-        print(formatter.code_start(start_addr, end_addr))
-        addr = start_addr
-        while addr <= end_addr:
-            if addr < end_addr:
-                classification_length = classifications[addr].length()
-            else:
-                classification_length = 1
-            pending_annotations = []
-            # We queue up annotations for addresses >addr (i.e. those
-            # "within" a multi-byte classification) first because their
-            # as_string() method might cause new annotations to appear at
-            # address addr.
-            for i in range(1, classification_length):
-                for annotation in sorted_annotations(annotations[addr + i]):
-                    pending_annotations.append(annotation.as_string(addr))
-            for annotation in sorted_annotations(annotations[addr]):
-                print(annotation.as_string(addr))
-            for annotation in pending_annotations:
-                print(annotation)
-            if addr < end_addr:
-                # We can now emit the classification output.
-                print("\n".join(classification_str[addr]))
-            addr += classification_length
-        print(formatter.code_end(), end="")
+        print("\n".join(disassemble_range(start_addr, end_addr)))
 
     if len(_final_commands) > 0:
         print()
@@ -224,6 +202,35 @@ def emit():
 
     print(formatter.disassembly_end(), end="")
 
+
+def disassemble_range(start_addr, end_addr):
+    result = []
+    formatter = config.formatter()
+    result.append(formatter.code_start(start_addr, end_addr)) # TODO: newlines
+    addr = start_addr
+    while addr <= end_addr:
+        if addr < end_addr:
+            classification_length = classifications[addr].length()
+        else:
+            classification_length = 1
+        pending_annotations = []
+        # We queue up annotations for addresses >addr (i.e. those
+        # "within" a multi-byte classification) first because their
+        # as_string() method might cause new annotations to appear at
+        # address addr.
+        for i in range(1, classification_length):
+            for annotation in sorted_annotations(annotations[addr + i]):
+                pending_annotations.append(annotation.as_string(addr))
+        for annotation in sorted_annotations(annotations[addr]):
+            result.append(annotation.as_string(addr))
+        for annotation in pending_annotations:
+            result.append(annotation)
+        if addr < end_addr:
+            # We can now emit the classification output.
+            result.extend(classification_str[addr])
+        addr += classification_length
+    result.append(formatter.code_end()) # TODO: newlines
+    return result
 
 def emitSFTODO():
     c_str = {}
