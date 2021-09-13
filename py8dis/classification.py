@@ -217,7 +217,6 @@ class Relocation(object): # TODO: !?!!
             result.append("    skip %s - %s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
             # We must do all the copyblock commands at the end to avoid any assumption
             # about the order separate blocks of code are assembled in.
-            # TODO: I am getting this copyblock doubled at the moment in output!
             disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
         else:
             result.append("!pseudopc %s {" % config.formatter().hex(self._dest))
