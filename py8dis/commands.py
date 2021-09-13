@@ -118,12 +118,12 @@ def code_ptr(addr, addr_high=None, offset=0):
         # well, but since the assembler has support for emitting a little-endian
         # 16-bit word it's nice to use it when we can.
         word(addr)
-        expr(addr, "%s%s" % (label, offset_string))
+        expr(addr, utils.LazyString("%s%s", label, offset_string))
     else:
         byte(addr)
-        expr(addr, "<(%s%s)" % (label, offset_string))
+        expr(addr, utils.LazyString("<(%s%s)", label, offset_string))
         byte(addr_high)
-        expr(addr_high, ">(%s%s)" % (label, offset_string))
+        expr(addr_high, utils.LazyString(">(%s%s)", label, offset_string))
     if abs(addr_high - addr) == 1:
         return max(addr, addr_high) + 1
     return None
