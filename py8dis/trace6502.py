@@ -99,7 +99,6 @@ class OpcodeZp(Opcode):
         pass
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(get_u8(addr + 1))
         return [addr + 2]
 
     def as_string(self, addr):
@@ -152,7 +151,6 @@ class OpcodeDataAbs(OpcodeAbs):
         pass
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
         return [addr + 3]
 
 
@@ -181,7 +179,6 @@ class OpcodeJmpInd(OpcodeAbs):
         pass
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
         return [None]
 
 

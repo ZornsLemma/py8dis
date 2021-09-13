@@ -31,7 +31,6 @@ class OpcodeJmpAbsX(OpcodeAbs):
         pass
 
     def disassemble(self, addr):
-        disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
         return [None]
 
 

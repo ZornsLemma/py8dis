@@ -8,7 +8,6 @@ import trace # SFTODO TEMP?
 import utils
 
 _final_commands = []
-_labels_fixed = False
 _user_label_hook = None
 
 primary_labels = {}
@@ -63,35 +62,13 @@ def add_optional_label(addr, s, base_addr=None):
         assert 0 <= base_addr <= 0xffff
         assert base_addr in optional_labels
         assert optional_labels[base_addr][1] is None
+    else:
+        assert is_simple_name(s)
     assert addr not in optional_labels
     optional_labels[addr] = (s, base_addr)
 
-expr_labels = {}
-defined_labels = {}
-def SFTODOOLDadd_label(addr, name, expr=False):
-    # ENHANCE: die_rt() that addr is in 0-&ffff inclusive?
-    assert not _labels_fixed
-    labelled_addrs[addr] = [] # TODO: THIS SHOULD JUST BE A SET
-    if expr:
-        assert addr not in expr_labels
-        expr_labels[addr] = name
-    else:
-        # The first name assigned to an address by this function has priority
-        # and will be used by default, but all names will be emitted as labels.
-        if addr not in defined_labels:
-            defined_labels[addr] = name
-        if name not in all_labels:
-            annotations[addr].append(Label(addr, name))
-            all_labels.add(name)
-
-def SFTODOOLDadd_optional_label(addr, name, base_addr=None):
-    assert not _labels_fixed
-    assert base_addr is None or addr != base_addr
-    optional_labels[addr] = (name, base_addr)
-
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 def get_label(addr, context):
-    #SFTODODELETEassert addr in labelled_addrs
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 # TODO: May want to expose this to use as it make be useful in a user label maker hook
@@ -106,7 +83,7 @@ def is_code(addr):
 def our_label_maker(addr, context):
     if addr in primary_labels:
         s = primary_labels[addr]
-        return (s, not is_simple_name(s))
+        return s
     if addr in optional_labels:
         s, base_addr = optional_labels[addr]
         if base_addr is not None:
@@ -114,8 +91,8 @@ def our_label_maker(addr, context):
             # this base label unnecessarily. I don't think this is a big deal,
             # but ideally we wouldn't do it.
             add_label(base_addr, optional_labels[base_addr][0])
-        return (s, not is_simple_name(s))
-    return (utils.force_case(("c%04x" if is_code(addr) else "l%04x") % addr), False)
+        return s
+    return utils.force_case(("c%04x" if is_code(addr) else "l%04x") % addr)
 
 def label_maker(addr, context):
     suggestion = our_label_maker(addr, context)
@@ -125,65 +102,10 @@ def label_maker(addr, context):
             return user_suggestion
     return suggestion
 
-
-
-
-# TODO: WIP - this creates a name, it doesn't update any data structures (but can ref them of course)
-def SFTODOOLDlabel_maker(addr, context):
-    # TODO: This should probably call some kind of user level hook
-    if addr in expr_labels:
-        suggestion = (expr_labels[addr], True)
-    elif addr in defined_labels:
-        suggestion = (defined_labels[addr], False)
-    elif addr in optional_labels:
-        # TODO: We need to respect the base_addr part of optional_labels
-        value, base_addr = optional_labels[addr]
-        if base_addr is None:
-            suggestion = (value, False)
-        else:
-            # TODO: We need to be sure optional_label[base_addr] exists (or we change how optional label expressions work)
-            suggestion = (value, True)
-    else:
-        if is_code(addr):
-            label = "c%04x" % addr
-        else:
-            label = "l%04x" % addr
-        suggestion = (utils.force_case(label), False)
-    if _user_label_hook is not None: # TODO
-        user_suggestion = _user_label_hook(addr, context, suggestion)
-        if user_suggestion is not None:
-            suggestion = user_suggestion
-    return suggestion
-
-all_labels = set()
 def get_final_label(addr, context):
-    #SFTODOOLDassert _labels_fixed
-    #SFTODOOLDassert addr in labelled_addrs
-    label, is_expr = label_maker(addr, context)
-    add_label(addr, label)
-    return label
-
-# TODO: WIP - but my current thinking is that all this function is doing is saying "make sure there is a label at address addr, because we will want to refer to it by label - I (the caller) don't care what that label is, I don't have any suggestions to make (though TODO: maybe I could in fact say "code" or "data"?) just make sure there is one"
-def ensure_addr_labelled(addr):
-    return # TODO!?
-    if addr not in labelled_addrs:
-        assert not _labels_fixed
-        labelled_addrs[addr] = []
-    return get_label(addr, None) # TODO: NEED A CONTEXT REALLY
-    # TODO!? FOLLOWING REDUNDANT/TO BE MOVED?
-    if addr not in labels:
-        assert not _labels_fixed
-        if addr in optional_labels:
-            label, base_addr = optional_labels.get(addr)
-            if base_addr is None:
-                add_label(addr, label)
-            else:
-                ensure_addr_labelled(base_addr)
-                add_label(addr, label, True)
-        else:
-            label = ("l%04x" if config.lower_case() else "L%04X") % addr
-            add_label(addr, label)
-    return get_label(addr, None) # TODO: NEED A CONTEXT REALLY
+    s = label_maker(addr, context)
+    add_label(addr, s)
+    return s
 
 def is_classified(addr, length):
     return any(x is not None for x in classifications[addr:addr+length])
@@ -252,20 +174,6 @@ def emit():
 
     # TODO!?
     classification_str = emitSFTODO()
-
-    # If there are labels which fall in the middle of multi-byte classifications,
-    # they will have to be defined via expressions from labels at the start of the
-    # multi-byte classification they fall within. Define those start labels now.
-    # TODO: This is a bit pessimistic - those labels might be expression labels, for example.
-    for start_addr, end_addr in sorted(config.disassembly_range()):
-        addr = start_addr
-        while addr < end_addr:
-            classification_length = classifications[addr].length()
-            for i in range(1, classification_length):
-                if addr+i in simple_labelled_addrs:
-                    ensure_addr_labelled(addr)
-                    break
-            addr += classification_length
 
     # Emit constants first
     if len(constants) > 0:

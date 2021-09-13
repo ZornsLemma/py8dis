@@ -14,7 +14,7 @@ wordentry(0x8826, 121) # XXX: table size is a guess
 # label indepdently of the standard label() command.
 def our_label_hook(addr, context, suggestion):
     if addr == 0x80b6:
-        return ("copy_to_stack_loop", False)
+        return "copy_to_stack_loop"
     return suggestion
 set_label_hook(our_label_hook)
 

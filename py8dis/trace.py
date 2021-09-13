@@ -7,9 +7,7 @@ references = collections.defaultdict(set)
 
 def add_entry(addr, label=None):
     entry_points.append(addr)
-    if label is None:
-        disassembly.ensure_addr_labelled(addr)
-    else:
+    if label is not None:
         disassembly.add_label(addr, label)
     return disassembly.get_label(addr, addr)
 
