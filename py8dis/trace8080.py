@@ -28,9 +28,6 @@ class Opcode(object):
     def is_code(self, addr):
         return True
 
-    def finalise(self):
-        pass
-
     def emit(self, addr): # TODO: redundant?
         print(utils.add_hex_dump(self.as_string(addr), addr, self.length()))
 
