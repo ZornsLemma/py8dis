@@ -31,7 +31,6 @@ def load(addr, filename, md5sum=None):
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    config.add_disassembly_range(addr, addr + len(data))
 
 # ENHANCE: This isn't good enough for cases where a program copies different
 # blocks of code/data into the same part of memory at different times. This
@@ -56,7 +55,7 @@ def move(dest, src, length):
     # tracing.
     if c.uses_copy():
         # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
-        config._disassembly_range.append((dest, dest+length)) # TODO!?
+        pass # TODO: config._disassembly_range.append((dest, dest+length)) # TODO!?
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -146,8 +145,18 @@ def set_label_hook(hook): # TODO: Rename to include "label_maker_hook" or simila
     disassembly.set_user_label_hook(hook)
 
 def go(post_trace_steps=None, autostring_min_length=3):
-    label(config.pydis_start, "pydis_start")
-    label(config.pydis_end, "pydis_end")
+    # TODO: Inefficient and also probably duplicating something we do elsewhere
+    # TODO: This doesn't give the "right" pydis_start for move()-using things with beebasm (at least) - but this area is in need of thinking some more anyway
+    pydis_start = None
+    pydis_end = None
+    for i in range(len(memory)):
+        if memory[i] is not None:
+            if pydis_start is None:
+                pydis_start = i
+            pydis_end = i + 1
+    label(pydis_start, "pydis_start")
+    label(pydis_end, "pydis_end")
+
     trace.trace()
     if config.label_references():
         trace.add_references_comments()

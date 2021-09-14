@@ -38,6 +38,8 @@ def add_references_comments():
         disassembly.add_comment(addr, "Referenced %s by %s" % (count, ", ".join(config.formatter().hex(addr_ref) for addr_ref in addr_refs)))
 
 def add_reference_histogram():
+    if len(references) == 0:
+        return
     frequency_table = [(addr, len(addr_refs)) for addr, addr_refs in references.items()]
     frequency_table = sorted(frequency_table, key=lambda x: (x[1], -x[0]), reverse=True)
     longest_label = max(len(disassembly.get_label(addr, addr)) for addr in references)
