@@ -98,6 +98,7 @@ def is_code(addr):
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 def our_label_maker(addr, context):
+    assert context is not None
     if addr in primary_labels:
         return primary_labels[addr]
     if addr in optional_labels:
@@ -275,7 +276,7 @@ class Label(object):
         if offset == 0:
             return formatter.inline_label(self.name)
         else:
-            label = get_label(addr, None) # TODO NEED CONTEXT IDEALLY? MAYBE NOT HERE
+            label = get_label(addr, self.addr)
             return formatter.explicit_label(self.name, label, offset)
 
     def as_string_assignment(self):
@@ -293,4 +294,4 @@ class Comment(object):
         formatter = config.formatter()
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
 
-# TODO: We seem to assert some simple constants have their own value, instead of that
+# TODO: We seem to assert some simple constants have their own value - is this wrong/weird?
