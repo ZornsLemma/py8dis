@@ -238,17 +238,19 @@ def emitSFTODO():
     # TODO: Will this function go wrong/be sub-optimal for acme move() case where not everything is in disassembly_range?
     c_str = {}
 
-    for start_addr, end_addr in sorted(config.disassembly_range()):
-        addr = start_addr
-        while addr < end_addr and config.memory[addr] is not None:
-            c = classifications[addr]
+    addr = 0
+    while addr < len(classifications):
+        c = classifications[addr]
+        if c is not None:
             c_str[addr] = c.as_string_list(addr)
             addr += c.length()
+        else:
+            addr += 1
 
-    for start_addr, end_addr in sorted(config.disassembly_range()):
-        addr = start_addr
-        while addr < end_addr:
-            c = classifications[addr]
+    addr = 0
+    while addr < len(classifications):
+        c = classifications[addr]
+        if c is not None:
             if c.is_mergeable() and c.length() > 1:
                 for i in range(1, c.length()):
                     if addr+i in simple_labelled_addrs:
@@ -259,6 +261,8 @@ def emitSFTODO():
                         c_str[addr + i] = classifications[addr + i].as_string_list(addr + i)
                         break
             addr += c.length()
+        else:
+            addr += 1
 
     return c_str
 
