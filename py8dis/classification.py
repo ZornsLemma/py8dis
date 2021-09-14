@@ -328,11 +328,8 @@ def autostring(min_length=3):
         addr += max(1, i)
 
 def classify_leftovers():
-    # TODO: Should this do everything in memory which is not None? Don't forget that on acme disassemblies with move() not everything appears in disassembly_range. But the fly in the ointment is that by classifying things outside those ranges, we may end up with classifications straddling the start/end of the regions we care about, causing us to crash when we start emitting at a partial classification or emitting past the end of the region because a classification straddles the end.
-    for start_addr, end_addr in config.disassembly_range():
-        addr = start_addr
-        while addr < end_addr:
-            if not disassembly.is_classified(addr, 1):
-                disassembly.add_classification(addr, Byte(1))
-            addr += disassembly.get_classification(addr).length()
-
+    addr = 0
+    while addr < len(memory):
+        if not disassembly.is_classified(addr, 1):
+            disassembly.add_classification(addr, Byte(1))
+        addr += disassembly.get_classification(addr).length()
