@@ -43,3 +43,7 @@ def add_references_comments():
     frequency_table = sorted(frequency_table, key=lambda x: (x[1], -x[0]), reverse=True)
     longest_label = max(len(disassembly.get_label(addr, None)) for addr in references)
     disassembly.add_comment(final_addr, "Label references by decreasing frequency:\n    " + "\n    ".join(("%-*s %3d" % (longest_label+1, disassembly.get_label(addr, None)+":", count)) for addr, count in frequency_table))
+
+
+
+# TODO: I am thinking maybe most/all uses of disassembly_range should be replaced by just iterating over whole of memory and emitting stuff for non-None addresses. move() would probably set some parallel "ignore me" flags on bytes which have been populated via move() on acme disassemblies where a Relocation() object will emit the disassembly from those bytes. (disassembly_range is something of an artefact of the early code where it was a convenient way to decide what to process, but it's not necessarily relevant any more.)
