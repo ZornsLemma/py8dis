@@ -153,8 +153,10 @@ def go(post_trace_steps=None, autostring_min_length=3):
         def post_trace_steps():
             classification.autostring(autostring_min_length)
     post_trace_steps()
-    classification.finalise()
-
+    classification.classify_leftovers()
+    # TODO: As in classify_leftovers(), we arguably shouldn't be doing this based on disassembly_range but it might also cause problems if we don't.
+    for start_addr, end_addr in config.disassembly_range():
+        disassembly.merge_classifications(start_addr, end_addr)
     disassembly.emit()
 
 parser = argparse.ArgumentParser()
