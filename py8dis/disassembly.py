@@ -235,6 +235,7 @@ def disassemble_range(start_addr, end_addr):
     return result
 
 def emitSFTODO():
+    # TODO: Will this function go wrong/be sub-optimal for acme move() case where not everything is in disassembly_range?
     c_str = {}
 
     for start_addr, end_addr in sorted(config.disassembly_range()):
