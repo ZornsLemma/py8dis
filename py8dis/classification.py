@@ -208,8 +208,6 @@ class Relocation(object): # TODO: !?!!
         # TODO: Do we need to use LazyString here?
         # TODO: crude hack to do beebasm vs acme
         if self.uses_copy():
-            # TODO: NEED TO SUPPORT !PSEUDOPC FOR ACME
-            # TODO: BEEBASM SPECIFIC
             # TODO: IGNORES CASE FORCING
             # Source and destination here are the source and destination for the
             # move which created this Relocation object, so they're "reversed" from
