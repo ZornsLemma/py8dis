@@ -17,10 +17,6 @@ import utils
 
 memory = config.memory
 
-# TODO: We need some sort of sanity check to avoid using these if load() never updates them...
-pydis_start = 0x10000
-pydis_end = -1
-
 def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
@@ -35,10 +31,7 @@ def load(addr, filename, md5sum=None):
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    config._disassembly_range.append((addr, addr + len(data)))
-    global pydis_start, pydis_end
-    pydis_start = min(pydis_start, addr)
-    pydis_end = max(pydis_end, addr + len(data))
+    config.add_disassembly_range(addr, addr + len(data))
 
 # ENHANCE: This isn't good enough for cases where a program copies different
 # blocks of code/data into the same part of memory at different times. This
@@ -149,8 +142,8 @@ def set_label_hook(hook): # TODO: Rename to include "label_maker_hook" or simila
     disassembly.set_user_label_hook(hook)
 
 def go(post_trace_steps=None, autostring_min_length=3):
-    label(pydis_start, "pydis_start")
-    label(pydis_end, "pydis_end")
+    label(config.pydis_start, "pydis_start")
+    label(config.pydis_end, "pydis_end")
     trace.trace()
     if config.label_references():
         trace.add_references_comments()

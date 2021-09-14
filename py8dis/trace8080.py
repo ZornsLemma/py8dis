@@ -25,11 +25,17 @@ class Opcode(object):
     def length(self):
         return 1 + self.operand_length
 
+    def is_code(self, addr):
+        return True
+
     def finalise(self):
         pass
 
-    def emit(self, addr):
+    def emit(self, addr): # TODO: redundant?
         print(utils.add_hex_dump(self.as_string(addr), addr, self.length()))
+
+    def as_string_list(self, addr):
+        return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
 
 
 class OpcodeImplied(Opcode):
@@ -59,7 +65,7 @@ class OpcodeConditionalBranch(Opcode):
         return [addr + 3, self._target(addr)]
 
     def as_string(self, addr):
-        return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr)))
+        return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
 opcodes = {
