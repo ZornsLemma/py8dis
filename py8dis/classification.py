@@ -314,16 +314,18 @@ def stringhiz(addr):
     return addr
 
 def autostring(min_length=3):
+    # TODO: Now this no longer respects disassembly_range stuff, we need to be able to correctly
+    # emit from part-way through a multi-byte classification to part-way through another one.
+    # (This could always have happened, but it was much less likely before.)
     assert min_length >= 2
-    for (start_addr, end_addr) in config.disassembly_range():
-        for i in range(0, (end_addr - min_length) - start_addr):
-            if not disassembly.is_classified(start_addr + i,  min_length):
-                n = 0
-                while not disassembly.is_classified(start_addr + i + n, 1) and utils.isprint(memory[start_addr + i + n]):
-                    n += 1
-                if n >= min_length:
-                    string(start_addr + i, n)
-
+    addr = 0
+    while addr < len(memory):
+        i = 0
+        while (addr + i) < len(memory) and memory[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory[addr + i]):
+            i += 1
+        if i >= min_length:
+            string(addr, i)
+        addr += max(1, i)
 
 def classify_leftovers():
     # TODO: Should this do everything in memory which is not None? Don't forget that on acme disassemblies with move() not everything appears in disassembly_range. But the fly in the ointment is that by classifying things outside those ranges, we may end up with classifications straddling the start/end of the regions we care about, causing us to crash when we start emitting at a partial classification or emitting past the end of the region because a classification straddles the end.
