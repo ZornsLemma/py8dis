@@ -31,18 +31,20 @@ def trace():
 
 # TODO: This code is a bit unreadable!
 def add_references_comments():
-    return # TODO TEMP
     if len(references) == 0:
         return
     for addr, addr_refs in references.items():
         count = "%d times" % len(addr_refs) if len(addr_refs) != 1 else "1 time"
         disassembly.add_comment(addr, "Referenced %s by %s" % (count, ", ".join(config.formatter().hex(addr_ref) for addr_ref in addr_refs)))
 
-    final_addr = max(end_addr for start_addr, end_addr in config._disassembly_range)
+def add_reference_histogram():
     frequency_table = [(addr, len(addr_refs)) for addr, addr_refs in references.items()]
     frequency_table = sorted(frequency_table, key=lambda x: (x[1], -x[0]), reverse=True)
-    longest_label = max(len(disassembly.get_label(addr, None)) for addr in references)
-    disassembly.add_comment(final_addr, "Label references by decreasing frequency:\n    " + "\n    ".join(("%-*s %3d" % (longest_label+1, disassembly.get_label(addr, None)+":", count)) for addr, count in frequency_table))
+    longest_label = max(len(disassembly.get_label(addr, addr)) for addr in references)
+    comment = config.formatter().comment_prefix()
+    print("%s Label references by decreasing frequency:" % comment)
+    for addr, count in frequency_table:
+        print("%s     %-*s %3d" % (comment, longest_label+1, disassembly.get_label(addr, addr) + ":", count))
 
 
 

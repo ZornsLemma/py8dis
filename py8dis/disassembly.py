@@ -217,6 +217,8 @@ def emit():
         print("\n".join(disassemble_range(start_addr, end_addr)))
         print(formatter.code_end(), end="")
 
+    trace.add_reference_histogram()
+
     if len(_final_commands) > 0:
         print()
         for line in _final_commands:
