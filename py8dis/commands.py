@@ -40,6 +40,17 @@ def load(addr, filename, md5sum=None):
     pydis_start = min(pydis_start, addr)
     pydis_end = max(pydis_end, addr + len(data))
 
+# ENHANCE: This isn't good enough for cases where a program copies different
+# blocks of code/data into the same part of memory at different times. This
+# isn't all that unlikely, e.g. IBOS does it with snippets of useful code it
+# wants to run from main RAM. The proper fix is probably to disassemble "in
+# place" with a kind of reverse offset (set by the equivalent of a move()
+# command before tracing starts), and then emit using either acme's pseudopc
+# inline or for beebasm emit clear
+# reusedspacestart,end:*=reusedspace:codecodecode:copyblock
+# inlinecopy,reusedspacestart,reusedspacend, i.e. doing the copyblock
+# immediately after emitting the corresponding code.
+# of code into low memory)
 def move(dest, src, length):
     c = classification.Relocation(dest, src, length)
     disassembly.add_classification(src, c)
