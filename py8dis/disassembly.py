@@ -159,8 +159,25 @@ def emit():
 
     print(formatter.disassembly_start(), end="")
 
+    # TODO: This (or something, depends how it "should" be handled) breaks moves for
+    # acme, as the move()d range is output twice.
+    code_ranges = [] # TODO: rename, any classification counts, not just code - it's "active_ranges" or "non_empty_ranges" or something
+    addr = 0
+    while addr < len(classifications):
+        while addr < len(classifications) and classifications[addr] is None:
+            addr += 1
+        if addr == len(classifications):
+            break
+        start_addr = addr
+        while addr < len(classifications) and classifications[addr] is not None:
+            addr += 1
+        code_ranges.append((start_addr, addr))
+
+    # TODO: disassembled_addresses might be near-trivially removable - e.g. by
+    # simply checking if "classification[addr or addr-1] is not None" - but let's
+    # keep it for now as I slowly evolve the code.
     disassembled_addresses = set()
-    for start_addr, end_addr in config.disassembly_range():
+    for start_addr, end_addr in code_ranges:
         # We include end_addr in the range because we're going to use the set
         # we're building up to control emission of inline labels - the end
         # address of a range has no classification, but the assembly pointer
@@ -193,7 +210,7 @@ def emit():
     print(sep, end="")
 
     sep = ""
-    for start_addr, end_addr in sorted(config.disassembly_range()):
+    for start_addr, end_addr in sorted(code_ranges):
         print(sep, end="")
         sep = "\n"
         print(formatter.code_start(start_addr, end_addr), end="")
