@@ -138,17 +138,17 @@ def get_classification(addr):
     return classifications[addr]
 
 # Combine adjacent mergeable classifications of the same type.
-def merge_classifications(start_addr, end_addr):
-    addr = start_addr
-    while addr < end_addr:
-        if classifications[addr].is_mergeable():
+def merge_classifications():
+    addr = 0
+    while addr < len(classifications):
+        if classifications[addr] is not None and classifications[addr].is_mergeable():
             addr2 = addr + classifications[addr].length()
-            while addr2 < end_addr and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_mergeable():
+            while addr2 < len(classifications) and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_mergeable():
                 addr2_length = classifications[addr2].length()
                 classifications[addr].set_length(classifications[addr].length() + addr2_length)
                 classifications[addr2] = partial_classification
                 addr2 += addr2_length
-        addr += classifications[addr].length()
+        addr += 1 if classifications[addr] is None else classifications[addr].length()
 
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
@@ -240,7 +240,7 @@ def emitSFTODO():
 
     for start_addr, end_addr in sorted(config.disassembly_range()):
         addr = start_addr
-        while addr < end_addr:
+        while addr < end_addr and config.memory[addr] is not None:
             c = classifications[addr]
             c_str[addr] = c.as_string_list(addr)
             addr += c.length()

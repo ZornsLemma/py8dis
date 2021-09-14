@@ -49,7 +49,11 @@ def move(dest, src, length):
     c = classification.Relocation(dest, src, length)
     disassembly.add_classification(src, c)
     memory[dest:dest+length] = memory[src:src+length]
-    # TODO: should we zero out the "source" region? that might break things but worth thinking about
+    # Note that we don't clear (set to None or 0) memory[src:src+length]. It's
+    # at least possible the code being disassembled accesses or even executes
+    # some sub-chunk of the memory we moved in its original location, so we
+    # want it to exist there, as well as at `dest` where it can be found by
+    # tracing.
     if c.uses_copy():
         # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
         config._disassembly_range.append((dest, dest+length)) # TODO!?
@@ -154,9 +158,7 @@ def go(post_trace_steps=None, autostring_min_length=3):
             classification.autostring(autostring_min_length)
     post_trace_steps()
     classification.classify_leftovers()
-    # TODO: As in classify_leftovers(), we arguably shouldn't be doing this based on disassembly_range but it might also cause problems if we don't.
-    for start_addr, end_addr in config.disassembly_range():
-        disassembly.merge_classifications(start_addr, end_addr)
+    disassembly.merge_classifications()
     disassembly.emit()
 
 parser = argparse.ArgumentParser()

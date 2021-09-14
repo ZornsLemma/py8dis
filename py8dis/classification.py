@@ -330,6 +330,6 @@ def autostring(min_length=3):
 def classify_leftovers():
     addr = 0
     while addr < len(memory):
-        if not disassembly.is_classified(addr, 1):
+        if memory[addr] is not None and not disassembly.is_classified(addr, 1):
             disassembly.add_classification(addr, Byte(1))
-        addr += disassembly.get_classification(addr).length()
+        addr += 1
