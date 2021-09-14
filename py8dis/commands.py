@@ -49,8 +49,9 @@ def load(addr, filename, md5sum=None):
 # inline or for beebasm emit clear
 # reusedspacestart,end:*=reusedspace:codecodecode:copyblock
 # inlinecopy,reusedspacestart,reusedspacend, i.e. doing the copyblock
-# immediately after emitting the corresponding code.
-# of code into low memory)
+# immediately after emitting the corresponding code. On the other hand,
+# tracing is not going to work properly where there are multiple possible
+# bits of code at any address, so perhaps we shouldn't even try to handle this.
 def move(dest, src, length):
     c = classification.Relocation(dest, src, length)
     disassembly.add_classification(src, c)
