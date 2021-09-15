@@ -57,6 +57,7 @@ def check_expr(expr, value):
     config.formatter().assert_expr(expr, value)
 
 
+# TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
 class LazyString(object):
     def __init__(self, fmt, *args):
         self._fmt = fmt
