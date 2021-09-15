@@ -178,9 +178,9 @@ def emit():
     # this or something v similar to force all labels to be generated
     emitSFTODO()
 
-    # Emit constants first
+    # Emit constants first in the order they were defined.
     if len(constants) > 0:
-        for value, name in sorted(constants, key=lambda x: x[0]):
+        for value, name in constants:
             if isinstance(value, six.integer_types):
                 value = formatter.hex(value)
             print(formatter.explicit_label(name, value))
