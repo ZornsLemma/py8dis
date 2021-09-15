@@ -185,7 +185,8 @@ class Relocation(object): # TODO: !?!!
         return self._length
 
     def is_code(self, addr):
-        return False # SFTODO: OK?
+        # ENHANCE: Just possibly our is_code() should be smarter than this.
+        return False
 
     def uses_copy(self):
         # TODO: crude hack to do beebasm vs acme
