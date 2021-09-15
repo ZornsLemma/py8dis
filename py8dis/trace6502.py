@@ -44,9 +44,6 @@ class Opcode(object):
     def is_code(self, addr):
         return True
 
-    def emit(self, addr): # TODO: redundant?
-        print(utils.add_hex_dump(self.as_string(addr), addr, self.length()))
-
     def as_string_list(self, addr):
         return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
 
