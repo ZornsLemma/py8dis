@@ -204,22 +204,11 @@ class Relocation(object): # TODO: !?!!
         print("\n".join(self.as_string_list(addr)))
 
     def as_string_list(self, addr):
+        formatter = config.formatter()
         result = []
-        # TODO: Do we need to use LazyString here?
-        # TODO: crude hack to do beebasm vs acme
-        if self.uses_copy():
-            # TODO: IGNORES CASE FORCING
-            # Source and destination here are the source and destination for the
-            # move which created this Relocation object, so they're "reversed" from
-            # the assembly output perspective.
-            result.append("    skip %s - %s" % (disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._dest, addr)))
-            # We must do all the copyblock commands at the end to avoid any assumption
-            # about the order separate blocks of code are assembled in.
-            disassembly._final_commands.append("copyblock %s, %s, %s" % (disassembly.get_label(self._dest, addr), disassembly.get_label(self._dest + self._length, addr), disassembly.get_label(self._source, addr)))
-        else:
-            result.append("!pseudopc %s {" % config.formatter().hex(self._dest))
-            result.extend(disassembly.disassemble_range(self._dest, self._dest + self._length))
-            result.append("}")
+        result.extend(formatter.pseudopc_start(self._dest, self._source, self._length))
+        result.extend(disassembly.disassemble_range(self._dest, self._dest + self._length))
+        result.extend(formatter.pseudopc_end(self._dest, self._source, self._length))
         return result
 
 

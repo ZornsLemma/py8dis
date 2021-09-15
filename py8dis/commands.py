@@ -17,20 +17,25 @@ import utils
 
 memory = config.memory
 
+# TODO!?
+config.load_ranges = []
+config.move_target = [False] * 64 * 1024
+
 def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
         data = bytearray(f.read())
         if addr + len(data) > 0xffff:
             utils.die("load() would overflow memory")
-        for i, c in enumerate(data):
-            memory[addr+i] = c
+        memory[addr:addr+len(data)] = data
     if md5sum is not None:
         import hashlib
         hash = hashlib.md5()
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
+    # TODO: Should check for overlapping ranges and maybe also merge adjacent ranges
+    config.load_ranges.append((addr, addr + len(data)))
 
 # ENHANCE: This isn't good enough for cases where a program copies different
 # blocks of code/data into the same part of memory at different times. This
@@ -45,6 +50,10 @@ def load(addr, filename, md5sum=None):
 # tracing is not going to work properly where there are multiple possible
 # bits of code at any address, so perhaps we shouldn't even try to handle this.
 def move(dest, src, length):
+    assert not any(config.move_target[x] for x in range(dest, dest+length))
+    assert not any(config.move_target[x] for x in range(src, src+length))
+    for i in range(dest, dest+length):
+        config.move_target[i] = True
     c = classification.Relocation(dest, src, length)
     disassembly.add_classification(src, c)
     memory[dest:dest+length] = memory[src:src+length]
@@ -53,9 +62,6 @@ def move(dest, src, length):
     # some sub-chunk of the memory we moved in its original location, so we
     # want it to exist there, as well as at `dest` where it can be found by
     # tracing.
-    if c.uses_copy():
-        # TODO: As with load(), we should probably check for overlapping disassembly ranges and merge adjacent ones here
-        pass # TODO: config._disassembly_range.append((dest, dest+length)) # TODO!?
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -145,15 +151,8 @@ def set_label_hook(hook): # TODO: Rename to include "label_maker_hook" or simila
     disassembly.set_user_label_hook(hook)
 
 def go(post_trace_steps=None, autostring_min_length=3):
-    # TODO: Inefficient and also probably duplicating something we do elsewhere
-    # TODO: This doesn't give the "right" pydis_start for move()-using things with beebasm (at least) - but this area is in need of thinking some more anyway
-    pydis_start = None
-    pydis_end = None
-    for i in range(len(memory)):
-        if memory[i] is not None:
-            if pydis_start is None:
-                pydis_start = i
-            pydis_end = i + 1
+    pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
+    pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
     label(pydis_start, "pydis_start")
     label(pydis_end, "pydis_end")
 
