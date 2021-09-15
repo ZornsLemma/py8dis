@@ -89,15 +89,12 @@ class OpcodeZp(Opcode):
 
 
 class OpcodeAbs(Opcode):
-    def __init__(self, mnemonic, suffix = None):
+    def __init__(self, mnemonic, suffix = None, has_zp_version = True):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
+        self._has_zp_version = has_zp_version
 
     def has_zp_version(self):
-        # ENHANCE: It might be too simplistic to always return True here; we could
-        # use a proper lookup table or similar. It's safe to return True in
-        # all cases, it just might cause ugly force-abs-addressing code to be
-        # emitted when there's no need.
-        return True
+        return self._has_zp_version
 
     def as_string(self, addr):
         # We need to avoid misassembly of absolute instructions with zero-page
@@ -127,8 +124,8 @@ class OpcodeAbs(Opcode):
 
 
 class OpcodeDataAbs(OpcodeAbs):
-    def __init__(self, mnemonic, suffix = None):
-        super(OpcodeDataAbs, self).__init__(mnemonic, suffix)
+    def __init__(self, mnemonic, suffix = None, has_zp_version = True):
+        super(OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version)
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
@@ -137,10 +134,7 @@ class OpcodeDataAbs(OpcodeAbs):
 
 class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
-        super(OpcodeJmpAbs, self).__init__("JMP")
-
-    def has_zp_version(self):
-        return False
+        super(OpcodeJmpAbs, self).__init__("JMP", has_zp_version=False)
 
     def disassemble(self, addr):
         return [None, utils.get_u16(addr + 1)]
@@ -148,10 +142,7 @@ class OpcodeJmpAbs(OpcodeAbs):
 
 class OpcodeJmpInd(OpcodeAbs):
     def __init__(self):
-        super(OpcodeJmpInd, self).__init__("JMP", ")")
-
-    def has_zp_version(self):
-        return False
+        super(OpcodeJmpInd, self).__init__("JMP", ")", has_zp_version=False)
 
     def disassemble(self, addr):
         disassembly.ensure_addr_labelled(utils.get_u16(addr + 1))
@@ -160,10 +151,7 @@ class OpcodeJmpInd(OpcodeAbs):
 
 class OpcodeJsr(OpcodeAbs):
     def __init__(self):
-        super(OpcodeJsr, self).__init__("JSR")
-
-    def has_zp_version(self):
-        return False
+        super(OpcodeJsr, self).__init__("JSR", has_zp_version=False)
 
     def disassemble(self, addr):
         target = utils.get_u16(addr + 1)
@@ -202,6 +190,9 @@ class OpcodeConditionalBranch(Opcode):
         return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr)))
 
 
+# ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
+# haven't done an exhaustive search to determine if there are any others not yet
+# marked.
 opcodes = {
     0x00: OpcodeReturn("BRK"),
     0x01: OpcodeZp("ORA", ",X)"),
@@ -290,7 +281,7 @@ opcodes = {
     0x95: OpcodeZp("STA", ",X"),
     0x96: OpcodeZp("STX", ",Y"),
     0x98: OpcodeImplied("TYA"),
-    0x99: OpcodeDataAbs("STA", ",Y"),
+    0x99: OpcodeDataAbs("STA", ",Y", has_zp_version=False),
     0x9a: OpcodeImplied("TXS"),
     0x9d: OpcodeDataAbs("STA", ",X"),
     0xa0: OpcodeImmediate("LDY"),
