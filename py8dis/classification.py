@@ -33,9 +33,6 @@ class Byte(object):
     def is_code(self, addr):
         return False
 
-    def emit(self, addr): # todo: redundant?
-        print("\n".join(self.as_string_list(addr)))
-
     def as_string_list(self, addr):
         result = []
         byte_prefix = formatter().byte_prefix()
@@ -95,9 +92,6 @@ class Word(object):
     def is_code(self, addr):
         return False
 
-    def emit(self, addr): # todo: redundant?
-        print("\n".join(self.as_string_list(addr)))
-
     def as_string_list(self, addr):
         # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
         # should probably all be cleaned up and factored out.
@@ -137,9 +131,6 @@ class String(object):
 
     def is_code(self, addr):
         return False
-
-    def emit(self, addr): # TODO: redundant?
-        print("\n".join(self.as_string_list(addr)))
 
     def as_string_list(self, addr):
         result = []
@@ -199,9 +190,6 @@ class Relocation(object): # TODO: !?!!
     def uses_copy(self):
         # TODO: crude hack to do beebasm vs acme
         return config.formatter().explicit_a
-
-    def emit(self, addr): # TODO: redundant?
-        print("\n".join(self.as_string_list(addr)))
 
     def as_string_list(self, addr):
         formatter = config.formatter()
