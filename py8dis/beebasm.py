@@ -62,17 +62,17 @@ def code_end():
 # TODO: pseudopc* not respecting case forcing
 def pseudopc_start(dest, source, length):
     result = []
-    result.append("    org %s" % hex(dest))
-    result.append("    guard %s" % hex(dest + length))
+    result.append(utils.force_case("    org %s" % hex(dest)))
+    result.append(utils.force_case("    guard %s" % hex(dest + length)))
     return result
 
 def pseudopc_end(dest, source, length):
     result = []
     # TODO: Use LazyString?
-    result.append("    copyblock %s, %s, %s" % (disassembly.get_label(dest, source), disassembly.get_label(dest + length, source), disassembly.get_label(source, source)))
-    result.append("    clear %s, %s" % (disassembly.get_label(dest, source), disassembly.get_label(dest + length, source)))
-    result.append("    org %s + (%s - %s)" % (disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source)))
-    result.append("    guard &ffff") # TODO! use value saved from code_start, probably
+    result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source), disassembly.get_label(source, source)))
+    result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source)))
+    result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source)))
+    result.append("    %s &ffff" % utils.force_case("guard")) # TODO! use value saved from code_start, probably
     return result
 
 def disassembly_end():
