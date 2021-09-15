@@ -80,7 +80,8 @@ def pseudopc_end(dest, source, length):
 def disassembly_end():
     s = "\n"
     if len(_pending_assertions) > 0:
-        s += "\n".join(utils.force_case("    assert ") + "%s == %s" % (expr, hex(value)) for expr, value in sorted(_pending_assertions.items()))
+        spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
+        s += "\n".join(utils.force_case("    assert ") + "%s == %s" % (expr, value) for expr, value in spa)
         s += "\n\n"
 
     s += utils.force_case("save")

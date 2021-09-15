@@ -66,9 +66,10 @@ def pseudopc_end(dest, source, length):
 def disassembly_end():
     s = ""
     if len(_pending_assertions) > 0:
-        for expr, value in sorted(_pending_assertions.items()):
-            s += "!if %s != %s {\n" % (expr, hex(value))
-            s += '    !error "Assertion failed: %s == %s"\n' % (expr, hex(value))
+        spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
+        for expr, value in spa:
+            s += "!if %s != %s {\n" % (expr, value)
+            s += '    !error "Assertion failed: %s == %s"\n' % (expr, value)
             s += "}\n"
         s += "\n"
     return s

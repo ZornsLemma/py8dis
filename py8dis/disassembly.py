@@ -8,7 +8,6 @@ import config
 import trace # SFTODO TEMP?
 import utils
 
-_final_commands = []
 _user_label_hook = None
 
 primary_labels = {}
@@ -178,8 +177,6 @@ def emit():
     # TODO!?!? We are discarding the results of emitSFTODO() but I think we need to do
     # this or something v similar to force all labels to be generated
     emitSFTODO()
-    global _final_commands
-    _final_commands = [] # TODO: bit of an ugly hack, stops copyblocks emitted by this first discarded pass getting duplicated
 
     # Emit constants first
     if len(constants) > 0:
@@ -209,11 +206,6 @@ def emit():
         print(formatter.code_end(), end="")
 
     trace.add_reference_histogram()
-
-    if len(_final_commands) > 0:
-        print()
-        for line in _final_commands:
-            print(line)
 
     print(formatter.disassembly_end(), end="")
 
