@@ -10,13 +10,13 @@ acorn.is_sideways_rom()
 
 wordentry(0x8826, 121) # XXX: table size is a guess
 
-# This is pointless as used, but notice that a label hook can introduce a
+# This is pointless as used, but notice that a label make can introduce a
 # label indepdently of the standard label() command.
-def our_label_hook(addr, context, suggestion):
+def our_label_maker(addr, context, suggestion):
     if addr == 0x80b6:
         return "copy_to_stack_loop"
     return suggestion
-set_label_hook(our_label_hook)
+set_label_maker_hook(our_label_maker)
 
 # XXX: l907d has a jsr which is followed by a BRA opcode, but it isn't
 # disassembled because the BRA operand is already being disassembled as

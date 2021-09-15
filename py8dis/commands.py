@@ -34,7 +34,6 @@ def load(addr, filename, md5sum=None):
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    # TODO: Should check for overlapping ranges and maybe also merge adjacent ranges
     config.load_ranges.append((addr, addr + len(data)))
 
 # ENHANCE: This isn't good enough for cases where a program copies different
@@ -147,8 +146,8 @@ def code_ptr(addr, addr_high=None, offset=0):
 def rts_code_ptr(addr, addr_high=None):
     return code_ptr(addr, addr_high, offset=1)
 
-def set_label_hook(hook): # TODO: Rename to include "label_maker_hook" or similar?
-    disassembly.set_user_label_hook(hook)
+def set_label_maker_hook(hook):
+    disassembly.set_user_label_maker_hook(hook)
 
 def go(post_trace_steps=None, autostring_min_length=3):
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)

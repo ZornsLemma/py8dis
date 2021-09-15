@@ -292,9 +292,6 @@ def stringhiz(addr):
     return addr
 
 def autostring(min_length=3):
-    # TODO: Now this no longer respects disassembly_range stuff, we need to be able to correctly
-    # emit from part-way through a multi-byte classification to part-way through another one.
-    # (This could always have happened, but it was much less likely before.)
     assert min_length >= 2
     addr = 0
     while addr < len(memory):

@@ -8,7 +8,7 @@ import config
 import trace # SFTODO TEMP?
 import utils
 
-_user_label_hook = None
+user_label_maker_hook = None
 
 primary_labels = {}
 all_simple_labels = {}
@@ -37,10 +37,10 @@ annotations = collections.defaultdict(list)
 # matter, as long as it's not None so we know these bytes have been classified.
 partial_classification = 0
 
-def set_user_label_hook(hook):
-    global _user_label_hook
-    assert _user_label_hook is None
-    _user_label_hook = hook
+def set_user_label_maker_hook(hook):
+    global user_label_maker_hook
+    assert user_label_maker_hook is None
+    user_label_maker_hook = hook
 
 def add_comment(addr, text):
     annotations[addr].append(Comment(text))
@@ -113,8 +113,8 @@ def our_label_maker(addr, context):
 
 def label_maker(addr, context):
     suggestion = our_label_maker(addr, context)
-    if _user_label_hook is not None:
-        user_suggestion = _user_label_hook(addr, context, suggestion)
+    if user_label_maker_hook is not None:
+        user_suggestion = user_label_maker_hook(addr, context, suggestion)
         if user_suggestion is not None:
             return user_suggestion
     return suggestion
