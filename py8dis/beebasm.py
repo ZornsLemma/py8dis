@@ -59,7 +59,6 @@ def code_start(start_addr, end_addr):
 def code_end():
     return ""
 
-# TODO: pseudopc* not respecting case forcing
 def pseudopc_start(dest, source, length):
     result = []
     result.append(utils.force_case("    org %s" % hex(dest)))
