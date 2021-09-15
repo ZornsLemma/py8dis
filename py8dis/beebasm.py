@@ -14,6 +14,7 @@ explicit_a = True
 
 _pending_assertions = {}
 _disassembly_start = ""
+_code_end_addr = 0 # TODO: bit hacky
 
 def set_output_filename(filename):
     global output_filename
@@ -52,6 +53,8 @@ def disassembly_start():
     return utils.force_case(_disassembly_start)
 
 def code_start(start_addr, end_addr):
+    global _code_end_addr
+    _code_end_addr = end_addr
     return (utils.force_case(
         "    org %s\n" % hex4(start_addr) +
         "    guard %s\n" % hex4(end_addr)))
@@ -71,7 +74,7 @@ def pseudopc_end(dest, source, length):
     result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source), disassembly.get_label(source, source)))
     result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source)))
     result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source)))
-    result.append("    %s &ffff" % utils.force_case("guard")) # TODO! use value saved from code_start, probably
+    result.append("    %s %s" % (utils.force_case("guard"), hex(_code_end_addr)))
     return result
 
 def disassembly_end():

@@ -279,7 +279,9 @@ def emitSFTODO():
         if c is not None:
             if c.is_mergeable() and c.length() > 1:
                 for i in range(1, c.length()):
+                    # TODO: I think this could incorrectly split a Word at an odd byte boundary and break things
                     if addr+i in simple_labelled_addrs:
+                        # TODO: Use split_classification() here? Perhaps not, think about it.
                         classifications[addr + i] = copy.copy(c)
                         classifications[addr + i].set_length(c.length() - i)
                         c.set_length(i)
