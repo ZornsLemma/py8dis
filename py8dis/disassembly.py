@@ -127,7 +127,7 @@ def get_final_label(addr, context):
     add_label(addr, s)
     return s
 
-def is_classified(addr, length):
+def is_classified(addr, length=1):
     return any(x is not None for x in classifications[addr:addr+length])
 
 def add_classification(addr, classification):
