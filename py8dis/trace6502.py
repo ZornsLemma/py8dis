@@ -96,7 +96,7 @@ class OpcodeZp(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        return "    %s %s%s%s" % (utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
+        return utils.LazyString("    %s %s%s%s", utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
 
 
 class OpcodeAbs(Opcode):
@@ -108,7 +108,6 @@ class OpcodeAbs(Opcode):
         return self._has_zp_version
 
     def as_string(self, addr):
-        # TODO: Do we need to use LazyString here?
         # We need to avoid misassembly of absolute instructions with zero-page
         # operands. These are relatively rare in real code, but apart from the
         # fact we should still handle them even if they're rare, they can also
@@ -214,7 +213,7 @@ class OpcodeConditionalBranch(Opcode):
         return [addr + 2, self._target(addr)]
 
     def as_string(self, addr):
-        return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
+        return utils.LazyString("    %s %s", utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
 # ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
@@ -384,7 +383,12 @@ def disassemble_instruction(addr):
     # If we hit something that's already classified, we can't/don't re-classify
     # it but that doesn't mean we can't continue to trace until something breaks
     # the control flow.
-    if not disassembly.is_classified(addr, 1 + opcode.operand_length):
+    if disassembly.is_classified(addr, 1 + opcode.operand_length):
+        s = opcode.as_string(addr)
+        def late_formatter():
+            return utils.add_hex_dump("overlapping: " + str(s)[4:], addr, opcode.length(), -len(config.formatter().comment_prefix())-1)
+        disassembly.add_comment(addr, utils.LazyString("%s", late_formatter))
+    else:
         disassembly.add_classification(addr, opcode)
     opcode.update_references(addr)
     return opcode.disassemble(addr)

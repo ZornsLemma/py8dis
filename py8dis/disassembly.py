@@ -320,6 +320,6 @@ class Comment(object):
 
     def as_string(self, addr):
         formatter = config.formatter()
-        return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in self.text.split("\n"))
+        return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in str(self.text).split("\n"))
 
 # TODO: We seem to assert some simple constants have their own value - is this wrong/weird?

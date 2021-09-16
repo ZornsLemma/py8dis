@@ -26,11 +26,11 @@ def get_u16_be(addr):
     assert memory[addr] is not None and memory[addr+1] is not None
     return (memory[addr] << 8) | memory[addr+1]
 
-def add_hex_dump(s, addr, length):
+def add_hex_dump(s, addr, length, column_adjust=0):
     assert length > 0
     if not config.hex_dump():
         return s
-    s = "%-*s" % (config.inline_comment_column(), s)
+    s = LazyString("%-*s", config.inline_comment_column() + column_adjust, s)
     s += "%s %s: " % (config.formatter().comment_prefix(), plainhex4(addr))
     capped_length = min(length, 3)
     s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
