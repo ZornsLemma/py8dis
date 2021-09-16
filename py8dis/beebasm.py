@@ -13,7 +13,7 @@ output_filename = None
 explicit_a = True
 
 _pending_assertions = {}
-_disassembly_start = ""
+_disassembly_start = []
 _code_end_addr = 0 # TODO: bit hacky
 
 def set_output_filename(filename):
@@ -47,20 +47,19 @@ def assert_expr(expr, value):
 def set_cmos(b):
     global _disassembly_start
     if b:
-        _disassembly_start = "    cpu 1\n\n"
+        _disassembly_start = [utils.force_case("    cpu 1"), ""]
 
 def disassembly_start():
-    return utils.force_case(_disassembly_start)
+    return _disassembly_start
 
 def code_start(start_addr, end_addr):
     global _code_end_addr
     _code_end_addr = end_addr
-    return (utils.force_case(
-        "    org %s\n" % hex4(start_addr) +
-        "    guard %s\n" % hex4(end_addr)))
+    return [utils.force_case("    org %s" % hex4(start_addr)),
+            utils.force_case("    guard %s" % hex4(end_addr))]
 
 def code_end():
-    return ""
+    return []
 
 def pseudopc_start(dest, source, length):
     result = []
@@ -78,18 +77,18 @@ def pseudopc_end(dest, source, length):
     return result
 
 def disassembly_end():
-    s = "\n"
-    if len(_pending_assertions) > 0:
-        spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
-        s += "\n".join(utils.force_case("    assert ") + "%s == %s" % (expr, value) for expr, value in spa)
-        s += "\n\n"
+    result = []
+    spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
+    result.extend(utils.force_case("    assert ") + "%s == %s" % (expr, value) for expr, value in spa)
+    result.append("")
 
-    s += utils.force_case("save")
+    s = utils.force_case("save")
     if output_filename is None:
         s += " pydis_start, pydis_end"
     else:
         s += ' "%s", pydis_start, pydis_end' % output_filename
-    return s + "\n"
+    result.append(s)
+    return result
 
 def abs_suffix():
     return ""

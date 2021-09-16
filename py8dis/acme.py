@@ -48,13 +48,13 @@ def set_cmos(b):
     pass
 
 def disassembly_start():
-    return ""
+    return []
 
 def code_start(start_addr, end_addr):
-    return "    * = %s\n" % hex4(start_addr)
+    return ["    * = %s\n" % hex4(start_addr)]
 
 def code_end():
-    return ""
+    return []
 
 def pseudopc_start(dest, source, length):
     return [utils.force_case("!pseudopc %s {" % hex(dest))]
@@ -64,15 +64,13 @@ def pseudopc_end(dest, source, length):
 
 # TODO: Not just here, I hate the inline "\n" mess with a lot of these functions. I should convert them to return a list of lines which will be joined with "\n" when finally emitted.
 def disassembly_end():
-    s = ""
-    if len(_pending_assertions) > 0:
-        spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
-        for expr, value in spa:
-            s += "!if %s != %s {\n" % (expr, value)
-            s += '    !error "Assertion failed: %s == %s"\n' % (expr, value)
-            s += "}\n"
-        s += "\n"
-    return s
+    result = []
+    spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
+    for expr, value in spa:
+        result.append("%s %s != %s {" % (utils.force_case("!if"), expr, value))
+        result.append('    %s "Assertion failed: %s == %s"' % (utils.force_case("!error"), expr, value))
+        result.append("}")
+    return result
 
 def abs_suffix():
     return "+2"

@@ -156,8 +156,9 @@ def sorted_annotations(annotations):
 # TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():
     formatter = config.formatter()
+    output = []
 
-    print(formatter.disassembly_start(), end="")
+    output.extend(formatter.disassembly_start())
 
     disassembled_addresses = set()
     for start_addr, end_addr in config.load_ranges:
@@ -183,31 +184,26 @@ def emit():
         for value, name in constants:
             if isinstance(value, six.integer_types):
                 value = formatter.hex(value)
-            print(formatter.explicit_label(name, value))
-        print()
+            output.append(formatter.explicit_label(name, value))
+        output.append("")
 
     # Emit labels which aren't within one of the disassembled ranges and which
     # therefore must be defined explicitly.
-    sep = ""
     for addr in sorted(annotations.keys()):
         if addr not in disassembled_addresses:
             for annotation in sorted_annotations(annotations[addr]):
                 if isinstance(annotation, Label):
-                    print(annotation.as_string_assignment())
-                    sep = "\n"
-    print(sep, end="")
+                    output.append(annotation.as_string_assignment())
 
-    sep = ""
     for start_addr, end_addr in sorted(config.load_ranges):
-        print(sep, end="")
-        sep = "\n"
-        print(formatter.code_start(start_addr, end_addr), end="")
-        print("\n".join(disassemble_range(start_addr, end_addr)))
-        print(formatter.code_end(), end="")
+        output.extend(formatter.code_start(start_addr, end_addr))
+        output.extend(disassemble_range(start_addr, end_addr))
+        output.extend(formatter.code_end())
 
-    trace.add_reference_histogram()
+    output.extend(trace.add_reference_histogram())
 
-    print(formatter.disassembly_end(), end="")
+    output.extend(formatter.disassembly_end())
+    print("\n".join(output))
 
 def split_classification(addr):
     if classifications[addr] != partial_classification:
@@ -244,6 +240,7 @@ def disassemble_range(start_addr, end_addr):
                 pending_annotations.append(annotation.as_string(addr))
         for annotation in sorted_annotations(annotations[addr]):
             result.append(annotation.as_string(addr))
+        # TODO: result.extend(pending_annotations)?
         for annotation in pending_annotations:
             result.append(annotation)
         if addr < end_addr:
