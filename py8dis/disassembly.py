@@ -240,9 +240,11 @@ def disassemble_range(start_addr, end_addr):
         # "within" a multi-byte classification) first because their
         # as_string() method might cause new annotations to appear at
         # address addr.
+        # TODO: isinstance(Label) is a hack
         for i in range(1, classification_length):
             for annotation in sorted_annotations(annotations[addr + i]):
-                pending_annotations.append(annotation.as_string(addr))
+                if isinstance(annotation, Label):
+                    pending_annotations.append(annotation.as_string(addr))
         for annotation in sorted_annotations(annotations[addr]):
             result.append(annotation.as_string(addr))
         # TODO: result.extend(pending_annotations)?
@@ -251,6 +253,10 @@ def disassemble_range(start_addr, end_addr):
         if addr < end_addr:
             # We can now emit the classification output.
             result.extend(classifications[addr].as_string_list(addr))
+        for i in range(1, classification_length):
+            for annotation in sorted_annotations(annotations[addr + i]):
+                if not isinstance(annotation, Label):
+                    result.append(annotation.as_string(addr))
         addr += classification_length
     return result
 
