@@ -102,6 +102,10 @@ def word(addr, n=1):
 def entry(addr, label=None):
     return add_entry(addr, label)
 
+def nonentry(addr):
+    # TODO: Call a function on trace module?
+    trace.traced_entry_points.add(addr)
+
 def wordentry(addr, n=1):
     word(addr, n)
     for i in range(n):

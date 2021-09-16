@@ -10,7 +10,7 @@ load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 acorn.add_standard_labels()
 acorn.is_sideways_rom()
 
-move(0x400, 0xbf04, 0xbf88-0xbf04) # XXX: length is a guess
+move(0x400, 0xbf04, 0xbf95-0xbf04) # XXX: length is a guess
 
 constant(0x01, "service_claim_absolute_workspace")
 constant(0x0f, "service_vectors_changed")
@@ -86,20 +86,22 @@ for i in range(8):
     entry(code_at)
     expr(addr, utils.LazyString("<((%s)-1)", get_label(code_at, addr)))
 
-stringcr(0xa17c) # preceding BNE is always taken
-byte(0xaefb) # preceding BNE is always taken
+nonentry(0xa17c) # preceding BNE is always taken
+nonentry(0xaefb) # preceding BNE is always taken
 
-entry((0x421-0x400)+0xbf04, "copied_to_421")
+#entry((0x421-0x400)+0xbf04, "copied_to_421")
 
 entry(0x89a7)
 entry(0x89b5)
 
-entry(0xbf04)
-entry(0xbf07)
-entry(0xbf0a)
-entry(0xbf2c)
-entry(0xbf88)
+#entry(0xbf04)
+#entry(0xbf07)
+#entry(0xbf0a)
+#entry(0xbf2c)
+#entry(0xbf88)
+#entry(0xbf90)
 entry(0xbfd2)
+entry(0xbf95)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.

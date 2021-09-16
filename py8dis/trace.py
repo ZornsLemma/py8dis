@@ -4,6 +4,7 @@ import config
 import disassembly
 
 entry_points = []
+traced_entry_points = set()
 references = collections.defaultdict(set)
 
 def add_entry(addr, label=None):
@@ -15,7 +16,8 @@ def add_entry(addr, label=None):
 def trace():
     while len(entry_points) > 0:
         entry_point = entry_points.pop(0)
-        if not disassembly.is_classified(entry_point, 1):
+        if entry_point not in traced_entry_points:
+            traced_entry_points.add(entry_point)
             #print(hex(entry_point))
             new_entry_points = config.disassemble_instruction()(entry_point)
             # The first element of new_entry_points is the implicit next

@@ -374,7 +374,6 @@ opcodes = {
 
 
 def disassemble_instruction(addr):
-    assert not disassembly.is_classified(addr, 1)
     opcode_value = memory[addr]
     #print(hex(opcode_value))
     if opcode_value not in opcodes:
