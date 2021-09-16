@@ -131,7 +131,7 @@ class OpcodeAbs(Opcode):
         # instruction as data with a comment showing what it is; the comment
         # includes an acme-style "+2" suffix to help indicate what's going on.
         operand = classification.get_address16(addr + 1)
-        return utils.LazyString("%s%s, (%s), (%s) ; %s+2 %s", config.formatter().byte_prefix(), classification.get_cosntant8(addr), operand, operand, result1, result2)
+        return utils.LazyString("%s%s, <(%s), >(%s) ; %s+2 %s", config.formatter().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
 
 
 class OpcodeDataAbs(OpcodeAbs):
