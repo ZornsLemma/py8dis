@@ -89,3 +89,11 @@ def string_chr(c):
     if utils.isprint(c) and chr(c) not in ("/", '"'):
         return chr(c)
     return None
+
+def sanitise(s):
+    # xa uses "\" as a line continuation character, so if a line (e.g. an ASCII
+    # dump of some byte data) happens to end with that, add a space to stop it
+    # being misinterpreted.
+    if len(s) > 0 and s[-1] == "\\":
+        return s + " "
+    return s

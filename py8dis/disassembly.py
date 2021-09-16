@@ -203,7 +203,7 @@ def emit():
     output.extend(trace.add_reference_histogram())
 
     output.extend(formatter.disassembly_end())
-    print("\n".join(str(line) for line in output))
+    print("\n".join(formatter.sanitise(str(line)) for line in output))
 
 def split_classification(addr):
     if classifications[addr] != partial_classification:
