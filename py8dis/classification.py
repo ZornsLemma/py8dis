@@ -258,8 +258,9 @@ def stringz(addr, exclude_terminator=False):
 
 def string(addr, n=None):
     if n is None:
+        assert not disassembly.is_classified(addr)
         n = 0
-        while utils.isprint(memory[addr + n]):
+        while not disassembly.is_classified(addr + n) and utils.isprint(memory[addr + n]):
             n += 1
     if n > 0:
         disassembly.add_classification(addr, String(n, False))
@@ -269,8 +270,11 @@ def string(addr, n=None):
 # string might be useful. The if-ed out code to decompose the last character
 # into a readable form would then potentially be useful too.
 def stringhi(addr):
+    assert not disassembly.is_classified(addr, 1)
     initial_addr = addr
     while True:
+        if disassembly.is_classified(addr, 1):
+            break
         if memory[addr] & 0x80 != 0:
             if False: # ENHANCE: Works but not that helpful so save it for a case where it is
                 c = memory[addr] & 0x7f
@@ -283,8 +287,11 @@ def stringhi(addr):
     return addr
 
 def stringhiz(addr):
+    assert not disassembly.is_classified(addr, 1)
     initial_addr = addr
     while True:
+        if disassembly.is_classified(addr, 1):
+            break
         if memory[addr] == 0 or (memory[addr] & 0x80) != 0:
             break
         addr += 1

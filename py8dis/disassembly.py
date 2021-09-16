@@ -69,7 +69,7 @@ def ensure_annotation(addr, s): # TODO: rename "ensure_simple_label"?
         annotations[addr].append(Label(addr, s))
 
 def add_label(addr, s):
-    assert 0 <= addr <= 0xffff
+    assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     if addr not in primary_labels:
         primary_labels[addr] = s
     if is_simple_name(s):
@@ -209,6 +209,8 @@ def emit():
     print("\n".join(formatter.sanitise(str(line)) for line in output))
 
 def split_classification(addr):
+    if addr >= 0x10000:
+        return
     if classifications[addr] != partial_classification:
         return
     split_addr = addr

@@ -25,7 +25,7 @@ def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
         data = bytearray(f.read())
-        if addr + len(data) > 0xffff:
+        if addr + len(data) > 0x10000:
             utils.die("load() would overflow memory")
         memory[addr:addr+len(data)] = data
     if md5sum is not None:

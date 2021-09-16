@@ -55,8 +55,10 @@ def disassembly_start():
 def code_start(start_addr, end_addr):
     global _code_end_addr
     _code_end_addr = end_addr
-    return [utils.force_case("    org %s" % hex4(start_addr)),
-            utils.force_case("    guard %s" % hex4(end_addr))]
+    result = [utils.force_case("    org %s" % hex4(start_addr))]
+    if end_addr < 0x10000:
+        result.append(utils.force_case("    guard %s" % hex4(end_addr)))
+    return result
 
 def code_end():
     return []
@@ -64,7 +66,8 @@ def code_end():
 def pseudopc_start(dest, source, length):
     result = []
     result.append(utils.force_case("    org %s" % hex(dest)))
-    result.append(utils.force_case("    guard %s" % hex(dest + length)))
+    if dest + length < 0x10000:
+        result.append(utils.force_case("    guard %s" % hex(dest + length)))
     return result
 
 def pseudopc_end(dest, source, length):
@@ -73,7 +76,8 @@ def pseudopc_end(dest, source, length):
     result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source), disassembly.get_label(source, source)))
     result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source)))
     result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source)))
-    result.append("    %s %s" % (utils.force_case("guard"), hex(_code_end_addr)))
+    if _code_end_addr < 0x10000:
+        result.append("    %s %s" % (utils.force_case("guard"), hex(_code_end_addr)))
     return result
 
 def disassembly_end():
