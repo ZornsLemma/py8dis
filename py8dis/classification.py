@@ -286,13 +286,16 @@ def stringhi(addr):
         disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
     return addr
 
-def stringhiz(addr):
+# Behaviour with include_terminator_fn=None should be beebdis-compatible.
+def stringhiz(addr, include_terminator_fn=None):
     assert not disassembly.is_classified(addr, 1)
     initial_addr = addr
     while True:
         if disassembly.is_classified(addr, 1):
             break
         if memory[addr] == 0 or (memory[addr] & 0x80) != 0:
+            if include_terminator_fn is not None and include_terminator_fn(memory[addr]):
+                addr += 1
             break
         addr += 1
     if addr > initial_addr:

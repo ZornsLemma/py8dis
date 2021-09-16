@@ -112,6 +112,9 @@ def wordentry(addr, n=1):
 def stringhi_hook(target, addr):
     return stringhi(addr + 3)
 
+def stringhiz_hook(target, addr):
+    return stringhiz(addr + 3)
+
 def stringcr_hook(target, addr):
     return stringcr(addr + 3)
 
