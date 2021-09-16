@@ -3,6 +3,7 @@ import sys
 
 import classification
 import config
+import disassembly # TODO?
 import utils
 
 config.set_formatter(sys.modules[__name__])
@@ -53,12 +54,11 @@ def code_start(start_addr, end_addr):
 def code_end():
     return []
 
-# TODO: PSEUDOPC NEEDS TWEAKING FOR XA OF COURSE
 def pseudopc_start(dest, source, length):
-    return [utils.force_case("!pseudopc %s {" % hex(dest))]
+    return ["* = %s" % hex(dest)]
 
 def pseudopc_end(dest, source, length):
-    return ["}"]
+    return [utils.LazyString("* = %s + (%s - %s)", disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source))]
 
 def disassembly_end():
     result = []

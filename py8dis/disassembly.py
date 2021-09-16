@@ -203,7 +203,7 @@ def emit():
     output.extend(trace.add_reference_histogram())
 
     output.extend(formatter.disassembly_end())
-    print("\n".join(output))
+    print("\n".join(str(line) for line in output))
 
 def split_classification(addr):
     if classifications[addr] != partial_classification:
@@ -257,7 +257,8 @@ def emitSFTODO():
     while addr < len(classifications):
         c = classifications[addr]
         if c is not None:
-            c_str[addr] = c.as_string_list(addr)
+            # TODO: As noted elsewhere emitSFTODO() is partially unnecessary now but note that we force str() here so LazyStrings are evaluated and all necessary label definitions are created before we start the final "emit" pass
+            c_str[addr] = [str(line) for line in c.as_string_list(addr)]
             addr += c.length()
         else:
             addr += 1
