@@ -62,16 +62,19 @@ def pseudopc_end(dest, source, length):
 
 def disassembly_end():
     result = []
+    return result # TODO!
     spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
     for expr, value in spa:
-        result.append("%s %s != %s {" % (utils.force_case("!if"), expr, value))
-        result.append('    %s "Assertion failed: %s == %s"' % (utils.force_case("!error"), expr, value))
-        result.append("}")
+        result.append("%s %s <> %s" % (utils.force_case("#if"), expr, value))
+        result.append("    #echo TODO") # result.append('    %s Assertion failed: %s == %s' % (utils.force_case("#echo"), expr, value))
+        result.append(utils.force_case("#endif"))
     return result
 
-# TODO: xa needs a "!" prefix on the *operand*
-def abs_suffix():
-    return "+2"
+def force_abs_instruction(instruction, prefix, operand, suffix):
+    # It's tempting to put brackets around "operand" in case it contains an
+    # expression, but the "!" prefix operator doesn't seem to like this and
+    # probably doesn't need it.
+    return utils.LazyString("    %s %s!%s%s", instruction, prefix, operand, suffix)
 
 def byte_prefix():
     return utils.force_case("    .byt ")

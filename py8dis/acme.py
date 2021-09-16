@@ -72,6 +72,9 @@ def disassembly_end():
         result.append("}")
     return result
 
+def force_abs_instruction(instruction, prefix, operand, suffix):
+    return utils.LazyString("    %s+2 %s%s%s", instruction, prefix, operand, suffix)
+
 def abs_suffix():
     return "+2"
 

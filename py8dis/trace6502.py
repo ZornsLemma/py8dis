@@ -108,6 +108,7 @@ class OpcodeAbs(Opcode):
         return self._has_zp_version
 
     def as_string(self, addr):
+        # TODO: Do we need to use LazyString here?
         # We need to avoid misassembly of absolute instructions with zero-page
         # operands. These are relatively rare in real code, but apart from the
         # fact we should still handle them even if they're rare, they can also
@@ -122,9 +123,9 @@ class OpcodeAbs(Opcode):
         # This is an absolute instruction with a zero-page operand which could
         # be misassembled. If the assembler has a way to explicitly request
         # absolute addressing, we use that.
-        abs_suffix = config.formatter().abs_suffix()
-        if abs_suffix != "":
-            return "    %s%s %s" % (result1, abs_suffix, result2)
+        force_abs_instruction = config.formatter().force_abs_instruction(result1, self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+        if force_abs_instruction is not None:
+            return force_abs_instruction
 
         # This assembler has no way to force absolute addressing, so emit the
         # instruction as data with a comment showing what it is; the comment

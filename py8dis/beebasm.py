@@ -90,8 +90,8 @@ def disassembly_end():
     result.append(s)
     return result
 
-def abs_suffix():
-    return ""
+def force_abs_instruction(instruction, prefix, operand, suffix):
+    return None
 
 def byte_prefix():
     return utils.force_case("    equb ")
