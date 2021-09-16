@@ -28,6 +28,12 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 add_entry(new_entry_point)
+    # We only need to defer label name generating using LazyString so that
+    # label names aren't assigned based on incomplete tracing. (For example,
+    # part way through tracing we may not have identified any code at address
+    # X and that might affect the label name used for address X.)
+    disassembly.trace_done = True
+
 
 # TODO: This code is a bit unreadable!
 def add_references_comments():

@@ -14,6 +14,8 @@ primary_labels = {}
 all_simple_labels = {}
 simple_labelled_addrs = set()
 
+trace_done = False # TODO!?
+
 
 # There is at most one classification for any address; in practice by the end of
 # disassembly there will be exactly one for all addresses in the target range,
@@ -120,6 +122,7 @@ def label_maker(addr, context):
     return suggestion
 
 def get_final_label(addr, context):
+    assert trace_done
     s = label_maker(addr, context)
     add_label(addr, s)
     return s

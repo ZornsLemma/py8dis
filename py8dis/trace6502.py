@@ -116,9 +116,9 @@ class OpcodeAbs(Opcode):
         # code. If we don't cope with them, bytes get lost and the disassembly
         # can't be correctly reassembled into a binary matching the input.
         result1 = utils.force_case(self.mnemonic)
-        result2 = "%s%s%s" % (self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+        result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
         if not self.has_zp_version() or utils.get_u16(addr + 1) >= 0x100:
-            return "    %s %s" % (result1, result2)
+            return utils.LazyString("    %s %s", result1, result2)
 
         # This is an absolute instruction with a zero-page operand which could
         # be misassembled. If the assembler has a way to explicitly request
@@ -131,8 +131,7 @@ class OpcodeAbs(Opcode):
         # instruction as data with a comment showing what it is; the comment
         # includes an acme-style "+2" suffix to help indicate what's going on.
         operand = classification.get_address16(addr + 1)
-        data = [classification.get_constant8(addr), "<(%s)" % operand, ">(%s)" % operand]
-        return "%s%s ; %s+2 %s" % (config.formatter().byte_prefix(), ", ".join(data), result1, result2)
+        return utils.LazyString("%s%s, (%s), (%s) ; %s+2 %s", config.formatter().byte_prefix(), classification.get_cosntant8(addr), operand, operand, result1, result2)
 
 
 class OpcodeDataAbs(OpcodeAbs):
