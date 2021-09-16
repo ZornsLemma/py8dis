@@ -31,7 +31,7 @@ def add_hex_dump(s, addr, length):
     if not config.hex_dump():
         return s
     s = "%-*s" % (config.inline_comment_column(), s)
-    s += "; %s: " % plainhex4(addr)
+    s += "%s %s: " % (config.formatter().comment_prefix(), plainhex4(addr))
     capped_length = min(length, 3)
     s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
     if capped_length < length:
