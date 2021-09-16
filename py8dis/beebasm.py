@@ -103,4 +103,6 @@ def string_prefix():
     return utils.force_case("    equs ")
 
 def string_chr(c):
-    return chr(c)
+    if utils.isprint(c) and chr(c) not in ('"'):
+        return chr(c)
+    return None

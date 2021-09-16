@@ -140,13 +140,14 @@ class String(object):
         s_i = 0
         for i in range(self._length):
             c = memory[addr + i]
-            if utils.isprint(c) and c != ord('"'):
+            c_in_string = formatter().string_chr(c)
+            if c_in_string is not None:
                 if state == 0:
                     s += '"'
                 elif state == 2:
                     s += ', "'
                 state = 1
-                s += formatter().string_chr(c)
+                s += c_in_string
             else:
                 if state == 1:
                     s += '", '
