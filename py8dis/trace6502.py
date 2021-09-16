@@ -384,6 +384,8 @@ def disassemble_instruction(addr):
     # it but that doesn't mean we can't continue to trace until something breaks
     # the control flow.
     if disassembly.is_classified(addr, 1 + opcode.operand_length):
+        # TODO: The machinations required to format the comment here are a bit
+        # annoying.
         s = opcode.as_string(addr)
         def late_formatter():
             return utils.add_hex_dump("overlapping: " + str(s)[4:], addr, opcode.length(), -len(config.formatter().comment_prefix())-1)
