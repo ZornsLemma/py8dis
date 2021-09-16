@@ -381,11 +381,11 @@ def disassemble_instruction(addr):
     if opcode_value not in opcodes:
         return [None]
     opcode = opcodes[opcode_value]
-    if disassembly.is_classified(addr, 1 + opcode.operand_length):
-        return [None]
-    # Up to this point we hadn't decided addr contains an instruction; we now
-    # have.
-    disassembly.add_classification(addr, opcode)
+    # If we hit something that's already classified, we can't/don't re-classify
+    # it but that doesn't mean we can't continue to trace until something breaks
+    # the control flow.
+    if not disassembly.is_classified(addr, 1 + opcode.operand_length):
+        disassembly.add_classification(addr, opcode)
     opcode.update_references(addr)
     return opcode.disassemble(addr)
 
