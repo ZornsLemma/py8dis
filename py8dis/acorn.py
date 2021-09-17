@@ -33,6 +33,8 @@ osword_enum = {
     0x0b: "osword_read_palette",
     0x0c: "osword_write_palette",
     0x0d: "osword_read_graphics_cursor_position",
+    0x0e: "osword_read_cmos_clock",
+    0x0f: "osword_write_cmos_clock",
 }
 
 osbyte_enum = {
@@ -213,6 +215,9 @@ def osword_sequence_hook(a_addr, x_addr, y_addr):
 def osbyte_sequence_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osbyte_enum)
 
+def oscli_sequence_hook(a_addr, x_addr, y_addr):
+    xy_addr(x_addr, y_addr)
+
 def acorn_sequence_hook(target, a_addr, x_addr, y_addr):
     # TODO: magic constants, should share with add_standard_labels via Python "constants"
     # TODO: do other OS calls
@@ -220,6 +225,7 @@ def acorn_sequence_hook(target, a_addr, x_addr, y_addr):
         0xffdd: osfile_sequence_hook,
         0xfff1: osword_sequence_hook,
         0xfff4: osbyte_sequence_hook,
+        0xfff7: oscli_sequence_hook,
     }
     if target in d:
         (d[target])(a_addr, x_addr, y_addr)

@@ -163,29 +163,53 @@ def merge_classifications():
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
+# TODO: Move
+opcode_jsr = 0x20
+opcode_jmp = 0x4c
+opcode_lda_imm = 0xa9
+opcode_ldx_imm = 0xa2
+opcode_ldy_imm = 0xa0
+opcode_tax = 0xaa
+opcode_txa = 0x8a
+opcode_tay = 0xa8
+opcode_tya = 0x98
+opcode_sequence = (opcode_lda_imm, opcode_ldx_imm, opcode_ldy_imm, opcode_tax, opcode_txa, opcode_tay, opcode_tya)
+opcode_neutral = []
+
 # TODO: Move - this is 6502 specific code
 def sequence_complete(sequence):
     memory = config.memory
-    if len(sequence) < 2 or memory[sequence[-1]] != 0x20:
+    if len(sequence) < 2 or memory[sequence[-1]] not in (opcode_jsr, opcode_jmp):
         del sequence[:]
         return
     target = utils.get_u16(sequence[-1] + 1)
     a_addr = None
     x_addr = None
     y_addr = None
-    for addr in sequence[::-1]:
+    for addr in sequence[:-1]:
         opcode = memory[addr]
-        if opcode == 0xa9 and a_addr is None:
+        if opcode == opcode_lda_imm:
             a_addr = addr + 1
-        elif opcode == 0xa0 and y_addr is None:
-            y_addr = addr + 1
-        elif opcode == 0xa2 and x_addr is None:
+        elif opcode == opcode_ldx_imm:
             x_addr = addr + 1
-    def SFTODO(x):
-        if x is None:
-            return "-"
-        return "%04x=%02x" % (x, config.memory[x])
-    print("; XXX %04x %s %s %s" % (target, SFTODO(a_addr), SFTODO(x_addr), SFTODO(y_addr)))
+        elif opcode == opcode_ldy_imm:
+            y_addr = addr + 1
+        elif opcode == opcode_tax:
+            x_addr = None
+        elif opcode == opcode_tay:
+            y_addr = None
+        elif opcode in (opcode_txa, opcode_tya):
+            a_addr = None
+        elif opcode in opcode_neutral:
+            pass
+        else:
+            assert False
+    if False:
+        def SFTODO(x):
+            if x is None:
+                return "-"
+            return "%04x=%02x" % (x, config.memory[x])
+        print("; XXX %04x %s %s %s" % (target, SFTODO(a_addr), SFTODO(x_addr), SFTODO(y_addr)))
     for hook in sequence_hooks:
         if hook(target, a_addr, x_addr, y_addr) is not None:
             break
@@ -197,6 +221,10 @@ def sequence_complete(sequence):
 # line instructions - the fact that the sequence might *also* be entered
 # part-way through via a label doesn't invalidate that inference.
 def analyse_sequences():
+    global opcode_neutral
+    for opcode, c in trace6502.opcodes.items(): # TODO: V HACKY
+        if c.mnemonic.startswith("ST") or c.mnemonic.startswith("PH"):
+            opcode_neutral.append(opcode)
     for start_addr, end_addr in config.load_ranges:
         addr = start_addr
         sequence = []
@@ -206,14 +234,10 @@ def analyse_sequences():
             # supposed to be generic code yet it's using trace6502...
             if isinstance(c, trace6502.Opcode):
                 opcode = config.memory[addr]
-                # TODO: Super hacky. Among other flaws, note that we could easily
-                # allow-but-ignore store instructions and flag setting instructions
-                # in a sequence. We could also maybe semi-interpret things like "tay";
-                # note that we must have y_addr=None after a tay, but it needn't
-                # interrupt the sequence and stop us inferring the value of A.
-                if opcode in (0x20, 0xa0, 0xa2, 0xa9):
+                # TODO: Super hacky.
+                if opcode in (opcode_jsr, opcode_jmp) or opcode in opcode_sequence:
                     sequence.append(addr)
-                if opcode not in (0xa0, 0xa2, 0xa9):
+                if opcode not in opcode_sequence and opcode not in opcode_neutral:
                     sequence_complete(sequence)
             else:
                 sequence_complete(sequence)
