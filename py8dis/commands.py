@@ -75,7 +75,7 @@ def constant(value, name):
 
 # ENHANCE: Should (can?) we arrange that if there is already an auto-generated
 # label at this address, the user one takes precedence? This may not be the case
-# as standard if the user uses code_ptr() and then label()s the taret address
+# as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose.
 def label(addr, name):
