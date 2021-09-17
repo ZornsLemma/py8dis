@@ -102,6 +102,8 @@ def word(addr, n=1):
 def entry(addr, label=None):
     return add_entry(addr, label)
 
+# TODO: Should byte()/word()/string() implicitly call nonentry()?
+# TODO: Should I then get rid of this as an explicit command?
 def nonentry(addr):
     # TODO: Call a function on trace module?
     trace.traced_entry_points.add(addr)
