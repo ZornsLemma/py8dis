@@ -158,6 +158,10 @@ def rts_code_ptr(addr, addr_high=None):
 def set_label_maker_hook(hook):
     disassembly.set_user_label_maker_hook(hook)
 
+# TODO: Highly experimental
+def add_sequence_hook(hook):
+    disassembly.sequence_hooks.append(hook)
+
 def go(post_trace_steps=None, autostring_min_length=3):
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
     pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)

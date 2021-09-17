@@ -6,6 +6,7 @@ import six
 
 import config
 import trace # SFTODO TEMP?
+import trace6502 # SFTODO TEMP?
 import utils
 
 user_label_maker_hook = None
@@ -13,6 +14,7 @@ user_label_maker_hook = None
 primary_labels = {}
 all_simple_labels = {}
 simple_labelled_addrs = set()
+sequence_hooks = [] # TODO: move?
 
 trace_done = False # TODO!?
 
@@ -48,6 +50,11 @@ def add_comment(addr, text):
     annotations[addr].append(Comment(text))
 
 def add_constant(value, name):
+    # TODO: inefficient linear search!
+    for v, n in constants:
+        if n == name:
+            assert v == value
+            return
     constants.append((value, name))
 
 def is_simple_name(s):
@@ -155,6 +162,65 @@ def merge_classifications():
 
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
+
+# TODO: Move - this is 6502 specific code
+def sequence_complete(sequence):
+    memory = config.memory
+    if len(sequence) < 2 or memory[sequence[-1]] != 0x20:
+        del sequence[:]
+        return
+    target = utils.get_u16(sequence[-1] + 1)
+    a_addr = None
+    x_addr = None
+    y_addr = None
+    for addr in sequence[::-1]:
+        opcode = memory[addr]
+        if opcode == 0xa9 and a_addr is None:
+            a_addr = addr + 1
+        elif opcode == 0xa0 and y_addr is None:
+            y_addr = addr + 1
+        elif opcode == 0xa2 and x_addr is None:
+            x_addr = addr + 1
+    def SFTODO(x):
+        if x is None:
+            return "-"
+        return "%04x=%02x" % (x, config.memory[x])
+    print("; XXX %04x %s %s %s" % (target, SFTODO(a_addr), SFTODO(x_addr), SFTODO(y_addr)))
+    for hook in sequence_hooks:
+        if hook(target, a_addr, x_addr, y_addr) is not None:
+            break
+    del sequence[:]
+
+# TODO: Move? We do need to do this before setting trace_done though (I think)...
+# Note that this does *not* check for labels breaking up a sequence. We're not
+# optimising code here, we are making an inference from a series of straight
+# line instructions - the fact that the sequence might *also* be entered
+# part-way through via a label doesn't invalidate that inference.
+def analyse_sequences():
+    for start_addr, end_addr in config.load_ranges:
+        addr = start_addr
+        sequence = []
+        while addr < end_addr:
+            c = classifications[addr]
+            # TODO: Use of isinstance() is hacky - not the only problem, but this is
+            # supposed to be generic code yet it's using trace6502...
+            if isinstance(c, trace6502.Opcode):
+                opcode = config.memory[addr]
+                # TODO: Super hacky. Among other flaws, note that we could easily
+                # allow-but-ignore store instructions and flag setting instructions
+                # in a sequence. We could also maybe semi-interpret things like "tay";
+                # note that we must have y_addr=None after a tay, but it needn't
+                # interrupt the sequence and stop us inferring the value of A.
+                if opcode in (0x20, 0xa0, 0xa2, 0xa9):
+                    sequence.append(addr)
+                if opcode not in (0xa0, 0xa2, 0xa9):
+                    sequence_complete(sequence)
+            else:
+                sequence_complete(sequence)
+            if c is not None:
+                addr += c.length()
+            else:
+                addr += 1
 
 # TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():
