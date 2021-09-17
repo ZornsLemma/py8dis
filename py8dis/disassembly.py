@@ -173,7 +173,10 @@ opcode_tax = 0xaa
 opcode_txa = 0x8a
 opcode_tay = 0xa8
 opcode_tya = 0x98
-opcode_sequence = (opcode_lda_imm, opcode_ldx_imm, opcode_ldy_imm, opcode_tax, opcode_txa, opcode_tay, opcode_tya)
+opcode_sequence = [opcode_lda_imm, opcode_ldx_imm, opcode_ldy_imm]
+opcode_corrupt_a = [opcode_txa, opcode_tya]
+opcode_corrupt_x = [opcode_tax]
+opcode_corrupt_y = [opcode_tay]
 opcode_neutral = []
 
 # TODO: Move - this is 6502 specific code
@@ -194,12 +197,12 @@ def sequence_complete(sequence):
             x_addr = addr + 1
         elif opcode == opcode_ldy_imm:
             y_addr = addr + 1
-        elif opcode == opcode_tax:
-            x_addr = None
-        elif opcode == opcode_tay:
-            y_addr = None
-        elif opcode in (opcode_txa, opcode_tya):
+        elif opcode in opcode_corrupt_a:
             a_addr = None
+        elif opcode in opcode_corrupt_x:
+            x_addr = None
+        elif opcode in opcode_corrupt_y:
+            y_addr = None
         elif opcode in opcode_neutral:
             pass
         else:
@@ -222,9 +225,21 @@ def sequence_complete(sequence):
 # part-way through via a label doesn't invalidate that inference.
 def analyse_sequences():
     global opcode_neutral
+    global opcode_corrupt_a
+    global opcode_corrupt_x
+    global opcode_corrupt_y
     for opcode, c in trace6502.opcodes.items(): # TODO: V HACKY
         if c.mnemonic.startswith("ST") or c.mnemonic.startswith("PH"):
             opcode_neutral.append(opcode)
+        if c.mnemonic == "LDA" and opcode != opcode_lda_imm:
+            opcode_corrupt_a.append(opcode)
+        if c.mnemonic == "LDX" and opcode != opcode_ldx_imm:
+            opcode_corrupt_x.append(opcode)
+        if c.mnemonic == "LDY" and opcode != opcode_ldy_imm:
+            opcode_corrupt_y.append(opcode)
+    opcode_sequence.extend(opcode_corrupt_a)
+    opcode_sequence.extend(opcode_corrupt_x)
+    opcode_sequence.extend(opcode_corrupt_y)
     for start_addr, end_addr in config.load_ranges:
         addr = start_addr
         sequence = []
