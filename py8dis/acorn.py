@@ -321,3 +321,24 @@ def is_sideways_rom():
     label(0x8000 + copyright_offset, "copyright")
     stringz(0x8000 + copyright_offset + 1)
     # ENHANCE: We could recognise tube transfer/relocation data in header
+
+def hardware_bbc():
+    def label_via(name, base):
+        optional_label(base +  0, name + "_via_orb_irb")
+        optional_label(base +  1, name + "_via_ora_ira")
+        optional_label(base +  2, name + "_via_ddrb")
+        optional_label(base +  3, name + "_via_ddra")
+        optional_label(base +  4, name + "_via_t1c_l")
+        optional_label(base +  5, name + "_via_t1c_h")
+        optional_label(base +  6, name + "_via_t1l_l")
+        optional_label(base +  7, name + "_via_t1l_h")
+        optional_label(base +  8, name + "_via_t2c_l")
+        optional_label(base +  9, name + "_via_t2c_h")
+        optional_label(base + 10, name + "_via_sr")
+        optional_label(base + 11, name + "_via_acr")
+        optional_label(base + 12, name + "_via_pcr")
+        optional_label(base + 13, name + "_via_ifr")
+        optional_label(base + 14, name + "_via_ier")
+        optional_label(base + 15, name + "_via_ora_ira")
+    label_via("system", 0xfe40)
+    label_via("user", 0xfe60)

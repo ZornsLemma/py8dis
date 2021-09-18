@@ -9,6 +9,7 @@ load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 
 acorn.add_standard_labels()
 acorn.is_sideways_rom()
+acorn.hardware_bbc()
 
 move(0x400, 0xbf04, 0xbf95-0xbf04) # XXX: length is a guess
 
