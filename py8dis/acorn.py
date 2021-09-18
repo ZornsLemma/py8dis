@@ -364,3 +364,9 @@ def hardware_bbc():
         optional_label(base + 15, name + "_via_ora_ira")
     label_via("system", 0xfe40)
     label_via("user", 0xfe60)
+
+def hardware_b_plus():
+    optional_label(0xfe34, "acccon")
+
+def hardware_master():
+    optional_label(0xfe34, "acccon")

@@ -84,7 +84,9 @@ def add_label(addr, s):
 
 def add_optional_label(addr, s, base_addr=None):
     assert 0 <= addr <= 0xffff
-    assert addr not in optional_labels
+    if addr in optional_labels:
+        assert optional_labels[addr] == (s, base_addr)
+        return
     if base_addr is not None:
         assert addr != base_addr
         assert 0 <= base_addr <= 0xffff
