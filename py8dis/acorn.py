@@ -385,3 +385,5 @@ def hardware_master():
 
 def hardware_6502sp():
     label_tube(0xfef8, "parasite")
+
+# TODO: Maybe have a "throw everything in" function for getting started quickly?
