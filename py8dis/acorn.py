@@ -320,6 +320,16 @@ def is_sideways_rom():
     stringz(0x8000 + copyright_offset + 1)
     # ENHANCE: We could recognise tube transfer/relocation data in header
 
+def label_tube(base, name):
+    optional_label(base + 0, "tube_%s_r1_status" % name)
+    optional_label(base + 1, "tube_%s_r1_data" % name)
+    optional_label(base + 2, "tube_%s_r2_status" % name)
+    optional_label(base + 3, "tube_%s_r2_data" % name)
+    optional_label(base + 4, "tube_%s_r3_status" % name)
+    optional_label(base + 5, "tube_%s_r3_data" % name)
+    optional_label(base + 6, "tube_%s_r4_status" % name)
+    optional_label(base + 7, "tube_%s_r4_data" % name)
+
 def hardware_bbc():
     optional_label(0xfe00 +  0, "crtc_horz_total")
     optional_label(0xfe00 +  1, "crtc_horz_displayed")
@@ -345,7 +355,7 @@ def hardware_bbc():
 
     optional_label(0xfe30, "romsel")
 
-    def label_via(name, base):
+    def label_via(base, name):
         optional_label(base +  0, name + "_via_orb_irb")
         optional_label(base +  1, name + "_via_ora_ira")
         optional_label(base +  2, name + "_via_ddrb")
@@ -362,11 +372,16 @@ def hardware_bbc():
         optional_label(base + 13, name + "_via_ifr")
         optional_label(base + 14, name + "_via_ier")
         optional_label(base + 15, name + "_via_ora_ira")
-    label_via("system", 0xfe40)
-    label_via("user", 0xfe60)
+    label_via(0xfe40, "system")
+    label_via(0xfe60, "user")
+
+    label_tube(0xfee0, "host")
 
 def hardware_b_plus():
     optional_label(0xfe34, "acccon")
 
 def hardware_master():
     optional_label(0xfe34, "acccon")
+
+def hardware_6502sp():
+    label_tube(0xfef8, "parasite")
