@@ -268,8 +268,6 @@ def add_standard_labels():
     ol2(0x0232, "ind2v")
     ol2(0x0234, "ind3v")
 
-    optional_label(0xfe30, "romsel")
-
     optional_label(0xffb9, "osrdsc")
     optional_label(0xffbc, "vduchr")
     optional_label(0xffbf, "oseven")
@@ -323,6 +321,30 @@ def is_sideways_rom():
     # ENHANCE: We could recognise tube transfer/relocation data in header
 
 def hardware_bbc():
+    optional_label(0xfe00 +  0, "crtc_horz_total")
+    optional_label(0xfe00 +  1, "crtc_horz_displayed")
+    optional_label(0xfe00 +  2, "crtc_horz_sync_pos")
+    optional_label(0xfe00 +  3, "crtc_sync_width")
+    optional_label(0xfe00 +  4, "crtc_vert_total")
+    optional_label(0xfe00 +  5, "crtc_vert_total_adjust")
+    optional_label(0xfe00 +  6, "crtc_vert_displayed")
+    optional_label(0xfe00 +  7, "crtc_vert_sync_pos")
+    optional_label(0xfe00 +  8, "crtc_interlace_delay")
+    optional_label(0xfe00 +  9, "crtc_scan_lines_per_char")
+    optional_label(0xfe00 + 10, "crtc_cursor_start")
+    optional_label(0xfe00 + 11, "crtc_cursor_end")
+    optional_label(0xfe00 + 12, "crtc_screen_start_high")
+    optional_label(0xfe00 + 13, "crtc_screen_start_low")
+    optional_label(0xfe00 + 14, "crtc_cursor_pos_high")
+    optional_label(0xfe00 + 15, "crtc_cursor_pos_low")
+    optional_label(0xfe00 + 16, "crtc_light_pen_pos_high")
+    optional_label(0xfe00 + 17, "crtc_light_pen_pos_low")
+
+    optional_label(0xfe20, "video_ula_control")
+    optional_label(0xfe21, "video_ula_palette")
+
+    optional_label(0xfe30, "romsel")
+
     def label_via(name, base):
         optional_label(base +  0, name + "_via_orb_irb")
         optional_label(base +  1, name + "_via_ora_ira")
