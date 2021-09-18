@@ -378,12 +378,26 @@ def hardware_bbc():
     label_tube(0xfee0, "host")
 
 def hardware_b_plus():
+    hardware_bbc()
     optional_label(0xfe34, "acccon")
 
 def hardware_master():
+    hardware_bbc()
     optional_label(0xfe34, "acccon")
 
 def hardware_6502sp():
     label_tube(0xfef8, "parasite")
+
+def bbc():
+    add_standard_labels()
+    hardware_bbc()
+
+def b_plus():
+    add_standard_labels()
+    hardware_b_plus()
+
+def master():
+    add_standard_labels()
+    hardware_master()
 
 # TODO: Maybe have a "throw everything in" function for getting started quickly?
