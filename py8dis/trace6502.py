@@ -275,6 +275,14 @@ def make_decrement(reg):
                 state[reg] = 0xff
     return decrement
 
+def make_increment(reg):
+    def increment(addr, state):
+        if state.get(reg, None) is not None:
+            state[reg] += 1
+            if state[reg] == 0x100:
+                state[reg] = 0
+    return increment
+
 def make_load_immediate(reg):
     def load_immediate(addr, state):
         v = memory[addr+1]
@@ -306,6 +314,10 @@ def update_xnz(addr, state):
 
 def update_ynz(addr, state):
     return make_corrupt_rnz('y')(addr, state)
+
+def update_nz(addr, state):
+    state['n'] = None
+    state['z'] = None
 
 def update_nzc(addr, state):
     state['n'] = None
@@ -439,26 +451,26 @@ opcodes = {
     0xad: OpcodeDataAbs("LDA", update=update_anz),
     0xae: OpcodeDataAbs("LDX", update=update_xnz),
     0xb0: OpcodeConditionalBranch("BCS"),
-    0xb1: OpcodeZp("LDA", "),Y"),
-    0xb4: OpcodeZp("LDY", ",X"),
-    0xb5: OpcodeZp("LDA", ",X"),
-    0xb8: OpcodeImplied("CLV"),
-    0xb9: OpcodeDataAbs("LDA", ",Y", has_zp_version=False, update=make_corrupt_rnz('a')),
-    0xba: OpcodeImplied("TSX"),
-    0xbc: OpcodeDataAbs("LDY", ",X"),
-    0xbd: OpcodeDataAbs("LDA", ",X"),
-    0xbe: OpcodeDataAbs("LDX", ",Y"),
-    0xc0: OpcodeImmediate("CPY"),
-    0xc1: OpcodeZp("CMP", ",X)"),
-    0xc4: OpcodeZp("CPY"),
-    0xc5: OpcodeZp("CMP"),
-    0xc6: OpcodeZp("DEC"),
-    0xc8: OpcodeImplied("INY"),
-    0xc9: OpcodeImmediate("CMP"),
-    0xca: OpcodeImplied("DEX"),
-    0xcc: OpcodeDataAbs("CPY"),
-    0xcd: OpcodeDataAbs("CMP"),
-    0xce: OpcodeDataAbs("DEC"),
+    0xb1: OpcodeZp("LDA", "),Y", update=update_anz),
+    0xb4: OpcodeZp("LDY", ",X", update=update_anz),
+    0xb5: OpcodeZp("LDA", ",X", update=update_anz),
+    0xb8: OpcodeImplied("CLV", update=make_update_flag('v', False)),
+    0xb9: OpcodeDataAbs("LDA", ",Y", has_zp_version=False, update=update_anz),
+    0xba: OpcodeImplied("TSX", update=update_xnz),
+    0xbc: OpcodeDataAbs("LDY", ",X", update=update_ynz),
+    0xbd: OpcodeDataAbs("LDA", ",X", update=update_anz),
+    0xbe: OpcodeDataAbs("LDX", ",Y", update=update_xnz),
+    0xc0: OpcodeImmediate("CPY", update=update_nzc),
+    0xc1: OpcodeZp("CMP", ",X)", update=update_nzc),
+    0xc4: OpcodeZp("CPY", update=update_nzc),
+    0xc5: OpcodeZp("CMP", update=update_nzc),
+    0xc6: OpcodeZp("DEC", update=update_nz),
+    0xc8: OpcodeImplied("INY", update=make_increment('y')),
+    0xc9: OpcodeImmediate("CMP", update=update_nzc),
+    0xca: OpcodeImplied("DEX", update=make_decrement('x')),
+    0xcc: OpcodeDataAbs("CPY", update=update_nzc),
+    0xcd: OpcodeDataAbs("CMP", update=update_nzc),
+    0xce: OpcodeDataAbs("DEC", update=update_nz),
     0xd0: OpcodeConditionalBranch("BNE"),
     0xd1: OpcodeZp("CMP", "),Y"),
     0xd5: OpcodeZp("CMP", ",X"),
