@@ -42,7 +42,7 @@ def add_hex_dump(s, addr, length, column_adjust=0):
         if disassembly.cpu_state_optimistic[addr] is not None:
             # TODO: This needs some generic way to call the right function, rather than assuming
             # it's in trace6502.
-            s += " " + trace6502.show_cpu_state(disassembly.cpu_state_optimistic[addr])
+            s += " " + " "*3*(3-length) + trace6502.show_cpu_state(disassembly.cpu_state_optimistic[addr])
     return s
 
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
