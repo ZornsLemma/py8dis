@@ -219,7 +219,7 @@ def oscli_sequence_hook(a_addr, x_addr, y_addr):
     xy_addr(x_addr, y_addr)
 
 def acorn_sequence_hook(target, a_addr, x_addr, y_addr):
-    # TODO: magic constants, should share with add_standard_labels via Python "constants"
+    # TODO: magic constants, should share with mos_labels via Python "constants"
     # TODO: do other OS calls
     d = {
         0xffdd: osfile_sequence_hook,
@@ -231,7 +231,7 @@ def acorn_sequence_hook(target, a_addr, x_addr, y_addr):
         (d[target])(a_addr, x_addr, y_addr)
 
 # ENHANCE: Split this up somehow into "tube or host" and "just host"?
-def add_standard_labels():
+def mos_labels():
     optional_label(0x00f2, "os_text_ptr")
     optional_label(0x00f4, "romsel_copy")
     optional_label(0x00f6, "osrdsc_ptr")
@@ -389,15 +389,15 @@ def hardware_6502sp():
     label_tube(0xfef8, "parasite")
 
 def bbc():
-    add_standard_labels()
+    mos_labels()
     hardware_bbc()
 
 def b_plus():
-    add_standard_labels()
+    mos_labels()
     hardware_b_plus()
 
 def master():
-    add_standard_labels()
+    mos_labels()
     hardware_master()
 
 # TODO: Maybe have a "throw everything in" function for getting started quickly?
