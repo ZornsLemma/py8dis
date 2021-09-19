@@ -48,6 +48,8 @@ class Opcode(object):
     def update_cpu_state(self, addr, state):
         if self.update is not None:
             self.update(addr, state)
+        else:
+            state.clear()
 
     def as_string_list(self, addr):
         return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
@@ -227,13 +229,18 @@ def show_cpu_state(state):
         n = state.get(r, None)
         if n is None:
             return "--"
-        return utils.hex2(n)
+        return utils.plainhex2(n)
     s += "A:%s X:%s Y:%s" % (fmt('a'), fmt('x'), fmt('y'))
     return s
 
 
 def corrupt_a(addr, state):
     state['a'] = None
+
+def make_load_immediate(reg):
+    def load_immediate(addr, state):
+        state[reg] = memory[addr+1]
+    return load_immediate
 
 
 # ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
@@ -332,7 +339,7 @@ opcodes = {
     0x9d: OpcodeDataAbs("STA", ",X"),
     0xa0: OpcodeImmediate("LDY"),
     0xa1: OpcodeZp("LDA", ",X)"),
-    0xa2: OpcodeImmediate("LDX"),
+    0xa2: OpcodeImmediate("LDX", update=make_load_immediate('x')),
     0xa4: OpcodeZp("LDY"),
     0xa5: OpcodeZp("LDA"),
     0xa6: OpcodeZp("LDX"),
