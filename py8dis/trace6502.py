@@ -279,8 +279,8 @@ def make_load_immediate(reg):
     def load_immediate(addr, state):
         v = memory[addr+1]
         state[reg] = v
-        state['z'] = (v == 0)
         state['n'] = ((v & 0x80) == 0x80)
+        state['z'] = (v == 0)
     return load_immediate
 
 def neutral(addr, state):
@@ -291,6 +291,19 @@ def update_anz(addr, state):
 
 def update_anzc(addr, state):
     return make_corrupt_rnzc('a')(addr, state)
+
+def update_bit(addr, state):
+    state['n'] = None
+    state['v'] = None
+    state['z'] = None
+
+def corrupt_flags(addr, state):
+    state['n'] = None
+    state['v'] = None
+    state['d'] = None
+    state['i'] = None
+    state['z'] = None
+    state['c'] = None
 
 
 # ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
@@ -311,20 +324,20 @@ opcodes = {
     0x15: OpcodeZp("ORA", ",X", update=update_anz),
     0x16: OpcodeZp("ASL", ",X", update=update_anzc),
     0x18: OpcodeImplied("CLC", update=make_update_flag('c', False)),
-    0x19: OpcodeDataAbs("ORA", ",Y", has_zp_version=False),
-    0x1d: OpcodeDataAbs("ORA", ",X"),
-    0x1e: OpcodeDataAbs("ASL", ",X"),
+    0x19: OpcodeDataAbs("ORA", ",Y", has_zp_version=False, update=update_anz),
+    0x1d: OpcodeDataAbs("ORA", ",X", update=update_anz),
+    0x1e: OpcodeDataAbs("ASL", ",X", update=update_anzc),
     0x20: OpcodeJsr(),
-    0x21: OpcodeZp("AND", ",X)"),
-    0x24: OpcodeZp("BIT"),
-    0x25: OpcodeZp("AND"),
-    0x26: OpcodeZp("ROL"),
-    0x28: OpcodeImplied("PLP"),
+    0x21: OpcodeZp("AND", ",X)", update=update_anzc),
+    0x24: OpcodeZp("BIT", update=update_bit),
+    0x25: OpcodeZp("AND", update=update_anz),
+    0x26: OpcodeZp("ROL", update=update_anzc),
+    0x28: OpcodeImplied("PLP", update=corrupt_flags),
     0x29: OpcodeImmediate("AND", update=update_anz),
-    0x2a: OpcodeImplied("ROL A"),
-    0x2c: OpcodeDataAbs("BIT"),
-    0x2d: OpcodeDataAbs("AND"),
-    0x2e: OpcodeDataAbs("ROL"),
+    0x2a: OpcodeImplied("ROL A", update=update_anzc),
+    0x2c: OpcodeDataAbs("BIT", update=update_bit),
+    0x2d: OpcodeDataAbs("AND", update=update_anz),
+    0x2e: OpcodeDataAbs("ROL", update=update_anzc),
     0x30: OpcodeConditionalBranch("BMI"),
     0x31: OpcodeZp("AND", "),Y"),
     0x35: OpcodeZp("AND", ",X"),
