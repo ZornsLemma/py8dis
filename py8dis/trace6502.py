@@ -292,10 +292,21 @@ def update_anz(addr, state):
 def update_anzc(addr, state):
     return make_corrupt_rnzc('a')(addr, state)
 
+def update_nzc(addr, state):
+    state['n'] = None
+    state['z'] = None
+    state['c'] = None
+
 def update_bit(addr, state):
     state['n'] = None
     state['v'] = None
     state['z'] = None
+
+def update_adc_sbc(addr, state):
+    state['n'] = None
+    state['v'] = None
+    state['z'] = None
+    state['c'] = None
 
 def corrupt_flags(addr, state):
     state['n'] = None
@@ -313,60 +324,60 @@ opcodes = {
     0x00: OpcodeReturn("BRK"),
     0x01: OpcodeZp("ORA", ",X)", update=update_anz),
     0x05: OpcodeZp("ORA", update=update_anz),
-    0x06: OpcodeZp("ASL", update=update_anzc),
+    0x06: OpcodeZp("ASL", update=update_nzc),
     0x08: OpcodeImplied("PHP", update=neutral),
     0x09: OpcodeImmediate("ORA", update=update_anz),
     0x0a: OpcodeImplied("ASL A", update=update_anzc),
     0x0d: OpcodeDataAbs("ORA", update=update_anz),
-    0x0e: OpcodeDataAbs("ASL", update=update_anzc),
+    0x0e: OpcodeDataAbs("ASL", update=update_nzc),
     0x10: OpcodeConditionalBranch("BPL"),
     0x11: OpcodeZp("ORA", "),Y", update=update_anz),
     0x15: OpcodeZp("ORA", ",X", update=update_anz),
-    0x16: OpcodeZp("ASL", ",X", update=update_anzc),
+    0x16: OpcodeZp("ASL", ",X", update=update_nzc),
     0x18: OpcodeImplied("CLC", update=make_update_flag('c', False)),
     0x19: OpcodeDataAbs("ORA", ",Y", has_zp_version=False, update=update_anz),
     0x1d: OpcodeDataAbs("ORA", ",X", update=update_anz),
-    0x1e: OpcodeDataAbs("ASL", ",X", update=update_anzc),
+    0x1e: OpcodeDataAbs("ASL", ",X", update=update_nzc),
     0x20: OpcodeJsr(),
     0x21: OpcodeZp("AND", ",X)", update=update_anzc),
     0x24: OpcodeZp("BIT", update=update_bit),
     0x25: OpcodeZp("AND", update=update_anz),
-    0x26: OpcodeZp("ROL", update=update_anzc),
+    0x26: OpcodeZp("ROL", update=update_nzc),
     0x28: OpcodeImplied("PLP", update=corrupt_flags),
     0x29: OpcodeImmediate("AND", update=update_anz),
     0x2a: OpcodeImplied("ROL A", update=update_anzc),
     0x2c: OpcodeDataAbs("BIT", update=update_bit),
     0x2d: OpcodeDataAbs("AND", update=update_anz),
-    0x2e: OpcodeDataAbs("ROL", update=update_anzc),
+    0x2e: OpcodeDataAbs("ROL", update=update_nzc),
     0x30: OpcodeConditionalBranch("BMI"),
-    0x31: OpcodeZp("AND", "),Y"),
-    0x35: OpcodeZp("AND", ",X"),
-    0x36: OpcodeZp("ROL", ",X"),
-    0x38: OpcodeImplied("SEC"),
-    0x39: OpcodeDataAbs("AND", ",Y", has_zp_version=False),
-    0x3d: OpcodeDataAbs("AND", ",X"),
-    0x3e: OpcodeDataAbs("ROL", ",X"),
+    0x31: OpcodeZp("AND", "),Y", update=update_anz),
+    0x35: OpcodeZp("AND", ",X", update=update_anz),
+    0x36: OpcodeZp("ROL", ",X", update=update_nzc),
+    0x38: OpcodeImplied("SEC", update=make_update_flag('c', True)),
+    0x39: OpcodeDataAbs("AND", ",Y", has_zp_version=False, update=update_anz),
+    0x3d: OpcodeDataAbs("AND", ",X", update=update_anz),
+    0x3e: OpcodeDataAbs("ROL", ",X", update=update_nzc),
     0x40: OpcodeReturn("RTI"),
-    0x41: OpcodeZp("EOR", ",X)"),
-    0x45: OpcodeZp("EOR"),
-    0x46: OpcodeZp("LSR"),
-    0x48: OpcodeImplied("PHA"),
-    0x49: OpcodeImmediate("EOR"),
-    0x4a: OpcodeImplied("LSR A"),
+    0x41: OpcodeZp("EOR", ",X)", update=update_anz),
+    0x45: OpcodeZp("EOR", update=update_anz),
+    0x46: OpcodeZp("LSR", update=update_nzc),
+    0x48: OpcodeImplied("PHA", update=neutral),
+    0x49: OpcodeImmediate("EOR", update=update_anz),
+    0x4a: OpcodeImplied("LSR A", update=update_anzc),
     0x4c: OpcodeJmpAbs(),
-    0x4d: OpcodeDataAbs("EOR"),
-    0x4e: OpcodeDataAbs("LSR"),
+    0x4d: OpcodeDataAbs("EOR", update=update_anz),
+    0x4e: OpcodeDataAbs("LSR", update=update_nzc),
     0x50: OpcodeConditionalBranch("BVC"),
-    0x51: OpcodeZp("EOR", "),Y"),
-    0x55: OpcodeZp("EOR", ",X"),
-    0x56: OpcodeZp("LSR", ",X"),
-    0x58: OpcodeImplied("CLI"),
-    0x59: OpcodeDataAbs("EOR", ",Y", has_zp_version=False),
-    0x5d: OpcodeDataAbs("EOR", ",X"),
-    0x5e: OpcodeDataAbs("LSR", ",X"),
+    0x51: OpcodeZp("EOR", "),Y", update=update_anz),
+    0x55: OpcodeZp("EOR", ",X", update=update_anz),
+    0x56: OpcodeZp("LSR", ",X",  update=update_nzc),
+    0x58: OpcodeImplied("CLI", update=make_update_flag('i', False)),
+    0x59: OpcodeDataAbs("EOR", ",Y", has_zp_version=False, update=update_anz),
+    0x5d: OpcodeDataAbs("EOR", ",X", update=update_anz),
+    0x5e: OpcodeDataAbs("LSR", ",X", update=update_nzc),
     0x60: OpcodeReturn("RTS"),
-    0x61: OpcodeZp("ADC", ",X)"),
-    0x65: OpcodeZp("ADC"),
+    0x61: OpcodeZp("ADC", ",X)", update=update_adc_sbc),
+    0x65: OpcodeZp("ADC", update=update_adc_sbc),
     0x66: OpcodeZp("ROR"),
     0x68: OpcodeImplied("PLA"),
     0x69: OpcodeImmediate("ADC"),
