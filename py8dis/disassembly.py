@@ -25,6 +25,8 @@ trace_done = False # TODO!?
 # "things in the assembler input which generate direct output", like instructions
 # or data.
 classifications = [None] * 64*1024
+# TODO: Experimental, "optimistic" because it's based on straight line code "this is *a* possible execution" - we may want to add a "pessimistic" variant which does its best to *guess* at the "common to all possible executions" behaviour
+cpu_state_optimistic = [None] * 64*1024
 
 optional_labels = {}
 constants = []
@@ -226,6 +228,21 @@ def sequence_complete(sequence):
 # line instructions - the fact that the sequence might *also* be entered
 # part-way through via a label doesn't invalidate that inference.
 def analyse_sequences():
+    addr = 0
+    sequence = []
+    state = {}
+    while addr < 0x10000:
+        c = classifications[addr]
+        if c is not None:
+            if c.is_code(addr):
+                c.update_cpu_state(addr, state)
+            else:
+                state = {}
+            cpu_state_optimistic[addr] = copy.copy(state)
+            addr += c.length()
+        else:
+            addr += 1
+    return # TODO: DELETE BELOW HERE, KEPT TEMP
     global opcode_neutral
     global opcode_corrupt_a
     global opcode_corrupt_x

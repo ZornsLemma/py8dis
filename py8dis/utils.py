@@ -2,6 +2,8 @@ from __future__ import print_function
 import sys
 
 import config
+import disassembly # TODO!?
+import trace6502 # TODO!
 
 memory = config.memory
 
@@ -36,6 +38,11 @@ def add_hex_dump(s, addr, length, column_adjust=0):
     s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
     if capped_length < length:
         s += " ..."
+    if True: # TODO: Should be configurable by user
+        if disassembly.cpu_state_optimistic[addr] is not None:
+            # TODO: This needs some generic way to call the right function, rather than assuming
+            # it's in trace6502.
+            s += " " + trace6502.show_cpu_state(disassembly.cpu_state_optimistic[addr])
     return s
 
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks

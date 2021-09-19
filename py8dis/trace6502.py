@@ -29,10 +29,11 @@ def get_u8(i):
 
 
 class Opcode(object):
-    def __init__(self, mnemonic, operand_length, suffix = None):
+    def __init__(self, mnemonic, operand_length, suffix=None, update=None):
         self.mnemonic = mnemonic
         self.suffix = suffix if suffix is not None else ""
         self.prefix = "(" if ")" in self.suffix else ""
+        self.update = update
         self.operand_length = operand_length
 
     def is_mergeable(self):
@@ -43,6 +44,10 @@ class Opcode(object):
 
     def is_code(self, addr):
         return True
+
+    def update_cpu_state(self, addr, state):
+        if self.update is not None:
+            self.update(addr, state)
 
     def as_string_list(self, addr):
         return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
@@ -68,8 +73,8 @@ class OpcodeImplied(Opcode):
 
 
 class OpcodeImmediate(Opcode):
-    def __init__(self, mnemonic):
-        super(OpcodeImmediate, self).__init__(mnemonic, 1)
+    def __init__(self, mnemonic, update=None):
+        super(OpcodeImmediate, self).__init__(mnemonic, 1, update=update)
 
     def update_references(self, addr):
         pass
@@ -216,6 +221,21 @@ class OpcodeConditionalBranch(Opcode):
         return utils.LazyString("    %s %s", utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
+def show_cpu_state(state):
+    s = ""
+    def fmt(r):
+        n = state.get(r, None)
+        if n is None:
+            return "--"
+        return utils.hex2(n)
+    s += "A:%s X:%s Y:%s" % (fmt('a'), fmt('x'), fmt('y'))
+    return s
+
+
+def corrupt_a(addr, state):
+    state['a'] = None
+
+
 # ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
 # haven't done an exhaustive search to determine if there are any others not yet
 # marked.
@@ -225,7 +245,7 @@ opcodes = {
     0x05: OpcodeZp("ORA"),
     0x06: OpcodeZp("ASL"),
     0x08: OpcodeImplied("PHP"),
-    0x09: OpcodeImmediate("ORA"),
+    0x09: OpcodeImmediate("ORA", update=corrupt_a),
     0x0a: OpcodeImplied("ASL A"),
     0x0d: OpcodeDataAbs("ORA"),
     0x0e: OpcodeDataAbs("ASL"),
@@ -243,7 +263,7 @@ opcodes = {
     0x25: OpcodeZp("AND"),
     0x26: OpcodeZp("ROL"),
     0x28: OpcodeImplied("PLP"),
-    0x29: OpcodeImmediate("AND"),
+    0x29: OpcodeImmediate("AND", update=corrupt_a),
     0x2a: OpcodeImplied("ROL A"),
     0x2c: OpcodeDataAbs("BIT"),
     0x2d: OpcodeDataAbs("AND"),
