@@ -283,6 +283,15 @@ def make_load_immediate(reg):
         state['z'] = (v == 0)
     return load_immediate
 
+def make_transfer(src_reg, dest_reg):
+    def transfer(addr, state):
+        v = state.get(src_reg, None)
+        state[dest_reg] = v
+        if v is not None:
+            state['n'] = ((v & 0x80) == 0x80)
+            state['z'] = (v == 0)
+    return transfer
+
 def neutral(addr, state):
     pass
 
@@ -291,6 +300,12 @@ def update_anz(addr, state):
 
 def update_anzc(addr, state):
     return make_corrupt_rnzc('a')(addr, state)
+
+def update_xnz(addr, state):
+    return make_corrupt_rnz('x')(addr, state)
+
+def update_ynz(addr, state):
+    return make_corrupt_rnz('y')(addr, state)
 
 def update_nzc(addr, state):
     state['n'] = None
@@ -378,51 +393,51 @@ opcodes = {
     0x60: OpcodeReturn("RTS"),
     0x61: OpcodeZp("ADC", ",X)", update=update_adc_sbc),
     0x65: OpcodeZp("ADC", update=update_adc_sbc),
-    0x66: OpcodeZp("ROR"),
-    0x68: OpcodeImplied("PLA"),
-    0x69: OpcodeImmediate("ADC"),
-    0x6a: OpcodeImplied("ROR A"),
+    0x66: OpcodeZp("ROR", update=update_nzc),
+    0x68: OpcodeImplied("PLA", update=update_anz),
+    0x69: OpcodeImmediate("ADC", update=update_adc_sbc),
+    0x6a: OpcodeImplied("ROR A", update=update_anzc),
     0x6c: OpcodeJmpInd(),
-    0x6d: OpcodeDataAbs("ADC"),
-    0x6e: OpcodeDataAbs("ROR"),
+    0x6d: OpcodeDataAbs("ADC", update=update_adc_sbc),
+    0x6e: OpcodeDataAbs("ROR", update=update_nzc),
     0x70: OpcodeConditionalBranch("BVS"),
-    0x71: OpcodeZp("ADC", "),Y"),
-    0x75: OpcodeZp("ADC", ",X"),
-    0x76: OpcodeZp("ROR", ",X"),
-    0x78: OpcodeImplied("SEI"),
-    0x79: OpcodeDataAbs("ADC", ",Y", has_zp_version=False),
-    0x7d: OpcodeDataAbs("ADC", ",X"),
-    0x7e: OpcodeDataAbs("ROR", ",X"),
+    0x71: OpcodeZp("ADC", "),Y", update=update_adc_sbc),
+    0x75: OpcodeZp("ADC", ",X", update=update_adc_sbc),
+    0x76: OpcodeZp("ROR", ",X", update=update_nzc),
+    0x78: OpcodeImplied("SEI", update=make_update_flag('i', True)),
+    0x79: OpcodeDataAbs("ADC", ",Y", has_zp_version=False, update=update_adc_sbc),
+    0x7d: OpcodeDataAbs("ADC", ",X", update=update_adc_sbc),
+    0x7e: OpcodeDataAbs("ROR", ",X", update=update_nzc),
     0x81: OpcodeZp("STA", ",X)", update=neutral),
     0x84: OpcodeZp("STY", update=neutral),
-    0x85: OpcodeZp("STA"),
-    0x86: OpcodeZp("STX"),
+    0x85: OpcodeZp("STA", update=neutral),
+    0x86: OpcodeZp("STX", update=neutral),
     0x88: OpcodeImplied("DEY", update=make_decrement('y')),
-    0x8a: OpcodeImplied("TXA"),
-    0x8c: OpcodeDataAbs("STY"),
-    0x8d: OpcodeDataAbs("STA"),
-    0x8e: OpcodeDataAbs("STX"),
+    0x8a: OpcodeImplied("TXA", update=make_transfer('x', 'a')),
+    0x8c: OpcodeDataAbs("STY", update=neutral),
+    0x8d: OpcodeDataAbs("STA", update=neutral),
+    0x8e: OpcodeDataAbs("STX", update=neutral),
     0x90: OpcodeConditionalBranch("BCC"),
-    0x91: OpcodeZp("STA", "),Y"),
-    0x94: OpcodeZp("STY", ",X"),
-    0x95: OpcodeZp("STA", ",X"),
-    0x96: OpcodeZp("STX", ",Y"),
-    0x98: OpcodeImplied("TYA"),
+    0x91: OpcodeZp("STA", "),Y", update=neutral),
+    0x94: OpcodeZp("STY", ",X", update=neutral),
+    0x95: OpcodeZp("STA", ",X", update=neutral),
+    0x96: OpcodeZp("STX", ",Y", update=neutral),
+    0x98: OpcodeImplied("TYA", update=make_transfer('y', 'a')),
     0x99: OpcodeDataAbs("STA", ",Y", has_zp_version=False, update=neutral),
-    0x9a: OpcodeImplied("TXS"),
-    0x9d: OpcodeDataAbs("STA", ",X"),
+    0x9a: OpcodeImplied("TXS", update=neutral), # we don't model S at all
+    0x9d: OpcodeDataAbs("STA", ",X", update=neutral),
     0xa0: OpcodeImmediate("LDY", update=make_load_immediate('y')),
-    0xa1: OpcodeZp("LDA", ",X)"),
+    0xa1: OpcodeZp("LDA", ",X)", update=update_anz),
     0xa2: OpcodeImmediate("LDX", update=make_load_immediate('x')),
-    0xa4: OpcodeZp("LDY"),
-    0xa5: OpcodeZp("LDA"),
-    0xa6: OpcodeZp("LDX"),
-    0xa8: OpcodeImplied("TAY"),
+    0xa4: OpcodeZp("LDY", update=update_ynz),
+    0xa5: OpcodeZp("LDA", update=update_anz),
+    0xa6: OpcodeZp("LDX", update=update_xnz),
+    0xa8: OpcodeImplied("TAY", update=make_transfer('a', 'y')),
     0xa9: OpcodeImmediate("LDA", update=make_load_immediate('a')),
-    0xaa: OpcodeImplied("TAX"),
-    0xac: OpcodeDataAbs("LDY"),
-    0xad: OpcodeDataAbs("LDA"),
-    0xae: OpcodeDataAbs("LDX"),
+    0xaa: OpcodeImplied("TAX", update=make_transfer('a', 'x')),
+    0xac: OpcodeDataAbs("LDY", update=update_ynz),
+    0xad: OpcodeDataAbs("LDA", update=update_anz),
+    0xae: OpcodeDataAbs("LDX", update=update_xnz),
     0xb0: OpcodeConditionalBranch("BCS"),
     0xb1: OpcodeZp("LDA", "),Y"),
     0xb4: OpcodeZp("LDY", ",X"),
