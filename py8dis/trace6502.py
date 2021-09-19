@@ -56,8 +56,8 @@ class Opcode(object):
 
 
 class OpcodeImplied(Opcode):
-    def __init__(self, mnemonic):
-        super(OpcodeImplied, self).__init__(mnemonic, 0)
+    def __init__(self, mnemonic, update=None):
+        super(OpcodeImplied, self).__init__(mnemonic, 0, update=update)
         self.mnemonic = mnemonic
         self.operand_length = 0
 
@@ -93,8 +93,8 @@ class OpcodeImmediate(Opcode):
 
 
 class OpcodeZp(Opcode):
-    def __init__(self, mnemonic, suffix = None):
-        super(OpcodeZp, self).__init__(mnemonic, 1, suffix)
+    def __init__(self, mnemonic, suffix=None, update=None):
+        super(OpcodeZp, self).__init__(mnemonic, 1, suffix, update=update)
 
     def update_references(self, addr):
         pass
@@ -107,8 +107,8 @@ class OpcodeZp(Opcode):
 
 
 class OpcodeAbs(Opcode):
-    def __init__(self, mnemonic, suffix = None, has_zp_version = True):
-        super(OpcodeAbs, self).__init__(mnemonic, 2, suffix)
+    def __init__(self, mnemonic, suffix=None, has_zp_version=True, update=None):
+        super(OpcodeAbs, self).__init__(mnemonic, 2, suffix, update=update)
         self._has_zp_version = has_zp_version
 
     def has_zp_version(self):
@@ -141,8 +141,8 @@ class OpcodeAbs(Opcode):
 
 
 class OpcodeDataAbs(OpcodeAbs):
-    def __init__(self, mnemonic, suffix = None, has_zp_version = True):
-        super(OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version)
+    def __init__(self, mnemonic, suffix=None, has_zp_version=True, update=None):
+        super(OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version, update=update)
 
     def update_references(self, addr):
         pass
@@ -219,6 +219,13 @@ class OpcodeConditionalBranch(Opcode):
     def disassemble(self, addr):
         return [addr + 2, self._target(addr)]
 
+    def update_cpu_state(self, addr, state):
+        # TODO: I think this is "right" - in our optimistic model (at least), a
+        # branch invalidates everything. Consider "ldy #3:.label:dey:bne label" -
+        # in the optimistic model we ignore labels and the only way we don't
+        # finish that sequence assuming y=2 is if the branch invalidates.
+        state.clear()
+
     def as_string(self, addr):
         return utils.LazyString("    %s %s", utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
@@ -234,13 +241,26 @@ def show_cpu_state(state):
     return s
 
 
-def corrupt_a(addr, state):
-    state['a'] = None
+def make_corrupt(reg):
+    def corrupt(addr, state):
+        state[reg] = None
+    return corrupt
+
+def make_decrement(reg):
+    def decrement(addr, state):
+        if state.get(reg, None) is not None:
+            state[reg] -= 1
+            if state[reg] == -1:
+                state[reg] = 0xff
+    return decrement
 
 def make_load_immediate(reg):
     def load_immediate(addr, state):
         state[reg] = memory[addr+1]
     return load_immediate
+
+def neutral(addr, state):
+    pass
 
 
 # ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
@@ -248,12 +268,12 @@ def make_load_immediate(reg):
 # marked.
 opcodes = {
     0x00: OpcodeReturn("BRK"),
-    0x01: OpcodeZp("ORA", ",X)"),
-    0x05: OpcodeZp("ORA"),
-    0x06: OpcodeZp("ASL"),
-    0x08: OpcodeImplied("PHP"),
-    0x09: OpcodeImmediate("ORA", update=corrupt_a),
-    0x0a: OpcodeImplied("ASL A"),
+    0x01: OpcodeZp("ORA", ",X)", update=make_corrupt('a')),
+    0x05: OpcodeZp("ORA", update=make_corrupt('a')),
+    0x06: OpcodeZp("ASL", update=make_corrupt('a')),
+    0x08: OpcodeImplied("PHP", update=neutral),
+    0x09: OpcodeImmediate("ORA", update=make_corrupt('a')),
+    0x0a: OpcodeImplied("ASL A", update=make_corrupt('a')),
     0x0d: OpcodeDataAbs("ORA"),
     0x0e: OpcodeDataAbs("ASL"),
     0x10: OpcodeConditionalBranch("BPL"),
@@ -270,7 +290,7 @@ opcodes = {
     0x25: OpcodeZp("AND"),
     0x26: OpcodeZp("ROL"),
     0x28: OpcodeImplied("PLP"),
-    0x29: OpcodeImmediate("AND", update=corrupt_a),
+    0x29: OpcodeImmediate("AND", update=make_corrupt('a')),
     0x2a: OpcodeImplied("ROL A"),
     0x2c: OpcodeDataAbs("BIT"),
     0x2d: OpcodeDataAbs("AND"),
@@ -319,11 +339,11 @@ opcodes = {
     0x79: OpcodeDataAbs("ADC", ",Y", has_zp_version=False),
     0x7d: OpcodeDataAbs("ADC", ",X"),
     0x7e: OpcodeDataAbs("ROR", ",X"),
-    0x81: OpcodeZp("STA", ",X)"),
-    0x84: OpcodeZp("STY"),
+    0x81: OpcodeZp("STA", ",X)", update=neutral),
+    0x84: OpcodeZp("STY", update=neutral),
     0x85: OpcodeZp("STA"),
     0x86: OpcodeZp("STX"),
-    0x88: OpcodeImplied("DEY"),
+    0x88: OpcodeImplied("DEY", update=make_decrement('y')),
     0x8a: OpcodeImplied("TXA"),
     0x8c: OpcodeDataAbs("STY"),
     0x8d: OpcodeDataAbs("STA"),
@@ -334,17 +354,17 @@ opcodes = {
     0x95: OpcodeZp("STA", ",X"),
     0x96: OpcodeZp("STX", ",Y"),
     0x98: OpcodeImplied("TYA"),
-    0x99: OpcodeDataAbs("STA", ",Y", has_zp_version=False),
+    0x99: OpcodeDataAbs("STA", ",Y", has_zp_version=False, update=neutral),
     0x9a: OpcodeImplied("TXS"),
     0x9d: OpcodeDataAbs("STA", ",X"),
-    0xa0: OpcodeImmediate("LDY"),
+    0xa0: OpcodeImmediate("LDY", update=make_load_immediate('y')),
     0xa1: OpcodeZp("LDA", ",X)"),
     0xa2: OpcodeImmediate("LDX", update=make_load_immediate('x')),
     0xa4: OpcodeZp("LDY"),
     0xa5: OpcodeZp("LDA"),
     0xa6: OpcodeZp("LDX"),
     0xa8: OpcodeImplied("TAY"),
-    0xa9: OpcodeImmediate("LDA"),
+    0xa9: OpcodeImmediate("LDA", update=make_load_immediate('a')),
     0xaa: OpcodeImplied("TAX"),
     0xac: OpcodeDataAbs("LDY"),
     0xad: OpcodeDataAbs("LDA"),
@@ -354,7 +374,7 @@ opcodes = {
     0xb4: OpcodeZp("LDY", ",X"),
     0xb5: OpcodeZp("LDA", ",X"),
     0xb8: OpcodeImplied("CLV"),
-    0xb9: OpcodeDataAbs("LDA", ",Y", has_zp_version=False),
+    0xb9: OpcodeDataAbs("LDA", ",Y", has_zp_version=False, update=make_corrupt('a')),
     0xba: OpcodeImplied("TSX"),
     0xbc: OpcodeDataAbs("LDY", ",X"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
