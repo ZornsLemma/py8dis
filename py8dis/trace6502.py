@@ -232,18 +232,34 @@ class OpcodeConditionalBranch(Opcode):
 
 def show_cpu_state(state):
     s = ""
-    def fmt(r):
+    def reg(r):
         n = state.get(r, None)
         if n is None:
             return "--"
         return utils.plainhex2(n)
-    s += "A:%s X:%s Y:%s" % (fmt('a'), fmt('x'), fmt('y'))
+    s += "A:%s X:%s Y:%s" % (reg('a'), reg('x'), reg('y'))
+    def flag(name):
+        b = state.get(name, None)
+        if b is None:
+            return "-"
+        return name.upper() if b else name.lower()
+    s += " %s%s%s%s%s%s" % (flag('n'), flag('v'), flag('d'), flag('i'), flag('z'), flag('c'))
     return s
 
 
-def make_corrupt(reg):
+def make_corrupt_rnz(reg):
     def corrupt(addr, state):
         state[reg] = None
+        state['n'] = None
+        state['z'] = None
+    return corrupt
+
+def make_corrupt_rnzc(reg):
+    def corrupt(addr, state):
+        state[reg] = None
+        state['n'] = None
+        state['z'] = None
+        state['c'] = None
     return corrupt
 
 def make_decrement(reg):
@@ -256,7 +272,10 @@ def make_decrement(reg):
 
 def make_load_immediate(reg):
     def load_immediate(addr, state):
-        state[reg] = memory[addr+1]
+        v = memory[addr+1]
+        state[reg] = v
+        state['z'] = (v == 0)
+        state['n'] = ((v & 0x80) == 0x80)
     return load_immediate
 
 def neutral(addr, state):
@@ -268,12 +287,12 @@ def neutral(addr, state):
 # marked.
 opcodes = {
     0x00: OpcodeReturn("BRK"),
-    0x01: OpcodeZp("ORA", ",X)", update=make_corrupt('a')),
-    0x05: OpcodeZp("ORA", update=make_corrupt('a')),
-    0x06: OpcodeZp("ASL", update=make_corrupt('a')),
+    0x01: OpcodeZp("ORA", ",X)", update=make_corrupt_rnz('a')),
+    0x05: OpcodeZp("ORA", update=make_corrupt_rnz('a')),
+    0x06: OpcodeZp("ASL", update=make_corrupt_rnzc('a')),
     0x08: OpcodeImplied("PHP", update=neutral),
-    0x09: OpcodeImmediate("ORA", update=make_corrupt('a')),
-    0x0a: OpcodeImplied("ASL A", update=make_corrupt('a')),
+    0x09: OpcodeImmediate("ORA", update=make_corrupt_rnz('a')),
+    0x0a: OpcodeImplied("ASL A", update=make_corrupt_rnzc('a')),
     0x0d: OpcodeDataAbs("ORA"),
     0x0e: OpcodeDataAbs("ASL"),
     0x10: OpcodeConditionalBranch("BPL"),
@@ -290,7 +309,7 @@ opcodes = {
     0x25: OpcodeZp("AND"),
     0x26: OpcodeZp("ROL"),
     0x28: OpcodeImplied("PLP"),
-    0x29: OpcodeImmediate("AND", update=make_corrupt('a')),
+    0x29: OpcodeImmediate("AND", update=make_corrupt_rnz('a')),
     0x2a: OpcodeImplied("ROL A"),
     0x2c: OpcodeDataAbs("BIT"),
     0x2d: OpcodeDataAbs("AND"),
@@ -374,7 +393,7 @@ opcodes = {
     0xb4: OpcodeZp("LDY", ",X"),
     0xb5: OpcodeZp("LDA", ",X"),
     0xb8: OpcodeImplied("CLV"),
-    0xb9: OpcodeDataAbs("LDA", ",Y", has_zp_version=False, update=make_corrupt('a')),
+    0xb9: OpcodeDataAbs("LDA", ",Y", has_zp_version=False, update=make_corrupt_rnz('a')),
     0xba: OpcodeImplied("TSX"),
     0xbc: OpcodeDataAbs("LDY", ",X"),
     0xbd: OpcodeDataAbs("LDA", ",X"),
