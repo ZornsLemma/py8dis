@@ -262,6 +262,11 @@ def make_corrupt_rnzc(reg):
         state['c'] = None
     return corrupt
 
+def make_update_flag(flag, b):
+    def update_flag(addr, state):
+        state[flag] = b
+    return update_flag
+
 def make_decrement(reg):
     def decrement(addr, state):
         if state.get(reg, None) is not None:
@@ -281,25 +286,31 @@ def make_load_immediate(reg):
 def neutral(addr, state):
     pass
 
+def update_anz(addr, state):
+    return make_corrupt_rnz('a')(addr, state)
+
+def update_anzc(addr, state):
+    return make_corrupt_rnzc('a')(addr, state)
+
 
 # ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
 # haven't done an exhaustive search to determine if there are any others not yet
 # marked.
 opcodes = {
     0x00: OpcodeReturn("BRK"),
-    0x01: OpcodeZp("ORA", ",X)", update=make_corrupt_rnz('a')),
-    0x05: OpcodeZp("ORA", update=make_corrupt_rnz('a')),
-    0x06: OpcodeZp("ASL", update=make_corrupt_rnzc('a')),
+    0x01: OpcodeZp("ORA", ",X)", update=update_anz),
+    0x05: OpcodeZp("ORA", update=update_anz),
+    0x06: OpcodeZp("ASL", update=update_anzc),
     0x08: OpcodeImplied("PHP", update=neutral),
-    0x09: OpcodeImmediate("ORA", update=make_corrupt_rnz('a')),
-    0x0a: OpcodeImplied("ASL A", update=make_corrupt_rnzc('a')),
-    0x0d: OpcodeDataAbs("ORA"),
-    0x0e: OpcodeDataAbs("ASL"),
+    0x09: OpcodeImmediate("ORA", update=update_anz),
+    0x0a: OpcodeImplied("ASL A", update=update_anzc),
+    0x0d: OpcodeDataAbs("ORA", update=update_anz),
+    0x0e: OpcodeDataAbs("ASL", update=update_anzc),
     0x10: OpcodeConditionalBranch("BPL"),
-    0x11: OpcodeZp("ORA", "),Y"),
-    0x15: OpcodeZp("ORA", ",X"),
-    0x16: OpcodeZp("ASL", ",X"),
-    0x18: OpcodeImplied("CLC"),
+    0x11: OpcodeZp("ORA", "),Y", update=update_anz),
+    0x15: OpcodeZp("ORA", ",X", update=update_anz),
+    0x16: OpcodeZp("ASL", ",X", update=update_anzc),
+    0x18: OpcodeImplied("CLC", update=make_update_flag('c', False)),
     0x19: OpcodeDataAbs("ORA", ",Y", has_zp_version=False),
     0x1d: OpcodeDataAbs("ORA", ",X"),
     0x1e: OpcodeDataAbs("ASL", ",X"),
@@ -309,7 +320,7 @@ opcodes = {
     0x25: OpcodeZp("AND"),
     0x26: OpcodeZp("ROL"),
     0x28: OpcodeImplied("PLP"),
-    0x29: OpcodeImmediate("AND", update=make_corrupt_rnz('a')),
+    0x29: OpcodeImmediate("AND", update=update_anz),
     0x2a: OpcodeImplied("ROL A"),
     0x2c: OpcodeDataAbs("BIT"),
     0x2d: OpcodeDataAbs("AND"),
