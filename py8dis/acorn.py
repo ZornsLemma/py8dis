@@ -197,6 +197,60 @@ osbyte_enum = {
     0xff: "osbyte_read_write_startup_options",
 }
 
+inkey_enum = {
+      -1: "inkey_key_shift",
+      -2: "inkey_key_ctrl",
+     -17: "inkey_key_q",
+     -18: "inkey_key_3",
+     -19: "inkey_key_4",
+     -20: "inkey_key_5",
+     -21: "inkey_key_f4",
+     -22: "inkey_key_8",
+     -23: "inkey_key_f7",
+     -24: "inkey_key_minus",
+     -25: "inkey_key_caret",
+     -26: "inkey_key_left",
+     -34: "inkey_key_w",
+     -35: "inkey_key_e",
+     -36: "inkey_key_t",
+     -37: "inkey_key_7",
+     -38: "inkey_key_i",
+     -39: "inkey_key_9",
+     -40: "inkey_key_0",
+     -41: "inkey_key_underscore",
+     -42: "inkey_key_down",
+     -43: "inkey_key_keypad_8",
+     -44: "inkey_key_keypad_9",
+     -49: "inkey_key_1",
+     -50: "inkey_key_2",
+     -51: "inkey_key_d",
+     -52: "inkey_key_r",
+     -53: "inkey_key_6",
+     -54: "inkey_key_u",
+     -55: "inkey_key_o",
+     -56: "inkey_key_p",
+     -57: "inkey_key_left_square_bracket",
+     -58: "inkey_key_up",
+     -59: "inkey_key_keypad_plus",
+     -60: "inkey_key_keypad_minus",
+     -61: "inkey_key_keypad_enter",
+     -65: "inkey_key_caps_lock",
+     -66: "inkey_key_a",
+     -67: "inkey_key_x",
+     -68: "inkey_key_f",
+     -69: "inkey_key_y",
+     -70: "inkey_key_j",
+     -71: "inkey_key_k",
+     -72: "inkey_key_at",
+     -73: "inkey_key_colon",
+     -74: "inkey_key_return",
+     -75: "inkey_key_keypad_slash",
+     -76: "inkey_key_keypad_del",
+     -77: "inkey_key_keypad_full_stop",
+     -85: "inkey_key_h",
+}
+inkey_enum = {k & 0xff: v for k, v in inkey_enum.items()}
+
 def enum_lookup(r_addr, e):
     if r_addr is None:
         return
@@ -217,6 +271,8 @@ def osword_argument_finder_hook(a_addr, x_addr, y_addr):
 
 def osbyte_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osbyte_enum)
+    if a_addr is not None and memory[a_addr] == 0x81:
+        enum_lookup(x_addr, inkey_enum)
 
 def oscli_argument_finder_hook(a_addr, x_addr, y_addr):
     xy_addr(x_addr, y_addr)
