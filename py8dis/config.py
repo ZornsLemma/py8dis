@@ -12,6 +12,7 @@ _disassemble_instruction = None
 
 indent_loops = True # TODO: Wrap in function? Default to False?
 loop_limit = 32 # TODO: Wrap in function? Move into trace6502?
+blank_line_at_block_end = True # TODO: Wrap in function?
 
 def formatter():
     return _formatter

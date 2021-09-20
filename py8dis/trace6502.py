@@ -97,8 +97,15 @@ class Opcode(object):
         else:
             state.clear()
 
+    def is_block_end(self):
+        # TODO: This should perhaps be defined on individual instructions or opcode classes.
+        return self.mnemonic in ("JMP", "RTS", "BRA")
+
     def as_string_list(self, addr):
-        return [utils.add_hex_dump(utils.LazyString("    "*Opcode.indent_level.get(addr, 0) + "%s", self.as_string(addr)), addr, self.length())]
+        result = [utils.add_hex_dump(utils.LazyString("    "*Opcode.indent_level.get(addr, 0) + "%s", self.as_string(addr)), addr, self.length())]
+        if self.is_block_end() and config.blank_line_at_block_end:
+            result.append("")
+        return result
 
 
 class OpcodeImplied(Opcode):
