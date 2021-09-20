@@ -131,6 +131,7 @@ def our_label_maker(addr, context):
     else:
         if len(addr_refs) == 1:
             addr_ref = list(addr_refs)[0]
+            # TODO: Maybe check if the instruction at addr is an RTS and don't use loop_ prefix if it is - or getting fancies, check if there's a straight line sequence terminating in RTS at addr and don't use loop_ prefix in that case either
             if trace6502.is_branch_to(addr_ref, addr) and 0 <= addr_ref - addr < config.loop_limit:
                 label = "loop_" + label
                 if config.indent_loops:
