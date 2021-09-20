@@ -242,6 +242,32 @@ def analyse_sequences():
             addr += c.length()
         else:
             addr += 1
+
+    addr = 0
+    state = {}
+    while addr < 0x10000:
+        c = classifications[addr]
+        if c is not None:
+            # TODO: Hacky use of isinstance()
+            if isinstance(c, trace6502.Opcode):
+                opcode = config.memory[addr]
+                if opcode in (opcode_jsr, opcode_jmp):
+                    target = utils.get_u16(addr + 1)
+                    for hook in sequence_hooks:
+                        # TODO: This is a mess because a register may or may not be in state and it may be None or it may be (value, addr) - probably best to make state a dictionary-based class to make this more regular
+                        def get(reg):
+                            if state is None:
+                                return None
+                            x = state.get(reg, None)
+                            if x is None:
+                                return None
+                            return x[1]
+                        if hook(target, get('a'), get('x'), get('y')) is not None:
+                            break
+            state = cpu_state_optimistic[addr]
+            addr += c.length()
+        else:
+            addr += 1
     return # TODO: DELETE BELOW HERE, KEPT TEMP
     global opcode_neutral
     global opcode_corrupt_a

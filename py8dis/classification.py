@@ -203,7 +203,9 @@ class Relocation(object): # TODO: !?!!
 
 
 def add_expression(addr, s):
-    expressions[addr] = s
+    # TODO: Warn/assert if addr already in expressions? Allow overriding this via an optional bool argument?
+    if addr not in expressions:
+        expressions[addr] = s
 
 def get_expression(addr, expected_value):
     expression = expressions[addr]

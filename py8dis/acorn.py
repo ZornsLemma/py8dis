@@ -204,6 +204,8 @@ def enum_lookup(r_addr, e):
         constant(r, e[r])
         expr(r_addr, e[r])
 
+# Note that the following code tries to handle A before X and Y; this is because (TODO: will this change?) expr() preserves the first expression for an address and if TAX etc are used we prefer to label A. TODO: Should we in fact prefer to label whichever register is actually loaded with the explicit immediate value?
+
 def osfile_sequence_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osfile_enum)
     xy_addr(x_addr, y_addr)
