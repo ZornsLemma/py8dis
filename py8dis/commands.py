@@ -1,7 +1,7 @@
 import argparse
 
 # These functions/objects are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz
+from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from trace import add_entry
 from utils import get_u16, get_u16_be
@@ -126,6 +126,9 @@ def stringcr_hook(target, addr):
 
 def stringz_hook(target, addr):
     return stringz(addr + 3)
+
+def stringn_hook(target, addr):
+    return stringn(addr + 3)
 
 def code_ptr(addr, addr_high=None, offset=0):
     if addr_high is None:

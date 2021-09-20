@@ -304,6 +304,12 @@ def stringhiz(addr, include_terminator_fn=None):
         disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
     return addr
 
+def stringn(addr):
+    disassembly.add_classification(addr, Byte(1, False))
+    length = memory[addr]
+    add_expression(addr, utils.LazyString("%s - %s", disassembly.get_label(addr + 1 + length, addr), disassembly.get_label(addr + 1, addr)))
+    return string(addr + 1, length)
+
 def autostring(min_length=3):
     assert min_length >= 2
     addr = 0
