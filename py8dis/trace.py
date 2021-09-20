@@ -19,15 +19,16 @@ def add_entry(addr, label=None):
 def analyse_code():
     addr = 0
     sequence = []
-    state = {}
+    import trace6502 # TODO!
+    state = trace6502.CpuState() # TODO: this is generic code and shouldn't assume trace6502 is in use
     while addr < 0x10000:
         c = disassembly.classifications[addr]
         if c is not None:
             if c.is_code(addr):
                 c.update_cpu_state(addr, state)
             else:
-                state = {}
-            disassembly.cpu_state_optimistic[addr] = copy.copy(state)
+                state = trace6502.CpuState() # TODO: as above
+            disassembly.cpu_state_optimistic[addr] = copy.deepcopy(state)
             addr += c.length()
         else:
             addr += 1

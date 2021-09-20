@@ -1,3 +1,5 @@
+import six # TODO!?
+
 import config
 import classification
 import config
@@ -27,6 +29,42 @@ def signed8(i):
 def get_u8(i):
     assert memory[i] is not None
     return memory[i]
+
+
+class CpuState(object):
+    def __init__(self):
+        self.clear()
+
+    def clear(self):
+        self._d = {
+            # For A/X/Y, value is (integer value if known, address of integer
+            # value if set by LDA/X/Y #).
+            "a": [None, None],
+            "x": [None, None],
+            "y": [None, None],
+            # For flags, value is True/False if known.
+            "n": None,
+            "v": None,
+            "d": None,
+            "i": None,
+            "z": None,
+            "c": None,
+        }
+
+    def __getitem__(self, key):
+        assert key in "axynvdizc"
+        return self._d[key]
+
+    def __setitem__(self, key, item):
+        assert key in "axynvdizc"
+        if key in "axy":
+            if item is None:
+                item = [None, None]
+            assert len(item) == 2
+            assert item[1] is None or item[0] is not None
+        else:
+            assert item is None or isinstance(item, six.integer_types)
+        self._d[key] = item
 
 
 class Opcode(object):
@@ -234,13 +272,13 @@ class OpcodeConditionalBranch(Opcode):
 def show_cpu_state(state):
     s = ""
     def reg(r):
-        v = state.get(r, None)
+        v = state[r][0]
         if v is None:
             return "--"
-        return utils.plainhex2(v[0])
+        return utils.plainhex2(v)
     s += "A:%s X:%s Y:%s" % (reg('a'), reg('x'), reg('y'))
     def flag(name):
-        b = state.get(name, None)
+        b = state[name]
         if b is None:
             return "-"
         return name.upper() if b else name.lower()
@@ -275,8 +313,8 @@ def make_update_flag(flag, b):
 
 def make_decrement(reg):
     def decrement(addr, state):
-        if state.get(reg, None) is not None:
-            v = state[reg][0]
+        v = state[reg][0]
+        if v is not None:
             v -= 1
             if v == -1:
                 v = 0xff
@@ -285,8 +323,8 @@ def make_decrement(reg):
 
 def make_increment(reg):
     def increment(addr, state):
-        if state.get(reg, None) is not None:
-            v = state[reg][0]
+        v = state[reg][0]
+        if v is not None:
             v += 1
             if v == 0x100:
                 v = 0
@@ -303,15 +341,11 @@ def make_load_immediate(reg):
 
 def make_transfer(src_reg, dest_reg):
     def transfer(addr, state):
-        if src_reg in state:
-            state[dest_reg] = state[src_reg]
-            x = state[dest_reg]
-            if x is not None:
-                v = x[0]
-                state['n'] = ((v & 0x80) == 0x80)
-                state['z'] = (v == 0)
-        else:
-            state[dest_reg] = None
+        state[dest_reg] = state[src_reg]
+        v = state[dest_reg][0]
+        if v is not None:
+            state['n'] = ((v & 0x80) == 0x80)
+            state['z'] = (v == 0)
     return transfer
 
 def neutral(addr, state):
@@ -546,7 +580,7 @@ def subroutine_argument_finder():
         return
 
     addr = 0
-    state = {}
+    state = CpuState()
     while addr < 0x10000:
         c = disassembly.classifications[addr]
         if c is not None:
@@ -558,14 +592,8 @@ def subroutine_argument_finder():
                 if opcode in (opcode_jsr, opcode_jmp):
                     target = utils.get_u16(addr + 1)
                     for hook in subroutine_argument_finder_hooks:
-                        # TODO: This is a mess because a register may or may not be in state and it may be None or it may be (value, addr) - probably best to make state a dictionary-based class to make this more regular
                         def get(reg):
-                            if state is None:
-                                return None
-                            x = state.get(reg, None)
-                            if x is None:
-                                return None
-                            return x[1]
+                            return state[reg][1]
                         if hook(target, get('a'), get('x'), get('y')) is not None:
                             break
             state = disassembly.cpu_state_optimistic[addr]
