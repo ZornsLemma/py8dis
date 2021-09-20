@@ -579,6 +579,16 @@ def is_subroutine_call(addr):
     c = disassembly.classifications[addr]
     return isinstance(c, Opcode) and c.mnemonic == "JSR"
 
+def is_branch_to(addr, target):
+    c = disassembly.classifications[addr]
+    import trace65c02 # TODO!
+    # TODO: hacky use of isinstance()
+    if isinstance(c, OpcodeConditionalBranch) or isinstance(c, trace65c02.OpcodeUnconditionalBranch):
+        return c._target(addr) == target
+    if isinstance(c, OpcodeJmpAbs):
+        return utils.get_u16(addr + 1) == target
+    return False
+
 # TODO: Move? We do need to do this before setting trace_done though (I think)...
 # Note that this does *not* check for labels breaking up a sequence. We're not
 # optimising code here, we are making an inference from a series of straight

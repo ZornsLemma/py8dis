@@ -125,8 +125,17 @@ def our_label_maker(addr, context):
         return utils.force_case("l%04x" % addr)
     label = utils.force_case("c%04x" % addr)
     # TODO: Shouldn't be using trace6502 in this generic code
-    if all(trace6502.is_subroutine_call(addr) for addr in trace.references.get(addr, [])):
+    addr_refs = trace.references.get(addr, [])
+    if all(trace6502.is_subroutine_call(addr) for addr in addr_refs):
         label = "sub_" + label
+    else:
+        # TODO: 128 (max distance) should probably be configurable
+        if len(addr_refs) == 1:
+            addr_ref = list(addr_refs)[0]
+            if trace6502.is_branch_to(addr_ref, addr) and 0 <= addr_ref - addr < 128:
+                label = "loop_" + label
+
+
     return label
 
 def label_maker(addr, context):
