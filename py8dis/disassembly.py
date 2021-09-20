@@ -129,13 +129,19 @@ def our_label_maker(addr, context):
     if all(trace6502.is_subroutine_call(addr) for addr in addr_refs):
         label = "sub_" + label
     else:
-        # TODO: 128 (max distance) should probably be configurable
         if len(addr_refs) == 1:
             addr_ref = list(addr_refs)[0]
-            if trace6502.is_branch_to(addr_ref, addr) and 0 <= addr_ref - addr < 128:
+            if trace6502.is_branch_to(addr_ref, addr) and 0 <= addr_ref - addr < config.loop_limit:
                 label = "loop_" + label
-
-
+                if config.indent_loops:
+                    while addr <= addr_ref:
+                        c = classifications[addr]
+                        if c is not None:
+                            if c.is_code(addr):
+                                c.indent(addr)
+                            addr += c.length()
+                        else:
+                            addr += 1
     return label
 
 def label_maker(addr, context):

@@ -3,6 +3,7 @@ from trace6502 import hook_subroutine
 import acorn
 
 # config.set_bytes_as_ascii(False)
+# config.loop_limit = 32
 
 load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
 #set_output_filename("anfs418.rom")

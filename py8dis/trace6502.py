@@ -1,3 +1,4 @@
+import collections # TODO!?
 import six # TODO!?
 
 import config
@@ -68,12 +69,15 @@ class CpuState(object):
 
 
 class Opcode(object):
+    indent_level = collections.defaultdict(int)
+
     def __init__(self, mnemonic, operand_length, suffix=None, update=None):
         self.mnemonic = mnemonic
         self.suffix = suffix if suffix is not None else ""
         self.prefix = "(" if ")" in self.suffix else ""
         self.update = update
         self.operand_length = operand_length
+        self.indent_level = 0
 
     def is_mergeable(self):
         return False
@@ -84,6 +88,9 @@ class Opcode(object):
     def is_code(self, addr):
         return True
 
+    def indent(self, addr):
+        Opcode.indent_level[addr] += 1
+
     def update_cpu_state(self, addr, state):
         if self.update is not None:
             self.update(addr, state)
@@ -91,7 +98,7 @@ class Opcode(object):
             state.clear()
 
     def as_string_list(self, addr):
-        return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
+        return [utils.add_hex_dump(utils.LazyString("    "*Opcode.indent_level.get(addr, 0) + "%s", self.as_string(addr)), addr, self.length())]
 
 
 class OpcodeImplied(Opcode):
