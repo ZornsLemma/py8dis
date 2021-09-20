@@ -1,3 +1,5 @@
+import copy # TODO!?
+
 import classification # TODO!?
 import collections
 import config
@@ -6,12 +8,32 @@ import disassembly
 entry_points = []
 traced_entry_points = set()
 references = collections.defaultdict(set)
+code_analysis_fns = [] # TODO!?
 
 def add_entry(addr, label=None):
     entry_points.append(addr)
     if label is not None:
         disassembly.add_label(addr, label)
     return disassembly.get_label(addr, addr)
+
+def analyse_code():
+    addr = 0
+    sequence = []
+    state = {}
+    while addr < 0x10000:
+        c = disassembly.classifications[addr]
+        if c is not None:
+            if c.is_code(addr):
+                c.update_cpu_state(addr, state)
+            else:
+                state = {}
+            disassembly.cpu_state_optimistic[addr] = copy.copy(state)
+            addr += c.length()
+        else:
+            addr += 1
+
+    for f in code_analysis_fns:
+        f()
 
 def trace():
     while len(entry_points) > 0:
@@ -30,7 +52,7 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 add_entry(new_entry_point)
-    disassembly.analyse_sequences()
+    analyse_code()
     # We only need to defer label name generating using LazyString so that
     # label names aren't assigned based on incomplete tracing. (For example,
     # part way through tracing we may not have identified any code at address

@@ -7,6 +7,7 @@ import utils
 
 memory = config.memory
 jsr_hooks = {}
+subroutine_argument_finder_hooks = [] # TODO: move?
 
 def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
@@ -535,4 +536,42 @@ def disassemble_instruction(addr):
     opcode.update_references(addr)
     return opcode.disassemble(addr)
 
+# TODO: Move? We do need to do this before setting trace_done though (I think)...
+# Note that this does *not* check for labels breaking up a sequence. We're not
+# optimising code here, we are making an inference from a series of straight
+# line instructions - the fact that the sequence might *also* be entered
+# part-way through via a label doesn't invalidate that inference.
+def subroutine_argument_finder():
+    if len(subroutine_argument_finder_hooks) == 0:
+        return
+
+    addr = 0
+    state = {}
+    while addr < 0x10000:
+        c = disassembly.classifications[addr]
+        if c is not None:
+            # TODO: Hacky use of isinstance()
+            if isinstance(c, Opcode):
+                opcode = config.memory[addr]
+                opcode_jsr = 0x20
+                opcode_jmp = 0x4c
+                if opcode in (opcode_jsr, opcode_jmp):
+                    target = utils.get_u16(addr + 1)
+                    for hook in subroutine_argument_finder_hooks:
+                        # TODO: This is a mess because a register may or may not be in state and it may be None or it may be (value, addr) - probably best to make state a dictionary-based class to make this more regular
+                        def get(reg):
+                            if state is None:
+                                return None
+                            x = state.get(reg, None)
+                            if x is None:
+                                return None
+                            return x[1]
+                        if hook(target, get('a'), get('x'), get('y')) is not None:
+                            break
+            state = disassembly.cpu_state_optimistic[addr]
+            addr += c.length()
+        else:
+            addr += 1
+
 config.set_disassemble_instruction(disassemble_instruction)
+trace.code_analysis_fns.append(subroutine_argument_finder) # TODO!?

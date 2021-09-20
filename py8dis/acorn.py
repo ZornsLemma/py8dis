@@ -1,4 +1,5 @@
 from commands import *
+import trace6502 # TODO!?
 import utils
 
 def xy_addr(x_addr, y_addr):
@@ -206,28 +207,28 @@ def enum_lookup(r_addr, e):
 
 # Note that the following code tries to handle A before X and Y; this is because (TODO: will this change?) expr() preserves the first expression for an address and if TAX etc are used we prefer to label A. TODO: Should we in fact prefer to label whichever register is actually loaded with the explicit immediate value?
 
-def osfile_sequence_hook(a_addr, x_addr, y_addr):
+def osfile_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osfile_enum)
     xy_addr(x_addr, y_addr)
 
-def osword_sequence_hook(a_addr, x_addr, y_addr):
+def osword_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osword_enum)
     xy_addr(x_addr, y_addr)
 
-def osbyte_sequence_hook(a_addr, x_addr, y_addr):
+def osbyte_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osbyte_enum)
 
-def oscli_sequence_hook(a_addr, x_addr, y_addr):
+def oscli_argument_finder_hook(a_addr, x_addr, y_addr):
     xy_addr(x_addr, y_addr)
 
-def acorn_sequence_hook(target, a_addr, x_addr, y_addr):
+def acorn_argument_finder_hook(target, a_addr, x_addr, y_addr):
     # TODO: magic constants, should share with mos_labels via Python "constants"
     # TODO: do other OS calls
     d = {
-        0xffdd: osfile_sequence_hook,
-        0xfff1: osword_sequence_hook,
-        0xfff4: osbyte_sequence_hook,
-        0xfff7: oscli_sequence_hook,
+        0xffdd: osfile_argument_finder_hook,
+        0xfff1: osword_argument_finder_hook,
+        0xfff4: osbyte_argument_finder_hook,
+        0xfff7: oscli_argument_finder_hook,
     }
     if target in d:
         (d[target])(a_addr, x_addr, y_addr)
@@ -293,7 +294,7 @@ def mos_labels():
     optional_label(0xfff7, "oscli")
 
     # TODO: Should this be a separate fn?
-    add_sequence_hook(acorn_sequence_hook)
+    trace6502.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
 
 def is_sideways_rom():
     comment(0x8000, "Sideways ROM header")
