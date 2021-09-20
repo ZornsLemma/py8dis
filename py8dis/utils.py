@@ -38,7 +38,7 @@ def add_hex_dump(s, addr, length, column_adjust=0):
     s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
     if capped_length < length:
         s += " ..."
-    if True: # TODO: Should be configurable by user
+    if config.show_cpu_state:
         if disassembly.cpu_state_optimistic[addr] is not None:
             # TODO: This needs some generic way to call the right function, rather than assuming
             # it's in trace6502.
