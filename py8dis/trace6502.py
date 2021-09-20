@@ -233,10 +233,10 @@ class OpcodeConditionalBranch(Opcode):
 def show_cpu_state(state):
     s = ""
     def reg(r):
-        n = state.get(r, None)
-        if n is None:
+        v = state.get(r, None)
+        if v is None:
             return "--"
-        return utils.plainhex2(n)
+        return utils.plainhex2(v[0])
     s += "A:%s X:%s Y:%s" % (reg('a'), reg('x'), reg('y'))
     def flag(name):
         b = state.get(name, None)
@@ -267,37 +267,50 @@ def make_update_flag(flag, b):
         state[flag] = b
     return update_flag
 
+# TODO: make_decrement() and make_increment() are probably not that useful -
+# it's all very well knowing the value of a register, but without an address to
+# use with expr() it doesn#t help that much. If they *are* useful, we should
+# probably make adc # and sbc # update the value where possible.
+
 def make_decrement(reg):
     def decrement(addr, state):
         if state.get(reg, None) is not None:
-            state[reg] -= 1
-            if state[reg] == -1:
-                state[reg] = 0xff
+            v = state[reg][0]
+            v -= 1
+            if v == -1:
+                v = 0xff
+            state[reg] = (v, None)
     return decrement
 
 def make_increment(reg):
     def increment(addr, state):
         if state.get(reg, None) is not None:
-            state[reg] += 1
-            if state[reg] == 0x100:
-                state[reg] = 0
+            v = state[reg][0]
+            v += 1
+            if v == 0x100:
+                v = 0
+            state[reg] = (v, None)
     return increment
 
 def make_load_immediate(reg):
     def load_immediate(addr, state):
         v = memory[addr+1]
-        state[reg] = v
+        state[reg] = (v, addr+1)
         state['n'] = ((v & 0x80) == 0x80)
         state['z'] = (v == 0)
     return load_immediate
 
 def make_transfer(src_reg, dest_reg):
     def transfer(addr, state):
-        v = state.get(src_reg, None)
-        state[dest_reg] = v
-        if v is not None:
-            state['n'] = ((v & 0x80) == 0x80)
-            state['z'] = (v == 0)
+        if src_reg in state:
+            state[dest_reg] = state[src_reg]
+            x = state[dest_reg]
+            if x is not None:
+                v = x[0]
+                state['n'] = ((v & 0x80) == 0x80)
+                state['z'] = (v == 0)
+        else:
+            state[dest_reg] = None
     return transfer
 
 def neutral(addr, state):
