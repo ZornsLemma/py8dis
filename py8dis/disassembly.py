@@ -121,7 +121,13 @@ def our_label_maker(addr, context):
             # but ideally we wouldn't do it.
             add_label(base_addr, optional_labels[base_addr][0])
         return s
-    return utils.force_case(("c%04x" if is_code(addr) else "l%04x") % addr)
+    if not is_code(addr):
+        return utils.force_case("l%04x" % addr)
+    label = utils.force_case("c%04x" % addr)
+    # TODO: Shouldn't be using trace6502 in this generic code
+    if all(trace6502.is_subroutine_call(addr) for addr in trace.references.get(addr, [])):
+        label = "sub_" + label
+    return label
 
 def label_maker(addr, context):
     suggestion = our_label_maker(addr, context)

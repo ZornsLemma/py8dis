@@ -570,6 +570,12 @@ def disassemble_instruction(addr):
     opcode.update_references(addr)
     return opcode.disassemble(addr)
 
+# TODO?
+# TODO: Should this maybe accept JMP abs too, since that could just be a tail call?
+def is_subroutine_call(addr):
+    c = disassembly.classifications[addr]
+    return isinstance(c, Opcode) and c.mnemonic == "JSR"
+
 # TODO: Move? We do need to do this before setting trace_done though (I think)...
 # Note that this does *not* check for labels breaking up a sequence. We're not
 # optimising code here, we are making an inference from a series of straight
