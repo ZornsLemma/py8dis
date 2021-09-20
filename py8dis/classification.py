@@ -218,6 +218,8 @@ def get_expression(addr, expected_value):
 
 def get_constant8(addr):
     if addr not in expressions:
+        if memory[addr] < 10:
+            return "%d" % memory[addr]
         return formatter().hex2(memory[addr])
     return get_expression(addr, memory[addr])
 
