@@ -36,7 +36,7 @@ class Byte(object):
     def as_string_list(self, addr):
         result = []
         byte_prefix = formatter().byte_prefix()
-        data = list(get_constant8(addr + i) for i in range(self._length))
+        data = list(get_constant8(addr + i, True) for i in range(self._length))
         def asciify(n):
             if n in expressions:
                 return "."
@@ -216,9 +216,9 @@ def get_expression(addr, expected_value):
     utils.check_expr(expression, expected_value)
     return expression
 
-def get_constant8(addr):
+def get_constant8(addr, force_hex2=False):
     if addr not in expressions:
-        if memory[addr] < 10:
+        if memory[addr] < 10 and not force_hex2:
             return "%d" % memory[addr]
         return formatter().hex2(memory[addr])
     return get_expression(addr, memory[addr])
