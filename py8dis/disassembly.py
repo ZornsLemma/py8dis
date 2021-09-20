@@ -61,12 +61,16 @@ def add_constant(value, name):
 def is_simple_name(s):
     assert isinstance(s, six.string_types)
     assert len(s) > 0
-    # TODO: Supporting "+" is a bit of an experimental hack, for explicitly
+    # TODO: Supporting "+" and "-" is a bit of an experimental hack, for explicitly
     # generating acme local labels.
+    if all(c == "+" for c in s):
+        return True
+    if all(c == "-" for c in s):
+        return True
     def valid_first(c):
-        return c.isalpha() or c == "_" or c == "+"
+        return c.isalpha() or c == "_"
     def valid_later(c):
-        return c.isalnum() or c == "_" or c == "+"
+        return c.isalnum() or c == "_"
     return valid_first(s[0]) and all(valid_later(c) for c in s)
 
 def ensure_annotation(addr, s): # TODO: rename "ensure_simple_label"?
