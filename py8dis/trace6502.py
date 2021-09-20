@@ -572,6 +572,9 @@ def disassemble_instruction(addr):
 
 # TODO?
 # TODO: Should this maybe accept JMP abs too, since that could just be a tail call?
+# Or perhaps we should insist (in the caller of is_subroutine_call()) that there is
+# at least one JSR to count as a subroutine, but if there is at least one JSR we also
+# allow any unconditional branch to it without disqualifying it?
 def is_subroutine_call(addr):
     c = disassembly.classifications[addr]
     return isinstance(c, Opcode) and c.mnemonic == "JSR"
