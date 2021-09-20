@@ -57,10 +57,10 @@ def code_end():
     return []
 
 def pseudopc_start(dest, source, length):
-    return [utils.force_case("!pseudopc %s {" % hex(dest))]
+    return ["", utils.force_case("!pseudopc %s {" % hex(dest))]
 
 def pseudopc_end(dest, source, length):
-    return ["}"]
+    return ["}", ""]
 
 # TODO: Not just here, I hate the inline "\n" mess with a lot of these functions. I should convert them to return a list of lines which will be joined with "\n" when finally emitted.
 def disassembly_end():
