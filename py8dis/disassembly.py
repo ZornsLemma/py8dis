@@ -311,16 +311,8 @@ def emitSFTODO():
     # TODO: Will this function go wrong/be sub-optimal for acme move() case where not everything is in disassembly_range?
     c_str = {}
 
-    addr = 0
-    while addr < len(classifications):
-        c = classifications[addr]
-        if c is not None:
-            # TODO: As noted elsewhere emitSFTODO() is partially unnecessary now but note that we force str() here so LazyStrings are evaluated and all necessary label definitions are created before we start the final "emit" pass
-            c_str[addr] = [str(line) for line in c.as_string_list(addr)]
-            addr += c.length()
-        else:
-            addr += 1
 
+    # TODO: As noted elsewhere emitSFTODO() is partially unnecessary now but note that we force str() here so LazyStrings are evaluated and all necessary label definitions are created before we start the final "emit" pass
     addr = 0
     while addr < len(classifications):
         c = classifications[addr]
@@ -333,9 +325,8 @@ def emitSFTODO():
                         classifications[addr + i] = copy.copy(c)
                         classifications[addr + i].set_length(c.length() - i)
                         c.set_length(i)
-                        c_str[addr] = c.as_string_list(addr)
-                        c_str[addr + i] = classifications[addr + i].as_string_list(addr + i)
                         break
+            c_str[addr] = [str(line) for line in c.as_string_list(addr)]
             addr += c.length()
         else:
             addr += 1
