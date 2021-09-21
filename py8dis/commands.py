@@ -48,6 +48,9 @@ def load(addr, filename, md5sum=None):
 # immediately after emitting the corresponding code. On the other hand,
 # tracing is not going to work properly where there are multiple possible
 # bits of code at any address, so perhaps we shouldn't even try to handle this.
+# TODO: When documenting all the recent changes, should note that move()
+# needs to be done to update the disassembler's memory before you try to
+# access things in the relocated region.
 def move(dest, src, length):
     assert not any(config.move_target[x] for x in range(dest, dest+length))
     assert not any(config.move_target[x] for x in range(src, src+length))
@@ -212,3 +215,6 @@ if args.upper:
     config.set_lower_case(False)
 else:
     config.set_lower_case(True)
+
+# TODO: General point - when the code is finally tidied up, it might be helpful (perhaps using
+# wrapper functions to avoid repeating things everywhere and perhaps to show an actual error message, even if we also output a backtrace, rather than raw python assertion failures) to do thinks like assert memory[addr] is not None rather than letting subsequent code fail confusingly when it tries to use that None.
