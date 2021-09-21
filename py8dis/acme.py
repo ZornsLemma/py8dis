@@ -67,7 +67,7 @@ def disassembly_end():
     result = []
     spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
     for expr, value in spa:
-        result.append("%s %s != %s {" % (utils.force_case("!if"), expr, value))
+        result.append("%s (%s) != %s {" % (utils.force_case("!if"), expr, value))
         result.append('    %s "Assertion failed: %s == %s"' % (utils.force_case("!error"), expr, value))
         result.append("}")
     return result
