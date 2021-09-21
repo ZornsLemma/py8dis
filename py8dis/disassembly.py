@@ -367,3 +367,5 @@ class Comment(object):
         return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in str(self.text).split("\n"))
 
 # TODO: We seem to assert some simple constants have their own value - is this wrong/weird?
+
+# TODO: TobyLobster's Chuckie Egg disassembly shows that we're not necessarily doing the best we can when striking a balance between splitting/merging classifications and forcing the use of derived labels. l0c00 is being generated as an expression even though we should probably be splitting the byte data up so we can just label 0xc00 directly. I think part of the problem is we don't even *know* 0c00 is going to generate a label until we start str()-ing the instruction classifications - obviously we could make the disassembly process spit out labelled addresses explicitly during disassembly and that may well be the right approach, then label *names* are a str()-stage thing but the fact that an address will be labelled is known as soon as we finish tracing.
