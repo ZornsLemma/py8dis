@@ -141,7 +141,7 @@ class OpcodeImmediate(Opcode):
         s = "    %s #%s" % (utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
         if (addr + 1) not in classification.expressions:
             c = memory[addr + 1]
-            if utils.isprint(c):
+            if config.show_char_literals and utils.isprint(c):
                 s += " %s '%s'" % (config.formatter().comment_prefix(), chr(c))
         return s
 
