@@ -222,6 +222,7 @@ def emit():
     # TODO!?!? We are discarding the results of emitSFTODO() but I think we need to do
     # this or something v similar to force all labels to be generated
     emitSFTODO()
+    labels_emitted_addrs.clear()
 
     # Emit constants first in the order they were defined.
     if len(constants) > 0:
@@ -267,6 +268,7 @@ def split_classification(addr):
     classifications[split_addr] = classification.Byte(classifications[addr].length() - first_split_length, False)
     classifications[addr] = classification.Byte(first_split_length, False)
 
+labels_emitted_addrs = set() # TODO: hack
 def disassemble_range(start_addr, end_addr):
     result = []
 
@@ -289,11 +291,16 @@ def disassemble_range(start_addr, end_addr):
         # address addr.
         # TODO: isinstance(Label) is a hack
         for i in range(1, classification_length):
+            s = set()
             for annotation in sorted_annotations(annotations[addr + i]):
-                if isinstance(annotation, Label):
+                if isinstance(annotation, Label) and (addr + i) not in labels_emitted_addrs:
                     pending_annotations.append(annotation.as_string(addr))
+                    s.add(addr + i)
+            labels_emitted_addrs.update(s)
         for annotation in sorted_annotations(annotations[addr]):
-            result.append(annotation.as_string(addr))
+            if (not isinstance(annotation, Label)) or (addr not in labels_emitted_addrs):
+                result.append(annotation.as_string(addr))
+        labels_emitted_addrs.add(addr)
         # TODO: result.extend(pending_annotations)?
         for annotation in pending_annotations:
             result.append(annotation)
