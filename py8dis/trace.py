@@ -54,8 +54,9 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 add_entry(new_entry_point)
-    for label in labelmanager.labels.values():
-        print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))
+    if True:
+        for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):
+            print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))
     analyse_code()
     # We only need to defer label name generating using LazyString so that
     # label names aren't assigned based on incomplete tracing. (For example,

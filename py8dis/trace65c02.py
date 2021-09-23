@@ -10,7 +10,11 @@ class OpcodeUnconditionalBranch(Opcode):
     def _target(self, addr):
         return addr + 2 + signed8(get_u8(addr + 1))
 
+    def abs_operand(self, addr):
+        return self._target(addr)
+
     def update_references(self, addr):
+        labels[self.abs_operand(addr)].add_reference(addr)
         trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
@@ -31,7 +35,7 @@ class OpcodeJmpAbsX(OpcodeAbs):
         return False
 
     def update_references(self, addr):
-        pass
+        labels[self.abs_operand(addr)].add_reference(addr)
 
     def disassemble(self, addr):
         return [None]
