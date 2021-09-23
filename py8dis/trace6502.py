@@ -5,10 +5,12 @@ import config
 import classification
 import config
 import disassembly
+import label
 import trace
 import utils
 
 memory = config.memory
+labels = label.labels
 jsr_hooks = {}
 subroutine_argument_finder_hooks = [] # TODO: move?
 
@@ -209,7 +211,9 @@ class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpAbs, self).__init__("JMP", has_zp_version=False)
 
+    # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
     def update_references(self, addr):
+        labels[utils.get_u16(addr + 1)].add_reference(addr)
         trace.references[utils.get_u16(addr + 1)].add(addr)
 
     def disassemble(self, addr):
@@ -231,19 +235,23 @@ class OpcodeJsr(OpcodeAbs):
     def __init__(self):
         super(OpcodeJsr, self).__init__("JSR", has_zp_version=False)
 
+    def _target(self, addr):
+        return utils.get_u16(addr + 1)
+
     def update_references(self, addr):
-        trace.references[utils.get_u16(addr + 1)].add(addr)
+        labels[self._target(addr)].add_reference(addr)
+        trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
-        target = utils.get_u16(addr + 1)
         # A hook only gets to return the "straight line" address to continue
         # tracing from (if there is one; it can return None if it wishes). Some
         # subroutines (e.g. jsr is_yx_zero:equw target_if_true, target_if_false)
         # might have no "straight line" case and want to return some labelled
         # entry points. This is supported by having the hook simply return None
         # and call entry() itself for the labelled entry points.
+        target = self._target(addr)
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
-        return [return_addr, utils.get_u16(addr + 1)]
+        return [return_addr, target]
 
 
 class OpcodeReturn(Opcode):
@@ -268,6 +276,7 @@ class OpcodeConditionalBranch(Opcode):
         return addr + 2 + signed8(get_u8(addr + 1))
 
     def update_references(self, addr):
+        labels[self._target(addr)].add_reference(addr)
         trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):

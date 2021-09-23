@@ -1,4 +1,5 @@
 from __future__ import print_function
+import collections # TODO!?
 import sys
 
 import config
@@ -80,3 +81,12 @@ class LazyString(object):
 
     def __len__(self):
         return len(str(self))
+
+# https://stackoverflow.com/questions/2912231/is-there-a-clever-way-to-pass-the-key-to-defaultdicts-default-factory
+class keydefaultdict(collections.defaultdict):
+    def __missing__(self, key):
+        if self.default_factory is None:
+            raise KeyError( key )
+        else:
+            ret = self[key] = self.default_factory(key)
+            return ret
