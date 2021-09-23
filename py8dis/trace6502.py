@@ -5,12 +5,12 @@ import config
 import classification
 import config
 import disassembly
-import label
+import labelmanager
 import trace
 import utils
 
 memory = config.memory
-labels = label.labels
+labels = labelmanager.labels
 jsr_hooks = {}
 subroutine_argument_finder_hooks = [] # TODO: move?
 
@@ -152,8 +152,11 @@ class OpcodeZp(Opcode):
     def __init__(self, mnemonic, suffix=None, update=None):
         super(OpcodeZp, self).__init__(mnemonic, 1, suffix, update=update)
 
+    def abs_operand(self, addr):
+        return memory[addr + 1]
+
     def update_references(self, addr):
-        pass
+        labels[self.abs_operand(addr)].add_reference(addr)
 
     def disassemble(self, addr):
         return [addr + 2]
@@ -166,6 +169,9 @@ class OpcodeAbs(Opcode):
     def __init__(self, mnemonic, suffix=None, has_zp_version=True, update=None):
         super(OpcodeAbs, self).__init__(mnemonic, 2, suffix, update=update)
         self._has_zp_version = has_zp_version
+
+    def abs_operand(self, addr):
+        return utils.get_u16(addr + 1)
 
     def has_zp_version(self):
         return self._has_zp_version
@@ -201,7 +207,7 @@ class OpcodeDataAbs(OpcodeAbs):
         super(OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version, update=update)
 
     def update_references(self, addr):
-        pass
+        labels[self.abs_operand(addr)].add_reference(addr)
 
     def disassemble(self, addr):
         return [addr + 3]
@@ -213,6 +219,9 @@ class OpcodeJmpAbs(OpcodeAbs):
 
     def _target(self, addr):
         return utils.get_u16(addr)
+
+    def abs_operand(self, addr):
+        return self._target(addr)
 
     # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
     def update_references(self, addr):
@@ -228,7 +237,7 @@ class OpcodeJmpInd(OpcodeAbs):
         super(OpcodeJmpInd, self).__init__("JMP", ")", has_zp_version=False)
 
     def update_references(self, addr):
-        pass
+        labels[utils.get_u16(addr + 1)].add_reference(addr)
 
     def disassemble(self, addr):
         return [None]
@@ -240,6 +249,9 @@ class OpcodeJsr(OpcodeAbs):
 
     def _target(self, addr):
         return utils.get_u16(addr + 1)
+
+    def abs_operand(self, addr):
+        return self._target(addr)
 
     def update_references(self, addr):
         labels[self._target(addr)].add_reference(addr)
@@ -277,6 +289,9 @@ class OpcodeConditionalBranch(Opcode):
 
     def _target(self, addr):
         return addr + 2 + signed8(get_u8(addr + 1))
+
+    def abs_operand(self, addr):
+        return self._target(addr)
 
     def update_references(self, addr):
         labels[self._target(addr)].add_reference(addr)
@@ -594,7 +609,7 @@ def disassemble_instruction(addr):
         disassembly.add_comment(addr, utils.LazyString("%s", late_formatter))
     else:
         disassembly.add_classification(addr, opcode)
-    opcode.update_references(addr)
+        opcode.update_references(addr)
     return opcode.disassemble(addr)
 
 # TODO?

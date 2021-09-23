@@ -24,6 +24,9 @@ class OpcodeJmpAbsX(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpAbsX, self).__init__("JMP", ",X)")
 
+    def abs_operand(self, addr):
+        return utils.get_u16(addr + 1)
+
     def has_zp_version(self):
         return False
 
