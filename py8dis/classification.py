@@ -3,6 +3,7 @@ import collections
 
 import config
 import disassembly
+import labelmanager
 import utils
 import trace
 
@@ -319,13 +320,21 @@ def autostring(min_length=3):
         i = 0
         while (addr + i) < len(memory) and memory[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory[addr + i]):
             i += 1
+            if (addr + i) in labelmanager.labels:
+                break
         if i >= min_length:
             string(addr, i)
         addr += max(1, i)
 
 def classify_leftovers():
+    # TODO: Might be able to factor out common code with autostring()
     addr = 0
     while addr < len(memory):
-        if memory[addr] is not None and not disassembly.is_classified(addr, 1):
-            disassembly.add_classification(addr, Byte(1))
-        addr += 1
+        i = 0
+        while (addr + i) < len(memory) and memory[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
+            i += 1
+            if (addr + i) in labelmanager.labels:
+                break
+        if i > 0:
+            disassembly.add_classification(addr, Byte(i, False))
+        addr += max(1, i)

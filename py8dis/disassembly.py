@@ -183,6 +183,7 @@ def get_classification(addr):
 
 # Combine adjacent mergeable classifications of the same type.
 def merge_classifications():
+    assert False # TODO!?
     addr = 0
     while addr < len(classifications):
         if classifications[addr] is not None and classifications[addr].is_mergeable():
