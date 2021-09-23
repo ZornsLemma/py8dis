@@ -211,13 +211,16 @@ class OpcodeJmpAbs(OpcodeAbs):
     def __init__(self):
         super(OpcodeJmpAbs, self).__init__("JMP", has_zp_version=False)
 
+    def _target(self, addr):
+        return utils.get_u16(addr)
+
     # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
     def update_references(self, addr):
-        labels[utils.get_u16(addr + 1)].add_reference(addr)
-        trace.references[utils.get_u16(addr + 1)].add(addr)
+        labels[self._target(addr)].add_reference(addr)
+        trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
-        return [None, utils.get_u16(addr + 1)]
+        return [None, self._target(addr)]
 
 
 class OpcodeJmpInd(OpcodeAbs):
