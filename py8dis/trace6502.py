@@ -218,7 +218,7 @@ class OpcodeJmpAbs(OpcodeAbs):
         super(OpcodeJmpAbs, self).__init__("JMP", has_zp_version=False)
 
     def _target(self, addr):
-        return utils.get_u16(addr)
+        return utils.get_u16(addr + 1)
 
     def abs_operand(self, addr):
         return self._target(addr)
