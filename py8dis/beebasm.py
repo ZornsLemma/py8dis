@@ -55,13 +55,13 @@ def disassembly_start():
 def code_start(start_addr, end_addr):
     global _code_end_addr
     _code_end_addr = end_addr
-    result = [utils.force_case("    org %s" % hex4(start_addr))]
+    result = ["TODOTEMPCODESTART", utils.force_case("    org %s" % hex4(start_addr))]
     if end_addr < 0x10000:
         result.append(utils.force_case("    guard %s" % hex4(end_addr)))
     return result
 
 def code_end():
-    return []
+    return ["TODOTEMPCODEEND"]
 
 def pseudopc_start(dest, source, length):
     result = []

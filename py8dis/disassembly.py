@@ -271,14 +271,16 @@ def emit():
     print("PPPDX", SFTODORANGES)
 
     for start_addr, end_addr in SFTODORANGES:
-        output.extend(formatter.code_start(start_addr, end_addr))
-        if config.move_offset[start_addr] is not None:
+        if config.move_offset[start_addr] is None:
+            output.extend(formatter.code_start(start_addr, end_addr))
+        else:
             SFTODOARGS = (config.move_offset[start_addr], start_addr, end_addr - start_addr)
             output.extend(formatter.pseudopc_start(*SFTODOARGS))
         output.extend(disassemble_range(start_addr, end_addr))
-        if config.move_offset[start_addr] is not None:
+        if config.move_offset[start_addr] is None:
+            output.extend(formatter.code_end())
+        else:
             output.extend(formatter.pseudopc_end(*SFTODOARGS))
-        output.extend(formatter.code_end())
 
     if config.label_references():
         output.extend(trace.add_reference_histogram())
