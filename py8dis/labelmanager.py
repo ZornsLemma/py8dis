@@ -19,6 +19,11 @@ class Label(object):
         if name not in self.explicit_names:
             self.explicit_names.append(name)
 
+    def explicit_definition_string_list(self):
+        formatter = config.formatter()
+        # TODO: Could the label have multiple names here which we need to define?
+        return [formatter.explicit_label(disassembly.get_label(self.addr, self.addr), formatter.hex4(self.addr))]
+
     def definition_string_list(self, emit_addr):
         formatter = config.formatter()
         result = []

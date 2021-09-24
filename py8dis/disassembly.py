@@ -245,11 +245,9 @@ def emit():
 
     # Emit labels which aren't within one of the disassembled ranges and which
     # therefore must be defined explicitly.
-    for addr in sorted(annotations.keys()):
+    for addr in sorted(labelmanager.labels.keys()):
         if addr not in disassembled_addresses:
-            for annotation in sorted_annotations(annotations[addr]):
-                if isinstance(annotation, Label):
-                    output.append(annotation.as_string_assignment())
+            output.extend(labelmanager.labels[addr].explicit_definition_string_list())
 
     for start_addr, end_addr in sorted(config.load_ranges):
         output.extend(formatter.code_start(start_addr, end_addr))
