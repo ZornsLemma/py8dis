@@ -330,7 +330,7 @@ def disassemble_range(start_addr, end_addr):
         # TODO: isinstance(Label) is a hack
         # TODO: The hacks on labelmanager.labels[] indexing will probably be broken or at least sub-optimal if we have multiple blocks of code move()d to the same destination, but let's get the basics working first
         def am2(x):
-            if config.move_offset[x] is None:
+            if config.move_offset[x] is None or x == end_addr:
                 return x
             return config.move_offset[x]
         for i in range(1, classification_length):
