@@ -304,15 +304,20 @@ def disassemble_range(start_addr, end_addr):
         # address addr.
         # TODO: isinstance(Label) is a hack
         for i in range(1, classification_length):
-            s = set()
-            for annotation in sorted_annotations(annotations[addr + i]):
-                if isinstance(annotation, Label) and (addr + i) not in labels_emitted_addrs:
-                    pending_annotations.append(annotation.as_string(addr))
-                    s.add(addr + i)
-            labels_emitted_addrs.update(s)
+            if (addr + i) in labelmanager.labels:
+                pending_annotations.append("XXAQ %04x" % (addr + i))
+            if False:
+                s = set()
+                for annotation in sorted_annotations(annotations[addr + i]):
+                        if isinstance(annotation, Label) and (addr + i) not in labels_emitted_addrs:
+                            pending_annotations.append(annotation.as_string(addr))
+                            s.add(addr + i)
+                labels_emitted_addrs.update(s)
         for annotation in sorted_annotations(annotations[addr]):
-            if (not isinstance(annotation, Label)) or (addr not in labels_emitted_addrs):
+            if not isinstance(annotation, Label): # TODO OLD or (addr not in labels_emitted_addrs):
                 result.append(annotation.as_string(addr))
+        if addr in labelmanager.labels:
+            result.append("XXBQ %04x" % addr)
         labels_emitted_addrs.add(addr)
         # TODO: result.extend(pending_annotations)?
         for annotation in pending_annotations:
