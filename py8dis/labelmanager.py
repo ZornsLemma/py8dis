@@ -24,12 +24,12 @@ class Label(object):
         result = []
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
-        if len(self.explicit_names) == 0:
-            # TODO: Is it OK to add to explicit_names? We're doing it "late" but will this cause any potential confusion? We could (for example) add it to a local copy of self.explicit_names instead.
-            self.explicit_names.append("xxx%04x" % self.addr) # TODO: should be calling label maker
         if offset == 0:
-            for name in self.explicit_names:
-                result.append(formatter.inline_label(name))
+            if len(self.explicit_names) == 0:
+                result.append(formatter.inline_label(disassembly.get_label(emit_addr, self.addr)))
+            else:
+                for name in self.explicit_names:
+                    result.append(formatter.inline_label(name))
         else:
             if emit_addr not in labels:
                 # TODO: is it OK to be springing new labels into existence here? I think it is, but may want to reconsider if nicer way to do it as refactoring proceeds
