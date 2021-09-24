@@ -98,7 +98,7 @@ class Word(object):
         # should probably all be cleaned up and factored out.
         result = []
         data = list(get_constant16(addr + i) for i in range(0, self._length, 2))
-        longest_item = max(len(x) for x in data)
+        longest_item = 10 # TODO: hack, was: max(len(x) for x in data)
         available_width = config.inline_comment_column() - 10
         items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
         item_min_width = min(longest_item, available_width // items_per_line)

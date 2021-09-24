@@ -11,11 +11,9 @@ traced_entry_points = set()
 references = collections.defaultdict(set)
 code_analysis_fns = [] # TODO!?
 
-def add_entry(addr, label=None):
+def add_entry(addr, name=None):
     entry_points.append(addr)
-    if label is not None:
-        disassembly.add_label(addr, label)
-    return disassembly.get_label(addr, addr)
+    return disassembly.add_label(addr, name)
 
 def analyse_code():
     addr = 0

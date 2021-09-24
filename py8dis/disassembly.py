@@ -86,9 +86,11 @@ def ensure_annotation(addr, s): # TODO: rename "ensure_simple_label"?
 def add_label(addr, s):
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     label = labelmanager.labels[addr]
-    label.add_explicit_name(s)
-    if is_simple_name(s):
-        ensure_annotation(addr, s)
+    if s is not None:
+        label.add_explicit_name(s)
+        if is_simple_name(s):
+            ensure_annotation(addr, s)
+    return label
 
 def add_optional_label(addr, s, base_addr=None):
     assert 0 <= addr <= 0xffff
