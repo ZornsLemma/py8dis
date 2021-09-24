@@ -22,7 +22,12 @@ class Label(object):
     def explicit_definition_string_list(self):
         formatter = config.formatter()
         # TODO: Could the label have multiple names here which we need to define?
-        return [formatter.explicit_label(disassembly.get_label(self.addr, self.addr), formatter.hex4(self.addr))]
+        # TODO: This handling of non-simple labels feels a bit hacky, as though maybe we should have flagged this earlier and perhaps not even be calling this function - but refactoring so just hack it for now
+        name = str(disassembly.get_label(self.addr, self.addr))
+        if disassembly.is_simple_name(name):
+            return [formatter.explicit_label(name, formatter.hex4(self.addr))]
+        else:
+            return []
 
     def definition_string_list(self, emit_addr):
         formatter = config.formatter()
