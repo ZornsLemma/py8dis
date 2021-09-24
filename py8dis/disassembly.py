@@ -305,7 +305,8 @@ def disassemble_range(start_addr, end_addr):
         # TODO: isinstance(Label) is a hack
         for i in range(1, classification_length):
             if (addr + i) in labelmanager.labels:
-                pending_annotations.append("XXAQ %04x" % (addr + i))
+                pending_annotations.extend(labelmanager.labels[addr + i].definition_string_list(addr))
+                #pending_annotations.append("XXAQ %04x" % (addr + i))
             if False:
                 s = set()
                 for annotation in sorted_annotations(annotations[addr + i]):
@@ -317,7 +318,8 @@ def disassemble_range(start_addr, end_addr):
             if not isinstance(annotation, Label): # TODO OLD or (addr not in labels_emitted_addrs):
                 result.append(annotation.as_string(addr))
         if addr in labelmanager.labels:
-            result.append("XXBQ %04x" % addr)
+            result.extend(labelmanager.labels[addr].definition_string_list(addr))
+            #result.append("XXBQ %04x" % addr)
         labels_emitted_addrs.add(addr)
         # TODO: result.extend(pending_annotations)?
         for annotation in pending_annotations:
