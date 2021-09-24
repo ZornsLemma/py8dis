@@ -246,8 +246,13 @@ def emit():
     # Emit labels which aren't within one of the disassembled ranges and which
     # therefore must be defined explicitly.
     for addr in sorted(labelmanager.labels.keys()):
-        if addr not in disassembled_addresses:
-            output.extend(labelmanager.labels[addr].explicit_definition_string_list())
+        # SFTODO: Hacky handling for move_offset
+        addr2 = trace6502.apply_move(addr)
+        assert len(addr2) == 1
+        addr2 = addr2[0]
+        #print("OOL %04x" % addr2)
+        if addr2 not in disassembled_addresses:
+            output.extend(labelmanager.labels[addr2].explicit_definition_string_list())
 
     # TODO: Probably inefficient, poor variable names, etc etc
     # TODO: Any danger of classifications straddling *load range* boundaries here and breaking things? disassemble_range() handles that but I think we may also need to do it here (or do it here instead) - for example, we might incorrectly have a subrange which extends past the end of a load_range
@@ -268,7 +273,7 @@ def emit():
                 SUBSTART = addr
                 SFTODOMOVEBASE = THISMOVE
             addr = new_addr
-    print("PPPDX", SFTODORANGES)
+    #print("PPPDX", SFTODORANGES)
 
     for start_addr, end_addr in SFTODORANGES:
         if config.move_offset[start_addr] is None:

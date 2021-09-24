@@ -29,7 +29,7 @@ def apply_move(target):
     for i, SFTODO in enumerate(config.move_offset):
         if SFTODO == target:
             if match is None:
-                print("QPP %04x %04x" % (i, SFTODO))
+                #print("QPP %04x %04x" % (i, SFTODO))
                 #assert False
                 match = i
             else:
