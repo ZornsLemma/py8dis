@@ -108,6 +108,7 @@ def add_optional_label(addr, s, base_addr=None):
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 def get_label(addr, context):
+    add_label(addr, None) # TODO: possibly a transitory hack as I refactor, not clear yet
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 # TODO: May want to expose this to use as it make be useful in a user label maker hook
