@@ -1,4 +1,6 @@
 memory = [None] * 64*1024
+# TODO: move_offset is probably misnamed
+move_offset = [None] * 64*1024
 
 _formatter = None
 _lower_case = True

@@ -19,7 +19,7 @@ memory = config.memory
 
 # TODO!?
 config.load_ranges = []
-config.move_target = [False] * 64 * 1024
+config.XXXmove_target = [False] * 64 * 1024
 
 def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
@@ -52,10 +52,23 @@ def load(addr, filename, md5sum=None):
 # needs to be done to update the disassembler's memory before you try to
 # access things in the relocated region.
 def move(dest, src, length):
-    assert not any(config.move_target[x] for x in range(dest, dest+length))
-    assert not any(config.move_target[x] for x in range(src, src+length))
+    assert length > 0
+    assert 0 <= src < 0x10000
+    assert 0 <= (src + length) <= 0x10000
+    assert 0 <= dest < 0x10000
+    assert 0 <= (dest + length) <= 0x10000
+    # You can't move from a region that hasn't been populated with data.
+    assert all(memory[i] is not None for i in range(src, src+length))
+    # You can't move from the same location more than once.
+    assert all(config.move_offset[i] is None for i in range(src, src+length))
+    for i in range(length):
+        config.move_offset[src + i] = dest + i
+    return # TODO: DELETE OLD CODE LATER
+
+    assert not any(config.XXXmove_target[x] for x in range(dest, dest+length))
+    assert not any(config.XXXmove_target[x] for x in range(src, src+length))
     for i in range(dest, dest+length):
-        config.move_target[i] = True
+        config.XXXmove_target[i] = True
     c = classification.Relocation(dest, src, length)
     disassembly.add_classification(src, c)
     memory[dest:dest+length] = memory[src:src+length]

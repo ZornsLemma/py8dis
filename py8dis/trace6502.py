@@ -14,6 +14,34 @@ labels = labelmanager.labels
 jsr_hooks = {}
 subroutine_argument_finder_hooks = [] # TODO: move?
 
+# TODO: Move? (no pun intended)
+# TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
+# TODO: Semi-temp note: if we dissassemble an instruction "physically" located at &6000 which is copied to &5000 at runtime and that instruction says JMP &5100, we (skimming over some edge cases) actually want to continue disassembling at &6100, where the instruction which will be copied to &5100 is located. This of course assumes that target is part of the same relocated block or is part of the code which never moves at all. If we have 40 bytes at &6000 which are copied to &5000 at runtime and 40 bytes at &7000 which are copied to &5100, we of course want to continue disassembling at "physical address" &7000.
+#
+# That's all "trivial". What if we have 40 bytes at &7000 and 40 bytes at &8000 and both of those can be copied to &5100 at runtime? Our *mapping* allows us to define this, but JMP &5100 cannot be traced, as we don't know which of those two source ranges to interpret it as. We could potentially as a heuristic say "if our address is part of a range, where there's ambiguity we will resolve that ambiguity in favour of something in our own range, otherwise we give up as we normally would".
+#
+# TODO: I think the heuristic approach is doable, but while I'm feeling my way and getting something working let's not do that yet.
+# TODO: This returns a list so it can return an empty list when it wants to say "give up" and this "just works" when appending the result to other lists
+def apply_move(target):
+    # TODO: Probably ultra-inefficient code - we should probably derive what we need from move_offset[] array once in go() - but want to get it right and be flexible before making it fast(er)
+    # TODO: Variable names are junk as I figure this out, rename later
+    match = None
+    for i, SFTODO in enumerate(config.move_offset):
+        if SFTODO == target:
+            if match is None:
+                print("QPP %04x %04x" % (i, SFTODO))
+                #assert False
+                match = i
+            else:
+                assert False # TODO JUST TEMP, PERFECTLY LEGIT CASE
+                return []
+    if match is None:
+        return [target]
+    else:
+        return [match]
+
+
+
 def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
     jsr_hooks[addr] = hook
@@ -229,7 +257,8 @@ class OpcodeJmpAbs(OpcodeAbs):
         trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
-        return [None, self._target(addr)]
+        # TODO: Should the apply_move() call be inside _target and/or abs_operand? Still feeling my way here...
+        return [None] + apply_move(self._target(addr))
 
 
 class OpcodeJmpInd(OpcodeAbs):
@@ -264,9 +293,16 @@ class OpcodeJsr(OpcodeAbs):
         # might have no "straight line" case and want to return some labelled
         # entry points. This is supported by having the hook simply return None
         # and call entry() itself for the labelled entry points.
+        # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after jsr_hooks.get()?
         target = self._target(addr)
         return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
-        return [return_addr, target]
+        if return_addr is not None:
+            result = apply_move(return_addr)
+            assert len(result) > 0 # TODO: no idea if this can happen, but since the first value returned from disassemble() is special we don't want to disappear it - if it can, we just need to set result = [None] here I think if len() == 0
+        else:
+            result = [None]
+        result += apply_move(target)
+        return result
 
 
 class OpcodeReturn(Opcode):
@@ -298,7 +334,8 @@ class OpcodeConditionalBranch(Opcode):
         trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
-        return [addr + 2, self._target(addr)]
+        # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..
+        return [addr + 2] + apply_move(self._target(addr))
 
     def update_cpu_state(self, addr, state):
         # TODO: I think this is "right" - in our optimistic model (at least), a
