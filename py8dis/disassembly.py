@@ -83,6 +83,7 @@ def ensure_annotation(addr, s): # TODO: rename "ensure_simple_label"?
         simple_labelled_addrs.add(addr)
         annotations[addr].append(Label(addr, s))
 
+# TODO: feeling my way wrt post_move_addr, but I think it may be necessary to preserve compatibility with old style control files in the new move model - NO, I am thinking this is wrong - labels have to be at the move "destination" addresses, since either !pseudopc or our beebasm equivalent with copyblock will use the "final" addresses not the "in binary" addresses when generating labels - *so* what happens where two blocks of code can be copied into overlapping regions? I suppose this is maybe something to address later, but perhaps the context (or an additional "relocation context" argument) provided to the label maker could use the "in binary" address, so you could for example assign different labels to &900 depending on how it's being used (bear in mind it might be being used by part of code running at &9xx, which is why having a context showing the address in-binary would be necessary or at least v helpful to distinguish, but it also might be being used by part of code running elsewhere - if that code was nolt relocate the context would naturally be its in binary address, but if it was from other relocated code it could get confusing - admittedly an obscure case - but perhaps provided both bits of information to label maker even if most of time only one is used would be a good idea)
 def add_label(addr, s):
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     label = labelmanager.labels[addr]
@@ -249,9 +250,35 @@ def emit():
         if addr not in disassembled_addresses:
             output.extend(labelmanager.labels[addr].explicit_definition_string_list())
 
+    # TODO: Probably inefficient, poor variable names, etc etc
+    # TODO: Any danger of classifications straddling *load range* boundaries here and breaking things? disassemble_range() handles that but I think we may also need to do it here (or do it here instead) - for example, we might incorrectly have a subrange which extends past the end of a load_range
+    SFTODORANGES = []
     for start_addr, end_addr in sorted(config.load_ranges):
+        addr = start_addr
+        SFTODOMOVEBASE = -1000000
+        SUBSTART = addr
+        while addr < end_addr:
+            new_addr = addr + classifications[addr].length()
+            THISMOVE = config.move_offset[addr]
+            if THISMOVE is None:
+                THISMOVE = -1000000
+            else:
+                THISMOVE = addr - THISMOVE
+            if THISMOVE != SFTODOMOVEBASE or new_addr >= end_addr:
+                SFTODORANGES.append((SUBSTART, addr))
+                SUBSTART = addr
+                SFTODOMOVEBASE = THISMOVE
+            addr = new_addr
+    print("PPPDX", SFTODORANGES)
+
+    for start_addr, end_addr in SFTODORANGES:
         output.extend(formatter.code_start(start_addr, end_addr))
+        if config.move_offset[start_addr] is not None:
+            SFTODOARGS = (config.move_offset[start_addr], start_addr, end_addr - start_addr)
+            output.extend(formatter.pseudopc_start(*SFTODOARGS))
         output.extend(disassemble_range(start_addr, end_addr))
+        if config.move_offset[start_addr] is not None:
+            output.extend(formatter.pseudopc_end(*SFTODOARGS))
         output.extend(formatter.code_end())
 
     if config.label_references():
