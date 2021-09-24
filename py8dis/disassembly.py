@@ -122,7 +122,7 @@ def is_code(addr):
 def our_label_maker(addr, context):
     assert context is not None
     label = labelmanager.labels.get(addr)
-    print("XXX %04x" % addr)
+    #print("YYY %04x" % addr)
     assert label is not None
     # TODO: We might want to move this logic into the Label object, and it could
     # potentially pick one of its own explicit names out based on context. For now we

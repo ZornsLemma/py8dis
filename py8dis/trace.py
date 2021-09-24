@@ -52,7 +52,7 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 add_entry(new_entry_point)
-    if True:
+    if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):
             print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))
     analyse_code()
