@@ -35,7 +35,7 @@ class Label(object):
                 # TODO: is it OK to be sprining new labels into existence here? I think it is, but may want to reconsider if nicer way to do it as refactoring proceeds
                 dummy = labels[emit_addr] # TODO: hack - we want to create the Label object but not call any fns on it
             for name in self.explicit_names:
-                result.append(formatter.explicit_label(name, labels[emit_addr], offset))
+                result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
         return result
 
 
