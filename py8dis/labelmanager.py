@@ -25,14 +25,14 @@ class Label(object):
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
         if len(self.explicit_names) == 0:
-            # TODO: Is it OK to add to explicit_names? We're doing it "late" but will this cause any potential confusion?
+            # TODO: Is it OK to add to explicit_names? We're doing it "late" but will this cause any potential confusion? We could (for example) add it to a local copy of self.explicit_names instead.
             self.explicit_names.append("xxx%04x" % self.addr) # TODO: should be calling label maker
         if offset == 0:
             for name in self.explicit_names:
                 result.append(formatter.inline_label(name))
         else:
             if emit_addr not in labels:
-                # TODO: is it OK to be sprining new labels into existence here? I think it is, but may want to reconsider if nicer way to do it as refactoring proceeds
+                # TODO: is it OK to be springing new labels into existence here? I think it is, but may want to reconsider if nicer way to do it as refactoring proceeds
                 dummy = labels[emit_addr] # TODO: hack - we want to create the Label object but not call any fns on it
             for name in self.explicit_names:
                 result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
