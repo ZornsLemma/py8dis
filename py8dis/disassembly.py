@@ -234,7 +234,6 @@ def emit():
     # TODO!?!? We are discarding the results of emitSFTODO() but I think we need to do
     # this or something v similar to force all labels to be generated
     emitSFTODO()
-    labels_emitted_addrs.clear()
 
     # Emit constants first in the order they were defined.
     if len(constants) > 0:
@@ -306,7 +305,6 @@ def split_classification(addr):
     classifications[split_addr] = classification.Byte(classifications[addr].length() - first_split_length, False)
     classifications[addr] = classification.Byte(first_split_length, False)
 
-labels_emitted_addrs = set() # TODO: hack
 def disassemble_range(start_addr, end_addr):
     result = []
 
@@ -328,24 +326,21 @@ def disassemble_range(start_addr, end_addr):
         # as_string() method might cause new annotations to appear at
         # address addr.
         # TODO: isinstance(Label) is a hack
+        # TODO: The hacks on labelmanager.labels[] indexing will probably be broken or at least sub-optimal if we have multiple blocks of code move()d to the same destination, but let's get the basics working first
+        def am2(x):
+            if config.move_offset[x] is None:
+                return x
+            return config.move_offset[x]
         for i in range(1, classification_length):
-            if (addr + i) in labelmanager.labels:
-                pending_annotations.extend(labelmanager.labels[addr + i].definition_string_list(addr))
+            if am2(addr + i) in labelmanager.labels:
+                pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr)))
                 #pending_annotations.append("XXAQ %04x" % (addr + i))
-            if False:
-                s = set()
-                for annotation in sorted_annotations(annotations[addr + i]):
-                        if isinstance(annotation, Label) and (addr + i) not in labels_emitted_addrs:
-                            pending_annotations.append(annotation.as_string(addr))
-                            s.add(addr + i)
-                labels_emitted_addrs.update(s)
         for annotation in sorted_annotations(annotations[addr]):
-            if not isinstance(annotation, Label): # TODO OLD or (addr not in labels_emitted_addrs):
+            if not isinstance(annotation, Label):
                 result.append(annotation.as_string(addr))
-        if addr in labelmanager.labels:
-            result.extend(labelmanager.labels[addr].definition_string_list(addr))
+        if am2(addr) in labelmanager.labels:
+            result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr)))
             #result.append("XXBQ %04x" % addr)
-        labels_emitted_addrs.add(addr)
         # TODO: result.extend(pending_annotations)?
         for annotation in pending_annotations:
             result.append(annotation)
