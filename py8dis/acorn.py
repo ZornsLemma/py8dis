@@ -197,6 +197,7 @@ osbyte_enum = {
     0xff: "osbyte_read_write_startup_options",
 }
 
+# TODO: Should sort this in the source by the key.
 inkey_enum = {
       -1: "inkey_key_shift",
       -2: "inkey_key_ctrl",
@@ -210,6 +211,7 @@ inkey_enum = {
      -24: "inkey_key_minus",
      -25: "inkey_key_caret",
      -26: "inkey_key_left",
+     -33: "inkey_key_f0",
      -34: "inkey_key_w",
      -35: "inkey_key_e",
      -36: "inkey_key_t",
@@ -219,6 +221,8 @@ inkey_enum = {
      -40: "inkey_key_0",
      -41: "inkey_key_underscore",
      -42: "inkey_key_down",
+     -27: "inkey_key_keypad_6",
+     -28: "inkey_key_keypad_7",
      -43: "inkey_key_keypad_8",
      -44: "inkey_key_keypad_9",
      -49: "inkey_key_1",
@@ -260,9 +264,6 @@ inkey_enum = {
      -91: "inkey_key_keypad_hash",
      -92: "inkey_key_keypad_asterisk",
      -93: "inkey_key_keypad_comma",
-     -94: "inkey_key_equals",
-     -95: "inkey_key_left",
-     -96: "inkey_key_right",
      -97: "inkey_key_tab",
      -98: "inkey_key_z",
      -99: "inkey_key_space",
