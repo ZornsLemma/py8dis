@@ -180,20 +180,6 @@ def add_classification(addr, classification):
 def get_classification(addr):
     return classifications[addr]
 
-# Combine adjacent mergeable classifications of the same type.
-def merge_classifications():
-    assert False # TODO!?
-    addr = 0
-    while addr < len(classifications):
-        if classifications[addr] is not None and classifications[addr].is_mergeable():
-            addr2 = addr + classifications[addr].length()
-            while addr2 < len(classifications) and type(classifications[addr2]) is type(classifications[addr]) and classifications[addr2].is_mergeable():
-                addr2_length = classifications[addr2].length()
-                classifications[addr].set_length(classifications[addr].length() + addr2_length)
-                classifications[addr2] = partial_classification
-                addr2 += addr2_length
-        addr += 1 if classifications[addr] is None else classifications[addr].length()
-
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
 
