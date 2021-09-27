@@ -200,6 +200,7 @@ def emit():
 
     # TODO: Probably inefficient, poor variable names, etc etc
     # TODO: Should we just be tracking the ranges as whole ranges when the user sets them up with move()?
+    # TODO: If we're not careful (it can work) here, when we have move()-region IDs, we could accidentally merge two (legitimately) adjancent regions and fail to use the correct region ID for the second and subsequent sub-ranges
     SFTODORANGES = []
     for start_addr, end_addr in sorted(config.load_ranges):
         isolate_range(start_addr, end_addr)
