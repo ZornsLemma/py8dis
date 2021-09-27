@@ -281,7 +281,7 @@ def emit():
     #print("PPPDX", SFTODORANGES)
 
     for start_addr, end_addr in SFTODORANGES:
-        print("QZZ %04x %04x" %(start_addr, end_addr))
+        #print("QZZ %04x %04x" %(start_addr, end_addr))
         if config.move_offset[start_addr] is None:
             output.extend(formatter.code_start(start_addr, end_addr))
         else:
@@ -292,7 +292,7 @@ def emit():
             output.extend(formatter.code_end())
         else:
             output.extend(formatter.pseudopc_end(*SFTODOARGS))
-            #output.extend(disassemble_range(end_addr, end_addr))
+            output.extend(labelmanager.labels[end_addr].definition_string_list(end_addr))
 
     if config.label_references():
         output.extend(trace.add_reference_histogram())
