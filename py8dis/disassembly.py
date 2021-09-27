@@ -199,9 +199,9 @@ def emit():
         output.append("")
 
     # TODO: Probably inefficient, poor variable names, etc etc
-    # TODO: Any danger of classifications straddling *load range* boundaries here and breaking things? disassemble_range() handles that but I think we may also need to do it here (or do it here instead) - for example, we might incorrectly have a subrange which extends past the end of a load_range
     SFTODORANGES = []
     for start_addr, end_addr in sorted(config.load_ranges):
+        isolate_range(start_addr, end_addr)
         #print("XXP %04x %04x" % (start_addr, end_addr))
         addr = start_addr
         SFTODOMOVEBASE = -1000000
@@ -274,13 +274,16 @@ def split_classification(addr):
     classifications[split_addr] = classification.Byte(classifications[addr].length() - first_split_length, False)
     classifications[addr] = classification.Byte(first_split_length, False)
 
+# It's possible (but unlikely) there is a multi-byte classification straddling the
+# ends of our range; if so, split them so we can output the precise range wanted.
+def isolate_range(start_addr, end_addr):
+    split_classification(start_addr)
+    split_classification(end_addr)
+
 def disassemble_range(start_addr, end_addr):
     result = []
 
-    # It's possible (but unlikely) there is a multi-byte classification straddling the
-    # ends of our range; if so, split them so we can output the precise range wanted.
-    split_classification(start_addr)
-    split_classification(end_addr)
+    isolate_range(start_addr, end_addr)
 
     addr = start_addr
     while addr <= end_addr:
