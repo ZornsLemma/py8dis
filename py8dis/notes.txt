@@ -24,3 +24,5 @@ this example does show however that we *cannot* merge adjacent pseudopc blocks i
 i suppose although these are *not* overlapping move() blocks, the do_b label kind of overlaps and this confusing-but-correct behaviour would probably be automatically fixed by having labels associated with a specific pseudopc block
 
 do we have a similar problem if we have adjacent load()s? i suspect we don't really, because that is morally equivalent to a single load() of a concatenated data file. we might (if I support this) wish to save() two adjacent ranges of memory out separately in a beebasm version of the output, but that is really independent of how we load()ed the data.
+
+what about deciding which labels we need to emit up-front because they will never get a chance to be done inline? the addresses we will "see" inline are the regions *including* the end addresses, with the move()-ed regions taken into account. we do need to be careful to also generate the end-of-source label after a pseudopc move()-ed region
