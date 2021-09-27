@@ -1,0 +1,26 @@
+load()/move() region notes:
+
+we need to emit something for each byte in a load()ed region
+move()s kind of create "holes" in a load()ed region where we have data but we emit it via a pseudopc block inline
+*because* we emit labels for the address after the end of a block at the end of that block, we would risk generating duplicate labels if two pseudopc blocks or two load()ed regions were adjacent
+- obviously we could simply avoid emitting any given label more than once, but this could still be confusing, e.g. we might emit:
+
+* = $2000
+!pseudopc $900 {
+.do_a
+    lda #65
+    rts
+.do_b
+}
+    blah blah; potentially lots of it
+!pseudopc $903 {
+; this is "do_b" - but we already emitted do_b label earlier, which isn't *wrong* (do_b will have value $903 as required) but is highly unhelpful
+    lda #66
+    rts
+}
+
+this example does show however that we *cannot* merge adjacent pseudopc blocks in all cases, because they needn't be consecutive in the "source".
+
+i suppose although these are *not* overlapping move() blocks, the do_b label kind of overlaps and this confusing-but-correct behaviour would probably be automatically fixed by having labels associated with a specific pseudopc block
+
+do we have a similar problem if we have adjacent load()s? i suspect we don't really, because that is morally equivalent to a single load() of a concatenated data file. we might (if I support this) wish to save() two adjacent ranges of memory out separately in a beebasm version of the output, but that is really independent of how we load()ed the data.
