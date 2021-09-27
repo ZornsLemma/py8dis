@@ -5,6 +5,7 @@ import utils
 
 class Label(object):
     def __init__(self, addr):
+        assert addr != 0xbf0a
         self.addr = addr
         self.references = set()
         # TODO: explicit_names is a list since we want to remember the order user-added names were provided in, at least for now

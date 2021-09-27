@@ -190,14 +190,6 @@ def emit():
 
     output.extend(formatter.disassembly_start())
 
-    disassembled_addresses = set()
-    for start_addr, end_addr in config.load_ranges:
-        # We include end_addr in the range because we're going to use the set
-        # we're building up to control emission of inline labels - the end
-        # address of a range has no classification, but the assembly pointer
-        # does reach it and we can emit labels inline there.
-        disassembled_addresses.update(range(start_addr, end_addr + 1))
-
     # Emit constants first in the order they were defined.
     if len(constants) > 0:
         for value, name in constants:
@@ -205,18 +197,6 @@ def emit():
                 value = formatter.hex(value)
             output.append(formatter.explicit_label(name, value))
         output.append("")
-
-    # Emit labels which aren't within one of the disassembled ranges and which
-    # therefore must be defined explicitly.
-    for addr in sorted(labelmanager.labels.keys()):
-        # SFTODO: Hacky handling for move_offset
-        #print("OOA %04x" % addr)
-        addr2 = trace6502.apply_move(addr)
-        assert len(addr2) == 1
-        addr2 = addr2[0]
-        #print("OOL %04x" % addr2)
-        if addr2 not in disassembled_addresses:
-            output.extend(labelmanager.labels[addr2].explicit_definition_string_list())
 
     # TODO: Probably inefficient, poor variable names, etc etc
     # TODO: Any danger of classifications straddling *load range* boundaries here and breaking things? disassemble_range() handles that but I think we may also need to do it here (or do it here instead) - for example, we might incorrectly have a subrange which extends past the end of a load_range
@@ -243,19 +223,31 @@ def emit():
             addr = new_addr
     #print("PPPDX", SFTODORANGES)
 
+    d = []
     for start_addr, end_addr in SFTODORANGES:
         #print("QZZ %04x %04x" %(start_addr, end_addr))
         if config.move_offset[start_addr] is None:
-            output.extend(formatter.code_start(start_addr, end_addr))
+            d.extend(formatter.code_start(start_addr, end_addr))
         else:
             SFTODOARGS = (config.move_offset[start_addr], start_addr, end_addr - start_addr)
-            output.extend(formatter.pseudopc_start(*SFTODOARGS))
-        output.extend(disassemble_range(start_addr, end_addr))
+            d.extend(formatter.pseudopc_start(*SFTODOARGS))
+        d.extend(disassemble_range(start_addr, end_addr))
         if config.move_offset[start_addr] is None:
-            output.extend(formatter.code_end())
+            d.extend(formatter.code_end())
         else:
-            output.extend(formatter.pseudopc_end(*SFTODOARGS))
-            output.extend(labelmanager.labels[end_addr].definition_string_list(end_addr))
+            d.extend(formatter.pseudopc_end(*SFTODOARGS))
+            d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr))
+
+    # Emit labels which haven't been emitted inline with the disassembly.
+    for addr in sorted(labelmanager.labels.keys()):
+        if not labelmanager.labels[addr].emitted:
+            # SFTODO: Hacky handling for move_offset
+            addr2 = trace6502.apply_move(addr)
+            assert len(addr2) == 1
+            addr2 = addr2[0]
+            output.extend(labelmanager.labels[addr2].explicit_definition_string_list())
+
+    output.extend(d)
 
     if config.label_references():
         output.extend(trace.add_reference_histogram())

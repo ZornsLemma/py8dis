@@ -13,7 +13,11 @@ code_analysis_fns = [] # TODO!?
 
 def add_entry(addr, name=None):
     entry_points.append(addr)
-    return disassembly.add_label(addr, name)
+    # TODO: Should this translation not be done on user calls and internal calls have a separate add_entry() version?
+    SFTODO = config.move_offset[addr]
+    if SFTODO is None:
+        SFTODO = addr
+    return disassembly.add_label(SFTODO, name)
 
 def analyse_code():
     addr = 0
