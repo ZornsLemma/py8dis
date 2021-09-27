@@ -57,26 +57,13 @@ def move(dest, src, length):
     assert 0 <= (src + length) <= 0x10000
     assert 0 <= dest < 0x10000
     assert 0 <= (dest + length) <= 0x10000
+    assert src != dest
     # You can't move from a region that hasn't been populated with data.
     assert all(memory[i] is not None for i in range(src, src+length))
     # You can't move from the same location more than once.
     assert all(config.move_offset[i] is None for i in range(src, src+length))
     for i in range(length):
         config.move_offset[src + i] = dest + i
-    return # TODO: DELETE OLD CODE LATER
-
-    assert not any(config.XXXmove_target[x] for x in range(dest, dest+length))
-    assert not any(config.XXXmove_target[x] for x in range(src, src+length))
-    for i in range(dest, dest+length):
-        config.XXXmove_target[i] = True
-    c = classification.Relocation(dest, src, length)
-    disassembly.add_classification(src, c)
-    memory[dest:dest+length] = memory[src:src+length]
-    # Note that we don't clear (set to None or 0) memory[src:src+length]. It's
-    # at least possible the code being disassembled accesses or even executes
-    # some sub-chunk of the memory we moved in its original location, so we
-    # want it to exist there, as well as at `dest` where it can be found by
-    # tracing.
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
