@@ -29,6 +29,8 @@ class Label(object):
         # TODO: Could the label have multiple names here which we need to define?
         # TODO: This handling of non-simple labels feels a bit hacky, as though maybe we should have flagged this earlier and perhaps not even be calling this function - but refactoring so just hack it for now
         name = str(disassembly.get_label(self.addr, self.addr))
+        if self.addr == 0x8909:
+            pass # print("QQQ", name)
         if disassembly.is_simple_name(name):
             return [formatter.explicit_label(name, formatter.hex4(self.addr))]
         else:
@@ -42,6 +44,9 @@ class Label(object):
         result = []
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
+        if self.addr == 0x8909:
+            pass # print("RRR", self.explicit_names, hex(emit_addr), offset)
+        # TODO: Having to use get_label() here feels a bit off, but it's probably easy to fix later
         if offset == 0:
             if len(self.explicit_names) == 0:
                 result.append(formatter.inline_label(disassembly.get_label(emit_addr, self.addr)))
@@ -50,14 +55,17 @@ class Label(object):
                     if disassembly.is_simple_name(name):
                         result.append(formatter.inline_label(name))
         else:
-            if emit_addr not in labels:
-                # TODO: is it OK to be springing new labels into existence here? I think it is, but may want to reconsider if nicer way to do it as refactoring proceeds
-                dummy = labels[emit_addr] # TODO: hack - we want to create the Label object but not call any fns on it
-            for name in self.explicit_names:
-                if disassembly.is_simple_name(name):
-                    result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
+            if len(self.explicit_names) == 0:
+                result.append(formatter.explicit_label(disassembly.get_label(self.addr, self.addr), disassembly.get_label(emit_addr, self.addr), offset))
+            else:
+                for name in self.explicit_names:
+                    if disassembly.is_simple_name(name):
+                        result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
         return result
 
 
 
 labels = utils.keydefaultdict(Label)
+
+
+# TODO: Hex dumps on "equw" lines are wrong (addresses seem to go up as if they were single bytes), not likely to be a big deal but needs investigating

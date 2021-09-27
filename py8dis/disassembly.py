@@ -211,10 +211,6 @@ def emit():
         # does reach it and we can emit labels inline there.
         disassembled_addresses.update(range(start_addr, end_addr + 1))
 
-    # TODO!?!? We are discarding the results of emitSFTODO() but I think we need to do
-    # this or something v similar to force all labels to be generated
-    emitSFTODO()
-
     # Emit constants first in the order they were defined.
     if len(constants) > 0:
         for value, name in constants:
@@ -334,10 +330,17 @@ def disassemble_range(start_addr, end_addr):
                 return x
             #assert x != 0xbf39
             return config.move_offset[x + adjust] - adjust
+        #print("AAA", labelmanager.labels[0x8909].emitted)
         for i in range(1, classification_length):
+            if addr + i == 0x8909:
+                pass #print("XXX %04x %04x" % (addr + i, am2(addr + i)))
+                #assert False
             if am2(addr + i) in labelmanager.labels:
+                #assert False
                 pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr)))
                 #pending_annotations.append("XXAQ %04x" % (addr + i))
+            else:
+                pass # assert False
         for annotation in sorted_annotations(annotations[addr]):
             if not isinstance(annotation, Label):
                 result.append(annotation.as_string(addr))
@@ -357,23 +360,6 @@ def disassemble_range(start_addr, end_addr):
                     result.append(annotation.as_string(addr))
         addr += classification_length
     return result
-
-def emitSFTODO():
-    # TODO: Will this function go wrong/be sub-optimal for acme move() case where not everything is in disassembly_range?
-    c_str = {}
-
-
-    # TODO: As noted elsewhere emitSFTODO() is partially unnecessary now but note that we force str() here so LazyStrings are evaluated and all necessary label definitions are created before we start the final "emit" pass
-    addr = 0
-    while addr < len(classifications):
-        c = classifications[addr]
-        if c is not None:
-            c_str[addr] = [str(line) for line in c.as_string_list(addr)]
-            addr += c.length()
-        else:
-            addr += 1
-
-    return c_str
 
 
 class Label(object):

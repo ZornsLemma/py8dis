@@ -235,9 +235,12 @@ class OpcodeDataAbs(OpcodeAbs):
         super(OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version, update=update)
 
     def update_references(self, addr):
+        if addr == 0x8ae3:
+            pass # print("XXX %04x" % self.abs_operand(addr))
         labels[self.abs_operand(addr)].add_reference(addr)
 
     def disassemble(self, addr):
+        #assert addr != 0x8ae3
         return [addr + 3]
 
 
