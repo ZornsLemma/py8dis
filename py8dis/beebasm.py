@@ -58,6 +58,7 @@ def code_start(start_addr, end_addr):
     result = ["", utils.force_case("    org %s" % hex4(start_addr))]
     if end_addr < 0x10000:
         result.append(utils.force_case("    guard %s" % hex4(end_addr)))
+    result.append("")
     return result
 
 def code_end():
@@ -68,6 +69,11 @@ def pseudopc_start(dest, source, length):
     result.append(utils.force_case("    org %s" % hex(dest)))
     if dest + length < 0x10000:
         result.append(utils.force_case("    guard %s" % hex(dest + length)))
+    # TODO: We will need some labels in pseudopc_end() but by then it will be too late to
+    # create them, so do it now. Is this hacky or OK?
+    disassembly.get_label(dest, source)
+    disassembly.get_label(dest + length, source)
+    disassembly.get_label(source, source)
     return result
 
 def pseudopc_end(dest, source, length):
@@ -75,9 +81,11 @@ def pseudopc_end(dest, source, length):
     # TODO: Use LazyString?
     result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source), disassembly.get_label(source, source)))
     result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source)))
+    result.append("")
     result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source)))
     if _code_end_addr < 0x10000:
         result.append("    %s %s" % (utils.force_case("guard"), hex(_code_end_addr)))
+    result.append("")
     return result
 
 def disassembly_end():

@@ -247,6 +247,7 @@ def emit():
     # therefore must be defined explicitly.
     for addr in sorted(labelmanager.labels.keys()):
         # SFTODO: Hacky handling for move_offset
+        #print("OOA %04x" % addr)
         addr2 = trace6502.apply_move(addr)
         assert len(addr2) == 1
         addr2 = addr2[0]
@@ -258,6 +259,7 @@ def emit():
     # TODO: Any danger of classifications straddling *load range* boundaries here and breaking things? disassemble_range() handles that but I think we may also need to do it here (or do it here instead) - for example, we might incorrectly have a subrange which extends past the end of a load_range
     SFTODORANGES = []
     for start_addr, end_addr in sorted(config.load_ranges):
+        #print("XXP %04x %04x" % (start_addr, end_addr))
         addr = start_addr
         SFTODOMOVEBASE = -1000000
         SUBSTART = addr
@@ -268,7 +270,10 @@ def emit():
                 THISMOVE = -1000000
             else:
                 THISMOVE = addr - THISMOVE
-            if THISMOVE != SFTODOMOVEBASE or new_addr >= end_addr:
+            if new_addr >= end_addr:
+                addr = new_addr
+                THISMOVE = SFTODOMOVEBASE + 1
+            if THISMOVE != SFTODOMOVEBASE:
                 SFTODORANGES.append((SUBSTART, addr))
                 SUBSTART = addr
                 SFTODOMOVEBASE = THISMOVE
@@ -276,6 +281,7 @@ def emit():
     #print("PPPDX", SFTODORANGES)
 
     for start_addr, end_addr in SFTODORANGES:
+        print("QZZ %04x %04x" %(start_addr, end_addr))
         if config.move_offset[start_addr] is None:
             output.extend(formatter.code_start(start_addr, end_addr))
         else:
@@ -286,6 +292,7 @@ def emit():
             output.extend(formatter.code_end())
         else:
             output.extend(formatter.pseudopc_end(*SFTODOARGS))
+            #output.extend(disassemble_range(end_addr, end_addr))
 
     if config.label_references():
         output.extend(trace.add_reference_histogram())
@@ -335,9 +342,14 @@ def disassemble_range(start_addr, end_addr):
         # TODO: isinstance(Label) is a hack
         # TODO: The hacks on labelmanager.labels[] indexing will probably be broken or at least sub-optimal if we have multiple blocks of code move()d to the same destination, but let's get the basics working first
         def am2(x):
-            if config.move_offset[x] is None or x == end_addr:
+            adjust = 0
+            if x == end_addr:
+                # TODO: Is this a hack or is it OK? The "exclusive" end address of a range is inclusive for the purposes of emitting labels at its end; we need to treat it specially because it *won't* have a move_offset so we want to apply the move_offset of the last actual byte in the range
+                #print("PPX")
+                adjust = -1
+            if config.move_offset[x + adjust] is None:
                 return x
-            return config.move_offset[x]
+            return config.move_offset[x + adjust] - adjust
         for i in range(1, classification_length):
             if am2(addr + i) in labelmanager.labels:
                 pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr)))
@@ -345,6 +357,7 @@ def disassemble_range(start_addr, end_addr):
         for annotation in sorted_annotations(annotations[addr]):
             if not isinstance(annotation, Label):
                 result.append(annotation.as_string(addr))
+        #print("KOO %04x %04x" % (addr, am2(addr)))
         if am2(addr) in labelmanager.labels:
             result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr)))
             #result.append("XXBQ %04x" % addr)
@@ -425,7 +438,7 @@ class Comment(object):
 # TODO: TobyLobster's Chuckie Egg disassembly shows that we're not necessarily doing the best we can when striking a balance between splitting/merging classifications and forcing the use of derived labels. l0c00 is being generated as an expression even though we should probably be splitting the byte data up so we can just label 0xc00 directly. I think part of the problem is we don't even *know* 0c00 is going to generate a label until we start str()-ing the instruction classifications - obviously we could make the disassembly process spit out labelled addresses explicitly during disassembly and that may well be the right approach, then label *names* are a str()-stage thing but the fact that an address will be labelled is known as soon as we finish tracing.
 
 
-assert False # TODO: General comment:
+#assert False # TODO: General comment:
 # I am starting to think labels on move()d stuff should be on the source regions. This does *not* agree with the value the assembler will assign to those labels, which is potentially confusing, but we can adjust for that internally. It *does* allow us to label up individual source regions independent of the fact that they get copied to the same dest address at runtime.
 # However, *if* we did label move()d stuff in the source region, it would not be possible to attach a regular label to the actual copy of the data in the binary, which is a problem e.g. think of the inevitable loop which does LDA in_binary_loc,X:STA dest_loc,X. With the current "labels are at the dest address" approach, in_binary_loc and dest_loc are distinct. With the "labels are at source address" approach, in_binary_loc and dest_loc are both the same (they are the "source" address). So maybe this strongly argues for the approach we are using where labels are on the dest regions. *But* this doesn't seem to fit all that well with the "we can handle multiple source regions copied to a single dest region" approach, since we can't label each separate move()d region independently, even though they do have a natural "distinction" by being at different source addresses.
 # I suspect/hope there's a clean solution to this so want to chew it over in background, hence this assert False comment to make some notes to come back to.
