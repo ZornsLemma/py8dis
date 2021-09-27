@@ -3,6 +3,7 @@ from trace6502 import *
 import config
 config.formatter().set_cmos(True)
 
+# TODO: This is probably wrong wrt moves; copy how OpcodeConditionalBranch works
 class OpcodeUnconditionalBranch(Opcode):
     def __init__(self, mnemonic):
         super(OpcodeUnconditionalBranch, self).__init__(mnemonic, 1)
