@@ -199,6 +199,7 @@ def emit():
         output.append("")
 
     # TODO: Probably inefficient, poor variable names, etc etc
+    # TODO: Should we just be tracking the ranges as whole ranges when the user sets them up with move()?
     SFTODORANGES = []
     for start_addr, end_addr in sorted(config.load_ranges):
         isolate_range(start_addr, end_addr)
