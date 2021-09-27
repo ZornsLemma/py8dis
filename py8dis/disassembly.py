@@ -223,13 +223,6 @@ def emit():
         # address of a range has no classification, but the assembly pointer
         # does reach it and we can emit labels inline there.
         disassembled_addresses.update(range(start_addr, end_addr + 1))
-        addr = start_addr
-        while addr < end_addr:
-            c = classifications[addr]
-            # TODO: Bit of a hack
-            if isinstance(c, classification.Relocation):
-                disassembled_addresses.update(range(c._dest, c._dest + c._length + 1))
-            addr += c.length()
 
     # TODO!?!? We are discarding the results of emitSFTODO() but I think we need to do
     # this or something v similar to force all labels to be generated

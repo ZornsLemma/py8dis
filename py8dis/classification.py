@@ -173,36 +173,6 @@ class String(object):
         return result
 
 
-class Relocation(object): # TODO: !?!!
-    def __init__(self, dest, source, length):
-        assert length > 0
-        self._dest = dest
-        self._source = source
-        self._length = length
-
-    def is_mergeable(self):
-        return False
-
-    def length(self):
-        return self._length
-
-    def is_code(self, addr):
-        # ENHANCE: Just possibly our is_code() should be smarter than this.
-        return False
-
-    def uses_copy(self):
-        # TODO: crude hack to do beebasm vs acme
-        return config.formatter().explicit_a
-
-    def as_string_list(self, addr):
-        formatter = config.formatter()
-        result = []
-        result.extend(formatter.pseudopc_start(self._dest, self._source, self._length))
-        result.extend(disassembly.disassemble_range(self._dest, self._dest + self._length))
-        result.extend(formatter.pseudopc_end(self._dest, self._source, self._length))
-        return result
-
-
 def add_expression(addr, s):
     # TODO: Warn/assert if addr already in expressions? Allow overriding this via an optional bool argument?
     if addr not in expressions:
