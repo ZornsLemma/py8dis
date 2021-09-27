@@ -324,12 +324,17 @@ class OpcodeConditionalBranch(Opcode):
         super(OpcodeConditionalBranch, self).__init__(mnemonic, 1)
 
     def _target(self, addr):
-        return addr + 2 + signed8(get_u8(addr + 1))
+        base = config.move_offset[addr]
+        if base is None:
+            base = addr
+        return base + 2 + signed8(get_u8(addr + 1))
 
     def abs_operand(self, addr):
         return self._target(addr)
 
     def update_references(self, addr):
+        #if addr == 0xbf0c:
+        #    print("XXA %04x" % self._target(addr))
         labels[self._target(addr)].add_reference(addr)
         trace.references[self._target(addr)].add(addr)
 
