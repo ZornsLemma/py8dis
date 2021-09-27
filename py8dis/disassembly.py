@@ -329,8 +329,7 @@ def disassemble_range(start_addr, end_addr):
             else:
                 pass # assert False
         for annotation in sorted_annotations(annotations[addr]):
-            if not isinstance(annotation, Label):
-                result.append(annotation.as_string(addr))
+            result.append(annotation.as_string(addr))
         #print("KOO %04x %04x" % (addr, am2(addr)))
         if am2(addr) in labelmanager.labels:
             result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr)))
@@ -343,32 +342,9 @@ def disassemble_range(start_addr, end_addr):
             result.extend(classifications[addr].as_string_list(addr))
         for i in range(1, classification_length):
             for annotation in sorted_annotations(annotations[addr + i]):
-                if not isinstance(annotation, Label):
-                    result.append(annotation.as_string(addr))
+                result.append(annotation.as_string(addr))
         addr += classification_length
     return result
-
-
-class Label(object):
-    priority = 1000
-
-    def __init__(self, addr, name):
-        self.addr = addr
-        self.name = name
-
-    def as_string(self, addr):
-        formatter = config.formatter()
-        offset = self.addr - addr
-        assert offset >= 0
-        if offset == 0:
-            return formatter.inline_label(self.name)
-        else:
-            label = get_label(addr, self.addr)
-            return formatter.explicit_label(self.name, label, offset)
-
-    def as_string_assignment(self):
-        formatter = config.formatter()
-        return formatter.explicit_label(self.name, formatter.hex4(self.addr))
 
 
 class Comment(object):
