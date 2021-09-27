@@ -10,6 +10,7 @@ class Label(object):
         # TODO: explicit_names is a list since we want to remember the order user-added names were provided in, at least for now
         self.explicit_names = []
         # TODO: Possibly non-simple names should go in a different list than explicit_names
+        self.emitted = False
 
     def add_reference(self, reference):
         assert disassembly.classifications[reference].abs_operand(reference) == self.addr
@@ -21,6 +22,9 @@ class Label(object):
             self.explicit_names.append(name)
 
     def explicit_definition_string_list(self):
+        if self.emitted:
+            return []
+        self.emitted = True
         formatter = config.formatter()
         # TODO: Could the label have multiple names here which we need to define?
         # TODO: This handling of non-simple labels feels a bit hacky, as though maybe we should have flagged this earlier and perhaps not even be calling this function - but refactoring so just hack it for now
@@ -31,6 +35,9 @@ class Label(object):
             return []
 
     def definition_string_list(self, emit_addr):
+        if self.emitted:
+            return []
+        self.emitted = True
         formatter = config.formatter()
         result = []
         assert emit_addr <= self.addr
