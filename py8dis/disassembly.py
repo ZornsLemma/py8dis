@@ -223,18 +223,18 @@ def emit():
             addr = new_addr
     #print("PPPDX", SFTODORANGES)
 
+    # Generate the disassembly proper, but don't emit it just yet.
     d = []
     for start_addr, end_addr in SFTODORANGES:
         #print("QZZ %04x %04x" %(start_addr, end_addr))
         if config.move_offset[start_addr] is None:
             d.extend(formatter.code_start(start_addr, end_addr))
+            d.extend(disassemble_range(start_addr, end_addr))
+            d.extend(formatter.code_end())
         else:
             SFTODOARGS = (config.move_offset[start_addr], start_addr, end_addr - start_addr)
             d.extend(formatter.pseudopc_start(*SFTODOARGS))
-        d.extend(disassemble_range(start_addr, end_addr))
-        if config.move_offset[start_addr] is None:
-            d.extend(formatter.code_end())
-        else:
+            d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.pseudopc_end(*SFTODOARGS))
             d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr))
 
