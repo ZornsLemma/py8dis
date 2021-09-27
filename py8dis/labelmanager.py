@@ -9,6 +9,7 @@ class Label(object):
         self.references = set()
         # TODO: explicit_names is a list since we want to remember the order user-added names were provided in, at least for now
         self.explicit_names = []
+        # TODO: Possibly non-simple names should go in a different list than explicit_names
 
     def add_reference(self, reference):
         assert disassembly.classifications[reference].abs_operand(reference) == self.addr
@@ -39,13 +40,15 @@ class Label(object):
                 result.append(formatter.inline_label(disassembly.get_label(emit_addr, self.addr)))
             else:
                 for name in self.explicit_names:
-                    result.append(formatter.inline_label(name))
+                    if disassembly.is_simple_name(name):
+                        result.append(formatter.inline_label(name))
         else:
             if emit_addr not in labels:
                 # TODO: is it OK to be springing new labels into existence here? I think it is, but may want to reconsider if nicer way to do it as refactoring proceeds
                 dummy = labels[emit_addr] # TODO: hack - we want to create the Label object but not call any fns on it
             for name in self.explicit_names:
-                result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
+                if disassembly.is_simple_name(name):
+                    result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
         return result
 
 
