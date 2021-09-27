@@ -100,6 +100,7 @@ def get_label(addr, context):
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 # TODO: May want to expose this to use as it make be useful in a user label maker hook
+# TODO: This might need tweaking so we don't classify "move source" as code - move.py currently shows this
 def is_code(addr):
     classification = classifications[addr]
     if classification is None or classification == partial_classification:
