@@ -350,7 +350,7 @@ class OpcodeConditionalBranch(Opcode):
 
     def disassemble(self, addr):
         # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..
-        return [addr + 2] + apply_move(self._target(addr))
+        return [addr + 2] + apply_move2(self._target(addr), addr)
 
     def update_cpu_state(self, addr, state):
         # TODO: I think this is "right" - in our optimistic model (at least), a
