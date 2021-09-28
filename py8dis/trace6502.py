@@ -33,7 +33,7 @@ def apply_move(target):
                 #assert False
                 match = i
             else:
-                assert False # TODO JUST TEMP, PERFECTLY LEGIT CASE
+                #assert False # TODO JUST TEMP, PERFECTLY LEGIT CASE
                 return []
     if match is None:
         return [target]
