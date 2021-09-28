@@ -289,6 +289,8 @@ def disassemble_range(start_addr, end_addr):
 
     isolate_range(start_addr, end_addr)
 
+    move_id = trace.get_move_id(start_addr)
+
     addr = start_addr
     while addr <= end_addr:
         if addr < end_addr:

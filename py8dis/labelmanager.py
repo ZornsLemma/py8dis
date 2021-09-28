@@ -15,6 +15,7 @@ class Label(object):
         self.emitted = False
 
     def set_move_id(self, move_id):
+        assert False # TODO: move_id is a property of an individual *name* within the label, not the label as a whole - and we also really need to be tracking emitted on individual names as well (with presumably some sort of extra case where a label with no explicit names can still be recorded as having been emitted)
         if move_id is None:
             return # TODO?
         #print("XAP", self.move_id, move_id)
