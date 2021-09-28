@@ -20,7 +20,16 @@ def get_move_id(addr):
             our_move_id = move_id
     return our_move_id
 
+# TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
 def add_entry(addr, name, move_id):
+    import trace6502 # TODO!
+    SFTODO = trace6502.apply_move2(addr, config.move_ranges[move_id][1] if move_id is not None else addr)
+    print("QPX", hex(addr), name, move_id, SFTODO)
+    assert len(SFTODO) == 1
+    entry_points.append(SFTODO[0])
+    return disassembly.add_label(addr, name, move_id)
+
+def add_entry_internal(addr, name, move_id):
     entry_points.append(addr)
     # TODO: Should this translation not be done on user calls and internal calls have a separate add_entry() version?
     SFTODO = config.move_offset[addr]
@@ -65,7 +74,7 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 print("AQB %04x" % new_entry_point)
-                add_entry(new_entry_point, name=None, move_id=get_move_id(new_entry_point))
+                add_entry_internal(new_entry_point, name=None, move_id=get_move_id(new_entry_point))
     if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):
             print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))
