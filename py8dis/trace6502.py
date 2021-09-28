@@ -44,6 +44,7 @@ def apply_move2(target, context):
     # TODO: Inefficient
     for dest, source, length in config.move_ranges:
         if dest <= target < dest+length:
+            # TODO: This should be checking for already found matches like apply_move() and returning [] if we have them, except if the match is in same context as us
             return [source + (target - dest)]
     return [target]
 
@@ -716,3 +717,5 @@ def subroutine_argument_finder():
 
 config.set_disassemble_instruction(disassemble_instruction)
 trace.code_analysis_fns.append(subroutine_argument_finder) # TODO!?
+
+# TODO: do commmands entry() and no_entry() need to do an lookup of move()s? The user will probably be addressing routines at their relocated destination addresses, but the tracing process works with source addresses.

@@ -22,7 +22,7 @@ low_a_foo
     bne low_a_loop
     ; imagine we have lots of padding here
     jsr install_low_b
-    ; This code would probaly have been overwritten and this jmp would be
+    ; This code would probably have been overwritten and this jmp would be
     ; corrupt but this is just a sketch; imagine we know this is past the
     ; area overwritten by install_low_b.
     jmp low_b_baz
