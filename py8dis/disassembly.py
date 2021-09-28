@@ -73,9 +73,10 @@ def is_simple_name(s):
     return valid_first(s[0]) and all(valid_later(c) for c in s)
 
 # TODO: feeling my way wrt post_move_addr, but I think it may be necessary to preserve compatibility with old style control files in the new move model - NO, I am thinking this is wrong - labels have to be at the move "destination" addresses, since either !pseudopc or our beebasm equivalent with copyblock will use the "final" addresses not the "in binary" addresses when generating labels - *so* what happens where two blocks of code can be copied into overlapping regions? I suppose this is maybe something to address later, but perhaps the context (or an additional "relocation context" argument) provided to the label maker could use the "in binary" address, so you could for example assign different labels to &900 depending on how it's being used (bear in mind it might be being used by part of code running at &9xx, which is why having a context showing the address in-binary would be necessary or at least v helpful to distinguish, but it also might be being used by part of code running elsewhere - if that code was nolt relocate the context would naturally be its in binary address, but if it was from other relocated code it could get confusing - admittedly an obscure case - but perhaps provided both bits of information to label maker even if most of time only one is used would be a good idea)
-def add_label(addr, s):
+def add_label(addr, s, move_id): # TODO: move_id should maybe default to None but let's see what happens for now
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     label = labelmanager.labels[addr]
+    label.set_move_id(move_id)
     if s is not None:
         label.add_explicit_name(s)
     return label
@@ -96,7 +97,8 @@ def add_optional_label(addr, s, base_addr=None):
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 def get_label(addr, context):
-    add_label(addr, None) # TODO: possibly a transitory hack as I refactor, not clear yet
+    # TODO: is context consistently source based, regardless of whether this is code or data using it?
+    add_label(addr, None, trace.get_move_id(context)) # TODO: possibly a transitory hack as I refactor, not clear yet
     return utils.LazyString("%s", lambda: get_final_label(addr, context))
 
 # TODO: May want to expose this to use as it make be useful in a user label maker hook
@@ -164,7 +166,7 @@ def label_maker(addr, context):
 def get_final_label(addr, context):
     assert trace_done
     s = label_maker(addr, context)
-    add_label(addr, s)
+    add_label(addr, s, trace.get_move_id(context))
     return s
 
 def is_classified(addr, length=1):

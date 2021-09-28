@@ -7,11 +7,19 @@ class Label(object):
     def __init__(self, addr):
         assert addr != 0xbf0a
         self.addr = addr
+        self.move_id = None
         self.references = set()
         # TODO: explicit_names is a list since we want to remember the order user-added names were provided in, at least for now
         self.explicit_names = []
         # TODO: Possibly non-simple names should go in a different list than explicit_names
         self.emitted = False
+
+    def set_move_id(self, move_id):
+        if move_id is None:
+            return # TODO?
+        #print("XAP", self.move_id, move_id)
+        assert self.move_id is None or self.move_id == move_id # TODO?
+        self.move_id = move_id
 
     def add_reference(self, reference):
         assert disassembly.classifications[reference].abs_operand(reference) == self.addr
@@ -70,3 +78,5 @@ labels = utils.keydefaultdict(Label)
 
 
 # TODO: Hex dumps on "equw" lines are wrong (addresses seem to go up as if they were single bytes), not likely to be a big deal but needs investigating
+
+# TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks

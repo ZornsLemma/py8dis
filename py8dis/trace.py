@@ -11,13 +11,22 @@ traced_entry_points = set()
 references = collections.defaultdict(set)
 code_analysis_fns = [] # TODO!?
 
-def add_entry(addr, name=None):
+# TODO: experimental, this is only meaningful for code addresses I think
+def get_move_id(addr):
+    our_move_id = None
+    for move_id, (dest, source, length) in enumerate(config.move_ranges):
+        if source <= addr < source+length:
+            assert our_move_id is None
+            our_move_id = move_id
+    return our_move_id
+
+def add_entry(addr, name, move_id):
     entry_points.append(addr)
     # TODO: Should this translation not be done on user calls and internal calls have a separate add_entry() version?
     SFTODO = config.move_offset[addr]
     if SFTODO is None:
         SFTODO = addr
-    return disassembly.add_label(SFTODO, name)
+    return disassembly.add_label(SFTODO, name, move_id)
 
 def analyse_code():
     addr = 0
@@ -56,7 +65,7 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 print("AQB %04x" % new_entry_point)
-                add_entry(new_entry_point)
+                add_entry(new_entry_point, name=None, move_id=get_move_id(new_entry_point))
     if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):
             print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))

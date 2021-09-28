@@ -21,6 +21,9 @@ memory = config.memory
 config.load_ranges = []
 config.XXXmove_target = [False] * 64 * 1024
 
+# TODO: experimental
+current_move_id = None
+
 def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
@@ -65,7 +68,9 @@ def move(dest, src, length):
     config.move_ranges.append((dest, src, length))
     for i in range(length):
         config.move_offset[src + i] = dest + i
-    return len(config.move_ranges) - 1 # index in move_ranges
+    global current_move_id
+    current_move_id = len(config.move_ranges) - 1
+    return current_move_id
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -83,8 +88,8 @@ def constant(value, name):
 # as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose.
-def label(addr, name):
-    disassembly.add_label(addr, name)
+def label(addr, name): # TODO: take move_id as arg?
+    disassembly.add_label(addr, name, current_move_id)
 
 def expr_label(addr, s):
     disassembly.add_label(addr, s)
@@ -105,7 +110,7 @@ def word(addr, n=1):
     disassembly.add_classification(addr, classification.Word(n * 2, False))
 
 def entry(addr, label=None):
-    return add_entry(addr, label)
+    return add_entry(addr, label, current_move_id)
 
 # TODO: Should byte()/word()/string() implicitly call nonentry()?
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
