@@ -12,29 +12,18 @@ class Label(object):
         # TODO: explicit_names is a list since we want to remember the order user-added names were provided in, at least for now
         self.explicit_names = []
         # TODO: Possibly non-simple names should go in a different list than explicit_names
-        self.emitted = False
-
-    def set_move_id(self, move_id):
-        assert False # TODO: move_id is a property of an individual *name* within the label, not the label as a whole - and we also really need to be tracking emitted on individual names as well (with presumably some sort of extra case where a label with no explicit names can still be recorded as having been emitted)
-        if move_id is None:
-            return # TODO?
-        #print("XAP", self.move_id, move_id)
-        assert self.move_id is None or self.move_id == move_id # TODO?
-        self.move_id = move_id
 
     def add_reference(self, reference):
         assert disassembly.classifications[reference].abs_operand(reference) == self.addr
         self.references.add(reference)
 
-    def add_explicit_name(self, name):
+    def add_explicit_name(self, name, move_id):
         # TODO: Inefficient search-on-list
         if name not in self.explicit_names:
-            self.explicit_names.append(name)
+            self.explicit_names.append((name, move_id))
 
     def explicit_definition_string_list(self):
-        if self.emitted:
-            return []
-        self.emitted = True
+        # TODO: Need to track what's been emitted
         formatter = config.formatter()
         # TODO: Could the label have multiple names here which we need to define?
         # TODO: This handling of non-simple labels feels a bit hacky, as though maybe we should have flagged this earlier and perhaps not even be calling this function - but refactoring so just hack it for now
@@ -46,10 +35,8 @@ class Label(object):
         else:
             return []
 
-    def definition_string_list(self, emit_addr):
-        if self.emitted:
-            return []
-        self.emitted = True
+    def definition_string_list(self, emit_addr, move_id):
+        # TODO: Need to track what's been emitted
         formatter = config.formatter()
         result = []
         assert emit_addr <= self.addr
@@ -61,16 +48,18 @@ class Label(object):
             if len(self.explicit_names) == 0:
                 result.append(formatter.inline_label(disassembly.get_label(emit_addr, self.addr)))
             else:
-                for name in self.explicit_names:
-                    if disassembly.is_simple_name(name):
-                        result.append(formatter.inline_label(name))
+                for name, name_move_id in self.explicit_names:
+                    if name_move_id is None or name_move_id == move_id:
+                        if disassembly.is_simple_name(name):
+                            result.append(formatter.inline_label(name))
         else:
             if len(self.explicit_names) == 0:
                 result.append(formatter.explicit_label(disassembly.get_label(self.addr, self.addr), disassembly.get_label(emit_addr, self.addr), offset))
             else:
-                for name in self.explicit_names:
-                    if disassembly.is_simple_name(name):
-                        result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
+                for name, name_move_id in self.explicit_names:
+                    if name_move_id is None or name_move_id == move_id:
+                        if disassembly.is_simple_name(name):
+                            result.append(formatter.explicit_label(name, disassembly.get_label(emit_addr, self.addr), offset))
         return result
 
 

@@ -76,9 +76,8 @@ def is_simple_name(s):
 def add_label(addr, s, move_id): # TODO: move_id should maybe default to None but let's see what happens for now
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     label = labelmanager.labels[addr]
-    label.set_move_id(move_id)
     if s is not None:
-        label.add_explicit_name(s)
+        label.add_explicit_name(s, move_id)
     return label
 
 def add_optional_label(addr, s, base_addr=None):
@@ -112,6 +111,7 @@ def is_code(addr):
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 def our_label_maker(addr, context):
     assert context is not None
+    move_id = trace.get_move_id(context) # TODO: OK?
     label = labelmanager.labels.get(addr)
     #print("YYY %04x" % addr)
     assert label is not None
@@ -120,7 +120,15 @@ def our_label_maker(addr, context):
     # prefer the first one, since that's how the code used to behave and we're trying
     # to gradually refactor.
     if len(label.explicit_names) > 0:
-        return label.explicit_names[0]
+        general_name = None
+        for name, name_move_id in label.explicit_names:
+            if name_move_id == move_id:
+                return name + "_" + str(move_id) # TODO: _ bit is temp hack
+            elif name_move_id is None:
+                general_name = name
+        if general_name is not None:
+            return general_name
+        return label.explicit_names[0][0]
     if addr in optional_labels:
         s, base_addr = optional_labels[addr]
         if base_addr is not None:
@@ -240,11 +248,12 @@ def emit():
             d.extend(formatter.pseudopc_start(*SFTODOARGS))
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.pseudopc_end(*SFTODOARGS))
-            d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr))
+            SFTODO_move_id = trace.get_move_id(start_addr)
+            d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr, SFTODO_move_id))
 
     # Emit labels which haven't been emitted inline with the disassembly.
     for addr in sorted(labelmanager.labels.keys()):
-        if not labelmanager.labels[addr].emitted:
+        if False: # TODO MASSIVE HACK not labelmanager.labels[addr].emitted:
             # SFTODO: Hacky handling for move_offset
             addr2 = trace6502.apply_move(addr)
             assert len(addr2) == 1
@@ -325,7 +334,7 @@ def disassemble_range(start_addr, end_addr):
                 #assert False
             if am2(addr + i) in labelmanager.labels:
                 #assert False
-                pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr)))
+                pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
                 #pending_annotations.append("XXAQ %04x" % (addr + i))
             else:
                 pass # assert False
@@ -333,7 +342,7 @@ def disassemble_range(start_addr, end_addr):
             result.append(annotation.as_string(addr))
         #print("KOO %04x %04x" % (addr, am2(addr)))
         if am2(addr) in labelmanager.labels:
-            result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr)))
+            result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr), move_id))
             #result.append("XXBQ %04x" % addr)
         # TODO: result.extend(pending_annotations)?
         for annotation in pending_annotations:
