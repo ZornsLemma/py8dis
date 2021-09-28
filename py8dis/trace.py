@@ -30,6 +30,9 @@ def add_entry(addr, name, move_id):
     return disassembly.add_label(addr, name, move_id)
 
 def add_entry_internal(addr, name, move_id):
+    if addr == 0x201d:
+        print("XAZZ")
+        #assert False
     entry_points.append(addr)
     # TODO: Should this translation not be done on user calls and internal calls have a separate add_entry() version?
     SFTODO = config.move_offset[addr]
@@ -73,7 +76,7 @@ def trace():
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
-                print("AQB %04x" % new_entry_point)
+                print("AQB %04x %04x" % (entry_point, new_entry_point))
                 add_entry_internal(new_entry_point, name=None, move_id=get_move_id(new_entry_point))
     if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):

@@ -116,6 +116,10 @@ def entry(addr, label=None):
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(addr):
     # TODO: Call a function on trace module?
+    # TODO: This prob needs to do some kind of inverse move
+    trace.traced_entry_points.add(addr)
+
+def nonentry_source(addr):
     trace.traced_entry_points.add(addr)
 
 def wordentry(addr, n=1):
