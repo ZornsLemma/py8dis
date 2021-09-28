@@ -52,3 +52,5 @@ install_low_b
     lda low_b,x
     sta $901,x
     rts
+
+; TODO: Nothing ever calls low_b so it naturally never gets traced, which isn't ideal

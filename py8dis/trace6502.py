@@ -42,11 +42,23 @@ def apply_move(target):
 
 def apply_move2(target, context):
     # TODO: Inefficient
-    for dest, source, length in config.move_ranges:
+    matches = {}
+    our_match_id = None
+    for match_id, (dest, source, length) in enumerate(config.move_ranges):
+        if source <= context < source+length:
+            assert our_match_id is None
+            our_match_id = match_id
         if dest <= target < dest+length:
-            # TODO: This should be checking for already found matches like apply_move() and returning [] if we have them, except if the match is in same context as us
-            return [source + (target - dest)]
-    return [target]
+            assert match_id not in matches
+            matches[match_id] = source + (target - dest)
+    if len(matches) == 0:
+        return [target]
+    elif len(matches) == 1:
+        return [matches.values()[0]]
+    else:
+        if our_match_id in matches:
+            return [matches.values()[our_match_id]]
+        return []
 
 def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
@@ -718,4 +730,4 @@ def subroutine_argument_finder():
 config.set_disassemble_instruction(disassemble_instruction)
 trace.code_analysis_fns.append(subroutine_argument_finder) # TODO!?
 
-# TODO: do commmands entry() and no_entry() need to do an lookup of move()s? The user will probably be addressing routines at their relocated destination addresses, but the tracing process works with source addresses.
+# TODO: do commmands entry() and no_entry() need to do an lookup of move()s? The user will probably be addressing routines at their relocated destination addresses, but the tracing process works with source addresses. (We might want some facility for a user to specify source addresses to these functions or variants, as this provides ultimate disambiguation in terms of forcing/preventing tracing of particular bits of code.)
