@@ -40,7 +40,12 @@ def apply_move(target):
     else:
         return [match]
 
-
+def apply_move2(target, context):
+    # TODO: Inefficient
+    for dest, source, length in config.move_ranges:
+        if dest <= target < dest+length:
+            return [source + (target - dest)]
+    return [target]
 
 def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
@@ -260,7 +265,9 @@ class OpcodeJmpAbs(OpcodeAbs):
         trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
+        print("PCC %s" % apply_move(self._target(addr)))
         # TODO: Should the apply_move() call be inside _target and/or abs_operand? Still feeling my way here...
+        return [None] + apply_move2(self._target(addr), addr)
         return [None] + apply_move(self._target(addr))
 
 

@@ -55,6 +55,7 @@ def trace():
             if implied_entry_point is not None:
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
+                print("AQB %04x" % new_entry_point)
                 add_entry(new_entry_point)
     if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):

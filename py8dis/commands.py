@@ -62,8 +62,10 @@ def move(dest, src, length):
     assert all(memory[i] is not None for i in range(src, src+length))
     # You can't move from the same location more than once.
     assert all(config.move_offset[i] is None for i in range(src, src+length))
+    config.move_ranges.append((dest, src, length))
     for i in range(length):
         config.move_offset[src + i] = dest + i
+    return len(config.move_ranges) - 1 # index in move_ranges
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
