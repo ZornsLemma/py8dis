@@ -11,6 +11,7 @@ class Name(object):
         self.name = name
         self.emitted = False
 
+assert False # TODONOW: I have this incomplete, the concept of not having any explicit names is key to "lazy assignment" of labels as we need them - but I also need to think how we handle tracking *multiple* "lazy assigned" names and the contexts that go with them
 class Label(object):
     def __init__(self, addr):
         self.addr = addr
