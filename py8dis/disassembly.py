@@ -119,16 +119,17 @@ def our_label_maker(addr, context):
     # potentially pick one of its own explicit names out based on context. For now we
     # prefer the first one, since that's how the code used to behave and we're trying
     # to gradually refactor.
-    if len(label.explicit_names) > 0:
+    if len(label.all_names()) > 0:
         general_name = None
-        for name, name_move_id in label.explicit_names:
-            if name_move_id == move_id:
-                return name + "_" + str(move_id) # TODO: _ bit is temp hack
-            elif name_move_id is None:
-                general_name = name
+        for name in label.explicit_names[move_id]:
+            # TODO: We are just returning the first name arbitrarily, which seems wrong
+            return name.name + "_" + str(move_id) # TODO: _ bit is temp hack
+        for name in label.explicit_names[None]:
+            # TODO: We are just returning the first name arbitrarily, which seems wrong
+                general_name = name.name
         if general_name is not None:
             return general_name
-        return label.explicit_names[0][0]
+        assert False
     if addr in optional_labels:
         s, base_addr = optional_labels[addr]
         if base_addr is not None:
