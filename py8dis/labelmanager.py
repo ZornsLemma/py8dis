@@ -8,6 +8,12 @@
 # - we must do this before we start to generate the text disassembly so we know all label
 #   names and can emit their definitions in the right place.
 
+# TODO: Sketchier notes about label names
+# - every label reference will call the label-name-maker and could in principle generate a completely different name
+# - the labelmanager needs to know about these labels to the extent of "label XYZ is at address A and I need to emit a definition" but it doesn't need to be capable of answering the "what label name do I use for this particular reference to address A", as that is answered by calling the label-name-maker every time.
+# - however, the labelmanager *does* need to know where - currently expressed in terms of move IDs (which are kind of turning into "region IDs" but I don't think that matters too much just yet) - to emit the definition of these labelmaker-created labels. How do we decide him?
+
+
 import collections
 
 import config
@@ -104,3 +110,5 @@ labels = utils.keydefaultdict(Label)
 # TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks
 
 # TODO: Just a general note - move IDs provide optional "annotations" on individual label names. They are "advisory" - labels just resolve to 16-bit integer addresses, of course - but they should allow us to try to emit different label names for the same address in different parts of the disassembly (i.e. the associated pseudopc block). They also help to provide disambiguation when tracing - where a destination address is mapped to more than one source address, we can use heuristics like "prefer the mapping for the move region we are currently tracing in", and maybe also allow users to annotation to say "the target address is in move region X". Still feeling my way with this but that's the general idea.
+
+# TODO: General note - may want to turn move IDs into region IDs, as I could imagine a user wanting to use them to help control label name generation for code in a certain part of the binary without actually having a move() (or with a move() "in the background" but with more than one ID for a single move() region - we might have to generate this internally). This might be easyish or it might not, but making a note to come back and think about this once I get the basics a bit more defined.
