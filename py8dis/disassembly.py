@@ -261,6 +261,7 @@ def emit():
     # Generate the disassembly proper, but don't emit it just yet. We do this so we can emit
     # labels in the "best" move region and then emit any leftover labels as explicit definitions
     # below.
+    # TODO: This is *not* emitting labels "after" the last address in some cases - e.g. move.py -a currently doesn't emit pydis_end inline. (To be fair, this is a bit of an edge case, but ideally it would work.)
     d = []
     for start_addr, end_addr in SFTODORANGES:
         #print("QZZ %04x %04x" %(start_addr, end_addr))
