@@ -1,3 +1,13 @@
+# TODO: Move/tidy this note somewhere permanent
+# Label names are a bit fiddly because:
+# - we discover the need for labels during the tracing process
+# - we cannot allocate names to labels during the tracing process, as the code to generate
+#   label names may want to look at the code as a whole and we need to finish tracing first.
+# - we therefore have to wait until we've finished tracing before generating any missing
+#   label names
+# - we must do this before we start to generate the text disassembly so we know all label
+#   names and can emit their definitions in the right place.
+
 import collections
 
 import config
@@ -32,6 +42,15 @@ class Label(object):
             for name in name_list:
                 result.add(name.name)
         return result
+
+    assert False # TODO: THIS ISN'T CALLED YET
+    def name_maker(self, context):
+        assert disassembly.trace_done
+        # TODO: This code should probably move in here
+        # TODO: We probably need to be deferring the call to get_final_label, unless we know we are not called until post-tracing - and since nothing calls us yet and I'm still trying to get my head straight, I don't know that at all...
+        new_name = disassembly.get_final_label(self.addr, context)
+        if new_name not in self.all_names():
+            self.add_explicit_name(new_name, TODOWHATMOVEID)
 
     def add_explicit_name(self, name, move_id):
         # It doesn't hurt to check move_id is valid in general, but in
