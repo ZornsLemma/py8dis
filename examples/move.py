@@ -12,5 +12,7 @@ entry(0x2000)
 move(0x900, 0x201e, 0x202d-0x201e)
 label(0x900, "print_and_inc_zp")
 
+#set_current_move_id(None)
+
 # Use all the information provided to actually disassemble the program.
 go()

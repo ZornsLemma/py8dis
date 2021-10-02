@@ -72,6 +72,11 @@ def move(dest, src, length):
     current_move_id = len(config.move_ranges) - 1
     return current_move_id
 
+# TODO!?
+def set_current_move_id(move_id):
+    global current_move_id
+    current_move_id = move_id
+
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
 # longer names in core disassembler code.
@@ -181,6 +186,8 @@ def add_sequence_hook(hook):
     disassembly.sequence_hooks.append(hook)
 
 def go(post_trace_steps=None, autostring_min_length=3):
+    # TODO: Perhaps a bit hacky, but label() will use this and we call it here to define pydis_start/end and we may also call it at other points in this user-style code. This may indicate label() needs to be changed.
+    set_current_move_id(None)
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
     pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
     label(pydis_start, "pydis_start")
