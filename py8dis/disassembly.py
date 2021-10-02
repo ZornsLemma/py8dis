@@ -125,7 +125,7 @@ def our_label_maker(addr, context):
         general_name = None
         for name in label.explicit_names[move_id]:
             # TODO: We are just returning the first name arbitrarily, which seems wrong
-            return (name.name + "_" + str(move_id), move_id) # TODO: _ bit is temp hack
+            return (name.name, move_id)
         for name in label.explicit_names[None]:
             # TODO: We are just returning the first name arbitrarily, which seems wrong
                 general_name = name.name
@@ -273,12 +273,7 @@ def emit():
 
     # Emit labels which haven't been emitted inline with the disassembly.
     for addr in sorted(labelmanager.labels.keys()):
-        if False: # TODO MASSIVE HACK not labelmanager.labels[addr].emitted:
-            # SFTODO: Hacky handling for move_offset
-            addr2 = trace6502.apply_move(addr)
-            assert len(addr2) == 1
-            addr2 = addr2[0]
-            output.extend(labelmanager.labels[addr2].explicit_definition_string_list())
+        output.extend(labelmanager.labels[addr].explicit_definition_string_list())
 
     output.extend(d)
 

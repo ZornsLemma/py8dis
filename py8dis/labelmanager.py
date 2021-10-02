@@ -54,6 +54,7 @@ class Label(object):
         # It doesn't hurt to check move_id is valid in general, but in
         # particular it helps detect accidentally passing a "context address" as
         # a move ID by mistake.
+        print("QQQ", name, move_id, hex(self.addr))
         assert move_id is None or 0 <= move_id < len(config.move_ranges)
         # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label
         if name not in self.all_names():
@@ -68,7 +69,7 @@ class Label(object):
                 if not name.emitted:
                     result.append(formatter.explicit_label(name.name, formatter.hex4(self.addr)))
                     name.emitted = True
-        return []
+        return result
 
     def definition_string_list(self, emit_addr, move_id):
         assert move_id is None or 0 <= move_id < len(config.move_ranges)
@@ -79,6 +80,7 @@ class Label(object):
         # TODO: It's probably OK, but note that we only emit for "matching" move_id; we leave it for
         # explicit_definition_string_list() to return any things which we never would emit otherwise. Arguably if we have *any* point at which we could define a label inline (particularly if it's for the default move_id None) we should emit *all* labels for all move IDs at that address which haven't specifically been emitted elsewhere. Doing this properly would require making sure we emit (to temporary storage) all the pseudo-pc regions first, so let's not worry about that yet.
         for name in self.explicit_names[move_id]:
+            print("PXX", name.name)
             # TODO: Our callers are probably expecting us to be calling get_label() if we don't have any explicit names, but I don't think this is actually a good way to work - but things are probably broken for the moment because of this
             if name.emitted:
                 continue
