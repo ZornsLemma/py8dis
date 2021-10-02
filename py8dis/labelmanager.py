@@ -106,3 +106,16 @@ labels = utils.keydefaultdict(Label)
 # TODO: Just a general note - move IDs provide optional "annotations" on individual label names. They are "advisory" - labels just resolve to 16-bit integer addresses, of course - but they should allow us to try to emit different label names for the same address in different parts of the disassembly (i.e. the associated pseudopc block). They also help to provide disambiguation when tracing - where a destination address is mapped to more than one source address, we can use heuristics like "prefer the mapping for the move region we are currently tracing in", and maybe also allow users to annotation to say "the target address is in move region X". Still feeling my way with this but that's the general idea.
 
 # TODO: General note - may want to turn move IDs into region IDs, as I could imagine a user wanting to use them to help control label name generation for code in a certain part of the binary without actually having a move() (or with a move() "in the background" but with more than one ID for a single move() region - we might have to generate this internally). This might be easyish or it might not, but making a note to come back and think about this once I get the basics a bit more defined.
+
+# This is just intended as a debugging tool; mainly for debugging py8dis itself, though
+# it might also be helpful for debugging user label hooks or similar.
+def all_labels_as_comments():
+    formatter = config.formatter()
+    c = formatter.comment_prefix()
+    result = ["All labels by address and move ID", ""]
+    for addr, label in labels.items():
+        result.append("%s %s:" % (c, utils.plainhex4(addr)))
+        for move_id, name_list in sorted(label.explicit_names.items()):
+            # TODO? assert len(name_list) > 0
+            result.append("%s     %4s: %s" % (c, move_id, ", ".join(sorted(x.name for x in name_list))))
+    return result

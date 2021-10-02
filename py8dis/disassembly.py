@@ -228,6 +228,9 @@ def emit():
             output.append(formatter.explicit_label(name, value))
         output.append("")
 
+    if True: # TODO: Should be config controlled
+        output.extend(labelmanager.all_labels_as_comments())
+
     # TODO: Probably inefficient, poor variable names, etc etc
     # TODO: Should we just be tracking the ranges as whole ranges when the user sets them up with move()?
     # TODO: If we're not careful (it can work) here, when we have move()-region IDs, we could accidentally merge two (legitimately) adjancent regions and fail to use the correct region ID for the second and subsequent sub-ranges
@@ -255,7 +258,9 @@ def emit():
             addr = new_addr
     #print("PPPDX", SFTODORANGES)
 
-    # Generate the disassembly proper, but don't emit it just yet.
+    # Generate the disassembly proper, but don't emit it just yet. We do this so we can emit
+    # labels in the "best" move region and then emit any leftover labels as explicit definitions
+    # below.
     d = []
     for start_addr, end_addr in SFTODORANGES:
         #print("QZZ %04x %04x" %(start_addr, end_addr))
