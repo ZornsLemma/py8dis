@@ -29,7 +29,6 @@ class Name(object):
         self.name = name
         self.emitted = False
 
-assert False # TODONOW: I have this incomplete, the concept of not having any explicit names is key to "lazy assignment" of labels as we need them - but I also need to think how we handle tracking *multiple* "lazy assigned" names and the contexts that go with them
 class Label(object):
     def __init__(self, addr):
         self.addr = addr
@@ -50,15 +49,6 @@ class Label(object):
             for name in name_list:
                 result.add(name.name)
         return result
-
-    assert False # TODO: THIS ISN'T CALLED YET
-    def name_maker(self, context):
-        assert disassembly.trace_done
-        # TODO: This code should probably move in here
-        # TODO: We probably need to be deferring the call to get_final_label, unless we know we are not called until post-tracing - and since nothing calls us yet and I'm still trying to get my head straight, I don't know that at all...
-        new_name = disassembly.get_final_label(self.addr, context)
-        if new_name not in self.all_names():
-            self.add_explicit_name(new_name, TODOWHATMOVEID)
 
     def add_explicit_name(self, name, move_id):
         # It doesn't hurt to check move_id is valid in general, but in
