@@ -131,7 +131,6 @@ def our_label_maker(addr, context):
                 general_name = name.name
         if general_name is not None:
             return (general_name, None)
-        assert False
     if addr in optional_labels:
         s, base_addr = optional_labels[addr]
         if base_addr is not None:
