@@ -20,6 +20,15 @@ def get_move_id(addr):
             our_move_id = move_id
     return our_move_id
 
+# TODO: experimental - name is deliberately crap as all these sort of functions need rationalising
+def get_move_id33(addr):
+    result = set()
+    for move_id, (dest, source, length) in enumerate(config.move_ranges):
+        if dest <= addr < dest+length:
+            result.add(move_id)
+    return result
+
+
 # TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
 def add_entry(addr, name, move_id):
     import trace6502 # TODO!
