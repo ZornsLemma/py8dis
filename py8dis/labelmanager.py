@@ -51,7 +51,7 @@ class Label(object):
         return result
 
     def add_explicit_name(self, name, move_id):
-        print("QQQ", name, move_id, hex(self.addr))
+        #print("QQQ", name, move_id, hex(self.addr))
         assert disassembly.is_simple_name(name) # TODO: If keep this, can probably remove some conditional logic elsewhere in labelmanager
         # It doesn't hurt to check move_id is valid in general, but in
         # particular it helps detect accidentally passing a "context address" as
@@ -81,7 +81,7 @@ class Label(object):
         # TODO: It's probably OK, but note that we only emit for "matching" move_id; we leave it for
         # explicit_definition_string_list() to return any things which we never would emit otherwise. Arguably if we have *any* point at which we could define a label inline (particularly if it's for the default move_id None) we should emit *all* labels for all move IDs at that address which haven't specifically been emitted elsewhere. Doing this properly would require making sure we emit (to temporary storage) all the pseudo-pc regions first, so let's not worry about that yet.
         for name in self.explicit_names[move_id]:
-            print("PXX", name.name)
+            #print("PXX", name.name)
             # TODO: Our callers are probably expecting us to be calling get_label() if we don't have any explicit names, but I don't think this is actually a good way to work - but things are probably broken for the moment because of this
             if name.emitted:
                 continue

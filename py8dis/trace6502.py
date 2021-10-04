@@ -280,7 +280,7 @@ class OpcodeJmpAbs(OpcodeAbs):
         trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
-        print("PCC %s" % apply_move(self._target(addr)))
+        #print("PCC %s" % apply_move(self._target(addr)))
         # TODO: Should the apply_move() call be inside _target and/or abs_operand? Still feeling my way here...
         return [None] + apply_move2(self._target(addr), addr)
         return [None] + apply_move(self._target(addr))
