@@ -113,7 +113,7 @@ labels = utils.keydefaultdict(Label)
 def all_labels_as_comments():
     formatter = config.formatter()
     c = formatter.comment_prefix()
-    result = ["All labels by address and move ID", ""]
+    result = ["%s All labels by address and move ID" % c, "%s" % c]
     for addr, label in labels.items():
         result.append("%s %s:" % (c, utils.plainhex4(addr)))
         for move_id, name_list in sorted(label.explicit_names.items()):
