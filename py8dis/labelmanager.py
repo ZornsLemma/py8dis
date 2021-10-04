@@ -91,7 +91,7 @@ class Label(object):
             else:
                 if disassembly.is_simple_name(name.name):
                     # TODO: I suspect get_label() call here will want tweaking eventually
-                    result.append(formatter.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr), offset))
+                    result.append(formatter.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
             name.emitted = True
         return result
 

@@ -95,12 +95,13 @@ def add_optional_label(addr, s, base_addr=None):
     optional_labels[addr] = (s, base_addr)
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
-def get_label(addr, context):
+# TODO: here move_id=None means "I am not forcing a move_id" whereas elsewhere None means "the general move ID", this sucks
+def get_label(addr, context, move_id=None):
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     # TODO: Do we *need* to create an empty Label object via labelmanager here? It might well be, and even if it's not necessary it might be useful (for example, the existence of anonymous Label objects at a certain point might indicate a bug, and it may also be that code analysis passes will want to know there *is* a label breaking up a stream of code). Having to create one via this dummy lookup is perhaps a bit clunky.
     dummy = labelmanager.labels[addr]
     # TODO: is context consistently source based, regardless of whether this is code or data using it?
-    return utils.LazyString("%s", lambda: get_final_label(addr, context))
+    return utils.LazyString("%s", lambda: get_final_label(addr, context, move_id))
 
 # TODO: May want to expose this to use as it make be useful in a user label maker hook
 # TODO: This might need tweaking so we don't classify "move source" as code - move.py currently shows this
@@ -111,12 +112,14 @@ def is_code(addr):
     return classification.is_code(addr)
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
-def our_label_maker(addr, context):
+# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
+def our_label_maker(addr, context, move_id):
     assert context is not None
-    move_id = trace.get_move_id(context) # TODO: OK?
-    move_ids2 = trace.get_move_id33(addr)
-    if move_id not in move_ids2:
-        move_id = None
+    if move_id is None:
+        move_id = trace.get_move_id(context) # TODO: OK?
+        move_ids2 = trace.get_move_id33(addr)
+        if move_id not in move_ids2:
+            move_id = None
     label = labelmanager.labels.get(addr)
     #print("YYY %04x" % addr)
     assert label is not None
@@ -170,18 +173,20 @@ def our_label_maker(addr, context):
 
 # TODO: I am thinking we should just have a single label_maker_hook which defaults to ours, then user code is free to "wrap" that and pre and/or post-process the result, and more user code can layer on top of that if it wants. but let's just stick with what we have for now.
 # TODO: This could and probably should be memo-ised - this would improve efficiency and would also avoid any risk of a non-idempotent user label maker function causing weird behaviour
-def label_maker(addr, context):
+# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
+def label_maker(addr, context, move_id):
     assert trace_done
-    suggestion = our_label_maker(addr, context)
+    suggestion = our_label_maker(addr, context, move_id)
     if user_label_maker_hook is not None:
         user_suggestion = user_label_maker_hook(addr, context, suggestion)
         if user_suggestion is not None:
             return user_suggestion
     return suggestion
 
-def get_final_label(addr, context):
+# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
+def get_final_label(addr, context, move_id):
     assert trace_done
-    name, move_id = label_maker(addr, context)
+    name, move_id = label_maker(addr, context, move_id)
     labelmanager.labels[addr].add_explicit_name(name, move_id)
     return name
 
