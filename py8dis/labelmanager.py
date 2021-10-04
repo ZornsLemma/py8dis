@@ -114,7 +114,7 @@ def all_labels_as_comments():
     formatter = config.formatter()
     c = formatter.comment_prefix()
     result = ["%s All labels by address and move ID" % c, "%s" % c]
-    for addr, label in labels.items():
+    for addr, label in sorted(labels.items()):
         result.append("%s %s:" % (c, utils.plainhex4(addr)))
         for move_id, name_list in sorted(label.explicit_names.items()):
             # TODO? assert len(name_list) > 0
