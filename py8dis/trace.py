@@ -114,4 +114,4 @@ def add_reference_histogram():
 
 # TODO: I am thinking maybe most/all uses of disassembly_range should be replaced by just iterating over whole of memory and emitting stuff for non-None addresses. move() would probably set some parallel "ignore me" flags on bytes which have been populated via move() on acme disassemblies where a Relocation() object will emit the disassembly from those bytes. (disassembly_range is something of an artefact of the early code where it was a convenient way to decide what to process, but it's not necessarily relevant any more.)
 
-assert False # TODO: arbitrary "next thing to work on" - move2.py -a is assigning l0905 to None move_id, since it is generated entirely based on a bne inside move region 0 it should ideally be heuristically assigned to move_id 0
+# TODO: arbitrary "next thing to work on" - move2.py -a is assigning l0905 to None move_id, since it is generated entirely based on a bne inside move region 0 it should ideally be heuristically assigned to move_id 0

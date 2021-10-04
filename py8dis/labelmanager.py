@@ -57,7 +57,7 @@ class Label(object):
         # particular it helps detect accidentally passing a "context address" as
         # a move ID by mistake.
         assert move_id is None or 0 <= move_id < len(config.move_ranges)
-        # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label
+        # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label. Or just possibly - this might be useful for auto-generated labels, at least - we want to be appending some sort of suffix to allow differently named variants of the label to exist in different move IDs. (Imagine we're tracing some code, and move IDs 0 and 1 both contain "bne &905"; we don't want to generate one l090 label and put it in one move ID and leave the other one implicit.)
         if name not in self.all_names():
             self.explicit_names[move_id].append(Name(name))
 
