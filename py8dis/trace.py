@@ -30,8 +30,8 @@ def add_entry(addr, name, move_id):
     return disassembly.add_label(addr, name, move_id)
 
 def add_entry_internal(addr, name, move_id):
-    if addr == 0x201d:
-        print("XAZZ")
+    #if addr == 0x201d:
+        #print("XAZZ")
         #assert False
     entry_points.append(addr)
     # TODO: Should this translation not be done on user calls and internal calls have a separate add_entry() version?

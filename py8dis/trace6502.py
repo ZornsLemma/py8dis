@@ -56,8 +56,8 @@ def apply_move2(target, context):
     elif len(matches) == 1:
         return [matches.values()[0]]
     else:
-        print("XXA", our_match_id)
-        print("XXD", matches)
+        #print("XXA", our_match_id)
+        #print("XXD", matches)
         if our_match_id in matches:
             return [matches.values()[our_match_id]]
         return []
