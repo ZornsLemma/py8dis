@@ -51,10 +51,11 @@ class Label(object):
         return result
 
     def add_explicit_name(self, name, move_id):
+        print("QQQ", name, move_id, hex(self.addr))
+        assert disassembly.is_simple_name(name) # TODO: If keep this, can probably remove some conditional logic elsewhere in labelmanager
         # It doesn't hurt to check move_id is valid in general, but in
         # particular it helps detect accidentally passing a "context address" as
         # a move ID by mistake.
-        print("QQQ", name, move_id, hex(self.addr))
         assert move_id is None or 0 <= move_id < len(config.move_ranges)
         # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label
         if name not in self.all_names():
