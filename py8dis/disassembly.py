@@ -143,7 +143,7 @@ def our_label_maker(addr, context, move_id):
             # TODO: If our "suggestion" is not acted on, we will have added
             # this base label unnecessarily. I don't think this is a big deal,
             # but ideally we wouldn't do it.
-            add_label(base_addr, optional_labels[base_addr][0])
+            add_label(base_addr, optional_labels[base_addr][0], None)
         return (s, None) # TODO: optional labels don't have a move_id at the moment?
     if not is_code(addr):
         label = utils.force_case("l%04x" % addr)
@@ -179,6 +179,9 @@ def label_maker(addr, context, move_id):
     suggestion = our_label_maker(addr, context, move_id)
     if user_label_maker_hook is not None:
         user_suggestion = user_label_maker_hook(addr, context, suggestion)
+        # TODO: Bit hacky but it feels nicer not to force user hooks to return a tuple
+        if isinstance(user_suggestion, six.string_types):
+            user_suggestion = (user_suggestion, None)
         if user_suggestion is not None:
             return user_suggestion
     return suggestion
@@ -216,7 +219,7 @@ def fix_label_names():
     while addr < len(classifications):
         c = classifications[addr]
         if c is not None:
-            dummy = str(c.as_string(addr))
+            dummy = [str(x) for x in c.as_string_list(addr)]
             addr += c.length()
         else:
             addr += 1
