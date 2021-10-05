@@ -183,7 +183,8 @@ def get_expression(addr, expected_value):
     # TODO: Possibly a bit hacky, feeling my way here during refactor
     if isinstance(expression, labelmanager.Label):
         # TODO: This might move onto Label object as a function?
-        return disassembly.our_label_maker(expression.addr, addr, None)
+        # TODO: Having to do [0] to get the name and ignore move ID feels a bit hacky - feeling my way
+        return disassembly.our_label_maker(expression.addr, addr, None)[0]
 
     # ENHANCE: It would be good to at least try to evaluate "expression" and generate
     # an error if it doesn't match expected_value. In reality most expressions will
