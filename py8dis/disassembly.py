@@ -190,7 +190,8 @@ def label_maker(addr, context, move_id):
 def get_final_label(addr, context, move_id):
     assert trace_done
     name, move_id = label_maker(addr, context, move_id)
-    labelmanager.labels[addr].add_explicit_name(name, move_id)
+    if is_simple_name(name):
+        labelmanager.labels[addr].add_explicit_name(name, move_id)
     return name
 
 def is_classified(addr, length=1):
