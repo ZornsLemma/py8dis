@@ -66,8 +66,9 @@ def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
     jsr_hooks[addr] = hook
 
+# TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
 def hook_subroutine(addr, name, hook):
-    trace.add_entry(addr, name)
+    trace.add_entry(addr, name, None)
     add_jsr_hook(addr, hook)
 
 def signed8(i):

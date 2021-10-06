@@ -76,7 +76,7 @@ def is_simple_name(s):
 def add_label(addr, s, move_id): # TODO: move_id should maybe default to None but let's see what happens for now
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     label = labelmanager.labels[addr]
-    if s is not None:
+    if s is not None and is_simple_name(s):
         label.add_explicit_name(s, move_id)
     return label
 
