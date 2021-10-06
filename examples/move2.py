@@ -4,7 +4,7 @@ from trace6502 import *
 # Load the program to be disassembled into the debugger's memory.
 # The md5sum is optional but helps avoid confusion if there are multiple versions
 # of the same program.
-load(0x2000, "asm/move2.dat") # TODO: add md5sum
+load(0x2000, "move2.orig") # TODO: add md5sum
 
 # Start tracing instructions at 0x2000.
 entry(0x2000)
