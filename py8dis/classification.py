@@ -180,8 +180,9 @@ def add_expression(addr, s):
 
 def get_expression(addr, expected_value):
     expression = expressions[addr]
-    # TODO: Possibly a bit hacky, feeling my way here during refactor
+    # TODO: Possibly a bit hacky, feeling my way here during refactor - what I believe we're trying to do is avoid doing check_expr() for simple labels, but we are also working round the fact that if expression *is* a Label object it can't be used like a (lazy)string which other expressions are - so we have a kind of internal inconsistency here which it would be nice not to have to hack round - perhaps the problem is that Label objects are leaking out to somewhere where they are then being passed by back to add_expression and we should work with (lazy)strings more consistently??
     if isinstance(expression, labelmanager.Label):
+        #return expression # TODO TEMP EXP - this breaks things but I wanted to see how
         return disassembly.get_label(expression.addr, addr, None)
 
     # ENHANCE: It would be good to at least try to evaluate "expression" and generate
