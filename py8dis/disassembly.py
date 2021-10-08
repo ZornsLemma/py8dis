@@ -113,6 +113,7 @@ def is_code(addr):
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 # TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
+# TODO: If it's not already supported, it should be supported to return a context/move-ID specific "expression" (e.g. "foobar+3") here.
 def our_label_maker(addr, context, move_id):
     assert context is not None
     if move_id is None:
