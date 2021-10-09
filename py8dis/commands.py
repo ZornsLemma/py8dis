@@ -98,6 +98,7 @@ def label(addr, name): # TODO: take move_id as arg?
     disassembly.add_label(addr, name, current_move_id)
 
 # TODO: Should probably take an optional move_id?
+# TODO: This isn't working - see "command_table+1" in dfs226.py for example
 def expr_label(addr, s):
     disassembly.add_label(addr, s, current_move_id)
 

@@ -116,6 +116,7 @@ def is_code(addr):
     if classification is None or classification == partial_classification:
         return False
     return classification.is_code(addr)
+# TODO: UP TO HERE WITH REVIEW
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 # TODO: As with get_label() we are using move_id=None to mean a non-standard thing here

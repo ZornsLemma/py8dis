@@ -13,6 +13,8 @@ acorn.is_sideways_rom()
 
 move(0x400, 0xbf04, 0xbf95-0xbf04) # XXX: length is a guess
 
+expr_label(0xa9, "l00a8+1") # TODO: experimental, only semi-sane, more to test disassembly
+
 constant(0x01, "service_claim_absolute_workspace")
 constant(0x0f, "service_vectors_changed")
 expr(0x8a17, "service_vectors_changed")
