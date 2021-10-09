@@ -183,6 +183,7 @@ def get_expression(addr, expected_value):
     expression = expressions[addr]
     # TODO: Possibly a bit hacky, feeling my way here during refactor - what I believe we're trying to do is avoid doing check_expr() for simple labels, but we are also working round the fact that if expression *is* a Label object it can't be used like a (lazy)string which other expressions are - so we have a kind of internal inconsistency here which it would be nice not to have to hack round - perhaps the problem is that Label objects are leaking out to somewhere where they are then being passed by back to add_expression and we should work with (lazy)strings more consistently?? - I am leaning towards trying this, perhaps with (not immediately essential) making an effort to return simple strings if a function has (for example) been *given* a label as a string. Note that you can't "just" string-ise a Label in isolation, as you need an address to give it context, so whatever object we use as a "label-ish" thing has to contain that context (which LazyStrings can, because they can contain a get_label() call with addr and context)
     if isinstance(expression, labelmanager.Label):
+        assert False
         return expression # TODO TEMP EXP - this breaks things but I wanted to see how
         return disassembly.get_label(expression.addr, addr, None)
 

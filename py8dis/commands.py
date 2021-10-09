@@ -1,4 +1,5 @@
 import argparse
+import six # TODO?
 
 # These functions/objects are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
@@ -116,7 +117,10 @@ def word(addr, n=1):
     disassembly.add_classification(addr, classification.Word(n * 2, False))
 
 def entry(addr, label=None):
-    return add_entry(addr, label, current_move_id)
+    add_entry(addr, label, current_move_id)
+    if isinstance(label, six.string_types):
+        return label
+    return disassembly.get_label(addr, addr, current_move_id)
 
 # TODO: Should byte()/word()/string() implicitly call nonentry()?
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)

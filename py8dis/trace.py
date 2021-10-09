@@ -36,7 +36,7 @@ def add_entry(addr, name, move_id):
     #print("QPX", hex(addr), name, move_id, SFTODO)
     assert len(SFTODO) == 1
     entry_points.append(SFTODO[0])
-    return disassembly.add_label(addr, name, move_id)
+    disassembly.add_label(addr, name, move_id)
 
 def add_entry_internal(addr, name, move_id):
     #if addr == 0x201d:
@@ -47,7 +47,7 @@ def add_entry_internal(addr, name, move_id):
     SFTODO = config.move_offset[addr]
     if SFTODO is None:
         SFTODO = addr
-    return disassembly.add_label(SFTODO, name, move_id)
+    disassembly.add_label(SFTODO, name, move_id)
 
 def analyse_code():
     addr = 0
