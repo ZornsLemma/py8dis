@@ -123,6 +123,7 @@ def is_code(addr):
 # TODO: If it's not already supported, it should be supported to return a context/move-ID specific "expression" (e.g. "foobar+3") here.
 def our_label_maker(addr, context, move_id):
     assert context is not None
+    assert False # TODO: This needs to return non-simple (expression) labels - the problem is that at the moment add_label is throwing the name away. This isn't hard to fix, the question is "what will hold onto these names"? Will be have an expr_labels dictionary or whatever to hold them? Will they be stored (probably *not* in explicit_names) on the label objects? Since these names are "reference only" (we don't need to emit definitions for them), do they "belong" on the labelmanager? They might, it might be that my current conception of it as really being a "definition manager" is a bit unnecessarily restrictive.
     if move_id is None:
         move_id = trace.get_move_id(context) # TODO: OK?
         move_ids2 = trace.get_move_id33(addr)
