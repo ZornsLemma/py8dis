@@ -76,8 +76,11 @@ def is_simple_name(s):
 def add_label(addr, s, move_id): # TODO: move_id should maybe default to None but let's see what happens for now
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     label = labelmanager.labels[addr]
-    if s is not None and is_simple_name(s):
-        label.add_explicit_name(s, move_id)
+    if s is not None:
+        if is_simple_name(s):
+            label.add_explicit_name(s, move_id)
+        else:
+            label.add_expression(s, move_id)
     return label
 
 def add_optional_label(addr, s, base_addr=None):
@@ -123,7 +126,6 @@ def is_code(addr):
 # TODO: If it's not already supported, it should be supported to return a context/move-ID specific "expression" (e.g. "foobar+3") here.
 def our_label_maker(addr, context, move_id):
     assert context is not None
-    assert False # TODO: This needs to return non-simple (expression) labels - the problem is that at the moment add_label is throwing the name away. This isn't hard to fix, the question is "what will hold onto these names"? Will be have an expr_labels dictionary or whatever to hold them? Will they be stored (probably *not* in explicit_names) on the label objects? Since these names are "reference only" (we don't need to emit definitions for them), do they "belong" on the labelmanager? They might, it might be that my current conception of it as really being a "definition manager" is a bit unnecessarily restrictive.
     if move_id is None:
         move_id = trace.get_move_id(context) # TODO: OK?
         move_ids2 = trace.get_move_id33(addr)
@@ -137,15 +139,18 @@ def our_label_maker(addr, context, move_id):
     # prefer the first one, since that's how the code used to behave and we're trying
     # to gradually refactor.
     if len(label.all_names()) > 0:
-        general_name = None
         for name in label.explicit_names[move_id]:
             # TODO: We are just returning the first name arbitrarily, which seems wrong
             return (name.name, move_id)
+        for expression in label.expressions[move_id]:
+            # TODO: arbitrary
+            return (expression, move_id)
         for name in label.explicit_names[None]:
             # TODO: We are just returning the first name arbitrarily, which seems wrong
-                general_name = name.name
-        if general_name is not None:
-            return (general_name, None)
+            return (name.name, None)
+        for expression in label.expressions[None]:
+            # TODO: arbitrary
+            return (expression, move_id)
     if addr in optional_labels:
         s, base_addr = optional_labels[addr]
         if base_addr is not None:

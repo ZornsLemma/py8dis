@@ -37,6 +37,7 @@ class Label(object):
         # TODO: explicit_names holds lists since we want to remember the order user-added names were provided in, at least for now
         self.explicit_names = collections.defaultdict(list)
         # TODO: Possibly non-simple names should go in a different list than explicit_names
+        self.expressions = collections.defaultdict(list) # TODO: slightly experimental
 
     def add_reference(self, reference):
         assert disassembly.classifications[reference].abs_operand(reference) == self.addr
@@ -48,6 +49,9 @@ class Label(object):
         for name_list in self.explicit_names.values():
             for name in name_list:
                 result.add(name.name)
+        # TODO: Probably correct to include expressions here but not sure
+        for expression_list in self.expressions.values():
+            result.update(expression_list)
         return result
 
     def add_explicit_name(self, name, move_id):
@@ -60,6 +64,17 @@ class Label(object):
         # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label. Or just possibly - this might be useful for auto-generated labels, at least - we want to be appending some sort of suffix to allow differently named variants of the label to exist in different move IDs. (Imagine we're tracing some code, and move IDs 0 and 1 both contain "bne &905"; we don't want to generate one l090 label and put it in one move ID and leave the other one implicit.)
         if name not in self.all_names():
             self.explicit_names[move_id].append(Name(name))
+
+    # TODO: Bit experimental, also bit copy-and-paste of add_explicit_name()
+    def add_expression(self, s, move_id):
+        assert not disassembly.is_simple_name(s)
+        # It doesn't hurt to check move_id is valid in general, but in
+        # particular it helps detect accidentally passing a "context address" as
+        # a move ID by mistake.
+        assert move_id is None or 0 <= move_id < len(config.move_ranges)
+        # TODO: Same question re what if name exists in a different move_id as for add_explicit_name() above
+        if s not in self.all_names():
+            self.expressions[move_id].append(s)
 
     def explicit_definition_string_list(self):
         # TODO: Note that we don't invoke the label hook or anything here - if a name got *used* for the label at some point, it should have been added into the label object so we know to emit it here.
