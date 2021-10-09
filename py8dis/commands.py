@@ -162,7 +162,6 @@ def code_ptr(addr, addr_high=None, offset=0):
     code_at = ((memory[addr_high] << 8) | memory[addr]) + offset
     # Label and trace the code at code_at
     label = entry(code_at) # ENHANCE: allow optional user-specified label?
-    label = disassembly.get_label(code_at, addr) # TODO: need for this feels like a hack *but* the Label object returned by entry() does not (at least currently) include the "context" - maybe entry() should return a LabelRef() object or something like that instead of a Label
     # Reference that label at addr/addr_high.
     offset_string = "" if offset == 0 else ("%+d" % -offset)
     if addr_high == addr + 1:
