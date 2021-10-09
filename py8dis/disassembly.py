@@ -98,7 +98,13 @@ def add_optional_label(addr, s, base_addr=None):
 # TODO: here move_id=None means "I am not forcing a move_id" whereas elsewhere None means "the general move ID", this sucks
 def get_label(addr, context, move_id=None):
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
-    # TODO: Do we *need* to create an empty Label object via labelmanager here? It might well be, and even if it's not necessary it might be useful (for example, the existence of anonymous Label objects at a certain point might indicate a bug, and it may also be that code analysis passes will want to know there *is* a label breaking up a stream of code). Having to create one via this dummy lookup is perhaps a bit clunky.
+    # We need to ensure the labelmanager knows there's a label at this address
+    # so it can emit a definition. It's tempting to try to defer this until
+    # get_final_label() is called, but it's good to have the label exist as
+    # early as possible - for example, this means post-tracing code analysis can
+    # see where labels exist and what references them. TODO: It is a bit clunky
+    # to have to do the "ensure it exists" via this dummy dictionary lookup
+    # though.
     dummy = labelmanager.labels[addr]
     # TODO: is context consistently source based, regardless of whether this is code or data using it?
     return utils.LazyString("%s", lambda: get_final_label(addr, context, move_id))
