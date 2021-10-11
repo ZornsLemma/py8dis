@@ -1,4 +1,3 @@
-# TODO: REVIEW UP TO HERE
 # TODO: Move/tidy this note somewhere permanent
 # Label names are a bit fiddly because:
 # - we discover the need for labels during the tracing process
@@ -88,6 +87,7 @@ class Label(object):
                     name.emitted = True
         return result
 
+    # TODO: Better name for this and/or explicit_definition_string_list() - it is not actually the explictness of the definition which is changing, it is the explicitness of the value
     def definition_string_list(self, emit_addr, move_id):
         assert move_id is None or 0 <= move_id < len(config.move_ranges)
         formatter = config.formatter()
