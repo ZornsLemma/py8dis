@@ -70,6 +70,7 @@ def move(dest, src, length):
     for i in range(length):
         config.move_offset[src + i] = dest + i
     global current_move_id
+    # TODO: Maybe - "EIBTI", this is Python after all - we should not update current_move_id here and should make the user wrap move() in set_current_move_id() if they want this. Not sure. It's arguably OK-ish for move() to set this, since it is a pretty explicitly move-related operation, but all the same, not ideal. And it kind of invites problems where user code forgets to set current_move_id back to "the global move region" where that would be helpful.
     current_move_id = len(config.move_ranges) - 1
     return current_move_id
 
