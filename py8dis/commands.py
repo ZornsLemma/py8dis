@@ -244,3 +244,6 @@ else:
 
 # TODO: General point - when the code is finally tidied up, it might be helpful (perhaps using
 # wrapper functions to avoid repeating things everywhere and perhaps to show an actual error message, even if we also output a backtrace, rather than raw python assertion failures) to do thinks like assert memory[addr] is not None rather than letting subsequent code fail confusingly when it tries to use that None.
+
+
+# TODO: I should in the near future switch to using move_id -1 for the "global" move region and reserve "None" to mean "I am not expressing any kind of move ID" in contexts where that is useful.
