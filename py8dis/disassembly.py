@@ -338,7 +338,6 @@ def isolate_range(start_addr, end_addr):
     split_classification(start_addr)
     split_classification(end_addr)
 
-# TODO: UP TO HERE WITH REVIEW
 def disassemble_range(start_addr, end_addr):
     result = []
 
@@ -371,15 +370,11 @@ def disassemble_range(start_addr, end_addr):
         for i in range(1, classification_length):
             if am2(addr + i) in labelmanager.labels:
                 pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
-            else:
-                pass # assert False
         for annotation in sorted_annotations(annotations[addr]):
             result.append(annotation.as_string(addr))
         if am2(addr) in labelmanager.labels:
             result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr), move_id))
-        # TODO: result.extend(pending_annotations)?
-        for annotation in pending_annotations:
-            result.append(annotation)
+        result.extend(pending_annotations)
         if addr < end_addr:
             # We can now emit the classification output.
             result.extend(classifications[addr].as_string_list(addr))
