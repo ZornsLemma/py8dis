@@ -95,6 +95,7 @@ def constant(value, name):
 # as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose.
+# TODO: See Chuckie Egg disassembly - I am starting to wonder if we need (poor names just for sake of writing this comment) label_binary() and label_runtime() variants on this to accommodate move()s
 def label(addr, name): # TODO: take move_id as arg?
     disassembly.add_label(addr, name, current_move_id)
 
