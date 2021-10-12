@@ -746,3 +746,6 @@ trace.code_analysis_fns.append(subroutine_argument_finder) # TODO!?
 
 
 # TODO: I should probably come up with some terminology for the two "sides" of a move() - perhaps "binary addr" (i.e. the address in the binary we are disassembling, the move source) and "runtime addr" (i.e. the address at runtime, the move dest) - this has nothing to do with the above move() variant scheme, it's just to try to make things a bit clearer in e.g. the trace code to see what kind of address a function is working with
+
+
+# TODO: TobyLobster's Chuckie Egg disassembly not unreasonably attempts to use memory[] directly and it is expecting that to reflect move()s. This is not compatible with having move()s with overlapping destiations, but I need to decide how to handle this. (One possibility - not that I'm super keen - would be to have memory_premove[] and memory_postmove[] arrays (terrible names just for writing this) and if you know you have no overlapping destinations you can use memory_postmove[] to get the old-style behaviour)
