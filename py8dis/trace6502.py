@@ -84,6 +84,11 @@ def get_u8(i):
     return memory[i]
 
 
+# TODO: Not a high priority, but once we have support for generating arbitrary inline
+# comments, we could potentially track things like inx/dex/iny/dey which adjust a
+# constant slightly and when we infer what that constant means (e.g. a keycode) we could
+# add an inline comment so we end up with something like "dex ; X=keycode_p" - at the
+# moment we can only do this for raw constants which we can convert into an expression.
 class CpuState(object):
     def __init__(self):
         self.clear()
