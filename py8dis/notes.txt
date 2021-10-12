@@ -31,3 +31,21 @@ what about deciding which labels we need to emit up-front because they will neve
 What if a program contains a top-level relocate down routine (e.g. it loads high from disc then relocates itself over disc workspace) *and* within that relocated down code contains some fragments of code it copies elsewhere? I am reluctant to allow "nested" relocations, but is this going to work at all?
 - without nested relocations we would have to move() the non-overlapping chunks separately
 - it probably (but would be good to test; gfoot's Repton 2 disassembly may do this) works for the common case where only the start/end addresses of the fragments are referenced - not thinking too clearly about this TBH...
+
+
+
+
+
+different "modes" for user interactions with the move system:
+(for the moment going with terminology "binary" and "runtime" but not final yet)
+
+"runtime address" mode is how things worked before the refactor
+this mode probably only works (maybe we actually detect this and error out) if all move()s have non-overlapping destinations (not too sure about this)
+label(X, "foo") associates label "foo" with the unmodified value X. Internally, if (as there will be if we enforce no overlapping) X is within a move() destination, we will probably implicitly tag the label with that move ID.
+expr(X, "foo") interprets X as a runtime address; internally X gets mapped back onto a binary address for the core disassembler to use
+- ditto byte(X), word(X), string(X) etc
+
+"binary address" mode is new and probably (?) not the default
+expr(X, "foo") etc interpret X as binary address with no translation - this implicitly disambiguates where move()s have overlapping destinations
+label(X, "foo") interprets X as a runtime address and does not modify it, so this is "inconsistent" with expr() et al - so label() behaves the same in both modes
+label(b2r(X), "foo") maps a binary address X to a runtime address (which may be a no-op) - this is useful if we are looking at a WIP disassembly, we see that code in the binary at 0xc221 which maybe gets relocated to 0x4300 (but we have no way to easily "see" that 0x4300 address, although maybe our hex dump should be toggleable between binary and runtime address constants) and we want to put a label on 0x4300 by saying label(b2r(0xc221), "foo")
