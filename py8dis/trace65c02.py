@@ -1,4 +1,3 @@
-# TODO: REVIEW UP TO HERE
 from trace6502 import *
 
 import config
