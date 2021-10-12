@@ -1,4 +1,3 @@
-# TODO: REVIEW UP TO HERE
 import collections # TODO!?
 import six # TODO!?
 
@@ -126,6 +125,7 @@ class CpuState(object):
 
 
 class Opcode(object):
+    # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
     indent_level = collections.defaultdict(int)
 
     def __init__(self, mnemonic, operand_length, suffix=None, update=None):
@@ -262,8 +262,6 @@ class OpcodeDataAbs(OpcodeAbs):
         super(OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version, update=update)
 
     def update_references(self, addr):
-        if addr == 0x8ae3:
-            pass # print("XXX %04x" % self.abs_operand(addr))
         labels[self.abs_operand(addr)].add_reference(addr)
 
     def disassemble(self, addr):
@@ -365,8 +363,6 @@ class OpcodeConditionalBranch(Opcode):
         return self._target(addr)
 
     def update_references(self, addr):
-        #if addr == 0xbf0c:
-        #    print("XXA %04x" % self._target(addr))
         labels[self._target(addr)].add_reference(addr)
         trace.references[self._target(addr)].add(addr)
 
@@ -424,7 +420,7 @@ def make_update_flag(flag, b):
 
 # TODO: make_decrement() and make_increment() are probably not that useful -
 # it's all very well knowing the value of a register, but without an address to
-# use with expr() it doesn#t help that much. If they *are* useful, we should
+# use with expr() it doesn't help that much. If they *are* useful, we should
 # probably make adc # and sbc # update the value where possible.
 
 def make_decrement(reg):
@@ -667,7 +663,6 @@ opcodes = {
 
 def disassemble_instruction(addr):
     opcode_value = memory[addr]
-    #print(hex(opcode_value))
     if opcode_value not in opcodes:
         return [None]
     opcode = opcodes[opcode_value]
