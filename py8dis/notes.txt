@@ -88,13 +88,22 @@ with use_move_id(relocate_down_move_id):
     with use_move_id(fragment_a_move_id):
         label(0x70, "foo")
 	expr(0x904, "foo") # not part of fragment_a_move_id but convenient to write it here without user having to "undo" the fragment_a_move_id somehow
-    with ue_move_id(fragment_b_move_id):
+    with use_move_id(fragment_b_move_id):
         label(0x70, "bar")
 	expr(0x114d, "bar")
 
-Internal the with code is probably just pushing and popping move_ids at the end of a list which we consult when we need to translate an address into (for labels) a move ID associated with that address or (for expr() etc) translate a runtime address into a binary address.
+Internally the with code is probably just pushing and popping move_ids at the end of a list which we consult when we need to translate an address into (for labels) a move ID associated with that address or (for expr() etc) translate a runtime address into a binary address.
 
-This is all done pre-tracing; at trace time we are probably still working with the static memory model in my current py8dis sketch.
+The with code is probably also updating config.memory[] to reflect the current move()s in effect - in principle config.memory could probably be an object which implements [] and uses the list of move IDs to dynamically compute this, whichever's easier.
+
+This is all done pre-tracing; at trace time we are probably still working with the static memory model in my current py8dis sketch. We'd probably rename current config.memory to config.memory_static or similar to try to avoid confusion; existing user code can then continue to refer to config.memory and "see" move()s having taken effect as it expects to.
+
+We might want to delete or otherwise disable config.memory access once tracing starts, since access to it would indiciate (I think) some sort of confusion on the part of the code executing; once tracing starts and we're not under the control of user-written with use_move_id() blocks, there isn't really such a concept of move()s "being applied" and the code should probably just be using config.memory_static. (Arguably some sorts of code which might get re-used - e.g. by being called via a jsr hook - would want to use config.memory, but they should probably be rewritten to use config.memory_static. Anyway, I don't say it *has* to be the case that config.memory is disabled during tracing and alter, just that it might well be a good idea.)
 
 [Aside: there's probably no big problem with making the "static" memory space >64K; that way (for example) if you had a 48K binary to disassemble and you need to be able to move() bits of it all over the 64K "real" address space to reflect the runtime situation, you could load() it at 0x10000 where it's out of the way and move() all of it to the corresponding addresses with overlaps as required. But probably no reason to go out of my way to complicate things even slightly with this yet.]
+
+[Note that in all of this we probably continue to require that a single binary address can only be move()d from once - I don't think that's a problem, and it's kind of a natural restriction because we are trying to write assembler input which will recreate the binary and we can't emit two things at the same place in the assembler input.]
+
+In this model it probably does make sense for a trace start point *supplied by the user* to have an address and a move ID, in order to allow it to be mapped back to a binary address. We don't need to track that internally when tracing because there is a unique binary address from the back-mapping which is what we use to trace, and as we trace *given* we are disassembling an instruction at binary address X we always have exactly one move ID (possibly "-1" for the default move ID covering un-move()d stuff) associated with X. When we LDA from an address we might want some sort of move ID hint or hook to help decide which label name we prefer to use (though this isn't part of tracing), but "the move ID we used when we started tracing" doesn't need to be tracked as it's implicit in the binary address of the LDA. When we JSR or JMP or BEQ or whatever to address Y and there are multiple move()s which put stuff at address Y, we might want to call some kind of user hook to help us decide (defaulting to just not tracing any further down that path, of course), but again "the move ID we used to start the trace" is not really relevant. In any case, I really don't want the tracing process to be too stateful because it seems like it invites getting different results from the chance of tracing branch X before branch Y.
+
 
