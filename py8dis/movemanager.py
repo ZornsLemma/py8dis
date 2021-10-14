@@ -99,7 +99,7 @@ if __name__ == "__main__":
     assert b2r(0x2000) == 0x70
     assert b2r(0x2000 + 8) == 0x2000 + 8
 
-    print("QQQ", hex(r2b(0x70))) # TODO: what *should* happen here?
+    print("QQQ", hex(r2b(0x70))) # TODO: what *should* happen here? it is *probably* correct - ie we should assert this - that this returns 0x70, since every runtime address has the corresponding binary address moved onto it by move ID 0 if nothing else is actively overriding that - but I would like to think about it a bit more before "committing" to this
 
     assert active_move_ids == [0]
     with moved(id2):
