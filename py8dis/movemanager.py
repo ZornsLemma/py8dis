@@ -69,6 +69,7 @@ def b2r(binary_addr):
 # a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
 # yet.
 def r2b(runtime_addr):
+    # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids.
     assert utils.is_valid_addr(runtime_addr)
     # TODO: Deriving this dynamically every time is super inefficient, but I'm still thinking
     # my way through this.
