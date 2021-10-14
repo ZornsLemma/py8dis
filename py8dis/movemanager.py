@@ -17,12 +17,18 @@ import contextlib
 
 active_move_ids = []
 
+# TODO: Note that move_definitions has to be interpreted "as a whole", since later moves can "steal" binary addresses from earlier moves. I don't think this is a problem - and the whole point is to allow the user to do things like move a big chunk of code which gets relocated at runtime as a whole and then override that for a fairly small chunks witin that big chunk that the copied elsewhere.
 move_definitions = [(0, 0, 0x10000)]
+
+move_id_for_binary_addr = [0] * 0x10000
 
 def add_move(dest, source, length):
     # TODO: This probably needs validation and to do all sorts of stuff
     move_definitions.append((dest, source, length))
-    return len(move_definitions) - 1
+    move_id = len(move_definitions) - 1
+    for i in range(length):
+        move_id_for_binary_addr[source + i] = move_id
+    return move_id
 
 def is_valid_move_id(move_id):
     return 0 <= move_id < len(move_definitions)

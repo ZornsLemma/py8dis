@@ -56,6 +56,7 @@ label(b2r(X), "foo") maps a binary address X to a runtime address (which may be 
 relocate_down_move_id = move(0x900, 0x1900, 0x6000) # move ID 1
 fragment_a_move_id = move(0x70, 0x9e3, 0x20) # move ID 2
 fragment_b_move_id = move(0x70, 0x2201, 0x16) # move ID 3
+# TODO: Actually the above is probably subtly wrong. I have written the 2nd-of-3 argument as if the first move had already taken effect, but the way I'm sketching this out in movemanager.py is that the second argument is always in "raw" binary addresses. I don't think this makes any fundamental difference, but it seems easier to implement and simpler to understand this way (if nothing else, it avoids the order of move() instructions potentially completely altering what data gets moved where - with the "always interpret as raw binary address" style, the assignment of move IDs to addresses may change with the order of moves, but the "wrong" data won't be copied as part of a move due to a reordering)
 
 we end up with:
 move_id[0x1900] == 1
