@@ -59,7 +59,7 @@ def b2r(binary_addr):
     assert utils.is_valid_addr(binary_addr)
     move_id = move_id_for_binary_addr[binary_addr]
     move_dest, move_source, move_length = move_definitions[move_id]
-    assert move_source <= binary_addr <= (move_source + move_length)
+    assert move_source <= binary_addr < (move_source + move_length)
     return move_dest + (binary_addr - move_source)
 
 # Return the binary address corresponding to a runtime address; because a
@@ -81,7 +81,7 @@ def r2b(runtime_addr):
     for move_id in active_move_ids[::-1]:
         if move_id in relevant_move_ids:
             move_dest, move_source, move_length = move_definitions[move_id]
-            assert move_dest <= runtime_addr <= (move_dest + move_length)
+            assert move_dest <= runtime_addr < (move_dest + move_length)
             return move_source + (runtime_addr - move_dest)
     assert False # TODO: currently not clear to me if this is possible...
 
