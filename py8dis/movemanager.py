@@ -1,5 +1,18 @@
 # TODO: Experimental
 
+# A "move" copies a block of bytes from some part of the "binary" (i.e. the
+# program being disassembled) to a different "runtime" address.
+#
+# A runtime address can be the target of more than one move - this handles, for
+# example, a ROM which copies different fragments of code into a single part of
+# RAM at different times.
+#
+# However, a binary address can only be the source of a single move. I think
+# this is a fairly natural restriction, because we're trying to generate
+# assembler input which will recreate the binary, and we can only have a single
+# classification (an instruction or data-emitting directive of some kind) for
+# each byte in the binary.
+
 import contextlib
 
 active_move_ids = []
