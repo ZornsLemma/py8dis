@@ -68,13 +68,13 @@ def b2r(binary_addr):
     assert move_source <= binary_addr < (move_source + move_length)
     return move_dest + (binary_addr - move_source)
 
-# Return the binary address corresponding to a runtime address; because a
-# runtime address can be the target of multiple moves, this can only be resolved
-# in the context of active_move_ids. TODO: UPDATE COMMENT TO REFLECT WE'RE ALSO RETURNING THE MOVE_ID - WE MAY WANT A VARIANT WHICH DOESN'T DO THIS
+# Return (binary address, move ID) corresponding to a runtime address; because a
+# runtime address can be the target of multiple moves, there may be no
+# single correct answer - active_move_ids is used to help disambiguate, but
+# if that fails (None, None) will be returned.
 # TODO: It might be useful to provide a variant of this function which returns
 # a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
 # yet.
-# TODO: *At least* for tracing and - still thinking about this - probably in all cases, I want to be able to do smart runtime-to-binary conversion without always using or needing the context of active_move_ids. This is obviously always on a best-effort basis (which is why we have active_move_ids so the user can clarify where appropriate pre-tracing), but the key point is that where moves *don't* conflict (the global move-everything-to-itself move may confuse matters here, need to think about that), we can always resolve a runtime address to a binary address taking moves into account without needing any context. (We probably want to do this all the time so that "simple" user disassemblies with non-conflicting moves don't need to do with moved(xxx), just as they currently don't need to with the "released" version.)
 def r2b(runtime_addr):
     # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids.
     assert utils.is_valid_addr(runtime_addr)
