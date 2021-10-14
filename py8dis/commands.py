@@ -179,6 +179,10 @@ def add_sequence_hook(hook):
     disassembly.sequence_hooks.append(hook)
 
 def go(post_trace_steps=None, autostring_min_length=3):
+    # Once we start tracing, we're taking a "static" view of the code and we
+    # don't want any leftover user hints about how to convert runtime addresses
+    # to binary addresses confusing things.
+    assert len(movemanager.active_move_ids) == 0
     # TODO: Perhaps a bit hacky, but label() will use this and we call it here to define pydis_start/end and we may also call it at other points in this user-style code. This may indicate label() needs to be changed.
     # TODO!? set_current_move_id(None)
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
