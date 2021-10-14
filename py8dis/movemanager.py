@@ -17,6 +17,7 @@
 import collections
 import contextlib
 
+import config
 import utils
 
 # TODO: Rename?
@@ -103,6 +104,15 @@ def r2b(runtime_addr):
     move_dest, move_source, move_length = move_definitions[selected_move_id]
     assert move_dest <= runtime_addr < (move_dest + move_length)
     return (move_source + (runtime_addr - move_dest), selected_move_id)
+
+# TODO: Maybe use this in more places
+def r2b_checked(runtime_addr):
+    binary_addr, move_id = r2b(runtime_addr)
+    if binary_addr is None:
+        # TODO: *Really* need a backtrace to make this useful
+        assert False # TODO TEMP
+        utils.die("Ambiguous runtime address %s" % config.formatter().hex(runtime_addr))
+    return binary_addr, move_id
 
 if __name__ == "__main__":
     id1 = add_move(0x70, 0x1900, 10)

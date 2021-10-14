@@ -80,7 +80,7 @@ def optional_label(addr, name, base_addr=None):
 
 def comment(runtime_addr, text):
     binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert data_loaded_at_binary_addr(binary_addr)
+    assert utils.data_loaded_at_binary_addr(binary_addr)
     disassembly.add_comment(binary_addr, text)
 
 def expr(runtime_addr, s):
@@ -99,7 +99,7 @@ def word(runtime_addr, n=1):
     disassembly.add_classification(binary_addr, classification.Word(n * 2, False))
 
 def entry(runtime_addr, label=None):
-    binary_addr, move_id = movemanager.r2b(runtime_addr)
+    binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     trace.add_entry(binary_addr, label, move_id)
     if isinstance(label, six.string_types):
@@ -109,8 +109,8 @@ def entry(runtime_addr, label=None):
 # TODO: Should byte()/word()/string() implicitly call nonentry()?
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(runtime_addr):
-    binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert data_loaded_at_binary_addr(binary_addr, n * 2)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    assert utils.data_loaded_at_binary_addr(binary_addr)
     # TODO: Call a function on trace module?
     # TODO: This prob needs to do some kind of inverse move
     trace.traced_entry_points.add(binary_addr)
