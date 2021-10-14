@@ -368,9 +368,7 @@ def disassemble_range(start_addr, end_addr):
             if x == end_addr:
                 # TODO: Is this a hack or is it OK? The "exclusive" end address of a range is inclusive for the purposes of emitting labels at its end; we need to treat it specially because it *won't* have a move_offset so we want to apply the move_offset of the last actual byte in the range
                 adjust = -1
-            if config.move_offset[x + adjust] is None:
-                return x
-            return config.move_offset[x + adjust] - adjust
+            return movemanager.b2r(x + adjust) - adjust
         for i in range(1, classification_length):
             if am2(addr + i) in labelmanager.labels:
                 pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))

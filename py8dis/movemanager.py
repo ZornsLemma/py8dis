@@ -88,7 +88,6 @@ def move_ids_for_runtime_addr(runtime_addr):
 # yet.
 def r2b(runtime_addr):
     relevant_move_ids = move_ids_for_runtime_addr(runtime_addr)
-    print("XXX", relevant_move_ids)
     if len(relevant_move_ids) == 0:
         return runtime_addr, base_move_id
     selected_move_id = None
