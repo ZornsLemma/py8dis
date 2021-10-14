@@ -51,6 +51,24 @@ def moved(move_id):
         assert active_move_ids[-1] == move_id
         active_move_ids.pop()
 
+def b2r(binary_addr):
+    assert utils.is_valid_addr(binary_addr)
+    move_id = move_id_for_binary_addr[binary_addr]
+    move_dest, move_source, move_length = move_definitions[move_id]
+    assert move_source <= binary_addr <= (move_source + move_length)
+    return move_dest + (binary_addr - move_source)
+
+def r2b(runtime_addr):
+    assert utils.is_valid_addr(runtime_addr)
+
+    # TODO: Deriving this dynamically every time is super inefficient, but I'm still thinking
+    # my way through this.
+    move_ids_for_runtime_addr = collections.defaultdict(list) # TODO: set not list??
+    for binary_addr, move_id in enumerate(move_id_for_binary_addr):
+        move_ids_for_runtime_addr[b2r(binary_addr)].append(move_id)
+
+    TODO
+
 
 if __name__ == "__main__":
     id1 = add_move(0x70, 0x1900, 10)
@@ -59,7 +77,12 @@ if __name__ == "__main__":
     assert move_id_for_binary_addr[0x70] == 0
     assert move_id_for_binary_addr[0x1900] == id1
     assert move_id_for_binary_addr[0x2000] == id2
-    assert move_id_for_binary_addr[0x2000 + 10] == 0
+    assert move_id_for_binary_addr[0x2000 + 8] == 0
+
+    assert b2r(0x70) == 0x70
+    assert b2r(0x1900) == 0x70
+    assert b2r(0x2000) == 0x70
+    assert b2r(0x2000 + 8) == 0x2000 + 8
 
     assert active_move_ids == []
     with moved(id2):
