@@ -64,7 +64,7 @@ def b2r(binary_addr):
 
 # Return the binary address corresponding to a runtime address; because a
 # runtime address can be the target of multiple moves, this can only be resolved
-# in the context of TODO.
+# in the context of active_move_ids.
 # TODO: It might be useful to provide a variant of this function which returns
 # a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
 # yet.
