@@ -67,6 +67,10 @@ def check_expr(expr, value):
 def is_valid_addr(addr):
     return 0 <= addr < 0x10000
 
+def data_loaded_at_binary_addr(binary_addr, n=1):
+    assert is_valid_addr(binary_addr)
+    assert is_valid_addr(binary_addr + n - 1)
+    return all(memory[binary_addr + i] is not None for i in range(n))
 
 # TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
 class LazyString(object):

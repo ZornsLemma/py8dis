@@ -4,7 +4,7 @@ import six # TODO?
 # These functions/objects are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
-from trace import add_entry
+from movemanager import moved
 from utils import get_u16, get_u16_be
 
 # These modules are used to implement things in this file and aren't so directly
@@ -13,6 +13,7 @@ from utils import get_u16, get_u16_be
 import classification
 import config
 import disassembly
+import movemanager
 import trace
 import utils
 
@@ -20,10 +21,6 @@ memory = config.memory
 
 # TODO!?
 config.load_ranges = []
-config.XXXmove_target = [False] * 64 * 1024
-
-# TODO: experimental
-current_move_id = None
 
 def load(addr, filename, md5sum=None):
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
@@ -40,44 +37,13 @@ def load(addr, filename, md5sum=None):
             utils.die("load() md5sum doesn't match")
     config.load_ranges.append((addr, addr + len(data)))
 
-# ENHANCE: This isn't good enough for cases where a program copies different
-# blocks of code/data into the same part of memory at different times. This
-# isn't all that unlikely, e.g. IBOS does it with snippets of useful code it
-# wants to run from main RAM. The proper fix is probably to disassemble "in
-# place" with a kind of reverse offset (set by the equivalent of a move()
-# command before tracing starts), and then emit using either acme's pseudopc
-# inline or for beebasm emit clear
-# reusedspacestart,end:*=reusedspace:codecodecode:copyblock
-# inlinecopy,reusedspacestart,reusedspacend, i.e. doing the copyblock
-# immediately after emitting the corresponding code. On the other hand,
-# tracing is not going to work properly where there are multiple possible
-# bits of code at any address, so perhaps we shouldn't even try to handle this.
 # TODO: When documenting all the recent changes, should note that move()
 # needs to be done to update the disassembler's memory before you try to
 # access things in the relocated region.
 def move(dest, src, length):
-    assert length > 0
-    assert 0 <= src < 0x10000
-    assert 0 <= (src + length) <= 0x10000
-    assert 0 <= dest < 0x10000
-    assert 0 <= (dest + length) <= 0x10000
-    assert src != dest
-    # You can't move from a region that hasn't been populated with data.
+    # You can't move from a region that hasn't been populated with data. TODO: Move this check into add_move()?
     assert all(memory[i] is not None for i in range(src, src+length))
-    # You can't move from the same location more than once.
-    assert all(config.move_offset[i] is None for i in range(src, src+length))
-    config.move_ranges.append((dest, src, length))
-    for i in range(length):
-        config.move_offset[src + i] = dest + i
-    global current_move_id
-    # TODO: Maybe - "EIBTI", this is Python after all - we should not update current_move_id here and should make the user wrap move() in set_current_move_id() if they want this. Not sure. It's arguably OK-ish for move() to set this, since it is a pretty explicitly move-related operation, but all the same, not ideal. And it kind of invites problems where user code forgets to set current_move_id back to "the global move region" where that would be helpful.
-    current_move_id = len(config.move_ranges) - 1
-    return current_move_id
-
-# TODO!?
-def set_current_move_id(move_id):
-    global current_move_id
-    current_move_id = move_id
+    return movemanager.add_move(dest, src, length)
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
@@ -95,53 +61,68 @@ def constant(value, name):
 # as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose.
-# TODO: See Chuckie Egg disassembly - I am starting to wonder if we need (poor names just for sake of writing this comment) label_binary() and label_runtime() variants on this to accommodate move()s
-def label(addr, name): # TODO: take move_id as arg?
-    disassembly.add_label(addr, name, current_move_id)
+def label(runtime_addr, name):
+    # We don't care about the equivalent binary address, but the process of looking
+    # it up gives us a move ID to associate with this label.
+    _, move_id = movemanager.r2b(runtime_addr)
+    disassembly.add_label(runtime_addr, name, move_id)
 
 # TODO: Should probably take an optional move_id?
 # TODO: This isn't working - see "command_table+1" in dfs226.py for example
-def expr_label(addr, s):
-    disassembly.add_label(addr, s, current_move_id)
+def expr_label(runtime_addr, s):
+    # TODO: If this continues to just forward to label() perhaps make that behavuour
+    # official and just provide both names for backwards compatibility/documenting the
+    # difference for users who want to??
+    return label(runtime_addr, s)
 
 def optional_label(addr, name, base_addr=None):
     disassembly.add_optional_label(addr, name, base_addr)
 
-def comment(addr, text):
-    disassembly.add_comment(addr, text)
+def comment(runtime_addr, text):
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    assert data_loaded_at_binary_addr(binary_addr)
+    disassembly.add_comment(binary_addr, text)
 
-def expr(addr, s):
-    classification.add_expression(addr, s)
+def expr(runtime_addr, s):
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    assert data_loaded_at_binary_addr(binary_addr)
+    classification.add_expression(binary_addr, s)
 
-def byte(addr, n=1):
-    disassembly.add_classification(addr, classification.Byte(n, False))
+def byte(runtime_addr, n=1):
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    assert data_loaded_at_binary_addr(binary_addr, n)
+    disassembly.add_classification(binary_addr, classification.Byte(n, False))
 
-def word(addr, n=1):
-    disassembly.add_classification(addr, classification.Word(n * 2, False))
+def word(runtime_addr, n=1):
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    assert data_loaded_at_binary_addr(binary_addr, n * 2)
+    disassembly.add_classification(binary_addr, classification.Word(n * 2, False))
 
-def entry(addr, label=None):
-    add_entry(addr, label, current_move_id)
+def entry(runtime_addr, label=None):
+    binary_addr, move_id = movemanager.r2b(runtime_addr)
+    assert utils.data_loaded_at_binary_addr(binary_addr)
+    trace.add_entry(binary_addr, label, move_id)
     if isinstance(label, six.string_types):
         return label
-    return disassembly.get_label(addr, addr, current_move_id)
+    return disassembly.get_label(runtime_addr, binary_addr, move_id)
 
 # TODO: Should byte()/word()/string() implicitly call nonentry()?
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
-def nonentry(addr):
+def nonentry(runtime_addr):
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    assert data_loaded_at_binary_addr(binary_addr, n * 2)
     # TODO: Call a function on trace module?
     # TODO: This prob needs to do some kind of inverse move
-    trace.traced_entry_points.add(addr)
+    trace.traced_entry_points.add(binary_addr)
 
-def nonentry_source(addr):
-    trace.traced_entry_points.add(addr)
-
-def wordentry(addr, n=1):
-    word(addr, n)
+def wordentry(runtime_addr, n=1):
+    word(runtime_addr, n)
     for i in range(n):
-        expr(addr, entry(get_u16(addr)))
-        addr += 2
-    return addr
+        expr(runtime_addr, entry(get_u16(addr)))
+        runtime_addr += 2
+    return runtime_addr
 
+# TODO: We might have a bit of a problem here - these hooks are used during tracing (when we're in "static" mode, so to speak) but they call stringhi() etc which are user function "intended" for use during the "dynamic" phase and which will probably be expecting runtime addresses. Does this suggest we want to "allow movemanager.r2b but make it the identity operation" during tracing??
 def stringhi_hook(target, addr):
     return stringhi(addr + 3)
 
@@ -157,33 +138,38 @@ def stringz_hook(target, addr):
 def stringn_hook(target, addr):
     return stringn(addr + 3)
 
-def code_ptr(addr, addr_high=None, offset=0):
-    if addr_high is None:
-        addr_high = addr + 1
-    assert memory[addr] is not None
-    assert memory[addr_high] is not None
-    code_at = ((memory[addr_high] << 8) | memory[addr]) + offset
+def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
+    if runtime_addr_high is None:
+        runtime_addr_high = runtime_addr + 1
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    binary_addr_high, _ = movemanager.r2b(runtime_addr_high)
+    assert data_loaded_at_binary_addr(binary_addr)
+    assert data_loaded_at_binary_addr(binary_addr_high)
+    code_at_runtime_addr = ((memory[addr_high] << 8) | memory[addr]) + offset
     # Label and trace the code at code_at
-    label = entry(code_at) # ENHANCE: allow optional user-specified label?
+    label = entry(code_at_runtime_addr) # ENHANCE: allow optional user-specified label?
     # Reference that label at addr/addr_high.
     offset_string = "" if offset == 0 else ("%+d" % -offset)
-    if addr_high == addr + 1:
+    if binary_addr_high == binary_addr + 1:
         # The general code in the "else" branch would work for this case as
         # well, but since the assembler has support for emitting a little-endian
         # 16-bit word it's nice to use it when we can.
-        word(addr)
-        expr(addr, utils.LazyString("%s%s", label, offset_string))
+        assert runtime_addr_high == runtime_addr + 1
+        # TODO: Use word()/expr() variants which take a binary addr directly?
+        word(runtime_addr)
+        expr(runtime_addr, utils.LazyString("%s%s", label, offset_string))
     else:
-        byte(addr)
-        expr(addr, utils.LazyString("<(%s%s)", label, offset_string))
-        byte(addr_high)
-        expr(addr_high, utils.LazyString(">(%s%s)", label, offset_string))
-    if abs(addr_high - addr) == 1:
-        return max(addr, addr_high) + 1
+        # TODO: Use byte()/expr() variants which take a binary addr directly?
+        byte(runtime_addr)
+        expr(runtime_addr, utils.LazyString("<(%s%s)", label, offset_string))
+        byte(runtime_addr_high)
+        expr(runtime_addr_high, utils.LazyString(">(%s%s)", label, offset_string))
+    if abs(runtime_addr_high - runtime_addr) == 1:
+        return max(runtime_addr, runtime_addr_high) + 1
     return None
 
-def rts_code_ptr(addr, addr_high=None):
-    return code_ptr(addr, addr_high, offset=1)
+def rts_code_ptr(runtime_addr, runtime_addr_high=None):
+    return code_ptr(runtime_addr, runtime_addr_high, offset=1)
 
 def set_label_maker_hook(hook):
     disassembly.set_user_label_maker_hook(hook)
@@ -194,7 +180,7 @@ def add_sequence_hook(hook):
 
 def go(post_trace_steps=None, autostring_min_length=3):
     # TODO: Perhaps a bit hacky, but label() will use this and we call it here to define pydis_start/end and we may also call it at other points in this user-style code. This may indicate label() needs to be changed.
-    set_current_move_id(None)
+    # TODO!? set_current_move_id(None)
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
     pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
     label(pydis_start, "pydis_start")

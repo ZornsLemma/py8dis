@@ -99,6 +99,7 @@ def add_optional_label(addr, s, base_addr=None):
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 # TODO: here move_id=None means "I am not forcing a move_id" whereas elsewhere None means "the general move ID", this sucks
+# TODO: I am thinking (99% confident) first argument, the actual label address, is a runtime address and (50% confident) second argument, the context, is a binary address
 def get_label(addr, context, move_id=None):
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     # We need to ensure the labelmanager knows there's a label at this address

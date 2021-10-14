@@ -5,6 +5,7 @@ import collections
 import config
 import disassembly
 import labelmanager # TODO!?
+import movemanager
 
 entry_points = []
 traced_entry_points = set()
@@ -30,24 +31,9 @@ def get_move_id33(addr):
 
 
 # TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
-def add_entry(addr, name, move_id):
-    import trace6502 # TODO!
-    SFTODO = trace6502.apply_move2(addr, config.move_ranges[move_id][1] if move_id is not None else addr)
-    #print("QPX", hex(addr), name, move_id, SFTODO)
-    assert len(SFTODO) == 1
-    entry_points.append(SFTODO[0])
-    disassembly.add_label(addr, name, move_id)
-
-def add_entry_internal(addr, name, move_id):
-    #if addr == 0x201d:
-        #print("XAZZ")
-        #assert False
-    entry_points.append(addr)
-    # TODO: Should this translation not be done on user calls and internal calls have a separate add_entry() version?
-    SFTODO = config.move_offset[addr]
-    if SFTODO is None:
-        SFTODO = addr
-    disassembly.add_label(SFTODO, name, move_id)
+def add_entry(binary_addr, name, move_id):
+    entry_points.append(binary_addr)
+    disassembly.add_label(movemanager.b2r(binary_addr), name, move_id)
 
 def analyse_code():
     addr = 0

@@ -11,7 +11,8 @@
 # this is a fairly natural restriction, because we're trying to generate
 # assembler input which will recreate the binary, and we can only have a single
 # classification (an instruction or data-emitting directive of some kind) for
-# each byte in the binary.
+# each byte in the binary. (We don't enforce this single source rule; instead
+# we allow add_move() to "steal" sources from previously defined moves.)
 
 import collections
 import contextlib
@@ -30,6 +31,8 @@ def add_move(dest, source, length):
     assert utils.is_valid_addr(source)
     assert utils.is_valid_addr(dest + length)
     assert utils.is_valid_addr(source + length)
+    assert dest != source # not fundamentally necessary, but seems sensible
+    assert length > 0
     move_definitions.append((dest, source, length))
     move_id = len(move_definitions) - 1
     for i in range(length):
@@ -64,10 +67,11 @@ def b2r(binary_addr):
 
 # Return the binary address corresponding to a runtime address; because a
 # runtime address can be the target of multiple moves, this can only be resolved
-# in the context of active_move_ids.
+# in the context of active_move_ids. TODO: UPDATE COMMENT TO REFLECT WE'RE ALSO RETURNING THE MOVE_ID - WE MAY WANT A VARIANT WHICH DOESN'T DO THIS
 # TODO: It might be useful to provide a variant of this function which returns
 # a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
 # yet.
+# TODO: *At least* for tracing and - still thinking about this - probably in all cases, I want to be able to do smart runtime-to-binary conversion without always using or needing the context of active_move_ids. This is obviously always on a best-effort basis (which is why we have active_move_ids so the user can clarify where appropriate pre-tracing), but the key point is that where moves *don't* conflict (the global move-everything-to-itself move may confuse matters here, need to think about that), we can always resolve a runtime address to a binary address taking moves into account without needing any context.
 def r2b(runtime_addr):
     # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids.
     assert utils.is_valid_addr(runtime_addr)
@@ -82,7 +86,7 @@ def r2b(runtime_addr):
         if move_id in relevant_move_ids:
             move_dest, move_source, move_length = move_definitions[move_id]
             assert move_dest <= runtime_addr < (move_dest + move_length)
-            return move_source + (runtime_addr - move_dest)
+            return (move_source + (runtime_addr - move_dest), move_id)
     assert False # TODO: currently not clear to me if this is possible...
 
 
