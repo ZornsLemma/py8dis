@@ -3,7 +3,6 @@ import collections # TODO!?
 import sys
 
 import config
-import disassembly # TODO!?
 #import trace6502 # TODO!
 
 memory = config.memory
@@ -40,6 +39,7 @@ def add_hex_dump(s, addr, length, column_adjust=0):
     if capped_length < length:
         s += " ..."
     if config.show_cpu_state:
+        import disassembly # TODO: horrible hack
         if disassembly.cpu_state_optimistic[addr] is not None:
             # TODO: This needs some generic way to call the right function, rather than assuming
             # it's in trace6502.
@@ -63,6 +63,9 @@ def check_expr(expr, value):
     # probably be retained even if expression evaluation is supported directly
     # in py8dis.
     config.formatter().assert_expr(expr, value)
+
+def is_valid_addr(addr):
+    return 0 <= addr < 0x10000
 
 
 # TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
