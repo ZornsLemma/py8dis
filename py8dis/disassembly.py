@@ -298,7 +298,7 @@ def emit():
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.code_end())
         else:
-            SFTODOARGS = (config.move_offset[start_addr], start_addr, end_addr - start_addr)
+            SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
             d.extend(formatter.pseudopc_start(*SFTODOARGS))
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.pseudopc_end(*SFTODOARGS))
