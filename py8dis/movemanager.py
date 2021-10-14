@@ -13,11 +13,12 @@
 # classification (an instruction or data-emitting directive of some kind) for
 # each byte in the binary.
 
+import collections
 import contextlib
 
 import utils
 
-active_move_ids = []
+active_move_ids = [0]
 
 # TODO: Note that move_definitions has to be interpreted "as a whole", since later moves can "steal" binary addresses from earlier moves. I don't think this is a problem - and the whole point is to allow the user to do things like move a big chunk of code which gets relocated at runtime as a whole and then override that for a fairly small chunks witin that big chunk that the copied elsewhere.
 move_definitions = [(0, 0, 0x10000)]
@@ -51,6 +52,9 @@ def moved(move_id):
         assert active_move_ids[-1] == move_id
         active_move_ids.pop()
 
+# Return the runtime address corresponding to a binary address; because a binary
+# address can only be the source of a single move, there is always a single
+# result of this mapping.
 def b2r(binary_addr):
     assert utils.is_valid_addr(binary_addr)
     move_id = move_id_for_binary_addr[binary_addr]
@@ -58,16 +62,27 @@ def b2r(binary_addr):
     assert move_source <= binary_addr <= (move_source + move_length)
     return move_dest + (binary_addr - move_source)
 
+# Return the binary address corresponding to a runtime address; because a
+# runtime address can be the target of multiple moves, this can only be resolved
+# in the context of TODO.
+# TODO: It might be useful to provide a variant of this function which returns
+# a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
+# yet.
 def r2b(runtime_addr):
     assert utils.is_valid_addr(runtime_addr)
-
     # TODO: Deriving this dynamically every time is super inefficient, but I'm still thinking
     # my way through this.
     move_ids_for_runtime_addr = collections.defaultdict(list) # TODO: set not list??
     for binary_addr, move_id in enumerate(move_id_for_binary_addr):
         move_ids_for_runtime_addr[b2r(binary_addr)].append(move_id)
-
-    TODO
+    relevant_move_ids = move_ids_for_runtime_addr[runtime_addr]
+    assert len(relevant_move_ids) > 0
+    for move_id in active_move_ids[::-1]:
+        if move_id in relevant_move_ids:
+            move_dest, move_source, move_length = move_definitions[move_id]
+            assert move_dest <= runtime_addr <= (move_dest + move_length)
+            return move_source + (runtime_addr - move_dest)
+    assert False # TODO: currently not clear to me if this is possible...
 
 
 if __name__ == "__main__":
@@ -84,10 +99,18 @@ if __name__ == "__main__":
     assert b2r(0x2000) == 0x70
     assert b2r(0x2000 + 8) == 0x2000 + 8
 
-    assert active_move_ids == []
+    print("QQQ", hex(r2b(0x70))) # TODO: what *should* happen here?
+
+    assert active_move_ids == [0]
     with moved(id2):
-        assert active_move_ids == [id2]
+        assert active_move_ids == [0, id2]
+        assert r2b(0x70) == 0x2000
+        assert r2b(0x2008) == 0x2008
         with moved(id1):
-            assert active_move_ids == [id2, id1]
-        assert active_move_ids == [id2]
-    assert active_move_ids == []
+            assert active_move_ids == [0, id2, id1]
+            assert r2b(0x70) == 0x1900
+            assert r2b(0x2008) == 0x2008
+        assert active_move_ids == [0, id2]
+        assert r2b(0x70) == 0x2000
+        assert r2b(0x2008) == 0x2008
+    assert active_move_ids == [0]
