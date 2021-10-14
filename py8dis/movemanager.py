@@ -68,14 +68,7 @@ def b2r(binary_addr):
     assert move_source <= binary_addr < (move_source + move_length)
     return move_dest + (binary_addr - move_source)
 
-# Return (binary address, move ID) corresponding to a runtime address; because a
-# runtime address can be the target of multiple moves, there may be no
-# single correct answer - active_move_ids is used to help disambiguate, but
-# if that fails (None, None) will be returned.
-# TODO: It might be useful to provide a variant of this function which returns
-# a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
-# yet.
-def r2b(runtime_addr):
+def move_ids_for_runtime_addr(runtime_addr):
     # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids.
     assert utils.is_valid_addr(runtime_addr)
     # TODO: Deriving this dynamically every time is super inefficient, but I'm still thinking
@@ -84,7 +77,17 @@ def r2b(runtime_addr):
     for binary_addr, move_id in enumerate(move_id_for_binary_addr):
         if move_id != base_move_id: # TODO: special case feels a bit awkward
             move_ids_for_runtime_addr[b2r(binary_addr)].append(move_id)
-    relevant_move_ids = move_ids_for_runtime_addr[runtime_addr]
+    return move_ids_for_runtime_addr[runtime_addr]
+
+# Return (binary address, move ID) corresponding to a runtime address; because a
+# runtime address can be the target of multiple moves, there may be no
+# single correct answer - active_move_ids is used to help disambiguate, but
+# if that fails (None, None) will be returned.
+# TODO: It might be useful to provide a variant of this function which returns
+# a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
+# yet.
+def r2b(runtime_addr):
+    relevant_move_ids = move_ids_for_runtime_addr(runtime_addr)
     print("XXX", relevant_move_ids)
     if len(relevant_move_ids) == 0:
         return runtime_addr, base_move_id

@@ -6,6 +6,7 @@ import six
 
 import config
 import labelmanager
+import movemanager
 import trace # SFTODO TEMP?
 import trace6502 # SFTODO TEMP?
 import utils
@@ -98,9 +99,12 @@ def add_optional_label(addr, s, base_addr=None):
     optional_labels[addr] = (s, base_addr)
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
-# TODO: here move_id=None means "I am not forcing a move_id" whereas elsewhere None means "the general move ID", this sucks
+# TODO: here move_id=None means "I am not forcing a move_id" whereas elsewhere None means "the general move ID", this sucks - being resolved now
 # TODO: I am thinking (99% confident) first argument, the actual label address, is a runtime address and (50% confident) second argument, the context, is a binary address
 def get_label(addr, context, move_id=None):
+    assert utils.is_valid_addr(addr)
+    assert utils.is_valid_addr(context)
+    assert move_id is None or movemanager.is_valid_move_id(move_id)
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     # We need to ensure the labelmanager knows there's a label at this address
     # so it can emit a definition. It's tempting to try to defer this until
@@ -199,9 +203,12 @@ def label_maker(addr, context, move_id):
             return user_suggestion
     return suggestion
 
-# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
+# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here - being resolved
 def get_final_label(addr, context, move_id):
     assert trace_done
+    assert utils.is_valid_addr(addr)
+    assert utils.is_valid_addr(context)
+    assert move_id is None or movemanager.is_valid_move_id(move_id)
     name, move_id = label_maker(addr, context, move_id)
     if is_simple_name(name):
         labelmanager.labels[addr].add_explicit_name(name, move_id)
@@ -268,14 +275,10 @@ def emit():
         SUBSTART = addr
         while addr < end_addr:
             new_addr = addr + classifications[addr].length()
-            THISMOVE = config.move_offset[addr]
-            if THISMOVE is None:
-                THISMOVE = -1000000
-            else:
-                THISMOVE = addr - THISMOVE
+            THISMOVE = movemanager.move_id_for_binary_addr[addr]
             if new_addr >= end_addr:
                 addr = new_addr
-                THISMOVE = SFTODOMOVEBASE + 1
+                THISMOVE = -1000000
             if THISMOVE != SFTODOMOVEBASE:
                 SFTODORANGES.append((SUBSTART, addr))
                 SUBSTART = addr
@@ -290,7 +293,7 @@ def emit():
     d = []
     for start_addr, end_addr in SFTODORANGES:
         #print("QZZ %04x %04x" %(start_addr, end_addr))
-        if config.move_offset[start_addr] is None:
+        if movemanager.move_id_for_binary_addr[start_addr] == movemanager.base_move_id:
             d.extend(formatter.code_start(start_addr, end_addr))
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.code_end())

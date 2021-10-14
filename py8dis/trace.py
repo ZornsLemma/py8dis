@@ -14,20 +14,11 @@ code_analysis_fns = [] # TODO!?
 
 # TODO: experimental, this is only meaningful for code addresses I think
 def get_move_id(addr):
-    our_move_id = None
-    for move_id, (dest, source, length) in enumerate(config.move_ranges):
-        if source <= addr < source+length:
-            assert our_move_id is None
-            our_move_id = move_id
-    return our_move_id
+    return movemanager.move_id_for_binary_addr[addr] # TODO!?
 
 # TODO: experimental - name is deliberately crap as all these sort of functions need rationalising
 def get_move_id33(addr):
-    result = set()
-    for move_id, (dest, source, length) in enumerate(config.move_ranges):
-        if dest <= addr < dest+length:
-            result.add(move_id)
-    return result
+    return set(movemanager.move_ids_for_runtime_addr(addr)) # TODO!?
 
 
 # TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
@@ -72,7 +63,7 @@ def trace():
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 #print("AQB %04x %04x" % (entry_point, new_entry_point))
-                add_entry_internal(new_entry_point, name=None, move_id=get_move_id(new_entry_point))
+                add_entry(new_entry_point, name=None, move_id=movemanager.move_id_for_binary_addr[new_entry_point])
     if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):
             print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))

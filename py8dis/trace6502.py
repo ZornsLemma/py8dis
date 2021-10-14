@@ -6,6 +6,7 @@ import classification
 import config
 import disassembly
 import labelmanager
+import movemanager
 import trace
 import utils
 
@@ -22,45 +23,17 @@ subroutine_argument_finder_hooks = [] # TODO: move?
 #
 # TODO: I think the heuristic approach is doable, but while I'm feeling my way and getting something working let's not do that yet.
 # TODO: This returns a list so it can return an empty list when it wants to say "give up" and this "just works" when appending the result to other lists
-def apply_move(target):
-    # TODO: Probably ultra-inefficient code - we should probably derive what we need from move_offset[] array once in go() - but want to get it right and be flexible before making it fast(er)
-    # TODO: Variable names are junk as I figure this out, rename later
-    match = None
-    for i, SFTODO in enumerate(config.move_offset):
-        if SFTODO == target:
-            if match is None:
-                #print("QPP %04x %04x" % (i, SFTODO))
-                #assert False
-                match = i
-            else:
-                #assert False # TODO JUST TEMP, PERFECTLY LEGIT CASE
-                return []
-    if match is None:
-        return [target]
-    else:
-        return [match]
+def apply_move(runtime_addr):
+    # TODO: This is a re-imp[lementation using movemanager, may want to get rid of apply_move() fn later
+    binary_addr, _ = movemanager.r2b(runtime_addr)
+    if binary_addr is None:
+        return []
+    return [binary_addr]
 
 def apply_move2(target, context):
-    # TODO: Inefficient
-    matches = {}
-    our_match_id = None
-    for match_id, (dest, source, length) in enumerate(config.move_ranges):
-        if source <= context < source+length:
-            assert our_match_id is None
-            our_match_id = match_id
-        if dest <= target < dest+length:
-            assert match_id not in matches
-            matches[match_id] = source + (target - dest)
-    if len(matches) == 0:
-        return [target]
-    elif len(matches) == 1:
-        return [matches.values()[0]]
-    else:
-        #print("XXA", our_match_id)
-        #print("XXD", matches)
-        if our_match_id in matches:
-            return [matches.values()[our_match_id]]
-        return []
+    # TODO: Rewritten in terms of movemanager - change this eventually? I think the rewrite does the same thing, but it may not, or it may do but not be right anyway...
+    with movemanager.moved(movemanager.move_id_for_binary_addr[target]):
+        return apply_move(target)
 
 def add_jsr_hook(addr, hook):
     assert addr not in jsr_hooks
@@ -354,9 +327,7 @@ class OpcodeConditionalBranch(Opcode):
         super(OpcodeConditionalBranch, self).__init__(mnemonic, 1)
 
     def _target(self, addr):
-        base = config.move_offset[addr]
-        if base is None:
-            base = addr
+        base = movemanager.b2r(addr)
         return base + 2 + signed8(get_u8(addr + 1))
 
     def abs_operand(self, addr):
