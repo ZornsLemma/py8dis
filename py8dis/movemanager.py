@@ -29,7 +29,6 @@ def add_move(dest, source, length):
     assert utils.is_valid_addr(source)
     assert utils.is_valid_addr(dest + length)
     assert utils.is_valid_addr(source + length)
-    # TODO: This probably needs validation and to do all sorts of stuff
     move_definitions.append((dest, source, length))
     move_id = len(move_definitions) - 1
     for i in range(length):
@@ -52,9 +51,16 @@ def moved(move_id):
         assert active_move_ids[-1] == move_id
         active_move_ids.pop()
 
+
 if __name__ == "__main__":
     id1 = add_move(0x70, 0x1900, 10)
     id2 = add_move(0x70, 0x2000, 8)
+
+    assert move_id_for_binary_addr[0x70] == 0
+    assert move_id_for_binary_addr[0x1900] == id1
+    assert move_id_for_binary_addr[0x2000] == id2
+    assert move_id_for_binary_addr[0x2000 + 10] == 0
+
     assert active_move_ids == []
     with moved(id2):
         assert active_move_ids == [id2]
