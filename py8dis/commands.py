@@ -85,12 +85,12 @@ def comment(runtime_addr, text):
 
 def expr(runtime_addr, s):
     binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert data_loaded_at_binary_addr(binary_addr)
+    assert utils.data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
 def byte(runtime_addr, n=1):
     binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert data_loaded_at_binary_addr(binary_addr, n)
+    assert utils.data_loaded_at_binary_addr(binary_addr, n)
     disassembly.add_classification(binary_addr, classification.Byte(n, False))
 
 def word(runtime_addr, n=1):
@@ -143,9 +143,9 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
         runtime_addr_high = runtime_addr + 1
     binary_addr, _ = movemanager.r2b(runtime_addr)
     binary_addr_high, _ = movemanager.r2b(runtime_addr_high)
-    assert data_loaded_at_binary_addr(binary_addr)
-    assert data_loaded_at_binary_addr(binary_addr_high)
-    code_at_runtime_addr = ((memory[addr_high] << 8) | memory[addr]) + offset
+    assert utils.data_loaded_at_binary_addr(binary_addr)
+    assert utils.data_loaded_at_binary_addr(binary_addr_high)
+    code_at_runtime_addr = ((memory[binary_addr_high] << 8) | memory[binary_addr]) + offset
     # Label and trace the code at code_at
     label = entry(code_at_runtime_addr) # ENHANCE: allow optional user-specified label?
     # Reference that label at addr/addr_high.

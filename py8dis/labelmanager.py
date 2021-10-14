@@ -72,7 +72,7 @@ class Label(object):
         # It doesn't hurt to check move_id is valid in general, but in
         # particular it helps detect accidentally passing a "context address" as
         # a move ID by mistake.
-        assert move_id is None or 0 <= move_id < len(config.move_ranges)
+        assert movemanager.is_valid_move_id(move_id)
         # TODO: Same question re what if name exists in a different move_id as for add_explicit_name() above
         if s not in self.all_names():
             self.expressions[move_id].append(s)
