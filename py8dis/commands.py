@@ -120,7 +120,9 @@ def nonentry(runtime_addr):
 def wordentry(runtime_addr, n=1):
     word(runtime_addr, n)
     for i in range(n):
-        expr(runtime_addr, entry(get_u16(addr)))
+        binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+        assert utils.data_loaded_at_binary_addr(binary_addr, 2)
+        expr(runtime_addr, entry(get_u16(binary_addr)))
         runtime_addr += 2
     return runtime_addr
 
