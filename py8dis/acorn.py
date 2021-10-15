@@ -4,7 +4,7 @@ import utils
 
 def xy_addr(x_addr, y_addr):
     if x_addr is not None and y_addr is not None:
-        label = get_label((memory[y_addr] << 8) | memory[x_addr], x_addr)
+        label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
         expr(x_addr, utils.LazyString("<(%s)", label))
         expr(y_addr, utils.LazyString(">(%s)", label))
 
@@ -296,7 +296,7 @@ inkey_enum = {k & 0xff: v for k, v in inkey_enum.items()}
 def enum_lookup(r_addr, e):
     if r_addr is None:
         return
-    r = config.memory[r_addr]
+    r = config.memory_binary[r_addr]
     if r in e:
         constant(r, e[r])
         expr(r_addr, e[r])
@@ -313,7 +313,7 @@ def osword_argument_finder_hook(a_addr, x_addr, y_addr):
 
 def osbyte_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osbyte_enum)
-    if a_addr is not None and memory[a_addr] == 0x81:
+    if a_addr is not None and memory_binary[a_addr] == 0x81:
         enum_lookup(x_addr, inkey_enum)
 
 def oscli_argument_finder_hook(a_addr, x_addr, y_addr):
@@ -400,7 +400,7 @@ def is_sideways_rom():
     def check_entry(addr, entry_type):
         jmp_abs_opcode = 0x4c
         label(addr, entry_type + "_entry")
-        if memory[addr] == jmp_abs_opcode:
+        if memory_binary[addr] == jmp_abs_opcode:
             entry(addr)
             label(utils.get_u16(addr + 1), entry_type + "_handler")
         else:
@@ -409,7 +409,7 @@ def is_sideways_rom():
     check_entry(0x8003, "service")
     label(0x8006, "rom_type")
     label(0x8007, "copyright_offset")
-    copyright_offset = memory[0x8007]
+    copyright_offset = memory_binary[0x8007]
     expr(0x8007, "copyright - rom_header")
     label(0x8008, "binary_version")
     label(0x8009, "title")

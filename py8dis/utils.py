@@ -5,7 +5,7 @@ import sys
 import config
 #import trace6502 # TODO!
 
-memory = config.memory
+memory_binary = config.memory_binary
 
 def die(s):
     print(s, file=sys.stderr)
@@ -24,12 +24,12 @@ def plainhex4(i):
     return ("%04x" if config.lower_case() else "%04X") % i
 
 def get_u16(addr):
-    assert memory[addr] is not None and memory[addr+1] is not None
-    return memory[addr] + (memory[addr+1] << 8)
+    assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
+    return memory_binary[addr] + (memory_binary[addr+1] << 8)
 
 def get_u16_be(addr):
-    assert memory[addr] is not None and memory[addr+1] is not None
-    return (memory[addr] << 8) | memory[addr+1]
+    assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
+    return (memory_binary[addr] << 8) | memory_binary[addr+1]
 
 def add_hex_dump(s, addr, length, column_adjust=0):
     assert length > 0
@@ -38,7 +38,7 @@ def add_hex_dump(s, addr, length, column_adjust=0):
     s = LazyString("%-*s", config.inline_comment_column() + column_adjust, s)
     s += "%s %s: " % (config.formatter().comment_prefix(), plainhex4(addr))
     capped_length = min(length, 3)
-    s += " ".join(plainhex2(x) for x in memory[addr:addr+capped_length])
+    s += " ".join(plainhex2(x) for x in memory_binary[addr:addr+capped_length])
     if capped_length < length:
         s += " ..."
     if config.show_cpu_state:
@@ -73,7 +73,7 @@ def is_valid_addr(addr):
 def data_loaded_at_binary_addr(binary_addr, n=1):
     assert is_valid_addr(binary_addr)
     assert is_valid_addr(binary_addr + n - 1)
-    return all(memory[binary_addr + i] is not None for i in range(n))
+    return all(memory_binary[binary_addr + i] is not None for i in range(n))
 
 # TODO: Probably not a good name for this function, something reflecting that it outputs a "described count" is probably better.
 def plural(n, singular):

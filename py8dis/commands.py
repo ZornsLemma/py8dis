@@ -17,7 +17,7 @@ import movemanager
 import trace
 import utils
 
-memory = config.memory
+memory_binary = config.memory_binary
 
 # TODO!?
 config.load_ranges = []
@@ -28,7 +28,7 @@ def load(addr, filename, md5sum=None):
         data = bytearray(f.read())
         if addr + len(data) > 0x10000:
             utils.die("load() would overflow memory")
-        memory[addr:addr+len(data)] = data
+        memory_binary[addr:addr+len(data)] = data
     if md5sum is not None:
         import hashlib
         hash = hashlib.md5()
@@ -42,7 +42,7 @@ def load(addr, filename, md5sum=None):
 # access things in the relocated region.
 def move(dest, src, length):
     # You can't move from a region that hasn't been populated with data. TODO: Move this check into add_move()?
-    assert all(memory[i] is not None for i in range(src, src+length))
+    assert all(memory_binary[i] is not None for i in range(src, src+length))
     return movemanager.add_move(dest, src, length)
 
 # These wrappers rename the verb-included longer names for some functions to
@@ -149,7 +149,7 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     binary_addr_high, _ = movemanager.r2b(runtime_addr_high)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr_high)
-    code_at_runtime_addr = ((memory[binary_addr_high] << 8) | memory[binary_addr]) + offset
+    code_at_runtime_addr = ((memory_binary[binary_addr_high] << 8) | memory_binary[binary_addr]) + offset
     # Label and trace the code at code_at
     label = entry(code_at_runtime_addr, warn=False) # ENHANCE: allow optional user-specified label?
     # Reference that label at addr/addr_high.

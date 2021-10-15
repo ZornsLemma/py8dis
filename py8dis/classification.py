@@ -8,7 +8,7 @@ import utils
 import trace
 
 expressions = {}
-memory = config.memory
+memory_binary = config.memory_binary
 formatter = config.formatter
 
 # ENHANCE: At the moment there's no support for wrapping round at the top of
@@ -41,7 +41,7 @@ class Byte(object):
         def asciify(n):
             if n in expressions:
                 return "."
-            c = memory[n]
+            c = memory_binary[n]
             if utils.isprint(c):
                 return chr(c)
             return "."
@@ -140,7 +140,7 @@ class String(object):
         state = 0
         s_i = 0
         for i in range(self._length):
-            c = memory[addr + i]
+            c = memory_binary[addr + i]
             c_in_string = formatter().string_chr(c)
             if c_in_string is not None:
                 if state == 0:
@@ -191,10 +191,10 @@ def get_expression(addr, expected_value):
 
 def get_constant8(addr, force_hex2=False):
     if addr not in expressions:
-        if memory[addr] < 10 and not force_hex2:
-            return "%d" % memory[addr]
-        return formatter().hex2(memory[addr])
-    return get_expression(addr, memory[addr])
+        if memory_binary[addr] < 10 and not force_hex2:
+            return "%d" % memory_binary[addr]
+        return formatter().hex2(memory_binary[addr])
+    return get_expression(addr, memory_binary[addr])
 
 def get_constant16(addr):
     if addr not in expressions:
@@ -202,7 +202,7 @@ def get_constant16(addr):
     return get_expression(addr, utils.get_u16(addr))
 
 def get_address8(addr):
-    operand = memory[addr]
+    operand = memory_binary[addr]
     if addr not in expressions:
         return disassembly.get_label(operand, addr)
     return get_expression(addr, operand)
@@ -216,7 +216,7 @@ def get_address16(addr):
 
 def stringterm(addr, terminator, exclude_terminator=False):
     initial_addr = addr
-    while memory[addr] != terminator:
+    while memory_binary[addr] != terminator:
         addr += 1
     string_length = (addr + 1) - initial_addr
     if exclude_terminator:
@@ -235,7 +235,7 @@ def string(addr, n=None):
     if n is None:
         assert not disassembly.is_classified(addr)
         n = 0
-        while not disassembly.is_classified(addr + n) and utils.isprint(memory[addr + n]):
+        while not disassembly.is_classified(addr + n) and utils.isprint(memory_binary[addr + n]):
             n += 1
     if n > 0:
         disassembly.add_classification(addr, String(n, False))
@@ -250,9 +250,9 @@ def stringhi(addr):
     while True:
         if disassembly.is_classified(addr, 1):
             break
-        if memory[addr] & 0x80 != 0:
+        if memory_binary[addr] & 0x80 != 0:
             if False: # ENHANCE: Works but not that helpful so save it for a case where it is
-                c = memory[addr] & 0x7f
+                c = memory_binary[addr] & 0x7f
                 if utils.isprint(c) and c != ord('"'):
                     add_expression(addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c)))
             break
@@ -268,8 +268,8 @@ def stringhiz(addr, include_terminator_fn=None):
     while True:
         if disassembly.is_classified(addr, 1):
             break
-        if memory[addr] == 0 or (memory[addr] & 0x80) != 0:
-            if include_terminator_fn is not None and include_terminator_fn(memory[addr]):
+        if memory_binary[addr] == 0 or (memory_binary[addr] & 0x80) != 0:
+            if include_terminator_fn is not None and include_terminator_fn(memory_binary[addr]):
                 addr += 1
             break
         addr += 1
@@ -279,16 +279,16 @@ def stringhiz(addr, include_terminator_fn=None):
 
 def stringn(addr):
     disassembly.add_classification(addr, Byte(1, False))
-    length = memory[addr]
+    length = memory_binary[addr]
     add_expression(addr, utils.LazyString("%s - %s", disassembly.get_label(addr + 1 + length, addr), disassembly.get_label(addr + 1, addr)))
     return string(addr + 1, length)
 
 def autostring(min_length=3):
     assert min_length >= 2
     addr = 0
-    while addr < len(memory):
+    while addr < len(memory_binary):
         i = 0
-        while (addr + i) < len(memory) and memory[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory[addr + i]):
+        while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory_binary[addr + i]):
             i += 1
             if (addr + i) in labelmanager.labels:
                 break
@@ -299,9 +299,9 @@ def autostring(min_length=3):
 def classify_leftovers():
     # TODO: Might be able to factor out common code with autostring()
     addr = 0
-    while addr < len(memory):
+    while addr < len(memory_binary):
         i = 0
-        while (addr + i) < len(memory) and memory[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
+        while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
             i += 1
             if (addr + i) in labelmanager.labels:
                 break

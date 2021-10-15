@@ -10,7 +10,7 @@ import movemanager
 import trace
 import utils
 
-memory = config.memory
+memory_binary = config.memory_binary
 labels = labelmanager.labels
 jsr_hooks = {}
 subroutine_argument_finder_hooks = [] # TODO: move?
@@ -52,8 +52,8 @@ def signed8(i):
         return i
 
 def get_u8(i):
-    assert memory[i] is not None
-    return memory[i]
+    assert memory_binary[i] is not None
+    return memory_binary[i]
 
 
 # TODO: Not a high priority, but once we have support for generating arbitrary inline
@@ -170,7 +170,7 @@ class OpcodeImmediate(Opcode):
     def as_string(self, addr):
         s = "    %s #%s" % (utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
         if (addr + 1) not in classification.expressions:
-            c = memory[addr + 1]
+            c = memory_binary[addr + 1]
             if config.show_char_literals and utils.isprint(c):
                 s += " %s '%s'" % (config.formatter().comment_prefix(), chr(c))
         return s
@@ -181,7 +181,7 @@ class OpcodeZp(Opcode):
         super(OpcodeZp, self).__init__(mnemonic, 1, suffix, update=update)
 
     def abs_operand(self, addr):
-        return memory[addr + 1]
+        return memory_binary[addr + 1]
 
     def update_references(self, addr):
         labels[self.abs_operand(addr)].add_reference(addr)
@@ -416,7 +416,7 @@ def make_increment(reg):
 
 def make_load_immediate(reg):
     def load_immediate(addr, state):
-        v = memory[addr+1]
+        v = memory_binary[addr+1]
         state[reg] = (v, addr+1)
         state['n'] = ((v & 0x80) == 0x80)
         state['z'] = (v == 0)
@@ -633,7 +633,7 @@ opcodes = {
 
 
 def disassemble_instruction(addr):
-    opcode_value = memory[addr]
+    opcode_value = memory_binary[addr]
     if opcode_value not in opcodes:
         return [None]
     opcode = opcodes[opcode_value]
@@ -687,7 +687,7 @@ def subroutine_argument_finder():
         if c is not None:
             # TODO: Hacky use of isinstance()
             if isinstance(c, Opcode):
-                opcode = config.memory[addr]
+                opcode = config.memory_binary[addr]
                 opcode_jsr = 0x20
                 opcode_jmp = 0x4c
                 if opcode in (opcode_jsr, opcode_jmp):

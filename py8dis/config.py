@@ -1,4 +1,4 @@
-memory = [None] * 64*1024
+memory_binary = [None] * 64*1024
 # TODO: move_offset is probably misnamed
 #TODOmove_offset = [None] * 64*1024
 #TODOmove_ranges = [] # TODO; experimental

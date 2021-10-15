@@ -9,7 +9,7 @@ import config
 import disassembly
 import utils
 
-memory = config.memory
+memory_binary = config.memory_binary
 
 
 class Opcode(object):
@@ -79,7 +79,7 @@ opcodes = {
 
 def disassemble_instruction(addr):
     assert not disassembly.is_classified(addr, 1)
-    opcode_value = memory[addr]
+    opcode_value = memory_binary[addr]
     #print(hex(opcode_value))
     if opcode_value not in opcodes:
         return [None]
