@@ -9,6 +9,9 @@ class MemoryRuntime(object):
         binary_address, _ = movemanager.r2b_checked(key)
         return memory_binary[binary_address]
 
+# TODO: This perhaps "should" be called memory_runtime, but earlier versions just had
+# memory and this is the main memory access for user code so probably reasonable to use
+# short name for it.
 memory = MemoryRuntime()
 
 # TODO: move_offset is probably misnamed
