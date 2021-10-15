@@ -1,4 +1,16 @@
 memory_binary = [None] * 64*1024
+
+# TODO: Move/tweak?
+class MemoryRuntime(object):
+    def __getitem__(self, key):
+        import movemanager # TODO!?
+        import utils # TODO!?
+        assert utils.is_valid_addr(key)
+        binary_address, _ = movemanager.r2b_checked(key)
+        return memory_binary[binary_address]
+
+memory = MemoryRuntime()
+
 # TODO: move_offset is probably misnamed
 #TODOmove_offset = [None] * 64*1024
 #TODOmove_ranges = [] # TODO; experimental

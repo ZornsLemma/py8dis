@@ -18,6 +18,7 @@ import trace
 import utils
 
 memory_binary = config.memory_binary
+memory = config.memory
 
 # TODO!?
 config.load_ranges = []
