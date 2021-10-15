@@ -89,14 +89,20 @@ def expr(runtime_addr, s):
     assert utils.data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
-def byte(runtime_addr, n=1):
+def byte(runtime_addr, n=1, warn=True):
     binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr, n)
+    if not utils.data_loaded_at_binary_addr(binary_addr, n):
+        if warn:
+            utils.check_data_loaded_at_binary_addr(binary_addr, n) # TODO: bit redundant re-checking
+        return
     disassembly.add_classification(binary_addr, classification.Byte(n, False))
 
-def word(runtime_addr, n=1):
+def word(runtime_addr, n=1, warn=True):
     binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr, n * 2)
+    if not utils.data_loaded_at_binary_addr(binary_addr, n * 2):
+        if warn:
+            utils.check_data_loaded_at_binary_addr(binary_addr, n * 2) # TODO: bit redundant re-checking
+        return
     disassembly.add_classification(binary_addr, classification.Word(n * 2, False))
 
 def entry(runtime_addr, label=None, warn=True):
