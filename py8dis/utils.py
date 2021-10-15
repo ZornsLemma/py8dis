@@ -11,6 +11,9 @@ def die(s):
     print(s, file=sys.stderr)
     sys.exit(1)
 
+def warn(s):
+    print("warning: " + s, file=sys.stderr)
+
 def force_case(s):
     return s.lower() if config.lower_case() else s.upper()
 
@@ -71,6 +74,16 @@ def data_loaded_at_binary_addr(binary_addr, n=1):
     assert is_valid_addr(binary_addr)
     assert is_valid_addr(binary_addr + n - 1)
     return all(memory[binary_addr + i] is not None for i in range(n))
+
+# TODO: Probably not a good name for this function, something reflecting that it outputs a "described count" is probably better.
+def plural(n, singular):
+    return "%d %s" % (n, singular if n == 1 else singular + "s")
+
+def check_data_loaded_at_binary_addr(binary_addr, n=1):
+    if data_loaded_at_binary_addr(binary_addr, n):
+        return
+    # TODO: Does this need to report runtime addr instead/as well?
+    warn("expecting %s of data at binary address %s but not present" % (plural(n, "byte"), config.formatter().hex(binary_addr)))
 
 # TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
 class LazyString(object):

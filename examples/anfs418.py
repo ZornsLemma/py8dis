@@ -77,6 +77,8 @@ min_y = 0x81
 for i in range(8):
     # There's a split table of code pointers for use via LDA:PHA:LDA:PHA:RTS at
     # &8869+x (low byte) and &8861+x (high byte).
+    # XXX: Is this right? These code pointers appear to point into main RAM,
+    # admittedly at locations which are potentially open for us to copy code to.
     code_ptr(0x8869 + min_y + i, 0x8861 + min_y + i)
     # There's also a low byte only table of code pointers at &8600+x; the high
     # byte of &86 is hard-coded at &8679. We manually do half of what code_ptr()

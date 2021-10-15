@@ -95,12 +95,14 @@ def byte(runtime_addr, n=1):
 
 def word(runtime_addr, n=1):
     binary_addr, _ = movemanager.r2b(runtime_addr)
-    assert data_loaded_at_binary_addr(binary_addr, n * 2)
+    assert utils.data_loaded_at_binary_addr(binary_addr, n * 2)
     disassembly.add_classification(binary_addr, classification.Word(n * 2, False))
 
-def entry(runtime_addr, label=None):
+def entry(runtime_addr, label=None, warn=True):
     binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr)
+    # TODO: Should probably warn rather than assert in other fns too
+    if warn:
+        utils.check_data_loaded_at_binary_addr(binary_addr)
     trace.add_entry(binary_addr, label, move_id)
     if isinstance(label, six.string_types):
         return label
@@ -147,7 +149,7 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     assert utils.data_loaded_at_binary_addr(binary_addr_high)
     code_at_runtime_addr = ((memory[binary_addr_high] << 8) | memory[binary_addr]) + offset
     # Label and trace the code at code_at
-    label = entry(code_at_runtime_addr) # ENHANCE: allow optional user-specified label?
+    label = entry(code_at_runtime_addr, warn=False) # ENHANCE: allow optional user-specified label?
     # Reference that label at addr/addr_high.
     offset_string = "" if offset == 0 else ("%+d" % -offset)
     if binary_addr_high == binary_addr + 1:
