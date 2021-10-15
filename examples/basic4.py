@@ -8,7 +8,7 @@ load(0x8000, "basic4.orig", "e11eed95d1caba8aa9772e9001590585")
 acorn.master()
 acorn.is_sideways_rom()
 
-wordentry(0x8826, 121) # XXX: table size is a guess
+wordentry(0x8826, 117) # XXX: table size is a guess
 
 # This is pointless as used, but notice that a label make can introduce a
 # label indepdently of the standard label() command.

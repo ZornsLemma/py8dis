@@ -83,6 +83,7 @@ def check_data_loaded_at_binary_addr(binary_addr, n=1):
     if data_loaded_at_binary_addr(binary_addr, n):
         return
     # TODO: Does this need to report runtime addr instead/as well?
+    # TODO: The idea is sound but in practice this is a bit confusing because you have no idea what in the user program is triggering the warning (whereas with an actual fail and a backtrace you do) - it's not ideal, but searching for the address (which is likely to appear as a label name) in the output can be helpful, but still, this feels a little crappy
     warn("expecting %s of data at binary address %s but not present" % (plural(n, "byte"), config.formatter().hex(binary_addr)))
 
 # TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
