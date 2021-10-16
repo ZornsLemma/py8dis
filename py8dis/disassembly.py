@@ -339,7 +339,6 @@ def isolate_range(start_addr, end_addr):
     split_classification(start_addr)
     split_classification(end_addr)
 
-# TODO REVIEW UP TO HERE
 def disassemble_range(start_addr, end_addr):
     result = []
 
@@ -406,11 +405,6 @@ class Comment(object):
 
 # TODO: TobyLobster's Chuckie Egg disassembly shows that we're not necessarily doing the best we can when striking a balance between splitting/merging classifications and forcing the use of derived labels. l0c00 is being generated as an expression even though we should probably be splitting the byte data up so we can just label 0xc00 directly. I think part of the problem is we don't even *know* 0c00 is going to generate a label until we start str()-ing the instruction classifications - obviously we could make the disassembly process spit out labelled addresses explicitly during disassembly and that may well be the right approach, then label *names* are a str()-stage thing but the fact that an address will be labelled is known as soon as we finish tracing.
 
-
-#assert False # TODO: General comment:
-# I am starting to think labels on move()d stuff should be on the source regions. This does *not* agree with the value the assembler will assign to those labels, which is potentially confusing, but we can adjust for that internally. It *does* allow us to label up individual source regions independent of the fact that they get copied to the same dest address at runtime.
-# However, *if* we did label move()d stuff in the source region, it would not be possible to attach a regular label to the actual copy of the data in the binary, which is a problem e.g. think of the inevitable loop which does LDA in_binary_loc,X:STA dest_loc,X. With the current "labels are at the dest address" approach, in_binary_loc and dest_loc are distinct. With the "labels are at source address" approach, in_binary_loc and dest_loc are both the same (they are the "source" address). So maybe this strongly argues for the approach we are using where labels are on the dest regions. *But* this doesn't seem to fit all that well with the "we can handle multiple source regions copied to a single dest region" approach, since we can't label each separate move()d region independently, even though they do have a natural "distinction" by being at different source addresses.
-# I suspect/hope there's a clean solution to this so want to chew it over in background, hence this assert False comment to make some notes to come back to.
-# - OK, so I am leaning towards making the labels apply on the "dest" regions, but allowing labels to be tagged with a "move ID" (assigned when we do a move() and probably returned by that function, though most code would ignore it - we'd probably set a "current move region" flag, and provide some function to say "set this back to value X, or None"), mostly ignorning it but when outputting labels from a source region corresponding to a move region, we would (approximately) emit only labels with None move region (if we havne't already emitted them) or labels with the matching move ID.
+# TODO: Do we need to make some provision for user-controlled labelling at *binary* addresses, or without any "implicit, because unambiguous, move() application"? Imagine we have a move()d chunk of code - we want a label on that code *at the binary address* so the LDA rom_copy,Y:STA ram_copy,Y loop can use a custom label for rom_copy. I *think* at the moment it would be hard/impossible for user code to successfully define the "rom_copy" label.
 
 # TODO: Note that in move.py, l0908 is an automatically generated label which we would like to heuristically assign a non-None move_id, but this doesn't happen yet.
