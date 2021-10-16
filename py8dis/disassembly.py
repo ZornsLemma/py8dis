@@ -378,6 +378,7 @@ def disassemble_range(start_addr, end_addr):
         # Emit any label definitions for addresses within the classification.
         result.extend(pending_labels)
         # Emit any annotations which would fall within the classification.
+        # TODO: It might be better to emit mid-classification annotations after the classification - if only because of the way overlapping instructions are currently handled. This is what we used to do before I tweaked it a few hours ago, IIRC. But don't rush into changing this, as I may want to tweak how overlapping instructions are recorded.
         for i in range(1, classification_length):
             if len(annotations[addr + i]) > 0:
                 # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
