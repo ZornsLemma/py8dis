@@ -94,7 +94,6 @@ class CpuState(object):
         self._d[key] = item
 
 
-# TODO REVIEW UP TO HERE
 class Opcode(object):
     # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
     indent_level = collections.defaultdict(int)
@@ -704,17 +703,3 @@ config.set_disassemble_instruction(disassemble_instruction)
 trace.code_analysis_fns.append(subroutine_argument_finder) # TODO!?
 
 # TODO: do commmands entry() and no_entry() need to do an lookup of move()s? The user will probably be addressing routines at their relocated destination addresses, but the tracing process works with source addresses. (We might want some facility for a user to specify source addresses to these functions or variants, as this provides ultimate disambiguation in terms of forcing/preventing tracing of particular bits of code.)
-
-# TODO: Thoughts on slightly variant move() scheme
-# - get rid of the "global" None/-1/whatever move region
-# - just have a default move region which the user can override (maybe if disassembling a big self-relocating binary, we want to default to the move region containing the relocated binary, not the "no move" region as we do now) - the default move region really just means "in the absence of any other information, associate labels with this move region"
-# - allow a move region to be discontiguous - I think this is near trivial following this scheme
-# - move() marks each address in a 64K array with a move ID - by default it assigns the next unused move ID but optionally the user can override it to use a value returned by a previous move() call to generate discontiguous regions
-# - when we're doing the emit of each move region for the non-default (currently non-None) regions to give them a chance to have labels emitted inline in them, we actually just emit each contiguous move ID block separately (we can identify these internally by start address of the block instead of using the move ID)
-# - we can allow move()s to overlap and just overwrite any older move ID on those addresses, making it easier for the user to identify a big block then pick out some sub-regions of it as separate move IDs. there's no hierarchy or anything here - after all, we're emitting a linear stream of byte-generating things. possibly we'd want some sort of flag or config option or move_allow_overlap() separate function here
-
-
-# TODO: I should probably come up with some terminology for the two "sides" of a move() - perhaps "binary addr" (i.e. the address in the binary we are disassembling, the move source) and "runtime addr" (i.e. the address at runtime, the move dest) - this has nothing to do with the above move() variant scheme, it's just to try to make things a bit clearer in e.g. the trace code to see what kind of address a function is working with
-
-
-# TODO: TobyLobster's Chuckie Egg disassembly not unreasonably attempts to use memory[] directly and it is expecting that to reflect move()s. This is not compatible with having move()s with overlapping destiations, but I need to decide how to handle this. (One possibility - not that I'm super keen - would be to have memory_premove[] and memory_postmove[] arrays (terrible names just for writing this) and if you know you have no overlapping destinations you can use memory_postmove[] to get the old-style behaviour) - TBH not sure that will work actually, because if you're passing "post-move" addresses into disassembler functions they will get confused
