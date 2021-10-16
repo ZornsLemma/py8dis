@@ -127,11 +127,30 @@ def is_code(addr):
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 def our_label_maker(addr, context, move_id):
     assert context is not None
+    #if addr == 0x6a7:
+    #    print("BBB", hex(context), move_id)
     if move_id is None:
         move_id = movemanager.move_id_for_binary_addr[context] # TODO: OK?
         move_ids2 = movemanager.move_ids_for_runtime_addr(addr)
+        #if addr == 0x6a7:
+        #    print("CCC", move_id, move_ids2)
+        # TODO: Next bit TCO (and move_ids2 is unused), not sure if this is good or not
+        #if move_id not in move_ids2:
+        #    move_id = movemanager.base_move_id
+        # TODO: Alternative experimental thing - the basic idea is that if we can't assign a move ID based on a matching of context and addr move IDs, *if* there is any existing label for any of those move IDs we will use it rather than forcing a new label in base_move_id to be created
         if move_id not in move_ids2:
+            # TODO: COPY AND PASTE OF BELOW CODE
+            move_ids3 = [move_id] + list(move_ids2)
+            label = labelmanager.labels.get(addr)
+            for candidate_move_id in move_ids3:
+                if candidate_move_id in label.explicit_names:
+                    for name in label.explicit_names[candidate_move_id]:
+                        return (name.name, candidate_move_id)
+                if candidate_move_id in label.expressions:
+                    for expression in label.expressions[candidate_move_id]:
+                        return (expression, candidate_move_id)
             move_id = movemanager.base_move_id
+
     label = labelmanager.labels.get(addr)
     #print("YYY %04x" % addr)
     assert label is not None
@@ -203,6 +222,8 @@ def label_maker(addr, context, move_id):
     return suggestion
 
 def get_final_label(addr, context, move_id):
+    #if addr == 0x6a7:
+    #    print("FFF", hex(context), move_id)
     assert trace_done
     assert utils.is_valid_addr(addr)
     assert utils.is_valid_addr(context)
