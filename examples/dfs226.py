@@ -4,6 +4,11 @@ import acorn
 
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
+# TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.
+tube_host_move_id1 = move(0x400, 0xaf79, 0xb075 - 0xaf79)
+tube_host_move_id2 = move(0x500, 0xacdb, 0xaea9 - 0xacdb)
+label(0xaf79, "tube_host_code1")
+label(0xacdb, "tube_host_code2")
 
 acorn.bbc()
 acorn.is_sideways_rom()
