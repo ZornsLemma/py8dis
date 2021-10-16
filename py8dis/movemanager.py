@@ -44,9 +44,12 @@ def add_move(dest, source, length):
     return move_id
 
 def is_valid_move_id(move_id):
+    # TODO: No need for base_move_id to be an exception with current value of 0...
     return move_id == base_move_id or 0 <= move_id < len(move_definitions)
 
 # TODO: Name for this function is perhaps not ideal
+# TODO: This should almost certainly be handled via Move() object returned by move() fn
+# which would allow us to write "with move(blah)" instead of "id = move(blah); with moved(id)"
 @contextlib.contextmanager
 def moved(move_id):
     assert is_valid_move_id(move_id)
@@ -70,7 +73,7 @@ def b2r(binary_addr):
     return move_dest + (binary_addr - move_source)
 
 def move_ids_for_runtime_addr(runtime_addr):
-    # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids.
+    # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids. That's not quite true - we do use this in at least one place - but there is some truth in it.
     assert utils.is_valid_addr(runtime_addr)
     # TODO: Deriving this dynamically every time is super inefficient, but I'm still thinking
     # my way through this.
@@ -112,11 +115,13 @@ def r2b_checked(runtime_addr):
         # TODO: *Really* need a backtrace to make this useful
         assert False # TODO TEMP
         utils.die("Ambiguous runtime address %s" % config.formatter().hex(runtime_addr))
+    assert move_id is not None
     return binary_addr, move_id
 
 if __name__ == "__main__":
     id1 = add_move(0x70, 0x1900, 10)
     id2 = add_move(0x70, 0x2000, 8)
+    id3 = add_move(0x900, 0x2100, 256)
 
     assert move_id_for_binary_addr[0x70] == base_move_id
     assert move_id_for_binary_addr[0x1900] == id1
@@ -127,19 +132,25 @@ if __name__ == "__main__":
     assert b2r(0x1900) == 0x70
     assert b2r(0x2000) == 0x70
     assert b2r(0x2000 + 8) == 0x2000 + 8
-
-    print("QQQ", r2b(0x70)) # TODO: what *should* happen here? it is *probably* correct - ie we should assert this - that this returns 0x70, since every runtime address has the corresponding binary address moved onto it by move ID 0 if nothing else is actively overriding that - but I would like to think about it a bit more before "committing" to this
+    assert b2r(0x2100) == 0x900
 
     assert active_move_ids == []
+    assert r2b(0x70) == (None, None)
+    assert r2b(0x900) == (0x2100, id3)
     with moved(id2):
         assert active_move_ids == [id2]
         assert r2b(0x70) == (0x2000, id2)
+        assert r2b(0x900) == (0x2100, id3)
         assert r2b(0x2008) == (0x2008, base_move_id)
         with moved(id1):
             assert active_move_ids == [id2, id1]
             assert r2b(0x70) == (0x1900, id1)
+            assert r2b(0x900) == (0x2100, id3)
             assert r2b(0x2008) == (0x2008, base_move_id)
         assert active_move_ids == [id2]
         assert r2b(0x70) == (0x2000, id2)
+        assert r2b(0x900) == (0x2100, id3)
         assert r2b(0x2008) == (0x2008, base_move_id)
     assert active_move_ids == []
+    assert r2b(0x70) == (None, None)
+    assert r2b(0x900) == (0x2100, id3)
