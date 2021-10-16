@@ -137,7 +137,7 @@ def our_label_maker(addr, context, move_id):
         # TODO: Next bit TCO (and move_ids2 is unused), not sure if this is good or not
         #if move_id not in move_ids2:
         #    move_id = movemanager.base_move_id
-        # TODO: Alternative experimental thing - the basic idea is that if we can't assign a move ID based on a matching of context and addr move IDs, *if* there is any existing label for any of those move IDs we will use it rather than forcing a new label in base_move_id to be created
+        # TODO: Alternative experimental thing - the basic idea is that if we can't assign a move ID based on a matching of context and addr move IDs, *if* there is any existing label for any of those move IDs we will use it rather than forcing a new label in base_move_id to be created - TODO: but shouldwe actually require *THERE IS ONLY ONE SUCH LABEL* - if there are multiple ones, we have no basis for picking one over another (I think)
         if move_id not in move_ids2:
             # TODO: COPY AND PASTE OF BELOW CODE
             move_ids3 = [move_id] + list(move_ids2)
