@@ -354,13 +354,11 @@ def disassemble_range(start_addr, end_addr):
             classification_length = classifications[addr].length()
         else:
             classification_length = 1
-        pending_annotations = []
-        # We queue up annotations for addresses >addr (i.e. those
-        # "within" a multi-byte classification) first because their
-        # as_string() method might cause new annotations to appear at
-        # address addr.
-        # TODO: isinstance(Label) is a hack
-        # TODO: The hacks on labelmanager.labels[] indexing will probably be broken or at least sub-optimal if we have multiple blocks of code move()d to the same destination, but let's get the basics working first
+
+        # We queue up labels defined "within" a multi-byte classification first
+        # because we might need to create a new label at addr to help in
+        # defining them.
+        pending_labels = []
         def am2(x):
             adjust = 0
             if x == end_addr:
@@ -369,18 +367,27 @@ def disassemble_range(start_addr, end_addr):
             return movemanager.b2r(x + adjust) - adjust
         for i in range(1, classification_length):
             if am2(addr + i) in labelmanager.labels:
-                pending_annotations.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
+                pending_labels.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
+
+        # Emit annotations for this address.
         for annotation in sorted_annotations(annotations[addr]):
             result.append(annotation.as_string(addr))
+        # Emit label definitions for this address.
         if am2(addr) in labelmanager.labels:
             result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr), move_id))
-        result.extend(pending_annotations)
-        if addr < end_addr:
-            # We can now emit the classification output.
-            result.extend(classifications[addr].as_string_list(addr))
+        # Emit any label definitions for addresses within the classification.
+        result.extend(pending_labels)
+        # Emit any annotations which would fall within the classification.
         for i in range(1, classification_length):
+            if len(annotations[addr + i]) > 0:
+                # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
+                utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
             for annotation in sorted_annotations(annotations[addr + i]):
                 result.append(annotation.as_string(addr))
+        # Emit the classification itself.
+        if addr < end_addr:
+            result.extend(classifications[addr].as_string_list(addr))
+
         addr += classification_length
     return result
 
