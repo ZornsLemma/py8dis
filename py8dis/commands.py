@@ -2,6 +2,7 @@ import argparse
 import six # TODO?
 
 # These functions/objects are directly exposed to the user.
+# TODO: I think we need to do something re runtime-vs-binary addresses here - at the moment these functions work with binary addresses but if they are directly user expsoed they need to use runtime addresses
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from movemanager import moved
