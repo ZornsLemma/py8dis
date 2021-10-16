@@ -49,7 +49,7 @@ def move(dest, src, length):
 
 # These wrappers rename the verb-included longer names for some functions to
 # give shorter, easier-to-type beebdis-style names for "user" code; we use the
-# longer names in core disassembler code.
+# longer names in core disassembler code. TODO: Slightly outdated comment, they are now also doing some address space translation
 
 # ENHANCE: This is "backwards" - in assembler input you'd write "name = value",
 # not "value = name". Should I change it? But it does feel consistent-ish with
@@ -62,7 +62,7 @@ def constant(value, name):
 # label at this address, the user one takes precedence? This may not be the case
 # as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
-# deal I suppose.
+# deal I suppose. TODO: Is this still a problem?
 def label(runtime_addr, name):
     # We don't care about the equivalent binary address, but the process of looking
     # it up gives us a move ID to associate with this label.
@@ -81,17 +81,17 @@ def optional_label(addr, name, base_addr=None):
     disassembly.add_optional_label(addr, name, base_addr)
 
 def comment(runtime_addr, text):
-    binary_addr, _ = movemanager.r2b(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     disassembly.add_comment(binary_addr, text)
 
 def expr(runtime_addr, s):
-    binary_addr, _ = movemanager.r2b(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
 def byte(runtime_addr, n=1, warn=True):
-    binary_addr, _ = movemanager.r2b(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if not utils.data_loaded_at_binary_addr(binary_addr, n):
         if warn:
             utils.check_data_loaded_at_binary_addr(binary_addr, n) # TODO: bit redundant re-checking
@@ -99,7 +99,7 @@ def byte(runtime_addr, n=1, warn=True):
     disassembly.add_classification(binary_addr, classification.Byte(n, False))
 
 def word(runtime_addr, n=1, warn=True):
-    binary_addr, _ = movemanager.r2b(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if not utils.data_loaded_at_binary_addr(binary_addr, n * 2):
         if warn:
             utils.check_data_loaded_at_binary_addr(binary_addr, n * 2) # TODO: bit redundant re-checking
@@ -116,7 +116,7 @@ def entry(runtime_addr, label=None, warn=True):
         return label
     return disassembly.get_label(runtime_addr, binary_addr, move_id)
 
-# TODO: Should byte()/word()/string() implicitly call nonentry()?
+# TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(runtime_addr):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
@@ -195,8 +195,6 @@ def go(post_trace_steps=None, autostring_min_length=3):
     # don't want any leftover user hints about how to convert runtime addresses
     # to binary addresses confusing things.
     assert len(movemanager.active_move_ids) == 0
-    # TODO: Perhaps a bit hacky, but label() will use this and we call it here to define pydis_start/end and we may also call it at other points in this user-style code. This may indicate label() needs to be changed.
-    # TODO!? set_current_move_id(None)
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
     pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
     label(pydis_start, "pydis_start")
@@ -247,6 +245,3 @@ else:
 
 # TODO: General point - when the code is finally tidied up, it might be helpful (perhaps using
 # wrapper functions to avoid repeating things everywhere and perhaps to show an actual error message, even if we also output a backtrace, rather than raw python assertion failures) to do thinks like assert memory[addr] is not None rather than letting subsequent code fail confusingly when it tries to use that None.
-
-
-# TODO: I should in the near future switch to using move_id -1 for the "global" move region and reserve "None" to mean "I am not expressing any kind of move ID" in contexts where that is useful.
