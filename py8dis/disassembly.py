@@ -99,7 +99,6 @@ def add_optional_label(addr, s, base_addr=None):
     optional_labels[addr] = (s, base_addr)
 
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
-# TODO: here move_id=None means "I am not forcing a move_id" whereas elsewhere None means "the general move ID", this sucks - being resolved now
 # TODO: I am thinking (99% confident) first argument, the actual label address, is a runtime address and (50% confident) second argument, the context, is a binary address
 def get_label(addr, context, move_id=None):
     assert utils.is_valid_addr(addr)
@@ -117,7 +116,7 @@ def get_label(addr, context, move_id=None):
     # TODO: is context consistently source based, regardless of whether this is code or data using it?
     return utils.LazyString("%s", lambda: get_final_label(addr, context, move_id))
 
-# TODO: May want to expose this to use as it make be useful in a user label maker hook
+# TODO: May want to expose this to user as it make be useful in a user label maker hook
 # TODO: This might need tweaking so we don't classify "move source" as code - move.py currently shows this
 def is_code(addr):
     classification = classifications[addr]
@@ -126,12 +125,12 @@ def is_code(addr):
     return classification.is_code(addr)
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
-# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
+# TODO REVIEW UP TO HERE
 def our_label_maker(addr, context, move_id):
     assert context is not None
     if move_id is None:
-        move_id = trace.get_move_id(context) # TODO: OK?
-        move_ids2 = trace.get_move_id33(addr)
+        move_id = movemanager.move_id_for_binary_addr[context] # TODO: OK?
+        move_ids2 = movemanager.move_ids_for_runtime_addr(addr)
         if move_id not in move_ids2:
             move_id = None
     label = labelmanager.labels.get(addr)
@@ -142,14 +141,15 @@ def our_label_maker(addr, context, move_id):
     # prefer the first one, since that's how the code used to behave and we're trying
     # to gradually refactor.
     if len(label.all_names()) > 0:
+        # TODO: prob OK to be returning "first" in the following code, but using loops to do this seems odd
         for name in label.explicit_names[move_id]:
-            # TODO: We are just returning the first name arbitrarily, which seems wrong
+            # TODO: We are just returning the first name arbitrarily, which seems wrong - actually probably fine, we have no basis to choose anything else
             return (name.name, move_id)
         for expression in label.expressions[move_id]:
-            # TODO: arbitrary
+            # TODO: arbitrary - again, probably fine
             return (expression, move_id)
         for name in label.explicit_names[None]:
-            # TODO: We are just returning the first name arbitrarily, which seems wrong
+            # TODO: We are just returning the first name arbitrarily, which seems wrong - see above, probably fine
             return (name.name, None)
         for expression in label.expressions[None]:
             # TODO: arbitrary
@@ -302,7 +302,7 @@ def emit():
             d.extend(formatter.pseudopc_start(*SFTODOARGS))
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.pseudopc_end(*SFTODOARGS))
-            SFTODO_move_id = trace.get_move_id(start_addr)
+            SFTODO_move_id = movemanager.move_id_for_binary_addr[start_addr]
             d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr, SFTODO_move_id))
 
     # Emit labels which haven't been emitted inline with the disassembly.
@@ -347,7 +347,7 @@ def disassemble_range(start_addr, end_addr):
 
     isolate_range(start_addr, end_addr)
 
-    move_id = trace.get_move_id(start_addr)
+    move_id = movemanager.move_id_for_binary_addr[start_addr]
 
     addr = start_addr
     while addr <= end_addr:

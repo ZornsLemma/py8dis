@@ -12,15 +12,6 @@ traced_entry_points = set()
 references = collections.defaultdict(set)
 code_analysis_fns = [] # TODO!?
 
-# TODO: experimental, this is only meaningful for code addresses I think
-def get_move_id(addr):
-    return movemanager.move_id_for_binary_addr[addr] # TODO!?
-
-# TODO: experimental - name is deliberately crap as all these sort of functions need rationalising
-def get_move_id33(addr):
-    return set(movemanager.move_ids_for_runtime_addr(addr)) # TODO!?
-
-
 # TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
 def add_entry(binary_addr, name, move_id):
     entry_points.append(binary_addr)

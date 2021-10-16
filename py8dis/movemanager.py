@@ -78,7 +78,7 @@ def move_ids_for_runtime_addr(runtime_addr):
     for binary_addr, move_id in enumerate(move_id_for_binary_addr):
         if move_id != base_move_id: # TODO: special case feels a bit awkward
             move_ids_for_runtime_addr[b2r(binary_addr)].append(move_id)
-    return move_ids_for_runtime_addr[runtime_addr]
+    return set(move_ids_for_runtime_addr[runtime_addr])
 
 # Return (binary address, move ID) corresponding to a runtime address; because a
 # runtime address can be the target of multiple moves, there may be no
@@ -93,7 +93,7 @@ def r2b(runtime_addr):
         return runtime_addr, base_move_id
     selected_move_id = None
     if len(relevant_move_ids) == 1:
-        selected_move_id = relevant_move_ids[0]
+        selected_move_id = min(relevant_move_ids)
     else:
         for move_id in active_move_ids[::-1]:
             if move_id in relevant_move_ids:
