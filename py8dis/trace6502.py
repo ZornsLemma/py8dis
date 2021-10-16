@@ -1,4 +1,3 @@
-# TODO REVIEW UP TO HERE
 import collections # TODO!?
 import six # TODO!?
 
@@ -16,31 +15,28 @@ labels = labelmanager.labels
 jsr_hooks = {}
 subroutine_argument_finder_hooks = [] # TODO: move?
 
-# TODO: Move? (no pun intended)
 # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
-# TODO: Semi-temp note: if we dissassemble an instruction "physically" located at &6000 which is copied to &5000 at runtime and that instruction says JMP &5100, we (skimming over some edge cases) actually want to continue disassembling at &6100, where the instruction which will be copied to &5100 is located. This of course assumes that target is part of the same relocated block or is part of the code which never moves at all. If we have 40 bytes at &6000 which are copied to &5000 at runtime and 40 bytes at &7000 which are copied to &5100, we of course want to continue disassembling at "physical address" &7000.
-#
-# That's all "trivial". What if we have 40 bytes at &7000 and 40 bytes at &8000 and both of those can be copied to &5100 at runtime? Our *mapping* allows us to define this, but JMP &5100 cannot be traced, as we don't know which of those two source ranges to interpret it as. We could potentially as a heuristic say "if our address is part of a range, where there's ambiguity we will resolve that ambiguity in favour of something in our own range, otherwise we give up as we normally would".
-#
-# TODO: I think the heuristic approach is doable, but while I'm feeling my way and getting something working let's not do that yet.
 # TODO: This returns a list so it can return an empty list when it wants to say "give up" and this "just works" when appending the result to other lists
 def apply_move(runtime_addr):
-    # TODO: This is a re-imp[lementation using movemanager, may want to get rid of apply_move() fn later
+    # TODO: This is a re-implementation using movemanager, may want to get rid of apply_move() fn later
     binary_addr, _ = movemanager.r2b(runtime_addr)
     if binary_addr is None:
         return []
     return [binary_addr]
 
+# TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
 def apply_move2(target, context):
     # TODO: Rewritten in terms of movemanager - change this eventually? I think the rewrite does the same thing, but it may not, or it may do but not be right anyway...
     with movemanager.moved(movemanager.move_id_for_binary_addr[context]):
         return apply_move(target)
 
 def add_jsr_hook(addr, hook):
+    # TODO: This almost certainly wants to be doing an r2b(addr)
     assert addr not in jsr_hooks
     jsr_hooks[addr] = hook
 
 # TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
+# TODO: Need to clarify runtime/binary here
 def hook_subroutine(addr, name, hook):
     trace.add_entry(addr, name, None)
     add_jsr_hook(addr, hook)
@@ -98,6 +94,7 @@ class CpuState(object):
         self._d[key] = item
 
 
+# TODO REVIEW UP TO HERE
 class Opcode(object):
     # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
     indent_level = collections.defaultdict(int)
