@@ -12,6 +12,7 @@ label(0xaf79, "tube_host_code1")
 label(0xacdb, "tube_host_code2")
 expr_label(0xacdb + 0x100, "tube_host_code2+256")
 wordentry(0x500)
+# TODO: Possible bug: we should be inlining a label definition l06a7 at binary &ae82; this *is* within a move() region but (perhaps due to the order things happen to be identified in) that label is associated with move ID 0, which means it never gets emitted inline at all and so it is emitted as an explicit value. The two possible areas of problem are a) should we (even if only by heuristic) be assigning it to a different move ID, or allowing it to change move ID/exist in multiple move IDs b) since it will never be emitted inline using the sole move ID 0 which it has, should be we realising that it's probably smart to output it in move 2 which *does* cover this address implicitly?
 
 acorn.bbc()
 acorn.is_sideways_rom()
