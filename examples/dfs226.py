@@ -9,6 +9,7 @@ tube_host_move_id1 = move(0x400, 0xaf79, 0xb075 - 0xaf79)
 tube_host_move_id2 = move(0x500, 0xacdb, 0xaea9 - 0xacdb)
 label(0xaf79, "tube_host_code1")
 label(0xacdb, "tube_host_code2")
+expr_label(0xacdb + 0x100, "tube_host_code2+256")
 
 acorn.bbc()
 acorn.is_sideways_rom()
