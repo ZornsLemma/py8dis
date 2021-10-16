@@ -178,6 +178,9 @@ entry(0xb047) # XXX: how is this code reached?
 entry(0xb736) # XXX: how is this code reached?
 entry(0xbf8b) # XXX: how is this code reached?
 
+label(0xaee8, "tube_banner_loop")
+label(0xaf35, "lda_0_rts")
+
 pc = 0x85d3
 label(pc, "opt4_table")
 for i in range(4):

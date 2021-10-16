@@ -164,6 +164,7 @@ def our_label_maker(addr, context, move_id):
     if not is_code(addr):
         label = utils.force_case("l%04x" % addr)
     else:
+        # TODO: Should probably be user-configurable, but maybe the "c" prefix here is not ideal because I personally tend to mix it up with the following hex digits - a letter > 'f' would be better
         label = utils.force_case("c%04x" % addr)
         # TODO: Shouldn't be using trace6502 in this generic code
         addr_refs = trace.references.get(addr, [])
