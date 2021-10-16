@@ -125,7 +125,6 @@ def is_code(addr):
     return classification.is_code(addr)
 
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
-# TODO REVIEW UP TO HERE
 def our_label_maker(addr, context, move_id):
     assert context is not None
     if move_id is None:
@@ -190,7 +189,6 @@ def our_label_maker(addr, context, move_id):
 
 # TODO: I am thinking we should just have a single label_maker_hook which defaults to ours, then user code is free to "wrap" that and pre and/or post-process the result, and more user code can layer on top of that if it wants. but let's just stick with what we have for now. *OR* - and this might be a lot less confusing - perhaps we have a list of label makes which we will call in turn, with the output of each being passed as the suggestion to the next. Our internal label maker would then be the first (and only) thing in the list by default but other code - including perhaps libraries of some kind - could add itself to the end of the list. Not sure if there should be a "do not call any further label makers" return indication to allow a label maker for force no further actions.
 # TODO: This could and probably should be memo-ised - this would improve efficiency and would also avoid any risk of a non-idempotent user label maker function causing weird behaviour
-# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here
 def label_maker(addr, context, move_id):
     assert trace_done
     suggestion = our_label_maker(addr, context, move_id)
@@ -203,7 +201,6 @@ def label_maker(addr, context, move_id):
             return user_suggestion
     return suggestion
 
-# TODO: As with get_label() we are using move_id=None to mean a non-standard thing here - being resolved
 def get_final_label(addr, context, move_id):
     assert trace_done
     assert utils.is_valid_addr(addr)
@@ -342,6 +339,7 @@ def isolate_range(start_addr, end_addr):
     split_classification(start_addr)
     split_classification(end_addr)
 
+# TODO REVIEW UP TO HERE
 def disassemble_range(start_addr, end_addr):
     result = []
 
