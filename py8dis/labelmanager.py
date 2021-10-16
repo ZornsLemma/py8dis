@@ -33,7 +33,7 @@ class Name(object):
 class Label(object):
     def __init__(self, addr):
         self.addr = addr
-        self.move_id = None
+        self.move_id = movemanager.base_move_id
         self.references = set()
         # TODO: explicit_names holds lists since we want to remember the order user-added names were provided in, at least for now
         self.explicit_names = collections.defaultdict(list)

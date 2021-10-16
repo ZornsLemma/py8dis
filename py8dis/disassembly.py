@@ -131,7 +131,7 @@ def our_label_maker(addr, context, move_id):
         move_id = movemanager.move_id_for_binary_addr[context] # TODO: OK?
         move_ids2 = movemanager.move_ids_for_runtime_addr(addr)
         if move_id not in move_ids2:
-            move_id = None
+            move_id = movemanager.base_move_id
     label = labelmanager.labels.get(addr)
     #print("YYY %04x" % addr)
     assert label is not None
