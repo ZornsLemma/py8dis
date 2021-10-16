@@ -148,10 +148,10 @@ def our_label_maker(addr, context, move_id):
         for expression in label.expressions[move_id]:
             # TODO: arbitrary - again, probably fine
             return (expression, move_id)
-        for name in label.explicit_names[None]:
+        for name in label.explicit_names[movemanager.base_move_id]:
             # TODO: We are just returning the first name arbitrarily, which seems wrong - see above, probably fine
             return (name.name, None)
-        for expression in label.expressions[None]:
+        for expression in label.expressions[movemanager.base_move_id]:
             # TODO: arbitrary
             return (expression, move_id)
     if addr in optional_labels:
