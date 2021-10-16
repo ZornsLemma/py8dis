@@ -13,6 +13,8 @@ label(0xacdb, "tube_host_code2")
 expr_label(0xacdb + 0x100, "tube_host_code2+256")
 wordentry(0x500)
 # TODO: Possible bug: we should be inlining a label definition l06a7 at binary &ae82; this *is* within a move() region but (perhaps due to the order things happen to be identified in) that label is associated with move ID 0, which means it never gets emitted inline at all and so it is emitted as an explicit value. The two possible areas of problem are a) should we (even if only by heuristic) be assigning it to a different move ID, or allowing it to change move ID/exist in multiple move IDs b) since it will never be emitted inline using the sole move ID 0 which it has, should be we realising that it's probably smart to output it in move 2 which *does* cover this address implicitly?
+# - OK, the reason this is assigned to move ID 0 is that the sole reference to 06a7 is from code in move ID 1 where 6a7 is in move ID 2, so (not unreasonably) we don't heuristically assign move ID 2 but leave it with a default of 0. TODO: Probably too hard for the benefit, but if we could somehow arrange for the two disjoint tube host code move()s to either *be* the same move ID or for their move IDs to be linked by the user, we could potentially then DTRT heuristically.
+# - TODO: don't forget the separate issue of "should we improve label emitting so we can use an implicit label where possible despite move ID"?
 
 acorn.bbc()
 acorn.is_sideways_rom()
