@@ -150,7 +150,7 @@ def our_label_maker(addr, context, move_id):
                     for expression in label.expressions[candidate_move_id]:
                         return (expression, candidate_move_id)
             # TODO: Should we default to move_id i.e. the move for our context address rather than always using base_move_id?
-            # TODO: And/or, should we attach some significance to whether there is a single unique move_id which contains runtime address 'addr'? If there is -i.e. if len(move_ids2)==1 - it makes more sense to create a label thre than in base_move_id as that way we will be able to emit the label with an inline value *without* artificially fiddling this (and maybe overriding some user-defined move ID in some circumstances) later
+            # TODO: And/or, should we attach some significance to whether there is a single unique move_id which contains runtime address 'addr'? If there is -i.e. if len(move_ids2)==1 - it makes more sense to create a label thre than in base_move_id as that way we will be able to emit the label with an inline value *without* artificially fiddling this (and maybe overriding some user-defined move ID in some circumstances) later - following is an experimental implementation of this, which seems to work pretty well
             if len(move_ids2) == 1:
                 move_id = min(move_ids2)
             else:
