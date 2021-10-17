@@ -149,6 +149,7 @@ def our_label_maker(addr, context, move_id):
                 if candidate_move_id in label.expressions:
                     for expression in label.expressions[candidate_move_id]:
                         return (expression, candidate_move_id)
+            # TODO: Should we default to move_id i.e. the move for our context address rather than always using base_move_id?
             move_id = movemanager.base_move_id
 
     label = labelmanager.labels.get(addr)
