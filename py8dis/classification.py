@@ -4,8 +4,9 @@ import collections
 import config
 import disassembly
 import labelmanager
-import utils
+import movemanager
 import trace
+import utils
 
 expressions = {}
 memory_binary = config.memory_binary
@@ -290,8 +291,7 @@ def autostring(min_length=3):
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory_binary[addr + i]):
             i += 1
-            assert False # TODO I THINK WE NEED TO BE DOING SOME BINARY/RUNTIME MAPPING TO CHECK CORRECTLY AGAINST LABELS
-            if (addr + i) in labelmanager.labels:
+            if movemanager.b2r(addr + i) in labelmanager.labels:
                 break
         if i >= min_length:
             string(addr, i)
@@ -304,8 +304,7 @@ def classify_leftovers():
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
             i += 1
-            assert False # TODO I THINK WE NEED TO BE DOING SOME BINARY/RUNTIME MAPPING TO CHECK CORRECTLY AGAINST LABELS
-            if (addr + i) in labelmanager.labels:
+            if movemanager.b2r(addr + i) in labelmanager.labels:
                 break
         if i > 0:
             disassembly.add_classification(addr, Byte(i, False))
