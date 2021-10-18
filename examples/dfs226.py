@@ -195,7 +195,7 @@ expr(0x8eb0, "nmi_XXX1-(nmi_beq+2)")
 expr(0x8ff4, "nmi_XXX1-(nmi_beq+2)")
 entry(0xd08+2+0x2f, "nmi_XXX2")
 expr(0x901e, "nmi_XXX2-(nmi_beq+2)")
-entry(0x9024) # XXX: how is this code reached? beq modification?
+#entry(0x9024) # XXX: how is this code reached? beq modification?
 entry(0x9029) # XXX: how is this code reached? beq modification?
 constant(0x40, "opcode_rti")
 expr(0x8e8e, "opcode_rti")
@@ -211,8 +211,19 @@ entry(0xd18, "nmi_cmp_imm_or_bcs")
 expr_label(0xd19, "nmi_cmp_imm_or_bcs+1")
 constant(0xb0, "opcode_bcs")
 expr(0x9056, "opcode_bcs")
+comment(0xd18+2+6, 
+"""One patched variant of the code transfers control to nmi_XXX5, which is the
+second byte of the following bcc instruction. That is always &05, which is
+ORA #. XXX: correct?""")
 label(0xd18+2+6, "nmi_XXX5") # TODO: make this entry()? I think there is some overlapping code and it may be less confusing this way, but I haven't analysed it properly yet
 expr(0x905b, "nmi_XXX5-(nmi_cmp_imm_or_bcs+2)")
+expr(0x8fc8, "opcode_bcs")
+comment(0xd3f, "The first two bytes of the following instruction may be patched at runtime.")
+label(0xd3f, "nmi_XXX6")
+expr_label(0xd40, "nmi_XXX6+1")
+label(0xd3f+2+6, "nmi_XXX7")
+expr(0x8fcd, "nmi_XXX7-(nmi_XXX6+2)")
+
 
 
 label(0x9066, "nmi_handler2_rom_start_minus_1")
