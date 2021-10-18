@@ -7,6 +7,8 @@ load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
 
 # TODO: Loop detection doesn't seem to work with move() - see e.g. l0036
 
+# TODO: We don't seem to be getting the "references" comments generated for labels in move() e.g. l0446 - probably partly related at least to loop detection problem
+
 # TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.
 tube_host_move_id1 = move(0x400, 0xaf79, 0xb075 - 0xaf79)
 tube_host_move_id2 = move(0x500, 0xacdb, 0xaea9 - 0xacdb)
@@ -31,6 +33,9 @@ expr(0xaf08, ">tube_brkv_handler")
 # - TODO: don't forget the separate issue of "should we improve label emitting so we can use an implicit label where possible despite move ID"?
 #label(0x6a7, "TODOEXP") # TODO: just to see what happens - OK, this automatically gets move ID 2 assigned, which is fair as that's the *sole* move covering this address - however, we *still* get a move ID 0 l06a7 label created, and I am not sure if that's good or not - I believe (not yet tested) we can override the creation of the new label by using expr(address referencing l06a7, "TODOEXP"), the question is "should" I have to do that? - I have now tweaked the heuristics so we re-use the label in move 2 rather than forcing creation of a name in move 0; we will see how that works out across different test cases.
 comment(0xaf70, "Patch the following JMP so we effectively do JMP (&500,X)")
+entry(0x435, "tube_entry_small_a")
+entry(0x428, "tube_entry_claim_tube")
+comment(0xaf87, "This is a call to release the tube.")
 
 acorn.bbc()
 acorn.is_sideways_rom()
