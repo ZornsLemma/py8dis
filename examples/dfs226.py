@@ -196,7 +196,7 @@ expr(0x8ff4, "nmi_XXX1-(nmi_beq+2)")
 entry(0xd08+2+0x2f, "nmi_XXX2")
 expr(0x901e, "nmi_XXX2-(nmi_beq+2)")
 #entry(0x9024) # XXX: how is this code reached? beq modification?
-entry(0x9029) # XXX: how is this code reached? beq modification?
+#entry(0x9029) # XXX: how is this code reached? beq modification?
 constant(0x40, "opcode_rti")
 expr(0x8e8e, "opcode_rti")
 comment(0xd04, "The operand of this and is modified at runtime.")
@@ -223,6 +223,8 @@ label(0xd3f, "nmi_XXX6")
 expr_label(0xd40, "nmi_XXX6+1")
 label(0xd3f+2+6, "nmi_XXX7")
 expr(0x8fcd, "nmi_XXX7-(nmi_XXX6+2)")
+entry(0xd08+2+0x4d, "nmi_XXX8")
+expr(0x8fa6, "nmi_XXX8-(nmi_beq+2)")
 
 
 
