@@ -208,6 +208,10 @@ class OpcodeAbs(Opcode):
         # happen when the disassembly is imperfect and data is interpreted as
         # code. If we don't cope with them, bytes get lost and the disassembly
         # can't be correctly reassembled into a binary matching the input.
+        # TODO: If we could evaluate expressions, *and* (unlikely) we don't
+        # fail at disassembly time when we spot the mismatch, we should force
+        # absolute addressing if the expression is a zero page value and the
+        # value in the input is not.
         result1 = utils.force_case(self.mnemonic)
         result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
         if not self.has_zp_version() or utils.get_u16(addr + 1) >= 0x100:
