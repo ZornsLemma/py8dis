@@ -191,6 +191,8 @@ label(0xd08, "nmi_beq")
 expr_label(0xd09, "nmi_beq+1")
 entry(0xd08+2+0x48, "nmi_XXX1")
 expr(0x8e49, "nmi_XXX1-(nmi_beq+2)")
+expr(0x8eb0, "nmi_XXX1-(nmi_beq+2)")
+expr(0x8ff4, "nmi_XXX1-(nmi_beq+2)")
 entry(0xd08+2+0x2f, "nmi_XXX2")
 expr(0x901e, "nmi_XXX2-(nmi_beq+2)")
 entry(0x9024) # XXX: how is this code reached? beq modification?
