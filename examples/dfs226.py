@@ -45,9 +45,6 @@ comment(0x518, "Table of flags used by tube_entry_small_a to set up registers 1/
 label(0x518, "tube_entry_flags")
 # TODO: Not sure if it's a bug or just a quirk, but we get duplicate "referenced by" lines at e.g. tube_host_code2 and l0500
 
-# TODO: There's a move()able chunk of code at c902f
-# TODO: move() nmi_handler_rom_start
-
 # These two options default to True (on) and are probably helpful during the
 # initial stages of a disassembly, but you might want to turn them off
 # eventually, particularly the hex dump.
@@ -226,7 +223,14 @@ expr(0x8fcd, "nmi_XXX7-(nmi_XXX6+2)")
 entry(0xd08+2+0x4d, "nmi_XXX8")
 expr(0x8fa6, "nmi_XXX8-(nmi_beq+2)")
 
-
+# The loop at &8fac doesn't make a pass with X=0.
+nmi3_move_id = move(0xd39, 0x9030, 0xe)
+label(0x9030, "nmi3_handler_rom_start") # TODO: not emitted inline because (I think) we have 0 bytes output in that region, but we could and probably should naturally emit this (perhaps check with acme report output, where it's probably clearer)
+label(0x902f+0xf, "nmi3_handler_rom_end")
+expr(0x8fab, "nmi3_handler_rom_end-nmi3_handler_rom_start")
+expr_label(0x902f, "nmi3_handler_rom_start-1")
+expr(0x8fb0, "nmi_XXX2-1")
+# TODO: l0d3a (for example) is not being emitted in the "natural" place - have a look exactly why and maybe tweak logic/heuristics to make this work automatically if feasible
 
 label(0x9066, "nmi_handler2_rom_start_minus_1")
 entry(0x9067, "nmi_handler2_rom_start")
