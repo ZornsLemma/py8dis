@@ -40,6 +40,10 @@ comment(0x69e, "Wait for register 4 to have space and write A to it.")
 entry(0x69e, "write_tube_r4_data")
 comment(0x518, "Table of flags used by tube_entry_small_a to set up registers 1/4 for the\nselected operation.")
 label(0x518, "tube_entry_flags")
+# TODO: Not sure if it's a bug or just a quirk, but we get duplicate "referenced by" lines at e.g. tube_host_code2 and l0500
+
+# TODO: There's a move()able chunk of code at c902f
+# TODO: move() nmi_handler_rom_start
 
 acorn.bbc()
 acorn.is_sideways_rom()

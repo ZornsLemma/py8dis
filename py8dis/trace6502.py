@@ -252,7 +252,7 @@ class OpcodeJmpAbs(OpcodeAbs):
     # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
     def update_references(self, addr):
         labels[self._target(addr)].add_reference(addr)
-        trace.references[self._target(addr)].add(addr)
+        #trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
         #print("PCC %s" % apply_move(self._target(addr)))
@@ -284,7 +284,7 @@ class OpcodeJsr(OpcodeAbs):
 
     def update_references(self, addr):
         labels[self._target(addr)].add_reference(addr)
-        trace.references[self._target(addr)].add(addr)
+        #trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
         # A hook only gets to return the "straight line" address to continue
@@ -332,7 +332,7 @@ class OpcodeConditionalBranch(Opcode):
 
     def update_references(self, addr):
         labels[self._target(addr)].add_reference(addr)
-        trace.references[self._target(addr)].add(addr)
+        #trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
         # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..

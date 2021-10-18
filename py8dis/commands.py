@@ -201,6 +201,7 @@ def go(post_trace_steps=None, autostring_min_length=3):
     label(pydis_end, "pydis_end")
 
     trace.trace()
+    trace.generate_references()
     disassembly.fix_label_names()
     if config.label_references():
         trace.add_references_comments()

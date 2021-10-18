@@ -9,7 +9,6 @@ import movemanager
 
 entry_points = []
 traced_entry_points = set()
-references = collections.defaultdict(set)
 code_analysis_fns = [] # TODO!?
 
 # TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
@@ -66,13 +65,25 @@ def trace():
     disassembly.trace_done = True
 
 
+# TODO: This is a temp hack - I had redundant (?) reference infrastructure so I'm getting rid of the trace.references, but as a temporary measure I'm going to generate this reference from the other
+def generate_references():
+    global references
+    references = collections.defaultdict(set)
+    for runtime_addr, label in labelmanager.labels.items():
+        binary_addr, _ = movemanager.r2b(runtime_addr)
+        if binary_addr is not None:
+            for reference in label.references: # TODO: rename reference->binary_reference_address?
+                assert reference >= 0x8000 # TODO TEMP
+                references[binary_addr].add(reference)
+
 # TODO: This code is a bit unreadable!
 def add_references_comments():
     if len(references) == 0:
         return
     for addr, addr_refs in references.items():
-        count = "%d times" % len(addr_refs) if len(addr_refs) != 1 else "1 time"
-        disassembly.add_comment(addr, "Referenced %s by %s" % (count, ", ".join(config.formatter().hex(addr_ref) for addr_ref in addr_refs)))
+        count = "%d times" % len(addr_refs) if len(addr_refs) != 1 else "1 time" # TODO: Use utils.plural
+        # TODO: Where the comment has to be emitted slightly out of place due to a classification, this becomes a bit confusing - we should probably be smarter, peek the classifications and generate a variant comment in that case at the "can actually be emitted" address - and/or maybe we shouldn't be generating reference comments for non-simple labels? (probably not the only way the first problem can occur though)
+        disassembly.add_comment(addr, "Referenced %s by %s" % (count, ", ".join(sorted(config.formatter().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs))))
 
 def add_reference_histogram():
     if len(references) == 0:
