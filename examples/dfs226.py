@@ -199,6 +199,16 @@ entry(0x9024) # XXX: how is this code reached? beq modification?
 entry(0x9029) # XXX: how is this code reached? beq modification?
 constant(0x40, "opcode_rti")
 expr(0x8e8e, "opcode_rti")
+comment(0xd04, "The operand of this and is modified at runtime.")
+entry(0xd04, "nmi_and_imm")
+expr_label(0xd05, "nmi_and_imm+1")
+label(0x912d, "nmi_and_table")
+comment(0xd16, "The operand of this lda is modified at runtime.")
+entry(0xd16, "nmi_lda_zp")
+expr_label(0xd17, "nmi_lda_zp+1")
+comment(0xd18, "The operand of this cmp is modified at runtime.")
+entry(0xd18, "nmi_cmp_imm")
+expr_label(0xd19, "nmi_cmp_imm+1")
 
 label(0x9066, "nmi_handler2_rom_start_minus_1")
 entry(0x9067, "nmi_handler2_rom_start")
