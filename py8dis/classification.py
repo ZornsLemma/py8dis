@@ -212,7 +212,9 @@ def get_address16(addr):
     operand = utils.get_u16(addr)
     if addr not in expressions:
         return disassembly.get_label(operand, addr)
-    assert isinstance(disassembly.get_classification(addr), Word)
+    # TODO: Hacky to use trace6502-specific class in next line
+    import trace6502
+    assert isinstance(disassembly.get_classification(addr), Word) or (isinstance(disassembly.get_classification(addr - 1), trace6502.Opcode) and disassembly.get_classification(addr - 1).length() == 3)
     return get_expression(addr, operand)
 
 def stringterm(addr, terminator, exclude_terminator=False):
