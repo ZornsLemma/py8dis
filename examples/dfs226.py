@@ -171,11 +171,11 @@ for i in range(7):
         rts_code_ptr(pc + 1, pc)
     pc += 2
 
-nmi_move_id = move(0xd00, 0x8f32, 0x5e)
-entry(0x8fd2, "nmi_handler_rom_start")
+nmi_move_id = move(0xd00, 0x8fd2, 0x5e)
+label(0x8fd2, "nmi_handler_rom_start")
 label(0x8fd2 + 0x5d + 1, "nmi_handler_rom_end")
 expr(0x8f95, "nmi_handler_rom_end-nmi_handler_rom_start-1")
-label(0xd00, "nmi_handler_ram")
+entry(0xd00, "nmi_handler_ram")
 comment(0x8ff5, 'This sta modifies the RAM copy of the operand of "lda #&2f" at 901e.')
 comment(0x901f, 'This sta modifies the RAM copy of the operand of "beq l900b" at 8fdb.')
 comment(0x9011, 'These incs modify the RAM copy of the operand of "sta lfee5" at 900f.')
@@ -184,6 +184,8 @@ comment(0x8fda, 'The operand of this "beq" is modified at runtime.')
 comment(0x900e, 'The operand of this "sta" is modified at runtime.')
 entry(0x9024) # XXX: how is this code reached? beq modification?
 entry(0x9029) # XXX: how is this code reached? beq modification?
+constant(0x40, "opcode_rti")
+expr(0x8e8e, "opcode_rti")
 
 label(0x9066, "nmi_handler2_rom_start_minus_1")
 entry(0x9067, "nmi_handler2_rom_start")
