@@ -5,6 +5,9 @@ import acorn
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
 
+acorn.bbc()
+acorn.is_sideways_rom()
+
 # TODO: Loop detection doesn't seem to work with move() - see e.g. l0036
 
 # TODO: We don't seem to be getting the "references" comments generated for labels in move() e.g. l0446 - probably partly related at least to loop detection problem
@@ -44,9 +47,6 @@ label(0x518, "tube_entry_flags")
 
 # TODO: There's a move()able chunk of code at c902f
 # TODO: move() nmi_handler_rom_start
-
-acorn.bbc()
-acorn.is_sideways_rom()
 
 # These two options default to True (on) and are probably helpful during the
 # initial stages of a disassembly, but you might want to turn them off
@@ -171,8 +171,11 @@ for i in range(7):
         rts_code_ptr(pc + 1, pc)
     pc += 2
 
+nmi_move_id = move(0xd00, 0x8f32, 0x5e)
 entry(0x8fd2, "nmi_handler_rom_start")
 label(0x8fd2 + 0x5d + 1, "nmi_handler_rom_end")
+expr(0x8f95, "nmi_handler_rom_end-nmi_handler_rom_start-1")
+label(0xd00, "nmi_handler_ram")
 comment(0x8ff5, 'This sta modifies the RAM copy of the operand of "lda #&2f" at 901e.')
 comment(0x901f, 'This sta modifies the RAM copy of the operand of "beq l900b" at 8fdb.')
 comment(0x9011, 'These incs modify the RAM copy of the operand of "sta lfee5" at 900f.')
