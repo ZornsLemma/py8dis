@@ -250,6 +250,11 @@ label(0x90fb, "nmi_handler2_rom_end")
 expr(0x9046, "nmi_handler2_rom_end-nmi_handler2_rom_start")
 with moved(nmi2_move_id):
     entry(0xd00)
+    comment(0xd0d, "The operand of this bcs is modified at runtime")
+    label(0xd0d, "nmi_bcs")
+    expr_label(0xd0e, "nmi_bcs+1")
+    entry(0xd0d+2+0x32, "nmi_XXX10")
+    expr(0xd3e, "nmi_XXX10-(nmi_bcs+2)")
 
 entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?
