@@ -14,6 +14,7 @@ from utils import get_u16, get_u16_be
 import classification
 import config
 import disassembly
+import labelmanager
 import movemanager
 import trace
 import utils
@@ -189,6 +190,18 @@ def set_label_maker_hook(hook):
 # TODO: Highly experimental
 def add_sequence_hook(hook):
     disassembly.sequence_hooks.append(hook)
+
+# TODO: Rename?
+def addr(label_name):
+    assert isinstance(label_name, six.string_types) # TODO: OK?!
+    # TODO: Ultra-inefficient implementation
+    for addr, label in sorted(labelmanager.labels.items()):
+        for name_list in label.explicit_names.values():
+            for name in name_list:
+                if label_name == name.name:
+                    return addr
+    assert False # TODO: !? return None?
+
 
 def go(post_trace_steps=None, autostring_min_length=3):
     # Once we start tracing, we're taking a "static" view of the code and we
