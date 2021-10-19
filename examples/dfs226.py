@@ -231,6 +231,16 @@ expr(0x8fab, "nmi3_handler_rom_end-nmi3_handler_rom_start")
 expr_label(0x902f, "nmi3_handler_rom_start-1")
 expr(0x8fb0, "nmi_XXX2-1")
 #assert False # TODO: l0d3a (for example) is not being emitted in the "natural" place - have a look exactly why and maybe tweak logic/heuristics to make this work automatically if feasible - what might be more fundamental (and related) is that l0d39 is being created *despite* having a user-assigned label at that address, *and* it does not appear in the dump of labels and move regions (though on investigating this is more a small quirk of beebasm pseudopc implementation than anything fundamental)
+with moved(nmi3_move_id):
+    # Note that there are two different blocks of code move()d to 0xd39, so to get the labels
+    # to appear in the desired place in the output we have to disambiguate with this "with".
+    # TODO: I believe the only reason we *don't* have to disambiguate on the other move() at
+    # this address is because its labels are "attached" before we do this "conflicting" move().
+    # The disassembly might be cleaner if we *did* disambiguate, not sure.
+    comment(0xd39, "The operand of this lda is modified at runtime.")
+    label(0xd39, "nmi_lda_abs")
+    expr_label(0xd3a, "nmi_lda_abs+1")
+    expr_label(0xd3b, "nmi_lda_abs+2")
 
 label(0x9066, "nmi_handler2_rom_start_minus_1")
 entry(0x9067, "nmi_handler2_rom_start")
