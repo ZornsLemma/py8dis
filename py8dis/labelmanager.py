@@ -90,6 +90,16 @@ class Label(object):
 
     # TODO: Better name for this and/or explicit_definition_string_list() - it is not actually the explictness of the definition which is changing, it is the explicitness of the value
     def definition_string_list(self, emit_addr, move_id):
+        result = self.definition_string_list_internal(emit_addr, move_id)
+        # If this runtime address has a single move ID associated with it (so
+        # there's no ambiguity), it seems a good idea to emit the associated
+        # definition here where it can be done inline. TODO: But this is experimental.
+        SFTODO = movemanager.move_ids_for_runtime_addr(self.addr)
+        if len(SFTODO) == 1:
+            result.extend(self.definition_string_list_internal(emit_addr, min(SFTODO)))
+        return result
+
+    def definition_string_list_internal(self, emit_addr, move_id):
         assert movemanager.is_valid_move_id(move_id)
         formatter = config.formatter()
         result = []

@@ -101,10 +101,9 @@ def add_optional_label(addr, s, base_addr=None):
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 # TODO: I am thinking (99% confident) first argument, the actual label address, is a runtime address and (50% confident) second argument, the context, is a binary address
 def get_label(addr, context, move_id=None):
-    assert utils.is_valid_addr(addr)
+    assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     assert utils.is_valid_addr(context)
     assert move_id is None or movemanager.is_valid_move_id(move_id)
-    assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     # We need to ensure the labelmanager knows there's a label at this address
     # so it can emit a definition. It's tempting to try to defer this until
     # get_final_label() is called, but it's good to have the label exist as
@@ -268,6 +267,7 @@ def fix_label_names():
             addr += c.length()
         else:
             addr += 1
+
 
 # TODO: General note, not here - we should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
 def emit():
