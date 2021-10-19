@@ -3,11 +3,12 @@ from trace6502 import hook_subroutine
 import acorn
 
 # TODO: Use this everywhere relevant
-def patched_branch(base_label, offset_addr, target_label):
+def patched_branch(base_label, offset_addr, target_label, label_only=False):
     base_addr = addr(base_label)
     offset = memory[offset_addr]
     assert offset < 0x80
-    entry(base_addr + 2 + offset, target_label)
+    f = label if label_only else entry 
+    f(base_addr + 2 + offset, target_label)
     expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
 
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
@@ -216,16 +217,13 @@ comment(0xd18+2+6,
 """One patched variant of the code transfers control to nmi_XXX5, which is the
 second byte of the following bcc instruction. That is always &05, which is
 ORA #. XXX: correct?""")
-label(0xd18+2+6, "nmi_XXX5") # TODO: make this entry()? I think there is some overlapping code and it may be less confusing this way, but I haven't analysed it properly yet
-expr(0x905b, "nmi_XXX5-(nmi_cmp_imm_or_bcs+2)")
+patched_branch("nmi_cmp_imm_or_bcs", 0x905b, "nmi_XXX5", label_only=True) # TODO: make this entry()? I think there is some overlapping code and it may be less confusing this way, but I haven't analysed it properly yet
 expr(0x8fc8, "opcode_bcs")
 comment(0xd3f, "The first two bytes of the following instruction may be patched at runtime.")
 label(0xd3f, "nmi_XXX6")
 expr_label(0xd40, "nmi_XXX6+1")
-label(0xd3f+2+6, "nmi_XXX7")
-expr(0x8fcd, "nmi_XXX7-(nmi_XXX6+2)")
-entry(0xd08+2+0x4d, "nmi_XXX8")
-expr(0x8fa6, "nmi_XXX8-(nmi_beq+2)")
+patched_branch("nmi_XXX6", 0x8fcd, "nmi_XXX7")
+patched_branch("nmi_beq", 0x8fa6, "nmi_XXX8")
 
 # The loop at &8fac doesn't make a pass with X=0.
 nmi3_move_id = move(0xd39, 0x9030, 0xe)
