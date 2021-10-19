@@ -242,10 +242,14 @@ with moved(nmi3_move_id):
     expr_label(0xd3a, "nmi_lda_abs+1")
     expr_label(0xd3b, "nmi_lda_abs+2")
 
-label(0x9066, "nmi_handler2_rom_start_minus_1")
-entry(0x9067, "nmi_handler2_rom_start")
-entry(0x907c) # XXX: how is this code reached?
+# The loop at &9047 doesn't make a pass with Y=0.
+nmi2_move_id = move(0xd00, 0x9067, 0x94)
+label(0x9067, "nmi_handler2_rom_start")
+expr_label(0x9066, "nmi_handler2_rom_start-1")
 label(0x90fb, "nmi_handler2_rom_end")
+expr(0x9046, "nmi_handler2_rom_end-nmi_handler2_rom_start")
+with moved(nmi2_move_id):
+    entry(0xd00)
 
 entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?

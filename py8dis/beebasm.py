@@ -4,6 +4,7 @@ import sys
 import classification
 import config
 import disassembly # TODO!?
+import movemanager
 import utils
 
 config.set_formatter(sys.modules[__name__])
@@ -68,18 +69,21 @@ def pseudopc_start(dest, source, length):
     result.append(utils.force_case("    org %s" % hex(dest)))
     # TODO: We will need some labels in pseudopc_end() but by then it will be too late to
     # create them, so do it now. Is this hacky or OK?
-    disassembly.get_label(dest, source)
-    disassembly.get_label(dest + length, source)
-    disassembly.get_label(source, source)
+    # TODO: The idea of including move_id here is to force the labels to be emitted "around" the pseudopc-emulation block, which is both more readable and necessary in some cases to avoid assembly problems where a label is not forward declared. It isn't working quite right yet.
+    move_id = movemanager.move_id_for_binary_addr[source]
+    disassembly.get_label(dest, source, move_id)
+    disassembly.get_label(dest + length, source, move_id)
+    disassembly.get_label(source, source, move_id)
     return result
 
 # TODO: General comment - I've currently given up on generating "guard" for beebasm, I can probably do this later but on a "whole program" basis - note that guard sets m_aFlags[x], it is not a "guard=x" and there's only one such guard active at a time, so we need to set it at the end of distinct non-adjoining ranges (I think)
 def pseudopc_end(dest, source, length):
     result = []
     # TODO: Use LazyString?
-    result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source), disassembly.get_label(dest + length, source), disassembly.get_label(dest, source)))
-    result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source), disassembly.get_label(source, source)))
-    result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source), disassembly.get_label(dest + length, source)))
+    move_id = movemanager.move_id_for_binary_addr[source]
+    result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(dest, source, move_id)))
+    result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(source, source, move_id)))
+    result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id)))
     result.append("")
     return result
 
