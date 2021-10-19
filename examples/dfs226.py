@@ -2,6 +2,14 @@ from commands import *
 from trace6502 import hook_subroutine
 import acorn
 
+# TODO: Use this everywhere relevant
+def patched_branch(base_label, offset_addr, target_label):
+    base_addr = addr(base_label)
+    offset = memory[offset_addr]
+    assert offset < 0x80
+    entry(base_addr + 2 + offset, target_label)
+    expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
+
 load(0x8000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
 
@@ -186,14 +194,10 @@ expr_label(0xd22, "nmi_lda_immXXX4+1")
 comment(0xd08, 'The operand of this "beq" is modified at runtime.')
 label(0xd08, "nmi_beq")
 expr_label(0xd09, "nmi_beq+1")
-entry(0xd08+2+0x48, "nmi_XXX1")
-expr(0x8e49, "nmi_XXX1-(nmi_beq+2)")
-expr(0x8eb0, "nmi_XXX1-(nmi_beq+2)")
-expr(0x8ff4, "nmi_XXX1-(nmi_beq+2)")
-entry(0xd08+2+0x2f, "nmi_XXX2")
-expr(0x901e, "nmi_XXX2-(nmi_beq+2)")
-#entry(0x9024) # XXX: how is this code reached? beq modification?
-#entry(0x9029) # XXX: how is this code reached? beq modification?
+patched_branch("nmi_beq", 0x8e49, "nmi_XXX1")
+patched_branch("nmi_beq", 0x8eb0, "nmi_XXX1")
+patched_branch("nmi_beq", 0x8ff4, "nmi_XXX1")
+patched_branch("nmi_beq", 0x901e, "nmi_XXX2")
 constant(0x40, "opcode_rti")
 expr(0x8e8e, "opcode_rti")
 comment(0xd04, "The operand of this and is modified at runtime.")
@@ -241,14 +245,6 @@ with moved(nmi3_move_id):
     label(0xd39, "nmi_lda_abs")
     expr_label(0xd3a, "nmi_lda_abs+1")
     expr_label(0xd3b, "nmi_lda_abs+2")
-
-# TODO: Use this everywhere relevant
-def patched_branch(base_label, offset_addr, target_label):
-    base_addr = addr(base_label)
-    offset = memory[offset_addr]
-    assert offset < 0x80
-    entry(base_addr + 2 + offset, target_label)
-    expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
 
 # The loop at &9047 doesn't make a pass with Y=0.
 nmi2_move_id = move(0xd00, 0x9067, 0x94)
