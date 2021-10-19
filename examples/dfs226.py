@@ -242,6 +242,14 @@ with moved(nmi3_move_id):
     expr_label(0xd3a, "nmi_lda_abs+1")
     expr_label(0xd3b, "nmi_lda_abs+2")
 
+# TODO: Use this everywhere relevant
+def patched_branch(base_label, offset_addr, target_label):
+    base_addr = 0xd0d # TODO: We should get this from the disasembler data structures
+    offset = memory[offset_addr]
+    assert offset < 0x80
+    entry(base_addr + 2 + offset, target_label)
+    expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
+
 # The loop at &9047 doesn't make a pass with Y=0.
 nmi2_move_id = move(0xd00, 0x9067, 0x94)
 label(0x9067, "nmi_handler2_rom_start")
@@ -254,8 +262,9 @@ with moved(nmi2_move_id):
     label(0xd0d, "nmi_bcs")
     # TODO: Could/should we fact this "bcs offset derivation" into a helper fn? Probably just one private to this file for now, not a library routine.
     expr_label(0xd0e, "nmi_bcs+1")
-    entry(0xd0d+2+0x32, "nmi_XXX10")
-    expr(0xd3e, "nmi_XXX10-(nmi_bcs+2)")
+    patched_branch("nmi_bcs", 0xd3e, "nmi_XXX10")
+    #entry(0xd0d+2+0x32, "nmi_XXX10")
+    #expr(0xd3e, "nmi_XXX10-(nmi_bcs+2)")
     entry(0xd0d+2+0x3b, "nmi_XXX11")
     expr(0xd47, "nmi_XXX11-(nmi_bcs+2)")
     entry(0xd0d+2+0x3f, "nmi_XXX12")
