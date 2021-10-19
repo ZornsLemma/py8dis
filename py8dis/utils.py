@@ -4,6 +4,7 @@ import sys
 
 import config
 #import trace6502 # TODO!
+import movemanager
 
 memory_binary = config.memory_binary
 
@@ -36,7 +37,9 @@ def add_hex_dump(s, addr, length, column_adjust=0):
     if not config.hex_dump():
         return s
     s = LazyString("%-*s", config.inline_comment_column() + column_adjust, s)
-    s += "%s %s: " % (config.formatter().comment_prefix(), plainhex4(addr))
+    # TODO: Addition of move() addresses is a bit hacky but I ultimately plan to rework all the output formatting anyway.
+    runtime_addr = movemanager.b2r(addr)
+    s += "%s %s %s: " % (config.formatter().comment_prefix(), plainhex4(runtime_addr) if runtime_addr != addr else "    ", plainhex4(addr))
     capped_length = min(length, 3)
     s += " ".join(plainhex2(x) for x in memory_binary[addr:addr+capped_length])
     if capped_length < length:
