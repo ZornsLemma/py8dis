@@ -263,16 +263,18 @@ with moved(nmi2_move_id):
     # TODO: Could/should we fact this "bcs offset derivation" into a helper fn? Probably just one private to this file for now, not a library routine.
     expr_label(0xd0e, "nmi_bcs+1")
     patched_branch("nmi_bcs", 0xd3e, "nmi_XXX10")
-    #entry(0xd0d+2+0x32, "nmi_XXX10")
-    #expr(0xd3e, "nmi_XXX10-(nmi_bcs+2)")
-    entry(0xd0d+2+0x3b, "nmi_XXX11")
-    expr(0xd47, "nmi_XXX11-(nmi_bcs+2)")
-    entry(0xd0d+2+0x3f, "nmi_XXX12")
-    expr(0xd4b, "nmi_XXX12-(nmi_bcs+2)")
-    entry(0xd0d+2+0x49, "nmi_XXX13")
-    expr(0xd55, "nmi_XXX13-(nmi_bcs+2)")
-    entry(0xd0d+2+0x4d, "nmi_XXX14")
-    expr(0xd59, "nmi_XXX14-(nmi_bcs+2)")
+    patched_branch("nmi_bcs", 0xd47, "nmi_XXX11")
+    #entry(0xd0d+2+0x3b, "nmi_XXX11")
+    #expr(0xd47, "nmi_XXX11-(nmi_bcs+2)")
+    patched_branch("nmi_bcs", 0xd4b, "nmi_XXX12")
+    #entry(0xd0d+2+0x3f, "nmi_XXX12")
+    #expr(0xd4b, "nmi_XXX12-(nmi_bcs+2)")
+    patched_branch("nmi_bcs", 0xd55, "nmi_XXX13")
+    #entry(0xd0d+2+0x49, "nmi_XXX13")
+    #expr(0xd55, "nmi_XXX13-(nmi_bcs+2)")
+    patched_branch("nmi_bcs", 0xd59, "nmi_XXX14")
+    #entry(0xd0d+2+0x4d, "nmi_XXX14")
+    #expr(0xd59, "nmi_XXX14-(nmi_bcs+2)")
 
 entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?
