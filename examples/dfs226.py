@@ -49,11 +49,17 @@ comment(0xaf70, "Patch the following JMP so we effectively do JMP (&500,X)")
 entry(0x435, "tube_entry_small_a")
 entry(0x428, "tube_entry_claim_tube")
 comment(0xaf87, "This is a call to release the tube.")
+comment(0x695, "Wait for register 2 to have space and write A to it.")
+entry(0x695, "write_tube_r2_data")
 comment(0x69e, "Wait for register 4 to have space and write A to it.")
 entry(0x69e, "write_tube_r4_data")
 comment(0x518, "Table of flags used by tube_entry_small_a to set up registers 1/4 for the\nselected operation.")
 label(0x518, "tube_entry_flags")
 # TODO: Not sure if it's a bug or just a quirk, but we get duplicate "referenced by" lines at e.g. tube_host_code2 and l0500
+entry(0x668, "tube_host_osword_0")
+entry(0x66a, "tube_host_osword_0_loop")
+entry(0x680, "tube_host_osword_0_no_escape")
+entry(0x687, "tube_host_osword_0_no_escape_loop")
 
 # These two options default to True (on) and are probably helpful during the
 # initial stages of a disassembly, but you might want to turn them off
