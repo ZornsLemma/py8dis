@@ -26,6 +26,7 @@ tube_host_move_id1 = move(0x400, 0xaf79, 0xb075 - 0xaf79)
 tube_host_move_id2 = move(0x500, 0xacdb, 0xaea9 - 0xacdb)
 tube_host_move_id3 = move(0x16, 0xaf38, 0x42)
 label(0xaf79, "tube_host_code1")
+# XXX: I wonder if some of the code at tube_host_code2 is not actually tube related. Maybe it is, it's just that the osbpu/osbget stuff at l0520 for example doesn't look very tube host code-ish.
 label(0xacdb, "tube_host_code2")
 label(0xaf38, "tube_host_code3")
 expr_label(0xacdb + 0x100, "tube_host_code2+256")
