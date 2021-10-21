@@ -293,7 +293,7 @@ entry(0x999b) # XXX: how is this code reached?
 entry(0x99be) # XXX: how is this code reached?
 entry(0x9c0c) # XXX: how is this code reached?
 entry(0x9d72) # XXX: how is this code reached?
-entry(0x9d9b) # XXX: how is this code reached?
+#entry(0x9d9b) # XXX: how is this code reached?
 entry(0x9e5d) # XXX: how is this code reached?
 entry(0xac3b) # XXX: how is this code reached?
 entry(0xacb2) # XXX: how is this code reached?
@@ -311,6 +311,20 @@ entry(0x994c, "invert_l1065")
 
 label(0xaee8, "tube_banner_loop")
 label(0xaf35, "lda_0_rts")
+
+entry(0x9a55, "generate_error_precheck_locked")
+entry(0x9c00, "generate_error_precheck_disc_changed")
+entry(0x9c82, "generate_error_precheck_open")
+
+# XXX: This is poking a zero over a stacked value, but I haven't analysed its
+# callers to see what that stacked value is.
+entry(0x9d8e, "zero_stacked_XXX")
+
+# XXX: This is guesswork based on the addresses of some code.
+pc = 0x9afa
+for i in range(7):
+    wordentry(pc)
+    pc += 3
 
 pc = 0x85d3
 label(pc, "opt4_table")
