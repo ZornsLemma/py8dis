@@ -72,16 +72,19 @@ def b2r(binary_addr):
     assert move_source <= binary_addr < (move_source + move_length)
     return move_dest + (binary_addr - move_source)
 
+cache_move_definitions_len = None
+cache = None
 def move_ids_for_runtime_addr(runtime_addr):
     # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids. That's not quite true - we do use this in at least one place - but there is some truth in it.
     assert utils.is_valid_addr(runtime_addr)
-    # TODO: Deriving this dynamically every time is super inefficient, but I'm still thinking
-    # my way through this.
-    move_ids_for_runtime_addr = collections.defaultdict(list) # TODO: set not list??
-    for binary_addr, move_id in enumerate(move_id_for_binary_addr):
-        if move_id != base_move_id: # TODO: special case feels a bit awkward
-            move_ids_for_runtime_addr[b2r(binary_addr)].append(move_id)
-    return set(move_ids_for_runtime_addr[runtime_addr])
+    global cache_move_definitions_len, cache
+    if cache_move_definitions_len is None or len(move_definitions) != cache_move_definitions_len:
+        cache = collections.defaultdict(set)
+        for binary_addr, move_id in enumerate(move_id_for_binary_addr):
+            if move_id != base_move_id: # TODO: special case feels a bit awkward
+                cache[b2r(binary_addr)].add(move_id)
+        cache_move_definitions_len = len(move_definitions)
+    return cache[runtime_addr]
 
 # Return (binary address, move ID) corresponding to a runtime address; because a
 # runtime address can be the target of multiple moves, there may be no
