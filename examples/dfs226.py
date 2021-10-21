@@ -270,6 +270,10 @@ with moved(nmi2_move_id):
     patched_branch("nmi_bcs", 0xd91, "nmi_XXX21")
     patched_branch("nmi_bcs", 0xd29, "nmi_XXX22")
     patched_branch("nmi_bcs", 0xd2f, "nmi_XXX23")
+    comment(0xd15, "The operand of this sta is modified at runtime.")
+    label(0xd15, "nmi_sta_abs2")
+    expr_label(0xd16, "nmi_sta_abs2+1")
+    expr_label(0xd17, "nmi_sta_abs2+2")
 
 entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?
