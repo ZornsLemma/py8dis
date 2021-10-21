@@ -261,6 +261,13 @@ with moved(nmi2_move_id):
     patched_branch("nmi_bcs", 0xd4b, "nmi_XXX12")
     patched_branch("nmi_bcs", 0xd55, "nmi_XXX13")
     patched_branch("nmi_bcs", 0xd59, "nmi_XXX14")
+    patched_branch("nmi_bcs", 0xd61, "nmi_XXX15")
+    patched_branch("nmi_bcs", 0xd69, "nmi_XXX16")
+    patched_branch("nmi_bcs", 0xd7d, "nmi_XXX17")
+    patched_branch("nmi_bcs", 0xd83, "nmi_XXX18")
+    patched_branch("nmi_bcs", 0xd87, "nmi_XXX19")
+    patched_branch("nmi_bcs", 0xd8b, "nmi_XXX20")
+    patched_branch("nmi_bcs", 0xd91, "nmi_XXX21")
 
 entry(0x80d3) # XXX: how is this code reached?
 entry(0x8441) # XXX: how is this code reached?
