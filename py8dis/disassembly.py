@@ -290,12 +290,9 @@ def emit():
     if True: # TODO: Should be config controlled
         output.extend(labelmanager.all_labels_as_comments())
 
-    # TODO: Probably inefficient, poor variable names, etc etc
-    # TODO: Should we just be tracking the ranges as whole ranges when the user sets them up with move()?
-    # TODO: If we're not careful (it can work) here, when we have move()-region IDs, we could accidentally merge two (legitimately) adjancent regions and fail to use the correct region ID for the second and subsequent sub-ranges
-    # TODO: I think this needs rewriting so it's not a massive hack and so it respects the exact end of move() ranges (it can isolate_range() if it needs to) - at the moment, it will happily add some slop which I think explains some weirdness I'm seeing with dfs226.py in isolation and also adjacent weirdness in dfs226b.py
-    # We completely ignore the classifications here; moves are more important
-    # and can bisect a classification. We call isolate_range to fix up the
+    # Break the output down into sub-ranges which share the same move ID. We
+    # completely ignore the classifications here; moves are more important and
+    # can bisect a classification. We call isolate_range to fix up the
     # classifications afterwards.
     SFTODORANGES = []
     current_range_start = None
