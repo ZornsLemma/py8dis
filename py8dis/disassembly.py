@@ -293,26 +293,29 @@ def emit():
     # TODO: Probably inefficient, poor variable names, etc etc
     # TODO: Should we just be tracking the ranges as whole ranges when the user sets them up with move()?
     # TODO: If we're not careful (it can work) here, when we have move()-region IDs, we could accidentally merge two (legitimately) adjancent regions and fail to use the correct region ID for the second and subsequent sub-ranges
-    assert False # TODO: I think this needs rewriting so it's not a massive hack and so it respects the exact end of move() ranges (it can isolate_range() if it needs to) - at the moment, it will happily add some slop which I think explains some weirdness I'm seeing with dfs226.py in isolation and also adjacent weirdness in dfs226b.py
+    # TODO: I think this needs rewriting so it's not a massive hack and so it respects the exact end of move() ranges (it can isolate_range() if it needs to) - at the moment, it will happily add some slop which I think explains some weirdness I'm seeing with dfs226.py in isolation and also adjacent weirdness in dfs226b.py
     SFTODORANGES = []
+    current_range_start = None
+    current_range_move_id = None
     for start_addr, end_addr in sorted(config.load_ranges):
-        isolate_range(start_addr, end_addr)
-        #print("XXP %04x %04x" % (start_addr, end_addr))
         addr = start_addr
-        SFTODOMOVEBASE = -1000000
-        SUBSTART = addr
         while addr < end_addr:
-            new_addr = addr + classifications[addr].length()
-            THISMOVE = movemanager.move_id_for_binary_addr[addr]
-            if new_addr >= end_addr:
-                addr = new_addr
-                THISMOVE = -1000000
-            if THISMOVE != SFTODOMOVEBASE:
-                SFTODORANGES.append((SUBSTART, addr))
-                SUBSTART = addr
-                SFTODOMOVEBASE = THISMOVE
-            addr = new_addr
-    #print("PPPDX", SFTODORANGES)
+            if current_range_start is not None:
+                if (addr == current_range_end and
+                    movemanager.move_id_for_binary_addr[addr] == current_range_move_id):
+                    current_range_end = addr + 1
+                else:
+                    SFTODORANGES.append((current_range_start, current_range_end))
+                    current_range_start = None
+            if current_range_start is None:
+                current_range_start = addr
+                current_range_end = addr + 1
+                current_range_move_id = movemanager.move_id_for_binary_addr[addr]
+            addr += 1
+    if current_range_start  != (current_range_end - 1):
+        SFTODORANGES.append((current_range_start, current_range_end))
+    for start_addr, end_addr in SFTODORANGES:
+        isolate_range(start_addr, end_addr)
 
     # Generate the disassembly proper, but don't emit it just yet. We do this so
     # we can emit label definitions in the "best" move region and then emit any
@@ -321,7 +324,7 @@ def emit():
     d = []
     # TODO: dfs226.py vs dfs226b.py - range starting at 00xaf38 and the range after are different between the two (not just the 0x6000 offset) - and even just looking at dfs226.py in isolation, the 0xaf7c end seems wrong compared to the move()s - I *suspect* this has something to do with classifications of "raw data" straddling the end of the range and not being handled properly or at least consistently
     for start_addr, end_addr in SFTODORANGES:
-        print("QZZ %04x %04x" %(start_addr, end_addr))
+        #print("QZZ %04x %04x" %(start_addr, end_addr))
         if movemanager.move_id_for_binary_addr[start_addr] == movemanager.base_move_id:
             d.extend(formatter.code_start(start_addr, end_addr))
             d.extend(disassemble_range(start_addr, end_addr))
