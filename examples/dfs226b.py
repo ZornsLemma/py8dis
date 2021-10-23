@@ -40,7 +40,14 @@ with moved(move(0x8000, 0x2000, 0x4000)):
     label(0xaf38, "tube_host_code3")
     expr_label(0xacdb + 0x100, "tube_host_code2+256")
     wordentry(0x500, 12)
+    entry(0x400)
+    entry(0x403)
     entry(0x406, "tube_entry")
+    entry(0x484) # XXX: how is this reached?
+    entry(0x48c) # XXX: how is this reached?
+    entry(0x491) # XXX: how is this reached?
+    entry(0x49b) # XXX: how is this reached?
+    entry(0x4ce) # XXX: how is this reached?
     entry(0x06ad, "tube_evntv_handler")
     expr(0xaef9, "<tube_evntv_handler")
     expr(0xaefe, ">tube_evntv_handler")
@@ -317,13 +324,14 @@ with moved(move(0x8000, 0x2000, 0x4000)):
     entry(0xac3b) # XXX: how is this code reached?
     entry(0xacb2) # XXX: how is this code reached?
     entry(0xaf38) # XXX: how is this code reached?
-    entry(0xaf79) # XXX: how is this code reached?
-    entry(0xaf7c) # XXX: how is this code reached?
+    #entry(0xaf79) # XXX: how is this code reached?
+    #entry(0xaf7c) # XXX: how is this code reached?
     entry(0xaf7f) # XXX: how is this code reached?
-    entry(0xaffd) # XXX: how is this code reached?
-    entry(0xb047) # XXX: how is this code reached?
+    #entry(0xaffd) # XXX: how is this code reached?
+    #entry(0xb047) # XXX: how is this code reached?
     entry(0xb736) # XXX: how is this code reached?
     entry(0xbf8b) # XXX: how is this code reached?
+    entry(0xb7d5) # XXX: how is this code reached?
 
     comment(0x994c, "Invert the 32-bit value at l1065")
     entry(0x994c, "invert_l1065")

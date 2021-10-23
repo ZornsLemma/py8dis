@@ -317,6 +317,8 @@ entry(0xaffd) # XXX: how is this code reached?
 entry(0xb047) # XXX: how is this code reached?
 entry(0xb736) # XXX: how is this code reached?
 entry(0xbf8b) # XXX: how is this code reached?
+entry(0xb7d5) # XXX: how is this code reached?
+
 
 comment(0x994c, "Invert the 32-bit value at l1065")
 entry(0x994c, "invert_l1065")
