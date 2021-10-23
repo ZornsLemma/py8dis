@@ -159,7 +159,6 @@ class String(object):
                 if c == ord('"'):
                     s += "'\"'"
                 else:
-                    print("AAA", hex(addr+i))
                     s += get_constant8(addr + i)
             if len(s) > (config.inline_comment_column() - 5):
                 if state == 1:

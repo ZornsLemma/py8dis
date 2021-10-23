@@ -95,9 +95,6 @@ def move_ids_for_runtime_addr(runtime_addr):
 # yet.
 def r2b(runtime_addr):
     relevant_move_ids = move_ids_for_runtime_addr(runtime_addr)
-    print("ZZZ", move_definitions)
-    print("YYY", hex(runtime_addr), relevant_move_ids)
-    print("QQQ", move_id_for_binary_addr[0xaf70-0x6000])
     if len(relevant_move_ids) == 0:
         return runtime_addr, base_move_id
     selected_move_id = None
