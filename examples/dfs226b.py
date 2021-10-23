@@ -32,7 +32,8 @@ with moved(move(0x8000, 0x2000, 0x4000)):
     # TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.
     tube_host_move_id1 = mymove(0x400, 0xaf79, 0xb075 - 0xaf79)
     tube_host_move_id2 = mymove(0x500, 0xacdb, 0xaea9 - 0xacdb)
-    tube_host_move_id3 = mymove(0x16, 0xaf38, 0x42)
+    # The code at &af2b copies &42 bytes from &af38to &16, but &af38+&42=&af7a, so this would steal the first byte of the move() to 0x400 above. XXX: I don't know if the byte copied from &af79 to zero page is done deliberately or is just the copy loop harmlessly but unnecessarily copying at an extra byte.
+    tube_host_move_id3 = mymove(0x16, 0xaf38, 0x41)
     label(0xaf79, "tube_host_code1")
     # XXX: I wonder if some of the code at tube_host_code2 is not actually tube related. Maybe it is, it's just that the osbpu/osbget stuff at l0520 for example doesn't look very tube host code-ish.
     label(0xacdb, "tube_host_code2")
