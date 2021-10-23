@@ -73,7 +73,6 @@ def generate_references():
         binary_addr, _ = movemanager.r2b(runtime_addr)
         if binary_addr is not None:
             for reference in label.references: # TODO: rename reference->binary_reference_address?
-                assert reference >= 0x8000 # TODO TEMP
                 references[binary_addr].add(reference)
 
 # TODO: This code is a bit unreadable!

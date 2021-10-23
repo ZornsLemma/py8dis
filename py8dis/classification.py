@@ -159,6 +159,7 @@ class String(object):
                 if c == ord('"'):
                     s += "'\"'"
                 else:
+                    print("AAA", hex(addr+i))
                     s += get_constant8(addr + i)
             if len(s) > (config.inline_comment_column() - 5):
                 if state == 1:
@@ -236,7 +237,9 @@ def stringcr(addr, exclude_terminator=False):
 def stringz(addr, exclude_terminator=False):
     return stringterm(addr, 0, exclude_terminator)
 
-def string(addr, n=None):
+# TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
+def string(runtime_addr, n=None):
+    addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: should prob call this binary_addr
     if n is None:
         assert not disassembly.is_classified(addr)
         n = 0
@@ -244,7 +247,7 @@ def string(addr, n=None):
             n += 1
     if n > 0:
         disassembly.add_classification(addr, String(n, False))
-    return addr + n
+    return movemanager.b2r(addr + n)
 
 # ENHANCE: A variant on this which considers the top-bit-set byte as part of the
 # string might be useful. The if-ed out code to decompose the last character
@@ -300,7 +303,7 @@ def autostring(min_length=3):
             if movemanager.b2r(addr + i) in labelmanager.labels:
                 break
         if i >= min_length:
-            string(addr, i)
+            string(addr, i) # TODO: this will be broken by my current semi-hack to make string() work with runtime addr
         addr += max(1, i)
 
 def classify_leftovers():
