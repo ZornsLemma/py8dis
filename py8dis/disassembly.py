@@ -318,8 +318,9 @@ def emit():
     # leftover labels as explicit definitions below.
     # TODO: This is *not* emitting labels "after" the last address in some cases - e.g. move.py -a currently doesn't emit pydis_end inline. (To be fair, this is a bit of an edge case, but ideally it would work.)
     d = []
+    # TODO: dfs226.py vs dfs226b.py - range starting at 00xaf38 and the range after are different between the two (not just the 0x6000 offset) - and even just looking at dfs226.py in isolation, the 0xaf7c end seems wrong compared to the move()s - I *suspect* this has something to do with classifications of "raw data" straddling the end of the range and not being handled properly or at least consistently
     for start_addr, end_addr in SFTODORANGES:
-        #print("QZZ %04x %04x" %(start_addr, end_addr))
+        print("QZZ %04x %04x" %(start_addr, end_addr))
         if movemanager.move_id_for_binary_addr[start_addr] == movemanager.base_move_id:
             d.extend(formatter.code_start(start_addr, end_addr))
             d.extend(disassemble_range(start_addr, end_addr))

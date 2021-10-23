@@ -24,7 +24,7 @@ acorn.is_sideways_rom()
 # TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.
 tube_host_move_id1 = move(0x400, 0xaf79, 0xb075 - 0xaf79)
 tube_host_move_id2 = move(0x500, 0xacdb, 0xaea9 - 0xacdb)
-tube_host_move_id3 = move(0x16, 0xaf38, 0x42)
+tube_host_move_id3 = move(0x16, 0xaf38, 0x42) # TODO: FWIW final included address is 0xaf79 (0xaf38+0x42=0xaf7a), which is probably causing some of the odd behaviour I see (reassuringly we never seem to generate "invalid" output, just weird) - although that's not to say there aren't bugs in how we're handling this
 label(0xaf79, "tube_host_code1")
 # XXX: I wonder if some of the code at tube_host_code2 is not actually tube related. Maybe it is, it's just that the osbpu/osbget stuff at l0520 for example doesn't look very tube host code-ish.
 label(0xacdb, "tube_host_code2")
