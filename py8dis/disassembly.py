@@ -184,13 +184,15 @@ def our_label_maker(addr, context, move_id):
             # but ideally we wouldn't do it.
             add_label(base_addr, optional_labels[base_addr][0], None)
         return (s, None) # TODO: optional labels don't have a move_id at the moment?
-    if not is_code(addr):
+    # TODO: Is this runtime->binary stuff correct?
+    binary_addr, _ = movemanager.r2b(addr)
+    if binary_addr is None or not is_code(binary_addr):
         label = utils.force_case("l%04x" % addr)
     else:
-        # TODO: Should probably be user-configurable, but maybe the "c" prefix here is not ideal because I personally tend to mix it up with the following hex digits - a letter > 'f' would be better
+        # TODO: Should probably be user-configurable, but maybe the "c" prefix here is not ideal because I personally tend to mix it up with the following hex digits - a letter > 'f' would be better - perhaps "x" for "executable"? (should be user-configurable as I say, but I am inclined to change the default)
         label = utils.force_case("c%04x" % addr)
         # TODO: Shouldn't be using trace6502 in this generic code
-        addr_refs = trace.references.get(addr, [])
+        addr_refs = trace.references.get(binary_addr, [])
         if all(trace6502.is_subroutine_call(addr) for addr in addr_refs):
             label = "sub_" + label
         else:
