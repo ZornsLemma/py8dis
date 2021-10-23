@@ -217,7 +217,9 @@ def get_address16(addr):
     assert isinstance(disassembly.get_classification(addr), Word) or (isinstance(disassembly.get_classification(addr - 1), trace6502.Opcode) and disassembly.get_classification(addr - 1).length() == 3)
     return get_expression(addr, operand)
 
-def stringterm(addr, terminator, exclude_terminator=False):
+# TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
+def stringterm(runtime_addr, terminator, exclude_terminator=False):
+    addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: should prob call this binary_addr
     initial_addr = addr
     while memory_binary[addr] != terminator:
         addr += 1
@@ -226,7 +228,7 @@ def stringterm(addr, terminator, exclude_terminator=False):
         string_length -= 1
     if string_length > 0:
         disassembly.add_classification(initial_addr, String(string_length, False))
-    return addr + 1
+    return movemanager.b2r(addr + 1)
 
 def stringcr(addr, exclude_terminator=False):
     return stringterm(addr, 13, exclude_terminator)
@@ -247,7 +249,9 @@ def string(addr, n=None):
 # ENHANCE: A variant on this which considers the top-bit-set byte as part of the
 # string might be useful. The if-ed out code to decompose the last character
 # into a readable form would then potentially be useful too.
-def stringhi(addr):
+# TODO: I have converted this to use runtime address without thinking about eg hooks
+def stringhi(runtime_addr):
+    addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: addr->binary_addr?
     assert not disassembly.is_classified(addr, 1)
     initial_addr = addr
     while True:
@@ -262,7 +266,7 @@ def stringhi(addr):
         addr += 1
     if addr > initial_addr:
         disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
-    return addr
+    return movemanager.b2r(addr)
 
 # Behaviour with include_terminator_fn=None should be beebdis-compatible.
 def stringhiz(addr, include_terminator_fn=None):

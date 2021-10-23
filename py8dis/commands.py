@@ -83,6 +83,7 @@ def optional_label(addr, name, base_addr=None):
 
 def comment(runtime_addr, text):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    print("XXX", hex(runtime_addr), hex(binary_addr))
     assert utils.data_loaded_at_binary_addr(binary_addr)
     disassembly.add_comment(binary_addr, text)
 

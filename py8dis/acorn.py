@@ -400,16 +400,16 @@ def is_sideways_rom():
     def check_entry(addr, entry_type):
         jmp_abs_opcode = 0x4c
         label(addr, entry_type + "_entry")
-        if memory_binary[addr] == jmp_abs_opcode:
+        if memory[addr] == jmp_abs_opcode:
             entry(addr)
-            label(utils.get_u16(addr + 1), entry_type + "_handler")
+            label(utils.get_u16_runtime(addr + 1), entry_type + "_handler")
         else:
             byte(addr, 3)
     check_entry(0x8000, "language")
     check_entry(0x8003, "service")
     label(0x8006, "rom_type")
     label(0x8007, "copyright_offset")
-    copyright_offset = memory_binary[0x8007]
+    copyright_offset = memory[0x8007]
     expr(0x8007, "copyright - rom_header")
     label(0x8008, "binary_version")
     label(0x8009, "title")

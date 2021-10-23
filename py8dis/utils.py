@@ -28,9 +28,19 @@ def get_u16(addr):
     assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
     return memory_binary[addr] + (memory_binary[addr+1] << 8)
 
+# TODO: This is a poor name - *if* one of these is going to have a non-explicit name, it should be this one not get_u16() which works with binary - but just getting things working for now - *maybe* get_u16 should take an "array" and an index as separate arguments
+def get_u16_runtime(runtime_addr):
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    return get_u16(binary_addr)
+
 def get_u16_be(addr):
     assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
     return (memory_binary[addr] << 8) | memory_binary[addr+1]
+
+# TODO: As get_u16_runtime
+def get_u16_be_runtime(runtime_addr):
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    return get_u16_be(binary_addr)
 
 def add_hex_dump(s, addr, length, column_adjust=0):
     assert length > 0
