@@ -260,7 +260,7 @@ with moved(move(0x8000, 0x2000, 0x4000)):
         # this address is because its labels are "attached" before we do this "conflicting" move().
         # The disassembly might be cleaner if we *did* disambiguate, not sure.
         comment(0xd39, "The operand of this lda is modified at runtime.")
-        label(0xd39, "nmi_lda_abs")
+        entry(0xd39, "nmi_lda_abs")
         expr_label(0xd3a, "nmi_lda_abs+1")
         expr_label(0xd3b, "nmi_lda_abs+2")
 
@@ -301,7 +301,6 @@ with moved(move(0x8000, 0x2000, 0x4000)):
     entry(0x881b) # XXX: how is this code reached?
     entry(0x8870) # XXX: how is this code reached?
     entry(0x8a32) # XXX: how is this code reached?
-    entry(0x9030) # XXX: how is this code reached?
     entry(0x9785) # XXX: how is this code reached?
     entry(0x97b6) # XXX: how is this code reached?
     entry(0x97c9) # XXX: how is this code reached?

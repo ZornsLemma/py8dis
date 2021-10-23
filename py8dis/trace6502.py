@@ -28,6 +28,8 @@ def apply_move(runtime_addr):
 def apply_move2(target, context):
     # TODO: Rewritten in terms of movemanager - change this eventually? I think the rewrite does the same thing, but it may not, or it may do but not be right anyway...
     with movemanager.moved(movemanager.move_id_for_binary_addr[context]):
+        #if context in (0x8fda, 0x2fda):
+        #    print("XAL", hex(target), movemanager.r2b(target))
         return apply_move(target)
 
 def add_jsr_hook(addr, hook):

@@ -13,7 +13,9 @@ code_analysis_fns = [] # TODO!?
 
 # TODO: experimental - but the point is the user will be referring to dest addrs not source addrs
 def add_entry(binary_addr, name, move_id):
+    #assert binary_addr != 0x9030
     entry_points.append(binary_addr)
+    # TODO: Should it be possible for the user to add an entry point without also triggering creation of a label?
     disassembly.add_label(movemanager.b2r(binary_addr), name, move_id)
 
 def analyse_code():
@@ -38,10 +40,12 @@ def analyse_code():
 
 def trace():
     while len(entry_points) > 0:
+        #assert 0x9030 not in entry_points
         entry_point = entry_points.pop(0)
+        #assert entry_point != 0x9030
         if entry_point not in traced_entry_points:
             traced_entry_points.add(entry_point)
-            #print(hex(entry_point))
+            #print("AXP", hex(entry_point))
             new_entry_points = config.disassemble_instruction()(entry_point)
             # The first element of new_entry_points is the implicit next
             # instruction (if there is one; it might be None) which is handled
@@ -50,9 +54,11 @@ def trace():
             assert len(new_entry_points) >= 1
             implied_entry_point = new_entry_points.pop(0)
             if implied_entry_point is not None:
+                #assert implied_entry_point != 0x9030
                 entry_points.append(implied_entry_point)
             for new_entry_point in new_entry_points:
                 #print("AQB %04x %04x" % (entry_point, new_entry_point))
+                #assert new_entry_point != 0x9030
                 add_entry(new_entry_point, name=None, move_id=movemanager.move_id_for_binary_addr[new_entry_point])
     if False:
         for addr, label in sorted(labelmanager.labels.items(), key=lambda x: x[0]):
