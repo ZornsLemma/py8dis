@@ -293,6 +293,7 @@ def emit():
     # TODO: Probably inefficient, poor variable names, etc etc
     # TODO: Should we just be tracking the ranges as whole ranges when the user sets them up with move()?
     # TODO: If we're not careful (it can work) here, when we have move()-region IDs, we could accidentally merge two (legitimately) adjancent regions and fail to use the correct region ID for the second and subsequent sub-ranges
+    assert False # TODO: I think this needs rewriting so it's not a massive hack and so it respects the exact end of move() ranges (it can isolate_range() if it needs to) - at the moment, it will happily add some slop which I think explains some weirdness I'm seeing with dfs226.py in isolation and also adjacent weirdness in dfs226b.py
     SFTODORANGES = []
     for start_addr, end_addr in sorted(config.load_ranges):
         isolate_range(start_addr, end_addr)
