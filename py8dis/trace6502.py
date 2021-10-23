@@ -32,6 +32,7 @@ def apply_move2(target, context):
         #    print("XAL", hex(target), movemanager.r2b(target))
         return apply_move(target)
 
+# TODO: Get rid of this function? It has one caller and doesn't seem to add much value.
 def add_jsr_hook(addr, hook):
     # TODO: This almost certainly wants to be doing an r2b(addr)
     assert addr not in jsr_hooks
@@ -39,9 +40,13 @@ def add_jsr_hook(addr, hook):
 
 # TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
 # TODO: Need to clarify runtime/binary here
-def hook_subroutine(addr, name, hook):
-    trace.add_entry(addr, name, None)
-    add_jsr_hook(addr, hook)
+def hook_subroutine(runtime_addr, name, hook, warn=True):
+    binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
+    # TODO: Should probably warn rather than assert in other fns too
+    if warn:
+        utils.check_data_loaded_at_binary_addr(binary_addr)
+    trace.add_entry(binary_addr, name, move_id)
+    add_jsr_hook(runtime_addr, hook)
 
 def signed8(i):
     assert 0 <= i <= 255
