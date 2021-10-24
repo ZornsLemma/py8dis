@@ -157,3 +157,5 @@ if __name__ == "__main__":
     assert active_move_ids == []
     assert r2b(0x70) == (None, None)
     assert r2b(0x900) == (0x2100, id3)
+
+# TODO: Worth thinking about - although it is probably reasonable to insist on each binary address only mapping to one runtime address for classifications (what if we classify the same pair of bytes in the input binary in two different ways, e.g. LDA #1 vs "!byte $a9, $01" or whatever), *for labels* (and other annotation-y things) where there can be "multiple answers", it may be easy, useful and sane to allow a single binary address to map to multiple runtime addresses. I should probably review all calls to b2r() or something like that with this thought in mind.

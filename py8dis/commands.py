@@ -68,6 +68,10 @@ def label(runtime_addr, name):
     # We don't care about the equivalent binary address, but the process of looking
     # it up gives us a move ID to associate with this label.
     _, move_id = movemanager.r2b(runtime_addr)
+    #if name == "nmi_handler_rom_start":
+    #    print("PXX", move_id)
+    #    print("PXY", movemanager.move_ids_for_runtime_addr(runtime_addr))
+    #    print("PXZ", movemanager.active_move_ids)
     disassembly.add_label(runtime_addr, name, move_id)
 
 # TODO: Should probably take an optional move_id?
