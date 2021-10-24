@@ -15,6 +15,32 @@
 # - I am sort of feeling I need to think about move/region IDs and context for py8dis as a whole, but that as a basic building block the labelmanager should work with something *like* move IDs but which as far as it is concerned are simply tags. These tags are used by the label maker code when considering what label name to use for a particular reference and similarly are used when retrieving "all" labels from the label manager in order to emit definitions, but the label manager itself doesn't really "understand" them (which is why although they *might* be move IDs they might also be some other arbitrary tag, e.g. if I want to do some kind of regions or context IDs or whatever).
 # - maybe the label manager will deal with raw move IDs just to keep things "less abstract and complex". Move IDs are important to labels because we need to (try to) emit labels in the appropriate !pseudopc region for readability. If there is some sort of more abstract region/context stuff going on at the user's instigation to help e.g. disambiguate multiple uses of the same zp location based on which code is accessing it, that causes us to have multiple names (sprung into existence by the label maker) for the same address, *but* we don't need to keep the definitions of those labels separate - for zp labels this would typically be all at the top of the assembly, for absolute addresses in the binary we still want to output the definitions for all the competing "contexts" at the same place. So there's probably no need to complicate the label manager (even if it's just a question of naming) with region IDs/context IDs - move IDs are all that matter to it. Contexts or whatever are important when deciding which label to use in a particular instruction/equb/equw/whatever, but that's something the label maker deals with - all the label manager cares about is that once the label maker comes to a decision, the new label name and its associated move ID are put into the label maker's internal state so we can emit the definition at the right point (which as waffled about is a decision entirely based on move ID, and address of course).
 
+# TODO: Fresh write up to try to help me clear my head, not necessarily complete or correct
+#
+# Labels work entirely with "runtime" addresses, since their whole reason for existing is to identify addresses which are referenced in some way by the code when it is executing.
+#
+# The classes are perhaps a bit badly named; a Label object represents a 16-bit address, but that Label object can have many names associated with it and those names are perhaps more naturally referred to as "labels" (and I probably do that all over the place).
+#
+# An address can have arbitrary many names. Each of these names has a "move ID" associated with it; the same move ID can be used on many names at many different addresses.
+#
+# For explicitly-created labels specified in the control file (and the same applies to expression labels; I won't make the distinction from here on), the move ID is assigned to the name at that point, based on converting the runtime address to a binary address, which takes into account the "with moved()" clauses the user has in effect at that point.
+#
+# For implicitly-created labels, get_final_label() effectively makes explicit the decision of the label maker, which provides both a name and a move ID at that point.
+#
+# In some sense move IDs are entirely advisory; we could emit every single name at the top of the disassembly as explicit definitions of the form "foo = &1234" and the output would reassemble just fine, even if it's not very useful.
+#
+# So what do move IDs do for us?
+#
+# Firstly, they help us emit label definitions in the "right" places. If we have two separate fragments of code which are move()d to runtime address &900 and both contain a branch to address &903, we'd like each of those fragments to use a separate inline label definition at address &903, so one fragment isn't "missing" a label to show control transfers in at &903 sometimes.
+#
+# Secondly, when we use a label to refer to a 16-bit address, we'd like to use a "good" name. In the move() example from the previous point, we'd like each move()d fragment to use the same name for &903 as it used when emitting the label definition.
+#
+# It is references to addresses which really "drive" all the complex move ID label stuff. This mostly boils down to the label maker code, although its decisions are informed by the optional move_id passed to get_label() (which is I think probably relatively un-tricky and if specified is just used as-is) and the context address passed to get_label().
+#
+# Names do not change their move ID once it's been assigned, although this probably isn't as important as it "feels" it ought to be, since most of the tricksy stuff is related to the label maker deciding what names and move IDs to assign to particular label references anyway. (User-specified labels are "easy" in many ways, because they come with an implicitly user-indicated move ID.)
+#
+# Except for user-specified labels, "definitions" are not really all that interesting (except that we need to emit them in the "best" place, which isn't completely trivial). Those definitions spring into existence as the label maker returns concrete name/move pairs; we don't "define" the labels as soon as we need them, we just queue up via get_label() a later call to the label maker once we've finished disassembling.
+
 
 import collections
 
