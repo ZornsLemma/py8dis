@@ -326,16 +326,20 @@ def emit():
     for start_addr, end_addr in SFTODORANGES:
         #print("QZZ %04x %04x" %(start_addr, end_addr))
         if movemanager.move_id_for_binary_addr[start_addr] == movemanager.base_move_id:
+            d.append("SFTODOTEMPNPPSTART")
             d.extend(formatter.code_start(start_addr, end_addr))
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.code_end())
+            d.append("SFTODOTEMPNPPEND")
         else:
+            d.append("SFTODOTEMPPPSTART %04x, %04x" % (start_addr, end_addr))
             SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
             d.extend(formatter.pseudopc_start(*SFTODOARGS))
             d.extend(disassemble_range(start_addr, end_addr))
             d.extend(formatter.pseudopc_end(*SFTODOARGS))
             SFTODO_move_id = movemanager.move_id_for_binary_addr[start_addr]
             d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr, SFTODO_move_id))
+            d.append("SFTODOTEMPPPEND %04x, %d" % (end_addr, SFTODO_move_id))
 
     # Emit labels which haven't been emitted inline with the disassembly.
     for addr in sorted(labelmanager.labels.keys()):
@@ -409,7 +413,10 @@ def disassemble_range(start_addr, end_addr):
         for annotation in sorted_annotations(annotations[addr]):
             result.append(annotation.as_string(addr))
         # Emit label definitions for this address.
+        if am2(addr) == 0x8fd2:
+            result.append("XXX %04x %d" % (addr, move_id))
         if am2(addr) in labelmanager.labels:
+            # TODO: Note that definition_string_list() does *not* include the equivalent of the maybe-a-hack in am2 to handle labels at the end of a move range, which I *think* explains why it doesn't emit some labels inline with dfs226b.py. I probably need to think a little more about the handling of emitting labels at the end of move ranges in order to decide how to handle this. I believe part of the issue is that if I do "generalise" this, the same address can be emitted as an inline label in more than one place somtimes (not always?) - at the end of one move range or at the start of another - and we need to be careful to try to do the right thing (e.g. always prefer start if we can) - we may need to take a whole-program view to decide what's right, really not sure right now
             result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr), move_id))
         # Emit any label definitions for addresses within the classification.
         result.extend(pending_labels)

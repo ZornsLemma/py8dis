@@ -95,6 +95,9 @@ class Label(object):
         # there's no ambiguity), it seems a good idea to emit the associated
         # definition here where it can be done inline. TODO: But this is experimental.
         SFTODO = movemanager.move_ids_for_runtime_addr(self.addr)
+        if emit_addr == 0x8fd2:
+            result.append("YYY %s" % SFTODO)
+            result.append("YYY2 %s" % movemanager.move_ids_for_runtime_addr(self.addr-1))
         if len(SFTODO) == 1:
             result.extend(self.definition_string_list_internal(emit_addr, min(SFTODO)))
         return result
