@@ -39,7 +39,7 @@
 #
 # Names do not change their move ID once it's been assigned, although this probably isn't as important as it "feels" it ought to be, since most of the tricksy stuff is related to the label maker deciding what names and move IDs to assign to particular label references anyway. (User-specified labels are "easy" in many ways, because they come with an implicitly user-indicated move ID.)
 #
-# Except for user-specified labels, "definitions" are not really all that interesting (except that we need to emit them in the "best" place, which isn't completely trivial). Those definitions spring into existence as the label maker returns concrete name/move pairs; we don't "define" the labels as soon as we need them, we just queue up via get_label() a later call to the label maker once we've finished disassembling.
+# Except for user-specified labels, "definitions" are not really all that interesting (except that we need to emit them in the "best" place, which isn't completely trivial). Those definitions spring into existence as the label maker returns concrete name/move pairs; we don't "define" the labels as soon as we need them, we just queue up via get_label() a later call to the label maker once we've finished disassembling and that creates the label name/move ID based on its use. In principle the label maker could return a different label every single time it's called, and that would work - we'd just end up with loads of duplicate labels for no good reason.
 
 
 import collections
