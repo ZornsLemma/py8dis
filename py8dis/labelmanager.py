@@ -117,6 +117,7 @@ class Label(object):
     # TODO: Better name for this and/or explicit_definition_string_list() - it is not actually the explictness of the definition which is changing, it is the explicitness of the value
     def definition_string_list(self, emit_addr, move_id):
         result = self.definition_string_list_internal(emit_addr, move_id)
+        return result # TODO: I suspect I don't need code below now
         # If this runtime address has a single move ID associated with it (so
         # there's no ambiguity), it seems a good idea to emit the associated
         # definition here where it can be done inline. TODO: But this is experimental.

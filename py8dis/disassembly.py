@@ -317,29 +317,65 @@ def emit():
     for start_addr, end_addr in SFTODORANGES:
         isolate_range(start_addr, end_addr)
 
+    # SFTODO: Experimental
+    SFTODOLABELTHING = collections.defaultdict(set)
+    for start_addr, end_addr in SFTODORANGES:
+        move_id = movemanager.move_id_for_binary_addr[start_addr]
+        for addr in range(start_addr, end_addr):
+            SFTODOLABELTHING[movemanager.b2r(addr)].add(move_id)
+        SFTODOLABELTHING[movemanager.b2r(end_addr - 1) + 1].add(move_id)
+    SFTODOLABELTHING2 = collections.defaultdict(set)
+    for start_addr, end_addr in SFTODORANGES:
+        for addr in range(start_addr, end_addr):
+            SFTODOLABELTHING2[addr].update(SFTODOLABELTHING[movemanager.b2r(addr)])
+        SFTODOLABELTHING2[end_addr].update(SFTODOLABELTHING[movemanager.b2r(end_addr - 1) + 1])
+    for SFTODO, SFTODO2 in SFTODOLABELTHING.items():
+        pass #print("YTT %04x %s" % (SFTODO, SFTODO2))
+    for SFTODO, SFTODO2 in SFTODOLABELTHING2.items():
+        pass # print("YXT %04x %s" % (SFTODO, SFTODO2))
+
     # Generate the disassembly proper, but don't emit it just yet. We do this so
     # we can emit label definitions in the "best" move region and then emit any
     # leftover labels as explicit definitions below.
     # TODO: This is *not* emitting labels "after" the last address in some cases - e.g. move.py -a currently doesn't emit pydis_end inline. (To be fair, this is a bit of an edge case, but ideally it would work.)
     d = []
     # TODO: dfs226.py vs dfs226b.py - range starting at 00xaf38 and the range after are different between the two (not just the 0x6000 offset) - and even just looking at dfs226.py in isolation, the 0xaf7c end seems wrong compared to the move()s - I *suspect* this has something to do with classifications of "raw data" straddling the end of the range and not being handled properly or at least consistently
-    for start_addr, end_addr in SFTODORANGES:
-        #print("QZZ %04x %04x" %(start_addr, end_addr))
-        if movemanager.move_id_for_binary_addr[start_addr] == movemanager.base_move_id:
-            d.append("SFTODOTEMPNPPSTART")
-            d.extend(formatter.code_start(start_addr, end_addr))
-            d.extend(disassemble_range(start_addr, end_addr))
-            d.extend(formatter.code_end())
-            d.append("SFTODOTEMPNPPEND")
-        else:
-            d.append("SFTODOTEMPPPSTART %04x, %04x" % (start_addr, end_addr))
-            SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
-            d.extend(formatter.pseudopc_start(*SFTODOARGS))
-            d.extend(disassemble_range(start_addr, end_addr))
-            d.extend(formatter.pseudopc_end(*SFTODOARGS))
-            SFTODO_move_id = movemanager.move_id_for_binary_addr[start_addr]
-            d.extend(labelmanager.labels[end_addr].definition_string_list(end_addr, SFTODO_move_id))
-            d.append("SFTODOTEMPPPEND %04x, %d" % (end_addr, SFTODO_move_id))
+    def SFTODOX(a, b):
+        pass
+    old_end_addr = -1
+    for SFTODO in range(2):
+        for start_addr, end_addr in SFTODORANGES:
+            move_id = movemanager.move_id_for_binary_addr[start_addr]
+            if move_id != movemanager.base_move_id:
+                if SFTODO == 0:
+                    SFTODOX(start_addr, movemanager.base_move_id)
+                else:
+                    d.extend(emit_labels(start_addr, movemanager.base_move_id))
+                    SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
+                    d.extend(formatter.pseudopc_start(*SFTODOARGS))
+            else:
+                if start_addr != old_end_addr:
+                    d.extend(formatter.code_start(start_addr, end_addr))
+            addr = start_addr
+            while addr < end_addr:
+                if SFTODO == 0:
+                    SFTODOX(addr, move_id)
+                else:
+                    d.extend(emit_addr(addr, move_id))
+                addr += classifications[addr].length()
+            assert addr == end_addr
+            if SFTODO == 0:
+                SFTODOX(end_addr, move_id)
+            else:
+                d.extend(emit_labels(end_addr, move_id)) # TODO: emit annotations too? (ditto other calls to emit_labels)
+            if move_id != movemanager.base_move_id:
+                if SFTODO == 0:
+                    SFTODOX(end_addr, movemanager.base_move_id)
+                else:
+                    SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
+                    d.extend(formatter.pseudopc_end(*SFTODOARGS))
+                    d.extend(emit_labels(end_addr, movemanager.base_move_id))
+            old_end_addr = end_addr
 
     # Emit labels which haven't been emitted inline with the disassembly.
     for addr in sorted(labelmanager.labels.keys()):
@@ -380,6 +416,46 @@ def isolate_range(start_addr, end_addr):
     split_classification(start_addr)
     split_classification(end_addr)
 
+# TODO: Does/should this emit annotations too?
+def emit_labels(binary_addr, move_id):
+    result = []
+    for annotation in sorted_annotations(annotations[binary_addr]):
+        result.append(annotation.as_string(binary_addr))
+    md = movemanager.move_definitions[move_id]
+    runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
+    result.extend(labelmanager.labels[runtime_addr].definition_string_list(runtime_addr, move_id))
+    return result
+
+def emit_addr(binary_addr, move_id):
+    addr = binary_addr # TODO: HACK FOR COPY AND PASTE ABILITY
+    result = []
+    classification_length = classifications[addr].length()
+    # We queue up labels defined "within" a multi-byte classification first
+    # because we might need to create a new label at addr to help in
+    # defining them.
+    pending_labels = []
+    def am2(x):
+        return movemanager.b2r(x)
+    for i in range(1, classification_length):
+        if am2(addr + i) in labelmanager.labels:
+            pending_labels.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
+    # Emit label definitions for this address.
+    result.extend(emit_labels(binary_addr, move_id))
+    # Emit any label definitions for addresses within the classification.
+    result.extend(pending_labels)
+    # Emit any annotations which would fall within the classification.
+    # TODO: It might be better to emit mid-classification annotations after the classification - if only because of the way overlapping instructions are currently handled. This is what we used to do before I tweaked it a few hours ago, IIRC. But don't rush into changing this, as I may want to tweak how overlapping instructions are recorded.
+    for i in range(1, classification_length):
+        if len(annotations[addr + i]) > 0:
+            # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
+            utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
+        for annotation in sorted_annotations(annotations[addr + i]):
+            result.append(annotation.as_string(addr))
+    # Emit the classification itself.
+    result.extend(classifications[addr].as_string_list(addr))
+    return result
+
+# TODO: DELETE?
 def disassemble_range(start_addr, end_addr):
     result = []
 
@@ -400,11 +476,7 @@ def disassemble_range(start_addr, end_addr):
         # defining them.
         pending_labels = []
         def am2(x):
-            adjust = 0
-            if x == end_addr:
-                # TODO: Is this a hack or is it OK? The "exclusive" end address of a range is inclusive for the purposes of emitting labels at its end; we need to treat it specially because it *won't* have a move_offset so we want to apply the move_offset of the last actual byte in the range
-                adjust = -1
-            return movemanager.b2r(x + adjust) - adjust
+            return movemanager.b2r(x)
         for i in range(1, classification_length):
             if am2(addr + i) in labelmanager.labels:
                 pending_labels.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
@@ -415,9 +487,8 @@ def disassemble_range(start_addr, end_addr):
         # Emit label definitions for this address.
         if am2(addr) == 0x8fd2:
             result.append("XXX %04x %d" % (addr, move_id))
-        if am2(addr) in labelmanager.labels:
-            # TODO: Note that definition_string_list() does *not* include the equivalent of the maybe-a-hack in am2 to handle labels at the end of a move range, which I *think* explains why it doesn't emit some labels inline with dfs226b.py. I probably need to think a little more about the handling of emitting labels at the end of move ranges in order to decide how to handle this. I believe part of the issue is that if I do "generalise" this, the same address can be emitted as an inline label in more than one place somtimes (not always?) - at the end of one move range or at the start of another - and we need to be careful to try to do the right thing (e.g. always prefer start if we can) - we may need to take a whole-program view to decide what's right, really not sure right now
-            result.extend(labelmanager.labels[am2(addr)].definition_string_list(am2(addr), move_id))
+        for SFTODOMOVEID in SFTODOLABELTHING2[addr]:
+            result.extend(labelmanager.labels[SFTODOXXX].definition_string_list(SFTODOXXX, SFTODOMOVEID))
         # Emit any label definitions for addresses within the classification.
         result.extend(pending_labels)
         # Emit any annotations which would fall within the classification.
