@@ -350,7 +350,7 @@ def emit():
     old_end_addr = -1
     for SFTODO in range(2):
         if SFTODO == 1:
-            print("XOU", SFTODOZ[0x9030])
+            pass # print("XOU", SFTODOZ[0x9030])
         for start_addr, end_addr in SFTODORANGES:
             move_id = movemanager.move_id_for_binary_addr[start_addr]
             if move_id != movemanager.base_move_id:
