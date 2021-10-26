@@ -124,7 +124,11 @@ class Label(object):
 
     # TODO: Better name for this and/or explicit_definition_string_list() - it is not actually the explictness of the definition which is changing, it is the explicitness of the value
     def definition_string_list(self, emit_addr, move_id):
+        # Emit any definitions for this move_id.
         result = self.definition_string_list_internal(emit_addr, move_id)
+        # Definitions for move IDs which will never get an opportunity to be emitted inline
+        # in their preferred move ID are emitted in the lowest-numbered move ID they can be
+        # emitted inline for.
         #print("ZZZ", hex(emit_addr), move_id, self.emit_opportunities)
         if move_id == min(self.emit_opportunities):
             leftover_move_ids = set(self.explicit_names.keys()) - self.emit_opportunities
