@@ -327,11 +327,15 @@ def emit():
         md = movemanager.move_definitions[move_id]
         runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
         labelmanager.labels[runtime_addr].notify_emit_opportunity(runtime_addr, move_id)
-    old_end_addr = -1
     for SFTODO in range(2):
+        old_end_addr = -1 # TODO: use None?
         if SFTODO == 1:
             pass # print("XOU", SFTODOZ[0x9030])
         for start_addr, end_addr in SFTODORANGES:
+            if old_end_addr == -1:
+                if SFTODO == 1:
+                    d.extend(formatter.code_start(start_addr, end_addr))
+                    old_end_addr = start_addr
             move_id = movemanager.move_id_for_binary_addr[start_addr]
             if move_id != movemanager.base_move_id:
                 if SFTODO == 0:
@@ -342,7 +346,8 @@ def emit():
                     d.extend(formatter.pseudopc_start(*SFTODOARGS))
             else:
                 if start_addr != old_end_addr:
-                    d.extend(formatter.code_start(start_addr, end_addr))
+                    if SFTODO == 1:
+                        d.extend(formatter.code_start(start_addr, end_addr))
             addr = start_addr
             while addr < end_addr:
                 if SFTODO == 0:
