@@ -65,6 +65,7 @@ class Label(object):
         self.explicit_names = collections.defaultdict(list)
         # TODO: Possibly non-simple names should go in a different list than explicit_names
         self.expressions = collections.defaultdict(list) # TODO: slightly experimental
+        self.emit_opportunities = set()
 
     def add_reference(self, reference):
         assert disassembly.classifications[reference].abs_operand(reference) == self.addr
@@ -114,19 +115,21 @@ class Label(object):
                     name.emitted = True
         return result
 
+    # TODO: We don't really need to pass runtime_addr to this function at all, do we?
+    def notify_emit_opportunity(self, runtime_addr, move_id):
+        #print("XAZ", hex(runtime_addr), move_id)
+        assert movemanager.is_valid_runtime_addr_for_move_id(runtime_addr, move_id)
+        assert (runtime_addr, move_id) not in self.emit_opportunities
+        self.emit_opportunities.add(move_id)
+
     # TODO: Better name for this and/or explicit_definition_string_list() - it is not actually the explictness of the definition which is changing, it is the explicitness of the value
     def definition_string_list(self, emit_addr, move_id):
         result = self.definition_string_list_internal(emit_addr, move_id)
-        return result # TODO: I suspect I don't need code below now
-        # If this runtime address has a single move ID associated with it (so
-        # there's no ambiguity), it seems a good idea to emit the associated
-        # definition here where it can be done inline. TODO: But this is experimental.
-        SFTODO = movemanager.move_ids_for_runtime_addr(self.addr)
-        if emit_addr == 0x8fd2:
-            result.append("YYY %s" % SFTODO)
-            result.append("YYY2 %s" % movemanager.move_ids_for_runtime_addr(self.addr-1))
-        if len(SFTODO) == 1:
-            result.extend(self.definition_string_list_internal(emit_addr, min(SFTODO)))
+        #print("ZZZ", hex(emit_addr), move_id, self.emit_opportunities)
+        if move_id == min(self.emit_opportunities):
+            leftover_move_ids = set(self.explicit_names.keys()) - self.emit_opportunities
+            for move_id in leftover_move_ids:
+                result.extend(self.definition_string_list_internal(emit_addr, move_id))
         return result
 
     def definition_string_list_internal(self, emit_addr, move_id):

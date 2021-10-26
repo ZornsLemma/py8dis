@@ -323,13 +323,10 @@ def emit():
     # TODO: This is *not* emitting labels "after" the last address in some cases - e.g. move.py -a currently doesn't emit pydis_end inline. (To be fair, this is a bit of an edge case, but ideally it would work.)
     d = []
     # TODO: dfs226.py vs dfs226b.py - range starting at 00xaf38 and the range after are different between the two (not just the 0x6000 offset) - and even just looking at dfs226.py in isolation, the 0xaf7c end seems wrong compared to the move()s - I *suspect* this has something to do with classifications of "raw data" straddling the end of the range and not being handled properly or at least consistently
-    global SFTODOZ
-    SFTODOZ = collections.defaultdict(set)
     def SFTODOX(binary_addr, move_id):
         md = movemanager.move_definitions[move_id]
         runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
-        global SFTODOZ
-        SFTODOZ[runtime_addr].add((binary_addr, move_id))
+        labelmanager.labels[runtime_addr].notify_emit_opportunity(runtime_addr, move_id)
     old_end_addr = -1
     for SFTODO in range(2):
         if SFTODO == 1:
@@ -349,7 +346,8 @@ def emit():
             addr = start_addr
             while addr < end_addr:
                 if SFTODO == 0:
-                    SFTODOX(addr, move_id)
+                    for i in range(0, classifications[addr].length()):
+                        SFTODOX(addr + i, move_id)
                 else:
                     d.extend(emit_addr(addr, move_id))
                 addr += classifications[addr].length()
@@ -414,6 +412,7 @@ def emit_labels(binary_addr, move_id):
     md = movemanager.move_definitions[move_id]
     runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
     result.extend(labelmanager.labels[runtime_addr].definition_string_list(runtime_addr, move_id))
+    return result # TODO: can prob delete below here now
     global SFTODOZ
     #assert False # TODO: This seems to help but I think it's not quite right - there might be multiple possible points (len>1) but if none of those points share the "native" move ID we maybe want to be emitting them here - not sure, need to think - OK, it may very well be what I'm doing is not right or is sub-optimal, but at least in dfs226b.py (not checked dfs226.py yet), the "things I'm not emitting inline" are things that "can't" be emitted inline because we never have the "assembler pc" pointing at them; these aren't simple bugs in what I've implemented here.
     if len(SFTODOZ[runtime_addr]) == 1:

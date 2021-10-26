@@ -47,6 +47,14 @@ def is_valid_move_id(move_id):
     # TODO: No need for base_move_id to be an exception with current value of 0...
     return move_id == base_move_id or 0 <= move_id < len(move_definitions)
 
+def is_valid_runtime_addr_for_move_id(runtime_addr, move_id):
+    assert utils.is_valid_addr(runtime_addr)
+    assert is_valid_move_id(move_id)
+    md = move_definitions[move_id]
+    # We *include* the end address here; this accounts for the fact that a label can be
+    # defined after the last classification in a move.
+    return md[0] <= runtime_addr <= (md[0] + md[2])
+
 # TODO: Name for this function is perhaps not ideal
 # TODO: This should almost certainly be handled via Move() object returned by move() fn
 # which would allow us to write "with move(blah)" instead of "id = move(blah); with moved(id)"
