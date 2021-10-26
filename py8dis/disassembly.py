@@ -317,23 +317,6 @@ def emit():
     for start_addr, end_addr in SFTODORANGES:
         isolate_range(start_addr, end_addr)
 
-    # SFTODO: Experimental
-    SFTODOLABELTHING = collections.defaultdict(set)
-    for start_addr, end_addr in SFTODORANGES:
-        move_id = movemanager.move_id_for_binary_addr[start_addr]
-        for addr in range(start_addr, end_addr):
-            SFTODOLABELTHING[movemanager.b2r(addr)].add(move_id)
-        SFTODOLABELTHING[movemanager.b2r(end_addr - 1) + 1].add(move_id)
-    SFTODOLABELTHING2 = collections.defaultdict(set)
-    for start_addr, end_addr in SFTODORANGES:
-        for addr in range(start_addr, end_addr):
-            SFTODOLABELTHING2[addr].update(SFTODOLABELTHING[movemanager.b2r(addr)])
-        SFTODOLABELTHING2[end_addr].update(SFTODOLABELTHING[movemanager.b2r(end_addr - 1) + 1])
-    for SFTODO, SFTODO2 in SFTODOLABELTHING.items():
-        pass #print("YTT %04x %s" % (SFTODO, SFTODO2))
-    for SFTODO, SFTODO2 in SFTODOLABELTHING2.items():
-        pass # print("YXT %04x %s" % (SFTODO, SFTODO2))
-
     # Generate the disassembly proper, but don't emit it just yet. We do this so
     # we can emit label definitions in the "best" move region and then emit any
     # leftover labels as explicit definitions below.
@@ -466,57 +449,6 @@ def emit_addr(binary_addr, move_id):
             result.append(annotation.as_string(addr))
     # Emit the classification itself.
     result.extend(classifications[addr].as_string_list(addr))
-    return result
-
-# TODO: DELETE?
-def disassemble_range(start_addr, end_addr):
-    result = []
-
-    isolate_range(start_addr, end_addr)
-
-    move_id = movemanager.move_id_for_binary_addr[start_addr]
-
-    addr = start_addr
-    while addr <= end_addr:
-        if addr < end_addr:
-            assert classifications[addr] is not None
-            classification_length = classifications[addr].length()
-        else:
-            classification_length = 1
-
-        # We queue up labels defined "within" a multi-byte classification first
-        # because we might need to create a new label at addr to help in
-        # defining them.
-        pending_labels = []
-        def am2(x):
-            return movemanager.b2r(x)
-        for i in range(1, classification_length):
-            if am2(addr + i) in labelmanager.labels:
-                pending_labels.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
-
-        # Emit annotations for this address.
-        for annotation in sorted_annotations(annotations[addr]):
-            result.append(annotation.as_string(addr))
-        # Emit label definitions for this address.
-        if am2(addr) == 0x8fd2:
-            result.append("XXX %04x %d" % (addr, move_id))
-        for SFTODOMOVEID in SFTODOLABELTHING2[addr]:
-            result.extend(labelmanager.labels[SFTODOXXX].definition_string_list(SFTODOXXX, SFTODOMOVEID))
-        # Emit any label definitions for addresses within the classification.
-        result.extend(pending_labels)
-        # Emit any annotations which would fall within the classification.
-        # TODO: It might be better to emit mid-classification annotations after the classification - if only because of the way overlapping instructions are currently handled. This is what we used to do before I tweaked it a few hours ago, IIRC. But don't rush into changing this, as I may want to tweak how overlapping instructions are recorded.
-        for i in range(1, classification_length):
-            if len(annotations[addr + i]) > 0:
-                # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
-                utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
-            for annotation in sorted_annotations(annotations[addr + i]):
-                result.append(annotation.as_string(addr))
-        # Emit the classification itself.
-        if addr < end_addr:
-            result.extend(classifications[addr].as_string_list(addr))
-
-        addr += classification_length
     return result
 
 
