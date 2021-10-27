@@ -106,6 +106,7 @@ def byte(runtime_addr, n=1, warn=True):
         return
     disassembly.add_classification(binary_addr, classification.Byte(n, False))
 
+# TODO: byte()/word() should probably optionally (via an optional arg or a variant function) allow the user to specify a format hint for the range without having to make a separate call to the relevant formatter function with the same arguments.
 def word(runtime_addr, n=1, warn=True):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if not utils.data_loaded_at_binary_addr(binary_addr, n * 2):
