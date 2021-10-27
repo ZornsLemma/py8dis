@@ -42,16 +42,23 @@ def format_classification_line(binary_addr, length, core_str):
     s = make_indent(indent) + core_str
     return add_hex_dump(binary_addr, length, s)
 
-def constant(binary_addr, n, bits):
-    format_hint = disassembly.format_hint.get(binary_addr)
-    if format_hint is not None:
-        return format_hint(n, bits)
+def int_formatter(n, bits):
     if n < 10:
         return "%d" % n
     if bits == 8:
         return config.formatter().hex2(n)
     assert bits == 16
     return config.formatter().hex4(n)
+
+def char_formatter(n, bits):
+    c = config.formatter().string_chr(n)
+    if c is not None:
+        return "'%s'" % c
+    return int_formatter(n, bits)
+
+def constant(binary_addr, n, bits):
+    format_hint = disassembly.format_hint.get(binary_addr, int_formatter)
+    return format_hint(n, bits)
 
 def constant8(binary_addr):
     assert utils.is_valid_addr(binary_addr)

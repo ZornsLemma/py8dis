@@ -345,4 +345,6 @@ label(pc, "opt4_table")
 for i in range(4):
     pc = string(pc, 4)
 
+char(0xa981)
+
 go()

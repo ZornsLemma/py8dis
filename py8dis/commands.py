@@ -16,6 +16,7 @@ import config
 import disassembly
 import labelmanager
 import movemanager
+import newformatter
 import trace
 import utils
 
@@ -208,6 +209,9 @@ def addr(label_name):
                     return addr
     assert False # TODO: !? return None?
 
+def char(runtime_addr):
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    disassembly.format_hint[binary_addr] = newformatter.char_formatter
 
 def go(post_trace_steps=None, autostring_min_length=3):
     # Once we start tracing, we're taking a "static" view of the code and we
