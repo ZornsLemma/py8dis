@@ -64,6 +64,15 @@ def binary_formatter(n, bits):
 def picture_binary_formatter(n, bits):
     return config.formatter().picture_binary(binary_formatter(n, bits))
 
+def decimal_formatter(n, bits):
+    return "%d" % n
+
+def hexadecimal_formatter(n, bits):
+    # TODO: It's possible we want to offer some additional control over leading
+    # zero padding and number of hex digits emitted, but let's just go with this
+    # for now.
+    return config.formatter().hex(n)
+
 def constant(binary_addr, n, bits):
     format_hint = disassembly.format_hint.get(binary_addr, int_formatter)
     return format_hint(n, bits)
