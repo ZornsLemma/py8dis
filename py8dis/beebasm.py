@@ -121,5 +121,8 @@ def string_chr(c):
 def binary_prefix():
     return "%"
 
+def picture_binary(s):
+    return s
+
 def sanitise(s):
     return s

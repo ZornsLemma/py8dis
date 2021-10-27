@@ -61,6 +61,9 @@ def binary_formatter(n, bits):
     s = ("0"*bits + s)[-bits:]
     return config.formatter().binary_prefix() + s
 
+def picture_binary_formatter(n, bits):
+    return config.formatter().picture_binary(binary_formatter(n, bits))
+
 def constant(binary_addr, n, bits):
     format_hint = disassembly.format_hint.get(binary_addr, int_formatter)
     return format_hint(n, bits)

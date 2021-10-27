@@ -347,5 +347,6 @@ for i in range(4):
 
 char(0xa981)
 binary(0x82fa)
+picture_binary(0x8041) # TODO: silly use of picture_binary(), just to test
 
 go()

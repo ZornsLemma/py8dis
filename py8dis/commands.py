@@ -221,6 +221,9 @@ def char(runtime_addr, n=1):
 def binary(runtime_addr, n=1):
     set_formatter(runtime_addr, n, newformatter.binary_formatter)
 
+def picture_binary(runtime_addr, n=1):
+    set_formatter(runtime_addr, n, newformatter.picture_binary_formatter)
+
 def go(post_trace_steps=None, autostring_min_length=3):
     # Once we start tracing, we're taking a "static" view of the code and we
     # don't want any leftover user hints about how to convert runtime addresses
