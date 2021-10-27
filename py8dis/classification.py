@@ -5,6 +5,7 @@ import config
 import disassembly
 import labelmanager
 import movemanager
+import newformatter
 import trace
 import utils
 
@@ -190,17 +191,18 @@ def get_expression(addr, expected_value):
     utils.check_expr(expression, expected_value)
     return expression
 
+# TODO: Where is force_hex2=True set? Do we still need this?
 def get_constant8(addr, force_hex2=False):
-    if addr not in expressions:
-        if memory_binary[addr] < 10 and not force_hex2:
-            return "%d" % memory_binary[addr]
+    if addr in expressions:
+        return get_expression(addr, memory_binary[addr])
+    if force_hex2:
         return formatter().hex2(memory_binary[addr])
-    return get_expression(addr, memory_binary[addr])
+    return newformatter.constant8(addr)
 
 def get_constant16(addr):
-    if addr not in expressions:
-        return formatter().hex4(utils.get_u16(addr))
-    return get_expression(addr, utils.get_u16(addr))
+    if addr in expressions:
+        return get_expression(addr, utils.get_u16(addr))
+    return newformatter.constant16(addr)
 
 def get_address8(addr):
     operand = memory_binary[addr]

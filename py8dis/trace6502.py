@@ -173,7 +173,7 @@ class OpcodeImmediate(Opcode):
 
     def as_string(self, addr):
         s = "    %s #%s" % (utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
-        if (addr + 1) not in classification.expressions:
+        if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
             c = memory_binary[addr + 1]
             if config.show_char_literals and utils.isprint(c):
                 s += " %s '%s'" % (config.formatter().comment_prefix(), chr(c))
