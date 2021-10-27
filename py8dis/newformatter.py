@@ -56,6 +56,11 @@ def char_formatter(n, bits):
         return "'%s'" % c
     return int_formatter(n, bits)
 
+def binary_formatter(n, bits):
+    s = bin(n)[2:]
+    s = ("0"*bits + s)[-bits:]
+    return config.formatter().binary_prefix() + s
+
 def constant(binary_addr, n, bits):
     format_hint = disassembly.format_hint.get(binary_addr, int_formatter)
     return format_hint(n, bits)

@@ -209,9 +209,17 @@ def addr(label_name):
                     return addr
     assert False # TODO: !? return None?
 
-def char(runtime_addr):
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    disassembly.format_hint[binary_addr] = newformatter.char_formatter
+def set_formatter(runtime_addr, n, formatter):
+    assert n > 0
+    for i in range(n):
+        binary_addr, _ = movemanager.r2b_checked(runtime_addr + i)
+        disassembly.format_hint[binary_addr] = formatter
+
+def char(runtime_addr, n=1):
+    set_formatter(runtime_addr, n, newformatter.char_formatter)
+
+def binary(runtime_addr, n=1):
+    set_formatter(runtime_addr, n, newformatter.binary_formatter)
 
 def go(post_trace_steps=None, autostring_min_length=3):
     # Once we start tracing, we're taking a "static" view of the code and we

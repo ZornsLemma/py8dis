@@ -118,5 +118,8 @@ def string_chr(c):
         return chr(c)
     return None
 
+def binary_prefix():
+    return "%"
+
 def sanitise(s):
     return s

@@ -346,5 +346,6 @@ for i in range(4):
     pc = string(pc, 4)
 
 char(0xa981)
+binary(0x82fa)
 
 go()
