@@ -45,6 +45,7 @@ def format_classification_line(binary_addr, length, core_str):
 
 # TODO: Highly experimental sketch for byte/word emitter
 # TODO: We might want Byte/Word objects to have a format function (a bit like format_hint for individual bytes) and allow the user to control it (poss via helper fns) - that way they could call this function with a None argument to get auto-column-calculation or an integer argument to specify "use n columns" or a variant of this function to get "no alignment but basic data-item-oriented-word-wrapping" output.
+# TODO: It's not unreasonable to have inline comments on items in data blocks; we might only emit them if the data block is single-column formatter - I guess we'd have to, actually, since there's no way to end an inline comment short of a newline. So we probably want to default to single-column if there's any inline comments in the range, and if the user has forced a multi-column structure we should probably warn about hidden inline comments
 def format_data_block(TODO):
     indent = 1 # TODO: variable indent
     if TODO:
