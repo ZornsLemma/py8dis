@@ -215,6 +215,12 @@ def set_formatter(runtime_addr, n, formatter):
         binary_addr, _ = movemanager.r2b_checked(runtime_addr + i)
         disassembly.format_hint[binary_addr] = formatter
 
+def num(runtime_addr, n=1):
+    # This is nearly the default behaviour, but by specifying a formatter explicitly the
+    # automatic addition of a comment showing the corresponding ASCII character for
+    # immediate constants will be disabled for this address.
+    set_formatter(runtime_addr, n, newformatter.int_formatter)
+
 def char(runtime_addr, n=1):
     set_formatter(runtime_addr, n, newformatter.char_formatter)
 

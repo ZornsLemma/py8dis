@@ -346,6 +346,8 @@ for i in range(4):
     pc = string(pc, 4)
 
 char(0xa981)
+char(0x80d1)
+num(0x8104)
 binary(0x82fa)
 picture_binary(0x8041) # TODO: silly use of picture_binary(), just to test
 
