@@ -77,8 +77,6 @@ def format_data_block(binary_addr, length, cols, element_size):
     if cols is not None:
         data_columns = cols
     else:
-        # TODO: We should allow the user to specify a number of data item columns - that would be part of
-        # the Byte/Word object and we would just use it here instead of deciding for ourselves
         # TODO: We should also support "just emit with no padding or attempt to align columns but not spilling past data_width unless a single item forces it", a pseudo "word wrapping" style
         # TODO: We might want to use a different value instead of hex_dump_column, e.g.
         # absolute_max_width (80/100/whatever) - "hex dump max width or 0 if no hex dump".
