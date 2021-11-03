@@ -37,6 +37,8 @@ class Byte(object):
         return False
 
     def as_string_list(self, addr):
+        return newformatter.format_data_block(addr, self._length, 1)
+        # TODO: DELETE THIS OLD CODE
         result = []
         byte_prefix = formatter().byte_prefix()
         data = list(get_constant8(addr + i, True) for i in range(self._length))

@@ -25,6 +25,7 @@ trace_done = False # TODO!?
 # or data.
 classifications = [None] * 64*1024
 format_hint = {} # TODO: move into newformatter? or config?
+indent_hint = collections.defaultdict(int)
 # TODO: Experimental, "optimistic" because it's based on straight line code "this is *a* possible execution" - we may want to add a "pessimistic" variant which does its best to *guess* at the "common to all possible executions" behaviour
 cpu_state_optimistic = [None] * 64*1024 # TODO: Move into trace6502.py?
 
