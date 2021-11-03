@@ -98,13 +98,14 @@ def expr(runtime_addr, s):
     assert utils.data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
-def byte(runtime_addr, n=1, warn=True):
+# TODO: Add "cols" to word() as well
+def byte(runtime_addr, n=1, cols=None, warn=True):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if not utils.data_loaded_at_binary_addr(binary_addr, n):
         if warn:
             utils.check_data_loaded_at_binary_addr(binary_addr, n) # TODO: bit redundant re-checking
         return
-    disassembly.add_classification(binary_addr, classification.Byte(n, False))
+    disassembly.add_classification(binary_addr, classification.Byte(n, is_mergeable=False, cols=cols))
 
 # TODO: byte()/word() should probably optionally (via an optional arg or a variant function) allow the user to specify a format hint for the range without having to make a separate call to the relevant formatter function with the same arguments. Just maybe an optional argument "format_command=None" where we do "if format_command is not None: format_command(runtime_addr, n)" would work, then you could do "word(0x432, 4, picture_binary)" (if we squeezed formatter in before warn=True argument; this is all getting a smidge messy, especially if the user is forced to specify 1 for the n argument) - anyway, think about it...
 def word(runtime_addr, n=1, warn=True):

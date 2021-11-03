@@ -354,5 +354,7 @@ binary(0x82fa)
 picture_binary(0x8041) # TODO: silly use of picture_binary(), just to test
 decimal(0x8150) # TODO: slightly silly (at least inconsistent) use, just to test
 hexadecimal(0x8208) # TODO: slightly silly use, just to test
+byte(0x9146, 32, cols=3) # TODO: slightly silly use, just to test
+padded_uint(0x9156, 16) # TODO: slightly silly use, just to test
 
 go()

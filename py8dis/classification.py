@@ -18,10 +18,12 @@ formatter = config.formatter
 # disassembling right up to the top of memory.
 
 class Byte(object):
-    def __init__(self, length, is_mergeable=True):
+    def __init__(self, length, is_mergeable=True, cols=None):
         assert length > 0
+        assert cols is None or cols > 0
         self._length = length
         self._is_mergeable = is_mergeable
+        self._cols = cols
 
     def is_mergeable(self):
         return self._is_mergeable
@@ -37,7 +39,7 @@ class Byte(object):
         return False
 
     def as_string_list(self, addr):
-        return newformatter.format_data_block(addr, self._length, 1)
+        return newformatter.format_data_block(addr, self._length, self._cols, 1)
         # TODO: DELETE THIS OLD CODE
         result = []
         byte_prefix = formatter().byte_prefix()
