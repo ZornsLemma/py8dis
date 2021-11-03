@@ -95,12 +95,17 @@ def format_data_block(binary_addr, length, element_size):
         result.append(add_hex_dump(binary_addr + i, items_on_line, core_str))
     return result
 
-def int_formatter(n, bits):
+def uint_formatter(n, bits, pad=False):
+    assert bits in (8, 16)
+    assert 0 <= n < (1<<bits)
     if n < 10:
-        return "%d" % n
+        s = "%d" % n
+        if pad:
+            # TODO: This padding assumes hex2() and hex4() use a single-character hex prefix.
+            s = ("     " + s)[-3 if bits == 8 else -5:]
+        return s
     if bits == 8:
         return config.formatter().hex2(n)
-    assert bits == 16
     return config.formatter().hex4(n)
 
 def char_formatter(n, bits):
@@ -127,7 +132,7 @@ def hexadecimal_formatter(n, bits):
     return config.formatter().hex(n)
 
 def constant(binary_addr, n, bits):
-    format_hint = disassembly.format_hint.get(binary_addr, int_formatter)
+    format_hint = disassembly.format_hint.get(binary_addr, uint_formatter)
     return format_hint(n, bits)
 
 def constant8(binary_addr):

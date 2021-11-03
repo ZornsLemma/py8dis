@@ -348,7 +348,8 @@ for i in range(4):
 char(0xa981)
 char(0x80d1)
 char(0x810e)
-num(0x8104)
+uint(0x8104)
+padded_uint(0x86b7, 3)
 binary(0x82fa)
 picture_binary(0x8041) # TODO: silly use of picture_binary(), just to test
 decimal(0x8150) # TODO: slightly silly (at least inconsistent) use, just to test
