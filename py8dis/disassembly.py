@@ -49,8 +49,14 @@ def set_user_label_maker_hook(hook):
     assert user_label_maker_hook is None
     user_label_maker_hook = hook
 
-def add_comment(addr, text):
-    annotations[addr].append(Comment(text))
+def add_comment(addr, text, priority=None):
+    # TODO: Comment object may no longer add value. And/or we may want to tweak how this
+    # works so Comment objects can contain LazyStrings that aren't evaluated immediately
+    # on construction.
+    annotations[addr].append(Comment(text, priority))
+
+def add_raw_annotation(addr, text, priority=None):
+    annotations[addr].append(Annotation(text, priority))
 
 def add_constant(value, name):
     # TODO: inefficient linear search!
@@ -458,15 +464,21 @@ def emit_addr(binary_addr, move_id):
     return result
 
 
-class Comment(object):
-    priority = 0
-
-    def __init__(self, text):
+class Annotation(object):
+    def __init__(self, text, priority=None):
+        if priority is None:
+            priority = 0
         self.text = text
+        self.priority = priority
 
     def as_string(self, addr):
-        formatter = config.formatter()
-        return "\n".join("%s %s" % (formatter.comment_prefix(), line) for line in str(self.text).split("\n"))
+        return self.text
+
+
+class Comment(Annotation):
+    def __init__(self, text, priority=None):
+        formatted_text = "\n".join("%s %s" % (config.formatter().comment_prefix(), line) for line in str(text).split("\n"))
+        Annotation.__init__(self, formatted_text, priority)
 
 # TODO: We seem to assert some simple constants have their own value - is this wrong/weird?
 

@@ -96,6 +96,13 @@ def formatted_comment(runtime_addr, text):
     assert utils.data_loaded_at_binary_addr(binary_addr)
     disassembly.add_comment(binary_addr, text)
 
+def annotate(runtime_addr, s, priority=None):
+    # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
+    disassembly.add_raw_annotation(runtime_addr, s, priority)
+
+def blank(runtime_addr, priority=None):
+    annotate(runtime_addr, "", priority)
+
 def expr(runtime_addr, s):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
