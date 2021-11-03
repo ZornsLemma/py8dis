@@ -25,22 +25,22 @@ def add_hex_dump(binary_addr, length, s):
         return s
     s = tab_to(s, hex_dump_column)
     s += config.formatter().comment_prefix() + " "
-    if len(movemanager.move_definitions) > 1:
-        runtime_addr = movemanager.b2r(binary_addr)
-        if runtime_addr != binary_addr:
-                s += utils.plainhex4(runtime_addr) + " "
-        else:
-                s += " "*5
     s += utils.plainhex4(binary_addr) + ": "
     data = config.memory_binary[binary_addr:binary_addr+min(length, hex_dump_max_bytes)]
     s += " ".join(utils.plainhex2(x) for x in data)
-    s += " "
     if length < hex_dump_max_bytes:
         s += "   " * (hex_dump_max_bytes - length)
-    s += "".join(chr(x) if utils.isprint(x) else "." for x in data)
     if length > hex_dump_max_bytes:
-        s += " ..."
-    return s
+        s += "... "
+    else:
+        s += " "*4
+    s += "".join(chr(x) if utils.isprint(x) else "." for x in data)
+    if length < hex_dump_max_bytes:
+        s += " " * (hex_dump_max_bytes - length)
+    runtime_addr = movemanager.b2r(binary_addr)
+    if runtime_addr != binary_addr:
+        s += " :%s[%d]" % (utils.plainhex4(runtime_addr), movemanager.move_id_for_binary_addr[binary_addr])
+    return s.rstrip()
 
 # TODO: Get rid of this? I think it's maybe not that useful.
 def format_classification_line(binary_addr, length, core_str):
@@ -90,6 +90,7 @@ def format_data_block(binary_addr, length, element_size):
     result = []
     for i in range(0, len(data), data_columns):
         items_on_line = min(len(data) - i, data_columns)
+        # TODO: If the items are *numbers* rather than constant names, we might want to right-align them. This "conflicts" with the idea of maybe using fixed three-char hex constants (for bytes; 5 for words, of course) for neatness. We probably need to allow all options and let the user control this, but the default should be sensible. Maybe if the user wants fixed max-length hex constants they should be specifying that via format_hint on the individual items of data.
         core_str = prefix + separator.join("%-*s" % (longest_item, x) for x in data[i:i+data_columns])
         result.append(add_hex_dump(binary_addr + i, items_on_line, core_str))
     return result
