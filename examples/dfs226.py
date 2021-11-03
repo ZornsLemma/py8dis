@@ -121,14 +121,14 @@ label(0x9104, "set_c_iff_have_fdc") # XXX: guessing, it is touching FDC memory-m
 comment(0x8057, "XXX: Redundant lda l00b3? Is sta l00b3 above redundant too?")
 
 comment(0x8077,
-"""Print (XXX: using l809f, which seems to be quite fancy) an inline string
-terminated by a top-bit set instruction to execute after printing the string.
-Carry is always clear on exit.""")
+"Print (XXX: using l809f, which seems to be quite fancy) an inline string "
+"terminated by a top-bit set instruction to execute after printing the string. "
+"Carry is always clear on exit.")
 
 hook_subroutine(0x8077, "print_inline_l809f_top_bit_clear", stringhi_hook)
 hook_subroutine(0xa99c, "print_inline_osasci_top_bit_clear", stringhi_hook)
 
-comment(0x8048,
+formatted_comment(0x8048,
 """Generate an OS error using inline data. Called as either:
     jsr XXX:equb errnum, "error message", 0
 to actually generate an error now, or as:

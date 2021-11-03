@@ -4,6 +4,7 @@ import classification
 import config
 import disassembly
 import movemanager
+import textwrap
 import utils
 
 # TODO: These should be user configurable, maybe they can/should live here or maybe they should be in config
@@ -143,3 +144,8 @@ def constant16(binary_addr):
     assert utils.is_valid_addr(binary_addr)
     n = util.get_u16(binary_addr)
     return constant(binary_addr, n, 16)
+
+def format_comment(text):
+    prefix = config.formatter().comment_prefix() + " "
+    text_width = hex_dump_column - len(prefix)
+    return textwrap.fill(text, text_width)
