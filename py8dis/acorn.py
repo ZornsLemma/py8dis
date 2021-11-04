@@ -397,14 +397,15 @@ def mos_labels():
 def is_sideways_rom():
     comment(0x8000, "Sideways ROM header")
     label(0x8000, "rom_header")
-    def check_entry(addr, entry_type):
+    def check_entry(runtime_addr, entry_type):
+        runtime_addr = utils.RuntimeAddr(runtime_addr)
         jmp_abs_opcode = 0x4c
-        label(addr, entry_type + "_entry")
-        if memory[addr] == jmp_abs_opcode:
-            entry(addr)
-            label(utils.get_u16_runtime(addr + 1), entry_type + "_handler")
+        label(runtime_addr, entry_type + "_entry")
+        if memory[runtime_addr] == jmp_abs_opcode:
+            entry(runtime_addr)
+            label(utils.get_u16_runtime(runtime_addr + 1), entry_type + "_handler")
         else:
-            byte(addr, 3)
+            byte(runtime_addr, 3)
     check_entry(0x8000, "language")
     check_entry(0x8003, "service")
     label(0x8006, "rom_type")

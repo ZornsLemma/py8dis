@@ -26,25 +26,28 @@ memory = config.memory
 # TODO!?
 config.load_ranges = []
 
-def load(addr, filename, md5sum=None):
+def load(binary_addr, filename, md5sum=None):
+    binary_addr = utils.BinaryAddr(binary_addr)
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
         data = bytearray(f.read())
-        if addr + len(data) > 0x10000:
+        if binary_addr + len(data) > 0x10000:
             utils.die("load() would overflow memory")
-        memory_binary[addr:addr+len(data)] = data
+        memory_binary[binary_addr:binary_addr+len(data)] = data
     if md5sum is not None:
         import hashlib
         hash = hashlib.md5()
         hash.update(data)
         if md5sum != hash.hexdigest():
             utils.die("load() md5sum doesn't match")
-    config.load_ranges.append((addr, addr + len(data)))
+    config.load_ranges.append((binary_addr, binary_addr + len(data)))
 
 # TODO: When documenting all the recent changes, should note that move()
 # needs to be done to update the disassembler's memory before you try to
 # access things in the relocated region.
 def move(dest, src, length):
+    dest = utils.RuntimeAddr(dest)
+    src = utils.BinaryAddr(src)
     # You can't move from a region that hasn't been populated with data. TODO: Move this check into add_move()?
     assert all(memory_binary[i] is not None for i in range(src, src+length))
     return movemanager.add_move(dest, src, length)
@@ -66,6 +69,7 @@ def constant(value, name):
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose. TODO: Is this still a problem?
 def label(runtime_addr, name):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     # We don't care about the equivalent binary address, but the process of looking
     # it up gives us a move ID to associate with this label.
     _, move_id = movemanager.r2b(runtime_addr)
@@ -80,21 +84,28 @@ def label(runtime_addr, name):
 # TODO: Should probably take an optional move_id?
 # TODO: This isn't working - see "command_table+1" in dfs226.py for example
 def expr_label(runtime_addr, s):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     # TODO: If this continues to just forward to label() perhaps make that behavuour
     # official and just provide both names for backwards compatibility/documenting the
     # difference for users who want to??
     return label(runtime_addr, s)
 
-def optional_label(addr, name, base_addr=None):
-    disassembly.add_optional_label(addr, name, base_addr)
+def optional_label(runtime_addr, name, base_runtime_addr=None):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    if base_runtime_addr is not None:
+        base_runtime_addr = utils.RuntimeAddr(base_runtime_addr)
+    disassembly.add_optional_label(runtime_addr, name, base_runtime_addr)
 
 def comment(runtime_addr, text):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     formatted_comment(runtime_addr, newformatter.format_comment(text))
 
 def formatted_comment(runtime_addr, text):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     disassembly.add_comment(binary_addr, text)
+# TODO: UP TO HERE WITH ADDING RUNTIMEADDR() CALLS
 
 def annotate(runtime_addr, s, priority=None):
     # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
@@ -104,12 +115,14 @@ def blank(runtime_addr, priority=None):
     annotate(runtime_addr, "", priority)
 
 def expr(runtime_addr, s):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
 # TODO: Add "cols" to word() as well
 def byte(runtime_addr, n=1, cols=None, warn=True):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if not utils.data_loaded_at_binary_addr(binary_addr, n):
         if warn:
@@ -127,6 +140,7 @@ def word(runtime_addr, n=1, warn=True):
     disassembly.add_classification(binary_addr, classification.Word(n * 2, False))
 
 def entry(runtime_addr, label=None, warn=True):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
     # TODO: Should probably warn rather than assert in other fns too
     if warn:
@@ -146,6 +160,7 @@ def nonentry(runtime_addr):
     trace.traced_entry_points.add(binary_addr)
 
 def wordentry(runtime_addr, n=1):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     word(runtime_addr, n)
     for i in range(n):
         binary_addr, _ = movemanager.r2b_checked(runtime_addr)
@@ -222,6 +237,7 @@ def addr(label_name):
     assert False # TODO: !? return None?
 
 def set_formatter(runtime_addr, n, formatter):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     assert n > 0
     for i in range(n):
         binary_addr, _ = movemanager.r2b_checked(runtime_addr + i)

@@ -41,6 +41,7 @@ def add_jsr_hook(addr, hook):
 # TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
 # TODO: Need to clarify runtime/binary here
 def hook_subroutine(runtime_addr, name, hook, warn=True):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
     # TODO: Should probably warn rather than assert in other fns too
     if warn:

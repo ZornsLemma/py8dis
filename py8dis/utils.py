@@ -128,3 +128,24 @@ class keydefaultdict(collections.defaultdict):
         else:
             ret = self[key] = self.default_factory(key)
             return ret
+
+
+# TODO: Very experimental
+class TypedInt(int):
+    def __add__(self, other):
+        res = super(TypedInt, self).__add__(other)
+        return self.__class__(res)
+
+
+# TODO: Very experimental
+class BinaryAddr(TypedInt):
+    def __new__(cls, value, *args, **kwargs):
+        assert not isinstance(value, RuntimeAddr)
+        return super(BinaryAddr, cls).__new__(cls, value)
+
+
+# TODO: Very experimental
+class RuntimeAddr(TypedInt):
+    def __new__(cls, value, *args, **kwargs):
+        assert not isinstance(value, BinaryAddr)
+        return super(RuntimeAddr, cls).__new__(cls, value)

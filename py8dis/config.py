@@ -1,3 +1,4 @@
+# TODO: Might be nice if memory_binary were an instance of a class which could assert its key is a BinaryAddr
 memory_binary = [None] * 64*1024
 
 # TODO: Move/tweak?
@@ -6,6 +7,7 @@ class MemoryRuntime(object):
         import movemanager # TODO!?
         import utils # TODO!?
         assert utils.is_valid_addr(key)
+        key = utils.RuntimeAddr(key)
         binary_address, _ = movemanager.r2b_checked(key)
         return memory_binary[binary_address]
 

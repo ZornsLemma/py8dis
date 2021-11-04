@@ -225,6 +225,7 @@ def get_address16(addr):
 
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
 def stringterm(runtime_addr, terminator, exclude_terminator=False):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: should prob call this binary_addr
     initial_addr = addr
     while memory_binary[addr] != terminator:
@@ -236,14 +237,17 @@ def stringterm(runtime_addr, terminator, exclude_terminator=False):
         disassembly.add_classification(initial_addr, String(string_length, False))
     return movemanager.b2r(addr + 1)
 
-def stringcr(addr, exclude_terminator=False):
-    return stringterm(addr, 13, exclude_terminator)
+def stringcr(runtime_addr, exclude_terminator=False):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    return stringterm(runtime_addr, 13, exclude_terminator)
 
-def stringz(addr, exclude_terminator=False):
-    return stringterm(addr, 0, exclude_terminator)
+def stringz(runtime_addr, exclude_terminator=False):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    return stringterm(runtime_addr, 0, exclude_terminator)
 
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
 def string(runtime_addr, n=None):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: should prob call this binary_addr
     if n is None:
         assert not disassembly.is_classified(addr)
@@ -259,6 +263,7 @@ def string(runtime_addr, n=None):
 # into a readable form would then potentially be useful too.
 # TODO: I have converted this to use runtime address without thinking about eg hooks
 def stringhi(runtime_addr):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: addr->binary_addr?
     assert not disassembly.is_classified(addr, 1)
     initial_addr = addr

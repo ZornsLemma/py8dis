@@ -26,11 +26,13 @@ base_move_id = 0
 active_move_ids = []
 
 # TODO: Note that move_definitions has to be interpreted "as a whole", since later moves can "steal" binary addresses from earlier moves. I don't think this is a problem - and the whole point is to allow the user to do things like move a big chunk of code which gets relocated at runtime as a whole and then override that for a fairly small chunks witin that big chunk that the copied elsewhere.
-move_definitions = [(0, 0, 0x10000)]
+move_definitions = [(utils.RuntimeAddr(0), utils.BinaryAddr(0), 0x10000)]
 
 move_id_for_binary_addr = [base_move_id] * 0x10000
 
 def add_move(dest, source, length):
+    assert isinstance(dest, utils.RuntimeAddr)
+    assert isinstance(source, utils.BinaryAddr)
     assert utils.is_valid_addr(dest)
     assert utils.is_valid_addr(source)
     assert utils.is_valid_addr(dest + length)
@@ -48,6 +50,7 @@ def is_valid_move_id(move_id):
     return move_id == base_move_id or 0 <= move_id < len(move_definitions)
 
 def is_valid_runtime_addr_for_move_id(runtime_addr, move_id):
+    assert isinstance(runtime_addr, utils.RuntimeAddr)
     assert utils.is_valid_addr(runtime_addr)
     assert is_valid_move_id(move_id)
     md = move_definitions[move_id]
@@ -74,21 +77,24 @@ def moved(move_id):
 # address can only be the source of a single move, there is always a single
 # result of this mapping.
 def b2r(binary_addr):
+    assert isinstance(binary_addr, utils.BinaryAddr)
     assert utils.is_valid_addr(binary_addr)
     move_id = move_id_for_binary_addr[binary_addr]
     move_dest, move_source, move_length = move_definitions[move_id]
     assert move_source <= binary_addr < (move_source + move_length)
-    return move_dest + (binary_addr - move_source)
+    return utils.RuntimeAddr(move_dest + (binary_addr - move_source))
 
 cache_move_definitions_len = None
 cache = None
 def move_ids_for_runtime_addr(runtime_addr):
+    assert isinstance(runtime_addr, utils.RuntimeAddr)
     # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids. That's not quite true - we do use this in at least one place - but there is some truth in it.
     assert utils.is_valid_addr(runtime_addr)
     global cache_move_definitions_len, cache
     if cache_move_definitions_len is None or len(move_definitions) != cache_move_definitions_len:
         cache = collections.defaultdict(set)
         for binary_addr, move_id in enumerate(move_id_for_binary_addr):
+            binary_addr = utils.BinaryAddr(binary_addr)
             if move_id != base_move_id: # TODO: special case feels a bit awkward
                 cache[b2r(binary_addr)].add(move_id)
         cache_move_definitions_len = len(move_definitions)
@@ -102,9 +108,10 @@ def move_ids_for_runtime_addr(runtime_addr):
 # a list of *all* possible binary addresses corresponding to runtime_addr; I am not sure
 # yet.
 def r2b(runtime_addr):
+    assert isinstance(runtime_addr, utils.RuntimeAddr)
     relevant_move_ids = move_ids_for_runtime_addr(runtime_addr)
     if len(relevant_move_ids) == 0:
-        return runtime_addr, base_move_id
+        return utils.BinaryAddr(int(runtime_addr)), base_move_id
     selected_move_id = None
     if len(relevant_move_ids) == 1:
         selected_move_id = min(relevant_move_ids)
@@ -117,10 +124,11 @@ def r2b(runtime_addr):
         return (None, None)
     move_dest, move_source, move_length = move_definitions[selected_move_id]
     assert move_dest <= runtime_addr < (move_dest + move_length)
-    return (move_source + (runtime_addr - move_dest), selected_move_id)
+    return (utils.BinaryAddr(move_source + (runtime_addr - move_dest)), selected_move_id)
 
 # TODO: Maybe use this in more places
 def r2b_checked(runtime_addr):
+    assert isinstance(runtime_addr, utils.RuntimeAddr)
     binary_addr, move_id = r2b(runtime_addr)
     if binary_addr is None:
         # TODO: *Really* need a backtrace to make this useful
