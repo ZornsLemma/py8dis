@@ -6,6 +6,7 @@ import config
 import disassembly
 import labelmanager # TODO!?
 import movemanager
+import utils
 
 entry_points = []
 traced_entry_points = set()
@@ -76,6 +77,7 @@ def generate_references():
     global references
     references = collections.defaultdict(set)
     for runtime_addr, label in labelmanager.labels.items():
+        runtime_addr = utils.RuntimeAddr(runtime_addr) # TODO: OK? Should keys in this dict be RuntimeAddrs to start with?
         binary_addr, _ = movemanager.r2b(runtime_addr)
         if binary_addr is not None:
             for reference in label.references: # TODO: rename reference->binary_reference_address?

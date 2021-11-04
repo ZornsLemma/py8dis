@@ -70,10 +70,11 @@ def constant(value, name):
 # deal I suppose. TODO: Is this still a problem?
 # TODO: labels just have "an address"; the concepts of runtime and binary addresses don't really make much sense for them, I think - *except* that we want to associate move IDs with them, so it's generally helpful to think of them as runtime addresses and then that helps us infer a move_id. But this isn't fundamental. I may be getting confused here.
 def label(addr, name, move_id=None):
+    addr = utils.RuntimeAddr(addr) # TODO: OK?
     if move_id is None: # TODO: not super happy with this
         # We don't care about the equivalent binary address, but the process of looking
         # it up gives us a move ID to associate with this label.
-        _, move_id = movemanager.r2b(utils.RuntimeAddr(addr))
+        _, move_id = movemanager.r2b(addr)
     #if name == "nmi_handler_rom_start":
     #    print("XAP", move_id)
     #if name == "nmi_handler_rom_start":
@@ -276,8 +277,9 @@ def go(post_trace_steps=None, autostring_min_length=3):
     assert len(movemanager.active_move_ids) == 0
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
     pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
-    label(pydis_start, "pydis_start", move_id=movemanager.base_move_id)
-    label(pydis_end, "pydis_end", move_id=movemanager.base_move_id)
+    # TODO: Are the int casts here OK? Feels a bit hacky but not quite sure.
+    label(int(pydis_start), "pydis_start", move_id=movemanager.base_move_id)
+    label(int(pydis_end), "pydis_end", move_id=movemanager.base_move_id)
 
     trace.trace()
     trace.generate_references()

@@ -134,6 +134,7 @@ def is_code(addr):
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 def our_label_maker(addr, context, move_id):
     assert context is not None
+    addr = utils.RuntimeAddr(addr) # TODO: OK? "type" for label addresses is a bit unclear
     #if addr == 0x6a7:
     #    print("BBB", hex(context), move_id)
     if move_id is None:
@@ -270,7 +271,7 @@ def sorted_annotations(annotations):
 # that we have a full set of label definitions ready to emit.
 def fix_label_names():
     assert trace_done
-    addr = 0
+    addr = utils.BinaryAddr(0)
     while addr < len(classifications):
         c = classifications[addr]
         if c is not None:

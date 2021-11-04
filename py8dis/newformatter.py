@@ -22,6 +22,7 @@ def make_indent(n):
     return (" " * indent_spaces) * n
 
 def add_hex_dump(binary_addr, length, s):
+    assert isinstance(binary_addr, utils.BinaryAddr)
     if not config._hex_dump:
         return s
     s = tab_to(s, hex_dump_column)
@@ -59,6 +60,7 @@ def format_classification_line(binary_addr, length, core_str):
 # TODO: We might want Byte/Word objects to have a format function (a bit like format_hint for individual bytes) and allow the user to control it (poss via helper fns) - that way they could call this function with a None argument to get auto-column-calculation or an integer argument to specify "use n columns" or a variant of this function to get "no alignment but basic data-item-oriented-word-wrapping" output.
 # TODO: It's not unreasonable to have inline comments on items in data blocks; we might only emit them if the data block is single-column formatter - I guess we'd have to, actually, since there's no way to end an inline comment short of a newline. So we probably want to default to single-column if there's any inline comments in the range, and if the user has forced a multi-column structure we should probably warn about hidden inline comments
 def format_data_block(binary_addr, length, cols, element_size):
+    assert isinstance(binary_addr, utils.BinaryAddr)
     assert utils.is_valid_addr(binary_addr)
     assert length >= 1
     assert element_size in (1, 2)

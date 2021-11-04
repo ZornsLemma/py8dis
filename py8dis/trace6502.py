@@ -308,10 +308,19 @@ class OpcodeJsr(OpcodeAbs):
         # and call entry() itself for the labelled entry points.
         # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after jsr_hooks.get()?
         target_runtime_addr = self._target(binary_addr)
-        def simple_jsr_hook(target_runtime_addr, caller_binary_addr):
-            return caller_binary_addr + 3
+        def simple_jsr_hook(target_runtime_addr, caller_runtime_addr):
+            assert isinstance(target_runtime_addr, utils.RuntimeAddr)
+            assert isinstance(caller_runtime_addr, utils.RuntimeAddr)
+            # TODO: It might be possible the following assertion fails if the moves
+            # in effect are sufficiently tricky, but I'll leave it for now as it
+            # may catch bugs - once the code is more trusted it can be removed
+            # if it's technically incorrect.
+            assert movemanager.r2b_checked(caller_runtime_addr)[0] == binary_addr
+            return caller_runtime_addr + 3
         jsr_hook = jsr_hooks.get(target_runtime_addr, simple_jsr_hook)
-        return_runtime_addr = jsr_hook(target_runtime_addr, binary_addr)
+        caller_runtime_addr = movemanager.b2r(binary_addr)
+        with movemanager.moved(movemanager.move_id_for_binary_addr[binary_addr]):
+            return_runtime_addr = jsr_hook(target_runtime_addr, caller_runtime_addr)
         if return_runtime_addr is not None:
             return_runtime_addr = utils.RuntimeAddr(return_runtime_addr)
             result = apply_move(return_runtime_addr)

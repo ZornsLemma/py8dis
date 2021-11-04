@@ -38,8 +38,8 @@ class Byte(object):
     def is_code(self, addr):
         return False
 
-    def as_string_list(self, addr):
-        return newformatter.format_data_block(addr, self._length, self._cols, 1)
+    def as_string_list(self, binary_addr):
+        return newformatter.format_data_block(binary_addr, self._length, self._cols, 1)
         # TODO: DELETE THIS OLD CODE
         result = []
         byte_prefix = formatter().byte_prefix()
@@ -305,7 +305,7 @@ def stringn(addr):
 
 def autostring(min_length=3):
     assert min_length >= 2
-    addr = 0
+    addr = utils.BinaryAddr(0)
     while addr < len(memory_binary):
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory_binary[addr + i]):
