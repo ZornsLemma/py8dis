@@ -68,18 +68,19 @@ def constant(value, name):
 # as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose. TODO: Is this still a problem?
-def label(runtime_addr, name):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
-    # We don't care about the equivalent binary address, but the process of looking
-    # it up gives us a move ID to associate with this label.
-    _, move_id = movemanager.r2b(runtime_addr)
+# TODO: labels just have "an address"; the concepts of runtime and binary addresses don't really make much sense for them, I think - *except* that we want to associate move IDs with them, so it's generally helpful to think of them as runtime addresses and then that helps us infer a move_id. But this isn't fundamental. I may be getting confused here.
+def label(addr, name, move_id=None):
+    if move_id is None: # TODO: not super happy with this
+        # We don't care about the equivalent binary address, but the process of looking
+        # it up gives us a move ID to associate with this label.
+        _, move_id = movemanager.r2b(utils.RuntimeAddr(addr))
     #if name == "nmi_handler_rom_start":
     #    print("XAP", move_id)
     #if name == "nmi_handler_rom_start":
     #    print("PXX", move_id)
     #    print("PXY", movemanager.move_ids_for_runtime_addr(runtime_addr))
     #    print("PXZ", movemanager.active_move_ids)
-    disassembly.add_label(runtime_addr, name, move_id)
+    disassembly.add_label(addr, name, move_id)
 
 # TODO: Should probably take an optional move_id?
 # TODO: This isn't working - see "command_table+1" in dfs226.py for example
@@ -275,8 +276,8 @@ def go(post_trace_steps=None, autostring_min_length=3):
     assert len(movemanager.active_move_ids) == 0
     pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
     pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
-    label(pydis_start, "pydis_start")
-    label(pydis_end, "pydis_end")
+    label(pydis_start, "pydis_start", move_id=movemanager.base_move_id)
+    label(pydis_end, "pydis_end", move_id=movemanager.base_move_id)
 
     trace.trace()
     trace.generate_references()

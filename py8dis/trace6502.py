@@ -256,7 +256,7 @@ class OpcodeJmpAbs(OpcodeAbs):
         super(OpcodeJmpAbs, self).__init__("JMP", has_zp_version=False)
 
     def _target(self, addr):
-        return utils.get_u16(addr + 1)
+        return utils.RuntimeAddr(utils.get_u16(addr + 1))
 
     def abs_operand(self, addr):
         return self._target(addr)
@@ -289,7 +289,7 @@ class OpcodeJsr(OpcodeAbs):
         super(OpcodeJsr, self).__init__("JSR", has_zp_version=False)
 
     def _target(self, addr):
-        return utils.get_u16(addr + 1)
+        return utils.RuntimeAddr(utils.get_u16(addr + 1))
 
     def abs_operand(self, addr):
         return self._target(addr)
@@ -298,7 +298,8 @@ class OpcodeJsr(OpcodeAbs):
         labels[self._target(addr)].add_reference(addr)
         #trace.references[self._target(addr)].add(addr)
 
-    def disassemble(self, addr):
+    def disassemble(self, binary_addr):
+        assert isinstance(binary_addr, utils.BinaryAddr)
         # A hook only gets to return the "straight line" address to continue
         # tracing from (if there is one; it can return None if it wishes). Some
         # subroutines (e.g. jsr is_yx_zero:equw target_if_true, target_if_false)
@@ -306,14 +307,18 @@ class OpcodeJsr(OpcodeAbs):
         # entry points. This is supported by having the hook simply return None
         # and call entry() itself for the labelled entry points.
         # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after jsr_hooks.get()?
-        target = self._target(addr)
-        return_addr = jsr_hooks.get(target, lambda target, addr: addr + 3)(target, addr)
-        if return_addr is not None:
-            result = apply_move(return_addr)
+        target_runtime_addr = self._target(binary_addr)
+        def simple_jsr_hook(target_runtime_addr, caller_binary_addr):
+            return caller_binary_addr + 3
+        jsr_hook = jsr_hooks.get(target_runtime_addr, simple_jsr_hook)
+        return_runtime_addr = jsr_hook(target_runtime_addr, binary_addr)
+        if return_runtime_addr is not None:
+            return_runtime_addr = utils.RuntimeAddr(return_runtime_addr)
+            result = apply_move(return_runtime_addr)
             assert len(result) > 0 # TODO: no idea if this can happen, but since the first value returned from disassemble() is special we don't want to disappear it - if it can, we just need to set result = [None] here I think if len() == 0
         else:
             result = [None]
-        result += apply_move(target)
+        result += apply_move(target_runtime_addr)
         return result
 
 
@@ -641,25 +646,26 @@ opcodes = {
 }
 
 
-def disassemble_instruction(addr):
-    opcode_value = memory_binary[addr]
+def disassemble_instruction(binary_addr):
+    assert isinstance(binary_addr, utils.BinaryAddr)
+    opcode_value = memory_binary[binary_addr]
     if opcode_value not in opcodes:
         return [None]
     opcode = opcodes[opcode_value]
     # If we hit something that's already classified, we can't/don't re-classify
     # it but that doesn't mean we can't continue to trace until something breaks
     # the control flow.
-    if disassembly.is_classified(addr, 1 + opcode.operand_length):
+    if disassembly.is_classified(binary_addr, 1 + opcode.operand_length):
         # TODO: The machinations required to format the comment here are a bit
         # annoying.
-        s = opcode.as_string(addr)
+        s = opcode.as_string(binary_addr)
         def late_formatter():
-            return utils.add_hex_dump("overlapping: " + str(s)[4:], addr, opcode.length(), -len(config.formatter().comment_prefix())-1)
-        disassembly.add_comment(addr, utils.LazyString("%s", late_formatter))
+            return utils.add_hex_dump("overlapping: " + str(s)[4:], binary_addr, opcode.length(), -len(config.formatter().comment_prefix())-1)
+        disassembly.add_comment(binary_addr, utils.LazyString("%s", late_formatter))
     else:
-        disassembly.add_classification(addr, opcode)
-        opcode.update_references(addr)
-    return opcode.disassemble(addr)
+        disassembly.add_classification(binary_addr, opcode)
+        opcode.update_references(binary_addr)
+    return opcode.disassemble(binary_addr)
 
 # TODO?
 # TODO: Should this maybe accept JMP abs too, since that could just be a tail call?
