@@ -120,7 +120,6 @@ def get_label(addr, context, move_id=None):
     # see where labels exist and what references them. TODO: It is a bit clunky
     # to have to do the "ensure it exists" via this dummy dictionary lookup
     # though.
-    # TODO: General point - is there a danger that looking up labels by int/RuntimeAddr/BinaryAddr gives the wrong results or are 42/RuntimeAddr(42)/BinaryAddr(42) all equivalent keys?
     dummy = labelmanager.labels[addr]
     # TODO: is context consistently source based, regardless of whether this is code or data using it?
     return utils.LazyString("%s", lambda: get_final_label(addr, context, move_id))
