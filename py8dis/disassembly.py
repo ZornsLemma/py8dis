@@ -109,6 +109,7 @@ def add_optional_label(addr, s, base_addr=None):
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 # TODO: I am thinking (99% confident) first argument, the actual label address, is a runtime address and (50% confident) second argument, the context, is a binary address
 def get_label(addr, context, move_id=None):
+    addr = int(addr) # TODO!?
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     assert utils.is_valid_addr(context)
     assert move_id is None or movemanager.is_valid_move_id(move_id)
@@ -119,6 +120,7 @@ def get_label(addr, context, move_id=None):
     # see where labels exist and what references them. TODO: It is a bit clunky
     # to have to do the "ensure it exists" via this dummy dictionary lookup
     # though.
+    # TODO: General point - is there a danger that looking up labels by int/RuntimeAddr/BinaryAddr gives the wrong results or are 42/RuntimeAddr(42)/BinaryAddr(42) all equivalent keys?
     dummy = labelmanager.labels[addr]
     # TODO: is context consistently source based, regardless of whether this is code or data using it?
     return utils.LazyString("%s", lambda: get_final_label(addr, context, move_id))

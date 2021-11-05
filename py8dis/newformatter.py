@@ -114,7 +114,7 @@ def char_formatter(n, bits):
     c = config.formatter().string_chr(n)
     if c is not None:
         return "'%s'" % c
-    return int_formatter(n, bits)
+    return uint_formatter(n, bits)
 
 def binary_formatter(n, bits):
     s = bin(n)[2:]
