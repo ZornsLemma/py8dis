@@ -58,7 +58,7 @@ class Name(object):
 
 class Label(object):
     def __init__(self, addr):
-        self.addr = addr
+        self.addr = int(addr) # TODO: cast to int is experimental - if keep this, other cast-y stuff might be redundant
         self.move_id = movemanager.base_move_id
         self.references = set()
         # TODO: explicit_names holds lists since we want to remember the order user-added names were provided in, at least for now

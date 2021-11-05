@@ -83,12 +83,20 @@ def check_expr(expr, value):
     # in py8dis.
     config.formatter().assert_expr(expr, value)
 
+# TODO: Get rid of or at least reduce use of this in favour of is_valid_{runtime,binary}_addr?
 def is_valid_addr(addr):
     return 0 <= addr < 0x10000
 
+def is_valid_runtime_addr(runtime_addr):
+    assert not isinstance(runtime_addr, BinaryAddr)
+    return is_valid_addr(runtime_addr)
+
+def is_valid_binary_addr(binary_addr):
+    assert not isinstance(binary_addr, RuntimeAddr)
+    return is_valid_addr(binary_addr)
+
 def data_loaded_at_binary_addr(binary_addr, n=1):
-    assert is_valid_addr(binary_addr)
-    assert is_valid_addr(binary_addr + n - 1)
+    assert all(is_valid_binary_addr(x) for x in range(binary_addr, binary_addr+n))
     return all(memory_binary[binary_addr + i] is not None for i in range(n))
 
 # TODO: Probably not a good name for this function, something reflecting that it outputs a "described count" is probably better.

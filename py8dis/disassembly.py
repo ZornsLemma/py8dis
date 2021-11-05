@@ -110,6 +110,7 @@ def add_optional_label(addr, s, base_addr=None):
 # TODO: I am thinking (99% confident) first argument, the actual label address, is a runtime address and (50% confident) second argument, the context, is a binary address
 def get_label(addr, context, move_id=None):
     addr = int(addr) # TODO!?
+    context = utils.BinaryAddr(context) # TODO: I think this is how things currently work, arguably since the context is passed to user code we should be using RuntimeAddr for context (at least by the time it gets out to user code, maybe not right here)
     assert 0 <= addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
     assert utils.is_valid_addr(context)
     assert move_id is None or movemanager.is_valid_move_id(move_id)
