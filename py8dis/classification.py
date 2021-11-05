@@ -282,20 +282,22 @@ def stringhi(runtime_addr):
     return movemanager.b2r(addr)
 
 # Behaviour with include_terminator_fn=None should be beebdis-compatible.
-def stringhiz(addr, include_terminator_fn=None):
-    assert not disassembly.is_classified(addr, 1)
-    initial_addr = addr
+def stringhiz(runtime_addr, include_terminator_fn=None):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    assert not disassembly.is_classified(binary_addr, 1)
+    initial_addr = binary_addr
     while True:
-        if disassembly.is_classified(addr, 1):
+        if disassembly.is_classified(binary_addr, 1):
             break
-        if memory_binary[addr] == 0 or (memory_binary[addr] & 0x80) != 0:
-            if include_terminator_fn is not None and include_terminator_fn(memory_binary[addr]):
-                addr += 1
+        if memory_binary[binary_addr] == 0 or (memory_binary[binary_addr] & 0x80) != 0:
+            if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_addr]):
+                binary_addr += 1
             break
-        addr += 1
-    if addr > initial_addr:
-        disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
-    return addr
+        binary_addr += 1
+    if binary_addr > initial_addr:
+        disassembly.add_classification(initial_addr, String(binary_addr - initial_addr, False))
+    return movemanager.b2r(binary_addr)
 
 def stringn(addr):
     disassembly.add_classification(addr, Byte(1, False))
@@ -321,7 +323,7 @@ def autostring(min_length=3):
 
 def classify_leftovers():
     # TODO: Might be able to factor out common code with autostring()
-    addr = 0
+    addr = utils.BinaryAddr(0)
     while addr < len(memory_binary):
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1):

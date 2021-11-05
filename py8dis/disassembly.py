@@ -252,12 +252,13 @@ def get_final_label(addr, context, move_id):
 def is_classified(addr, length=1):
     return any(x is not None for x in classifications[addr:addr+length])
 
-def add_classification(addr, classification):
+def add_classification(binary_addr, classification):
+    binary_addr = utils.BinaryAddr(binary_addr)
     assert classification is not None
-    assert not is_classified(addr, classification.length())
-    classifications[addr] = classification
+    assert not is_classified(binary_addr, classification.length())
+    classifications[binary_addr] = classification
     for i in range(1, classification.length()):
-        classifications[addr+i] = partial_classification
+        classifications[binary_addr+i] = partial_classification
 
 def get_classification(addr):
     return classifications[addr]
