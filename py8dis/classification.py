@@ -313,7 +313,7 @@ def autostring(min_length=3):
             if movemanager.b2r(addr + i) in labelmanager.labels:
                 break
         if i >= min_length:
-            # TODO: I suspect the next two line fragment should be wrapped up if I keep it, probably repeated a bit
+            # TODO: I suspect the next two line fragment should be wrapped up if I keep it, probably repeated a bit (probably something like "with movemanager.b2r(binary_addr) as runtime_addr:...", although I probably can't reuse the b2r function, but maybe think about it)
             runtime_addr = movemanager.b2r(addr)
             with movemanager.moved(movemanager.move_id_for_binary_addr[addr]):
                 string(runtime_addr, i)
