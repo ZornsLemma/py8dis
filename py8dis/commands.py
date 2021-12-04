@@ -155,6 +155,7 @@ def entry(runtime_addr, label=None, warn=True):
 # TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(runtime_addr):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
     # TODO: Call a function on trace module?
@@ -190,6 +191,8 @@ def stringn_hook(target, addr):
 def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     if runtime_addr_high is None:
         runtime_addr_high = runtime_addr + 1
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    runtime_addr_high = utils.RuntimeAddr(runtime_addr_high)
     binary_addr, _ = movemanager.r2b(runtime_addr)
     binary_addr_high, _ = movemanager.r2b(runtime_addr_high)
     assert utils.data_loaded_at_binary_addr(binary_addr)
