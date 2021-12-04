@@ -324,7 +324,16 @@ class OpcodeJsr(OpcodeAbs):
         if return_runtime_addr is not None:
             return_runtime_addr = utils.RuntimeAddr(return_runtime_addr)
             result = apply_move(return_runtime_addr)
-            assert len(result) > 0 # TODO: no idea if this can happen, but since the first value returned from disassemble() is special we don't want to disappear it - if it can, we just need to set result = [None] here I think if len() == 0
+            if len(result) == 0:
+                # The return runtime address could not be unambiguously converted into a binary
+                # address. It's highly likely the JSR is returning to the immediately following
+                # instruction, so if binary_addr+3 maps to the return runtime address, use that,
+                # otherwise give up and don't trace anything "after" the JSR.
+                simple_return_binary_addr = binary_addr + 3
+                if return_runtime_addr == movemanager.b2r(simple_return_binary_addr):
+                    result = [simple_return_binary_addr]
+                else:
+                    result = [None]
         else:
             result = [None]
         result += apply_move(target_runtime_addr)
