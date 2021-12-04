@@ -668,6 +668,7 @@ def disassemble_instruction(binary_addr):
         # TODO: The machinations required to format the comment here are a bit
         # annoying.
         s = opcode.as_string(binary_addr)
+        # TODO: Formatting of "overlapping" lines in output is poor, e.g. hex dump is offset
         def late_formatter():
             return utils.add_hex_dump("overlapping: " + str(s)[4:], binary_addr, opcode.length(), -len(config.formatter().comment_prefix())-1)
         disassembly.add_comment(binary_addr, utils.LazyString("%s", late_formatter))

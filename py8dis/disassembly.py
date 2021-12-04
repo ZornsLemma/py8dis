@@ -481,8 +481,10 @@ class Annotation(object):
 
 class Comment(Annotation):
     def __init__(self, text, priority=None):
-        formatted_text = "\n".join("%s %s" % (config.formatter().comment_prefix(), line) for line in str(text).split("\n"))
-        Annotation.__init__(self, formatted_text, priority)
+        # TODO!?
+        def late_formatter():
+            return "\n".join("%s %s" % (config.formatter().comment_prefix(), line) for line in str(text).split("\n"))
+        Annotation.__init__(self, utils.LazyString("%s", late_formatter), priority)
 
 # TODO: We seem to assert some simple constants have their own value - is this wrong/weird?
 
