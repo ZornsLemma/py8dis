@@ -133,6 +133,7 @@ def is_code(addr):
         return False
     return classification.is_code(addr)
 
+# TODONOW: NOT HERE, JUST GENERAL NOTE - TWEAK THE USER VISIBLE "WITH MOVE()" SYNTAX SO A MOVE() RETURN VALUE CAN BE USED WITHOUT WRAPPING IN moved()
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 def our_label_maker(addr, context, move_id):
     assert context is not None
@@ -456,10 +457,10 @@ def emit_addr(binary_addr, move_id):
     # Emit any label definitions for addresses within the classification.
     result.extend(pending_labels)
     # Emit any annotations which would fall within the classification.
-    # TODO: It might be better to emit mid-classification annotations after the classification - if only because of the way overlapping instructions are currently handled. This is what we used to do before I tweaked it a few hours ago, IIRC. But don't rush into changing this, as I may want to tweak how overlapping instructions are recorded.
+    # TODONOW: It might be better to emit mid-classification annotations after the classification - if only because of the way overlapping instructions are currently handled. This is what we used to do before I tweaked it a few hours ago, IIRC. But don't rush into changing this, as I may want to tweak how overlapping instructions are recorded.
     for i in range(1, classification_length):
         if len(annotations[addr + i]) > 0:
-            # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
+            # TODONOW: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
             utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
         for annotation in sorted_annotations(annotations[addr + i]):
             result.append(annotation.as_string(addr))

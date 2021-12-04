@@ -173,7 +173,7 @@ def wordentry(runtime_addr, n=1):
         runtime_addr += 2
     return runtime_addr
 
-# TODO: We might have a bit of a problem here - these hooks are used during tracing (when we're in "static" mode, so to speak) but they call stringhi() etc which are user function "intended" for use during the "dynamic" phase and which will probably be expecting runtime addresses. Does this suggest we want to "allow movemanager.r2b but make it the identity operation" during tracing??
+# TODO: We might have a bit of a problem here - these hooks are used during tracing (when we're in "static" mode, so to speak) but they call stringhi() etc which are user function "intended" for use during the "dynamic" phase and which will probably be expecting runtime addresses. Does this suggest we want to "allow movemanager.r2b but make it the identity operation" during tracing?? TODONOW: This needs dealing with, I *think* it's actually OK in the latest model where all hooks etc work with runtime addresses too, but not sure right now. Whatever, these should check the addresses provided are of the right type (RuntimeAddr/BinaryAddr).
 def stringhi_hook(target, addr):
     return stringhi(addr + 3)
 
