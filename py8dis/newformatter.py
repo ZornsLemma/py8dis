@@ -144,7 +144,7 @@ def constant8(binary_addr):
 
 def constant16(binary_addr):
     assert utils.is_valid_addr(binary_addr)
-    n = util.get_u16(binary_addr)
+    n = utils.get_u16(binary_addr)
     return constant(binary_addr, n, 16)
 
 def format_comment(text):
