@@ -9,17 +9,18 @@ class OpcodeUnconditionalBranch(Opcode):
         super(OpcodeUnconditionalBranch, self).__init__(mnemonic, 1)
 
     def _target(self, addr):
-        return addr + 2 + signed8(get_u8(addr + 1))
+        base = movemanager.b2r(addr)
+        return base + 2 + signed8(get_u8(addr + 1))
 
     def abs_operand(self, addr):
         return self._target(addr)
 
     def update_references(self, addr):
         labels[self.abs_operand(addr)].add_reference(addr)
-        trace.references[self._target(addr)].add(addr)
+        #trace.references[self._target(addr)].add(addr)
 
     def disassemble(self, addr):
-        return [None, self._target(addr)]
+        return [None] + apply_move2(self._target(addr), addr)
 
     def as_string(self, addr):
         return utils.LazyString("    %s %s", utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
