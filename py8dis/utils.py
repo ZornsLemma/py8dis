@@ -45,6 +45,7 @@ def get_u16_be_runtime(runtime_addr):
 def add_hex_dump(s, addr, length, column_adjust=0):
     # TODO: Hacky redirect to newformatter code
     import newformatter
+    assert column_adjust == 0 # we don't use this any more, get rid of the argument
     return newformatter.add_hex_dump(addr, length, s)
     assert length > 0
     if not config.hex_dump():
