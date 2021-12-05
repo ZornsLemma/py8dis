@@ -299,11 +299,13 @@ def stringhiz(runtime_addr, include_terminator_fn=None):
         disassembly.add_classification(initial_addr, String(binary_addr - initial_addr, False))
     return movemanager.b2r(binary_addr)
 
-def stringn(addr):
-    disassembly.add_classification(addr, Byte(1, False))
-    length = memory_binary[addr]
-    add_expression(addr, utils.LazyString("%s - %s", disassembly.get_label(addr + 1 + length, addr), disassembly.get_label(addr + 1, addr)))
-    return string(addr + 1, length)
+def stringn(runtime_addr):
+    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    disassembly.add_classification(binary_addr, Byte(1, False))
+    length = memory_binary[binary_addr]
+    add_expression(binary_addr, utils.LazyString("%s - %s", disassembly.get_label(runtime_addr + 1 + length, binary_addr), disassembly.get_label(runtime_addr + 1, binary_addr)))
+    return string(runtime_addr + 1, length)
 
 def autostring(min_length=3):
     assert min_length >= 2
