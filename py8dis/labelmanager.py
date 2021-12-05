@@ -164,7 +164,7 @@ class Label(object):
 labels = utils.keydefaultdict(Label)
 
 
-# TODO: Hex dumps on "equw" lines are wrong (addresses seem to go up as if they were single bytes), not likely to be a big deal but needs investigating
+# TODONOW: Hex dumps on "equw" lines are wrong (addresses seem to go up as if they were single bytes), not likely to be a big deal but needs investigating
 
 # TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks
 
