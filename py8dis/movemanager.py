@@ -28,7 +28,25 @@ active_move_ids = []
 # TODO: Note that move_definitions has to be interpreted "as a whole", since later moves can "steal" binary addresses from earlier moves. I don't think this is a problem - and the whole point is to allow the user to do things like move a big chunk of code which gets relocated at runtime as a whole and then override that for a fairly small chunks witin that big chunk that the copied elsewhere.
 move_definitions = [(utils.RuntimeAddr(0), utils.BinaryAddr(0), 0x10000)]
 
-move_id_for_binary_addr = [base_move_id] * 0x10000
+def is_valid_move_id(move_id):
+    # TODO: No need for base_move_id to be an exception with current value of 0...
+    return move_id == base_move_id or 0 <= move_id < len(move_definitions)
+
+class Move(int):
+    def __new__(cls, value, *args, **kwargs):
+        assert is_valid_move_id(value)
+        return super(Move, cls).__new__(cls, value)
+
+    def __enter__(self):
+        active_move_ids.append(self)
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        assert active_move_ids[-1] == self
+        active_move_ids.pop()
+
+move_id_for_binary_addr = [Move(base_move_id)] * 0x10000
+assert all(isinstance(x, Move) for x in move_id_for_binary_addr) # TODO: redundant, but paranoid for now
 
 def add_move(dest, source, length):
     assert isinstance(dest, utils.RuntimeAddr)
@@ -40,14 +58,10 @@ def add_move(dest, source, length):
     assert dest != source # not fundamentally necessary, but seems sensible
     assert length > 0
     move_definitions.append((dest, source, length))
-    move_id = len(move_definitions) - 1
+    move_id = Move(len(move_definitions) - 1)
     for i in range(length):
         move_id_for_binary_addr[source + i] = move_id
     return move_id
-
-def is_valid_move_id(move_id):
-    # TODO: No need for base_move_id to be an exception with current value of 0...
-    return move_id == base_move_id or 0 <= move_id < len(move_definitions)
 
 def is_valid_runtime_addr_for_move_id(runtime_addr, move_id):
     assert isinstance(runtime_addr, utils.RuntimeAddr)
@@ -61,17 +75,11 @@ def is_valid_runtime_addr_for_move_id(runtime_addr, move_id):
 # TODO: Name for this function is perhaps not ideal
 # TODO: This should almost certainly be handled via Move() object returned by move() fn
 # which would allow us to write "with move(blah)" instead of "id = move(blah); with moved(id)"
-@contextlib.contextmanager
+# TODOCOMMETEDOUT @contextlib.contextmanager
 def moved(move_id):
-    assert is_valid_move_id(move_id)
-    # TODO: Should we insist move_id is not already in active_move_ids? Probably
-    # unnecessarily picky.
-    active_move_ids.append(move_id)
-    try:
-        yield
-    finally:
-        assert active_move_ids[-1] == move_id
-        active_move_ids.pop()
+    # TODO: This function is redundant now we have Move() objects which are context managers themselves; it should be done away with eventually, but for now let's keep it as a no-op
+    assert isinstance(move_id, Move)
+    return move_id
 
 # Return the runtime address corresponding to a binary address; because a binary
 # address can only be the source of a single move, there is always a single
