@@ -86,7 +86,7 @@ def format_data_block(binary_addr, length, cols, element_size):
         data_width = hex_dump_column - len(prefix)
         if config._hex_dump:
             data_width -= 1 # leave a space before the hex dump comment prefix
-        # We add len(separator) to data_width because if we there are n items on a
+        # We add len(separator) to data_width because if there are n items on a
         # line we only need n-1 separators, but the divisor assumes every item
         # includes a separator. TODO: Probably correct but think about it...
         data_columns = max(1, (data_width + len(separator)) // (longest_item + len(separator)))
@@ -94,7 +94,7 @@ def format_data_block(binary_addr, length, cols, element_size):
     for i in range(0, len(data), data_columns):
         items_on_line = min(len(data) - i, data_columns)
         core_str = prefix + separator.join("%-*s" % (longest_item, x) for x in data[i:i+data_columns])
-        result.append(add_hex_dump(binary_addr + i, items_on_line, core_str))
+        result.append(add_hex_dump(binary_addr + i * element_size, items_on_line, core_str))
     return result
 
 def uint_formatter(n, bits, pad=False):

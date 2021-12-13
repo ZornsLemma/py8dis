@@ -81,9 +81,11 @@ class Byte(object):
 
 
 class Word(object):
-    def __init__(self, length, is_mergeable=True):
+    def __init__(self, length, is_mergeable=True, cols=None):
+        assert cols is None or cols > 0
         self.set_length(length)
         self._is_mergeable = is_mergeable
+        self._cols = cols
 
     def is_mergeable(self):
         return self._is_mergeable
@@ -99,7 +101,9 @@ class Word(object):
     def is_code(self, addr):
         return False
 
-    def as_string_list(self, addr):
+    def as_string_list(self, binary_addr):
+        return newformatter.format_data_block(binary_addr, self._length, self._cols, 2)
+        # TODO: DELETE THIS OLD CODE
         # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
         # should probably all be cleaned up and factored out.
         result = []

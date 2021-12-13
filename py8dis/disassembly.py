@@ -461,8 +461,8 @@ def emit_addr(binary_addr, move_id):
     # Emit any annotations which would fall within the classification. We do this after the classification itself; this does have some logic (we're "rounding to the end of the classification) and in particular this works better than "rounding to start" does with the current way overlapping instructions are emitted as comments.
     for i in range(1, classification_length):
         if len(annotations[addr + i]) > 0:
-            # TODONOW: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations.
-            utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
+            # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations. I've commented it out for now as annoying is exactly right.
+            pass # utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
         for annotation in sorted_annotations(annotations[addr + i]):
             result.append(annotation.as_string(addr))
     return result

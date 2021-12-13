@@ -164,8 +164,6 @@ class Label(object):
 labels = utils.keydefaultdict(Label)
 
 
-# TODONOW: Hex dumps on "equw" lines are wrong (addresses seem to go up as if they were single bytes), not likely to be a big deal but needs investigating
-
 # TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks
 
 # TODO: Just a general note - move IDs provide optional "annotations" on individual label names. They are "advisory" - labels just resolve to 16-bit integer addresses, of course - but they should allow us to try to emit different label names for the same address in different parts of the disassembly (i.e. the associated pseudopc block). They also help to provide disambiguation when tracing - where a destination address is mapped to more than one source address, we can use heuristics like "prefer the mapping for the move region we are currently tracing in", and maybe also allow users to annotation to say "the target address is in move region X". Still feeling my way with this but that's the general idea.
