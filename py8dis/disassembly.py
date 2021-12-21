@@ -133,7 +133,6 @@ def is_code(addr):
         return False
     return classification.is_code(addr)
 
-# TODONOW: NOT HERE, JUST GENERAL NOTE - TWEAK THE USER VISIBLE "WITH MOVE()" SYNTAX SO A MOVE() RETURN VALUE CAN BE USED WITHOUT WRAPPING IN moved()
 # TODO: Should I call these "references", since they may be things like expressions? then again, I am calling things labels when they are really expressions too.
 def our_label_maker(addr, context, move_id):
     assert context is not None
