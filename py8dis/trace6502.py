@@ -381,6 +381,7 @@ class OpcodeConditionalBranch(Opcode):
         state.clear()
 
     def as_string(self, addr):
+        #print("XXX", hex(addr), movemanager.move_id_for_binary_addr[addr])
         return utils.LazyString("    %s %s", utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
