@@ -90,7 +90,11 @@ def string_chr(c):
         return chr(c)
     return None
 
-# TODO: New stuff added to acme/beebasm but not yet done here
+def binary_prefix():
+    return "%"
+
+def picture_binary(s):
+    return s
 
 def sanitise(s):
     # xa uses "\" as a line continuation character, so if a line (e.g. an ASCII
