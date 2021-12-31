@@ -60,14 +60,15 @@ pseudopc_index=0
 def pseudopc_start(dest, source, length):
     move_id = movemanager.move_id_for_binary_addr[source]
     global pseudopc_index
-    disassembly.add_label(dest, "pseudopc_start_%d" % pseudopc_index, move_id)
-    disassembly.add_label(dest + length, "pseudopc_end_%d" % pseudopc_index, move_id)
+    #disassembly.add_label(dest, "pseudopc_start_%d" % pseudopc_index, move_id)
+    #disassembly.add_label(dest + length, "pseudopc_end_%d" % pseudopc_index, move_id)
     pseudopc_index += 1
     return ["* = %s" % hex(dest)]
 
 def pseudopc_end(dest, source, length):
     move_id = movemanager.move_id_for_binary_addr[source]
-    return [utils.LazyString("* = %s + (pseudopc_end_%d - pseudopc_start_%d)", disassembly.get_label(source, source, move_id), pseudopc_index - 1, pseudopc_index - 1)]
+    # TODO: Hard-coding a literal address here is very unsatisfactory but (as noted in TODO just above pseudopc_start()) I am struggling to make anything else work.
+    return [utils.LazyString("* = %s", hex(source + length))]
 
 def disassembly_end():
     result = []
