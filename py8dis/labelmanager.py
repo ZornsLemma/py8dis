@@ -173,6 +173,8 @@ labels = utils.keydefaultdict(Label)
 # This is just intended as a debugging tool; mainly for debugging py8dis itself, though
 # it might also be helpful for debugging user label hooks or similar.
 def all_labels_as_comments():
+    if not config.show_all_labels:
+        return []
     formatter = config.formatter()
     c = formatter.comment_prefix()
     result = ["%s All labels by address and move ID" % c, "%s" % c]
