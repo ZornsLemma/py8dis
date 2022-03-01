@@ -319,6 +319,7 @@ def osword_argument_finder_hook(a_addr, x_addr, y_addr):
 
 def osbyte_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osbyte_enum)
+    # TODO: Should we check Y=&FF? Or at least Y is not known to be <128?
     if a_addr is not None and memory_binary[a_addr] == 0x81:
         enum_lookup(x_addr, inkey_enum)
 
