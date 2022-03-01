@@ -728,8 +728,11 @@ def subroutine_argument_finder():
                     target = utils.get_u16(addr + 1)
                     for hook in subroutine_argument_finder_hooks:
                         def get(reg):
-                            return state[reg][1]
-                        if hook(target, get('a'), get('x'), get('y')) is not None:
+                            v = state[reg][1]
+                            if v is None:
+                                return v
+                            return utils.BinaryAddr(v)
+                        if hook(utils.RuntimeAddr(target), get('a'), get('x'), get('y')) is not None:
                             break
             state = disassembly.cpu_state_optimistic[addr]
             addr += c.length()

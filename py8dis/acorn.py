@@ -4,9 +4,13 @@ import utils
 
 def xy_addr(x_addr, y_addr):
     if x_addr is not None and y_addr is not None:
+        assert isinstance(x_addr, utils.BinaryAddr)
+        assert isinstance(y_addr, utils.BinaryAddr)
         label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
-        expr(x_addr, utils.LazyString("<(%s)", label))
-        expr(y_addr, utils.LazyString(">(%s)", label))
+        # TODO: This is a bit silly. We do b2r(), then expr() will convert back *and might fail*;
+        # if we just assigned the expr directly to the binary address that couldn't happen.
+        expr(movemanager.b2r(x_addr), utils.LazyString("<(%s)", label))
+        expr(movemanager.b2r(y_addr), utils.LazyString(">(%s)", label))
 
 osfile_enum = {
     0x00: "osfile_save",
@@ -299,7 +303,9 @@ def enum_lookup(r_addr, e):
     r = config.memory_binary[r_addr]
     if r in e:
         constant(r, e[r])
-        expr(r_addr, e[r])
+        # TODO: This is a bit silly. We do b2r(), then expr() will convert back *and might fail*;
+        # if we just assigned the expr directly to the binary address that couldn't happen.
+        expr(movemanager.b2r(r_addr), e[r])
 
 # Note that the following code tries to handle A before X and Y; this is because (TODO: will this change?) expr() preserves the first expression for an address and if TAX etc are used we prefer to label A. TODO: Should we in fact prefer to label whichever register is actually loaded with the explicit immediate value?
 
@@ -320,6 +326,7 @@ def oscli_argument_finder_hook(a_addr, x_addr, y_addr):
     xy_addr(x_addr, y_addr)
 
 def acorn_argument_finder_hook(target, a_addr, x_addr, y_addr):
+    assert isinstance(target, utils.RuntimeAddr)
     # TODO: magic constants, should share with mos_labels via Python "constants"
     # TODO: do other OS calls
     d = {
