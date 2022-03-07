@@ -90,7 +90,9 @@ def string_prefix():
 def string_chr(c):
     if c == ord('\\'):
         return '\\\\'
-    if utils.isprint(c) and chr(c) not in ('"'):
+    if c == ord('"'):
+        return '\\"'
+    if utils.isprint(c):
         return chr(c)
     return None
 
