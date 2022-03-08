@@ -96,7 +96,9 @@ def string_prefix():
     return utils.force_case("    .asc ")
 
 def string_chr(c):
-    if utils.isprint(c) and chr(c) not in ("/", '"'):
+    if chr(c) in '^"':
+        return "^" + chr(c)
+    if utils.isprint(c):
         return chr(c)
     return None
 
