@@ -37,7 +37,6 @@ def explicit_label(name, value, offset=None):
 
 # xa supports ";" as a comment prefix, but by default colons terminate ";"
 # comments, so we use "//".
-#
 def comment_prefix():
     return "//"
 
