@@ -37,6 +37,7 @@ def explicit_label(name, value, offset=None):
 
 # xa supports ";" as a comment prefix, but by default colons terminate ";"
 # comments, so we use "//".
+#
 def comment_prefix():
     return "//"
 
@@ -98,6 +99,11 @@ def string_prefix():
 def string_chr(c):
     if chr(c) in '^"':
         return "^" + chr(c)
+    # xa has a bug which can affect strings containing '/', so we force them to
+    # be encoded specially. See
+    # https://stardot.org.uk/forums/viewtopic.php?p=351954#p351954 for more.
+    if chr(c) == '/':
+        return None
     if utils.isprint(c):
         return chr(c)
     return None
