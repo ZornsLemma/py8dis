@@ -252,38 +252,37 @@ def stringz(runtime_addr, exclude_terminator=False):
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
 def string(runtime_addr, n=None):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
-    addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: should prob call this binary_addr
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if n is None:
-        assert not disassembly.is_classified(addr)
+        assert not disassembly.is_classified(binary_addr)
         n = 0
-        while not disassembly.is_classified(addr + n) and utils.isprint(memory_binary[addr + n]):
+        while not disassembly.is_classified(binary_addr + n) and utils.isprint(memory_binary[binary_addr + n]):
             n += 1
     if n > 0:
-        disassembly.add_classification(addr, String(n, False))
-    return movemanager.b2r(addr + n)
+        disassembly.add_classification(binary_addr, String(n, False))
+    return movemanager.b2r(binary_addr + n)
 
-# ENHANCE: A variant on this which considers the top-bit-set byte as part of the
-# string might be useful. The if-ed out code to decompose the last character
-# into a readable form would then potentially be useful too.
-# TODO: I have converted this to use runtime address without thinking about eg hooks
-def stringhi(runtime_addr):
+def stringhi(runtime_addr, include_terminator_fn=None):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
-    addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: addr->binary_addr?
-    assert not disassembly.is_classified(addr, 1)
-    initial_addr = addr
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    assert not disassembly.is_classified(binary_addr, 1)
+    initial_addr = binary_addr
     while True:
-        if disassembly.is_classified(addr, 1):
+        if disassembly.is_classified(binary_addr, 1):
             break
-        if memory_binary[addr] & 0x80 != 0:
-            if False: # ENHANCE: Works but not that helpful so save it for a case where it is
-                c = memory_binary[addr] & 0x7f
-                if utils.isprint(c) and c != ord('"'):
-                    add_expression(addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c)))
+        if memory_binary[binary_addr] & 0x80 != 0:
+            if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_addr]):
+                c = memory_binary[binary_addr] & 0x7f
+                if utils.isprint(c) and c != ord('"') and c != ord('\''):
+                    add_expression(binary_addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c)))
+                else:
+                    add_expression(binary_addr, "%s+%s" % (formatter().hex2(0x80), formatter().hex2(c)))
+                binary_addr += 1
             break
-        addr += 1
-    if addr > initial_addr:
-        disassembly.add_classification(initial_addr, String(addr - initial_addr, False))
-    return movemanager.b2r(addr)
+        binary_addr += 1
+    if binary_addr > initial_addr:
+        disassembly.add_classification(initial_addr, String(binary_addr - initial_addr, False))
+    return movemanager.b2r(binary_addr)
 
 # Behaviour with include_terminator_fn=None should be beebdis-compatible.
 def stringhiz(runtime_addr, include_terminator_fn=None):
