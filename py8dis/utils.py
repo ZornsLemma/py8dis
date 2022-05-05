@@ -24,6 +24,25 @@ def plainhex2(i):
 def plainhex4(i):
     return ("%04x" if config.lower_case() else "%04X") % i
 
+def tab_to(s, n):
+    assert n >= 0
+    return "%-*s" % (n, s)
+
+def make_indent(n):
+    assert n >= 0
+    return (config.indent_string()) * n
+
+def signed8(i):
+    assert 0 <= i <= 255
+    if i >= 0x80:
+        return i - 256
+    else:
+        return i
+
+def get_u8(addr):
+    assert memory_binary[addr] is not None
+    return memory_binary[addr]
+
 def get_u16(addr):
     assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
     return memory_binary[addr] + (memory_binary[addr+1] << 8)
@@ -41,30 +60,6 @@ def get_u16_be(addr):
 def get_u16_be_runtime(runtime_addr):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     return get_u16_be(binary_addr)
-
-def add_hex_dump(s, addr, length, column_adjust=0):
-    # TODO: Hacky redirect to newformatter code
-    import newformatter
-    assert column_adjust == 0 # we don't use this any more, get rid of the argument
-    return newformatter.add_hex_dump(addr, length, s)
-    assert length > 0
-    if not config.hex_dump():
-        return s
-    s = LazyString("%-*s", config.inline_comment_column() + column_adjust, s)
-    # TODO: Addition of move() addresses is a bit hacky but I ultimately plan to rework all the output formatting anyway.
-    runtime_addr = movemanager.b2r(addr)
-    s += "%s %s %s: " % (config.formatter().comment_prefix(), plainhex4(runtime_addr) if runtime_addr != addr else "    ", plainhex4(addr))
-    capped_length = min(length, 3)
-    s += " ".join(plainhex2(x) for x in memory_binary[addr:addr+capped_length])
-    if capped_length < length:
-        s += " ..."
-    if config.show_cpu_state:
-        import disassembly # TODO: horrible hack
-        if disassembly.cpu_state_optimistic[addr] is not None:
-            # TODO: This needs some generic way to call the right function, rather than assuming
-            # it's in trace6502.
-            pass # TODO! s += " " + " "*3*(3-length) + trace6502.show_cpu_state(disassembly.cpu_state_optimistic[addr])
-    return s
 
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
 def chunks(lst, n):
@@ -138,6 +133,8 @@ class keydefaultdict(collections.defaultdict):
             ret = self[key] = self.default_factory(key)
             return ret
 
+def sorted_annotations(annotations):
+    return sorted(annotations, key=lambda x: x.priority)
 
 # TODO: Very experimental
 class TypedInt(int):

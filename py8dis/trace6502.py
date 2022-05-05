@@ -7,6 +7,7 @@ import config
 import disassembly
 import labelmanager
 import movemanager
+import newformatter
 import trace
 import utils
 
@@ -48,17 +49,6 @@ def hook_subroutine(runtime_addr, name, hook, warn=True):
         utils.check_data_loaded_at_binary_addr(binary_addr)
     trace.add_entry(binary_addr, name, move_id)
     add_jsr_hook(runtime_addr, hook)
-
-def signed8(i):
-    assert 0 <= i <= 255
-    if i >= 0x80:
-        return i - 256
-    else:
-        return i
-
-def get_u8(i):
-    assert memory_binary[i] is not None
-    return memory_binary[i]
 
 
 # TODO: Not a high priority, but once we have support for generating arbitrary inline
@@ -136,8 +126,8 @@ class Opcode(object):
         # TODO: This should perhaps be defined on individual instructions or opcode classes.
         return self.mnemonic in ("JMP", "RTS", "BRA")
 
-    def as_string_list(self, addr):
-        result = [utils.add_hex_dump(utils.LazyString("    "*Opcode.indent_level.get(addr, 0) + "%s", self.as_string(addr)), addr, self.length())]
+    def as_string_list(self, addr, annotations):
+        result = [newformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(Opcode.indent_level.get(addr, 0)) + "%s", self.as_string(addr)))]
         if self.is_block_end() and config.blank_line_at_block_end:
             result.append("")
         return result
@@ -159,7 +149,7 @@ class OpcodeImplied(Opcode):
         mnemonic = self.mnemonic
         if (not config.formatter().explicit_a) and mnemonic.endswith(" A"):
             mnemonic = mnemonic[:-2]
-        return "    %s" % utils.force_case(mnemonic)
+        return "%s%s" % (utils.make_indent(1), utils.force_case(mnemonic))
 
 
 class OpcodeImmediate(Opcode):
@@ -173,7 +163,7 @@ class OpcodeImmediate(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        s = "    %s #%s" % (utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
+        s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
         if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
             c = memory_binary[addr + 1]
             if config.show_char_literals and utils.isprint(c):
@@ -195,7 +185,7 @@ class OpcodeZp(Opcode):
         return [addr + 2]
 
     def as_string(self, addr):
-        return utils.LazyString("    %s %s%s%s", utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
+        return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
 
 
 class OpcodeAbs(Opcode):
@@ -223,7 +213,7 @@ class OpcodeAbs(Opcode):
         result1 = utils.force_case(self.mnemonic)
         result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
         if not self.has_zp_version() or utils.get_u16(addr + 1) >= 0x100:
-            return utils.LazyString("    %s %s", result1, result2)
+            return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
         # This is an absolute instruction with a zero-page operand which could
         # be misassembled. If the assembler has a way to explicitly request
@@ -236,7 +226,7 @@ class OpcodeAbs(Opcode):
         # instruction as data with a comment showing what it is; the comment
         # includes an acme-style "+2" suffix to help indicate what's going on.
         operand = classification.get_address16(addr + 1)
-        return utils.LazyString("%s%s, <(%s), >(%s) ; %s+2 %s", config.formatter().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
+        return utils.LazyString("%s%s%s, <(%s), >(%s) ; %s+2 %s", utils.make_indent(1), config.formatter().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
 
 
 class OpcodeDataAbs(OpcodeAbs):
@@ -351,7 +341,7 @@ class OpcodeReturn(Opcode):
         return [None]
 
     def as_string(self, addr):
-        return "    %s" % utils.force_case(self.mnemonic)
+        return "%s%s" % (utils.make_indent(1), utils.force_case(self.mnemonic))
 
 
 class OpcodeConditionalBranch(Opcode):
@@ -360,7 +350,7 @@ class OpcodeConditionalBranch(Opcode):
 
     def _target(self, addr):
         base = movemanager.b2r(addr)
-        return base + 2 + signed8(get_u8(addr + 1))
+        return base + 2 + utils.signed8(utils.get_u8(addr + 1))
 
     def abs_operand(self, addr):
         return self._target(addr)
@@ -382,7 +372,7 @@ class OpcodeConditionalBranch(Opcode):
 
     def as_string(self, addr):
         #print("XXX", hex(addr), movemanager.move_id_for_binary_addr[addr])
-        return utils.LazyString("    %s %s", utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
+        return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
 def show_cpu_state(state):
@@ -508,9 +498,6 @@ def corrupt_flags(addr, state):
     state['c'] = None
 
 
-# ENHANCE: Some of these opcodes might benefit from has_zp_version=False; I
-# haven't done an exhaustive search to determine if there are any others not yet
-# marked.
 opcodes = {
     0x00: OpcodeReturn("BRK"),
     0x01: OpcodeZp("ORA", ",X)", update=update_anz),
@@ -679,7 +666,7 @@ def disassemble_instruction(binary_addr):
         # annoying.
         s = opcode.as_string(binary_addr)
         def late_formatter():
-            return utils.add_hex_dump(config.formatter().comment_prefix() + " overlapping: " + str(s)[4:], binary_addr, opcode.length())
+            return newformatter.add_inline_comment(binary_addr, opcode.length(), None, config.formatter().comment_prefix() + " overlapping: " + str(s)[4:])
         disassembly.add_raw_annotation(binary_addr, utils.LazyString("%s", late_formatter))
     else:
         disassembly.add_classification(binary_addr, opcode)

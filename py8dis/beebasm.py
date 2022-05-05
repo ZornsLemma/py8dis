@@ -48,7 +48,7 @@ def assert_expr(expr, value):
 def set_cmos(b):
     global _disassembly_start
     if b:
-        _disassembly_start = [utils.force_case("    cpu 1"), ""]
+        _disassembly_start = [utils.make_indent(1) + utils.force_case("cpu 1"), ""]
 
 def disassembly_start():
     return _disassembly_start
@@ -57,7 +57,7 @@ def disassembly_start():
 def code_start(start_addr, end_addr):
     global _code_end_addr
     _code_end_addr = end_addr
-    result = ["", utils.force_case("    org %s" % hex4(start_addr))]
+    result = ["", utils.make_indent(1) + utils.force_case("org %s" % hex4(start_addr))]
     result.append("")
     return result
 
@@ -66,7 +66,7 @@ def code_end():
 
 def pseudopc_start(dest, source, length):
     result = [""]
-    result.append(utils.force_case("    org %s" % hex(dest)))
+    result.append(utils.make_indent(1) + utils.force_case("org %s" % hex(dest)))
     # TODO: We will need some labels in pseudopc_end() but by then it will be too late to
     # create them, so do it now. Is this hacky or OK?
     # TODO: The idea of including move_id here is to force the labels to be emitted "around" the pseudopc-emulation block, which is both more readable and necessary in some cases to avoid assembly problems where a label is not forward declared. It isn't working quite right yet.
@@ -83,16 +83,16 @@ def pseudopc_end(dest, source, length):
     result = []
     # TODO: Use LazyString?
     move_id = movemanager.move_id_for_binary_addr[source]
-    result.append("    %s %s + (%s - %s)" % (utils.force_case("org"), disassembly.get_label(source, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(dest, source, move_id)))
-    result.append("    %s %s, %s, %s" % (utils.force_case("copyblock"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(source, source, move_id)))
-    result.append("    %s %s, %s" % (utils.force_case("clear"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id)))
+    result.append("%s%s %s + (%s - %s)" % (utils.make_indent(1), utils.force_case("org"), disassembly.get_label(source, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(dest, source, move_id)))
+    result.append("%s%s %s, %s, %s" % (utils.make_indent(1), utils.force_case("copyblock"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(source, source, move_id)))
+    result.append("%s%s %s, %s" % (utils.make_indent(1), utils.force_case("clear"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id)))
     result.append("")
     return result
 
 def disassembly_end():
     result = []
     spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
-    result.extend(utils.force_case("    assert ") + "%s == %s" % (expr, value) for expr, value in spa)
+    result.extend(utils.make_indent(1) + utils.force_case("assert ") + "%s == %s" % (expr, value) for expr, value in spa)
     result.append("")
 
     s = utils.force_case("save")
@@ -107,13 +107,13 @@ def force_abs_instruction(instruction, prefix, operand, suffix):
     return None
 
 def byte_prefix():
-    return utils.force_case("    equb ")
+    return utils.force_case("equb ")
 
 def word_prefix():
-    return utils.force_case("    equw ")
+    return utils.force_case("equw ")
 
 def string_prefix():
-    return utils.force_case("    equs ")
+    return utils.force_case("equs ")
 
 def string_chr(c):
     if utils.isprint(c) and chr(c) not in ('"'):

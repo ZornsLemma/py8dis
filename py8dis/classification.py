@@ -38,46 +38,8 @@ class Byte(object):
     def is_code(self, addr):
         return False
 
-    def as_string_list(self, binary_addr):
-        return newformatter.format_data_block(binary_addr, self._length, self._cols, 1)
-        # TODO: DELETE THIS OLD CODE
-        result = []
-        byte_prefix = formatter().byte_prefix()
-        data = list(get_constant8(addr + i, True) for i in range(self._length))
-        def asciify(n):
-            if n in expressions:
-                return "."
-            c = memory_binary[n]
-            if utils.isprint(c):
-                return chr(c)
-            return "."
-        ascii = list(asciify(addr + i) for i in range(self._length))
-        longest_item = max(len(x) for x in data)
-        available_width = config.inline_comment_column() - len(byte_prefix)
-        items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
-        item_min_width = min(longest_item, available_width // items_per_line)
-        #print("QQ", longest_item, items_per_line, item_min_width)
-        #print("QQ2", ascii)
-        directives = []
-        comments = []
-        for chunk in utils.chunks(data, items_per_line):
-            s = ""
-            sep = ""
-            for item in chunk:
-                s += sep + "%-*s" % (item_min_width, item)
-                sep = ", "
-            directives.append("%s%s" % (byte_prefix, s))
-        i = 0
-        for chunk in utils.chunks(ascii, items_per_line):
-            comments.append(("%s %s: " % (formatter().comment_prefix(), utils.plainhex4(addr+i))) + "".join(chunk))
-            i += len(chunk)
-        comment_indent = config.inline_comment_column()
-        for directive, comment in zip(directives, comments):
-            if config.bytes_as_ascii():
-                result.append("%-*s%s" % (comment_indent, directive, comment))
-            else:
-                result.append(directive)
-        return result
+    def as_string_list(self, binary_addr, annotations):
+        return newformatter.format_data_block(binary_addr, self._length, self._cols, 1, annotations)
 
 
 class Word(object):
@@ -101,27 +63,8 @@ class Word(object):
     def is_code(self, addr):
         return False
 
-    def as_string_list(self, binary_addr):
-        return newformatter.format_data_block(binary_addr, self._length, self._cols, 2)
-        # TODO: DELETE THIS OLD CODE
-        # ENHANCE: This code is a messy copy and paste of Data's emit() function; it
-        # should probably all be cleaned up and factored out.
-        result = []
-        data = list(get_constant16(addr + i) for i in range(0, self._length, 2))
-        longest_item = 10 # TODO: hack, was: max(len(x) for x in data)
-        available_width = config.inline_comment_column() - 10
-        items_per_line = min(max(1, available_width // (longest_item + 2)), 8)
-        item_min_width = min(longest_item, available_width // items_per_line)
-        i = 0
-        for chunk in utils.chunks(data, items_per_line):
-            s = ""
-            sep = ""
-            for item in chunk:
-                s += sep + "%-*s" % (item_min_width, item)
-                sep = ", "
-            result.append(utils.add_hex_dump("%s%s" % (formatter().word_prefix(), s), addr + i, len(chunk) * 2))
-            i += len(chunk)
-        return result
+    def as_string_list(self, binary_addr, annotations):
+        return newformatter.format_data_block(binary_addr, self._length, self._cols, 2, annotations)
 
 
 class String(object):
@@ -143,9 +86,9 @@ class String(object):
     def is_code(self, addr):
         return False
 
-    def as_string_list(self, addr):
+    def as_string_list(self, addr, annotations):
         result = []
-        prefix = formatter().string_prefix()
+        prefix = utils.make_indent(1) + formatter().string_prefix()
         s = prefix
         state = 0
         s_i = 0
@@ -172,14 +115,14 @@ class String(object):
             if len(s) > (config.inline_comment_column() - 5):
                 if state == 1:
                     s += '"'
-                result.append(utils.add_hex_dump(s, addr + s_i, i - s_i))
+                result.append(newformatter.add_inline_comment(addr + s_i, i - s_i, annotations, s))
                 s = prefix
                 s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            result.append(utils.add_hex_dump(s, addr + s_i, self._length - s_i))
+            result.append(newformatter.add_inline_comment(addr + s_i, self._length - s_i, annotations, s))
         return result
 
 
@@ -199,12 +142,9 @@ def get_expression(addr, expected_value):
     utils.check_expr(expression, expected_value)
     return expression
 
-# TODO: Where is force_hex2=True set? Do we still need this?
-def get_constant8(addr, force_hex2=False):
+def get_constant8(addr):
     if addr in expressions:
         return get_expression(addr, memory_binary[addr])
-    if force_hex2:
-        return formatter().hex2(memory_binary[addr])
     return newformatter.constant8(addr)
 
 def get_constant16(addr):
@@ -230,16 +170,16 @@ def get_address16(addr):
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
 def stringterm(runtime_addr, terminator, exclude_terminator=False):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
-    addr, _ = movemanager.r2b_checked(runtime_addr) # TODO: should prob call this binary_addr
-    initial_addr = addr
-    while memory_binary[addr] != terminator:
-        addr += 1
-    string_length = (addr + 1) - initial_addr
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    initial_addr = binary_addr
+    while memory_binary[binary_addr] != terminator:
+        binary_addr += 1
+    string_length = (binary_addr + 1) - initial_addr
     if exclude_terminator:
         string_length -= 1
     if string_length > 0:
         disassembly.add_classification(initial_addr, String(string_length, False))
-    return movemanager.b2r(addr + 1)
+    return movemanager.b2r(binary_addr + 1)
 
 def stringcr(runtime_addr, exclude_terminator=False):
     runtime_addr = utils.RuntimeAddr(runtime_addr)

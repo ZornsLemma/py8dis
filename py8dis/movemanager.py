@@ -75,7 +75,7 @@ def is_valid_runtime_addr_for_move_id(runtime_addr, move_id):
 # TODO: Name for this function is perhaps not ideal
 # TODO: This should almost certainly be handled via Move() object returned by move() fn
 # which would allow us to write "with move(blah)" instead of "id = move(blah); with moved(id)"
-# TODOCOMMETEDOUT @contextlib.contextmanager
+# TODOCOMMENTEDOUT @contextlib.contextmanager
 def moved(move_id):
     # TODO: This function is redundant now we have Move() objects which are context managers themselves; it should be done away with eventually, but for now let's keep it as a no-op
     assert isinstance(move_id, Move)

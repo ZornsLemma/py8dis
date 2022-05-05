@@ -49,14 +49,14 @@ def set_user_label_maker_hook(hook):
     assert user_label_maker_hook is None
     user_label_maker_hook = hook
 
-def add_comment(addr, text, priority=None):
+def add_comment(addr, text, inline=False, priority=None):
     # TODO: Comment object may no longer add value. And/or we may want to tweak how this
     # works so Comment objects can contain LazyStrings that aren't evaluated immediately
     # on construction.
-    annotations[addr].append(Comment(text, priority))
+    annotations[addr].append(Comment(text, inline, priority))
 
-def add_raw_annotation(addr, text, priority=None):
-    annotations[addr].append(Annotation(text, priority))
+def add_raw_annotation(addr, text, inline=False, priority=None):
+    annotations[addr].append(Annotation(text, inline, priority))
 
 def add_constant(value, name):
     # TODO: inefficient linear search!
@@ -265,9 +265,6 @@ def add_classification(binary_addr, classification):
 def get_classification(addr):
     return classifications[addr]
 
-def sorted_annotations(annotations):
-    return sorted(annotations, key=lambda x: x.priority)
-
 # get_label() returns LazyString objects so we can defer assignment of actual
 # concrete label strings until we've finished the tracing process. This function
 # forces a conversion of all label names to concrete strings in order to ensure
@@ -278,7 +275,7 @@ def fix_label_names():
     while addr < len(classifications):
         c = classifications[addr]
         if c is not None:
-            dummy = [str(x) for x in c.as_string_list(addr)]
+            dummy = [str(x) for x in c.as_string_list(addr, None)]
             addr += c.length()
         else:
             addr += 1
@@ -424,8 +421,9 @@ def isolate_range(start_addr, end_addr):
 # TODO: Does/should this emit annotations too?
 def emit_labels(binary_addr, move_id):
     result = []
-    for annotation in sorted_annotations(annotations[binary_addr]):
-        result.append(annotation.as_string(binary_addr))
+    for annotation in utils.sorted_annotations(annotations[binary_addr]):
+        if not annotation.inline:
+            result.append(annotation.as_string(binary_addr))
     md = movemanager.move_definitions[move_id]
     runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
     result.extend(labelmanager.labels[runtime_addr].definition_string_list(runtime_addr, move_id))
@@ -439,51 +437,52 @@ def emit_labels(binary_addr, move_id):
     return result
 
 def emit_addr(binary_addr, move_id):
-    addr = binary_addr # TODO: HACK FOR COPY AND PASTE ABILITY
     result = []
-    classification_length = classifications[addr].length()
+    classification_length = classifications[binary_addr].length()
     # We queue up labels defined "within" a multi-byte classification first
-    # because we might need to create a new label at addr to help in
+    # because we might need to create a new label at binary_addr to help in
     # defining them.
     pending_labels = []
     def am2(x):
         return movemanager.b2r(x)
     for i in range(1, classification_length):
-        if am2(addr + i) in labelmanager.labels:
-            pending_labels.extend(labelmanager.labels[am2(addr + i)].definition_string_list(am2(addr), move_id))
+        if am2(binary_addr + i) in labelmanager.labels:
+            pending_labels.extend(labelmanager.labels[am2(binary_addr + i)].definition_string_list(am2(binary_addr), move_id))
     # Emit label definitions for this address.
     result.extend(emit_labels(binary_addr, move_id))
     # Emit any label definitions for addresses within the classification.
     result.extend(pending_labels)
     # Emit the classification itself.
-    result.extend(classifications[addr].as_string_list(addr))
-    # Emit any annotations which would fall within the classification. We do this after the classification itself; this does have some logic (we're "rounding to the end of the classification) and in particular this works better than "rounding to start" does with the current way overlapping instructions are emitted as comments.
+    result.extend(classifications[binary_addr].as_string_list(binary_addr, annotations))
+    # Emit any annotations which would fall within the classification. We do this after the classification itself; this does have some logic (we're "rounding to the end of the classification") and in particular this works better than "rounding to start" does with the current way overlapping instructions are emitted as comments.
     for i in range(1, classification_length):
-        if len(annotations[addr + i]) > 0:
+        if len(annotations[binary_addr + i]) > 0:
             # TODO: Get rid of this warning? It is perhaps annoying at least where "overlapping" instruction streams are added as annotations. I've commented it out for now as annoying is exactly right.
-            pass # utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(addr + i), config.formatter().hex(addr)))
-        for annotation in sorted_annotations(annotations[addr + i]):
-            result.append(annotation.as_string(addr))
+            pass # utils.warn("annotation at binary address %s is being emitted at %s" % (config.formatter().hex(binary_addr + i), config.formatter().hex(binary_addr)))
+        for annotation in utils.sorted_annotations(annotations[binary_addr + i]):
+            if not annotation.inline:
+                result.append(annotation.as_string(binary_addr))
     return result
 
 
 class Annotation(object):
-    def __init__(self, text, priority=None):
+    def __init__(self, text, inline=False, priority=None):
         if priority is None:
             priority = 0
         self.text = text
+        self.inline = inline
         self.priority = priority
 
     def as_string(self, addr):
-        return self.text
+        return str(self.text)
 
 
 class Comment(Annotation):
-    def __init__(self, text, priority=None):
+    def __init__(self, text, inline=False, priority=None):
         # TODO!?
         def late_formatter():
             return "\n".join("%s %s" % (config.formatter().comment_prefix(), line) for line in str(text).split("\n"))
-        Annotation.__init__(self, utils.LazyString("%s", late_formatter), priority)
+        Annotation.__init__(self, utils.LazyString("%s", late_formatter), inline, priority)
 
 # TODO: We seem to assert some simple constants have their own value - is this wrong/weird?
 

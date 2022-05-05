@@ -7,94 +7,90 @@ import movemanager
 import textwrap
 import utils
 
-# TODO: These should be user configurable, maybe they can/should live here or maybe they should be in config
-indent_spaces = 4
-# TODO: rename hex_dump_column code_width or something like that?
-hex_dump_column = 70 # TODO: increase this? to 80?
-hex_dump_max_bytes = 3 # TODO: not sure this is a great default
-
-def tab_to(s, n):
-    assert n >= 0
-    return "%-*s" % (n, s)
-
-def make_indent(n):
-    assert n >= 0
-    return (" " * indent_spaces) * n
+hex_dump_max_bytes = 3  # TODO: not sure this is a great default
 
 def add_hex_dump(binary_addr, length, s):
     assert isinstance(binary_addr, utils.BinaryAddr)
     if not config._hex_dump:
         return s
-    s = tab_to(s, hex_dump_column)
     s += config.formatter().comment_prefix() + " "
-    s += utils.plainhex4(binary_addr) + ": "
+
+    # Add hex characters as a fixed width string
     data = config.memory_binary[binary_addr:binary_addr+min(length, hex_dump_max_bytes)]
-    s += " ".join(utils.plainhex2(x) for x in data)
-    if length < hex_dump_max_bytes:
-        s += "   " * (hex_dump_max_bytes - length)
+    dump_hex = " ".join(utils.plainhex2(x) for x in data)
     if length > hex_dump_max_bytes:
-        s += "... "
-    else:
-        s += " "*4
-    s += "".join(chr(x) if utils.isprint(x) else "." for x in data)
-    if length < hex_dump_max_bytes:
-        s += " " * (hex_dump_max_bytes - length)
+        dump_hex += "... "
+    dump_hex = utils.tab_to(dump_hex, 3 * hex_dump_max_bytes + 3)
+
+    # Add ASCII characters as a fixed width string
+    dump_chars = utils.tab_to("".join(chr(x) if utils.isprint(x) else "." for x in data), hex_dump_max_bytes)
+
+    # Add move commentary, as a fixed width string
     runtime_addr = movemanager.b2r(binary_addr)
+    dump_move = ""
     if runtime_addr != binary_addr:
-        s += " :%s[%d]" % (utils.plainhex4(runtime_addr), movemanager.move_id_for_binary_addr[binary_addr])
+        dump_move = " :%s[%d]" % (utils.plainhex4(runtime_addr), movemanager.move_id_for_binary_addr[binary_addr])
+    dump_move = utils.tab_to(dump_move, 12)
+
+    # Join them all together: address, hex bytes, characters, move details
+    s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + dump_move
+    return s
+
+# Adds a hex dump and inline comment for the line
+def add_inline_comment(binary_addr, length, annotations, s):
+    # Add spaces up to the comment column
+    s = utils.tab_to(s, config.inline_comment_column())
+
+    # Add any hex dump (fixed width)
+    s = add_hex_dump(binary_addr, length, s)
+
+    # Add any inline comments
+    if annotations:
+        for i in range(0, length):
+            for annotation in utils.sorted_annotations(annotations[binary_addr + i]):
+                if annotation.inline:
+                    s += annotation.as_string(binary_addr)
     return s.rstrip()
 
-# TODO: Get rid of this? I think it's maybe not that useful.
-def format_classification_line(binary_addr, length, core_str):
-    assert utils.is_valid_addr(binary_addr)
-    assert length >= 1
-    assert isinstance(core_str, six.string_types)
-    assert "\n" not in core_str
-    indent = 1 # TODO: variable indent
-    # TODO: inline comment
-    # TODO: multiline things
-    s = make_indent(indent) + core_str
-    return add_hex_dump(binary_addr, length, s)
-
-# TODO: Highly experimental sketch for byte/word emitter
 # TODO: We might want Byte/Word objects to have a format function (a bit like format_hint for individual bytes) and allow the user to control it (poss via helper fns) - that way they could call this function with a None argument to get auto-column-calculation or an integer argument to specify "use n columns" or a variant of this function to get "no alignment but basic data-item-oriented-word-wrapping" output.
 # TODO: It's not unreasonable to have inline comments on items in data blocks; we might only emit them if the data block is single-column formatter - I guess we'd have to, actually, since there's no way to end an inline comment short of a newline. So we probably want to default to single-column if there's any inline comments in the range, and if the user has forced a multi-column structure we should probably warn about hidden inline comments
-def format_data_block(binary_addr, length, cols, element_size):
+def format_data_block(binary_addr, length, cols, element_size, annotations):
     assert isinstance(binary_addr, utils.BinaryAddr)
     assert utils.is_valid_addr(binary_addr)
     assert length >= 1
     assert element_size in (1, 2)
     assert length % element_size == 0
-    indent = disassembly.indent_hint[binary_addr] + 1
+
     if element_size == 1:
-        # TODO: Old code used to force_hex2=True on get_constant8, I may want to do that or something *similar* here - I think the idea was to ensure nice column alignment without the different lengths of things like "3", "&f" and "&2f" breaking things. I may just be smarter about alignment and not need to do any kind of forcing. If I do need to force, I might want to force leading spaces to a fixed width (probably 3 chars) *if* using a simple "numeric" formatter.
         data = list(classification.get_constant8(binary_addr + i) for i in range(length))
         data_prefix = config.formatter().byte_prefix()
     else:
         data = list(classification.get_constant16(binary_addr + i) for i in range(0, length, 2))
         data_prefix = config.formatter().word_prefix()
-    # TODO: Need for strip() is silly but will save tweaking all three assembler files just now.
-    prefix = make_indent(indent) + data_prefix.strip() + " "
+
+    indent = disassembly.indent_hint[binary_addr] + 1
+    prefix = utils.make_indent(indent) + data_prefix
     separator = ", "
     longest_item = max(len(x) for x in data)
     if cols is not None:
-        data_columns = cols
+        num_data_items_on_line = cols
     else:
         # TODO: We should also support "just emit with no padding or attempt to align columns but not spilling past data_width unless a single item forces it", a pseudo "word wrapping" style
-        # TODO: We might want to use a different value instead of hex_dump_column, e.g.
+        # TODO: We might want to use a different value instead of config.inline_comment_column(), e.g.
         # absolute_max_width (80/100/whatever) - "hex dump max width or 0 if no hex dump".
-        data_width = hex_dump_column - len(prefix)
+        data_width = config.inline_comment_column() - len(prefix)
         if config._hex_dump:
             data_width -= 1 # leave a space before the hex dump comment prefix
         # We add len(separator) to data_width because if there are n items on a
         # line we only need n-1 separators, but the divisor assumes every item
-        # includes a separator. TODO: Probably correct but think about it...
-        data_columns = max(1, (data_width + len(separator)) // (longest_item + len(separator)))
+        # includes a separator.
+        num_data_items_on_line = max(1, (data_width + len(separator)) // (longest_item + len(separator)))
     result = []
-    for i in range(0, len(data), data_columns):
-        items_on_line = min(len(data) - i, data_columns)
-        core_str = prefix + separator.join("%-*s" % (longest_item, x) for x in data[i:i+data_columns])
-        result.append(add_hex_dump(binary_addr + i * element_size, items_on_line * element_size, core_str))
+    for i in range(0, len(data), num_data_items_on_line):
+        items_on_line = min(len(data) - i, num_data_items_on_line)
+        core_str = prefix + separator.join("%*s" % (longest_item, x) for x in data[i:i+num_data_items_on_line])
+        core_str = add_inline_comment(binary_addr + i * element_size, items_on_line * element_size, annotations, core_str)
+        result.append(core_str)
     return result
 
 def uint_formatter(n, bits, pad=False):
@@ -149,5 +145,5 @@ def constant16(binary_addr):
 
 def format_comment(text):
     prefix = config.formatter().comment_prefix() + " "
-    text_width = hex_dump_column - len(prefix)
+    text_width = config.inline_comment_column() - len(prefix)
     return textwrap.fill(text, text_width)

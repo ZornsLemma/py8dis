@@ -50,7 +50,7 @@ def disassembly_start():
     return []
 
 def code_start(start_addr, end_addr):
-    return ["    * = %s\n" % hex4(start_addr)]
+    return ["%s* = %s" % (utils.make_indent(1), hex4(start_addr)), ""]
 
 def code_end():
     return []
@@ -76,7 +76,7 @@ def disassembly_end():
     spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
     for expr, value in spa:
         result.append("%s %s <> %s" % (utils.force_case("#if"), expr, value))
-        result.append("    #echo TODO") # result.append('    %s Assertion failed: %s == %s' % (utils.force_case("#echo"), expr, value))
+        result.append("    #echo TODO") # result.append(utils.make_indent(1) + '%s Assertion failed: %s == %s' % (utils.force_case("#echo"), expr, value))
         result.append(utils.force_case("#endif"))
     return result
 
@@ -84,16 +84,16 @@ def force_abs_instruction(instruction, prefix, operand, suffix):
     # It's tempting to put brackets around "operand" in case it contains an
     # expression, but the "!" prefix operator doesn't seem to like this and
     # probably doesn't need it.
-    return utils.LazyString("    %s %s!%s%s", instruction, prefix, operand, suffix)
+    return utils.LazyString("%s%s %s!%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
 def byte_prefix():
-    return utils.force_case("    .byt ")
+    return utils.force_case(".byt ")
 
 def word_prefix():
-    return utils.force_case("    .word ")
+    return utils.force_case(".word ")
 
 def string_prefix():
-    return utils.force_case("    .asc ")
+    return utils.force_case(".asc ")
 
 def string_chr(c):
     if chr(c) in '^"':
