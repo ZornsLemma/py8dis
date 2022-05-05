@@ -1,6 +1,7 @@
 from trace6502 import *
 
 import config
+import utils
 config.formatter().set_cmos(True)
 
 # TODO: This is probably wrong wrt moves; copy how OpcodeConditionalBranch works
@@ -10,7 +11,7 @@ class OpcodeUnconditionalBranch(Opcode):
 
     def _target(self, addr):
         base = movemanager.b2r(addr)
-        return base + 2 + signed8(get_u8(addr + 1))
+        return base + 2 + utils.signed8(utils.get_u8(addr + 1))
 
     def abs_operand(self, addr):
         return self._target(addr)
