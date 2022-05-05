@@ -49,14 +49,13 @@ import disassembly # TODO!?
 import movemanager
 import utils
 
-# TODO: I think Name is an implementation detail of Label - users of Label won't see it.
-# TODO: General point - perhaps having this class called Name and thus it being natural to use "name" as a local variable holding an instance of this class and then having to say "name.name" is a bit confusing
-class Name(object):
-    def __init__(self, name):
-        self.name = name
-        self.emitted = False
-
 class Label(object):
+    # TODO: General point - perhaps having this class called Name and thus it being natural to use "name" as a local variable holding an instance of this class and then having to say "name.name" is a bit confusing
+    class Name(object):
+        def __init__(self, name):
+            self.name = name
+            self.emitted = False
+
     def __init__(self, addr):
         self.addr = int(addr) # TODO: cast to int is experimental - if keep this, other cast-y stuff might be redundant
         self.move_id = movemanager.base_move_id
@@ -91,7 +90,7 @@ class Label(object):
         assert movemanager.is_valid_move_id(move_id)
         # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label. Or just possibly - this might be useful for auto-generated labels, at least - we want to be appending some sort of suffix to allow differently named variants of the label to exist in different move IDs. (Imagine we're tracing some code, and move IDs 0 and 1 both contain "bne &905"; we don't want to generate one l090 label and put it in one move ID and leave the other one implicit.)
         if name not in self.all_names():
-            self.explicit_names[move_id].append(Name(name))
+            self.explicit_names[move_id].append(self.Name(name))
 
     # TODO: Bit experimental, also bit copy-and-paste of add_explicit_name()
     def add_expression(self, s, move_id):

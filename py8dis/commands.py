@@ -98,15 +98,17 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
         base_runtime_addr = utils.RuntimeAddr(base_runtime_addr)
     disassembly.add_optional_label(runtime_addr, name, base_runtime_addr)
 
-def comment(runtime_addr, text):
+def comment(runtime_addr, text, inline=False):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
-    formatted_comment(runtime_addr, newformatter.format_comment(text))
+    if not inline:
+        text = newformatter.format_comment(text)
+    formatted_comment(runtime_addr, text, inline)
 
-def formatted_comment(runtime_addr, text):
+def formatted_comment(runtime_addr, text, inline=False):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
-    disassembly.add_comment(binary_addr, text)
+    disassembly.add_comment(binary_addr, text, inline)
 # TODO: UP TO HERE WITH ADDING RUNTIMEADDR() CALLS
 
 def annotate(runtime_addr, s, priority=None):
@@ -122,7 +124,6 @@ def expr(runtime_addr, s):
     assert utils.data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
-# TODO: Add "cols" to word() as well
 def byte(runtime_addr, n=1, cols=None, warn=True):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)

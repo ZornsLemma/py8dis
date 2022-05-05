@@ -51,7 +51,7 @@ def disassembly_start():
     return []
 
 def code_start(start_addr, end_addr):
-    return ["    * = %s\n" % hex4(start_addr)]
+    return ["", "%s* = %s" % (utils.make_indent(1), hex4(start_addr)), ""]
 
 def code_end():
     return []
@@ -62,38 +62,34 @@ def pseudopc_start(dest, source, length):
 def pseudopc_end(dest, source, length):
     return ["}", ""]
 
-# TODO: Not just here, I hate the inline "\n" mess with a lot of these functions. I should convert them to return a list of lines which will be joined with "\n" when finally emitted.
 def disassembly_end():
     result = []
     spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
     for expr, value in spa:
         result.append("%s (%s) != %s {" % (utils.force_case("!if"), expr, value))
-        result.append('    %s "Assertion failed: %s == %s"' % (utils.force_case("!error"), expr, value))
+        result.append('%s%s "Assertion failed: %s == %s"' % (utils.make_indent(1), utils.force_case("!error"), expr, value))
         result.append("}")
     return result
 
 def force_abs_instruction(instruction, prefix, operand, suffix):
-    return utils.LazyString("    %s+2 %s%s%s", instruction, prefix, operand, suffix)
-
-def abs_suffix():
-    return "+2"
+    return utils.LazyString("%s%s+2 %s%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
 def byte_prefix():
-    return utils.force_case("    !byte ")
+    return utils.force_case("!byte ")
 
 def word_prefix():
-    return utils.force_case("    !word ")
+    return utils.force_case("!word ")
 
 def string_prefix():
-    return utils.force_case("    !text ")
+    return utils.force_case("!text ")
 
-def string_chr(c):
-    if c == ord('\\'):
+def string_chr(i):
+    if i == ord('\\'):
         return '\\\\'
-    if c == ord('"'):
+    if i == ord('"'):
         return '\\"'
-    if utils.isprint(c):
-        return chr(c)
+    if utils.isprint(i):
+        return chr(i)
     return None
 
 def binary_prefix():

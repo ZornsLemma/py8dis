@@ -28,8 +28,8 @@ class Opcode(object):
     def is_code(self, addr):
         return True
 
-    def as_string_list(self, addr):
-        return [utils.add_hex_dump(self.as_string(addr), addr, self.length())]
+    def as_string_list(self, addr, annotations):
+        return [newformatter.add_inline_comment(addr, self.length(), annotations, self.as_string(addr))]
 
 
 class OpcodeImplied(Opcode):
@@ -45,7 +45,7 @@ class OpcodeImplied(Opcode):
         mnemonic = self.mnemonic
         if (not config.formatter().explicit_a) and mnemonic.endswith(" A"):
             mnemonic = mnemonic[:-2]
-        return "    %s" % utils.force_case(mnemonic)
+        return "%s%s" % (utils.make_indent(1), utils.force_case(mnemonic))
 
 
 class OpcodeConditionalBranch(Opcode):
@@ -59,7 +59,7 @@ class OpcodeConditionalBranch(Opcode):
         return [addr + 3, self._target(addr)]
 
     def as_string(self, addr):
-        return "    %s %s" % (utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
+        return "%s%s %s" % (utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self._target(addr), addr))
 
 
 opcodes = {

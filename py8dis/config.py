@@ -26,7 +26,8 @@ _bytes_as_ascii = True
 _hex_dump = True
 _label_references = True
 
-_inline_comment_column = 60
+_inline_comment_column = 70
+_indent_string = " "*4
 
 _disassemble_instruction = None
 
@@ -80,11 +81,20 @@ def set_inline_comment_column(n):
     global _inline_comment_column
     _inline_comment_column = n
 
+def indent_string():
+    global _indent_string
+    return _indent_string
+
+def set_indent_string(s):
+    global _indent_string
+    _indent_string = s
+
+def disassemble_instruction():
+    assert _disassemble_instruction is not None
+    return _disassemble_instruction
+
 def set_disassemble_instruction(f):
     global _disassemble_instruction
     assert _disassemble_instruction is None
     _disassemble_instruction = f
 
-def disassemble_instruction():
-    assert _disassemble_instruction is not None
-    return _disassemble_instruction

@@ -90,7 +90,8 @@ def add_references_comments():
     for addr, addr_refs in references.items():
         count = "%d times" % len(addr_refs) if len(addr_refs) != 1 else "1 time" # TODO: Use utils.plural
         # TODO: Where the comment has to be emitted slightly out of place due to a classification, this becomes a bit confusing - we should probably be smarter, peek the classifications and generate a variant comment in that case at the "can actually be emitted" address - and/or maybe we shouldn't be generating reference comments for non-simple labels? (probably not the only way the first problem can occur though) - or maybe we should be forcibly breaking classifications for these? or maybe we should be attaching the comment inline to the relevant label (but that might be confusing if there are multiple labels for the same address) - for the moment I am always including 'addr' in the comment which helps a bit but isn't ideal
-        disassembly.add_comment(addr, "%s referenced %s by %s" % (config.formatter().hex4(addr), count, ", ".join(sorted(config.formatter().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs))))
+        comment = "%s referenced %s by %s" % (config.formatter().hex4(addr), count, ", ".join(sorted(config.formatter().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs)))
+        disassembly.add_comment(addr, comment, False)
 
 def add_reference_histogram():
     if len(references) == 0:
