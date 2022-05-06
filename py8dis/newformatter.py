@@ -45,6 +45,7 @@ def add_hex_dump(binary_addr, length, s):
 
 # Adds a hex dump and inline comment for the line
 def add_inline_comment(binary_addr, length, annotations, s):
+    assert isinstance(binary_addr, utils.BinaryAddr)
     # Add spaces up to the comment column
     s = utils.tab_to(s, config.get_inline_comment_column())
 
