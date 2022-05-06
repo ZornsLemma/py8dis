@@ -3,7 +3,6 @@ import collections # TODO!?
 import sys
 
 import config
-#import trace6502 # TODO!
 import movemanager
 
 memory_binary = config.memory_binary
@@ -16,13 +15,13 @@ def warn(s):
     print("warning: " + s, file=sys.stderr)
 
 def force_case(s):
-    return s.lower() if config.lower_case() else s.upper()
+    return s.lower() if config.get_lower_case() else s.upper()
 
 def plainhex2(i):
-    return ("%02x" if config.lower_case() else "%02X") % i
+    return ("%02x" if config.get_lower_case() else "%02X") % i
 
 def plainhex4(i):
-    return ("%04x" if config.lower_case() else "%04X") % i
+    return ("%04x" if config.get_lower_case() else "%04X") % i
 
 def tab_to(s, n):
     assert n >= 0
@@ -30,7 +29,7 @@ def tab_to(s, n):
 
 def make_indent(n):
     assert n >= 0
-    return (config.indent_string()) * n
+    return (config.get_indent_string()) * n
 
 def signed8(i):
     assert 0 <= i <= 255
@@ -39,27 +38,31 @@ def signed8(i):
     else:
         return i
 
-def get_u8(addr):
-    assert memory_binary[addr] is not None
-    return memory_binary[addr]
+def get_u8_binary(binary_addr):
+    assert memory_binary[binary_addr] is not None
+    return memory_binary[binary_addr]
 
-def get_u16(addr):
-    assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
-    return memory_binary[addr] + (memory_binary[addr+1] << 8)
+def get_u16_binary(binary_addr):
+    assert memory_binary[binary_addr] is not None and memory_binary[binary_addr+1] is not None
+    return memory_binary[binary_addr] + (memory_binary[binary_addr+1] << 8)
 
-# TODO: This is a poor name - *if* one of these is going to have a non-explicit name, it should be this one not get_u16() which works with binary - but just getting things working for now - *maybe* get_u16 should take an "array" and an index as separate arguments
+# TODO: *maybe* get_u16 should take an "array" and an index as separate arguments
 def get_u16_runtime(runtime_addr):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u16(binary_addr)
+    return get_u16_binary(binary_addr)
 
-def get_u16_be(addr):
-    assert memory_binary[addr] is not None and memory_binary[addr+1] is not None
-    return (memory_binary[addr] << 8) | memory_binary[addr+1]
+# Deprecated
+def get_u16_be(binary_addr):
+    return get_u16_be_binary(binary_addr)
+
+def get_u16_be_binary(binary_addr):
+    assert memory_binary[binary_addr] is not None and memory_binary[binary_addr+1] is not None
+    return (memory_binary[binary_addr] << 8) | memory_binary[binary_addr+1]
 
 # TODO: As get_u16_runtime
 def get_u16_be_runtime(runtime_addr):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u16_be(binary_addr)
+    return get_u16_be_binary(binary_addr)
 
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
 def chunks(lst, n):
@@ -77,7 +80,7 @@ def check_expr(expr, value):
     # reliable (it's just not as early a detection as we'd like) so should
     # probably be retained even if expression evaluation is supported directly
     # in py8dis.
-    config.formatter().assert_expr(expr, value)
+    config.get_formatter().assert_expr(expr, value)
 
 # TODO: Get rid of or at least reduce use of this in favour of is_valid_{runtime,binary}_addr?
 def is_valid_addr(addr):
@@ -104,7 +107,7 @@ def check_data_loaded_at_binary_addr(binary_addr, n=1):
         return True
     # TODO: Does this need to report runtime addr instead/as well?
     # TODO: The idea is sound but in practice this is a bit confusing because you have no idea what in the user program is triggering the warning (whereas with an actual fail and a backtrace you do) - it's not ideal, but searching for the address (which is likely to appear as a label name) in the output can be helpful, but still, this feels a little crappy
-    warn("expecting %s of data at binary address %s but not present" % (plural(n, "byte"), config.formatter().hex(binary_addr)))
+    warn("expecting %s of data at binary address %s but not present" % (plural(n, "byte"), config.get_formatter().hex(binary_addr)))
     return False
 
 # TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.

@@ -1,5 +1,5 @@
 from commands import *
-import trace6502 # TODO!?
+import trace
 import utils
 
 def xy_addr(x_addr, y_addr):
@@ -201,6 +201,28 @@ osbyte_enum = {
     0xff: "osbyte_read_write_startup_options",
 }
 
+# TODO: Find e.g. "LDA #5:STA crtc_address_register" and replace 5 from the list below "LDA #crtc_vert_total_adjust:STA crtc_address_register"
+crtc_registers_enum =  {
+       0: "crtc_horz_total",
+       1: "crtc_horz_displayed",
+       2: "crtc_horz_sync_pos",
+       3: "crtc_sync_width",
+       4: "crtc_vert_total",
+       5: "crtc_vert_total_adjust",
+       6: "crtc_vert_displayed",
+       7: "crtc_vert_sync_pos",
+       8: "crtc_interlace_delay",
+       9: "crtc_scan_lines_per_char",
+      10: "crtc_cursor_start",
+      11: "crtc_cursor_end",
+      12: "crtc_screen_start_high",
+      13: "crtc_screen_start_low",
+      14: "crtc_cursor_pos_high",
+      15: "crtc_cursor_pos_low",
+      16: "crtc_light_pen_pos_high",
+      17: "crtc_light_pen_pos_low",
+}
+
 # TODO: Should sort this in the source by the key.
 inkey_enum = {
       -1: "inkey_key_shift",
@@ -400,7 +422,7 @@ def mos_labels():
     optional_label(0xfff7, "oscli")
 
     # TODO: Should this be a separate fn?
-    trace6502.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
+    trace.cpu.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
 
 def is_sideways_rom():
     comment(0x8000, "Sideways ROM header")
@@ -441,24 +463,8 @@ def label_tube(base, name):
     optional_label(base + 7, "tube_%s_r4_data" % name)
 
 def hardware_bbc():
-    optional_label(0xfe00 +  0, "crtc_horz_total")
-    optional_label(0xfe00 +  1, "crtc_horz_displayed")
-    optional_label(0xfe00 +  2, "crtc_horz_sync_pos")
-    optional_label(0xfe00 +  3, "crtc_sync_width")
-    optional_label(0xfe00 +  4, "crtc_vert_total")
-    optional_label(0xfe00 +  5, "crtc_vert_total_adjust")
-    optional_label(0xfe00 +  6, "crtc_vert_displayed")
-    optional_label(0xfe00 +  7, "crtc_vert_sync_pos")
-    optional_label(0xfe00 +  8, "crtc_interlace_delay")
-    optional_label(0xfe00 +  9, "crtc_scan_lines_per_char")
-    optional_label(0xfe00 + 10, "crtc_cursor_start")
-    optional_label(0xfe00 + 11, "crtc_cursor_end")
-    optional_label(0xfe00 + 12, "crtc_screen_start_high")
-    optional_label(0xfe00 + 13, "crtc_screen_start_low")
-    optional_label(0xfe00 + 14, "crtc_cursor_pos_high")
-    optional_label(0xfe00 + 15, "crtc_cursor_pos_low")
-    optional_label(0xfe00 + 16, "crtc_light_pen_pos_high")
-    optional_label(0xfe00 + 17, "crtc_light_pen_pos_low")
+    optional_label(0xfe00, "crtc_address_register")
+    optional_label(0xfe01, "crtc_address_write")
 
     optional_label(0xfe20, "video_ula_control")
     optional_label(0xfe21, "video_ula_palette")

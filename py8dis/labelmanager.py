@@ -105,7 +105,7 @@ class Label(object):
 
     def explicit_definition_string_list(self):
         # TODO: Note that we don't invoke the label hook or anything here - if a name got *used* for the label at some point, it should have been added into the label object so we know to emit it here.
-        formatter = config.formatter()
+        formatter = config.get_formatter()
         result = []
         for name_list in self.explicit_names.values():
             for name in name_list:
@@ -137,7 +137,7 @@ class Label(object):
 
     def definition_string_list_internal(self, emit_addr, move_id):
         assert movemanager.is_valid_move_id(move_id)
-        formatter = config.formatter()
+        formatter = config.get_formatter()
         result = []
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
@@ -172,9 +172,9 @@ labels = utils.keydefaultdict(Label)
 # This is just intended as a debugging tool; mainly for debugging py8dis itself, though
 # it might also be helpful for debugging user label hooks or similar.
 def all_labels_as_comments():
-    if not config.show_all_labels:
+    if not config.get_show_all_labels():
         return []
-    formatter = config.formatter()
+    formatter = config.get_formatter()
     c = formatter.comment_prefix()
     result = ["%s All labels by address and move ID" % c, "%s" % c]
     for addr, label in sorted(labels.items()):

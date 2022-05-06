@@ -11,7 +11,7 @@ import utils
 
 expressions = {}
 memory_binary = config.memory_binary
-formatter = config.formatter
+formatter = config.get_formatter
 
 # ENHANCE: At the moment there's no support for wrapping round at the top of
 # memory and we might just crash (probably with an out-of-bounds error) if
@@ -86,14 +86,14 @@ class String(object):
     def is_code(self, addr):
         return False
 
-    def as_string_list(self, addr, annotations):
+    def as_string_list(self, binary_addr, annotations):
         result = []
         prefix = utils.make_indent(1) + formatter().string_prefix()
         s = prefix
         state = 0
         s_i = 0
         for i in range(self._length):
-            c = memory_binary[addr + i]
+            c = memory_binary[binary_addr + i]
             c_in_string = formatter().string_chr(c)
             if c_in_string is not None:
                 if state == 0:
@@ -111,18 +111,18 @@ class String(object):
                 if c == ord('"'):
                     s += "'\"'"
                 else:
-                    s += get_constant8(addr + i)
-            if len(s) > (config.inline_comment_column() - 5):
+                    s += get_constant8(binary_addr + i)
+            if len(s) > (config.get_inline_comment_column() - 5):
                 if state == 1:
                     s += '"'
-                result.append(newformatter.add_inline_comment(addr + s_i, i - s_i, annotations, s))
+                result.append(newformatter.add_inline_comment(binary_addr + s_i, i - s_i, annotations, s))
                 s = prefix
                 s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            result.append(newformatter.add_inline_comment(addr + s_i, self._length - s_i, annotations, s))
+            result.append(newformatter.add_inline_comment(binary_addr + s_i, self._length - s_i, annotations, s))
         return result
 
 
@@ -142,30 +142,29 @@ def get_expression(addr, expected_value):
     utils.check_expr(expression, expected_value)
     return expression
 
-def get_constant8(addr):
-    if addr in expressions:
-        return get_expression(addr, memory_binary[addr])
-    return newformatter.constant8(addr)
+def get_constant8(binary_addr):
+    if binary_addr in expressions:
+        return get_expression(binary_addr, memory_binary[binary_addr])
+    return newformatter.constant8(binary_addr)
 
-def get_constant16(addr):
-    if addr in expressions:
-        return get_expression(addr, utils.get_u16(addr))
-    return newformatter.constant16(addr)
+def get_constant16(binary_addr):
+    if binary_addr in expressions:
+        return get_expression(binary_addr, utils.get_u16_binary(binary_addr))
+    return newformatter.constant16(binary_addr)
 
-def get_address8(addr):
-    operand = memory_binary[addr]
-    if addr not in expressions:
-        return disassembly.get_label(operand, addr)
-    return get_expression(addr, operand)
+def get_address8(binary_addr):
+    operand = memory_binary[binary_addr]
+    if binary_addr not in expressions:
+        return disassembly.get_label(operand, binary_addr)
+    return get_expression(binary_addr, operand)
 
-def get_address16(addr):
-    operand = utils.get_u16(addr)
-    if addr not in expressions:
-        return disassembly.get_label(operand, addr)
-    # TODO: Hacky to use trace6502-specific class in next line
-    import trace6502
-    assert isinstance(disassembly.get_classification(addr), Word) or (isinstance(disassembly.get_classification(addr - 1), trace6502.Opcode) and disassembly.get_classification(addr - 1).length() == 3)
-    return get_expression(addr, operand)
+def get_address16(binary_addr):
+    operand = utils.get_u16_binary(binary_addr)
+    if binary_addr not in expressions:
+        return disassembly.get_label(operand, binary_addr)
+
+    assert isinstance(disassembly.get_classification(binary_addr), Word) or (isinstance(disassembly.get_classification(binary_addr - 1), trace.cpu.Opcode) and disassembly.get_classification(binary_addr - 1).length() == 3)
+    return get_expression(binary_addr, operand)
 
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
 def stringterm(runtime_addr, terminator, exclude_terminator=False):
