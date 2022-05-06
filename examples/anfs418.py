@@ -1,5 +1,5 @@
+import trace6502
 from commands import *
-from trace6502 import hook_subroutine
 import acorn
 
 # config.set_bytes_as_ascii(False)
