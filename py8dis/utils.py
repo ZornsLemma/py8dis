@@ -51,6 +51,10 @@ def get_u16_runtime(runtime_addr):
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     return get_u16_binary(binary_addr)
 
+# Deprecated
+def get_u16_be(binary_addr):
+    return get_u16_be_binary(binary_addr)
+
 def get_u16_be_binary(binary_addr):
     assert memory_binary[binary_addr] is not None and memory_binary[binary_addr+1] is not None
     return (memory_binary[binary_addr] << 8) | memory_binary[binary_addr+1]

@@ -6,7 +6,7 @@ import six # TODO?
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from movemanager import moved
-from utils import get_u16_binary, get_u16_be_binary
+from utils import get_u16_binary, get_u16_be_binary, get_u16_be
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
