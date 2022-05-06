@@ -29,7 +29,6 @@ config.load_ranges = []
 def load(binary_addr, filename, md5sum=None):
     if trace.cpu is None:
         utils.die("No CPU type selected; import one of the trace*.py modules to set this.")
-    assert trace.cpu is not None
     binary_addr = utils.BinaryAddr(binary_addr)
     # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
