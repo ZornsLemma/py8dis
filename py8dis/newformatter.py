@@ -26,7 +26,7 @@ def add_hex_dump(binary_addr, length, s):
 
     # Add CPU state as a fixed width string
     dump_cpu_state = ""
-    if config.get_show_cpu_state:
+    if config.get_show_cpu_state():
         state = trace.cpu.cpu_state_optimistic[binary_addr]
         if state:
             dump_cpu_state = " " + state.show()
