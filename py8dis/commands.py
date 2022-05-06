@@ -6,7 +6,7 @@ import six # TODO?
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from movemanager import moved
-from utils import get_u16, get_u16_be
+from utils import get_u16_binary, get_u16_be_binary
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
@@ -68,20 +68,19 @@ def constant(value, name):
 # as standard if the user uses code_ptr() and then label()s the target address
 # afterwards. They can always do it the other way round so this isn't a huge
 # deal I suppose. TODO: Is this still a problem?
-# TODO: labels just have "an address"; the concepts of runtime and binary addresses don't really make much sense for them, I think - *except* that we want to associate move IDs with them, so it's generally helpful to think of them as runtime addresses and then that helps us infer a move_id. But this isn't fundamental. I may be getting confused here.
-def label(addr, name, move_id=None):
-    addr = utils.RuntimeAddr(addr) # TODO: OK?
+def label(runtime_addr, name, move_id=None):
+    runtime_addr = utils.RuntimeAddr(runtime_addr) # TODO: OK?
     if move_id is None: # TODO: not super happy with this
         # We don't care about the equivalent binary address, but the process of looking
         # it up gives us a move ID to associate with this label.
-        _, move_id = movemanager.r2b(addr)
+        _, move_id = movemanager.r2b(runtime_addr)
     #if name == "nmi_handler_rom_start":
     #    print("XAP", move_id)
     #if name == "nmi_handler_rom_start":
     #    print("PXX", move_id)
     #    print("PXY", movemanager.move_ids_for_runtime_addr(runtime_addr))
     #    print("PXZ", movemanager.active_move_ids)
-    disassembly.add_label(addr, name, move_id)
+    disassembly.add_label(runtime_addr, name, move_id)
 
 # TODO: Should probably take an optional move_id?
 # TODO: This isn't working - see "command_table+1" in dfs226.py for example
@@ -149,7 +148,8 @@ def entry(runtime_addr, label=None, warn=True):
     # TODO: Should probably warn rather than assert in other fns too
     if warn:
         utils.check_data_loaded_at_binary_addr(binary_addr)
-    trace.add_entry(binary_addr, label, move_id)
+
+    trace.cpu.add_entry(binary_addr, label, move_id)
     if isinstance(label, six.string_types):
         return label
     return disassembly.get_label(runtime_addr, binary_addr, move_id)
@@ -160,9 +160,8 @@ def nonentry(runtime_addr):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert utils.data_loaded_at_binary_addr(binary_addr)
-    # TODO: Call a function on trace module?
-    # TODO: This prob needs to do some kind of inverse move
-    trace.traced_entry_points.add(binary_addr)
+
+    trace.cpu.traced_entry_points.add(binary_addr)
 
 def wordentry(runtime_addr, n=1):
     runtime_addr = utils.RuntimeAddr(runtime_addr)
@@ -170,7 +169,7 @@ def wordentry(runtime_addr, n=1):
     for i in range(n):
         binary_addr, _ = movemanager.r2b_checked(runtime_addr)
         assert utils.data_loaded_at_binary_addr(binary_addr, 2)
-        expr(runtime_addr, entry(get_u16(binary_addr)))
+        expr(runtime_addr, entry(get_u16_binary(binary_addr)))
         runtime_addr += 2
     return runtime_addr
 
@@ -285,11 +284,11 @@ def go(post_trace_steps=None, autostring_min_length=3):
     label(int(pydis_start), "pydis_start", move_id=movemanager.base_move_id)
     label(int(pydis_end), "pydis_end", move_id=movemanager.base_move_id)
 
-    trace.trace()
-    trace.generate_references()
+    trace.cpu.trace()
+    trace.cpu.generate_references()
     disassembly.fix_label_names()
-    if config.label_references():
-        trace.add_references_comments()
+    if config.get_label_references():
+        trace.cpu.add_references_comments()
     # autostring() really needs to be invoked after trace() has done its classification,
     # so we wrap it up in here by default rather than expecting the user to call it.
     if post_trace_steps is None:
