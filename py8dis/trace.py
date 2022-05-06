@@ -5,6 +5,7 @@ import disassembly
 import labelmanager
 import movemanager
 import utils
+import newformatter
 
 cpu = None
 
@@ -146,3 +147,5 @@ class Cpu(object):
 # TODO: I am thinking maybe most/all uses of disassembly_range should be replaced by just iterating over whole of memory and emitting stuff for non-None addresses. move() would probably set some parallel "ignore me" flags on bytes which have been populated via move() on acme disassemblies where a Relocation() object will emit the disassembly from those bytes. (disassembly_range is something of an artefact of the early code where it was a convenient way to decide what to process, but it's not necessarily relevant any more.)
 
 # TODO: move2.py -a should probably "heuristically" say to iself "hmm, jmp l090d doesn't even resolve to an instruction in my move ID, and look there is *another* label at the same addresss which does resolve to an instruction, let's use that rather than generating a jmp into the middle of an instruction". Hmm, on second thoughts maybe this is overly clever and special case (this code is decidedly odd, since it's a hacked up test case, not real code). Sleep on it.
+
+# TODO: do commmands entry() and no_entry() need to do an lookup of move()s? The user will probably be addressing routines at their relocated destination addresses, but the tracing process works with source addresses. (We might want some facility for a user to specify source addresses to these functions or variants, as this provides ultimate disambiguation in terms of forcing/preventing tracing of particular bits of code.)
