@@ -200,8 +200,6 @@ class Cpu6502(trace.Cpu):
             return self.apply_move(target)
 
 
-    # TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
-    # TODO: Need to clarify runtime/binary here
     def hook_subroutine(self, runtime_addr, name, hook, warn=True):
         runtime_addr = utils.RuntimeAddr(runtime_addr)
         binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
@@ -266,8 +264,6 @@ class Cpu6502(trace.Cpu):
     class OpcodeImplied(Opcode):
         def __init__(self, mnemonic, update=None):
             super(Cpu6502.OpcodeImplied, self).__init__(mnemonic, 0, update=update)
-            self.mnemonic = mnemonic
-            self.operand_length = 0
 
         def update_references(self, addr):
             pass
@@ -479,10 +475,10 @@ class Cpu6502(trace.Cpu):
             return [binary_addr + 2] + trace.cpu.apply_move2(self._target(binary_addr), binary_addr)
 
         def update_cpu_state(self, addr, state):
-            # TODO: I think this is "right" - in our optimistic model (at least), a
-            # branch invalidates everything. Consider "ldy #3:.label:dey:bne label" -
-            # in the optimistic model we ignore labels and the only way we don't
-            # finish that sequence assuming y=2 is if the branch invalidates.
+            # In our optimistic model (at least), a branch invalidates everything.
+            # Consider "ldy #3:.label:dey:bne label" - in the optimistic model we ignore
+            # labels and the only way we don't finish that sequence assuming y=2 is if
+            # the branch invalidates.
             state.clear()
 
         def as_string(self, binary_addr):
@@ -653,11 +649,6 @@ class Cpu6502(trace.Cpu):
         state['z'] = None
         state['c'] = None
 
-    # TODO?
-    # TODO: Should this maybe accept JMP abs too, since that could just be a tail call?
-    # Or perhaps we should insist (in the caller of is_subroutine_call()) that there is
-    # at least one JSR to count as a subroutine, but if there is at least one JSR we also
-    # allow any unconditional branch to it without disqualifying it?
     def is_subroutine_call(self, addr):
         c = disassembly.classifications[addr]
         return isinstance(c, trace.cpu.Opcode) and c.mnemonic == "JSR"

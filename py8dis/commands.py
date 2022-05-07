@@ -307,13 +307,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")
 parser.add_argument("-a", "--acme", action="store_true", help="generate acme-style output")
 parser.add_argument("-x", "--xa", action="store_true", help="generate xa-style output")
+parser.add_argument("-8", "--z88dk-8080", action="store_true", help="generate z88dk style output for the 8080 processor")
 parser.add_argument("-l", "--lower", action="store_true", help="generate lower-case output (default)")
 parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output (default)")
 args = parser.parse_args()
 
-assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa) if x)
+assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa, args.z88dk_8080) if x)
 if assembler_count > 1:
-    utils.die("--beebasm, --acme and --xa arguments are incompatible")
+    utils.die("--beebasm, --acme, --xa and --z88dk_8080 arguments are incompatible")
 if args.lower and args.upper:
     utils.die("--lower and --upper arguments are incompatible")
 
@@ -323,6 +324,9 @@ if args.acme:
 elif args.xa:
     import xa
     set_output_filename = xa.set_output_filename
+elif args.z88dk_8080:
+    import z88dk_8080
+    set_output_filename = z88dk_8080.set_output_filename
 else:
     import beebasm
     set_output_filename = beebasm.set_output_filename
