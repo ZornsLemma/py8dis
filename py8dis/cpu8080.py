@@ -1,8 +1,3 @@
-# ENHANCE: This is just a skeleton to help confirm the basic idea of separate
-# tracefoo.py modules more-or-less works. It isn't capable of disassembling real
-# 8080 code and it doesn't try to be smart about understanding the structure of
-# 8080 opcodes.
-
 import collections
 
 import config
