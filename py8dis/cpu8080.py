@@ -22,8 +22,6 @@ class Cpu8080(trace.Cpu):
     def __init__(self):
         super(Cpu8080, self).__init__()
 
-        self.call_hooks = {}
-
         # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
         self.indent_level_dict = collections.defaultdict(int)
 
@@ -308,7 +306,7 @@ class Cpu8080(trace.Cpu):
         if warn:
             utils.check_data_loaded_at_binary_addr(binary_addr)
         self.add_entry(binary_addr, name, move_id)
-        self.call_hooks[runtime_addr] = hook
+        self.subroutine_hooks[runtime_addr] = hook
 
 
     # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
@@ -515,7 +513,7 @@ class Cpu8080(trace.Cpu):
             # might have no "straight line" case and want to return some labelled
             # entry points. This is supported by having the hook simply return None
             # and call entry() itself for the labelled entry points.
-            # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after call_hooks.get()?
+            # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after subroutine_hooks.get()?
             target_runtime_addr = self._target(binary_addr)
             def simple_call_hook(target_runtime_addr, caller_runtime_addr):
                 assert isinstance(target_runtime_addr, utils.RuntimeAddr)
@@ -526,7 +524,7 @@ class Cpu8080(trace.Cpu):
                 # if it's technically incorrect.
                 assert movemanager.r2b_checked(caller_runtime_addr)[0] == binary_addr
                 return caller_runtime_addr + 3
-            call_hook = trace.cpu.call_hooks.get(target_runtime_addr, simple_call_hook)
+            call_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_call_hook)
             caller_runtime_addr = movemanager.b2r(binary_addr)
             with movemanager.moved(movemanager.move_id_for_binary_addr[binary_addr]):
                 return_runtime_addr = call_hook(target_runtime_addr, caller_runtime_addr)
@@ -535,9 +533,9 @@ class Cpu8080(trace.Cpu):
                 result = trace.cpu.apply_move(return_runtime_addr)
                 if len(result) == 0:
                     # The return runtime address could not be unambiguously converted into a binary
-                    # address. It's highly likely the JSR is returning to the immediately following
+                    # address. It's highly likely the 'CALL' is returning to the immediately following
                     # instruction, so if binary_addr+3 maps to the return runtime address, use that,
-                    # otherwise give up and don't trace anything "after" the JSR.
+                    # otherwise give up and don't trace anything "after" the 'CALL'.
                     simple_return_binary_addr = binary_addr + 3
                     if return_runtime_addr == movemanager.b2r(simple_return_binary_addr):
                         result = [simple_return_binary_addr]
