@@ -17,11 +17,16 @@ class Cpu(object):
         self.labels = labelmanager.labels
 
         self.subroutine_argument_finder_hooks = []
+        self.subroutine_hooks = {}
         self.opcodes = {}
         self.entry_points = []
         self.traced_entry_points = set()
         self.code_analysis_fns = []
         self.trace_done = False
+
+        # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
+        self.indent_level_dict = collections.defaultdict(int)
+
 
         # TODO: Experimental, "optimistic" because it's based on straight line code "this is *a* possible execution". We may want to add a "pessimistic" variant which does its best to *guess* at the "common to all possible executions" behaviour
         self.cpu_state_optimistic = [None] * 64*1024

@@ -123,7 +123,7 @@ def char_formatter(n, bits):
 def binary_formatter(n, bits):
     s = bin(n)[2:]
     s = ("0"*bits + s)[-bits:]
-    return config.get_formatter().binary_prefix() + s
+    return config.get_formatter().binary_format(s)
 
 def picture_binary_formatter(n, bits):
     return config.get_formatter().picture_binary(binary_formatter(n, bits))

@@ -23,8 +23,6 @@ class Cpu6502(trace.Cpu):
 
         self.code_analysis_fns.append(self.subroutine_argument_finder)     # TODO!?
 
-        self.jsr_hooks = {}
-
         # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
         self.indent_level_dict = collections.defaultdict(int)
 
@@ -207,7 +205,7 @@ class Cpu6502(trace.Cpu):
         if warn:
             utils.check_data_loaded_at_binary_addr(binary_addr)
         self.add_entry(binary_addr, name, move_id)
-        self.jsr_hooks[runtime_addr] = hook
+        self.subroutine_hooks[runtime_addr] = hook
 
     class Opcode(object):
         def __init__(self, mnemonic, operand_length, suffix=None, update=None):
@@ -421,9 +419,9 @@ class Cpu6502(trace.Cpu):
             # might have no "straight line" case and want to return some labelled
             # entry points. This is supported by having the hook simply return None
             # and call entry() itself for the labelled entry points.
-            # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after jsr_hooks.get()?
+            # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after subroutine_hooks.get()?
             target_runtime_addr = self._target(binary_addr)
-            def simple_jsr_hook(target_runtime_addr, caller_runtime_addr):
+            def simple_subroutine_hook(target_runtime_addr, caller_runtime_addr):
                 assert isinstance(target_runtime_addr, utils.RuntimeAddr)
                 assert isinstance(caller_runtime_addr, utils.RuntimeAddr)
                 # TODO: It might be possible the following assertion fails if the moves
@@ -432,10 +430,10 @@ class Cpu6502(trace.Cpu):
                 # if it's technically incorrect.
                 assert movemanager.r2b_checked(caller_runtime_addr)[0] == binary_addr
                 return caller_runtime_addr + 3
-            jsr_hook = trace.cpu.jsr_hooks.get(target_runtime_addr, simple_jsr_hook)
+            subroutine_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_subroutine_hook)
             caller_runtime_addr = movemanager.b2r(binary_addr)
             with movemanager.moved(movemanager.move_id_for_binary_addr[binary_addr]):
-                return_runtime_addr = jsr_hook(target_runtime_addr, caller_runtime_addr)
+                return_runtime_addr = subroutine_hook(target_runtime_addr, caller_runtime_addr)
             if return_runtime_addr is not None:
                 return_runtime_addr = utils.RuntimeAddr(return_runtime_addr)
                 result = trace.cpu.apply_move(return_runtime_addr)

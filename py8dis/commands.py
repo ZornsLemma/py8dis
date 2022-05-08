@@ -311,7 +311,7 @@ parser.add_argument("-a", "--acme", action="store_true", help="generate acme-sty
 parser.add_argument("-x", "--xa", action="store_true", help="generate xa-style output")
 parser.add_argument("-8", "--z88dk-8080", action="store_true", help="generate z88dk style output for the 8080 processor")
 parser.add_argument("-l", "--lower", action="store_true", help="generate lower-case output (default)")
-parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output (default)")
+parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output")
 args = parser.parse_args()
 
 assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa, args.z88dk_8080) if x)

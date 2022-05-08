@@ -92,8 +92,8 @@ def string_chr(i):
         return chr(i)
     return None
 
-def binary_prefix():
-    return "%"
+def binary_format(s):
+    return "%" + s
 
 def picture_binary(s):
     return s.replace("0", ".").replace("1", "#")

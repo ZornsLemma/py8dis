@@ -107,8 +107,8 @@ def string_chr(c):
         return chr(c)
     return None
 
-def binary_prefix():
-    return "%"
+def binary_format(s):
+    return "%" + s
 
 def picture_binary(s):
     return s
