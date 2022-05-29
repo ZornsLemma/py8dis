@@ -154,4 +154,4 @@ def constant16(binary_addr):
 def format_comment(text):
     prefix = config.get_formatter().comment_prefix() + " "
     text_width = config.get_inline_comment_column() - len(prefix)
-    return textwrap.fill(text, text_width)
+    return "\n".join(textwrap.fill(paragraph, text_width) for paragraph in text.split("\n"))
