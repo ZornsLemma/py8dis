@@ -78,8 +78,8 @@ def pseudopc_start(dest, source, length):
 
 # TODO: General comment - I've currently given up on generating "guard" for beebasm, I can probably do this later but on a "whole program" basis - note that guard sets m_aFlags[x], it is not a "guard=x" and there's only one such guard active at a time, so we need to set it at the end of distinct non-adjoining ranges (I think)
 def pseudopc_end(dest, source, length):
-    assert isinstance(dest, utils.RuntimeAddr)
-    assert isinstance(source, utils.BinaryAddr)
+    assert isinstance(dest, memorymanager.RuntimeAddr)
+    assert isinstance(source, memorymanager.BinaryAddr)
     result = []
     # TODO: Use LazyString?
     move_id = movemanager.move_id_for_binary_addr[source]

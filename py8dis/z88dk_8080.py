@@ -59,9 +59,7 @@ def disassembly_end():
     result = []
     spa = sorted((str(expr), hex(value)) for expr, value in _pending_assertions.items())
     for expr, value in spa:
-        result.append("; TODO %s (%s) != %s {" % (utils.force_case("!if"), expr, value))
-        result.append('; TODO %s%s "Assertion failed: %s == %s"' % (utils.make_indent(1), utils.force_case("!error"), expr, value))
-        result.append("; TODO }")
+        result.append("; ASSERT ((%s) == %s)" % (expr, value))
     return result
 
 def force_abs_instruction(instruction, prefix, operand, suffix):
@@ -86,10 +84,10 @@ def string_chr(i):
     return None
 
 def binary_format(s):
-    return s + "b"
+    return "%" + s
 
 def picture_binary(s):
-    return s
+    return "%\"" + s.replace("0", "-").replace("1", "#").replace("%", "") + "\""
 
 def sanitise(s):
     return s

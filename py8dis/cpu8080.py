@@ -4,8 +4,9 @@ import config
 import classification
 import config
 import disassembly
+import mainformatter
+import memorymanager
 import movemanager
-import newformatter
 import trace
 import utils
 
@@ -300,11 +301,9 @@ class Cpu8080(trace.Cpu):
         }
 
     def hook_subroutine(self, runtime_addr, name, hook, warn=True):
-        runtime_addr = utils.RuntimeAddr(runtime_addr)
+        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
         binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
-        # TODO: Should probably warn rather than assert in other fns too
-        if warn:
-            utils.check_data_loaded_at_binary_addr(binary_addr)
+        memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
         self.add_entry(binary_addr, name, move_id)
         self.subroutine_hooks[runtime_addr] = hook
 
@@ -321,7 +320,7 @@ class Cpu8080(trace.Cpu):
     # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
     def apply_move2(self, target, context):
         # TODO: Rewritten in terms of movemanager - change this eventually? I think the rewrite does the same thing, but it may not, or it may do but not be right anyway...
-        with movemanager.moved(movemanager.move_id_for_binary_addr[context]):
+        with movemanager.move_id_for_binary_addr[context]:
             #if context in (0x8fda, 0x2fda):
             #    print("XAL", hex(target), movemanager.r2b(target))
             return self.apply_move(target)
@@ -334,9 +333,6 @@ class Cpu8080(trace.Cpu):
             self.prefix = "(" if ")" in self.suffix else ""
             self.update = update
             self.operand_length = operand_length
-
-        def is_mergeable(self):
-            return False
 
         def length(self):
             return 1 + self.operand_length
@@ -360,7 +356,7 @@ class Cpu8080(trace.Cpu):
             return "%s%s" % (utils.make_indent(1), utils.force_case(self.mnemonic))
 
         def as_string_list(self, addr, annotations):
-            result = [newformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
+            result = [mainformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result
@@ -410,7 +406,7 @@ class Cpu8080(trace.Cpu):
             super(Cpu8080.OpcodeAddr16, self).__init__(mnemonic, 2, update=update)
 
         def abs_operand(self, addr):
-            return utils.get_u16_binary(addr + 1)
+            return memorymanager.get_u16_binary(addr + 1)
 
         def as_string(self, addr):
             result1 = utils.force_case(self.mnemonic)
@@ -428,7 +424,7 @@ class Cpu8080(trace.Cpu):
             super(Cpu8080.OpcodeJmp, self).__init__(mnemonic, 2, update=update)
 
         def _target(self, addr):
-            return utils.RuntimeAddr(utils.get_u16_binary(addr + 1))
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(addr + 1))
 
         def abs_operand(self, addr):
             return self._target(addr)
@@ -467,7 +463,7 @@ class Cpu8080(trace.Cpu):
             super(Cpu8080.OpcodeConditionalBranch, self).__init__(mnemonic, 2, update=update)
 
         def _target(self, binary_addr):
-            return utils.RuntimeAddr(utils.get_u16_binary(binary_addr + 1))
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
         def abs_operand(self, binary_addr):
             return self._target(binary_addr)
@@ -496,7 +492,7 @@ class Cpu8080(trace.Cpu):
             super(Cpu8080.OpcodeCall, self).__init__(mnemonic, 2, update=update)
 
         def _target(self, addr):
-            return utils.RuntimeAddr(utils.get_u16_binary(addr + 1))
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(addr + 1))
 
         def abs_operand(self, addr):
             return self._target(addr)
@@ -506,7 +502,7 @@ class Cpu8080(trace.Cpu):
             #trace.references[self._target(addr)].add(addr)
 
         def disassemble(self, binary_addr):
-            assert isinstance(binary_addr, utils.BinaryAddr)
+            assert isinstance(binary_addr, memorymanager.BinaryAddr)
             # A hook only gets to return the "straight line" address to continue
             # tracing from (if there is one; it can return None if it wishes). Some
             # subroutines (e.g. jsr is_yx_zero:equw target_if_true, target_if_false)
@@ -516,8 +512,8 @@ class Cpu8080(trace.Cpu):
             # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after subroutine_hooks.get()?
             target_runtime_addr = self._target(binary_addr)
             def simple_call_hook(target_runtime_addr, caller_runtime_addr):
-                assert isinstance(target_runtime_addr, utils.RuntimeAddr)
-                assert isinstance(caller_runtime_addr, utils.RuntimeAddr)
+                assert isinstance(target_runtime_addr, memorymanager.RuntimeAddr)
+                assert isinstance(caller_runtime_addr, memorymanager.RuntimeAddr)
                 # TODO: It might be possible the following assertion fails if the moves
                 # in effect are sufficiently tricky, but I'll leave it for now as it
                 # may catch bugs - once the code is more trusted it can be removed
@@ -529,7 +525,7 @@ class Cpu8080(trace.Cpu):
             with movemanager.moved(movemanager.move_id_for_binary_addr[binary_addr]):
                 return_runtime_addr = call_hook(target_runtime_addr, caller_runtime_addr)
             if return_runtime_addr is not None:
-                return_runtime_addr = utils.RuntimeAddr(return_runtime_addr)
+                return_runtime_addr = memorymanager.RuntimeAddr(return_runtime_addr)
                 result = trace.cpu.apply_move(return_runtime_addr)
                 if len(result) == 0:
                     # The return runtime address could not be unambiguously converted into a binary

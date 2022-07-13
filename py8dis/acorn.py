@@ -4,8 +4,8 @@ import utils
 
 def xy_addr(x_addr, y_addr):
     if x_addr is not None and y_addr is not None:
-        assert isinstance(x_addr, utils.BinaryAddr)
-        assert isinstance(y_addr, utils.BinaryAddr)
+        assert isinstance(x_addr, memorymanager.BinaryAddr)
+        assert isinstance(y_addr, memorymanager.BinaryAddr)
         label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
         # TODO: This is a bit silly. We do b2r(), then expr() will convert back *and might fail*;
         # if we just assigned the expr directly to the binary address that couldn't happen.
@@ -322,7 +322,7 @@ inkey_enum = {k & 0xff: v for k, v in inkey_enum.items()}
 def enum_lookup(r_addr, e):
     if r_addr is None:
         return
-    r = config.memory_binary[r_addr]
+    r = memorymanager.memory_binary[r_addr]
     if r in e:
         constant(r, e[r])
         # TODO: This is a bit silly. We do b2r(), then expr() will convert back *and might fail*;
@@ -349,7 +349,7 @@ def oscli_argument_finder_hook(a_addr, x_addr, y_addr):
     xy_addr(x_addr, y_addr)
 
 def acorn_argument_finder_hook(target, a_addr, x_addr, y_addr):
-    assert isinstance(target, utils.RuntimeAddr)
+    assert isinstance(target, memorymanager.RuntimeAddr)
     # TODO: magic constants, should share with mos_labels via Python "constants"
     # TODO: do other OS calls
     d = {
@@ -428,7 +428,7 @@ def is_sideways_rom():
     comment(0x8000, "Sideways ROM header")
     label(0x8000, "rom_header")
     def check_entry(runtime_addr, entry_type):
-        runtime_addr = utils.RuntimeAddr(runtime_addr)
+        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
         jmp_abs_opcode = 0x4c
         label(runtime_addr, entry_type + "_entry")
         if memory[runtime_addr] == jmp_abs_opcode:

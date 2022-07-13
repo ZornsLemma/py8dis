@@ -5,8 +5,9 @@ import classification
 import config
 import disassembly
 import labelmanager
+import mainformatter
+import memorymanager
 import movemanager
-import newformatter
 import trace
 import utils
 
@@ -192,18 +193,16 @@ class Cpu6502(trace.Cpu):
     # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
     def apply_move2(self, target, context):
         # TODO: Rewritten in terms of movemanager - change this eventually? I think the rewrite does the same thing, but it may not, or it may do but not be right anyway...
-        with movemanager.moved(movemanager.move_id_for_binary_addr[context]):
+        with movemanager.move_id_for_binary_addr[context]:
             #if context in (0x8fda, 0x2fda):
             #    print("XAL", hex(target), movemanager.r2b(target))
             return self.apply_move(target)
 
 
     def hook_subroutine(self, runtime_addr, name, hook, warn=True):
-        runtime_addr = utils.RuntimeAddr(runtime_addr)
+        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
         binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
-        # TODO: Should probably warn rather than assert in other fns too
-        if warn:
-            utils.check_data_loaded_at_binary_addr(binary_addr)
+        memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
         self.add_entry(binary_addr, name, move_id)
         self.subroutine_hooks[runtime_addr] = hook
 
@@ -215,9 +214,6 @@ class Cpu6502(trace.Cpu):
             self.update = update
             self.operand_length = operand_length
             self.indent_level = 0
-
-        def is_mergeable(self):
-            return False
 
         def length(self):
             return 1 + self.operand_length
@@ -239,7 +235,7 @@ class Cpu6502(trace.Cpu):
             return self.mnemonic in ("JMP", "RTS", "BRA")
 
         def as_string_list(self, addr, annotations):
-            result = [newformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
+            result = [mainformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result
@@ -318,7 +314,7 @@ class Cpu6502(trace.Cpu):
             self._has_zp_version = has_zp_version
 
         def abs_operand(self, addr):
-            return utils.get_u16_binary(addr + 1)
+            return memorymanager.get_u16_binary(addr + 1)
 
         def has_zp_version(self):
             return self._has_zp_version
@@ -336,7 +332,7 @@ class Cpu6502(trace.Cpu):
             # value in the input is not.
             result1 = utils.force_case(self.mnemonic)
             result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
-            if not self.has_zp_version() or utils.get_u16_binary(addr + 1) >= 0x100:
+            if not self.has_zp_version() or memorymanager.get_u16_binary(addr + 1) >= 0x100:
                 return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
             # This is an absolute instruction with a zero-page operand which could
@@ -369,7 +365,7 @@ class Cpu6502(trace.Cpu):
             super(Cpu6502.OpcodeJmpAbs, self).__init__("JMP", has_zp_version=False)
 
         def _target(self, addr):
-            return utils.RuntimeAddr(utils.get_u16_binary(addr + 1))
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(addr + 1))
 
         def abs_operand(self, addr):
             return self._target(addr)
@@ -391,7 +387,7 @@ class Cpu6502(trace.Cpu):
             super(Cpu6502.OpcodeJmpInd, self).__init__("JMP", ")", has_zp_version=False)
 
         def update_references(self, addr):
-            trace.cpu.labels[utils.get_u16_binary(addr + 1)].add_reference(addr)
+            trace.cpu.labels[memorymanager.get_u16_binary(addr + 1)].add_reference(addr)
 
         def disassemble(self, binary_addr):
             return [None]
@@ -402,7 +398,7 @@ class Cpu6502(trace.Cpu):
             super(Cpu6502.OpcodeJsr, self).__init__("JSR", has_zp_version=False)
 
         def _target(self, addr):
-            return utils.RuntimeAddr(utils.get_u16_binary(addr + 1))
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(addr + 1))
 
         def abs_operand(self, addr):
             return self._target(addr)
@@ -412,7 +408,7 @@ class Cpu6502(trace.Cpu):
             #trace.references[self._target(addr)].add(addr)
 
         def disassemble(self, binary_addr):
-            assert isinstance(binary_addr, utils.BinaryAddr)
+            assert isinstance(binary_addr, memorymanager.BinaryAddr)
             # A hook only gets to return the "straight line" address to continue
             # tracing from (if there is one; it can return None if it wishes). Some
             # subroutines (e.g. jsr is_yx_zero:equw target_if_true, target_if_false)
@@ -422,8 +418,8 @@ class Cpu6502(trace.Cpu):
             # TODO: Do we need to apply_move() here or in _target() or in abs_operand() or before/after subroutine_hooks.get()?
             target_runtime_addr = self._target(binary_addr)
             def simple_subroutine_hook(target_runtime_addr, caller_runtime_addr):
-                assert isinstance(target_runtime_addr, utils.RuntimeAddr)
-                assert isinstance(caller_runtime_addr, utils.RuntimeAddr)
+                assert isinstance(target_runtime_addr, memorymanager.RuntimeAddr)
+                assert isinstance(caller_runtime_addr, memorymanager.RuntimeAddr)
                 # TODO: It might be possible the following assertion fails if the moves
                 # in effect are sufficiently tricky, but I'll leave it for now as it
                 # may catch bugs - once the code is more trusted it can be removed
@@ -432,10 +428,10 @@ class Cpu6502(trace.Cpu):
                 return caller_runtime_addr + 3
             subroutine_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_subroutine_hook)
             caller_runtime_addr = movemanager.b2r(binary_addr)
-            with movemanager.moved(movemanager.move_id_for_binary_addr[binary_addr]):
+            with movemanager.move_id_for_binary_addr[binary_addr]:
                 return_runtime_addr = subroutine_hook(target_runtime_addr, caller_runtime_addr)
             if return_runtime_addr is not None:
-                return_runtime_addr = utils.RuntimeAddr(return_runtime_addr)
+                return_runtime_addr = memorymanager.RuntimeAddr(return_runtime_addr)
                 result = trace.cpu.apply_move(return_runtime_addr)
                 if len(result) == 0:
                     # The return runtime address could not be unambiguously converted into a binary
@@ -459,7 +455,7 @@ class Cpu6502(trace.Cpu):
 
         def _target(self, binary_addr):
             base = movemanager.b2r(binary_addr)
-            return base + 2 + utils.signed8(utils.get_u8_binary(binary_addr + 1))
+            return base + 2 + utils.signed8(memorymanager.get_u8_binary(binary_addr + 1))
 
         def abs_operand(self, binary_addr):
             return self._target(binary_addr)
@@ -658,7 +654,7 @@ class Cpu6502(trace.Cpu):
         if isinstance(c, self.OpcodeConditionalBranch):
             return c._target(addr) == target
         if isinstance(c, self.OpcodeJmpAbs):
-            return utils.get_u16_binary(addr + 1) == target
+            return memorymanager.get_u16_binary(addr + 1) == target
         return False
 
     # TODO: Move? We do need to do this before setting trace_done though (I think)...
@@ -681,14 +677,14 @@ class Cpu6502(trace.Cpu):
                     opcode_jsr = 0x20
                     opcode_jmp = 0x4c
                     if opcode in (opcode_jsr, opcode_jmp):
-                        target = utils.get_u16_binary(addr + 1)
+                        target = memorymanager.get_u16_binary(addr + 1)
                         for hook in self.subroutine_argument_finder_hooks:
                             def get(reg):
                                 v = state[reg][1]
                                 if v is None:
                                     return v
-                                return utils.BinaryAddr(v)
-                            if hook(utils.RuntimeAddr(target), get('a'), get('x'), get('y')) is not None:
+                                return memorymanager.BinaryAddr(v)
+                            if hook(memorymanager.RuntimeAddr(target), get('a'), get('x'), get('y')) is not None:
                                 break
                 state = trace.cpu.cpu_state_optimistic[addr]
                 addr += c.length()

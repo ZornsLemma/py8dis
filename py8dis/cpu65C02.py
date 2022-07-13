@@ -57,7 +57,7 @@ class Cpu65C02(Cpu6502):
 
         def _target(self, binary_addr):
             base = movemanager.b2r(binary_addr)
-            return base + 2 + utils.signed8(utils.get_u8_binary(binary_addr + 1))
+            return base + 2 + utils.signed8(memorymanager.get_u8_binary(binary_addr + 1))
 
         def abs_operand(self, binary_addr):
             return self._target(binary_addr)
@@ -78,7 +78,7 @@ class Cpu65C02(Cpu6502):
             super(Cpu65C02.OpcodeJmpAbsX, self).__init__("JMP", ",X)")
 
         def abs_operand(self, binary_addr):
-            return utils.get_u16_binary(binary_addr + 1)
+            return memorymanager.get_u16_binary(binary_addr + 1)
 
         def has_zp_version(self):
             return False

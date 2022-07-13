@@ -1,79 +1,74 @@
 from __future__ import print_function
-import collections # TODO!?
+import collections
 import sys
 
 import config
-import movemanager
-
-memory_binary = config.memory_binary
 
 def die(s):
+    """Print an error message and halt execution."""
     print(s, file=sys.stderr)
     sys.exit(1)
 
 def warn(s):
+    """Print a warning message but don't halt execution."""
     print("warning: " + s, file=sys.stderr)
 
 def force_case(s):
+    """Change string to upper or lower case as configured."""
+
     return s.lower() if config.get_lower_case() else s.upper()
 
 def plainhex2(i):
+    """Return a two character (one byte) hex string in the appropriate case."""
+
     return ("%02x" if config.get_lower_case() else "%02X") % i
 
 def plainhex4(i):
+    """Return a four character (two byte) hex string in the appropriate case."""
+
     return ("%04x" if config.get_lower_case() else "%04X") % i
 
 def tab_to(s, n):
+    """Right padding to column n for a string s."""
+
     assert n >= 0
     return "%-*s" % (n, s)
 
 def make_indent(n):
+    """Make an indent string."""
+
     assert n >= 0
     return (config.get_indent_string()) * n
 
 def signed8(i):
+    """Convert an integer to a signed byte sized value."""
+
     assert 0 <= i <= 255
     if i >= 0x80:
         return i - 256
     else:
         return i
 
-def get_u8_binary(binary_addr):
-    assert memory_binary[binary_addr] is not None
-    return memory_binary[binary_addr]
-
-def get_u16_binary(binary_addr):
-    assert memory_binary[binary_addr] is not None and memory_binary[binary_addr+1] is not None
-    return memory_binary[binary_addr] + (memory_binary[binary_addr+1] << 8)
-
-# TODO: *maybe* get_u16 should take an "array" and an index as separate arguments
-def get_u16_runtime(runtime_addr):
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u16_binary(binary_addr)
-
-# Deprecated
-def get_u16_be(binary_addr):
-    return get_u16_be_binary(binary_addr)
-
-def get_u16_be_binary(binary_addr):
-    assert memory_binary[binary_addr] is not None and memory_binary[binary_addr+1] is not None
-    return (memory_binary[binary_addr] << 8) | memory_binary[binary_addr+1]
-
-# TODO: As get_u16_runtime
-def get_u16_be_runtime(runtime_addr):
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u16_be_binary(binary_addr)
-
 # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
+
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 def isprint(c):
+    """Is the character a printable ASCII character?"""
+
     return 32 <= c <= 126
 
 def check_expr(expr, value):
+    """Add an assert to the output based on an expression."""
+
+    # ENHANCE: It would be good to at least try to evaluate "expression" and generate
+    # an error if it doesn't match expected_value. In reality most expressions will
+    # be fairly simple combinations of labels and basic integer arithmetic, mixed with
+    # the < and > operators to get the low and high bytes of a 16-bit word.
+
     # ENHANCE: It would be good if this could (probably optionally) evaluate
     # 'expr' itself in the content of the current set of labels and constants.
     # However, the "assert at assembly time" approach should be absolutely
@@ -82,36 +77,19 @@ def check_expr(expr, value):
     # in py8dis.
     config.get_formatter().assert_expr(expr, value)
 
-# TODO: Get rid of or at least reduce use of this in favour of is_valid_{runtime,binary}_addr?
-def is_valid_addr(addr):
-    return 0 <= addr < 0x10000
+def count_with_units(n, unit_name_singular, unit_name_plural):
+    """Describes a count of a given unit e.g. "3 apples".
 
-def is_valid_runtime_addr(runtime_addr):
-    assert not isinstance(runtime_addr, BinaryAddr)
-    return is_valid_addr(runtime_addr)
+    Returns a string with the amount given and the unit name either
+    in singular or plural form.
+    """
 
-def is_valid_binary_addr(binary_addr):
-    assert not isinstance(binary_addr, RuntimeAddr)
-    return is_valid_addr(binary_addr)
-
-def data_loaded_at_binary_addr(binary_addr, n=1):
-    assert all(is_valid_binary_addr(x) for x in range(binary_addr, binary_addr+n))
-    return all(memory_binary[binary_addr + i] is not None for i in range(n))
-
-# TODO: Probably not a good name for this function, something reflecting that it outputs a "described count" is probably better.
-def plural(n, singular):
-    return "%d %s" % (n, singular if n == 1 else singular + "s")
-
-def check_data_loaded_at_binary_addr(binary_addr, n=1):
-    if data_loaded_at_binary_addr(binary_addr, n):
-        return True
-    # TODO: Does this need to report runtime addr instead/as well?
-    # TODO: The idea is sound but in practice this is a bit confusing because you have no idea what in the user program is triggering the warning (whereas with an actual fail and a backtrace you do) - it's not ideal, but searching for the address (which is likely to appear as a label name) in the output can be helpful, but still, this feels a little crappy
-    warn("expecting %s of data at binary address %s but not present" % (plural(n, "byte"), config.get_formatter().hex(binary_addr)))
-    return False
+    return "%d %s" % (n, unit_name_singular if n == 1 else unit_name_plural)
 
 # TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
 class LazyString(object):
+    """Defers string formatting until needed"""
+
     def __init__(self, fmt, *args):
         self._fmt = fmt
         self._args = args
@@ -138,23 +116,3 @@ class keydefaultdict(collections.defaultdict):
 
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
-
-# TODO: Very experimental
-class TypedInt(int):
-    def __add__(self, other):
-        res = super(TypedInt, self).__add__(other)
-        return self.__class__(res)
-
-
-# TODO: Very experimental
-class BinaryAddr(TypedInt):
-    def __new__(cls, value, *args, **kwargs):
-        assert not isinstance(value, RuntimeAddr)
-        return super(BinaryAddr, cls).__new__(cls, value)
-
-
-# TODO: Very experimental
-class RuntimeAddr(TypedInt):
-    def __new__(cls, value, *args, **kwargs):
-        assert not isinstance(value, BinaryAddr)
-        return super(RuntimeAddr, cls).__new__(cls, value)

@@ -5,7 +5,8 @@ import disassembly
 import labelmanager
 import movemanager
 import utils
-import newformatter
+import mainformatter
+import memorymanager
 
 cpu = None
 
@@ -13,7 +14,7 @@ class Cpu(object):
     """Abstract base class representing a CPU"""
 
     def __init__(self):
-        self.memory_binary = config.memory_binary
+        self.memory_binary = memorymanager.memory_binary
         self.labels = labelmanager.labels
 
         self.subroutine_argument_finder_hooks = []
@@ -24,16 +25,12 @@ class Cpu(object):
         self.code_analysis_fns = []
         self.trace_done = False
 
-        # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
-        self.indent_level_dict = collections.defaultdict(int)
-
-
         # TODO: Experimental, "optimistic" because it's based on straight line code "this is *a* possible execution". We may want to add a "pessimistic" variant which does its best to *guess* at the "common to all possible executions" behaviour
         self.cpu_state_optimistic = [None] * 64*1024
 
 
     def disassemble_instruction(self, binary_addr):
-        assert isinstance(binary_addr, utils.BinaryAddr)
+        assert isinstance(binary_addr, memorymanager.BinaryAddr)
         opcode_value = self.memory_binary[binary_addr]
         if opcode_value not in self.opcodes:
             return [None]
@@ -45,7 +42,7 @@ class Cpu(object):
             # TODO: The machinations required to format the comment here are a bit annoying.
             s = opcode.as_string(binary_addr)
             def late_formatter():
-                return newformatter.add_inline_comment(binary_addr, opcode.length(), None, config.get_formatter().comment_prefix() + " overlapping: " + str(s)[4:])
+                return mainformatter.add_inline_comment(binary_addr, opcode.length(), None, config.get_formatter().comment_prefix() + " overlapping: " + str(s)[4:])
             disassembly.add_raw_annotation(binary_addr, utils.LazyString("%s", late_formatter))
         else:
             disassembly.add_classification(binary_addr, opcode)
@@ -115,7 +112,7 @@ class Cpu(object):
         global references
         references = collections.defaultdict(set)
         for runtime_addr, label in self.labels.items():
-            runtime_addr = utils.RuntimeAddr(runtime_addr) # TODO: OK? Should keys in this dict be RuntimeAddrs to start with?
+            runtime_addr = memorymanager.RuntimeAddr(runtime_addr) # TODO: OK? Should keys in this dict be RuntimeAddrs to start with?
             binary_addr, _ = movemanager.r2b(runtime_addr)
             if binary_addr is not None:
                 for reference in label.references: # TODO: rename reference->binary_reference_address?
@@ -126,7 +123,7 @@ class Cpu(object):
         if len(references) == 0:
             return
         for addr, addr_refs in references.items():
-            count = utils.plural(len(addr_refs), "time")
+            count = utils.count_with_units(len(addr_refs), "time", "times")
             address_list = ", ".join(sorted(config.get_formatter().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs))
             comment = "%s referenced %s by %s" % (config.get_formatter().hex4(addr), count, address_list)
 
