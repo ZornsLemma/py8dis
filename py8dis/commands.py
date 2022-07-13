@@ -1,230 +1,56 @@
 """
-Exposes useful commands to the user.
+Exposes useful commands to the user:
 
-load()
-    Loads a binary file to analyse.
+load()                  Loads a binary file to analyse.
+move()                  Indicates that a block of memory is copied at runtime.
+label()                 Define a label name for a runtime address.
+optional_label()        Define a label name for a runtime address, if used.
+addr()                  Returns the runtime address of the given label name.
+get_label()             Get the label for a specified address.
+set_label_maker_hook()  Sets a user defined 'hook' function that can make label names.
 
-move()
-    Indicates that a block of memory is copied at runtime.
+constant()              Define a name for a constant value.
 
-    Often a block of code or data is moved (relocated) after loading
-    but before being used at runtime. For example, BBC Micro games that
-    load at $1900 may relocate bits or even all of themselves down to
-    $e00 before being used.
+comment()               Add a comment. Word wraps.
+formatted_comment()     Add a comment, as is.
 
-    This function specifies such a move, indicating that the runtime
-    address is different from the loaded address for a block of memory.
-    This allows labels within the block to be properly defined by their
-    runtime addresses.
+byte()                  Categorise 8 bit bytes at the given address as byte data.
+word()                  Categorise 16 bit words at the given address as word data.
+stringterm()            Terminates at a specified value.
+stringcr()              Terminates at ASCII code 13.
+stringz()               Terminates at ASCII code 0.
+string()                Terminates at a non-printable character, or the given length.
+stringhi()              Terminates at a top-bit-set character, final character optional.
+stringhiz()             As stringhi, but also terminates at zero.
+stringn()               The first byte holds the length, followed by the string.
 
-    move()s should be called before accessing the relocated block.
-    As a simple rule put any move() commands first, directly after
-    load().
+entry()                 Specifies that there is code at the given address.
+wordentry()             Marks a sequence of data words as being addresses of code.
+code_ptr()              Marks two bytes of data as being a subroutine's address.
+rts_code_ptr()          Marks two bytes of data as being an RTS-able subroutine address.
+nonentry()              Marks an address as 'not to be traced as code'.
+hook_subroutine()       For functions that don't return normally, control the tracing.
 
-Labels:
-    Memory addresses (either within or external to the binary) are
-    given names.
+expr_label()            Define an expression equivalent to a 16 bit runtime address.
+expr()                  Define a string expression equivalent to data at an address.
 
-    label()
-        Define a label name for a runtime address.
+annotate()              Add a raw string directly to the assembly code output.
+blank()                 Add a blank line directly to the assembly code output.
 
-    optional_label()
-        Define a label name for a runtime address, but only output it
-        if used. For example, this is used to specify OS entry points
-        where we only need to define those points if they are used.
+get_u8_binary()         Read a single byte of data from the specified address.
+get_u16_binary()        Read a 16 bit value (little endian) from the specified address.
+get_u16_be_binary()     Read a 16 bit value (big endian) from the specified address.
 
-    expr_label()
-        Defines a string expression to be output when the given
-        runtime address is referenced.
+char()                  Specifies quoted character (e.g. 'a') formatting.
+binary()                Specifies binary (e.g. %010110111) formatting.
+picture_binary()        Specifies picture binary (e.g. %#.####.#) formatting.
+decimal()               Specifies decimal formatting.
+hexadecimal()           Specifies hex formatting.
+uint()                  Specifies uint formatting.
+padded_uint()           Specifies padded uint formatting.
+set_formatter()         Specifies a function used to format data.
 
-        An expression is a string containing labels and/or other
-        arithmetic calculations that the assembler can interpret. When
-        the given address is referenced by code, the string expression
-        is output instead.
-
-        e.g. the command expr_label(0x1234, "my_table+1") would change
-        all instances of 'lda $1234' to 'lda my_table+1'.
-
-comment()
-    Define a comment string to appear in the assembly code at the
-    given address in the output. The comment can be inlined (added
-    to the end of the line), or standalone (a separate line of output).
-    The comment is automatically word wrapped.
-
-formatted_comment()
-    As comment(), but no word wrapping is done.
-
-constant()
-    Define a name for a constant value.
-
-    These names can then be used in subsequent calls to expr().
-
-expr()
-    Define a string expression for an address.
-
-    A string expression is output at the given runtime address
-    instead of a regular numerical value.
-
-    An expression is a string containing labels, constants and/or other
-    arithmetic calculations that the assembler can interpret. When the
-    given address reached, the regular output is replaced by the string
-    expression.
-
-    e.g. 'lda #$30' might be replaced by 'lda #>screen_address'
-
-byte()
-    Categorise a number of bytes at the given address as byte data.
-
-word()
-    Categorise a number of 16 bit words at the given address as word
-    data.
-
-String Functions:
-    Categorises the bytes at the given address as string data.
-    Different functions define the extent of the string:
-
-    stringterm()  the string terminates at a specified value
-    stringcr()    the string terminates at ASCII code 13
-    stringz()     the string terminates at ASCII code 0
-    string()      the string terminates at a non-printable character,
-                  or the given length
-    stringhi()    the string terminates at a top-bit-set character,
-                  optionally including the bottom 7 bits of the
-                  terminator as the final character
-    stringhiz()   as stringhi, but also terminates at zero
-    stringn()     the first byte holds the length, followed by the
-                  string
-
-entry()
-    Specifies that there is code at the given address.
-
-    When go() is called, code is automatically traced from each entry
-    point through all possible branches and subroutines. This is
-    categorised as code, and therefore output as instructions.
-
-nonentry()
-    Marks an address as 'not to be traced as code'.
-
-    See entry() for details of tracing. When the tracing of code
-    reaches the given address then tracing stops. For example,
-    when a conditional branch is in practice always taken at runtime,
-    any following code is never executed. Use of this command is
-    usually only required occasionally.
-
-wordentry()
-    Marks a sequence of data words as being addresses of code.
-
-    For a table of words where each entry is the address of some code,
-    this both categorises the data as words, and substitutes label names
-    as appropriate.
-
-annotate()
-    Add a raw string directly to the assembly code output at the given
-    address.
-
-blank()
-    Add a blank line directly to the assembly code output at the given
-    address.
-
-Hook routines:
-    A 'hook' is a user supplied function. Hooks can help trace,
-    categorise, and label.
-
-    hook_subroutine()
-        Add a hook for a subroutine to determine execution flow.
-
-        When executed, an unusual subroutine may not return right after it
-        was called. For the purpose of tracing the code, we need to know
-        where code will continue to be executed. The hook_subroutine()
-        function is used to specify a 'hook' routine that determines
-        where execution continues after the subroutine finishes.
-
-        There is a common use case: A subroutine that 'prints the following
-        string' has a call to a subroutine followed by a string definition.
-        Execution only continues *after* the string definition.
-
-        The following '*_hook' functions are designed to be used as the
-        'hook' parameter, to determine the end of the string.
-
-    code_ptr()
-        Marks two bytes of data as being the address of a subroutine.
-
-        The low and high bytes do not need to be stored adjacently since
-        their addresses can be specified separately. This is used to handle
-        jump tables where the low and high bytes are stored in separate
-        tables. An optional offset can be applied to the subroutine
-        address.
-
-        Assumes the assembler understands expressions like '<(my_label+1)'.
-
-        Code tracing, see entry(), is applied to the subroutine.
-
-    rts_code_ptr()
-        Marks two bytes of data as being the address of a subroutine.
-
-        This is the same as code_ptr() with offset=1. Designed for use when
-        pushing an address onto the stack before transferring control by
-        executing 'rts'.
-
-    set_label_maker_hook()
-        Sets a user defined 'hook' function that can make label names.
-
-        Given an address, the user supplied function should return
-        a unique label name or just return the suggested name.
-
-        Sometimes having a routine to make label names can be useful. For
-        example, labels at addresses that just 'rts' to early out of a
-        subroutine can be labelled uniformly as 'return1', 'return2' etc.
-
-addr()
-    Returns the runtime address of the given label name
-
-Reading bytes from the binary data in memory:
-    get_u8_binary()
-        Read and return a single byte of data from the specified address
-
-    get_u16_binary()
-        Read and return a 16 bit value (little endian) from the specified address
-
-    get_u16_be_binary()
-        Read and return a 16 bit value (big endian) from the specified address
-
-Formatting values:
-    By default numerical values are formatted as decimals for single
-    digits or hex otherwise ('uint'). The following functions change
-    this format for data in the specified block.
-
-    char()
-        Specifies quoted character (e.g. 'a') formatting for data in the given block
-
-    binary()
-        Specifies binary (e.g. %010110111) formatting for data in the given block
-
-    picture_binary()
-        Specifies picture binary (e.g. %#.####.#) formatting for data in the given block
-
-    decimal()
-        Specifies decimal formatting for data in the given block
-
-    hexadecimal()
-        Specifies hex formatting for data in the given block
-
-    uint()
-        Specifies uint formatting for data in the given block
-
-    padded_uint()
-        Specifies padded uint formatting for data in the given block
-
-    set_formatter()
-        Specifies a function used to format data in a block.
-
-        The 'formatter' is a function that given a value to format, returns
-        a string.
-
-        This function is used by the previous formatting functions.
-
-go()
-    Classifies code and data, calculates label names and emits assembly.
+go()                    Classifies code and data and emits assembly.
 """
 
 import argparse
@@ -293,11 +119,6 @@ def constant(value, name):
 
     disassembly.add_constant(value, name)
 
-# ENHANCE: Should (can?) we arrange that if there is already an auto-generated
-# label at this address, the user one takes precedence? This may not be the case
-# as standard if the user uses code_ptr() and then label()s the target address
-# afterwards. They can always do it the other way round so this isn't a huge
-# deal I suppose. TODO: Is this still a problem?
 def label(runtime_addr, name, move_id=None):
     """Define a label name for a runtime address."""
 
@@ -446,7 +267,7 @@ def nonentry(runtime_addr):
     reaches the given address then tracing stops. For example,
     when a conditional branch is in practice always taken at runtime,
     any following code is never executed. Use of this command is
-    usually only required occasionally.
+    rare.
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
