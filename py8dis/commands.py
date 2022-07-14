@@ -161,7 +161,9 @@ def expr_label(runtime_addr, s):
     return label(runtime_addr, s)
 
 def optional_label(runtime_addr, name, base_runtime_addr=None):
-    """Set a label at a runtime address, but only output if used."""
+    """Set a label at a runtime address, but only output if used.
+
+    When two consecutive bytes share a label (e.g. `userv` and `userv+1`) then `base_runtime_addr` points to the first byte."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if base_runtime_addr is not None:

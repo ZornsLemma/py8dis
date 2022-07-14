@@ -88,13 +88,13 @@ This output is suitable for feeding into the beebasm assembler. You can switch t
 
 The output of the hello world example can be improved. Load helloworld.py and add:
 
-	import acorn
-	acorn.bbc()
+    import acorn
+    acorn.bbc()
 
 This defines BBC Micro OS specific constants, which resolves &ffe3 into a proper label name. Add:
 
-	label(0x2002, "print_message_loop")
-	label(0x200e, "message")
+    label(0x2002, "print_message_loop")
+    label(0x200e, "message")
 
 to give proper names for the remaining labels.
 
@@ -104,8 +104,8 @@ To change the configuration, add `import config` and call the following as neede
 
 | Functions                                | Default | Notes                                                     |
 | ---------------------------------------- | :-----: | --------------------------------------------------------- |
-| `config.set_lower_case(b)`	            | True    | Set output to be upper or lower case.                     |
-| `config.set_hex_dump(b)`		            | True    | Show or hide hex dump output.                             |
+| `config.set_lower_case(b)`               | True    | Set output to be upper or lower case.                     |
+| `config.set_hex_dump(b)`                 | True    | Show or hide hex dump output.                             |
 | `config.set_label_references(b)`         | True    | Show or hide output of label references.                  |
 | `config.set_inline_comment_column(n)`    | 70      | Specify the character column where inline comments start. |
 | `config.set_indent_string(s)`            | " "*4   | Set the string (usually spaces) for one indent level.     |
@@ -175,13 +175,13 @@ py8dis doesn't directly check the expression provided evaluates to the expected 
 
 :pencil:`expr(addr, s)`
 
-When disassembling the byte at `addr`, use the string `s` instead of the literal value of that byte. Note that `addr` is the address of the byte itself, not the address of the instruction whose operand it is. `addr` might not even be part of an instruction; it might be data of some kind. 
+When disassembling the byte at `addr`, use the string `s` instead of the literal value of that byte. Note that `addr` is the address of the byte itself, not the address of the instruction whose operand it is. `addr` might not even be part of an instruction; it might be data of some kind.
 
 Example: `lda #$30` could be replaced with `lda #>screen_address`.
 
 :pencil:`expr_label(addr, s)`
 
-Associate expression `s` with address `addr`. Any reference to `addr` in an instruction operand when disassembling will be replaced with `s`. 
+Associate expression `s` with address `addr`. Any reference to `addr` in an instruction operand when disassembling will be replaced with `s`.
 
 Example: `lda $1ee4,x` could be replaced with `lda current_level_data+1,x`
 
@@ -222,7 +222,7 @@ Marks a sequence of `n` words as being (16-bit little endian) addresses of subro
 
 :pencil:`code_ptr(addr, addr_high=None, offset=0)`
 
-Marks two bytes of data as being the address of a subroutine. The low and high bytes do not need to be stored adjacently since their addresses can be specified separately as `addr` and `addr_high`. If `addr_high` is None, then `addr_high` is assumed to be the byte after `addr`. This function can be used to handle jump tables where the low and high bytes are stored in separate tables. 
+Marks two bytes of data as being the address of a subroutine. The low and high bytes do not need to be stored adjacently since their addresses can be specified separately as `addr` and `addr_high`. If `addr_high` is None, then `addr_high` is assumed to be the byte after `addr`. This function can be used to handle jump tables where the low and high bytes are stored in separate tables.
 
 An optional offset can be applied to the data to get the subroutine address. The subroutine address is added as an entry point for code tracing.
 
@@ -234,7 +234,7 @@ Syntactic sugar for `code_ptr(..., offset=1)`. This is intended for use with jum
 
 ### Modifying the tracing process
 
-See `entry()` to find out more about tracing. 
+See `entry()` to find out more about tracing.
 
 :pencil:`nonentry(addr)`
 
@@ -268,11 +268,11 @@ By default numerical values are formatted as decimals for single digits or hex o
 | :---------------------------------------- | :----------------------------------------------------------------------------------------- |
 | :pencil:`char(addr,n=1)`                  | Specifies quoted character (e.g. 'a') formatting for data in the given block               |
 | :pencil:`binary(addr,n=1)`                | Specifies binary (e.g. %010110111) formatting for data in the given block                  |
-| :pencil:`picture_binary(addr,n=1)`        | Specifies picture binary (e.g. %#.####.#) formatting for data in the given block           |  
-| :pencil:`decimal(addr,n=1)`               | Specifies decimal formatting for data in the given block                                   | 
+| :pencil:`picture_binary(addr,n=1)`        | Specifies picture binary (e.g. %#.####.#) formatting for data in the given block           |
+| :pencil:`decimal(addr,n=1)`               | Specifies decimal formatting for data in the given block                                   |
 | :pencil:`hexadecimal(addr,n=1)`           | Specifies hex formatting for data in the given block                                       |
-| :pencil:`uint(addr,n=1)`                  | Specifies uint formatting for data in the given block                                      | 
-| :pencil:`padded_uint(addr,n=1)`           | Specifies padded uint formatting for data in the given block                               | 
+| :pencil:`uint(addr,n=1)`                  | Specifies uint formatting for data in the given block                                      |
+| :pencil:`padded_uint(addr,n=1)`           | Specifies padded uint formatting for data in the given block                               |
 | :pencil:`set_formatter(addr,n,formatter)` | The `formatter` function converts a data value into a string. Used by the above functions. |
 
 ### Comments and blank lines
@@ -310,7 +310,7 @@ Returns the unsigned big-endian 16-bit word at address `addr`.
 ### Relocating memory
 :pencil:`move(dest, src, length)`
 
-Indicates that a block of memory is copied at runtime. 
+Indicates that a block of memory is copied at runtime.
 
 Often a block of memory is moved (relocated) after loading the binary file but before being used at runtime. For example, BBC Micro games that load at &1900 often relocate bits of code or data, or maybe the whole file down to &e00 before use.
 

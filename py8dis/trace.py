@@ -30,11 +30,18 @@ class Cpu(object):
 
 
     def disassemble_instruction(self, binary_addr):
+        """
+        Disassemble an instruction at the binary address.
+
+        Identifies the opcode and calls into the opcode object to do the actual disassembly.
+        """
+
         assert isinstance(binary_addr, memorymanager.BinaryAddr)
         opcode_value = self.memory_binary[binary_addr]
         if opcode_value not in self.opcodes:
             return [None]
         opcode = self.opcodes[opcode_value]
+
         # If we hit something that's already classified, we can't/don't re-classify
         # it but that doesn't mean we can't continue to trace until something breaks
         # the control flow.

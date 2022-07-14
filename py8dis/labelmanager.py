@@ -103,14 +103,25 @@ class Label(object):
         if s not in self.all_names():
             self.expressions[move_id].append(s)
 
-    def explicit_definition_string_list(self):
-        # TODO: Note that we don't invoke the label hook or anything here - if a name got *used* for the label at some point, it should have been added into the label object so we know to emit it here.
+    def find_max_explicit_name_length(self):
+        max_name_length = 0
+        for name_list in self.explicit_names.values():
+            for name in name_list:
+                if not name.emitted:
+                    max_name_length = max(max_name_length, name.name)
+        return max_name_length
+
+    def explicit_definition_string_list(self, align_column):
+        # Note that we don't invoke the label hook or anything here -
+        # if a name got *used* for the label at some point, it should
+        # have been added into the label object so we know to emit it
+        # here.
         formatter = config.get_formatter()
         result = []
         for name_list in self.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    result.append(formatter.explicit_label(name.name, formatter.hex4(self.addr)))
+                    result.append(formatter.explicit_label(name.name, formatter.hex4(self.addr), offset=None, align=align_column))
                     name.emitted = True
         return result
 
@@ -162,6 +173,14 @@ class Label(object):
 
 labels = utils.keydefaultdict(Label)
 
+def find_max_explicit_name_length():
+    max_name_length = 0
+    for addr in labels.keys():
+        for name_list in labels[addr].explicit_names.values():
+            for name in name_list:
+                if not name.emitted:
+                    max_name_length = max(max_name_length, len(name.name))
+    return max_name_length
 
 # TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks
 

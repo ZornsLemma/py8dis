@@ -28,8 +28,8 @@ def hex4(n):
 def inline_label(name):
     return "%s:" % name
 
-def explicit_label(name, value, offset=None):
-    return "%s EQU %s%s" % (name, value, "" if offset is None else "+%d" % offset)
+def explicit_label(name, value, offset=None, align=0):
+    return "%sEQU %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
 
 def comment_prefix():
     return ";"

@@ -87,8 +87,7 @@ def format_data_block(binary_addr, length, cols, element_size, annotations):
         data = list(classification.get_constant16(binary_addr + i) for i in range(0, length, 2))
         data_prefix = config.get_formatter().word_prefix()
 
-    indent = disassembly.indent_hint[binary_addr] + 1
-    prefix = utils.make_indent(indent) + data_prefix
+    prefix = utils.make_indent(1) + data_prefix
     separator = ", "
     longest_item = max(len(x) for x in data)
     if cols is not None:
@@ -174,7 +173,7 @@ def hexadecimal_formatter(n, bits):
 
 def constant(binary_addr, n, bits):
     """Format a constant value, using whatever formatter is hinted"""
-    
+
     format_hint = disassembly.format_hint.get(binary_addr, uint_formatter)
     return format_hint(n, bits)
 
@@ -194,7 +193,7 @@ def constant16(binary_addr):
 
 def format_comment(text):
     """Format a standalone (i.e. not inline) multiline comment.
-    
+
     Text is word wrapped.
     """
 
