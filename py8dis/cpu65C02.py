@@ -7,7 +7,7 @@ class Cpu65C02(Cpu6502):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Cpu65C02, cls).__new__(cls)
 
-            config.get_formatter().set_cmos(True)
+            config.set_cmos(True)
         return cls.instance
 
     def __init__(self):

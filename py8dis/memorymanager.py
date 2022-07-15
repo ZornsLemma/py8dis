@@ -1,20 +1,15 @@
 import utils
 
-# TODO: Very experimental
 class TypedInt(int):
     def __add__(self, other):
         res = super(TypedInt, self).__add__(other)
         return self.__class__(res)
 
-
-# TODO: Very experimental
 class BinaryAddr(TypedInt):
     def __new__(cls, value, *args, **kwargs):
         assert not isinstance(value, RuntimeAddr)
         return super(BinaryAddr, cls).__new__(cls, value)
 
-
-# TODO: Very experimental
 class RuntimeAddr(TypedInt):
     def __new__(cls, value, *args, **kwargs):
         assert not isinstance(value, BinaryAddr)
@@ -59,18 +54,21 @@ def get_u16_be_binary(binary_addr):
 def get_u8_runtime(runtime_addr):
     """Get 8 bit number given a runtime address"""
 
+    import movemanager
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     return get_u8_binary(binary_addr)
 
 def get_u16_runtime(runtime_addr):
     """Get 16 bit number (little-endian) given a runtime address"""
 
+    import movemanager
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     return get_u16_binary(binary_addr)
 
 def get_u16_be_runtime(runtime_addr):
     """Get 16 bit number (big-endian) given a runtime address"""
 
+    import movemanager
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     return get_u16_be_binary(binary_addr)
 

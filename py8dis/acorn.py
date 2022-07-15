@@ -433,7 +433,7 @@ def is_sideways_rom():
         label(runtime_addr, entry_type + "_entry")
         if memory[runtime_addr] == jmp_abs_opcode:
             entry(runtime_addr)
-            label(utils.get_u16_runtime(runtime_addr + 1), entry_type + "_handler")
+            label(memorymanager.get_u16_runtime(runtime_addr + 1), entry_type + "_handler")
         else:
             byte(runtime_addr, 3)
     check_entry(0x8000, "language")

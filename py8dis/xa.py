@@ -43,14 +43,46 @@ def comment_prefix():
 def assert_expr(expr, value):
     _pending_assertions[expr] = value
 
-def set_cmos(b):
-    pass
-
 def disassembly_start():
     return []
 
-def code_start(start_addr, end_addr):
-    return ["%s* = %s" % (utils.make_indent(1), hex4(start_addr)), ""]
+def code_start(start_addr, end_addr, first):
+    global _code_index
+
+    # The first code block is just a "* = $xxxx" style line
+    if first:
+        _code_index = 1
+        return ["", "%s* = %s" % (utils.make_indent(1), hex4(start_addr)), ""]
+
+    end_label = "end_of_part_" + str(_code_index)
+    _code_index += 1
+
+    # Subsequent blocks weirdly need padding with a '.dsb' command
+
+    # Example from docs at http://www.floodgap.com/retrotech/xa/xa.1.html :
+    #
+    #     * = $1000
+    #
+    #     ; this is your code at $1000
+    # part1       rts
+    #     ; this label marks the end of code
+    # endofpart1
+    #
+    #     ; DON'T PUT A NEW .word HERE!
+    #     * = $2000
+    #     .dsb (*-endofpart1), 0
+    #     ; yes, set it again
+    #     * = $2000
+    #
+    #     ; this is your code at $2000
+    # part2       rts
+
+    # So we mimic this example here:
+    return [end_label,
+        "%s* = %s" % (utils.make_indent(1), hex4(start_addr)),
+        ".dsb (*-%s), 0" % (end_label),
+        "%s* = %s" % (utils.make_indent(1), hex4(start_addr)),
+        ""]
 
 def code_end():
     return []
@@ -86,6 +118,9 @@ def force_abs_instruction(instruction, prefix, operand, suffix):
     # probably doesn't need it.
     return utils.LazyString("%s%s %s!%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
+def force_zp_label_prefix():
+    return "`"
+
 def byte_prefix():
     return utils.force_case(".byt ")
 
@@ -96,7 +131,11 @@ def string_prefix():
     return utils.force_case(".asc ")
 
 def string_chr(c):
-    if chr(c) in '^"':
+    # Workaround for a bug in xa that means an escaped double quote in a string
+    # doesn't play well with a // comment, causing a syntax error
+    if chr(c) == '"':
+        return "\", 34, \""
+    if chr(c) == '^':
         return "^" + chr(c)
     # xa has a bug which can affect strings containing '/', so we force them to
     # be encoded specially. See

@@ -7,7 +7,7 @@ def patched_branch(base_label, offset_addr, target_label, label_only=False):
     base_addr = addr(base_label)
     offset = memory[offset_addr]
     assert offset < 0x80
-    f = label if label_only else entry 
+    f = label if label_only else entry
     f(base_addr + 2 + offset, target_label)
     expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
 
@@ -62,6 +62,10 @@ with move(0x8000, 0x2000, 0x4000):
     # - TODO: don't forget the separate issue of "should we improve label emitting so we can use an implicit label where possible despite move ID"?
     #label(0x6a7, "TODOEXP") # TODO: just to see what happens - OK, this automatically gets move ID 2 assigned, which is fair as that's the *sole* move covering this address - however, we *still* get a move ID 0 l06a7 label created, and I am not sure if that's good or not - I believe (not yet tested) we can override the creation of the new label by using expr(address referencing l06a7, "TODOEXP"), the question is "should" I have to do that? - I have now tweaked the heuristics so we re-use the label in move 2 rather than forcing creation of a name in move 0; we will see how that works out across different test cases.
     comment(0xaf70-0x6000, "Patch the following JMP so we effectively do JMP (&500,X)") # TODO: Offset hack but it may be fair enough because this is within a sub-move
+
+    label(0x51, "jump_address_low")
+    expr(0x4f, config.get_formatter().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
+
     entry(0x435, "tube_entry_small_a")
     entry(0x428, "tube_entry_claim_tube")
     comment(0xaf87-0x6000, "This is a call to release the tube.")
@@ -199,7 +203,7 @@ with move(0x8000, 0x2000, 0x4000):
         # which doesn't correspond to a valid address. (We could obviously cope with
         # this in other ways, such as disassembling the first part of the table
         # separately.)
-        code_at = utils.get_u16_be_runtime(pc) + 1 # TODO: shouldn't need to import utils??
+        code_at = memorymanager.get_u16_be_runtime(pc) + 1
         if code_at <= 0xffff:
             rts_code_ptr(pc + 1, pc)
         pc += 2
@@ -240,7 +244,7 @@ with move(0x8000, 0x2000, 0x4000):
     expr_label(0xd19, "nmi_cmp_imm_or_bcs+1")
     constant(0xb0, "opcode_bcs")
     expr(0x9056, "opcode_bcs")
-    comment(0xd18+2+6, 
+    comment(0xd18+2+6,
     """One patched variant of the code transfers control to nmi_XXX5, which is the
     second byte of the following bcc instruction. That is always &05, which is
     ORA #. XXX: correct?""")

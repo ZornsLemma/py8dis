@@ -1,7 +1,3 @@
 *.pyc
-examples/anfs418.orig
-examples/basic4.orig
-examples/dfs226.orig
-examples/*.lst
-examples/*.dat
-examples/*.asm
+examples/build/
+test/

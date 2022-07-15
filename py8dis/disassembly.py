@@ -373,6 +373,32 @@ def fix_label_names():
             binary_addr += 1
 
 
+def calculate_move_ranges():
+    """Calculate contiguous memory ranges with a shared move ID."""
+
+    move_ranges = []
+    current_range_start = None
+    current_range_move_id = None
+    for start_addr, end_addr in sorted(memorymanager.load_ranges):
+        binary_addr = start_addr
+        while binary_addr < end_addr:
+            if current_range_start is not None:
+                if (binary_addr == current_range_end and movemanager.move_id_for_binary_addr[binary_addr] == current_range_move_id):
+                    current_range_end = binary_addr + 1
+                else:
+                    move_ranges.append((current_range_start, current_range_end))
+                    current_range_start = None
+            if current_range_start is None:
+                current_range_start = binary_addr
+                current_range_end = binary_addr + 1
+                current_range_move_id = movemanager.move_id_for_binary_addr[binary_addr]
+            binary_addr += 1
+    if current_range_start  != (current_range_end - 1):
+        move_ranges.append((current_range_start, current_range_end))
+
+    return move_ranges
+
+
 def emit():
     """Outputs the disassembly.
     """
@@ -403,34 +429,17 @@ def emit():
             output.append(formatter.explicit_label(name, value, None, max_len))
         output.append("")
 
-    if True: # TODO: Should be config controlled
+    # For debugging py8dis output all labels, their addresses and move_ids
+    if config.get_show_all_labels():
         output.extend(labelmanager.all_labels_as_comments())
 
-    # Break the output down into sub-ranges which share the same move ID. We
-    # completely ignore the classifications here; moves are more important and
-    # can bisect a classification. We call isolate_range to fix up the
-    # classifications afterwards.
-    SFTODORANGES = []
-    current_range_start = None
-    current_range_move_id = None
-    for start_addr, end_addr in sorted(memorymanager.load_ranges):
-        binary_addr = start_addr
-        while binary_addr < end_addr:
-            if current_range_start is not None:
-                if (binary_addr == current_range_end and
-                    movemanager.move_id_for_binary_addr[binary_addr] == current_range_move_id):
-                    current_range_end = binary_addr + 1
-                else:
-                    SFTODORANGES.append((current_range_start, current_range_end))
-                    current_range_start = None
-            if current_range_start is None:
-                current_range_start = binary_addr
-                current_range_end = binary_addr + 1
-                current_range_move_id = movemanager.move_id_for_binary_addr[binary_addr]
-            binary_addr += 1
-    if current_range_start  != (current_range_end - 1):
-        SFTODORANGES.append((current_range_start, current_range_end))
-    for start_addr, end_addr in SFTODORANGES:
+    # Break the output down into sub-ranges which share the same move
+    # ID. We completely ignore the classifications here; moves are more
+    # important and  can bisect a classification. We call isolate_range
+    # to fix up the classifications afterwards.
+    move_ranges = calculate_move_ranges()
+
+    for start_addr, end_addr in move_ranges:
         isolate_range(start_addr, end_addr)
 
     # Generate the disassembly proper, but don't emit it just yet. We
@@ -442,6 +451,8 @@ def emit():
     # some cases - e.g. move.py -a currently doesn't emit pydis_end
     # inline. (To be fair, this is a bit of an edge case, but ideally
     # it would work.)
+
+    # d is the main disassembly output.
     d = []
 
     # TODO: dfs226.py vs dfs226b.py - range starting at 00xaf38 and the
@@ -451,68 +462,88 @@ def emit():
     # has something to do with classifications of "raw data" straddling
     # the end of the range and not being handled properly or at least
     # consistently
-    def SFTODOX(binary_addr, move_id):
+
+    def record_emit_point(binary_addr, move_id):
         md = movemanager.move_definitions[move_id]
         runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
         labelmanager.labels[runtime_addr].notify_emit_opportunity(runtime_addr, move_id)
 
-    for SFTODO in range(2):
-        old_end_addr = -1 # TODO: use None?
-        if SFTODO == 1:
-            pass # print("XOU", SFTODOZ[0x9030])
-        for start_addr, end_addr in SFTODORANGES:
-            if old_end_addr == -1:
-                if SFTODO == 1:
-                    d.extend(formatter.code_start(start_addr, end_addr))
-                    old_end_addr = start_addr
-            move_id = movemanager.move_id_for_binary_addr[start_addr]
-            if move_id != movemanager.base_move_id:
-                if SFTODO == 0:
-                    SFTODOX(start_addr, movemanager.base_move_id)
-                else:
-                    d.extend(emit_labels(start_addr, movemanager.base_move_id))
-                    SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
-                    d.extend(formatter.pseudopc_start(*SFTODOARGS))
-            else:
-                if start_addr != old_end_addr:
-                    if SFTODO == 1:
-                        d.extend(formatter.code_start(start_addr, end_addr))
-            addr = start_addr
-            while addr < end_addr:
-                if SFTODO == 0:
-                    for i in range(0, classifications[addr].length()):
-                        SFTODOX(addr + i, move_id)
-                else:
-                    d.extend(emit_addr(addr, move_id))
-                addr += classifications[addr].length()
-            assert addr == end_addr
-            if SFTODO == 0:
-                SFTODOX(end_addr, move_id)
-            else:
-                d.extend(emit_labels(end_addr, move_id)) # TODO: emit annotations too? (ditto other calls to emit_labels)
-            if move_id != movemanager.base_move_id:
-                if SFTODO == 0:
-                    SFTODOX(end_addr, movemanager.base_move_id)
-                else:
-                    SFTODOARGS = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
-                    d.extend(formatter.pseudopc_end(*SFTODOARGS))
-                    d.extend(emit_labels(end_addr, movemanager.base_move_id))
-            old_end_addr = end_addr
+    # Calculate the move_ids that will emit output?
+    for start_addr, end_addr in move_ranges:
+        move_id = movemanager.move_id_for_binary_addr[start_addr]
+        if move_id != movemanager.base_move_id:
+            record_emit_point(start_addr, movemanager.base_move_id)
+
+        addr = start_addr
+        while addr < end_addr:
+            for i in range(0, classifications[addr].length()):
+                record_emit_point(addr + i, move_id)
+            addr += classifications[addr].length()
+        assert addr == end_addr
+        record_emit_point(end_addr, move_id)
+        if move_id != movemanager.base_move_id:
+            record_emit_point(end_addr, movemanager.base_move_id)
+
+
+    # Output disassembly for each range in turn
+    old_end_addr = None
+    for start_addr, end_addr in move_ranges:
+        if old_end_addr == None:
+            # Output an ORG at the beginning
+            d.extend(formatter.code_start(start_addr, end_addr, True))
+            old_end_addr = start_addr
+
+        move_id = movemanager.move_id_for_binary_addr[start_addr]
+
+        # Handle start of a new !pseudopc block
+        if move_id != movemanager.base_move_id:
+            # Output any base move labels just before starting a new !pseudopc block
+            d.extend(emit_labels(start_addr, movemanager.base_move_id))
+
+            # Output start of !pseudopc block
+            pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
+            d.extend(formatter.pseudopc_start(*pseudopc_args))
+        else:
+            # If a new ORG is needed, output that
+            if start_addr != old_end_addr:
+                d.extend(formatter.code_start(start_addr, end_addr, False))
+
+        # output at each address in the block
+        addr = start_addr
+        while addr < end_addr:
+            d.extend(emit_addr(addr, move_id))
+            addr += classifications[addr].length()
+        assert addr == end_addr
+
+        # Emit labels and annotations at the end address of the move
+        d.extend(emit_labels(end_addr, move_id))
+
+        # Handle the end of the !pseudopc block
+        if move_id != movemanager.base_move_id:
+            # Output the end of the !pseudopc block
+            pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
+            d.extend(formatter.pseudopc_end(*pseudopc_args))
+
+            # Output any base move labels after the !pseudopc block is done
+            d.extend(emit_labels(end_addr, movemanager.base_move_id))
+        old_end_addr = end_addr
+
 
     # Emit labels which haven't been emitted inline with the disassembly.
     output.append(("%s Memory locations") % (formatter.comment_prefix()))
 
-    # Find longest explicit label name
+    # Find the longest such explicit label name
     align_name_length = labelmanager.find_max_explicit_name_length()
     align_name_length = indent_len * ((align_name_length + indent_len - 1) // indent_len)
 
-    # Output the explicit label names (with alignment)
+    # Add the explicit label names (aligned) to the output
     for addr in sorted(labelmanager.labels.keys()):
         output.extend(labelmanager.labels[addr].explicit_definition_string_list(align_name_length))
 
+    # Add the main disassembly to the output
     output.extend(d)
 
-    # Show label references
+    # Show label reference histogram
     if config.get_label_references():
         output.extend(trace.cpu.add_reference_histogram())
 
@@ -527,7 +558,7 @@ def emit():
     # Finish off disassembly
     output.extend(formatter.disassembly_end())
 
-    # Actually output the listing
+    # Actually print the listing
     print("\n".join(formatter.sanitise(str(line)) for line in output))
 
 def split_classification(binary_addr):

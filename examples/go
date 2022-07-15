@@ -1,0 +1,48 @@
+# Script for testing
+
+set -e
+
+mkdir -p build
+
+check_identical() {
+    original_dat="$1"
+    new_dat="$2"
+
+    xxd -g1 "$original_dat" >build/temp1.hex
+    xxd -g1 "$new_dat"      >build/temp2.hex
+    diff build/temp1.hex build/temp2.hex
+}
+
+test() {
+    source_path="$1"
+    original_dat="$2"
+
+    filename=$(basename ${source_path%.*})
+
+    # Beebasm
+    echo "Testing $filename for Beebasm"
+    python3 "$source_path" > "build/${filename}_beebasm.asm"
+    beebasm -v -o "build/${filename}_beebasm.dat" -i "build/${filename}_beebasm.asm" > "build/${filename}_beebasm.lst"
+    check_identical "$original_dat" "build/${filename}_beebasm.dat"
+
+    # Acme
+    echo "Testing $filename for Acme"
+    python3 "$source_path" --acme > "build/${filename}_acme.asm"
+    acme -o "build/${filename}_acme.dat" --report "build/${filename}_acme_report.txt" --symbollist "build/${filename}_acme_symbols.txt" "build/${filename}_acme.asm"
+    check_identical "$original_dat" "build/${filename}_acme.dat"
+
+    # xa
+    echo "Testing $filename for xa"
+    python3 "$source_path" --xa > "build/${filename}_xa.asm"
+    xa -o "build/${filename}_xa.dat" -l "build/${filename}_xa_symbols.txt" "build/${filename}_xa.asm"
+    check_identical "$original_dat" "build/${filename}_xa.dat"
+}
+
+test "helloworld.py" "helloworld.orig"
+test "basic4.py" "basic4.orig"
+test "dfs226.py" "DFS226.orig"
+test "dfs226b.py" "DFS226.orig"
+test "anfs418.py" "anfs418.orig"
+test "move.py"  "move.orig"
+test "move2.py" "move2.orig"
+test "split.py" "split.orig"

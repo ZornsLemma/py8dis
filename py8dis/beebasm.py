@@ -3,7 +3,8 @@ import sys
 
 import classification
 import config
-import disassembly # TODO!?
+import disassembly
+import memorymanager
 import movemanager
 import utils
 
@@ -45,16 +46,15 @@ def comment_prefix():
 def assert_expr(expr, value):
     _pending_assertions[expr] = value
 
-def set_cmos(b):
-    global _disassembly_start
-    if b:
-        _disassembly_start = [utils.make_indent(1) + utils.force_case("cpu 1"), ""]
-
 def disassembly_start():
+    global _disassembly_start
+
+    if config.get_cmos():
+        _disassembly_start = [utils.make_indent(1) + utils.force_case("cpu 1"), ""]
     return _disassembly_start
 
 # TODO: end_addr may not be used by any assemblers any more
-def code_start(start_addr, end_addr):
+def code_start(start_addr, end_addr, first):
     global _code_end_addr
     _code_end_addr = end_addr
     result = ["", utils.make_indent(1) + utils.force_case("org %s" % hex4(start_addr))]
@@ -105,6 +105,9 @@ def disassembly_end():
 
 def force_abs_instruction(instruction, prefix, operand, suffix):
     return None
+
+def force_zp_label_prefix():
+    return ""
 
 def byte_prefix():
     return utils.force_case("equb ")

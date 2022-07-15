@@ -7,7 +7,7 @@ def patched_branch(base_label, offset_addr, target_label, label_only=False):
     base_addr = addr(base_label)
     offset = memory[offset_addr]
     assert offset < 0x80
-    f = label if label_only else entry 
+    f = label if label_only else entry
     f(base_addr + 2 + offset, target_label)
     expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
 
@@ -50,6 +50,10 @@ comment(0xaf70, "Patch the following JMP so we effectively do JMP (&500,X)")
 blank(0xaf70) # TODO: silly, just to test
 comment(0xaf70, "Extra comment after a blank line") # TODO: silly, just to test
 annotate(0xaf70, "; manually-created comment") # TODO: silly, just to test
+
+label(0x51, "jump_address_low")
+expr(0x4f, config.get_formatter().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
+
 entry(0x435, "tube_entry_small_a")
 entry(0x428, "tube_entry_claim_tube")
 comment(0xaf87, "This is a call to release the tube.")
@@ -187,7 +191,7 @@ for i in range(7):
     # which doesn't correspond to a valid address. (We could obviously cope with
     # this in other ways, such as disassembling the first part of the table
     # separately.)
-    code_at = get_u16_be(pc) + 1
+    code_at = memorymanager.get_u16_be_binary(pc) + 1
     if code_at <= 0xffff:
         rts_code_ptr(pc + 1, pc)
     pc += 2
@@ -228,7 +232,7 @@ entry(0xd18, "nmi_cmp_imm_or_bcs")
 expr_label(0xd19, "nmi_cmp_imm_or_bcs+1")
 constant(0xb0, "opcode_bcs")
 expr(0x9056, "opcode_bcs")
-comment(0xd18+2+6, 
+comment(0xd18+2+6,
 """One patched variant of the code transfers control to nmi_XXX5, which is the
 second byte of the following bcc instruction. That is always &05, which is
 ORA #. XXX: correct?""")

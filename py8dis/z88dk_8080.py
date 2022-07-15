@@ -37,13 +37,10 @@ def comment_prefix():
 def assert_expr(expr, value):
     _pending_assertions[expr] = value
 
-def set_cmos(b):
-    pass
-
 def disassembly_start():
     return []
 
-def code_start(start_addr, end_addr):
+def code_start(start_addr, end_addr, first):
     return ["", "%sORG %s" % (utils.make_indent(1), hex4(start_addr)), ""]
 
 def code_end():
@@ -64,6 +61,9 @@ def disassembly_end():
 
 def force_abs_instruction(instruction, prefix, operand, suffix):
     return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
+
+def force_zp_label_prefix():
+    return ""
 
 def byte_prefix():
     return utils.force_case("DB ")
