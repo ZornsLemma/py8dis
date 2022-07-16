@@ -75,7 +75,7 @@ def check_expr(expr, value):
     # reliable (it's just not as early a detection as we'd like) so should
     # probably be retained even if expression evaluation is supported directly
     # in py8dis.
-    config.get_formatter().assert_expr(expr, value)
+    config.get_assembler().assert_expr(expr, value)
 
 def count_with_units(n, unit_name_singular, unit_name_plural):
     """Describes a count of a given unit e.g. "3 apples".

@@ -16,7 +16,7 @@ def add_hex_dump(binary_addr, length, s):
     assert isinstance(binary_addr, memorymanager.BinaryAddr)
     if not config.get_hex_dump():
         return s
-    s += config.get_formatter().comment_prefix() + " "
+    s += config.get_assembler().comment_prefix() + " "
 
     # Add hex characters as a fixed width string
     data = memorymanager.memory_binary[binary_addr:binary_addr + min(length, config.get_hex_dump_max_bytes())]
@@ -82,10 +82,10 @@ def format_data_block(binary_addr, length, cols, element_size, annotations):
 
     if element_size == 1:
         data = list(classification.get_constant8(binary_addr + i) for i in range(length))
-        data_prefix = config.get_formatter().byte_prefix()
+        data_prefix = config.get_assembler().byte_prefix()
     else:
         data = list(classification.get_constant16(binary_addr + i) for i in range(0, length, 2))
-        data_prefix = config.get_formatter().word_prefix()
+        data_prefix = config.get_assembler().word_prefix()
 
     prefix = utils.make_indent(1) + data_prefix
     separator = ", "
@@ -126,8 +126,8 @@ def uint_formatter(n, bits, pad=False):
             s = ("     " + s)[-3 if bits == 8 else -5:]
         return s
     if bits == 8:
-        return config.get_formatter().hex2(n)
-    return config.get_formatter().hex4(n)
+        return config.get_assembler().hex2(n)
+    return config.get_assembler().hex4(n)
 
 def char_formatter(n, bits):
     """Format a quoted character.
@@ -135,7 +135,7 @@ def char_formatter(n, bits):
     Returns a quoted character if possible otherwise just a hex or decimal integer.
     """
 
-    c = config.get_formatter().string_chr(n)
+    c = config.get_assembler().string_chr(n)
     if c is not None:
         return "'%s'" % c
     return uint_formatter(n, bits)
@@ -148,7 +148,7 @@ def binary_formatter(n, bits):
 
     s = bin(n)[2:]
     s = ("0"*bits + s)[-bits:]
-    return config.get_formatter().binary_format(s)
+    return config.get_assembler().binary_format(s)
 
 def picture_binary_formatter(n, bits):
     """Format 'picture' binary data.
@@ -156,7 +156,7 @@ def picture_binary_formatter(n, bits):
     'Picture' binary uses alternative characters for expressing binary digits. This is most commonly used for displaying 1-bit per pixel sprites.
     """
 
-    return config.get_formatter().picture_binary(binary_formatter(n, bits))
+    return config.get_assembler().picture_binary(binary_formatter(n, bits))
 
 def decimal_formatter(n, bits):
     """Format a regular decimal number"""
@@ -169,7 +169,7 @@ def hexadecimal_formatter(n, bits):
     # TODO: It's possible we want to offer some additional control over leading
     # zero padding and number of hex digits emitted, but let's just go with this
     # for now.
-    return config.get_formatter().hex(n)
+    return config.get_assembler().hex(n)
 
 def constant(binary_addr, n, bits):
     """Format a constant value, using whatever formatter is hinted"""
@@ -197,6 +197,6 @@ def format_comment(text):
     Text is word wrapped.
     """
 
-    prefix = config.get_formatter().comment_prefix() + " "
+    prefix = config.get_assembler().comment_prefix() + " "
     text_width = config.get_inline_comment_column() - len(prefix)
     return "\n".join(textwrap.fill(paragraph, text_width) for paragraph in text.split("\n"))

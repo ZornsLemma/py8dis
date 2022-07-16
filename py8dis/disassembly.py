@@ -403,7 +403,7 @@ def emit():
     """Outputs the disassembly.
     """
 
-    formatter = config.get_formatter()
+    formatter = config.get_assembler()
     output = []
 
     # Output any prologue
@@ -581,7 +581,7 @@ def split_classification(binary_addr):
         return
 
     # TODO: Do we need to check and not warn if this is just an automatic string/byte classification?
-    utils.warn("move boundary at binary address %s splits a classification" % config.get_formatter().hex(binary_addr))
+    utils.warn("move boundary at binary address %s splits a classification" % config.get_assembler().hex(binary_addr))
     split_addr = binary_addr
     while classifications[binary_addr] == partial_classification:
         binary_addr -= 1
@@ -648,7 +648,7 @@ def emit_addr(binary_addr, move_id):
             # least where "overlapping" instruction streams are added
             # as annotations. I've commented it out for now as annoying
             # is exactly right.
-            pass # utils.warn("annotation at binary address %s is being emitted at %s" % (config.get_formatter().hex(binary_addr + i), config.get_formatter().hex(binary_addr)))
+            pass # utils.warn("annotation at binary address %s is being emitted at %s" % (config.get_assembler().hex(binary_addr + i), config.get_assembler().hex(binary_addr)))
         for annotation in utils.sorted_annotations(annotations[binary_addr + i]):
             if not annotation.inline:
                 result.append(annotation.as_string(binary_addr))
@@ -677,7 +677,7 @@ class Comment(Annotation):
     def __init__(self, text, inline=False, priority=None):
 
         def late_formatter():
-            return "\n".join("%s %s" % (config.get_formatter().comment_prefix(), line) for line in str(text).split("\n"))
+            return "\n".join("%s %s" % (config.get_assembler().comment_prefix(), line) for line in str(text).split("\n"))
 
         Annotation.__init__(self, utils.LazyString("%s", late_formatter), inline, priority)
 

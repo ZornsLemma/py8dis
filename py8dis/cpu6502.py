@@ -267,7 +267,7 @@ class Cpu6502(trace.Cpu):
 
         def as_string(self, addr):
             mnemonic = self.mnemonic
-            if (not config.get_formatter().explicit_a) and mnemonic.endswith(" A"):
+            if (not config.get_assembler().explicit_a) and mnemonic.endswith(" A"):
                 mnemonic = mnemonic[:-2]
             return "%s%s" % (utils.make_indent(1), utils.force_case(mnemonic))
 
@@ -287,7 +287,7 @@ class Cpu6502(trace.Cpu):
             if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
                 c = trace.cpu.memory_binary[addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
-                    s += " %s '%s'" % (config.get_formatter().comment_prefix(), chr(c))
+                    s += " %s '%s'" % (config.get_assembler().comment_prefix(), chr(c))
             return s
 
 
@@ -338,7 +338,7 @@ class Cpu6502(trace.Cpu):
             # This is an absolute instruction with a zero-page operand which could
             # be misassembled. If the assembler has a way to explicitly request
             # absolute addressing, we use that.
-            force_abs_instruction = config.get_formatter().force_abs_instruction(result1, self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+            force_abs_instruction = config.get_assembler().force_abs_instruction(result1, self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
             if force_abs_instruction is not None:
                 return force_abs_instruction
 
@@ -346,7 +346,7 @@ class Cpu6502(trace.Cpu):
             # instruction as data with a comment showing what it is; the comment
             # includes an acme-style "+2" suffix to help indicate what's going on.
             operand = classification.get_address16(addr + 1)
-            return utils.LazyString("%s%s%s, <(%s), >(%s) ; %s+2 %s", utils.make_indent(1), config.get_formatter().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
+            return utils.LazyString("%s%s%s, <(%s), >(%s) ; %s+2 %s", utils.make_indent(1), config.get_assembler().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
 
 
     class OpcodeDataAbs(OpcodeAbs):

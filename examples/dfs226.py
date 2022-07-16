@@ -51,7 +51,7 @@ comment(0xaf70, "Extra comment after a blank line") # TODO: silly, just to test
 annotate(0xaf70, "; manually-created comment") # TODO: silly, just to test
 
 label(0x51, "jump_address_low")
-expr(0x4f, config.get_formatter().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
+expr(0x4f, config.get_assembler().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
 
 entry(0x435, "tube_entry_small_a")
 entry(0x428, "tube_entry_claim_tube")

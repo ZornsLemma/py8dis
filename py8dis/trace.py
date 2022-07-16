@@ -55,7 +55,7 @@ class Cpu(object):
             s = opcode.as_string(binary_addr)
 
             def late_formatter():
-                return mainformatter.add_inline_comment(binary_addr, opcode.length(), None, config.get_formatter().comment_prefix() + " overlapping: " + str(s)[4:])
+                return mainformatter.add_inline_comment(binary_addr, opcode.length(), None, config.get_assembler().comment_prefix() + " overlapping: " + str(s)[4:])
 
             disassembly.add_raw_annotation(binary_addr, utils.LazyString("%s", late_formatter))
         else:
@@ -152,8 +152,8 @@ class Cpu(object):
             return
         for addr, addr_refs in references.items():
             count = utils.count_with_units(len(addr_refs), "time", "times")
-            address_list = ", ".join(sorted(config.get_formatter().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs))
-            comment = "%s referenced %s by %s" % (config.get_formatter().hex4(addr), count, address_list)
+            address_list = ", ".join(sorted(config.get_assembler().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs))
+            comment = "%s referenced %s by %s" % (config.get_assembler().hex4(addr), count, address_list)
 
             # TODO: Where the comment has to be emitted slightly out of
             # place due to a classification, this becomes a bit
@@ -181,7 +181,7 @@ class Cpu(object):
         frequency_table = [(addr, len(addr_refs)) for addr, addr_refs in references.items()]
         frequency_table = sorted(frequency_table, key=lambda x: (x[1], -x[0]), reverse=True)
         longest_label = max(len(disassembly.get_label(addr, addr)) for addr in references)
-        comment = config.get_formatter().comment_prefix()
+        comment = config.get_assembler().comment_prefix()
         result.append("%s Label references by decreasing frequency:" % comment)
         for addr, count in frequency_table:
             result.append("%s     %-*s %3d" % (comment, longest_label+1, disassembly.get_label(addr, addr) + ":", count))

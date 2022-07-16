@@ -63,7 +63,7 @@ with move(0x8000, 0x2000, 0x4000):
     comment(0xaf70-0x6000, "Patch the following JMP so we effectively do JMP (&500,X)") # TODO: Offset hack but it may be fair enough because this is within a sub-move
 
     label(0x51, "jump_address_low")
-    expr(0x4f, config.get_formatter().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
+    expr(0x4f, config.get_assembler().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
 
     entry(0x435, "tube_entry_small_a")
     entry(0x428, "tube_entry_claim_tube")

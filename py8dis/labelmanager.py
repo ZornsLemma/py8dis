@@ -170,12 +170,12 @@ class Label(object):
         # if a name got *used* for the label at some point, it should
         # have been added into the label object so we know to emit it
         # here.
-        formatter = config.get_formatter()
+        assembler = config.get_assembler()
         result = []
         for name_list in self.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    result.append(formatter.explicit_label(name.name, formatter.hex4(self.addr), offset=None, align=align_column))
+                    result.append(assembler.explicit_label(name.name, assembler.hex4(self.addr), offset=None, align=align_column))
                     name.emitted = True
         return result
 
@@ -212,7 +212,7 @@ class Label(object):
         """Get a list of the labels in a move_id as a list of strings."""
 
         assert movemanager.is_valid_move_id(move_id)
-        formatter = config.get_formatter()
+        assembler = config.get_assembler()
         result = []
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
@@ -237,11 +237,11 @@ class Label(object):
                 continue
             if offset == 0:
                 if disassembly.is_simple_name(name.name):
-                    result.append(formatter.inline_label(name.name))
+                    result.append(assembler.inline_label(name.name))
             else:
                 if disassembly.is_simple_name(name.name):
                     # TODO: I suspect get_label() call here will want tweaking eventually
-                    result.append(formatter.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
+                    result.append(assembler.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
             name.emitted = True
         return result
 
@@ -271,7 +271,7 @@ def all_labels_as_comments():
     py8dis itself, though it might also be helpful for debugging user
     label hooks or similar."""
 
-    formatter = config.get_formatter()
+    formatter = config.get_assembler()
     c = formatter.comment_prefix()
     result = ["%s All labels by address and move ID" % c, "%s" % c]
     for addr, label in sorted(labels.items()):

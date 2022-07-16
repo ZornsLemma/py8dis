@@ -382,7 +382,7 @@ class Cpu8080(trace.Cpu):
             if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
                 c = trace.cpu.memory_binary[addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
-                    s += " %s '%s'" % (config.get_formatter().comment_prefix(), chr(c))
+                    s += " %s '%s'" % (config.get_assembler().comment_prefix(), chr(c))
             return s
 
 
@@ -398,7 +398,7 @@ class Cpu8080(trace.Cpu):
             if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
                 c = trace.cpu.memory_binary[addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
-                    s += " %s '%s'" % (config.get_formatter().comment_prefix(), chr(c))
+                    s += " %s '%s'" % (config.get_assembler().comment_prefix(), chr(c))
             return s
 
     class OpcodeAddr16(Opcode):

@@ -118,16 +118,16 @@ def set_hex_dump_max_bytes(i):
 
 
 # For internal use only:
-_formatter                  = None      # Internal variable holding the module used to emit disassembly, e.g. beebasm.py, acme.py etc
+_assembler                  = None      # Internal variable holding the assembler object used to emit disassembly, e.g. beebasm.py, acme.py etc
 _cmos                       = False
 
-def get_formatter():
-    global _formatter
-    return _formatter
+def get_assembler():
+    global _assembler
+    return _assembler
 
-def set_formatter(f):
-    global _formatter
-    _formatter = f
+def set_assembler(f):
+    global _assembler
+    _assembler = f
 
 def get_cmos():
     global _cmos

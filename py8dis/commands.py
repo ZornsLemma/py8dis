@@ -103,6 +103,9 @@ def load(binary_addr, filename, cpu_name, md5sum=None):
     else:
         cpu_name = cpu_name.lower()
 
+        # Get the list of supported CPUs for the assembler in lower case
+        assembler_cpus_supported = [x.lower() for x in config.get_assembler().cpus_supported()]
+
         # Check the assembler can handle the CPU chosen
         if not cpu_name in assembler_cpus_supported:
             utils.die("Cpu '%s' is not supported by the chosen assembler. See call to load()" % (cpu_name))
@@ -557,23 +560,14 @@ if args.lower and args.upper:
 
 if args.acme:
     import acme
-    set_output_filename = acme.set_output_filename
-    assembler_cpus_supported = acme.cpus_supported()
 elif args.xa:
     import xa
-    set_output_filename = xa.set_output_filename
-    assembler_cpus_supported = xa.cpus_supported()
 elif args.z88dk_8080:
     import z88dk_8080
-    set_output_filename = z88dk_8080.set_output_filename
-    assembler_cpus_supported = z88dk_8080.cpus_supported()
 else:
     import beebasm
-    set_output_filename = beebasm.set_output_filename
-    assembler_cpus_supported = beebasm.cpus_supported()
 
-# Make CPUs lower case for string matching
-assembler_cpus_supported = [x.lower() for x in assembler_cpus_supported]
+set_output_filename = config.get_assembler().set_output_filename
 
 if args.upper:
     config.set_lower_case(False)

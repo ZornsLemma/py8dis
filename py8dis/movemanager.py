@@ -199,7 +199,7 @@ def r2b_checked(runtime_addr):
     if binary_addr is None:
         # TODO: *Really* need a backtrace to make this useful
         assert False # TODO: A hack to get a backtrace
-        utils.die("Ambiguous runtime address %s" % config.get_formatter().hex(runtime_addr))
+        utils.die("Ambiguous runtime address %s" % config.get_assembler().hex(runtime_addr))
 
     assert move_id is not None
     return binary_addr, move_id

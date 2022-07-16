@@ -44,7 +44,7 @@ import memorymanager
 
 expressions   = {}
 memory_binary = memorymanager.memory_binary
-formatter     = config.get_formatter
+assembler     = config.get_assembler
 
 # ENHANCE: At the moment there's no support for wrapping round at the top of
 # memory and we might just crash (probably with an out-of-bounds error) if
@@ -115,13 +115,13 @@ class String(object):
 
     def as_string_list(self, binary_addr, annotations):
         result = []
-        prefix = utils.make_indent(1) + formatter().string_prefix()
+        prefix = utils.make_indent(1) + assembler().string_prefix()
         s = prefix
         state = 0
         s_i = 0
         for i in range(self._length):
             c = memory_binary[binary_addr + i]
-            c_in_string = formatter().string_chr(c)
+            c_in_string = assembler().string_chr(c)
             if c_in_string is not None:
                 if state == 0:
                     s += '"'
@@ -293,9 +293,9 @@ def stringhi(runtime_addr, include_terminator_fn=None):
             if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_addr]):
                 c = memory_binary[binary_addr] & 0x7f
                 if utils.isprint(c) and c != ord('"') and c != ord('\''):
-                    add_expression(binary_addr, "%s+'%s'" % (formatter().hex2(0x80), chr(c)))
+                    add_expression(binary_addr, "%s+'%s'" % (assembler().hex2(0x80), chr(c)))
                 else:
-                    add_expression(binary_addr, "%s+%s" % (formatter().hex2(0x80), formatter().hex2(c)))
+                    add_expression(binary_addr, "%s+%s" % (assembler().hex2(0x80), assembler().hex2(c)))
                 binary_addr += 1
             break
         binary_addr += 1
