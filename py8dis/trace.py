@@ -9,6 +9,7 @@ import movemanager
 import utils
 
 cpu = None
+subroutine_argument_finder_hooks = []
 
 class Cpu(object):
     """Abstract base class representing a CPU"""
@@ -17,7 +18,6 @@ class Cpu(object):
         self.memory_binary = memorymanager.memory_binary
         self.labels = labelmanager.labels
 
-        self.subroutine_argument_finder_hooks = []
         self.subroutine_hooks = {}
         self.opcodes = {}
         self.entry_points = []

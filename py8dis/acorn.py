@@ -421,8 +421,7 @@ def mos_labels():
     optional_label(0xfff4, "osbyte")
     optional_label(0xfff7, "oscli")
 
-    # TODO: Should this be a separate fn?
-    trace.cpu.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
+    trace.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
 
 def is_sideways_rom():
     comment(0x8000, "Sideways ROM header")

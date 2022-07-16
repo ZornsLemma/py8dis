@@ -39,15 +39,32 @@ of those fragments to have a separate inline label definition at
 address &903, so one fragment isn't "missing" a label to show control
 transfers in at &903 sometimes.
 
+So move IDs provide optional "annotations" on individual label names.
+They are "advisory" - labels just resolve to 16-bit integer addresses,
+of course - but they should allow us to try to emit different label
+names for the same address in different parts of the disassembly (i.e.
+the associated pseudopc block). They also help to provide
+disambiguation when tracing - where a destination address is mapped to
+more than one source address, we can use heuristics like "prefer the
+mapping for the move region we are currently tracing in", and maybe
+also allow users to annotate to say "the target address is in move
+region X".
+
 Secondly, when we use a label to refer to a 16-bit address, we'd like
 to use a "good" name. In the move() example from the previous point,
-we'd like each move()d fragment to use the same name for &903 as it
-used when emitting the label definition for that fragment.
+we'd like each move()d fragment to use the same name when referencing
+&903 as when it emitted the label definition for that fragment.
 
 (In some sense move IDs are entirely advisory; we could emit every
 single name at the top of the disassembly as explicit definitions of
 the form "foo = $1234" and the output would reassemble just fine. But
 this would not very readable or useful output.)
+
+We may want to turn move IDs into region IDs, as I could imagine a user
+wanting to use them to help control label name generation for code in
+a certain part of the binary without actually having a move() (or with
+a move() "in the background" but with more than one ID for a single
+move() region - we might have to generate this internally).
 """
 
 import collections
@@ -114,12 +131,14 @@ class Label(object):
         # move_id? We probably shouldn't allow it to exist with both -
         # we don't want to assume the assembler will accept duplicate
         # definitions of the same label name.
-        # For auto-generated labels, at least we may want to be
+        #
+        # For auto-generated labels at least we may want to be
         # appending some sort of suffix to allow differently named
         # variants of the label to exist in different move IDs.
-        # (Imagine we're tracing some code, and move IDs 0 and 1 both
+        #
+        # Imagine we're tracing some code, and move IDs 0 and 1 both
         # contain "bne &905"; we don't want to generate one l0905 label
-        # and put it in one move ID and leave the other one implicit.)
+        # and put it in one move ID and leave the other one implicit.
         if name not in self.all_names():
             self.explicit_names[move_id].append(self.Name(name))
 
@@ -174,14 +193,14 @@ class Label(object):
     # not actually the explictness of the definition which is changing, it is the
     # explicitness of the value.
     def definition_string_list(self, emit_addr, move_id):
-        """"""
+        """Get a list of the labels in a move_id as a list of strings."""
 
         # Emit any definitions for this move_id.
         result = self.definition_string_list_internal(emit_addr, move_id)
 
-        # Definitions for move IDs which will never get an opportunity to be emitted inline
-        # in their preferred move ID are emitted in the lowest-numbered move ID they can be
-        # emitted inline for.
+        # Definitions for move IDs which will never get an opportunity
+        # to be emitted inline in their preferred move ID are emitted
+        # in the lowest-numbered move ID they can be emitted inline for.
         #print("ZZZ", hex(emit_addr), move_id, self.emit_opportunities)
         if (len(self.emit_opportunities) > 0) and (move_id == min(self.emit_opportunities)):
             leftover_move_ids = set(self.explicit_names.keys()) - self.emit_opportunities
@@ -190,16 +209,30 @@ class Label(object):
         return result
 
     def definition_string_list_internal(self, emit_addr, move_id):
+        """Get a list of the labels in a move_id as a list of strings."""
+
         assert movemanager.is_valid_move_id(move_id)
         formatter = config.get_formatter()
         result = []
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
-        # TODO: It's probably OK, but note that we only emit for "matching" move_id; we leave it for
-        # explicit_definition_string_list() to return any things which we never would emit otherwise. Arguably if we have *any* point at which we could define a label inline (particularly if it's for the default move_id None) we should emit *all* labels for all move IDs at that address which haven't specifically been emitted elsewhere. Doing this properly would require making sure we emit (to temporary storage) all the pseudo-pc regions first, so let's not worry about that yet.
+        # TODO: It's probably OK, but note that we only emit for
+        # "matching" move_id; we leave it for
+        # explicit_definition_string_list() to return any things which
+        # we never would emit otherwise. Arguably if we have *any*
+        # point at which we could define a label inline (particularly
+        # if it's for the default move_id None) we should emit *all*
+        # labels for all move IDs at that address which haven't
+        # specifically been emitted elsewhere. Doing this properly
+        # would require making sure we emit (to temporary storage) all
+        # the pseudo-pc regions first, so let's not worry about that
+        # yet.
         for name in self.explicit_names[move_id]:
             #print("PXX", name.name)
-            # TODO: Our callers are probably expecting us to be calling get_label() if we don't have any explicit names, but I don't think this is actually a good way to work - but things are probably broken for the moment because of this
+            # TODO: Our callers are probably expecting us to be calling
+            # get_label() if we don't have any explicit names, but I
+            # don't think this is actually a good way to work - but
+            # things are probably broken for the moment because of this
             if name.emitted:
                 continue
             if offset == 0:
@@ -217,6 +250,11 @@ class Label(object):
 labels = utils.keydefaultdict(Label)
 
 def find_max_explicit_name_length():
+    """Get the length of the longest explicit label.
+
+    This is used to align the equals signs on the list of memory
+    locations at the top of the output."""
+
     max_name_length = 0
     for addr in labels.keys():
         for name_list in labels[addr].explicit_names.values():
@@ -225,15 +263,14 @@ def find_max_explicit_name_length():
                     max_name_length = max(max_name_length, len(name.name))
     return max_name_length
 
-# TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks
-
-# TODO: Just a general note - move IDs provide optional "annotations" on individual label names. They are "advisory" - labels just resolve to 16-bit integer addresses, of course - but they should allow us to try to emit different label names for the same address in different parts of the disassembly (i.e. the associated pseudopc block). They also help to provide disambiguation when tracing - where a destination address is mapped to more than one source address, we can use heuristics like "prefer the mapping for the move region we are currently tracing in", and maybe also allow users to annotation to say "the target address is in move region X". Still feeling my way with this but that's the general idea.
-
-# TODO: General note - may want to turn move IDs into region IDs, as I could imagine a user wanting to use them to help control label name generation for code in a certain part of the binary without actually having a move() (or with a move() "in the background" but with more than one ID for a single move() region - we might have to generate this internally). This might be easyish or it might not, but making a note to come back and think about this once I get the basics a bit more defined.
-
-# This is just intended as a debugging tool; mainly for debugging py8dis itself, though
-# it might also be helpful for debugging user label hooks or similar.
+# For debugging...
 def all_labels_as_comments():
+    """Return all labels as comments.
+
+    This is just intended as a debugging tool; mainly for debugging
+    py8dis itself, though it might also be helpful for debugging user
+    label hooks or similar."""
+
     formatter = config.get_formatter()
     c = formatter.comment_prefix()
     result = ["%s All labels by address and move ID" % c, "%s" % c]

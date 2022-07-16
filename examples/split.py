@@ -1,4 +1,7 @@
 from commands import *
+import acorn
+
+acorn.bbc()
 
 # Load the program to be disassembled into the debugger's memory.
 # The md5sum is optional but helps avoid confusion if there are multiple versions

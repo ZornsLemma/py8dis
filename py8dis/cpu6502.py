@@ -663,7 +663,7 @@ class Cpu6502(trace.Cpu):
     # line instructions - the fact that the sequence might *also* be entered
     # part-way through via a label doesn't invalidate that inference.
     def subroutine_argument_finder(self):
-        if len(self.subroutine_argument_finder_hooks) == 0:
+        if len(trace.subroutine_argument_finder_hooks) == 0:
             return
 
         addr = 0
@@ -678,7 +678,7 @@ class Cpu6502(trace.Cpu):
                     opcode_jmp = 0x4c
                     if opcode in (opcode_jsr, opcode_jmp):
                         target = memorymanager.get_u16_binary(addr + 1)
-                        for hook in self.subroutine_argument_finder_hooks:
+                        for hook in trace.subroutine_argument_finder_hooks:
                             def get(reg):
                                 v = state[reg][1]
                                 if v is None:
