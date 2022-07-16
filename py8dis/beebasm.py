@@ -18,6 +18,9 @@ _pending_assertions = {}
 _disassembly_start = []
 _code_end_addr = 0 # TODO: bit hacky
 
+def cpus_supported():
+    return ["6502", "65c02"]
+
 def set_output_filename(filename):
     global output_filename
     output_filename = filename

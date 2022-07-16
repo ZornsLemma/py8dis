@@ -31,8 +31,8 @@ rts_code_ptr()          Marks two bytes of data as being an RTS-able subroutine 
 nonentry()              Marks an address as 'not to be traced as code'.
 hook_subroutine()       For functions that don't return normally, control the tracing.
 
+expr()                  Define an expression equivalent to an 8 bit data byte.
 expr_label()            Define an expression equivalent to a 16 bit runtime address.
-expr()                  Define a string expression equivalent to data at an address.
 
 annotate()              Add a raw string directly to the assembly code output.
 blank()                 Add a blank line directly to the assembly code output.
@@ -75,16 +75,44 @@ import mainformatter
 import trace
 import utils
 
+from cpu65C02 import *
+from cpu6502 import *
+from cpu8080 import *
+
+cpu_names = { "6502"  : lambda : Cpu6502(),
+              "65c02" : lambda : Cpu65C02(),
+              "8080"  : lambda : Cpu8080(),
+            }
+
 memory_binary = memorymanager.memory_binary
 memory = memorymanager.memory
 
-def load(binary_addr, filename, md5sum=None):
+def load(binary_addr, filename, cpu_name, md5sum=None):
     """Loads a binary file to analyse at the given address.
 
     Load a binary file and optionally verify the checksum of the data."""
 
-    if trace.cpu is None:
-        utils.die("No CPU type selected; import one of the trace*.py modules to set this.")
+    # Check we have a valid CPU for the chosen assembler and select the
+    # trace.cpu accordingly
+    if cpu_name is None:
+        utils.die("No CPU type selected in call to load().")
+
+    if isinstance(cpu_name, trace.Cpu):
+        # Set the CPU
+        trace.cpu = cpu_name
+    else:
+        cpu_name = cpu_name.lower()
+
+        # Check the assembler can handle the CPU chosen
+        if not cpu_name in assembler_cpus_supported:
+            utils.die("Cpu '%s' is not supported by the chosen assembler. See call to load()" % (cpu_name))
+
+        # Set the CPU
+        if cpu_name in cpu_names.keys():
+            trace.cpu = cpu_names[cpu_name]()
+        else:
+            utils.die("Unknown CPU or missing CPU parameter '%s' specified for load()." % (cpu_name))
+
     memorymanager.load(filename, binary_addr, md5sum)
 
 def move(dest, src, length):
@@ -242,7 +270,7 @@ def word(runtime_addr, n=1, cols=None):
 
 def entry(runtime_addr, label=None, warn=True):
     """
-    Specifies that there is code at the given address.
+    Specifies that there is code at the given runtime address.
 
     When go() is called, code is automatically traced from each entry
     point through all possible branches and subroutines. This is
@@ -530,15 +558,19 @@ if args.lower and args.upper:
 if args.acme:
     import acme
     set_output_filename = acme.set_output_filename
+    assembler_cpus_supported = acme.cpus_supported()
 elif args.xa:
     import xa
     set_output_filename = xa.set_output_filename
+    assembler_cpus_supported = xa.cpus_supported()
 elif args.z88dk_8080:
     import z88dk_8080
     set_output_filename = z88dk_8080.set_output_filename
+    assembler_cpus_supported = z88dk_8080.cpus_supported()
 else:
     import beebasm
     set_output_filename = beebasm.set_output_filename
+    assembler_cpus_supported = beebasm.cpus_supported()
 
 if args.upper:
     config.set_lower_case(False)

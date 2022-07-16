@@ -11,6 +11,9 @@ explicit_a = False
 
 _pending_assertions = {}
 
+def cpus_supported():
+    return ["6502", "65c02"]
+
 def set_output_filename(filename):
     # Irrelevant for acme, accepted for compatibility with beebasm.
     pass

@@ -1,4 +1,3 @@
-import trace8080
 from commands import *
 
 def my_comment(addr, comment):
@@ -14,7 +13,7 @@ config.set_show_char_literals(False)
 #config.set_hex_dump(False)
 
 # Example code from http://www.emulator101.com/full-8080-emulation.html
-load(0x0100, "test8080.orig", "f5ca07054c3ee9832866f5c60697a3f6")
+load(0x0100, "test8080.orig", "8080", "f5ca07054c3ee9832866f5c60697a3f6")
 entry(0x0100)
 comment(0x0100, "jump to 8080 CPU diagnostic", inline=True)
 

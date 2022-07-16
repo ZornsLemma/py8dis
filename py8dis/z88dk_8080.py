@@ -9,6 +9,9 @@ config.set_formatter(sys.modules[__name__])
 
 _pending_assertions = {}
 
+def cpus_supported():
+    return ["8080"]
+
 def set_output_filename(filename):
     # Irrelevant for z88dk, accepted for compatibility with beebasm.
     pass

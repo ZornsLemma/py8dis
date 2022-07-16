@@ -1,4 +1,3 @@
-import trace6502
 from commands import *
 import acorn
 
@@ -11,7 +10,7 @@ def patched_branch(base_label, offset_addr, target_label, label_only=False):
     f(base_addr + 2 + offset, target_label)
     expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
 
-load(0x2000, "dfs226.orig", "f083f49d6fe66344c650d7e74249cb96")
+load(0x2000, "dfs226.orig", "6502", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
 
 # TODO: Every occurrence of -0x6000 or the like *might* indicate a bug in py8dis; it may also be "fair enough" because this disassembly is asking too much with a double move
