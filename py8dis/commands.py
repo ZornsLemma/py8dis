@@ -572,6 +572,9 @@ else:
     set_output_filename = beebasm.set_output_filename
     assembler_cpus_supported = beebasm.cpus_supported()
 
+# Make CPUs lower case for string matching
+assembler_cpus_supported = [x.lower() for x in assembler_cpus_supported]
+
 if args.upper:
     config.set_lower_case(False)
 else:

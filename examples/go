@@ -51,6 +51,7 @@ test_8080() {
     check_identical "$original_dat" "build/${filename}_8080.bin"
 }
 
+test_8080 "example8080.py" "example8080.orig"
 test_8080 "test8080.py" "test8080.orig"
 test "helloworld.py" "helloworld.orig"
 test "basic4.py" "basic4.orig"
