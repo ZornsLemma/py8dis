@@ -425,7 +425,10 @@ def emit():
 
         for value, name in sorted(constants, key=lambda x: x[1]):
             if isinstance(value, six.integer_types):
-                value = formatter.hex(value)
+                if config.get_constants_are_decimal():
+                    value = str(value)
+                else:
+                    value = formatter.hex(value)
             output.append(formatter.explicit_label(name, value, None, max_len))
         output.append("")
 
