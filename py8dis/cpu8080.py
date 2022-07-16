@@ -173,7 +173,7 @@ class Cpu8080(trace.Cpu):
             0x87: self.OpcodeImplied("ADD A"),
             0x88: self.OpcodeImplied("ADC B"),
             0x89: self.OpcodeImplied("ADC C"),
-            0x8a: self.OpcodeImplied("ADC E"),
+            0x8a: self.OpcodeImplied("ADC D"),
             0x8b: self.OpcodeImplied("ADC E"),
             0x8c: self.OpcodeImplied("ADC H"),
             0x8d: self.OpcodeImplied("ADC L"),
@@ -284,9 +284,9 @@ class Cpu8080(trace.Cpu):
 
             0xf0: self.OpcodeImplied("RP"),
             0xf1: self.OpcodeImplied("POP PSW"),
-            0xf2: self.OpcodeConditionalBranch("JP"),
+            0xf2: self.OpcodeConditionalBranch("JP P,"),
             0xf3: self.OpcodeImplied("DI"),
-            0xf4: self.OpcodeCall("CP"),
+            0xf4: self.OpcodeCall("CALL P,"),
             0xf5: self.OpcodeImplied("PUSH PSW"),
             0xf6: self.OpcodeImmediate("ORI"),
             0xf7: self.OpcodeReset("RST 6"),
@@ -522,7 +522,7 @@ class Cpu8080(trace.Cpu):
                 return caller_runtime_addr + 3
             call_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_call_hook)
             caller_runtime_addr = movemanager.b2r(binary_addr)
-            with movemanager.moved(movemanager.move_id_for_binary_addr[binary_addr]):
+            with movemanager.move_id_for_binary_addr[binary_addr]:
                 return_runtime_addr = call_hook(target_runtime_addr, caller_runtime_addr)
             if return_runtime_addr is not None:
                 return_runtime_addr = memorymanager.RuntimeAddr(return_runtime_addr)

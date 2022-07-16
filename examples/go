@@ -38,6 +38,20 @@ test() {
     check_identical "$original_dat" "build/${filename}_xa.dat"
 }
 
+test_8080() {
+    source_path="$1"
+    original_dat="$2"
+
+    filename=$(basename ${source_path%.*})
+
+    # z88dk-z80asm
+    echo "Testing $filename for z88dk-z80asm"
+    python3 "$source_path" --z88dk-8080 > "build/${filename}_8080.asm"
+    z88dk-z80asm -m8080 -b -l -s -o"build/${filename}_8080.bin" "build/${filename}_8080.asm"
+    check_identical "$original_dat" "build/${filename}_8080.bin"
+}
+
+test_8080 "test8080.py" "test8080.orig"
 test "helloworld.py" "helloworld.orig"
 test "basic4.py" "basic4.orig"
 test "dfs226.py" "DFS226.orig"
