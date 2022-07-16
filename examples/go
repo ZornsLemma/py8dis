@@ -22,7 +22,7 @@ test() {
     # Beebasm
     echo "Testing $filename for Beebasm"
     python3 "$source_path" > "build/${filename}_beebasm.asm"
-    beebasm -v -o "build/${filename}_beebasm.dat" -i "build/${filename}_beebasm.asm" > "build/${filename}_beebasm.lst"
+    beebasm -v -o "build/${filename}_beebasm.dat" -i "build/${filename}_beebasm.asm" > "build/${filename}_beebasm_report.txt"
     check_identical "$original_dat" "build/${filename}_beebasm.dat"
 
     # Acme
