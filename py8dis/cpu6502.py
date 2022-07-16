@@ -232,7 +232,7 @@ class Cpu6502(trace.Cpu):
 
         def is_block_end(self):
             # TODO: This should perhaps be defined on individual instructions or opcode classes.
-            return self.mnemonic in ("JMP", "RTS", "BRA")
+            return self.mnemonic in ("JMP", "RTS", "RTI", "BRA")
 
         def as_string_list(self, addr, annotations):
             result = [mainformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]

@@ -1,5 +1,5 @@
 """
-Disassembling code.
+Disassembling code (and data).
 
 Classifies bytes of binary data as code.
 
@@ -329,7 +329,7 @@ def get_final_label(addr, context, move_id):
     return name
 
 def is_classified(binary_addr, length=1):
-    """Is any address in the given range is classified?"""
+    """Is any address in the given range classified?"""
 
     return any(x is not None for x in classifications[binary_addr:binary_addr+length])
 
@@ -508,14 +508,24 @@ def emit():
             if start_addr != old_end_addr:
                 d.extend(formatter.code_start(start_addr, end_addr, False))
 
-        # output at each address in the block
+        # output at each address within the block
+        was_code = None
         addr = start_addr
         while addr < end_addr:
+            # if we have just transitioned from data to code, add a blank line
+            now_is_code = is_code(addr)
+            if now_is_code and was_code == False:
+                d.extend([""])
+            was_code = now_is_code
+
+            # output the line itself
             d.extend(emit_addr(addr, move_id))
+
+            # move to the next address
             addr += classifications[addr].length()
         assert addr == end_addr
 
-        # Emit labels and annotations at the end address of the move
+        # Emit labels and annotations at the end address of the move range
         d.extend(emit_labels(end_addr, move_id))
 
         # Handle the end of the !pseudopc block

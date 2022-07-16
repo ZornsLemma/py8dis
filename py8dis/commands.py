@@ -484,11 +484,10 @@ def go(post_trace_steps=None, autostring_min_length=3):
     pydis_start, pydis_end = memorymanager.get_entire_load_range()
 
     # Create start and end labels
-    # TODO: Are the int casts here OK? Feels a bit hacky but not quite sure.
     label(int(pydis_start), "pydis_start", move_id=movemanager.base_move_id)
     label(int(pydis_end), "pydis_end", move_id=movemanager.base_move_id)
 
-    # Trace where code lines
+    # Trace where code lives
     trace.cpu.trace()
     trace.cpu.generate_references()
 
@@ -498,14 +497,15 @@ def go(post_trace_steps=None, autostring_min_length=3):
         trace.cpu.add_references_comments()
 
     # Scan the binary for strings (or allow a user function to do it)
-    # autostring() really needs to be invoked after trace() has done its classification,
-    # so we wrap it up in here by default rather than expecting the user to call it.
+    # autostring() really needs to be invoked after trace() has done
+    # its classification, so we wrap it up in here by default rather
+    # than expecting the user to call it.
     if post_trace_steps is None:
         def post_trace_steps():
             classification.autostring(autostring_min_length)
     post_trace_steps()
 
-    # Mark everything left as bytes
+    # Mark everything remaining as bytes
     classification.classify_leftovers()
 
     # Output assembly code
