@@ -7,10 +7,12 @@ import trace
 import utils
 import memorymanager
 
-def add_hex_dump(binary_addr, length, s):
-    """Creates the major part of the inline comment for a line of output.
+def add_hex_dump(binary_addr, length, cycles_description, s):
+    """Creates the majority of the inline comment for a line of output.
 
-    This creates a string containing the hex dump and character equivalents, CPU state, and move commentary. This string has a fixed width.
+    This creates a string containing the hex dump and character
+    equivalents, CPU state, and move commentary. This string has a
+    fixed width.
     """
 
     assert isinstance(binary_addr, memorymanager.BinaryAddr)
@@ -28,6 +30,12 @@ def add_hex_dump(binary_addr, length, s):
     # Add ASCII characters as a fixed width string
     dump_chars = utils.tab_to("".join(chr(x) if utils.isprint(x) else "." for x in data), config.get_hex_dump_max_bytes())
 
+    # Add cycle counts
+    if config.get_show_cycles() and cycles_description and len(cycles_description) > 0:
+        cycles_description = utils.tab_to(" " + cycles_description + " cycles", 14)
+    else:
+        cycles_description = ""
+
     # Add CPU state as a fixed width string
     dump_cpu_state = ""
     if config.get_show_cpu_state():
@@ -44,13 +52,14 @@ def add_hex_dump(binary_addr, length, s):
     dump_move = utils.tab_to(dump_move, 12)
 
     # Join them all together: address, hex bytes, characters, cpu state, move details
-    s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + dump_cpu_state + dump_move
+    s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + cycles_description + dump_cpu_state + dump_move
     return s
 
-def add_inline_comment(binary_addr, length, annotations, s):
+def add_inline_comment(binary_addr, length, cycles_description, annotations, s):
     """Creates the entire inline comment for the line as a string.
 
-    Creates a string including the hex dump and character equivalents, CPU state, move commentary, and any inline annotations.
+    Creates a string including the hex dump and character equivalents,
+    CPU state, move commentary, and any inline annotations.
     """
 
     assert isinstance(binary_addr, memorymanager.BinaryAddr)
@@ -58,7 +67,7 @@ def add_inline_comment(binary_addr, length, annotations, s):
     s = utils.tab_to(s, config.get_inline_comment_column())
 
     # Add any hex dump (fixed width)
-    s = add_hex_dump(binary_addr, length, s)
+    s = add_hex_dump(binary_addr, length, cycles_description, s)
 
     # Add any inline annotations
     if annotations:
@@ -71,7 +80,8 @@ def add_inline_comment(binary_addr, length, annotations, s):
 def format_data_block(binary_addr, length, cols, element_size, annotations):
     """Format a block of data.
 
-    Formats an array of bytes or words, returning one string for each line of output.
+    Formats an array of bytes or words, returning one string for each
+    line of output.
     """
 
     assert isinstance(binary_addr, memorymanager.BinaryAddr)
@@ -107,14 +117,16 @@ def format_data_block(binary_addr, length, cols, element_size, annotations):
     for i in range(0, len(data), num_data_items_on_line):
         items_on_line = min(len(data) - i, num_data_items_on_line)
         core_str = prefix + separator.join("%*s" % (longest_item, x) for x in data[i:i+num_data_items_on_line])
-        core_str = add_inline_comment(binary_addr + i * element_size, items_on_line * element_size, annotations, core_str)
+        core_str = add_inline_comment(binary_addr + i * element_size, items_on_line * element_size, "", annotations, core_str)
         result.append(core_str)
     return result
 
 def uint_formatter(n, bits, pad=False):
     """Format an 8 or 16 bit number as hex or single digit decimal.
 
-    For readability we format values 0-9 as decimal, but use hex otherwise. Includes optional left padding to align columns of data in blocks.
+    For readability we format values 0-9 as decimal, but use hex
+    otherwise. Includes optional left padding to align columns of data
+    in blocks.
     """
 
     assert bits in (8, 16)
@@ -132,7 +144,8 @@ def uint_formatter(n, bits, pad=False):
 def char_formatter(n, bits):
     """Format a quoted character.
 
-    Returns a quoted character if possible otherwise just a hex or decimal integer.
+    Returns a quoted character if possible otherwise just a hex or
+    decimal integer.
     """
 
     c = config.get_assembler().string_chr(n)
@@ -153,7 +166,9 @@ def binary_formatter(n, bits):
 def picture_binary_formatter(n, bits):
     """Format 'picture' binary data.
 
-    'Picture' binary uses alternative characters for expressing binary digits. This is most commonly used for displaying 1-bit per pixel sprites.
+    'Picture' binary uses alternative characters for expressing binary
+    digits. This is most commonly used for displaying 1-bit per pixel
+    sprites.
     """
 
     return config.get_assembler().picture_binary(binary_formatter(n, bits))

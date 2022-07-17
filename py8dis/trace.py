@@ -55,7 +55,7 @@ class Cpu(object):
             s = opcode.as_string(binary_addr)
 
             def late_formatter():
-                return mainformatter.add_inline_comment(binary_addr, opcode.length(), None, config.get_assembler().comment_prefix() + " overlapping: " + str(s)[4:])
+                return mainformatter.add_inline_comment(binary_addr, opcode.length(), "", None, config.get_assembler().comment_prefix() + " overlapping: " + str(s)[4:])
 
             disassembly.add_raw_annotation(binary_addr, utils.LazyString("%s", late_formatter))
         else:

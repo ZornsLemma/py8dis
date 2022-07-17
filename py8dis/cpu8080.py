@@ -356,7 +356,7 @@ class Cpu8080(trace.Cpu):
             return "%s%s" % (utils.make_indent(1), utils.force_case(self.mnemonic))
 
         def as_string_list(self, addr, annotations):
-            result = [mainformatter.add_inline_comment(addr, self.length(), annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
+            result = [mainformatter.add_inline_comment(addr, self.length(), "", annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result

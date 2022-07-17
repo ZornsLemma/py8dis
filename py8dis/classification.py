@@ -142,14 +142,14 @@ class String(object):
             if len(s) > (config.get_inline_comment_column() - 5):
                 if state == 1:
                     s += '"'
-                result.append(mainformatter.add_inline_comment(binary_addr + s_i, i - s_i, annotations, s))
+                result.append(mainformatter.add_inline_comment(binary_addr + s_i, i - s_i, "", annotations, s))
                 s = prefix
                 s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            result.append(mainformatter.add_inline_comment(binary_addr + s_i, self._length - s_i, annotations, s))
+            result.append(mainformatter.add_inline_comment(binary_addr + s_i, self._length - s_i, "", annotations, s))
         return result
 
 
