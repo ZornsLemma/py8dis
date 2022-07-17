@@ -117,7 +117,7 @@ To change the configuration, add `import config` and call the following as neede
 | `config.set_show_char_literals(b)`       | True    | Show or hide character literals comments.                        |
 | `config.set_show_all_labels(b)`          | False   | Show or hide a list of all labels used (for debugging py8dis).   |
 | `config.set_hex_dump_max_bytes(i)`       | 3       | Set the number of hex bytes output on a single line.             |
-
+| `config.set_show_cycles(b)`              | False   | Show the number of cycles taken by each instruction.             |
 
 ## Command reference
 

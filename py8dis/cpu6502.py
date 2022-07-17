@@ -421,7 +421,7 @@ class Cpu6502(trace.Cpu):
             super(Cpu6502.OpcodeDataAbs, self).__init__(mnemonic, suffix, has_zp_version, cycles=cycles, update=update)
 
         def _target(self, addr):
-            return addr
+            return memorymanager.RuntimeAddr(self.abs_operand(addr))
 
         def update_references(self, addr):
             trace.cpu.labels[self.abs_operand(addr)].add_reference(addr)
