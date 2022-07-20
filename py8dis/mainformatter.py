@@ -1,5 +1,3 @@
-# TODO: Rename
-
 import classification
 import config
 import disassembly
@@ -7,15 +5,23 @@ import movemanager
 import textwrap
 import trace
 import utils
+import memorymanager
 
-def add_hex_dump(binary_addr, length, s):
-    assert isinstance(binary_addr, utils.BinaryAddr)
+def add_hex_dump(binary_addr, length, cycles_description, s):
+    """Creates the majority of the inline comment for a line of output.
+
+    This creates a string containing the hex dump and character
+    equivalents, CPU state, and move commentary. This string has a
+    fixed width.
+    """
+
+    assert isinstance(binary_addr, memorymanager.BinaryAddr)
     if not config.get_hex_dump():
         return s
-    s += config.get_formatter().comment_prefix() + " "
+    s += config.get_assembler().comment_prefix() + " "
 
     # Add hex characters as a fixed width string
-    data = config.memory_binary[binary_addr:binary_addr + min(length, config.get_hex_dump_max_bytes())]
+    data = memorymanager.memory_binary[binary_addr:binary_addr + min(length, config.get_hex_dump_max_bytes())]
     dump_hex = " ".join(utils.plainhex2(x) for x in data)
     if length > config.get_hex_dump_max_bytes():
         dump_hex += "... "
@@ -23,6 +29,12 @@ def add_hex_dump(binary_addr, length, s):
 
     # Add ASCII characters as a fixed width string
     dump_chars = utils.tab_to("".join(chr(x) if utils.isprint(x) else "." for x in data), config.get_hex_dump_max_bytes())
+
+    # Add cycle counts
+    if config.get_show_cycles() and cycles_description and len(cycles_description) > 0:
+        cycles_description = utils.tab_to(" " + cycles_description + " cycles", 14)
+    else:
+        cycles_description = ""
 
     # Add CPU state as a fixed width string
     dump_cpu_state = ""
@@ -40,19 +52,24 @@ def add_hex_dump(binary_addr, length, s):
     dump_move = utils.tab_to(dump_move, 12)
 
     # Join them all together: address, hex bytes, characters, cpu state, move details
-    s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + dump_cpu_state + dump_move
+    s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + cycles_description + dump_cpu_state + dump_move
     return s
 
-# Adds a hex dump and inline comment for the line
-def add_inline_comment(binary_addr, length, annotations, s):
-    assert isinstance(binary_addr, utils.BinaryAddr)
+def add_inline_comment(binary_addr, length, cycles_description, annotations, s):
+    """Creates the entire inline comment for the line as a string.
+
+    Creates a string including the hex dump and character equivalents,
+    CPU state, move commentary, and any inline annotations.
+    """
+
+    assert isinstance(binary_addr, memorymanager.BinaryAddr)
     # Add spaces up to the comment column
     s = utils.tab_to(s, config.get_inline_comment_column())
 
     # Add any hex dump (fixed width)
-    s = add_hex_dump(binary_addr, length, s)
+    s = add_hex_dump(binary_addr, length, cycles_description, s)
 
-    # Add any inline comments
+    # Add any inline annotations
     if annotations:
         for i in range(0, length):
             for annotation in utils.sorted_annotations(annotations[binary_addr + i]):
@@ -60,24 +77,27 @@ def add_inline_comment(binary_addr, length, annotations, s):
                     s += annotation.as_string(binary_addr)
     return s.rstrip()
 
-# TODO: We might want Byte/Word objects to have a format function (a bit like format_hint for individual bytes) and allow the user to control it (poss via helper fns) - that way they could call this function with a None argument to get auto-column-calculation or an integer argument to specify "use n columns" or a variant of this function to get "no alignment but basic data-item-oriented-word-wrapping" output.
-# TODO: It's not unreasonable to have inline comments on items in data blocks; we might only emit them if the data block is single-column formatter - I guess we'd have to, actually, since there's no way to end an inline comment short of a newline. So we probably want to default to single-column if there's any inline comments in the range, and if the user has forced a multi-column structure we should probably warn about hidden inline comments
 def format_data_block(binary_addr, length, cols, element_size, annotations):
-    assert isinstance(binary_addr, utils.BinaryAddr)
-    assert utils.is_valid_addr(binary_addr)
+    """Format a block of data.
+
+    Formats an array of bytes or words, returning one string for each
+    line of output.
+    """
+
+    assert isinstance(binary_addr, memorymanager.BinaryAddr)
+    assert memorymanager.is_valid_binary_addr(binary_addr)
     assert length >= 1
     assert element_size in (1, 2)
     assert length % element_size == 0
 
     if element_size == 1:
         data = list(classification.get_constant8(binary_addr + i) for i in range(length))
-        data_prefix = config.get_formatter().byte_prefix()
+        data_prefix = config.get_assembler().byte_prefix()
     else:
         data = list(classification.get_constant16(binary_addr + i) for i in range(0, length, 2))
-        data_prefix = config.get_formatter().word_prefix()
+        data_prefix = config.get_assembler().word_prefix()
 
-    indent = disassembly.indent_hint[binary_addr] + 1
-    prefix = utils.make_indent(indent) + data_prefix
+    prefix = utils.make_indent(1) + data_prefix
     separator = ", "
     longest_item = max(len(x) for x in data)
     if cols is not None:
@@ -97,11 +117,18 @@ def format_data_block(binary_addr, length, cols, element_size, annotations):
     for i in range(0, len(data), num_data_items_on_line):
         items_on_line = min(len(data) - i, num_data_items_on_line)
         core_str = prefix + separator.join("%*s" % (longest_item, x) for x in data[i:i+num_data_items_on_line])
-        core_str = add_inline_comment(binary_addr + i * element_size, items_on_line * element_size, annotations, core_str)
+        core_str = add_inline_comment(binary_addr + i * element_size, items_on_line * element_size, "", annotations, core_str)
         result.append(core_str)
     return result
 
 def uint_formatter(n, bits, pad=False):
+    """Format an 8 or 16 bit number as hex or single digit decimal.
+
+    For readability we format values 0-9 as decimal, but use hex
+    otherwise. Includes optional left padding to align columns of data
+    in blocks.
+    """
+
     assert bits in (8, 16)
     assert 0 <= n < (1<<bits)
     if n < 10:
@@ -111,47 +138,80 @@ def uint_formatter(n, bits, pad=False):
             s = ("     " + s)[-3 if bits == 8 else -5:]
         return s
     if bits == 8:
-        return config.get_formatter().hex2(n)
-    return config.get_formatter().hex4(n)
+        return config.get_assembler().hex2(n)
+    return config.get_assembler().hex4(n)
 
 def char_formatter(n, bits):
-    c = config.get_formatter().string_chr(n)
+    """Format a quoted character.
+
+    Returns a quoted character if possible otherwise just a hex or
+    decimal integer.
+    """
+
+    c = config.get_assembler().string_chr(n)
     if c is not None:
         return "'%s'" % c
     return uint_formatter(n, bits)
 
 def binary_formatter(n, bits):
+    """Format a binary string
+
+    Pads to the number of bits given.
+    """
+
     s = bin(n)[2:]
     s = ("0"*bits + s)[-bits:]
-    return config.get_formatter().binary_format(s)
+    return config.get_assembler().binary_format(s)
 
 def picture_binary_formatter(n, bits):
-    return config.get_formatter().picture_binary(binary_formatter(n, bits))
+    """Format 'picture' binary data.
+
+    'Picture' binary uses alternative characters for expressing binary
+    digits. This is most commonly used for displaying 1-bit per pixel
+    sprites.
+    """
+
+    return config.get_assembler().picture_binary(binary_formatter(n, bits))
 
 def decimal_formatter(n, bits):
+    """Format a regular decimal number"""
+
     return "%d" % n
 
 def hexadecimal_formatter(n, bits):
+    """Format an 8 or 16 bit hex number"""
+
     # TODO: It's possible we want to offer some additional control over leading
     # zero padding and number of hex digits emitted, but let's just go with this
     # for now.
-    return config.get_formatter().hex(n)
+    return config.get_assembler().hex(n)
 
 def constant(binary_addr, n, bits):
+    """Format a constant value, using whatever formatter is hinted"""
+
     format_hint = disassembly.format_hint.get(binary_addr, uint_formatter)
     return format_hint(n, bits)
 
 def constant8(binary_addr):
-    assert utils.is_valid_addr(binary_addr)
-    n = config.memory_binary[binary_addr]
+    """Format a constant value, using whatever formatter is hinted"""
+
+    assert memorymanager.is_valid_binary_addr(binary_addr)
+    n = memorymanager.memory_binary[binary_addr]
     return constant(binary_addr, n, 8)
 
 def constant16(binary_addr):
-    assert utils.is_valid_addr(binary_addr)
-    n = utils.get_u16_binary(binary_addr)
+    """Format a constant value, using whatever formatter is hinted"""
+
+    assert memorymanager.is_valid_binary_addr(binary_addr)
+    n = memorymanager.get_u16_binary(binary_addr)
     return constant(binary_addr, n, 16)
 
 def format_comment(text):
-    prefix = config.get_formatter().comment_prefix() + " "
+    """Format a standalone (i.e. not inline) multiline comment.
+
+    Text is word wrapped.
+    """
+
+    prefix = config.get_assembler().comment_prefix() + " "
     text_width = config.get_inline_comment_column() - len(prefix)
     return "\n".join(textwrap.fill(paragraph, text_width) for paragraph in text.split("\n"))
