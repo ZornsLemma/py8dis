@@ -43,9 +43,14 @@ class Acme(assembler.Assembler):
         self.pending_assertions[expr] = value
 
     def disassembly_start(self):
+        result = []
+
+        if self.output_filename:
+            result.extend(["!to \"%s\", plain" % (self.output_filename)])
+
         if config.get_cmos():
-            return ["!cpu 65c02", ""]
-        return []
+            result.extend(["!cpu 65c02", ""])
+        return result
 
     def code_start(self, start_addr, end_addr, first):
         return ["", "%s* = %s" % (utils.make_indent(1), self.hex4(start_addr)), ""]

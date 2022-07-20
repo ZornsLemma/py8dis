@@ -256,8 +256,8 @@ def find_max_explicit_name_length():
     locations at the top of the output."""
 
     max_name_length = 0
-    for addr in labels.keys():
-        for name_list in labels[addr].explicit_names.values():
+    for label in labels.values():
+        for name_list in label.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
                     max_name_length = max(max_name_length, len(name.name))

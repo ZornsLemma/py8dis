@@ -743,10 +743,12 @@ class Cpu6502(trace.Cpu):
             return
 
         addr = 0
-        state = trace.cpu.CpuState()
+        state = None
         while addr < 0x10000:
             c = disassembly.classifications[addr]
             if c is not None:
+                if state == None:
+                    state = trace.cpu.CpuState()
                 # TODO: Hacky use of isinstance()
                 if isinstance(c, trace.cpu.Opcode):
                     opcode = trace.cpu.memory_binary[addr]

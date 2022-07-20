@@ -61,6 +61,7 @@ class Cpu(object):
         else:
             disassembly.add_classification(binary_addr, opcode)
             opcode.update_references(binary_addr)
+
         return opcode.disassemble(binary_addr)
 
     def add_entry(self, binary_addr, name, move_id):
@@ -79,9 +80,9 @@ class Cpu(object):
             if c is not None:
                 if c.is_code(binary_addr):
                     c.update_cpu_state(binary_addr, state)
+                    self.cpu_state_optimistic[binary_addr] = copy.deepcopy(state)
                 else:
                     state = self.CpuState()
-                self.cpu_state_optimistic[binary_addr] = copy.deepcopy(state)
                 binary_addr += c.length()
             else:
                 binary_addr += 1
