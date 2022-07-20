@@ -1,46 +1,71 @@
-# TODO: Move/tidy this note somewhere permanent
-# Label names are a bit fiddly because:
-# - we discover the need for labels during the tracing process
-# - we cannot allocate names to labels during the tracing process, as the code to generate
-#   label names may want to look at the code as a whole and we need to finish tracing first.
-# - we therefore have to wait until we've finished tracing before generating any missing
-#   label names
-# - we must do this before we start to generate the text disassembly so we know all label
-#   names and can emit their definitions in the right place.
+"""
+Label manager.
 
-# TODO: Sketchier notes about label names
-# - every label reference will call the label-name-maker and could in principle generate a completely different name
-# - the labelmanager needs to know about these labels to the extent of "label XYZ is at address A and I need to emit a definition" but it doesn't need to be capable of answering the "what label name do I use for this particular reference to address A", as that is answered by calling the label-name-maker every time.
-# - however, the labelmanager *does* need to know where - currently expressed in terms of move IDs (which are kind of turning into "region IDs" but I don't think that matters too much just yet) - to emit the definition of these labelmaker-created labels. How do we decide him? I suppose the general answer - which would probably be hidden by an extra layer most of the time - is that the label maker says "I want a label with name A at address B and the definition belongs to move ID C". That gives the core code enough to work with, and the label maker framework can then be responsbile for assigning C - perhaps it will simply default to None unless overridden, or there will be some heuristic, or the user will choose to get involved.
-# - I am sort of feeling I need to think about move/region IDs and context for py8dis as a whole, but that as a basic building block the labelmanager should work with something *like* move IDs but which as far as it is concerned are simply tags. These tags are used by the label maker code when considering what label name to use for a particular reference and similarly are used when retrieving "all" labels from the label manager in order to emit definitions, but the label manager itself doesn't really "understand" them (which is why although they *might* be move IDs they might also be some other arbitrary tag, e.g. if I want to do some kind of regions or context IDs or whatever).
-# - maybe the label manager will deal with raw move IDs just to keep things "less abstract and complex". Move IDs are important to labels because we need to (try to) emit labels in the appropriate !pseudopc region for readability. If there is some sort of more abstract region/context stuff going on at the user's instigation to help e.g. disambiguate multiple uses of the same zp location based on which code is accessing it, that causes us to have multiple names (sprung into existence by the label maker) for the same address, *but* we don't need to keep the definitions of those labels separate - for zp labels this would typically be all at the top of the assembly, for absolute addresses in the binary we still want to output the definitions for all the competing "contexts" at the same place. So there's probably no need to complicate the label manager (even if it's just a question of naming) with region IDs/context IDs - move IDs are all that matter to it. Contexts or whatever are important when deciding which label to use in a particular instruction/equb/equw/whatever, but that's something the label maker deals with - all the label manager cares about is that once the label maker comes to a decision, the new label name and its associated move ID are put into the label maker's internal state so we can emit the definition at the right point (which as waffled about is a decision entirely based on move ID, and address of course).
+A label names a runtime address.
 
-# TODO: Fresh write up to try to help me clear my head, not necessarily complete or correct
-#
-# Labels work entirely with "runtime" addresses, since their whole reason for existing is to identify addresses which are referenced in some way by the code when it is executing.
-#
-# The classes are perhaps a bit badly named; a Label object represents a 16-bit address, but that Label object can have many names associated with it and those names are perhaps more naturally referred to as "labels" (and I probably do that all over the place).
-#
-# An address can have arbitrary many names. Each of these names has a "move ID" associated with it; the same move ID can be used on many names at many different addresses.
-#
-# For explicitly-created labels specified in the control file (and the same applies to expression labels; I won't make the distinction from here on), the move ID is assigned to the name at that point, based on converting the runtime address to a binary address, which takes into account the "with moved()" clauses the user has in effect at that point.
-#
-# For implicitly-created labels, get_final_label() effectively makes explicit the decision of the label maker, which provides both a name and a move ID at that point.
-#
-# In some sense move IDs are entirely advisory; we could emit every single name at the top of the disassembly as explicit definitions of the form "foo = &1234" and the output would reassemble just fine, even if it's not very useful.
-#
-# So what do move IDs do for us?
-#
-# Firstly, they help us emit label definitions in the "right" places. If we have two separate fragments of code which are move()d to runtime address &900 and both contain a branch to address &903, we'd like each of those fragments to use a separate inline label definition at address &903, so one fragment isn't "missing" a label to show control transfers in at &903 sometimes.
-#
-# Secondly, when we use a label to refer to a 16-bit address, we'd like to use a "good" name. In the move() example from the previous point, we'd like each move()d fragment to use the same name for &903 as it used when emitting the label definition.
-#
-# It is references to addresses which really "drive" all the complex move ID label stuff. This mostly boils down to the label maker code, although its decisions are informed by the optional move_id passed to get_label() (which is I think probably relatively un-tricky and if specified is just used as-is) and the context address passed to get_label().
-#
-# Names do not change their move ID once it's been assigned, although this probably isn't as important as it "feels" it ought to be, since most of the tricksy stuff is related to the label maker deciding what names and move IDs to assign to particular label references anyway. (User-specified labels are "easy" in many ways, because they come with an implicitly user-indicated move ID.)
-#
-# Except for user-specified labels, "definitions" are not really all that interesting (except that we need to emit them in the "best" place, which isn't completely trivial). Those definitions spring into existence as the label maker returns concrete name/move pairs; we don't "define" the labels as soon as we need them, we just queue up via get_label() a later call to the label maker once we've finished disassembling and that creates the label name/move ID based on its use. In principle the label maker could return a different label every single time it's called, and that would work - we'd just end up with loads of duplicate labels for no good reason.
+We discover the need for labels during the tracing process, but wait
+until tracing is complete before we generate the label names, just
+before we emit the disassembly itself.
 
+This gives the label naming code the maximum amount of information we
+can in order to suggest useful label names.
+
+The labelmanager says 'I want to name a label at runtime address A and
+binary address B, and the definition belongs to move ID C'.
+
+A suggested name is generated automatically, and the user supplied
+label maker hook function is called to actually name the label.
+
+Labels are used in two ways. Firstly they have a definition. They are
+defined either in the disassembly itself at the start of a line, or if
+they are external labels not within the range of the binary (e.g. a
+call to the OS, or a zero page variable) then they are listed at the
+top of the output as a 'label = value' line. Secondly labels are
+used when referenced e.g. as an operand of an instruction.
+
+A `Label` object stores a runtime address and multiple names each with
+an associated move ID. `Simple` aka `Explicit` names are the regular
+label names used to define and reference a runtime address.
+`Expressions` have labels and constants with arithmetic calculations
+that are understood by the assembler. Expressions are only used when
+referencing an address, they are not used to define a label.
+
+So what do move IDs do for us?
+
+Firstly, they help us emit label definitions in the "right" places. If
+we have two separate fragments of code which are move()d to runtime
+address &900 and both contain a branch to address &903, we'd like each
+of those fragments to have a separate inline label definition at
+address &903, so one fragment isn't "missing" a label to show control
+transfers in at &903 sometimes.
+
+So move IDs provide optional "annotations" on individual label names.
+They are "advisory" - labels just resolve to 16-bit integer addresses,
+of course - but they should allow us to try to emit different label
+names for the same address in different parts of the disassembly (i.e.
+the associated pseudopc block). They also help to provide
+disambiguation when tracing - where a destination address is mapped to
+more than one source address, we can use heuristics like "prefer the
+mapping for the move region we are currently tracing in", and maybe
+also allow users to annotate to say "the target address is in move
+region X".
+
+Secondly, when we use a label to refer to a 16-bit address, we'd like
+to use a "good" name. In the move() example from the previous point,
+we'd like each move()d fragment to use the same name when referencing
+&903 as when it emitted the label definition for that fragment.
+
+(In some sense move IDs are entirely advisory; we could emit every
+single name at the top of the disassembly as explicit definitions of
+the form "foo = $1234" and the output would reassemble just fine. But
+this would not very readable or useful output.)
+
+We may want to turn move IDs into region IDs, as I could imagine a user
+wanting to use them to help control label name generation for code in
+a certain part of the binary without actually having a move() (or with
+a move() "in the background" but with more than one ID for a single
+move() region - we might have to generate this internally).
+"""
 
 import collections
 
@@ -50,20 +75,26 @@ import movemanager
 import utils
 
 class Label(object):
-    # TODO: General point - perhaps having this class called Name and thus it being natural to use "name" as a local variable holding an instance of this class and then having to say "name.name" is a bit confusing
+    # TODO: General point - perhaps having this class called Name and
+    # thus it being natural to use "name" as a local variable holding
+    # an instance of this class and then having to say "name.name" is
+    # a bit confusing
     class Name(object):
         def __init__(self, name):
             self.name = name
             self.emitted = False
 
     def __init__(self, addr):
-        self.addr = int(addr) # TODO: cast to int is experimental - if keep this, other cast-y stuff might be redundant
+        self.addr = int(addr)
         self.move_id = movemanager.base_move_id
         self.references = set()
-        # TODO: explicit_names holds lists since we want to remember the order user-added names were provided in, at least for now
+
+        # `explicit_names` holds lists since we want to remember the
+        # order user-added names were provided.
         self.explicit_names = collections.defaultdict(list)
-        # TODO: Possibly non-simple names should go in a different list than explicit_names
-        self.expressions = collections.defaultdict(list) # TODO: slightly experimental
+
+        # Non-simple names go in a different list
+        self.expressions = collections.defaultdict(list)
         self.emit_opportunities = set()
 
     def add_reference(self, reference):
@@ -71,90 +102,146 @@ class Label(object):
         self.references.add(reference)
 
     def all_names(self):
-        # TODO: We should maintain this set in add_explicit_names() and any other "add" functions rather than regenerating it every time, but for now I want guaranteed consistency over speed.
+        """Return all label names and expressions for this label"""
+
+        # TODO: We should maintain this set in add_explicit_names() and
+        # any other "add" functions rather than regenerating it every
+        # time, but for now I want guaranteed consistency over speed.
         result = set()
         for name_list in self.explicit_names.values():
             for name in name_list:
                 result.add(name.name)
-        # TODO: Probably correct to include expressions here but not sure
+
+        # TODO: Should we be including expressions here, or have a
+        # separate `all_expressions()` function?
         for expression_list in self.expressions.values():
             result.update(expression_list)
         return result
 
     def add_explicit_name(self, name, move_id):
-        # TODO: Is there any value in recognising move_id None here? Should our callers have filtered it out before now, since we're just going to force it to base_move_id?
+        """Add a simple named label"""
+
         if move_id is None:
             move_id = movemanager.base_move_id
-        #print("QQQ", name, move_id, hex(self.addr))
-        assert disassembly.is_simple_name(name) # TODO: If keep this, can probably remove some conditional logic elsewhere in labelmanager
+
+        assert disassembly.is_simple_name(name)
         assert movemanager.is_valid_move_id(move_id)
-        # TODO: What if the name already exists but with a different move_id? We probably shouldn't allow it to exist with both - we don't want to assume the assembler will accept duplicate definitions of the same label name - but maybe we should be erroring, warning or *changing* the move_id of the existing label. Or just possibly - this might be useful for auto-generated labels, at least - we want to be appending some sort of suffix to allow differently named variants of the label to exist in different move IDs. (Imagine we're tracing some code, and move IDs 0 and 1 both contain "bne &905"; we don't want to generate one l090 label and put it in one move ID and leave the other one implicit.)
+
+        # TODO: What if the name already exists but with a different
+        # move_id? We probably shouldn't allow it to exist with both -
+        # we don't want to assume the assembler will accept duplicate
+        # definitions of the same label name.
+        #
+        # For auto-generated labels at least we may want to be
+        # appending some sort of suffix to allow differently named
+        # variants of the label to exist in different move IDs.
+        #
+        # Imagine we're tracing some code, and move IDs 0 and 1 both
+        # contain "bne &905"; we don't want to generate one l0905 label
+        # and put it in one move ID and leave the other one implicit.
         if name not in self.all_names():
             self.explicit_names[move_id].append(self.Name(name))
 
-    # TODO: Bit experimental, also bit copy-and-paste of add_explicit_name()
     def add_expression(self, s, move_id):
+        """Add an expression to use when referencing a runtime address"""
+
         assert not disassembly.is_simple_name(s)
-        # It doesn't hurt to check move_id is valid in general, but in
-        # particular it helps detect accidentally passing a "context address" as
-        # a move ID by mistake.
         assert movemanager.is_valid_move_id(move_id)
-        # TODO: Same question re what if name exists in a different move_id as for add_explicit_name() above
+
         if s not in self.all_names():
             self.expressions[move_id].append(s)
 
-    def explicit_definition_string_list(self):
-        # TODO: Note that we don't invoke the label hook or anything here - if a name got *used* for the label at some point, it should have been added into the label object so we know to emit it here.
-        formatter = config.get_formatter()
+    def find_max_explicit_name_length(self):
+        """Find the length of the longest explicit name not emitted.
+
+        Used to help formatting the list of label definitions."""
+
+        max_name_length = 0
+        for name_list in self.explicit_names.values():
+            for name in name_list:
+                if not name.emitted:
+                    max_name_length = max(max_name_length, name.name)
+        return max_name_length
+
+    def explicit_definition_string_list(self, align_column):
+        """Return a list of the explicit `label = value` output strings."""
+
+        # Note that we don't invoke the label hook or anything here -
+        # if a name got *used* for the label at some point, it should
+        # have been added into the label object so we know to emit it
+        # here.
+        assembler = config.get_assembler()
         result = []
         for name_list in self.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    result.append(formatter.explicit_label(name.name, formatter.hex4(self.addr)))
+                    result.append(assembler.explicit_label(name.name, assembler.hex4(self.addr), offset=None, align=align_column))
                     name.emitted = True
         return result
 
     # TODO: We don't really need to pass runtime_addr to this function at all, do we?
     def notify_emit_opportunity(self, runtime_addr, move_id):
+        """Record that the move_id is used."""
+
         #print("XAZ", hex(runtime_addr), move_id)
         assert movemanager.is_valid_runtime_addr_for_move_id(runtime_addr, move_id)
-        assert (runtime_addr, move_id) not in self.emit_opportunities
+        # assert (runtime_addr, move_id) not in self.emit_opportunities
+
         self.emit_opportunities.add(move_id)
 
-    # TODO: Better name for this and/or explicit_definition_string_list() - it is not actually the explictness of the definition which is changing, it is the explicitness of the value
+    # TODO: Better name for this and/or explicit_definition_string_list() - it is
+    # not actually the explictness of the definition which is changing, it is the
+    # explicitness of the value.
     def definition_string_list(self, emit_addr, move_id):
+        """Get a list of the labels in a move_id as a list of strings."""
+
         # Emit any definitions for this move_id.
         result = self.definition_string_list_internal(emit_addr, move_id)
-        # Definitions for move IDs which will never get an opportunity to be emitted inline
-        # in their preferred move ID are emitted in the lowest-numbered move ID they can be
-        # emitted inline for.
+
+        # Definitions for move IDs which will never get an opportunity
+        # to be emitted inline in their preferred move ID are emitted
+        # in the lowest-numbered move ID they can be emitted inline for.
         #print("ZZZ", hex(emit_addr), move_id, self.emit_opportunities)
-        if move_id == min(self.emit_opportunities):
+        if (len(self.emit_opportunities) > 0) and (move_id == min(self.emit_opportunities)):
             leftover_move_ids = set(self.explicit_names.keys()) - self.emit_opportunities
             for move_id in leftover_move_ids:
                 result.extend(self.definition_string_list_internal(emit_addr, move_id))
         return result
 
     def definition_string_list_internal(self, emit_addr, move_id):
+        """Get a list of the labels in a move_id as a list of strings."""
+
         assert movemanager.is_valid_move_id(move_id)
-        formatter = config.get_formatter()
+        assembler = config.get_assembler()
         result = []
         assert emit_addr <= self.addr
         offset = self.addr - emit_addr
-        # TODO: It's probably OK, but note that we only emit for "matching" move_id; we leave it for
-        # explicit_definition_string_list() to return any things which we never would emit otherwise. Arguably if we have *any* point at which we could define a label inline (particularly if it's for the default move_id None) we should emit *all* labels for all move IDs at that address which haven't specifically been emitted elsewhere. Doing this properly would require making sure we emit (to temporary storage) all the pseudo-pc regions first, so let's not worry about that yet.
+        # TODO: It's probably OK, but note that we only emit for
+        # "matching" move_id; we leave it for
+        # explicit_definition_string_list() to return any things which
+        # we never would emit otherwise. Arguably if we have *any*
+        # point at which we could define a label inline (particularly
+        # if it's for the default move_id None) we should emit *all*
+        # labels for all move IDs at that address which haven't
+        # specifically been emitted elsewhere. Doing this properly
+        # would require making sure we emit (to temporary storage) all
+        # the pseudo-pc regions first, so let's not worry about that
+        # yet.
         for name in self.explicit_names[move_id]:
             #print("PXX", name.name)
-            # TODO: Our callers are probably expecting us to be calling get_label() if we don't have any explicit names, but I don't think this is actually a good way to work - but things are probably broken for the moment because of this
+            # TODO: Our callers are probably expecting us to be calling
+            # get_label() if we don't have any explicit names, but I
+            # don't think this is actually a good way to work - but
+            # things are probably broken for the moment because of this
             if name.emitted:
                 continue
             if offset == 0:
                 if disassembly.is_simple_name(name.name):
-                    result.append(formatter.inline_label(name.name))
+                    result.append(assembler.inline_label(name.name))
             else:
                 if disassembly.is_simple_name(name.name):
                     # TODO: I suspect get_label() call here will want tweaking eventually
-                    result.append(formatter.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
+                    result.append(assembler.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
             name.emitted = True
         return result
 
@@ -162,19 +249,29 @@ class Label(object):
 
 labels = utils.keydefaultdict(Label)
 
+def find_max_explicit_name_length():
+    """Get the length of the longest explicit label.
 
-# TODO: Some acme output seems to include redundant and possibly confusing *=xxx after pseudopc blocks
+    This is used to align the equals signs on the list of memory
+    locations at the top of the output."""
 
-# TODO: Just a general note - move IDs provide optional "annotations" on individual label names. They are "advisory" - labels just resolve to 16-bit integer addresses, of course - but they should allow us to try to emit different label names for the same address in different parts of the disassembly (i.e. the associated pseudopc block). They also help to provide disambiguation when tracing - where a destination address is mapped to more than one source address, we can use heuristics like "prefer the mapping for the move region we are currently tracing in", and maybe also allow users to annotation to say "the target address is in move region X". Still feeling my way with this but that's the general idea.
+    max_name_length = 0
+    for label in labels.values():
+        for name_list in label.explicit_names.values():
+            for name in name_list:
+                if not name.emitted:
+                    max_name_length = max(max_name_length, len(name.name))
+    return max_name_length
 
-# TODO: General note - may want to turn move IDs into region IDs, as I could imagine a user wanting to use them to help control label name generation for code in a certain part of the binary without actually having a move() (or with a move() "in the background" but with more than one ID for a single move() region - we might have to generate this internally). This might be easyish or it might not, but making a note to come back and think about this once I get the basics a bit more defined.
-
-# This is just intended as a debugging tool; mainly for debugging py8dis itself, though
-# it might also be helpful for debugging user label hooks or similar.
+# For debugging...
 def all_labels_as_comments():
-    if not config.get_show_all_labels():
-        return []
-    formatter = config.get_formatter()
+    """Return all labels as comments.
+
+    This is just intended as a debugging tool; mainly for debugging
+    py8dis itself, though it might also be helpful for debugging user
+    label hooks or similar."""
+
+    formatter = config.get_assembler()
     c = formatter.comment_prefix()
     result = ["%s All labels by address and move ID" % c, "%s" % c]
     for addr, label in sorted(labels.items()):

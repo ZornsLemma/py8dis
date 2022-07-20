@@ -1,12 +1,67 @@
+"""
+Exposes useful commands to the user:
+
+load()                  Loads a binary file to analyse.
+move()                  Indicates that a block of memory is copied at runtime.
+label()                 Define a label name for a runtime address.
+optional_label()        Define a label name for a runtime address, if used.
+addr()                  Returns the runtime address of the given label name.
+get_label()             Get the label for a specified address.
+set_label_maker_hook()  Sets a user defined 'hook' function that can make label names.
+
+constant()              Define a name for a constant value.
+
+comment()               Add a comment. Word wraps.
+formatted_comment()     Add a comment, as is.
+
+byte()                  Categorise 8 bit bytes at the given address as byte data.
+word()                  Categorise 16 bit words at the given address as word data.
+stringterm()            Terminates at a specified value.
+stringcr()              Terminates at ASCII code 13.
+stringz()               Terminates at ASCII code 0.
+string()                Terminates at a non-printable character, or the given length.
+stringhi()              Terminates at a top-bit-set character, final character optional.
+stringhiz()             As stringhi, but also terminates at zero.
+stringn()               The first byte holds the length, followed by the string.
+
+entry()                 Specifies that there is code at the given address.
+wordentry()             Marks a sequence of data words as being addresses of code.
+code_ptr()              Marks two bytes of data as being a subroutine's address.
+rts_code_ptr()          Marks two bytes of data as being an RTS-able subroutine address.
+nonentry()              Marks an address as 'not to be traced as code'.
+hook_subroutine()       For functions that don't return normally, control the tracing.
+
+expr()                  Define an expression equivalent to an 8 bit data byte.
+expr_label()            Define an expression equivalent to a 16 bit runtime address.
+
+annotate()              Add a raw string directly to the assembly code output.
+blank()                 Add a blank line directly to the assembly code output.
+
+get_u8_binary()         Read a single byte of data from the specified address.
+get_u16_binary()        Read a 16 bit value (little endian) from the specified address.
+get_u16_be_binary()     Read a 16 bit value (big endian) from the specified address.
+
+char()                  Specifies quoted character (e.g. 'a') formatting.
+binary()                Specifies binary (e.g. %010110111) formatting.
+picture_binary()        Specifies picture binary (e.g. %#.####.#) formatting.
+decimal()               Specifies decimal formatting.
+hexadecimal()           Specifies hex formatting.
+uint()                  Specifies uint formatting.
+padded_uint()           Specifies padded uint formatting.
+set_formatter()         Specifies a function used to format data.
+
+go()                    Classifies code and data and emits assembly.
+"""
+
 import argparse
 import six # TODO?
+import memorymanager
 
 # These functions/objects are directly exposed to the user.
-# TODO: I think we need to do something re runtime-vs-binary addresses here - at the moment these functions work with binary addresses but if they are directly user expsoed they need to use runtime addresses
+# TODO: I think we need to do something re runtime-vs-binary addresses here - at the moment these functions work with binary addresses but if they are directly user exposed they need to use runtime addresses
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
-from movemanager import moved
-from utils import get_u16_binary, get_u16_be_binary, get_u16_be
+from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
@@ -16,62 +71,89 @@ import config
 import disassembly
 import labelmanager
 import movemanager
-import newformatter
+import mainformatter
 import trace
 import utils
 
-memory_binary = config.memory_binary
-memory = config.memory
+from cpu65C02 import *
+from cpu6502 import *
+from cpu8080 import *
 
-# TODO!?
-config.load_ranges = []
+cpu_names = { "6502"  : lambda : Cpu6502(),
+              "65c02" : lambda : Cpu65C02(),
+              "8080"  : lambda : Cpu8080(),
+            }
 
-def load(binary_addr, filename, md5sum=None):
-    if trace.cpu is None:
-        utils.die("No CPU type selected; import one of the trace*.py modules to set this.")
-    binary_addr = utils.BinaryAddr(binary_addr)
-    # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
-    with open(filename, "rb") as f:
-        data = bytearray(f.read())
-        if binary_addr + len(data) > 0x10000:
-            utils.die("load() would overflow memory")
-        memory_binary[binary_addr:binary_addr+len(data)] = data
-    if md5sum is not None:
-        import hashlib
-        hash = hashlib.md5()
-        hash.update(data)
-        if md5sum != hash.hexdigest():
-            utils.die("load() md5sum doesn't match")
-    config.load_ranges.append((binary_addr, binary_addr + len(data)))
+memory_binary = memorymanager.memory_binary
+memory = memorymanager.memory
 
-# TODO: When documenting all the recent changes, should note that move()
-# needs to be done to update the disassembler's memory before you try to
-# access things in the relocated region.
+def load(binary_addr, filename, cpu_name, md5sum=None):
+    """Loads a binary file to analyse at the given address.
+
+    Load a binary file and optionally verify the checksum of the data."""
+
+    # Check we have a valid CPU for the chosen assembler and select the
+    # trace.cpu accordingly
+    if cpu_name is None:
+        utils.die("No CPU type selected in call to load().")
+
+    if isinstance(cpu_name, trace.Cpu):
+        # Set the CPU
+        trace.cpu = cpu_name
+    else:
+        cpu_name = cpu_name.lower()
+
+        # Get the list of supported CPUs for the assembler in lower case
+        assembler_cpus_supported = [x.lower() for x in config.get_assembler().cpus_supported()]
+
+        # Check the assembler can handle the CPU chosen
+        if not cpu_name in assembler_cpus_supported:
+            utils.die("Cpu '%s' is not supported by the chosen assembler. See call to load()" % (cpu_name))
+
+        # Set the CPU
+        if cpu_name in cpu_names.keys():
+            trace.cpu = cpu_names[cpu_name]()
+        else:
+            utils.die("Unknown CPU or missing CPU parameter '%s' specified for load()." % (cpu_name))
+
+    memorymanager.load(filename, binary_addr, md5sum)
+
 def move(dest, src, length):
-    dest = utils.RuntimeAddr(dest)
-    src = utils.BinaryAddr(src)
+    """Indicates that a block of memory is copied at runtime.
+
+    Often a block of code or data is moved (relocated) after loading
+    but before being used at runtime. For example, BBC Micro games that
+    load at $1900 may relocate bits or even all of themselves down to
+    $e00 before being used.
+
+    This function specifies such a move, indicating that the runtime
+    address is different from the loaded address for a block of memory.
+    This allows labels within the block to be properly defined by their
+    runtime addresses.
+
+    move()s should be called before accessing the relocated block.
+    As a simple rule put any move() commands first, directly after
+    load().
+    """
+
+    dest = memorymanager.RuntimeAddr(dest)
+    src = memorymanager.BinaryAddr(src)
     # You can't move from a region that hasn't been populated with data. TODO: Move this check into add_move()?
     assert all(memory_binary[i] is not None for i in range(src, src+length))
     return movemanager.add_move(dest, src, length)
 
-# These wrappers rename the verb-included longer names for some functions to
-# give shorter, easier-to-type beebdis-style names for "user" code; we use the
-# longer names in core disassembler code. TODO: Slightly outdated comment, they are now also doing some address space translation
-
-# ENHANCE: This is "backwards" - in assembler input you'd write "name = value",
-# not "value = name". Should I change it? But it does feel consistent-ish with
-# things like label() taking the "value" as the first argument and it feels
-# right that they use that order.
 def constant(value, name):
+    """Give a name to a constant value for use in the assembly.
+
+    These names can then be used in subsequent calls to expr().
+    """
+
     disassembly.add_constant(value, name)
 
-# ENHANCE: Should (can?) we arrange that if there is already an auto-generated
-# label at this address, the user one takes precedence? This may not be the case
-# as standard if the user uses code_ptr() and then label()s the target address
-# afterwards. They can always do it the other way round so this isn't a huge
-# deal I suppose. TODO: Is this still a problem?
 def label(runtime_addr, name, move_id=None):
-    runtime_addr = utils.RuntimeAddr(runtime_addr) # TODO: OK?
+    """Define a label name for a runtime address."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr) # TODO: OK?
     if move_id is None: # TODO: not super happy with this
         # We don't care about the equivalent binary address, but the process of looking
         # it up gives us a move ID to associate with this label.
@@ -87,32 +169,64 @@ def label(runtime_addr, name, move_id=None):
 # TODO: Should probably take an optional move_id?
 # TODO: This isn't working - see "command_table+1" in dfs226.py for example
 def expr_label(runtime_addr, s):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """Define an expression for a runtime address.
+
+    Defines a string expression to be output when the given
+    runtime address is referenced.
+
+    An expression is a string containing labels and/or other
+    arithmetic calculations that the assembler can interpret. When
+    the given address is referenced by code, the string expression
+    is output instead.
+
+    e.g. the command expr_label(0x1234, "my_table+1") would change
+    all instances of 'lda $1234' to 'lda my_table+1'.
+
+    Assembler assertions output at the end of the assembly code ensure
+    that the expressions evaluate to the expected constants."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     # TODO: If this continues to just forward to label() perhaps make that behavuour
     # official and just provide both names for backwards compatibility/documenting the
     # difference for users who want to??
     return label(runtime_addr, s)
 
 def optional_label(runtime_addr, name, base_runtime_addr=None):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """Set a label at a runtime address, but only output if used.
+
+    When two consecutive bytes share a label (e.g. `userv` and `userv+1`) then `base_runtime_addr` points to the first byte."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if base_runtime_addr is not None:
-        base_runtime_addr = utils.RuntimeAddr(base_runtime_addr)
+        base_runtime_addr = memorymanager.RuntimeAddr(base_runtime_addr)
     disassembly.add_optional_label(runtime_addr, name, base_runtime_addr)
 
 def comment(runtime_addr, text, inline=False):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """Add a comment.
+
+    Define a comment string to appear in the assembly code at the
+    given address in the output. The comment can be inlined (added
+    to the end of the line), or standalone (a separate line of output).
+    The comment is automatically word wrapped.
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if not inline:
-        text = newformatter.format_comment(text)
+        text = mainformatter.format_comment(text)
     formatted_comment(runtime_addr, text, inline)
 
 def formatted_comment(runtime_addr, text, inline=False):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """Add a comment without word wrapping."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
     disassembly.add_comment(binary_addr, text, inline)
-# TODO: UP TO HERE WITH ADDING RUNTIMEADDR() CALLS
 
 def annotate(runtime_addr, s, priority=None):
+    """Add a raw string directly to the assembly code output at the
+    given address."""
+
     # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
     disassembly.add_raw_annotation(runtime_addr, s, priority)
 
@@ -120,36 +234,56 @@ def blank(runtime_addr, priority=None):
     annotate(runtime_addr, "", priority)
 
 def expr(runtime_addr, s):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """Define a string expression for an address.
+
+    A string expression is output at the given runtime address
+    instead of a regular numerical value.
+
+    An expression is a string containing labels, constants and/or other
+    arithmetic calculations that the assembler can interpret. When the
+    given address reached, the regular output is replaced by the string
+    expression.
+
+    e.g. 'lda #$30' might be replaced by 'lda #>screen_address'
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
     classification.add_expression(binary_addr, s)
 
-def byte(runtime_addr, n=1, cols=None, warn=True):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+def byte(runtime_addr, n=1, cols=None):
+    """Categorise a number of bytes at the given address as byte data."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    if not utils.data_loaded_at_binary_addr(binary_addr, n):
-        if warn:
-            utils.check_data_loaded_at_binary_addr(binary_addr, n) # TODO: bit redundant re-checking
+    if not memorymanager.check_data_loaded_at_binary_addr(binary_addr, n, True):
         return
-    disassembly.add_classification(binary_addr, classification.Byte(n, is_mergeable=False, cols=cols))
+    disassembly.add_classification(binary_addr, classification.Byte(n, cols=cols))
 
 # TODO: byte()/word() should probably optionally (via an optional arg or a variant function) allow the user to specify a format hint for the range without having to make a separate call to the relevant formatter function with the same arguments. Just maybe an optional argument "format_command=None" where we do "if format_command is not None: format_command(runtime_addr, n)" would work, then you could do "word(0x432, 4, picture_binary)" (if we squeezed formatter in before warn=True argument; this is all getting a smidge messy, especially if the user is forced to specify 1 for the n argument) - anyway, think about it...
-def word(runtime_addr, n=1, cols=None, warn=True):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+def word(runtime_addr, n=1, cols=None):
+    """Categorise a number of 16 bit words at the given address as word data."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    if not utils.data_loaded_at_binary_addr(binary_addr, n * 2):
-        if warn:
-            utils.check_data_loaded_at_binary_addr(binary_addr, n * 2) # TODO: bit redundant re-checking
+    if not memorymanager.check_data_loaded_at_binary_addr(binary_addr, n * 2, True):
         return
-    disassembly.add_classification(binary_addr, classification.Word(n * 2, is_mergeable=False, cols=cols))
+    disassembly.add_classification(binary_addr, classification.Word(n * 2, cols=cols))
 
 def entry(runtime_addr, label=None, warn=True):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """
+    Specifies that there is code at the given runtime address.
+
+    When go() is called, code is automatically traced from each entry
+    point through all possible branches and subroutines. This is
+    categorised as code, and therefore output as instructions.
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
     # TODO: Should probably warn rather than assert in other fns too
-    if warn:
-        utils.check_data_loaded_at_binary_addr(binary_addr)
+    memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
 
     trace.cpu.add_entry(binary_addr, label, move_id)
     if isinstance(label, six.string_types):
@@ -159,24 +293,59 @@ def entry(runtime_addr, label=None, warn=True):
 # TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
 # TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(runtime_addr):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """
+    Marks an address as 'not to be traced as code'.
+
+    See entry() for details of tracing. When the tracing of code
+    reaches the given address then tracing stops. For example,
+    when a conditional branch is in practice always taken at runtime,
+    any following code is never executed. Use of this command is
+    rare.
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
 
     trace.cpu.traced_entry_points.add(binary_addr)
 
 def wordentry(runtime_addr, n=1):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """
+    Marks a sequence of data words as being addresses of code.
+
+    For a table of words where each entry is the address of some code,
+    this both categorises the data as words, and substitutes label names
+    as appropriate.
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     word(runtime_addr, n)
     for i in range(n):
         binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-        assert utils.data_loaded_at_binary_addr(binary_addr, 2)
+        assert memorymanager.is_data_loaded_at_binary_addr(binary_addr, 2)
         expr(runtime_addr, entry(get_u16_binary(binary_addr)))
         runtime_addr += 2
     return runtime_addr
 
 # TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
 def hook_subroutine(runtime_addr, name, hook, warn=True):
+    """
+    Add a hook function for a subroutine at the given address.
+
+    When executed, an unusual subroutine may not return right after it
+    was called. For the purpose of tracing the code, we need to know
+    where code will continue to be executed. The hook_subroutine()
+    function can be used to specify a 'hook' routine that determines
+    where execution continues after the subroutine finishes.
+
+    There is a common use case: A subroutine that 'prints the following
+    string' has a call to a subroutine followed by a string definition.
+    Execution only continues *after* the string definition.
+
+    The following '*_hook' functions are designed to be used as the
+    'hook' parameter, to determine the end of the string.
+    """
+
     trace.cpu.hook_subroutine(runtime_addr, name, hook, warn)
 
 def stringhi_hook(target, addr):
@@ -195,14 +364,28 @@ def stringn_hook(target, addr):
     return stringn(addr + 3)
 
 def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
+    """
+    Marks two bytes of data as being the address of a subroutine.
+
+    The low and high bytes do not need to be stored adjacently since
+    their addresses can be specified separately. This is used to handle
+    jump tables where the low and high bytes are stored in separate
+    tables. An optional offset can be applied to the subroutine
+    address.
+
+    Assumes the assembler understands expressions like '<(my_label+1)'.
+
+    Code tracing, see entry(), is applied to the subroutine.
+    """
+
     if runtime_addr_high is None:
         runtime_addr_high = runtime_addr + 1
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
-    runtime_addr_high = utils.RuntimeAddr(runtime_addr_high)
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr_high = memorymanager.RuntimeAddr(runtime_addr_high)
     binary_addr, _ = movemanager.r2b(runtime_addr)
     binary_addr_high, _ = movemanager.r2b(runtime_addr_high)
-    assert utils.data_loaded_at_binary_addr(binary_addr)
-    assert utils.data_loaded_at_binary_addr(binary_addr_high)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr_high)
     code_at_runtime_addr = ((memory_binary[binary_addr_high] << 8) | memory_binary[binary_addr]) + offset
     # Label and trace the code at code_at
     label = entry(code_at_runtime_addr, warn=False) # ENHANCE: allow optional user-specified label?
@@ -227,17 +410,33 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     return None
 
 def rts_code_ptr(runtime_addr, runtime_addr_high=None):
+    """
+    Marks two bytes of data as being the address of a subroutine.
+
+    This is the same as code_ptr() with offset=1. Designed for use when
+    pushing an address onto the stack before transferring control by
+    executing 'rts'.
+    """
     return code_ptr(runtime_addr, runtime_addr_high, offset=1)
 
 def set_label_maker_hook(hook):
-    disassembly.set_user_label_maker_hook(hook)
+    """
+    Sets a user defined 'hook' function that can make label names.
 
-# TODO: Highly experimental
-def add_sequence_hook(hook):
-    disassembly.sequence_hooks.append(hook)
+    Given an address, the user supplied function should return
+    a unique label name or just return the suggested name.
+
+    Sometimes having a routine to make label names can be useful. For
+    example, labels at addresses that just 'rts' to early out of a
+    subroutine can be labelled uniformly as 'return1', 'return2' etc.
+    """
+
+    disassembly.set_user_label_maker_hook(hook)
 
 # TODO: Rename?
 def addr(label_name):
+    """Returns the runtime address of the given label name"""
+
     assert isinstance(label_name, six.string_types) # TODO: OK?!
     # TODO: Ultra-inefficient implementation
     for addr, label in sorted(labelmanager.labels.items()):
@@ -248,63 +447,102 @@ def addr(label_name):
     assert False # TODO: !? return None?
 
 def set_formatter(runtime_addr, n, formatter):
-    runtime_addr = utils.RuntimeAddr(runtime_addr)
+    """
+    Specifies a function used to format data in a block.
+
+    The 'formatter' is a function that given a value to format, returns
+    a string.
+
+    This function is used by the following formatting functions.
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     assert n > 0
     for i in range(n):
         binary_addr, _ = movemanager.r2b_checked(runtime_addr + i)
         disassembly.format_hint[binary_addr] = formatter
 
 def uint(runtime_addr, n=1):
+    """Specifies uint formatting for data in the given block"""
+
     # This is nearly the default behaviour, but by specifying a formatter explicitly the
     # automatic addition of a comment showing the corresponding ASCII character for
     # immediate constants will be disabled for this address.
-    set_formatter(runtime_addr, n, newformatter.uint_formatter)
+    set_formatter(runtime_addr, n, mainformatter.uint_formatter)
 
 def padded_uint(runtime_addr, n=1):
-    set_formatter(runtime_addr, n, lambda n, bits: newformatter.uint_formatter(n, bits, pad=True))
+    """Specifies padded uint formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, lambda n, bits: mainformatter.uint_formatter(n, bits, pad=True))
 
 def char(runtime_addr, n=1):
-    set_formatter(runtime_addr, n, newformatter.char_formatter)
+    """Specifies quoted character formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, mainformatter.char_formatter)
 
 def binary(runtime_addr, n=1):
-    set_formatter(runtime_addr, n, newformatter.binary_formatter)
+    """Specifies binary formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, mainformatter.binary_formatter)
 
 def picture_binary(runtime_addr, n=1):
-    set_formatter(runtime_addr, n, newformatter.picture_binary_formatter)
+    """Specifies picture binary formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, mainformatter.picture_binary_formatter)
 
 def decimal(runtime_addr, n=1):
-    set_formatter(runtime_addr, n, newformatter.decimal_formatter)
+    """Specifies decimal formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, mainformatter.decimal_formatter)
 
 # "hex" is a Python built-in function so we can't use that.
 def hexadecimal(runtime_addr, n=1):
-    set_formatter(runtime_addr, n, newformatter.hexadecimal_formatter)
+    """Specifies hex formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, mainformatter.hexadecimal_formatter)
 
 def go(post_trace_steps=None, autostring_min_length=3):
+    """
+    Classifies code and data, calculates labels and emits assembly.
+    """
+
     # Once we start tracing, we're taking a "static" view of the code and we
     # don't want any leftover user hints about how to convert runtime addresses
     # to binary addresses confusing things.
     assert len(movemanager.active_move_ids) == 0
-    pydis_start = min(start_addr for start_addr, end_addr in config.load_ranges)
-    pydis_end = max(end_addr for start_addr, end_addr in config.load_ranges)
-    # TODO: Are the int casts here OK? Feels a bit hacky but not quite sure.
+
+    # Find entire binary range
+    pydis_start, pydis_end = memorymanager.get_entire_load_range()
+
+    # Create start and end labels
     label(int(pydis_start), "pydis_start", move_id=movemanager.base_move_id)
     label(int(pydis_end), "pydis_end", move_id=movemanager.base_move_id)
 
+    # Trace where code lives
     trace.cpu.trace()
     trace.cpu.generate_references()
+
+    # Fix up label names
     disassembly.fix_label_names()
     if config.get_label_references():
         trace.cpu.add_references_comments()
-    # autostring() really needs to be invoked after trace() has done its classification,
-    # so we wrap it up in here by default rather than expecting the user to call it.
+
+    # Scan the binary for strings (or allow a user function to do it)
+    # autostring() really needs to be invoked after trace() has done
+    # its classification, so we wrap it up in here by default rather
+    # than expecting the user to call it.
     if post_trace_steps is None:
         def post_trace_steps():
             classification.autostring(autostring_min_length)
     post_trace_steps()
+
+    # Mark everything remaining as bytes
     classification.classify_leftovers()
+
+    # Output assembly code
     disassembly.emit()
 
-
+# Command line parsing
 parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--beebasm", action="store_true", help="generate beebasm-style output (default)")
 parser.add_argument("-a", "--acme", action="store_true", help="generate acme-style output")
@@ -316,22 +554,20 @@ args = parser.parse_args()
 
 assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa, args.z88dk_8080) if x)
 if assembler_count > 1:
-    utils.die("--beebasm, --acme, --xa and --z88dk_8080 arguments are incompatible")
+    utils.die("--beebasm, --acme, --xa and --z88dk-8080 arguments are incompatible")
 if args.lower and args.upper:
     utils.die("--lower and --upper arguments are incompatible")
 
 if args.acme:
     import acme
-    set_output_filename = acme.set_output_filename
 elif args.xa:
     import xa
-    set_output_filename = xa.set_output_filename
 elif args.z88dk_8080:
     import z88dk_8080
-    set_output_filename = z88dk_8080.set_output_filename
 else:
     import beebasm
-    set_output_filename = beebasm.set_output_filename
+
+set_output_filename = config.get_assembler().set_output_filename
 
 if args.upper:
     config.set_lower_case(False)
