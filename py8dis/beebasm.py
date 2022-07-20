@@ -85,7 +85,7 @@ class Beebasm(assembler.Assembler):
 
     def disassembly_end(self):
         result = []
-        spa = sorted((str(expr), hex(value)) for expr, value in self.pending_assertions.items())
+        spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
         result.extend(utils.make_indent(1) + utils.force_case("assert ") + "%s == %s" % (expr, value) for expr, value in spa)
         result.append("")
 
