@@ -648,8 +648,8 @@ def split_classification(binary_addr):
     while classifications[binary_addr] == partial_classification:
         binary_addr -= 1
     first_split_length = split_addr - binary_addr
-    classifications[split_addr] = classification.Byte(classifications[binary_addr].length() - first_split_length, False)
-    classifications[binary_addr] = classification.Byte(first_split_length, False)
+    classifications[split_addr] = classification.Byte(classifications[binary_addr].length() - first_split_length)
+    classifications[binary_addr] = classification.Byte(first_split_length)
 
 # It's possible (but unlikely) there is a multi-byte classification straddling the
 # ends of our range; if so, split them so we can output the precise range wanted.
