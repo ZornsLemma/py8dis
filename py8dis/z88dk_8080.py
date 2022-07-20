@@ -23,7 +23,7 @@ class Z88DK(assembler.Assembler):
             return "$%s" % utils.plainhex4(n)
 
     def hex4(self, n):
-        return hex(n)
+        return self.hex(n)
 
     def inline_label(self, name):
         return "%s:" % name

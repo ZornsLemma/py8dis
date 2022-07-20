@@ -90,9 +90,9 @@ class Acme(assembler.Assembler):
 
     def string_chr(self, i):
         if i == ord('\\'):
-            return '\\\\'
+            return None
         if i == ord('"'):
-            return '\\"'
+            return None
         if utils.isprint(i):
             return chr(i)
         return None
