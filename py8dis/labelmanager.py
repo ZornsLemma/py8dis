@@ -89,6 +89,10 @@ class Label(object):
         self.move_id = movemanager.base_move_id
         self.references = set()
 
+        # `local_labels` stores tuples (name, start_addr, end_addr)
+        # indexed by move_id, as created by `add_local_label()`
+        self.local_labels = collections.defaultdict(list)
+
         # `explicit_names` holds lists since we want to remember the
         # order user-added names were provided.
         self.explicit_names = collections.defaultdict(list)
@@ -104,10 +108,16 @@ class Label(object):
     def all_names(self):
         """Return all label names and expressions for this label"""
 
+        result = set()
+
+        # Add all local names
+        for name_data in self.local_labels.values():
+            if name_data:
+                result.add(name_data[0])
+
         # TODO: We should maintain this set in add_explicit_names() and
         # any other "add" functions rather than regenerating it every
         # time, but for now I want guaranteed consistency over speed.
-        result = set()
         for name_list in self.explicit_names.values():
             for name in name_list:
                 result.add(name.name)
@@ -141,6 +151,17 @@ class Label(object):
         # and put it in one move ID and leave the other one implicit.
         if name not in self.all_names():
             self.explicit_names[move_id].append(self.Name(name))
+
+    def add_local_label(self, name, start_addr, end_addr, move_id):
+        """Add a local label"""
+
+        if move_id is None:
+            move_id = movemanager.base_move_id
+
+        assert disassembly.is_simple_name(name)
+        assert movemanager.is_valid_move_id(move_id)
+
+        self.local_labels[move_id].append((name, start_addr, end_addr))
 
     def add_expression(self, s, move_id):
         """Add an expression to use when referencing a runtime address"""

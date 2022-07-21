@@ -140,6 +140,15 @@ def add_optional_label(runtime_addr, s, base_addr=None):
         assert is_simple_name(s)
     optional_labels[runtime_addr] = (s, base_addr)
 
+def add_local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
+    """Add a label at the given runtime address, valid only if referenced in the region specified.
+
+    start_addr, end_addr are runtime addresses.
+    """
+
+    label = labelmanager.labels[runtime_addr]
+    label.add_local_label(name, start_addr, end_addr, move_id)
+
 # TODO: Later it might make sense for context to default to None, but for now don't want this.
 def get_label(runtime_addr, context, move_id=None):
     """Get a label name (a lazy string) for the given runtime address.
@@ -202,17 +211,18 @@ def suggest_label_name(runtime_addr, context, move_id):
     # The actual rules are:
     #
     # 1. If a move ID is already specified, use that.
-    # 2. We choose the move ID of the binary_address if it's the same
+    # 2. Choose the move ID of the binary_address if it's the same
     #    as a move ID of the runtime address.
-    # 3. We look for any explicit label at the runtime address that has
-    #    a `move_id` that matches one at either the runtime address or
+    # 3. Look for any label at the runtime address that has a
+    #    `move_id` that matches one at either the runtime address or
     #    binary address. If found, we have got our ideal label so
-    #    return that (label, move ID, False) tuple.
-    # 4. Same as 3, but looking through the expression labels.
-    # 5. If there is only one valid move_id at the runtime address,
+    #    return that ((name, move ID), False) tuple.
+    #    We look in order through the local labels, then the explicit
+    #    labels, then the expressions.
+    # 4. If there is only one valid move_id at the runtime address,
     #    select that move ID. (It makes more sense to create a label
     #    there than in the base move ID).
-    # 6. All else has failed, so use the base move ID.
+    # 5. All else has failed, so use the base move ID.
 
     # Rule 1
     if move_id is None:
@@ -224,22 +234,31 @@ def suggest_label_name(runtime_addr, context, move_id):
         # Rule 2
         if move_id not in move_ids2:
             move_ids3 = [move_id] + list(move_ids2)
+
+            # Get the label
             label = labelmanager.labels.get(runtime_addr)
             for candidate_move_id in move_ids3:
-                # Rule 3
+                # Rule 3: Local labels
+                if candidate_move_id in label.local_labels:
+                    for (name, start_addr, end_addr) in label.local_labels[candidate_move_id]:
+                        if start_addr <= context < end_addr:
+                            return ((name, candidate_move_id), False)
+
+                # Rule 3: Explicit labels
                 if candidate_move_id in label.explicit_names:
                     for name in label.explicit_names[candidate_move_id]:
                         return ((name.name, candidate_move_id), False)
-                # Rule 4
+
+                # Rule 3: Expressions
                 if candidate_move_id in label.expressions:
                     for expression in label.expressions[candidate_move_id]:
                         return ((expression, candidate_move_id), False)
 
             if len(move_ids2) == 1:
-                # Rule 5
+                # Rule 4
                 move_id = min(move_ids2)
             else:
-                # Rule 6
+                # Rule 5
                 move_id = movemanager.base_move_id
 
     label = labelmanager.labels.get(runtime_addr)
@@ -247,30 +266,34 @@ def suggest_label_name(runtime_addr, context, move_id):
     assert label is not None
 
     # If the runtime address has a label name, choose the first one.
-    # First check for explicit names or expressions in our chosen move
-    # ID. If that fails try the base move ID.
+    # Check the local labels, then explicit names then expressions in
+    # our chosen move ID. If that fails try the base move ID.
 
     # TODO: We might want to move this logic into the Label object, and
     # it could potentially pick one of its own explicit names out based
     # on context. For now we prefer the first one, since that's how the
     # code used to behave and we're trying to gradually refactor.
-    if len(label.all_names()) > 0:
-        # We are just returning the first name arbitrarily, since we
-        # have no basis to choose anything else.
 
-        # We look for a label/expression in the current move_id, or
-        # failing that in the base_move_id.
+    # We are just returning the first name arbitrarily, since we
+    # have no basis to choose anything else.
 
-        # TODO: Using loops here seems odd, since we are just returning
-        # the first item.
-        for name in label.explicit_names[move_id]:
-            return ((name.name, move_id), False)
-        for expression in label.expressions[move_id]:
-            return ((expression, move_id), False)
-        for name in label.explicit_names[movemanager.base_move_id]:
-            return ((name.name, None), False)
-        for expression in label.expressions[movemanager.base_move_id]:
-            return ((expression, move_id), False)
+    # We look for a local label, explicit label or expression in the
+    # current move_id, or failing that in the base_move_id.
+    for (name, start_addr, end_addr) in label.local_labels[move_id]:
+        if start_addr <= context < end_addr:
+            return ((name, move_id), False)
+    for name in label.explicit_names[move_id]:
+        return ((name.name, move_id), False)
+    for expression in label.expressions[move_id]:
+        return ((expression, move_id), False)
+
+    for (name, start_addr, end_addr) in label.local_labels[movemanager.base_move_id]:
+        if start_addr <= context < end_addr:
+            return ((name, move_id), False)
+    for name in label.explicit_names[movemanager.base_move_id]:
+        return ((name.name, None), False)
+    for expression in label.expressions[movemanager.base_move_id]:
+        return ((expression, move_id), False)
 
     # If no explicit label or expression is suitable, try the optional
     # labels.

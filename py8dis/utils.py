@@ -11,7 +11,8 @@ def die(s):
 
 def warn(s):
     """Print a warning message but don't halt execution."""
-    print("warning: " + s, file=sys.stderr)
+    print("warning: %s" % (s), file=sys.stderr)
+
 
 def force_case(s):
     """Change string to upper or lower case as configured."""
