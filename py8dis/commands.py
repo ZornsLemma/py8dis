@@ -5,6 +5,7 @@ load()                  Loads a binary file to analyse.
 move()                  Indicates that a block of memory is copied at runtime.
 label()                 Define a label name for a runtime address.
 optional_label()        Define a label name for a runtime address, if used.
+local_label()           Define a label name for a runtime address within a memory range.
 addr()                  Returns the runtime address of the given label name.
 get_label()             Get the label for a specified address.
 set_label_maker_hook()  Sets a user defined 'hook' function that can make label names.
@@ -200,6 +201,9 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
     if base_runtime_addr is not None:
         base_runtime_addr = memorymanager.RuntimeAddr(base_runtime_addr)
     disassembly.add_optional_label(runtime_addr, name, base_runtime_addr)
+
+def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
+    disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
 
 def comment(runtime_addr, text, inline=False):
     """Add a comment.
