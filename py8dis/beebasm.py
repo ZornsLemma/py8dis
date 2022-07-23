@@ -16,6 +16,9 @@ class Beebasm(assembler.Assembler):
         self.explicit_a = True
         self.output_filename = None
 
+    def get_name(self):
+        return "beebasm"
+
     def cpus_supported(self):
         return ["6502", "65c02"]
 

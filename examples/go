@@ -41,7 +41,7 @@ check_disassemblies() {
 
     if [[ $check_disassembly -gt 0 ]]
     then
-        diff $candidate_asm $known_good_asm
+        diff $known_good_asm $candidate_asm
     fi
 
     if [[ $make_known_good -gt 0 ]]
@@ -103,3 +103,4 @@ test "anfs418.py" "anfs418.orig"
 test "move.py"  "move.orig"
 test "move2.py" "move2.orig"
 test "split.py" "split.orig"
+test "chuckie.py" "chuckie.orig"

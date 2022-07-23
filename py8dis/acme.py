@@ -10,6 +10,9 @@ class Acme(assembler.Assembler):
     def __init__(self):
         super(assembler.Assembler, self).__init__()
 
+    def get_name(self):
+        return "acme"
+
     def cpus_supported(self):
         return ["6502", "65c02"]
 

@@ -205,6 +205,15 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
 def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
 
+def substitute_constants(instruction, reg, constants_dict, add_constants=True):
+    """When loading a register with an immediate value somewhere before the given instruction, fill in a constant or expression from a dictionary"""
+
+    if add_constants:
+        for entry in constants_dict:
+            constant(entry, constants_dict[entry])
+
+    trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict))
+
 def comment(runtime_addr, text, inline=False):
     """Add a comment.
 
@@ -249,12 +258,23 @@ def expr(runtime_addr, s):
     expression.
 
     e.g. 'lda #$30' might be replaced by 'lda #>screen_address'
+
+    Alternatively, a dictionary can be supplied with integer keys and
+    string values. The byte found at the address is used as the key,
+    and is replaced with the expression string value.
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
-    classification.add_expression(binary_addr, s)
+
+    if isinstance(s, dict):
+        # Dictionary supplied.
+        # Look up value in binary, and use that as key in dictionary
+        val = get_u8_binary(binary_addr)
+        classification.add_expression(binary_addr, s[val])
+    else:
+        classification.add_expression(binary_addr, s)
 
 def byte(runtime_addr, n=1, cols=None):
     """Categorise a number of bytes at the given address as byte data."""
@@ -441,14 +461,10 @@ def set_label_maker_hook(hook):
 def addr(label_name):
     """Returns the runtime address of the given label name"""
 
-    assert isinstance(label_name, six.string_types) # TODO: OK?!
-    # TODO: Ultra-inefficient implementation
-    for addr, label in sorted(labelmanager.labels.items()):
-        for name_list in label.explicit_names.values():
-            for name in name_list:
-                if label_name == name.name:
-                    return addr
-    assert False # TODO: !? return None?
+    if not isinstance(label_name, six.string_types):
+        return None
+
+    return labelmanager.addr(label_name)
 
 def set_formatter(runtime_addr, n, formatter):
     """
@@ -504,6 +520,11 @@ def hexadecimal(runtime_addr, n=1):
     """Specifies hex formatting for data in the given block"""
 
     set_formatter(runtime_addr, n, mainformatter.hexadecimal_formatter)
+
+def is_assembler(s):
+    if config.get_assembler().get_name().lower() == s.lower():
+        return True
+    return False
 
 def go(post_trace_steps=None, autostring_min_length=3):
     """

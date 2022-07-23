@@ -270,6 +270,21 @@ class Label(object):
 
 labels = utils.keydefaultdict(Label)
 
+def addr(label_name):
+    # TODO: Ultra-inefficient implementation
+    for addr, label in sorted(labels.items()):
+        # Check explicit label names
+        for name_list in label.explicit_names.values():
+            for name in name_list:
+                if label_name == name.name:
+                    return addr
+        # Check local labels
+        for label_list in label.local_labels.values():
+            for label_entry in label_list:
+                if label_name == label_entry[0]:
+                    return addr
+    return None
+
 def find_max_explicit_name_length():
     """Get the length of the longest explicit label.
 
