@@ -185,7 +185,7 @@ into:
 
 When `instruction` is encountered, look for a load immediate instruction for register `reg` somewhere beforehand, and use the `constants_dict` dictionary to substitute a constant or expression (see below for an explanation of expressions) in place of the immediate value.
 
-`define_add_constants` has three possible values:
+`define_all_constants` has three possible values:
 
     None    - define no constants (the default)
     False   - define only the constants used

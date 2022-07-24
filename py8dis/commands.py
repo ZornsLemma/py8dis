@@ -209,7 +209,7 @@ def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
 def substitute_constants(instruction, reg, constants_dict, define_all_constants=None):
     """When loading a register with an immediate value somewhere before the given instruction, fill in a constant or expression from a dictionary
 
-    `define_add_constants` has three possible values:
+    `define_all_constants` has three possible values:
         None    - define no constants (the default)
         False   - define only the constants used
         True    - define all constants
