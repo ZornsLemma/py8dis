@@ -10,6 +10,7 @@ import utils
 
 cpu = None
 subroutine_argument_finder_hooks = []
+substitute_constant_list = []
 
 class Cpu(object):
     """Abstract base class representing a CPU"""

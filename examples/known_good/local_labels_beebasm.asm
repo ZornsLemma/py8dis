@@ -1,7 +1,11 @@
+; Constants
+crtc_vert_total_adjust   = 5
+
 ; Memory locations
-char_to_print   = &0070
-bit_value       = &0070
-oswrch          = &ffee
+bit_value               = &0070
+char_to_print           = &0070
+crtc_address_register   = &fe00
+oswrch                  = &ffee
 
     org &2000
 
@@ -30,8 +34,15 @@ oswrch          = &ffee
 .skip_add_to_bit_count
     lda bit_value                                                     ; 201e: a5 70       .p
     bne bit_counting_loop                                             ; 2020: d0 f7       ..
-    rts                                                               ; 2022: 60          `
+    jsr crtc_substitution_test                                        ; 2022: 20 26 20     &
+    rts                                                               ; 2025: 60          `
+
+.crtc_substitution_test
+    lda #crtc_vert_total_adjust                                       ; 2026: a9 05       ..
+    sta crtc_address_register                                         ; 2028: 8d 00 fe    ...
+    rts                                                               ; 202b: 60          `
 
 .pydis_end
+    assert crtc_vert_total_adjust == &05
 
 save pydis_start, pydis_end

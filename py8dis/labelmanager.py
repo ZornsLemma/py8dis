@@ -30,6 +30,9 @@ label names used to define and reference a runtime address.
 that are understood by the assembler. Expressions are only used when
 referencing an address, they are not used to define a label.
 
+`Local Labels` are Labels that are only used within a range or ranges of
+addresses. They override regular labels.
+
 So what do move IDs do for us?
 
 Firstly, they help us emit label definitions in the "right" places. If
@@ -59,26 +62,20 @@ we'd like each move()d fragment to use the same name when referencing
 single name at the top of the disassembly as explicit definitions of
 the form "foo = $1234" and the output would reassemble just fine. But
 this would not very readable or useful output.)
-
-We may want to turn move IDs into region IDs, as I could imagine a user
-wanting to use them to help control label name generation for code in
-a certain part of the binary without actually having a move() (or with
-a move() "in the background" but with more than one ID for a single
-move() region - we might have to generate this internally).
 """
 
 import collections
 
 import config
-import disassembly # TODO!?
+import disassembly
 import movemanager
 import utils
 
 class Label(object):
     # TODO: General point - perhaps having this class called Name and
     # thus it being natural to use "name" as a local variable holding
-    # an instance of this class and then having to say "name.name" is
-    # a bit confusing
+    # an instance of this class and then having to say "name.name" is a
+    # bit confusing.
     class Name(object):
         def __init__(self, name):
             self.name = name
@@ -115,15 +112,15 @@ class Label(object):
             if name_data:
                 result.add(name_data[0])
 
-        # TODO: We should maintain this set in add_explicit_names() and
-        # any other "add" functions rather than regenerating it every
-        # time, but for now I want guaranteed consistency over speed.
+        # TODO: For performance, we could maintain this set in
+        # add_explicit_names() and any other "add" functions rather
+        # than regenerating it every time, but for now I want
+        # guaranteed consistency over speed.
         for name_list in self.explicit_names.values():
             for name in name_list:
                 result.add(name.name)
 
-        # TODO: Should we be including expressions here, or have a
-        # separate `all_expressions()` function?
+        # Add expressions
         for expression_list in self.expressions.values():
             result.update(expression_list)
         return result
@@ -192,27 +189,27 @@ class Label(object):
         # have been added into the label object so we know to emit it
         # here.
         assembler = config.get_assembler()
-        result = []
+
+        # Gather the names and sort them.
+        gathered_names = []
         for name_list in self.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    result.append(assembler.explicit_label(name.name, assembler.hex4(self.addr), offset=None, align=align_column))
+                    gathered_names.append(name.name)
                     name.emitted = True
+        gathered_names = sorted(gathered_names)
+
+        result = []
+        for name in gathered_names:
+            result.append(assembler.explicit_label(name, assembler.hex4(self.addr), offset=None, align=align_column))
+
         return result
 
-    # TODO: We don't really need to pass runtime_addr to this function at all, do we?
-    def notify_emit_opportunity(self, runtime_addr, move_id):
+    def notify_emit_opportunity(self, move_id):
         """Record that the move_id is used."""
-
-        #print("XAZ", hex(runtime_addr), move_id)
-        assert movemanager.is_valid_runtime_addr_for_move_id(runtime_addr, move_id)
-        # assert (runtime_addr, move_id) not in self.emit_opportunities
 
         self.emit_opportunities.add(move_id)
 
-    # TODO: Better name for this and/or explicit_definition_string_list() - it is
-    # not actually the explictness of the definition which is changing, it is the
-    # explicitness of the value.
     def definition_string_list(self, emit_addr, move_id):
         """Get a list of the labels in a move_id as a list of strings."""
 
@@ -270,6 +267,21 @@ class Label(object):
 
 labels = utils.keydefaultdict(Label)
 
+def addr(label_name):
+    # TODO: Ultra-inefficient implementation, optimise!
+    for addr, label in sorted(labels.items()):
+        # Check explicit label names
+        for name_list in label.explicit_names.values():
+            for name in name_list:
+                if label_name == name.name:
+                    return addr
+        # Check local labels
+        for label_list in label.local_labels.values():
+            for label_entry in label_list:
+                if label_name == label_entry[0]:
+                    return addr
+    return None
+
 def find_max_explicit_name_length():
     """Get the length of the longest explicit label.
 
@@ -298,6 +310,5 @@ def all_labels_as_comments():
     for addr, label in sorted(labels.items()):
         result.append("%s %s:" % (c, utils.plainhex4(addr)))
         for move_id, name_list in sorted(label.explicit_names.items()):
-            # TODO? assert len(name_list) > 0
             result.append("%s     %4s: %s" % (c, move_id, ", ".join(sorted(x.name for x in name_list))))
     return result

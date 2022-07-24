@@ -55,11 +55,12 @@ go()                    Classifies code and data and emits assembly.
 """
 
 import argparse
-import six # TODO?
 import memorymanager
 
 # These functions/objects are directly exposed to the user.
-# TODO: I think we need to do something re runtime-vs-binary addresses here - at the moment these functions work with binary addresses but if they are directly user exposed they need to use runtime addresses
+# TODO: I think we need to do something re runtime-vs-binary addresses
+# here - at the moment these functions work with binary addresses but
+# if they are directly user exposed they need to use runtime addresses
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary
@@ -205,6 +206,22 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
 def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
 
+def substitute_constants(instruction, reg, constants_dict, define_all_constants=None):
+    """When loading a register with an immediate value somewhere before the given instruction, fill in a constant or expression from a dictionary
+
+    `define_add_constants` has three possible values:
+        None    - define no constants (the default)
+        False   - define only the constants used
+        True    - define all constants
+    """
+
+    if define_all_constants == True:
+        for entry in constants_dict:
+            if disassembly.is_simple_name(constants_dict[entry]):
+                constant(entry, constants_dict[entry])
+
+    trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
+
 def comment(runtime_addr, text, inline=False):
     """Add a comment.
 
@@ -249,12 +266,23 @@ def expr(runtime_addr, s):
     expression.
 
     e.g. 'lda #$30' might be replaced by 'lda #>screen_address'
+
+    Alternatively, a dictionary can be supplied with integer keys and
+    string values. The byte found at the address is used as the key,
+    and is replaced with the expression string value.
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
-    classification.add_expression(binary_addr, s)
+
+    if isinstance(s, dict):
+        # Dictionary supplied.
+        # Look up value in binary, and use that as key in dictionary
+        val = get_u8_binary(binary_addr)
+        classification.add_expression(binary_addr, s[val])
+    else:
+        classification.add_expression(binary_addr, s)
 
 def byte(runtime_addr, n=1, cols=None):
     """Categorise a number of bytes at the given address as byte data."""
@@ -290,7 +318,7 @@ def entry(runtime_addr, label=None, warn=True):
     memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
 
     trace.cpu.add_entry(binary_addr, label, move_id)
-    if isinstance(label, six.string_types):
+    if utils.is_string_type(label):
         return label
     return disassembly.get_label(runtime_addr, binary_addr, move_id)
 
@@ -437,18 +465,13 @@ def set_label_maker_hook(hook):
 
     disassembly.set_user_label_maker_hook(hook)
 
-# TODO: Rename?
 def addr(label_name):
     """Returns the runtime address of the given label name"""
 
-    assert isinstance(label_name, six.string_types) # TODO: OK?!
-    # TODO: Ultra-inefficient implementation
-    for addr, label in sorted(labelmanager.labels.items()):
-        for name_list in label.explicit_names.values():
-            for name in name_list:
-                if label_name == name.name:
-                    return addr
-    assert False # TODO: !? return None?
+    if not utils.is_string_type(label_name):
+        return None
+
+    return labelmanager.addr(label_name)
 
 def set_formatter(runtime_addr, n, formatter):
     """
@@ -504,6 +527,11 @@ def hexadecimal(runtime_addr, n=1):
     """Specifies hex formatting for data in the given block"""
 
     set_formatter(runtime_addr, n, mainformatter.hexadecimal_formatter)
+
+def is_assembler(s):
+    if config.get_assembler().get_name().lower() == s.lower():
+        return True
+    return False
 
 def go(post_trace_steps=None, autostring_min_length=3):
     """
@@ -578,5 +606,9 @@ if args.upper:
 else:
     config.set_lower_case(True)
 
-# TODO: General point - when the code is finally tidied up, it might be helpful (perhaps using
-# wrapper functions to avoid repeating things everywhere and perhaps to show an actual error message, even if we also output a backtrace, rather than raw python assertion failures) to do thinks like assert memory[addr] is not None rather than letting subsequent code fail confusingly when it tries to use that None.
+# TODO: General point - when the code is finally tidied up, it might be
+# helpful (perhaps using wrapper functions to avoid repeating things
+# everywhere and perhaps to show an actual error message, even if we
+# also output a backtrace, rather than raw python assertion failures)
+# to do thinks like assert memory[addr] is not None rather than letting
+# subsequent code fail confusingly when it tries to use that None.

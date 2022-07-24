@@ -15,7 +15,6 @@ from __future__ import print_function
 import classification
 import collections
 import copy
-import six
 
 import config
 import labelmanager
@@ -96,7 +95,7 @@ def is_simple_name(s):
 
     Must be a single letter or underscore followed by any number of alphanumerics or underscores"""
 
-    assert isinstance(s, six.string_types)
+    assert utils.is_string_type(s)
     assert len(s) > 0
 
     def valid_first(c):
@@ -378,7 +377,7 @@ def label_maker(addr, context, move_id):
         # If return value is a string, then make it a (label, move_id)
         # tuple. Bit hacky but it feels nicer not to force user hooks
         # to return a tuple.
-        if isinstance(user_suggestion, six.string_types):
+        if utils.is_string_type(user_suggestion):
             user_suggestion = (user_suggestion, None)
 
         # if user changed the label to something new, then return it
@@ -408,6 +407,7 @@ def get_final_label(addr, context, move_id):
     name, move_id = label_maker(addr, context, move_id)
     if is_simple_name(name):
         labelmanager.labels[addr].add_explicit_name(name, move_id)
+
     return name
 
 def is_classified(binary_addr, length=1):
@@ -506,7 +506,7 @@ def emit():
         max_len = indent_len * (max_len+indent_len-1)//indent_len
 
         for value, name in sorted(constants, key=lambda x: x[1]):
-            if isinstance(value, six.integer_types):
+            if utils.is_integer_type(value):
                 if config.get_constants_are_decimal():
                     value = str(value)
                 else:
@@ -551,7 +551,7 @@ def emit():
     def record_emit_point(binary_addr, move_id):
         md = movemanager.move_definitions[move_id]
         runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
-        labelmanager.labels[runtime_addr].notify_emit_opportunity(runtime_addr, move_id)
+        labelmanager.labels[runtime_addr].notify_emit_opportunity(move_id)
 
     # Calculate the move_ids that will emit output?
     for start_addr, end_addr in move_ranges:
@@ -632,7 +632,7 @@ def emit():
     align_name_length = indent_len * ((align_name_length + indent_len - 1) // indent_len)
 
     # Add the explicit label names (aligned) to the output
-    for addr in sorted(labelmanager.labels.keys()):
+    for addr in sorted(labelmanager.labels):
         output.extend(labelmanager.labels[addr].explicit_definition_string_list(align_name_length))
 
     # Add the main disassembly to the output

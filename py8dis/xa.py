@@ -3,7 +3,7 @@ import sys
 
 import classification
 import config
-import disassembly # TODO?
+import disassembly
 import movemanager
 import utils
 import assembler
@@ -12,6 +12,9 @@ class Xa(assembler.Assembler):
     def __init__(self):
         super(assembler.Assembler, self).__init__()
         self.pseudopc_index=0
+
+    def get_name(self):
+        return "xa"
 
     def cpus_supported(self):
         return ["6502", "65c02"]

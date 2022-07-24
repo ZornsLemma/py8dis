@@ -10,6 +10,9 @@ class Z88DK(assembler.Assembler):
     def __init__(self):
         super(assembler.Assembler, self).__init__()
 
+    def get_name(self):
+        return "z88dk"
+
     def cpus_supported(self):
         return ["8080"]
 
