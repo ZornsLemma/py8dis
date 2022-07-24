@@ -1062,7 +1062,7 @@ sprite_constants = {
     54: "SpriteId_BigG",
 }
 
-substitute_constants("jsr plotspriteatcharpos", 'a', sprite_constants)
+substitute_constants("jsr plotspriteatcharpos", 'a', sprite_constants, True)
 substitute_constants("jsr setmapblock", 'a', sprite_constants)
 substitute_constants("jsr getspritedata", 'a', sprite_constants)
 substitute_constants("jsr showbigletter", 'a', sprite_constants)

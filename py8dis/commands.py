@@ -205,14 +205,21 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
 def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
 
-def substitute_constants(instruction, reg, constants_dict, add_constants=True):
-    """When loading a register with an immediate value somewhere before the given instruction, fill in a constant or expression from a dictionary"""
+def substitute_constants(instruction, reg, constants_dict, define_all_constants=None):
+    """When loading a register with an immediate value somewhere before the given instruction, fill in a constant or expression from a dictionary
 
-    if add_constants:
+    `define_add_constants` has three possible values:
+        None    - define no constants (the default)
+        False   - define only the constants used
+        True    - define all constants
+    """
+
+    if define_all_constants == True:
         for entry in constants_dict:
-            constant(entry, constants_dict[entry])
+            if disassembly.is_simple_name(constants_dict[entry]):
+                constant(entry, constants_dict[entry])
 
-    trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict))
+    trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
 
 def comment(runtime_addr, text, inline=False):
     """Add a comment.

@@ -423,6 +423,10 @@ def mos_labels():
 
     trace.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
 
+    trace.substitute_constant_list.append(SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
+    trace.substitute_constant_list.append(SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
+    trace.substitute_constant_list.append(SubConst("sty crtc_address_register", 'y', crtc_registers_enum, True))
+
 def is_sideways_rom():
     comment(0x8000, "Sideways ROM header")
     label(0x8000, "rom_header")

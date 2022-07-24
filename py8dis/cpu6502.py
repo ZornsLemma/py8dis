@@ -151,7 +151,7 @@ class SubConst(object):
 
     These are stored in substitute_constant_list"""
 
-    def __init__(self, instruction, reg, constants_dict):
+    def __init__(self, instruction, reg, constants_dict, define_constant):
         mnemonic, operand, operand_length, prefix, suffix, addr_modes = parse_instruction(instruction)
         self.mnemonic       = mnemonic
         self.addr_modes     = addr_modes        # There can be two possible addressing modes, a zp and addr version
@@ -159,6 +159,7 @@ class SubConst(object):
         self._opcode        = None              # not set yet
         self.reg            = reg
         self.constants_dict = constants_dict
+        self.define_constant = define_constant
 
     def get_opcode(self, opcodes):
         # If already calculated, return it
@@ -184,10 +185,15 @@ class SubConst(object):
         if result != None:
             return result
 
-        # Remove all adornment like a leading & or $, everything except
-        # hex characters, then convert hex string to int. This is
-        # probably deeply misguided.
-        result = re.sub('[^0-9A-Fa-f]+', '', self.operand)
+        # TODO: Optimise!
+        for addr in disassembly.optional_labels:
+            if disassembly.optional_labels[addr][0] == self.operand:
+                return addr
+
+        # Assume hex of some kind. Remove common prefixes.
+        result = self.operand
+        if result[0] in "&$":
+            result = result[1:]
         return int(result, 16)
 
 class Cpu6502(trace.Cpu):
@@ -1021,7 +1027,15 @@ class Cpu6502(trace.Cpu):
                                         # check the const_sub dictionary has the current value as a key
                                         if reg_value in const_sub.constants_dict:
                                             # set the constant or expression at this address
-                                            classification.add_expression(where_reg_set, const_sub.constants_dict[reg_value])
+                                            const_or_expression = const_sub.constants_dict[reg_value]
+                                            classification.add_expression(where_reg_set, const_or_expression)
+
+                                            # define the constant, if desired
+                                            if const_sub.define_constant:
+                                                # is this a constant?
+                                                if disassembly.is_simple_name(const_or_expression):
+                                                    # define the constant
+                                                    disassembly.add_constant(reg_value, const_or_expression)
 
                 state = trace.cpu.cpu_state_optimistic[addr]
                 addr += c.length()
