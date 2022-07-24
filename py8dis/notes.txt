@@ -1,0 +1,110 @@
+load()/move() region notes:
+
+we need to emit something for each byte in a load()ed region
+move()s kind of create "holes" in a load()ed region where we have data but we emit it via a pseudopc block inline
+*because* we emit labels for the address after the end of a block at the end of that block, we would risk generating duplicate labels if two pseudopc blocks or two load()ed regions were adjacent
+- obviously we could simply avoid emitting any given label more than once, but this could still be confusing, e.g. we might emit:
+
+* = $2000
+!pseudopc $900 {
+.do_a
+    lda #65
+    rts
+.do_b
+}
+    blah blah; potentially lots of it
+!pseudopc $903 {
+; this is "do_b" - but we already emitted do_b label earlier, which isn't *wrong* (do_b will have value $903 as required) but is highly unhelpful
+    lda #66
+    rts
+}
+
+this example does show however that we *cannot* merge adjacent pseudopc blocks in all cases, because they needn't be consecutive in the "source".
+
+i suppose although these are *not* overlapping move() blocks, the do_b label kind of overlaps and this confusing-but-correct behaviour would probably be automatically fixed by having labels associated with a specific pseudopc block
+
+do we have a similar problem if we have adjacent load()s? i suspect we don't really, because that is morally equivalent to a single load() of a concatenated data file. we might (if I support this) wish to save() two adjacent ranges of memory out separately in a beebasm version of the output, but that is really independent of how we load()ed the data.
+
+what about deciding which labels we need to emit up-front because they will never get a chance to be done inline? the addresses we will "see" inline are the regions *including* the end addresses, with the move()-ed regions taken into account. we do need to be careful to also generate the end-of-source label after a pseudopc move()-ed region
+
+
+What if a program contains a top-level relocate down routine (e.g. it loads high from disc then relocates itself over disc workspace) *and* within that relocated down code contains some fragments of code it copies elsewhere? I am reluctant to allow "nested" relocations, but is this going to work at all?
+- without nested relocations we would have to move() the non-overlapping chunks separately
+- it probably (but would be good to test; gfoot's Repton 2 disassembly may do this) works for the common case where only the start/end addresses of the fragments are referenced - not thinking too clearly about this TBH...
+
+
+
+
+
+different "modes" for user interactions with the move system:
+(for the moment going with terminology "binary" and "runtime" but not final yet)
+
+"runtime address" mode is how things worked before the refactor
+this mode probably only works (maybe we actually detect this and error out) if all move()s have non-overlapping destinations (not too sure about this)
+label(X, "foo") associates label "foo" with the unmodified value X. Internally, if (as there will be if we enforce no overlapping) X is within a move() destination, we will probably implicitly tag the label with that move ID.
+expr(X, "foo") interprets X as a runtime address; internally X gets mapped back onto a binary address for the core disassembler to use
+- ditto byte(X), word(X), string(X) etc
+
+"binary address" mode is new and probably (?) not the default
+expr(X, "foo") etc interpret X as binary address with no translation - this implicitly disambiguates where move()s have overlapping destinations
+label(X, "foo") interprets X as a runtime address and does not modify it, so this is "inconsistent" with expr() et al - so label() behaves the same in both modes
+label(b2r(X), "foo") maps a binary address X to a runtime address (which may be a no-op) - this is useful if we are looking at a WIP disassembly, we see that code in the binary at 0xc221 which maybe gets relocated to 0x4300 (but we have no way to easily "see" that 0x4300 address, although maybe our hex dump should be toggleable between binary and runtime address constants) and we want to put a label on 0x4300 by saying label(b2r(0xc221), "foo")
+
+
+
+
+relocate_down_move_id = move(0x900, 0x1900, 0x6000) # move ID 1
+fragment_a_move_id = move(0x70, 0x9e3, 0x20) # move ID 2
+fragment_b_move_id = move(0x70, 0x2201, 0x16) # move ID 3
+# TODO: Actually the above is probably subtly wrong. I have written the 2nd-of-3 argument as if the first move had already taken effect, but the way I'm sketching this out in movemanager.py is that the second argument is always in "raw" binary addresses. I don't think this makes any fundamental difference, but it seems easier to implement and simpler to understand this way (if nothing else, it avoids the order of move() instructions potentially completely altering what data gets moved where - with the "always interpret as raw binary address" style, the assignment of move IDs to addresses may change with the order of moves, but the "wrong" data won't be copied as part of a move due to a reordering)
+
+we end up with:
+move_id[0x1900] == 1
+...
+move_id[0x19e2] == 1
+move_id[0x19e3] == 2
+...
+move_id[0x2002] == 2
+move_id[0x2003] == 1
+...
+
+so move ID 1 is no longer contiguous, but I think we can cope with that - it just means when we emit our "fragments" internally the real key is (move_id, start address of this run of move_id) not just "move_id".
+
+
+our model is (partly just to match how current released py8dis works, but also because it does feel fairly logical) that the user wants to work entirely in terms of "runtime" addresses, as if the move()s have been applied
+
+for label(), we *can* tolerate amibiguity over move ID - although we'd prefer to have an answer, either user-supplied or heuristically generated, for good quality output - because we are assigning the supplied value unaltered to a label name. It's completely normal to have labels which refer to addresses that are not part of the binary (screen memory or working RAM, for example).
+
+for expr() etc, we *can't* tolerate ambiguity over move ID, because internally we need to attach the expr() etc to the corresponding instruction bytes *at the binary address*. (as a sub case of this, we should error if there is *no* binary address corresponding, because such an expr() will never be emitted and is thus useless and probably an error when the user meant something else.)
+
+rather than have set_current_move_id() explicitly or implicitly, I am thinking some kind of with structure:
+
+with use_move_id(fragment_a_move_id) as dummy: # do we need the 'as' clause to keep Python happy or is it optional?
+    label(0x70, "foo") # associates 16-bit value "0x70" with name "foo" in move ID 2
+
+we might even allow nested use_move_id(), so we can do:
+
+with use_move_id(relocate_down_move_id):
+    label(0x900, "start")
+    with use_move_id(fragment_a_move_id):
+        label(0x70, "foo")
+	expr(0x904, "foo") # not part of fragment_a_move_id but convenient to write it here without user having to "undo" the fragment_a_move_id somehow
+    with use_move_id(fragment_b_move_id):
+        label(0x70, "bar")
+	expr(0x114d, "bar")
+
+Internally the with code is probably just pushing and popping move_ids at the end of a list which we consult when we need to translate an address into (for labels) a move ID associated with that address or (for expr() etc) translate a runtime address into a binary address.
+
+The with code is probably also updating config.memory[] to reflect the current move()s in effect - in principle config.memory could probably be an object which implements [] and uses the list of move IDs to dynamically compute this, whichever's easier.
+
+This is all done pre-tracing; at trace time we are probably still working with the static memory model in my current py8dis sketch. We'd probably rename current config.memory to config.memory_static or similar to try to avoid confusion; existing user code can then continue to refer to config.memory and "see" move()s having taken effect as it expects to.
+
+We might want to delete or otherwise disable config.memory access once tracing starts, since access to it would indiciate (I think) some sort of confusion on the part of the code executing; once tracing starts and we're not under the control of user-written with use_move_id() blocks, there isn't really such a concept of move()s "being applied" and the code should probably just be using config.memory_static. (Arguably some sorts of code which might get re-used - e.g. by being called via a jsr hook - would want to use config.memory, but they should probably be rewritten to use config.memory_static. Anyway, I don't say it *has* to be the case that config.memory is disabled during tracing and alter, just that it might well be a good idea.)
+
+[Aside: there's probably no big problem with making the "static" memory space >64K; that way (for example) if you had a 48K binary to disassemble and you need to be able to move() bits of it all over the 64K "real" address space to reflect the runtime situation, you could load() it at 0x10000 where it's out of the way and move() all of it to the corresponding addresses with overlaps as required. But probably no reason to go out of my way to complicate things even slightly with this yet.]
+
+[Note that in all of this we probably continue to require that a single binary address can only be move()d from once - I don't think that's a problem, and it's kind of a natural restriction because we are trying to write assembler input which will recreate the binary and we can't emit two things at the same place in the assembler input.]
+
+In this model it probably does make sense for a trace start point *supplied by the user* to have an address and a move ID, in order to allow it to be mapped back to a binary address. We don't need to track that internally when tracing because there is a unique binary address from the back-mapping which is what we use to trace, and as we trace *given* we are disassembling an instruction at binary address X we always have exactly one move ID (possibly "-1" for the default move ID covering un-move()d stuff) associated with X. When we LDA from an address we might want some sort of move ID hint or hook to help decide which label name we prefer to use (though this isn't part of tracing), but "the move ID we used when we started tracing" doesn't need to be tracked as it's implicit in the binary address of the LDA. When we JSR or JMP or BEQ or whatever to address Y and there are multiple move()s which put stuff at address Y, we might want to call some kind of user hook to help us decide (defaulting to just not tracing any further down that path, of course), but again "the move ID we used to start the trace" is not really relevant. In any case, I really don't want the tracing process to be too stateful because it seems like it invites getting different results from the chance of tracing branch X before branch Y.
+
+

@@ -1,14 +1,16 @@
 from commands import *
-from trace6502 import hook_subroutine
 import acorn
 
 # config.set_bytes_as_ascii(False)
+# config.loop_limit = 32
 
-load(0x8000, "anfs418.orig", "0926bcb6f47458f8c4aed5364ff1122d")
-set_output_filename("anfs418.rom")
+load(0x8000, "anfs418.orig", "6502", "0926bcb6f47458f8c4aed5364ff1122d")
+#set_output_filename("anfs418.rom")
 
-acorn.add_standard_labels()
+acorn.bbc()
 acorn.is_sideways_rom()
+
+move(0x400, 0xbf04, 0xbf95-0xbf04) # XXX: length is a guess
 
 constant(0x01, "service_claim_absolute_workspace")
 constant(0x0f, "service_vectors_changed")
@@ -74,6 +76,8 @@ min_y = 0x81
 for i in range(8):
     # There's a split table of code pointers for use via LDA:PHA:LDA:PHA:RTS at
     # &8869+x (low byte) and &8861+x (high byte).
+    # XXX: Is this right? These code pointers appear to point into main RAM,
+    # admittedly at locations which are potentially open for us to copy code to.
     code_ptr(0x8869 + min_y + i, 0x8861 + min_y + i)
     # There's also a low byte only table of code pointers at &8600+x; the high
     # byte of &86 is hard-coded at &8679. We manually do half of what code_ptr()
@@ -82,22 +86,24 @@ for i in range(8):
     addr = 0x8600 + min_y + i
     code_at = (0x8600 + memory[addr]) + 1
     entry(code_at)
-    expr(addr, "<((%s)-1)" % get_label(code_at))
+    expr(addr, utils.LazyString("<((%s)-1)", get_label(code_at, addr)))
 
-stringcr(0xa17c) # preceding BNE is always taken
-byte(0xaefb) # preceding BNE is always taken
+nonentry(0xa17c) # preceding BNE is always taken
+nonentry(0xaefb) # preceding BNE is always taken
 
-entry((0x421-0x400)+0xbf04, "copied_to_421")
+#entry((0x421-0x400)+0xbf04, "copied_to_421")
 
 entry(0x89a7)
 entry(0x89b5)
 
-entry(0xbf04)
-entry(0xbf07)
-entry(0xbf0a)
-entry(0xbf2c)
-entry(0xbf88)
+#entry(0xbf04)
+#entry(0xbf07)
+#entry(0xbf0a)
+#entry(0xbf2c)
+#entry(0xbf88)
+#entry(0xbf90)
 entry(0xbfd2)
+entry(0xbf95)
 
 # This subroutine prints non-top-bit-set characters following it, then continues
 # execution at the first top-bit-set byte following it.
