@@ -161,11 +161,35 @@ Why is this useful? Example 1: Labels at addresses that just 'rts' to early out 
 
 Define a constant `name` with value `value`; think of this as being passed straight through to the output as `name = value`.
 
-Constants are never used automatically by py8dis, which makes them different from labels:
+To illustrate the difference between labels and constants:
 - If you say `label(42, "meaning_of_life")`, an `lda 42` instruction will be disassembled as `lda meaning_of_life`.
 - If you say `constant(42, "meaning_of_life")`, an `lda 42` instruction will be disassembled as `lda 42`. Use ``expr()`` (see below) to use a constant. Example: You could use `expr()` to change `lda #42` into `lda #meaning_of_life`.
 
 Simple rule of thumb: use `label` only for addresses, use `constant()` for everything else.
+
+:pencil:`substitute_constants(instruction, reg, constants_dict, define_all_constants=None)`
+
+The idea of this command is to replace load immediate numbers with constants. 
+
+For example: `substitute_constants("sta sprite_number", 'a', sprite_dict)`
+
+Would search for any `sta sprite_number` and convert e.g.:
+
+    lda #$15
+    sta sprite_number
+
+into:
+
+    lda #SpriteId_Peanut
+    sta sprite_number
+
+When `instruction` is encountered, look for a load immediate instruction for register `reg` somewhere beforehand, and use the `constants_dict` dictionary to substitute a constant or expression (see below for an explanation of expressions) in place of the immediate value.
+
+`define_add_constants` has three possible values:
+
+    None    - define no constants (the default)
+    False   - define only the constants used
+    True    - define all constants
 
 ### Expressions
 
@@ -178,6 +202,8 @@ py8dis doesn't directly check the expression provided evaluates to the expected 
 When disassembling the byte at `addr`, use the string `s` instead of the literal value of that byte. Note that `addr` is the address of the byte itself, not the address of the instruction whose operand it is. `addr` might not even be part of an instruction; it might be data of some kind.
 
 Example: `lda #$30` could be replaced with `lda #>screen_address`.
+
+Alternatively, if s is a dictionary, then use it to substitute a constant or expression in place of the byte at `addr`.
 
 :pencil:`expr_label(addr, s)`
 

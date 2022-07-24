@@ -1,16 +1,16 @@
 from commands import *
 import trace
 import utils
+import classification
 
 def xy_addr(x_addr, y_addr):
     if x_addr is not None and y_addr is not None:
         assert isinstance(x_addr, memorymanager.BinaryAddr)
         assert isinstance(y_addr, memorymanager.BinaryAddr)
         label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
-        # TODO: This is a bit silly. We do b2r(), then expr() will convert back *and might fail*;
-        # if we just assigned the expr directly to the binary address that couldn't happen.
-        expr(movemanager.b2r(x_addr), utils.LazyString("<(%s)", label))
-        expr(movemanager.b2r(y_addr), utils.LazyString(">(%s)", label))
+
+        classification.add_expression(x_addr, utils.LazyString("<(%s)", label))
+        classification.add_expression(y_addr, utils.LazyString(">(%s)", label))
 
 osfile_enum = {
     0x00: "osfile_save",
@@ -201,7 +201,6 @@ osbyte_enum = {
     0xff: "osbyte_read_write_startup_options",
 }
 
-# TODO: Find e.g. "LDA #5:STA crtc_address_register" and replace 5 from the list below "LDA #crtc_vert_total_adjust:STA crtc_address_register"
 crtc_registers_enum =  {
        0: "crtc_horz_total",
        1: "crtc_horz_displayed",
@@ -223,7 +222,6 @@ crtc_registers_enum =  {
       17: "crtc_light_pen_pos_low",
 }
 
-# TODO: Should sort this in the source by the key.
 inkey_enum = {
       -1: "inkey_key_shift",
       -2: "inkey_key_ctrl",
@@ -325,11 +323,13 @@ def enum_lookup(r_addr, e):
     r = memorymanager.memory_binary[r_addr]
     if r in e:
         constant(r, e[r])
-        # TODO: This is a bit silly. We do b2r(), then expr() will convert back *and might fail*;
-        # if we just assigned the expr directly to the binary address that couldn't happen.
-        expr(movemanager.b2r(r_addr), e[r])
+        classification.add_expression(r_addr, e[r])
 
-# Note that the following code tries to handle A before X and Y; this is because (TODO: will this change?) expr() preserves the first expression for an address and if TAX etc are used we prefer to label A. TODO: Should we in fact prefer to label whichever register is actually loaded with the explicit immediate value?
+# Note that the following code tries to handle A before X and Y; this
+# is because (TODO: will this change?) expr() preserves the first
+# expression for an address and if TAX etc are used we prefer to label
+# A. TODO: Should we in fact prefer to label whichever register is
+# actually loaded with the explicit immediate value?
 
 def osfile_argument_finder_hook(a_addr, x_addr, y_addr):
     enum_lookup(a_addr, osfile_enum)

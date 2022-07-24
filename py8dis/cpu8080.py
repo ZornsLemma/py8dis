@@ -602,7 +602,7 @@ class Cpu8080(trace.Cpu):
                 assert len(item) == 2
                 assert item[1] is None or item[0] is not None
             else:
-                assert item is None or isinstance(item, six.integer_types)
+                assert item is None or utils.is_integer_type(item)
             self._d[key] = item
 
         def show(self):

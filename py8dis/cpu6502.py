@@ -1,16 +1,14 @@
-import collections # TODO!?
-import six # TODO!?
-
 import classification
+import collections
 import config
 import disassembly
 import labelmanager
 import mainformatter
 import memorymanager
 import movemanager
+import re
 import trace
 import utils
-import re
 
 def parse_instruction(instruction):
     instruction = instruction.strip()
@@ -815,7 +813,7 @@ class Cpu6502(trace.Cpu):
                 assert len(item) == 2
                 assert item[1] is None or item[0] is not None
             else:
-                assert item is None or isinstance(item, six.integer_types)
+                assert item is None or utils.is_integer_type(item)
             self._d[key] = item
 
         def show(self):

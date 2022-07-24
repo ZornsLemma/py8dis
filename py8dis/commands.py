@@ -55,11 +55,12 @@ go()                    Classifies code and data and emits assembly.
 """
 
 import argparse
-import six # TODO?
 import memorymanager
 
 # These functions/objects are directly exposed to the user.
-# TODO: I think we need to do something re runtime-vs-binary addresses here - at the moment these functions work with binary addresses but if they are directly user exposed they need to use runtime addresses
+# TODO: I think we need to do something re runtime-vs-binary addresses
+# here - at the moment these functions work with binary addresses but
+# if they are directly user exposed they need to use runtime addresses
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary
@@ -317,7 +318,7 @@ def entry(runtime_addr, label=None, warn=True):
     memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
 
     trace.cpu.add_entry(binary_addr, label, move_id)
-    if isinstance(label, six.string_types):
+    if utils.is_string_type(label):
         return label
     return disassembly.get_label(runtime_addr, binary_addr, move_id)
 
@@ -464,11 +465,10 @@ def set_label_maker_hook(hook):
 
     disassembly.set_user_label_maker_hook(hook)
 
-# TODO: Rename?
 def addr(label_name):
     """Returns the runtime address of the given label name"""
 
-    if not isinstance(label_name, six.string_types):
+    if not utils.is_string_type(label_name):
         return None
 
     return labelmanager.addr(label_name)
@@ -606,5 +606,9 @@ if args.upper:
 else:
     config.set_lower_case(True)
 
-# TODO: General point - when the code is finally tidied up, it might be helpful (perhaps using
-# wrapper functions to avoid repeating things everywhere and perhaps to show an actual error message, even if we also output a backtrace, rather than raw python assertion failures) to do thinks like assert memory[addr] is not None rather than letting subsequent code fail confusingly when it tries to use that None.
+# TODO: General point - when the code is finally tidied up, it might be
+# helpful (perhaps using wrapper functions to avoid repeating things
+# everywhere and perhaps to show an actual error message, even if we
+# also output a backtrace, rather than raw python assertion failures)
+# to do thinks like assert memory[addr] is not None rather than letting
+# subsequent code fail confusingly when it tries to use that None.

@@ -1,5 +1,6 @@
 from __future__ import print_function
 import collections
+import re
 import sys
 
 import config
@@ -87,7 +88,32 @@ def count_with_units(n, unit_name_singular, unit_name_plural):
 
     return "%d %s" % (n, unit_name_singular if n == 1 else unit_name_plural)
 
-# TODO: Not a problem but just a note so I can come back to it and check my thinking later and maybe put some comments in elsewhere: we only "need" LazyString to defer labelling decisions until we've decided if an address is code or data, since otherwise we have all the information we need straight away. This means that we *don't* need to use LazyString anywhere "outside" the tracing code.
+# Create string types and integer types depending on python version
+if sys.version_info[0] == 2:
+    _integer_types = (long, int)
+    _string_types  = (basestring,)
+else:
+    _integer_types = (int,)
+    _string_types  = (str,)
+
+def is_string_type(item):
+    return isinstance(item, _string_types)
+
+def is_integer_type(item):
+    return isinstance(item, _integer_types)
+
+# See https://stackoverflow.com/a/11150413
+def natural_sort(l):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(l, key=alphanum_key)
+
+# TODO: Not a problem but just a note so I can come back to it and
+# check my thinking later and maybe put some comments in elsewhere: we
+# only "need" LazyString to defer labelling decisions until we've
+# decided if an address is code or data, since otherwise we have all
+# the information we need straight away. This means that we *don't*
+# need to use LazyString anywhere "outside" the tracing code.
 class LazyString(object):
     """Defers string formatting until needed"""
 

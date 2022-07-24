@@ -2,8 +2,8 @@
 crtc_vert_total_adjust   = 5
 
 ; Memory locations
-char_to_print           = &0070
 bit_value               = &0070
+char_to_print           = &0070
 crtc_address_register   = &fe00
 oswrch                  = &ffee
 

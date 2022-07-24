@@ -82,12 +82,11 @@ class MemoryRuntime(object):
         return memory_binary[binary_address]
 
 
-# TODO: Might be nice if memory_binary were an instance of a class which could assert its key is a BinaryAddr
 memory_binary = [None] * 64*1024
 
-# TODO: This perhaps "should" be called memory_runtime, but earlier versions just had
-# memory and this is the main memory access for user code so probably reasonable to use
-# short name for it.
+# This perhaps should more properly be called memory_runtime, but
+# earlier versions just had memory and this is the main memory access
+# for user code so probably reasonable to use a short name for it.
 memory = MemoryRuntime()
 
 load_ranges = []
@@ -101,7 +100,6 @@ def get_entire_load_range():
 def load(filename, binary_addr, md5sum=None):
     binary_addr = BinaryAddr(binary_addr)
 
-    # TODO: We need to check load() doesn't overlap anything which already exists, and this is probably also where we'd merge adjacent ranges
     with open(filename, "rb") as f:
         data = bytearray(f.read())
         if binary_addr + len(data) > 0x10000:

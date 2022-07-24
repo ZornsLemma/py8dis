@@ -3,7 +3,7 @@ import sys
 
 import classification
 import config
-import disassembly # TODO?
+import disassembly
 import movemanager
 import utils
 import assembler

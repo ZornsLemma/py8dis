@@ -51,7 +51,6 @@ class Beebasm(assembler.Assembler):
             return [utils.make_indent(1) + utils.force_case("cpu 1"), ""]
         return []
 
-    # TODO: end_addr may not be used by any assemblers any more
     def code_start(self, start_addr, end_addr, first):
         result = ["", utils.make_indent(1) + utils.force_case("org %s" % self.hex4(start_addr))]
         result.append("")
@@ -63,16 +62,27 @@ class Beebasm(assembler.Assembler):
     def pseudopc_start(self, dest, source, length):
         result = [""]
         result.append(utils.make_indent(1) + utils.force_case("org %s" % self.hex(dest)))
-        # TODO: We will need some labels in pseudopc_end() but by then it will be too late to
-        # create them, so do it now. Is this hacky or OK?
-        # TODO: The idea of including move_id here is to force the labels to be emitted "around" the pseudopc-emulation block, which is both more readable and necessary in some cases to avoid assembly problems where a label is not forward declared. It isn't working quite right yet.
+        # TODO: We will need some labels in pseudopc_end() but by then
+        # it will be too late to create them, so do it now. Is this
+        # hacky or OK?
+        #
+        # TODO: The idea of including move_id here is to force the
+        # labels to be emitted "around" the pseudopc-emulation block,
+        # which is both more readable and necessary in some cases to
+        # avoid assembly problems where a label is not forward
+        # declared. It isn't working quite right yet.
         move_id = movemanager.move_id_for_binary_addr[source]
         disassembly.get_label(dest, source, move_id)
         disassembly.get_label(dest + length, source, move_id)
         disassembly.get_label(source, source, move_id)
         return result
 
-    # TODO: General comment - I've currently given up on generating "guard" for beebasm, I can probably do this later but on a "whole program" basis - note that guard sets m_aFlags[x], it is not a "guard=x" and there's only one such guard active at a time, so we need to set it at the end of distinct non-adjoining ranges (I think)
+    # TODO: General comment - I've currently given up on generating
+    # "guard" for beebasm, I can probably do this later but on a "whole
+    # program" basis - note that guard sets m_aFlags[x], it is not a
+    # "guard=x" and there's only one such guard active at a time, so we
+    # need to set it at the end of distinct non-adjoining ranges (I
+    # think)
     def pseudopc_end(self, dest, source, length):
         assert isinstance(dest, memorymanager.RuntimeAddr)
         assert isinstance(source, memorymanager.BinaryAddr)
