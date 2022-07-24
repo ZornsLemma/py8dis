@@ -361,3 +361,4 @@ If you have problems or suggestions for improvement, you can raise an issue or s
 ## Credits and thanks
 
 * py8dis is heavily influenced by Phill Harvey-Smith's [BeebDis](https://github.com/prime6809/BeebDis); I've tried to model py8dis commands on BeebDis where possible.
+* TobyLobster has contributed numerous improvements to py8dis, including refactoring, code clean up, local label support and constant substitution, as well as making many helpful suggestions.
