@@ -57,7 +57,8 @@ annotations = collections.defaultdict(list)
 partial_classification = 0
 
 
-# TODO: We should probably check all disassembly ranges are non-overlapping and merge any adjacent ones.
+# TODO: We should probably check all disassembly ranges are
+# non-overlapping and merge any adjacent ones.
 
 
 def set_user_label_maker_hook(hook):
@@ -93,7 +94,8 @@ def add_constant(value, name):
 def is_simple_name(s):
     """Check the name is a simple valid label name.
 
-    Must be a single letter or underscore followed by any number of alphanumerics or underscores"""
+    Must be a single letter or underscore followed by any number of
+    alphanumerics or underscores"""
 
     assert utils.is_string_type(s)
     assert len(s) > 0
@@ -120,7 +122,8 @@ def add_label(runtime_addr, s, move_id):
 def add_optional_label(runtime_addr, s, base_addr=None):
     """Add a label at the given runtime address, but only output if used.
 
-    When two consecutive bytes share a base label name (e.g. `userv` and `userv+1`) then `base_runtime_addr` points to the first byte."""
+    When two consecutive bytes share a base label name (e.g. `userv`
+    and `userv+1`) then `base_runtime_addr` points to the first byte."""
 
     assert 0 <= runtime_addr <= 0xffff
 
@@ -767,29 +770,4 @@ class Comment(Annotation):
         Annotation.__init__(self, utils.LazyString("%s", late_formatter), inline, priority)
 
 # TODO: We seem to assert some simple constants have their own value -
-# is this wrong/weird?
-
-# TODO: TobyLobster's Chuckie Egg disassembly shows that we're not
-# necessarily doing the best we can when striking a balance between
-# splitting/merging classifications and forcing the use of derived
-# labels. l0c00 is being generated as an expression even though we
-# should probably be splitting the byte data up so we can just label
-#  0xc00 directly. I think part of the problem is we don't even
-# *know* 0c00 is going to generate a label until we start str()-ing
-# the instruction classifications - obviously we could make the
-# disassembly process spit out labelled addresses explicitly during
-# disassembly and that may well be the right approach, then label
-# *names* are a str()-stage thing but the fact that an address will be
-# labelled is known as soon as we finish tracing.
-
-# TODO: Do we need to make some provision for user-controlled labelling
-# at *binary* addresses, or without any "implicit, because unambiguous,
-# move() application"? Imagine we have a move()d chunk of code - we
-# want a label on that code *at the binary address* so the
-# LDA rom_copy,Y:STA ram_copy,Y loop can use a custom label for
-# rom_copy. I *think* at the moment it would be hard/impossible for
-# user code to successfully define the "rom_copy" label.
-
-# TODO: Note that in move.py, l0908 is an automatically generated label
-# which we would like to heuristically assign a non-None move_id, but
-# this doesn't happen yet.
+# this is not wrong per-se, but a bit weird.

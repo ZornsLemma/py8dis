@@ -4,6 +4,7 @@ set -e
 
 check_disassembly=0
 make_known_good=0
+make_extras=0
 
 # Argument parsing
 while (( $# )); do
@@ -12,6 +13,7 @@ while (( $# )); do
 		shift
 		break
 	;;
+	-x|--make-extras) make_extras=1; echo "Making extra files (reports, symbol files etc)." ;;
 	-c|--check-disassembly) check_disassembly=1; echo "Checking disassemblies against known good." ;;
 	-m|--make-known-good) make_known_good=1; echo "Making known good." ;;
 	-*)
@@ -33,6 +35,9 @@ check_identical() {
     xxd -g1 "$original_dat" >build/temp1.hex
     xxd -g1 "$new_dat"      >build/temp2.hex
     diff build/temp1.hex build/temp2.hex
+
+    rm "build/temp1.hex"
+    rm "build/temp2.hex"
 }
 
 check_disassemblies() {
@@ -56,25 +61,41 @@ test() {
 
     filename=$(basename ${source_path%.*})
 
+    acme_extras=""
+    xa_extras=""
+    if [[ $make_extras -gt 0 ]]
+    then
+        acme_extras="--report build/${filename}_acme_report.txt --symbollist build/${filename}_acme_symbols.txt"
+        xa_extras="-l build/${filename}_xa_symbols.txt"
+    fi
+
     # Acme
     echo "Testing $filename for Acme"
     python3 "$source_path" --acme > "build/${filename}_acme.asm"
     check_disassemblies "build/${filename}_acme.asm" "known_good/${filename}_acme.asm"
-    acme -o "build/${filename}_acme.dat" --report "build/${filename}_acme_report.txt" --symbollist "build/${filename}_acme_symbols.txt" "build/${filename}_acme.asm"
+
+    # Add these for symbols/report:
+    acme -o "build/${filename}_acme.dat" $acme_extras "build/${filename}_acme.asm"
     check_identical "$original_dat" "build/${filename}_acme.dat"
 
     # xa
     echo "Testing $filename for xa"
     python3 "$source_path" --xa > "build/${filename}_xa.asm"
     check_disassemblies "build/${filename}_xa.asm" "known_good/${filename}_xa.asm"
-    xa -o "build/${filename}_xa.dat" -l "build/${filename}_xa_symbols.txt" "build/${filename}_xa.asm"
+    xa -o "build/${filename}_xa.dat" $xa_extras "build/${filename}_xa.asm"
     check_identical "$original_dat" "build/${filename}_xa.dat"
 
     # Beebasm
     echo "Testing $filename for Beebasm"
     python3 "$source_path" > "build/${filename}_beebasm.asm"
     check_disassemblies "build/${filename}_beebasm.asm" "known_good/${filename}_beebasm.asm"
-    beebasm -v -o "build/${filename}_beebasm.dat" -i "build/${filename}_beebasm.asm" > "build/${filename}_beebasm_report.txt"
+
+    if [[ $make_extras -gt 0 ]]
+    then
+        beebasm -v -o "build/${filename}_beebasm.dat" -i "build/${filename}_beebasm.asm" >"build/${filename}_beebasm_report.txt"
+    else
+        beebasm -v -o "build/${filename}_beebasm.dat" -i "build/${filename}_beebasm.asm" 1>/dev/null
+    fi
     check_identical "$original_dat" "build/${filename}_beebasm.dat"
 }
 
@@ -84,12 +105,20 @@ test_8080() {
 
     filename=$(basename ${source_path%.*})
 
+    extras=""
+    if [[ $make_extras -gt 0 ]]
+    then
+        extras="-l -s"
+    fi
+
     # z88dk-z80asm
     echo "Testing $filename for z88dk-z80asm"
     python3 "$source_path" --z88dk-8080 > "build/${filename}_8080.asm"
     check_disassemblies "build/${filename}_8080.asm" "known_good/${filename}_8080.asm"
-    z88dk-z80asm -m8080 -b -l -s -o"build/${filename}_8080.bin" "build/${filename}_8080.asm"
+    z88dk-z80asm -m8080 -b $extras -o"build/${filename}_8080.bin" "build/${filename}_8080.asm"
     check_identical "$original_dat" "build/${filename}_8080.bin"
+
+    rm "build/${filename}_8080.o"
 }
 
 test_8080 "example8080.py" "example8080.orig"
