@@ -13,70 +13,84 @@ class Cpu65C02(Cpu6502):
     def __init__(self):
         super(Cpu65C02, self).__init__()
 
-        # ENHANCE: On a 65C02 undefined opcodes are guaranteed to be NOPs of varying
-        # lengths. These are *not* implemented here, since most code probably won't be
-        # executing them and it's probably better to reduce the chances of arbitrary
-        # data being traced as code. All the same, it might be nice to allow the user to
+        # On a 65C02 undefined opcodes are guaranteed to be NOPs of
+        # varying lengths. These are *not* implemented here, since most
+        # code probably won't be executing them and it's probably
+        # better to reduce the chances of arbitrary data being traced
+        # as code.
+        # ENHANCE: All the same, it might be nice to allow the user to
         # opt in to disassembling these.
+        #
+        # On the 6502 undocumented opcodes are sometimes used. Perhaps
+        # allow them too: e.g. Zalaga uses undocumented opcodes.
+
+        # Each opcode is categorised by how it affects A:
+        #
+        # (-) Does not touch A                  (e.g. CLC, PHP, LDX)
+        # (U) Uses A, but doesn't change it     (e.g. CMP, STA, PHA)
+        # (A) Adjusts A, via arithmetic/bitwise (e.g. ASL, ADC, AND)
+        # (O) Overwrites A completely.          (e.g. LDA, PLA)
+        #
+        # and similarly for the X and Y registers.
         self.opcodes.update({
             # new instructions
-            0x04: self.OpcodeZp(                    "TSB zp",       cycles="5",  update=self.update_z),
-            0x0c: self.OpcodeDataAbs(               "TSB addr",     cycles="6",  update=self.update_z),
-            0x12: self.OpcodeZp(                    "ORA (zp)",     cycles="5",  update=self.update_anz),
-            0x14: self.OpcodeZp(                    "TRB zp",       cycles="5",  update=self.update_z),
-            0x1a: self.OpcodeImplied(               "INC A",        cycles="2",  update=self.make_increment('a')),
-            0x1c: self.OpcodeDataAbs(               "TRB addr",     cycles="6",  update=self.update_z),
-            0x32: self.OpcodeZp(                    "AND (zp)",     cycles="5",  update=self.update_anz),
-            0x34: self.OpcodeZp(                    "BIT zp,X",     cycles="4",  update=self.update_bit),
-            0x3c: self.OpcodeDataAbs(               "BIT addr,X",   cycles="4",  update=self.update_bit),
-            0x3a: self.OpcodeImplied(               "DEC A",        cycles="2",  update=self.make_decrement('a')),
-            0x52: self.OpcodeZp(                    "EOR (zp)",     cycles="5",  update=self.update_anz),
-            0x5a: self.OpcodeImplied(               "PHY",          cycles="3",  update=self.neutral),
-            0x64: self.OpcodeZp(                    "STZ zp",       cycles="3",  update=self.neutral),
-            0x72: self.OpcodeZp(                    "ADC (zp)",     cycles="5e", update=self.update_adc_sbc),
-            0x74: self.OpcodeZp(                    "STZ zp,X",     cycles="4",  update=self.neutral),
-            0x7a: self.OpcodeImplied(               "PLY",          cycles="4",  update=self.update_ynz),
-            0x7c: self.OpcodeJmpAbsX(               "JMP (addr,X)", cycles="6"),
-            0x80: self.OpcodeUnconditionalBranch(   "BRA offset",   cycles="3d"),
-            0x89: self.OpcodeImmediate(             "BIT #imm",     cycles="2",  update=self.update_z), # BIT immediate only affects Z
-            0x92: self.OpcodeZp(                    "STA (zp)",     cycles="5",  update=self.neutral),
-            0x9c: self.OpcodeDataAbs(               "STZ addr",     cycles="4",  update=self.neutral),
-            0x9e: self.OpcodeDataAbs(               "STZ addr,X",   cycles="5",  update=self.neutral),
-            0xb2: self.OpcodeZp(                    "LDA (zp)",     cycles="5",  update=self.update_anz),
-            0xd2: self.OpcodeZp(                    "CMP (zp)",     cycles="5",  update=self.update_nzc),
-            0xda: self.OpcodeImplied(               "PHX",          cycles="3",  update=self.neutral),
-            0xf2: self.OpcodeZp(                    "SBC (zp)",     cycles="5e", update=self.update_adc_sbc),
-            0xfa: self.OpcodeImplied(               "PLX",          cycles="4",  update=self.update_xnz),
+            0x04: self.OpcodeZp(                    "TSB zp",       "U--", cycles="5",  update=self.update_z),
+            0x0c: self.OpcodeDataAbs(               "TSB addr",     "U--", cycles="6",  update=self.update_z),
+            0x12: self.OpcodeZp(                    "ORA (zp)",     "A--", cycles="5",  update=self.update_nz),
+            0x14: self.OpcodeZp(                    "TRB zp",       "U--", cycles="5",  update=self.update_z),
+            0x1a: self.OpcodeImplied(               "INC A",        "A--", cycles="2",  update=self.make_increment('a')),
+            0x1c: self.OpcodeDataAbs(               "TRB addr",     "U--", cycles="6",  update=self.update_z),
+            0x32: self.OpcodeZp(                    "AND (zp)",     "A--", cycles="5",  update=self.update_nz),
+            0x34: self.OpcodeZp(                    "BIT zp,X",     "UU-", cycles="4",  update=self.update_bit),
+            0x3c: self.OpcodeDataAbs(               "BIT addr,X",   "UU-", cycles="4",  update=self.update_bit),
+            0x3a: self.OpcodeImplied(               "DEC A",        "A--", cycles="2",  update=self.make_decrement('a')),
+            0x52: self.OpcodeZp(                    "EOR (zp)",     "A--", cycles="5",  update=self.update_nz),
+            0x5a: self.OpcodeImplied(               "PHY",          "--U", cycles="3",  update=self.neutral),
+            0x64: self.OpcodeZp(                    "STZ zp",       "---", cycles="3",  update=self.neutral),
+            0x72: self.OpcodeZp(                    "ADC (zp)",     "A--", cycles="5e", update=self.update_adc_sbc),
+            0x74: self.OpcodeZp(                    "STZ zp,X",     "-U-", cycles="4",  update=self.neutral),
+            0x7a: self.OpcodeImplied(               "PLY",          "--O", cycles="4",  update=self.update_nz),
+            0x7c: self.OpcodeJmpAbsX(               "JMP (addr,X)", "---", cycles="6"),
+            0x80: self.OpcodeUnconditionalBranch(   "BRA offset",   "---", cycles="3d"),
+            0x89: self.OpcodeImmediate(             "BIT #imm",     "U--", cycles="2",  update=self.update_z), # BIT immediate only affects Z
+            0x92: self.OpcodeZp(                    "STA (zp)",     "U--", cycles="5",  update=self.neutral),
+            0x9c: self.OpcodeDataAbs(               "STZ addr",     "---", cycles="4",  update=self.neutral),
+            0x9e: self.OpcodeDataAbs(               "STZ addr,X",   "-U-", cycles="5",  update=self.neutral),
+            0xb2: self.OpcodeZp(                    "LDA (zp)",     "O--", cycles="5",  update=self.update_nz),
+            0xd2: self.OpcodeZp(                    "CMP (zp)",     "U--", cycles="5",  update=self.update_nzc),
+            0xda: self.OpcodeImplied(               "PHX",          "-U-", cycles="3",  update=self.neutral),
+            0xf2: self.OpcodeZp(                    "SBC (zp)",     "A--", cycles="5e", update=self.update_adc_sbc),
+            0xfa: self.OpcodeImplied(               "PLX",          "-O-", cycles="4",  update=self.update_nz),
 
             # 6502 instructions with changed cycle counts
-            0x1e: self.OpcodeDataAbs(               "ASL addr,X",   cycles="6b", update=self.update_nzc),
-            0x3e: self.OpcodeDataAbs(               "ROL addr,X",   cycles="6b", update=self.update_nzc),
-            0x5e: self.OpcodeDataAbs(               "LSR addr,X",   cycles="6b", update=self.update_nzc),
-            0x6c: self.OpcodeJmpInd(                "JMP (addr)",   cycles="6"),
-            0x7e: self.OpcodeDataAbs(               "ROR addr,X",   cycles="6b", update=self.update_nzc),
+            0x1e: self.OpcodeDataAbs(               "ASL addr,X",   "-U-", cycles="6b", update=self.update_nzc),
+            0x3e: self.OpcodeDataAbs(               "ROL addr,X",   "-U-", cycles="6b", update=self.update_nzc),
+            0x5e: self.OpcodeDataAbs(               "LSR addr,X",   "-U-", cycles="6b", update=self.update_nzc),
+            0x6c: self.OpcodeJmpInd(                "JMP (addr)",   "---", cycles="6"),
+            0x7e: self.OpcodeDataAbs(               "ROR addr,X",   "-U-", cycles="6b", update=self.update_nzc),
 
-            0x61: self.OpcodeZp(                    "ADC (zp,X)",   cycles="6e", update=self.update_adc_sbc),
-            0x65: self.OpcodeZp(                    "ADC zp",       cycles="3e", update=self.update_adc_sbc),
-            0x69: self.OpcodeImmediate(             "ADC #imm",     cycles="2e", update=self.update_adc_sbc),
-            0x6d: self.OpcodeDataAbs(               "ADC addr",     cycles="4e", update=self.update_adc_sbc),
-            0x71: self.OpcodeZp(                    "ADC (zp),Y",   cycles="5c", update=self.update_adc_sbc),
-            0x75: self.OpcodeZp(                    "ADC zp,X",     cycles="4e", update=self.update_adc_sbc),
-            0x79: self.OpcodeDataAbs(               "ADC addr,Y",   cycles="4c", has_zp_version=False, update=self.update_adc_sbc),
-            0x7d: self.OpcodeDataAbs(               "ADC addr,X",   cycles="4c", update=self.update_adc_sbc),
-            0xe1: self.OpcodeZp(                    "SBC (zp,X)",   cycles="6",  update=self.update_adc_sbc),
-            0xe5: self.OpcodeZp(                    "SBC zp",       cycles="3e", update=self.update_adc_sbc),
-            0xe9: self.OpcodeImmediate(             "SBC #imm",     cycles="2",  update=self.update_adc_sbc),
-            0xed: self.OpcodeDataAbs(               "SBC addr",     cycles="4",  update=self.update_adc_sbc),
-            0xf1: self.OpcodeZp(                    "SBC (zp),Y",   cycles="5c", update=self.update_adc_sbc),
-            0xf5: self.OpcodeZp(                    "SBC zp,X",     cycles="4e", update=self.update_adc_sbc),
-            0xf9: self.OpcodeDataAbs(               "SBC addr,Y",   cycles="4c", has_zp_version=False, update=self.update_adc_sbc),
-            0xfd: self.OpcodeDataAbs(               "SBC addr,X",   cycles="4c", update=self.update_adc_sbc),
+            0x61: self.OpcodeZp(                    "ADC (zp,X)",   "AU-", cycles="6e", update=self.update_adc_sbc),
+            0x65: self.OpcodeZp(                    "ADC zp",       "A--", cycles="3e", update=self.update_adc_sbc),
+            0x69: self.OpcodeImmediate(             "ADC #imm",     "A--", cycles="2e", update=self.update_adc_sbc),
+            0x6d: self.OpcodeDataAbs(               "ADC addr",     "A--", cycles="4e", update=self.update_adc_sbc),
+            0x71: self.OpcodeZp(                    "ADC (zp),Y",   "A-U", cycles="5c", update=self.update_adc_sbc),
+            0x75: self.OpcodeZp(                    "ADC zp,X",     "AU-", cycles="4e", update=self.update_adc_sbc),
+            0x79: self.OpcodeDataAbs(               "ADC addr,Y",   "A-U", cycles="4c", has_zp_version=False, update=self.update_adc_sbc),
+            0x7d: self.OpcodeDataAbs(               "ADC addr,X",   "AU-", cycles="4c", update=self.update_adc_sbc),
+            0xe1: self.OpcodeZp(                    "SBC (zp,X)",   "AU-", cycles="6",  update=self.update_adc_sbc),
+            0xe5: self.OpcodeZp(                    "SBC zp",       "A--", cycles="3e", update=self.update_adc_sbc),
+            0xe9: self.OpcodeImmediate(             "SBC #imm",     "A--", cycles="2",  update=self.update_adc_sbc),
+            0xed: self.OpcodeDataAbs(               "SBC addr",     "A--", cycles="4",  update=self.update_adc_sbc),
+            0xf1: self.OpcodeZp(                    "SBC (zp),Y",   "A-U", cycles="5c", update=self.update_adc_sbc),
+            0xf5: self.OpcodeZp(                    "SBC zp,X",     "AU-", cycles="4e", update=self.update_adc_sbc),
+            0xf9: self.OpcodeDataAbs(               "SBC addr,Y",   "A-U", cycles="4c", has_zp_version=False, update=self.update_adc_sbc),
+            0xfd: self.OpcodeDataAbs(               "SBC addr,X",   "AU-", cycles="4c", update=self.update_adc_sbc),
         })
 
     # TODO: This is probably wrong wrt moves; copy how OpcodeConditionalBranch works
     class OpcodeUnconditionalBranch(Cpu6502.Opcode):
-        def __init__(self, instruction_template, cycles="???"):
-            super(Cpu65C02.OpcodeUnconditionalBranch, self).__init__(instruction_template, cycles=cycles)
+        def __init__(self, instruction_template, reg_change, cycles="???"):
+            super(Cpu65C02.OpcodeUnconditionalBranch, self).__init__(instruction_template, reg_change, cycles=cycles)
 
         def target(self, binary_addr):
             base = movemanager.b2r(binary_addr)
@@ -97,8 +111,8 @@ class Cpu65C02(Cpu6502):
 
 
     class OpcodeJmpAbsX(Cpu6502.OpcodeAbs):
-        def __init__(self, instruction_template, cycles="???"):
-            super(Cpu65C02.OpcodeJmpAbsX, self).__init__(instruction_template, has_zp_version=False, cycles=cycles)
+        def __init__(self, instruction_template, reg_change, cycles="???"):
+            super(Cpu65C02.OpcodeJmpAbsX, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
         def update_references(self, binary_addr):
             trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
