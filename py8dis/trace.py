@@ -11,6 +11,31 @@ import utils
 cpu = None
 subroutine_argument_finder_hooks = []
 substitute_constant_list = []
+subroutines_list = []
+
+class Subroutine(object):
+    """Data concerning a subroutine."""
+
+    def __init__(self, runtime_addr, label_name, title, description, entry, exit, hook_function, move_id):
+        self.runtime_addr   = memorymanager.RuntimeAddr(runtime_addr)
+        self.move_id        = move_id
+        self.label_name     = label_name
+        self.title          = title
+        self.description    = description
+        if entry:
+            self.entry = entry
+        else:
+            self.entry = {}
+        if exit:
+            self.exit = exit
+        else:
+            self.exit = {}
+
+
+        self.hook_function  = hook_function
+
+def add_subroutine(runtime_addr, name, title, description, entry, exit, hook_function, move_id):
+    subroutines_list.append(Subroutine(runtime_addr, name, title, description, entry, exit, hook_function, move_id))
 
 class Cpu(object):
     """Abstract base class representing a CPU"""
@@ -72,8 +97,9 @@ class Cpu(object):
         disassembly.add_label(movemanager.b2r(binary_addr), name, move_id)
 
     def analyse_code(self):
-        """Tracks the CPU state as we trace code."""
+        """Calculates CPU state for all memory then runs code analysis."""
 
+        # Calculate the CPU state
         binary_addr = 0
         state = self.CpuState()
         while binary_addr < 0x10000:
@@ -88,6 +114,7 @@ class Cpu(object):
             else:
                 binary_addr += 1
 
+        # Call each of the code analysis functions
         for f in self.code_analysis_fns:
             f()
 
@@ -121,7 +148,7 @@ class Cpu(object):
             for addr, label in sorted(self.labels.items(), key=lambda x: x[0]):
                 print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))
 
-        # Track the CPU state
+        # Calculate the CPU states and analyse the code
         self.analyse_code()
 
         # We defer label name generating using LazyString so that label

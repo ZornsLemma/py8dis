@@ -141,7 +141,6 @@ def parse_instruction_template(instruction):
             utils.warn("%s, %s, %s, %s, %s, %s" % (mnemonic, operand, operand_length, prefix, suffix, addr_mode))
             utils.die("Could not understand instruction template %s" % (instruction))
 
-
     return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
 
 class SubConst(object):
@@ -236,6 +235,7 @@ class Cpu6502(trace.Cpu):
 
         self.code_analysis_fns.append(self.subroutine_argument_finder)
         self.code_analysis_fns.append(self.substitute_constants)
+        self.code_analysis_fns.append(self.find_subroutine_calls)
 
         # TODO: indent_level is a bit of a hack (after all, arguably
         # byte/word directives etc should have it too) and should
@@ -566,6 +566,9 @@ class Cpu6502(trace.Cpu):
             result = self.cycles
             return result
 
+        def could_be_call_to_subroutine(self):
+            return False
+
         def as_string_list(self, addr, annotations):
             lazy_string = utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr))
             result = [mainformatter.add_inline_comment(addr, self.length(), self.cycles_description(addr), annotations, lazy_string)]
@@ -714,6 +717,9 @@ class Cpu6502(trace.Cpu):
         def is_block_end(self):
             return True
 
+        def could_be_call_to_subroutine(self):
+            return True
+
         def disassemble(self, binary_addr):
             #print("PCC %s" % apply_move(self.target(binary_addr)))
             # TODO: Should the apply_move() call be inside target and/or abs_operand? Still feeling my way here...
@@ -742,6 +748,9 @@ class Cpu6502(trace.Cpu):
         def update_references(self, addr):
             trace.cpu.labels[self.target(addr)].add_reference(addr)
             #trace.references[self.target(addr)].add(addr)
+
+        def could_be_call_to_subroutine(self):
+            return True
 
         def disassemble(self, binary_addr):
             assert isinstance(binary_addr, memorymanager.BinaryAddr)
@@ -803,6 +812,9 @@ class Cpu6502(trace.Cpu):
         def disassemble(self, binary_addr):
             # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..
             return [binary_addr + 2] + trace.cpu.apply_move2(self.target(binary_addr), binary_addr)
+
+        def could_be_call_to_subroutine(self):
+            return True
 
         def update_cpu_state(self, addr, state):
             # In our optimistic model (at least), a branch invalidates everything.
@@ -1053,6 +1065,55 @@ class Cpu6502(trace.Cpu):
                                 state.get_previous_load_imm('x'),
                                 state.get_previous_load_imm('y')) is not None:
                                 break
+                state = trace.cpu.cpu_state_optimistic[addr]
+                addr += c.length()
+            else:
+                addr += 1
+
+    def find_subroutine_calls(self):
+        """Finds calls to subroutines, and calls its hook function.
+
+        Subroutines will have been registered previously with calls
+        to the subroutine() command.
+
+        The hook function receives the address, CPU state, and
+        subroutine data and most likely uses it to label and/or comment
+        the calling code.
+        """
+
+        addr = 0
+        state = None
+
+        while addr < 0x10000:
+            c = disassembly.classifications[addr]
+            if c is not None:
+                if state == None:
+                    state = trace.cpu.CpuState()
+
+                if isinstance(c, trace.cpu.Opcode):
+                    could_be_call_to_subroutine = c.could_be_call_to_subroutine()
+                    target = c.target(memorymanager.BinaryAddr(addr))
+
+                    # check each subroutine
+                    for subroutine in trace.subroutines_list:
+                        found = False
+
+                        # convert to binary address
+                        binary_addr, _ = movemanager.r2b(subroutine.runtime_addr)
+                        if addr == binary_addr:
+                            # We are at the subroutine address itself.
+                            # We might have fallen through from above
+                            # and so we count this as a match.
+                            found = True
+                        elif could_be_call_to_subroutine and (target == subroutine.runtime_addr):
+                            # If our instruction is a call to the
+                            # address of the subroutine, then we have
+                            # found a match.
+                            found = True
+
+                        if found:
+                            subroutine.hook_function(addr, state, subroutine)
+
                 state = trace.cpu.cpu_state_optimistic[addr]
                 addr += c.length()
             else:

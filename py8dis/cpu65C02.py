@@ -103,6 +103,9 @@ class Cpu65C02(Cpu6502):
             trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
             #trace.references[self.target(binary_addr)].add(binary_addr)
 
+        def could_be_call_to_subroutine(self):
+            return True
+
         def disassemble(self, binary_addr):
             return [None] + trace.cpu.apply_move2(self.target(binary_addr), binary_addr)
 

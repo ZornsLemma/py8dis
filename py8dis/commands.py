@@ -222,6 +222,10 @@ def substitute_constants(instruction, reg, constants_dict, define_all_constants=
 
     trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
 
+def subroutine(runtime_addr, name, title, description, entry=None, exit=None, hook=None, move_id=None):
+    optional_label(runtime_addr, name, move_id)
+    trace.add_subroutine(runtime_addr, name, title, description, entry, exit, hook, move_id)
+
 def comment(runtime_addr, text, inline=False):
     """Add a comment.
 

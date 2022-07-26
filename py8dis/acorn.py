@@ -325,41 +325,35 @@ def enum_lookup(r_addr, e):
         constant(r, e[r])
         classification.add_expression(r_addr, e[r])
 
-# Note that the following code tries to handle A before X and Y; this
-# is because (TODO: will this change?) expr() preserves the first
-# expression for an address and if TAX etc are used we prefer to label
-# A. TODO: Should we in fact prefer to label whichever register is
-# actually loaded with the explicit immediate value?
 
-def osfile_argument_finder_hook(a_addr, x_addr, y_addr):
+def osfile_hook(addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osfile_enum)
     xy_addr(x_addr, y_addr)
 
-def osword_argument_finder_hook(a_addr, x_addr, y_addr):
+def osword_hook(addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osword_enum)
     xy_addr(x_addr, y_addr)
 
-def osbyte_argument_finder_hook(a_addr, x_addr, y_addr):
+def osbyte_hook(addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osbyte_enum)
+
     # TODO: Should we check Y=&FF? Or at least Y is not known to be <128?
     if a_addr is not None and memory_binary[a_addr] == 0x81:
         enum_lookup(x_addr, inkey_enum)
 
-def oscli_argument_finder_hook(a_addr, x_addr, y_addr):
+def oscli_hook(addr, state, subroutine):
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
     xy_addr(x_addr, y_addr)
-
-def acorn_argument_finder_hook(target, a_addr, x_addr, y_addr):
-    assert isinstance(target, memorymanager.RuntimeAddr)
-    # TODO: magic constants, should share with mos_labels via Python "constants"
-    # TODO: do other OS calls
-    d = {
-        0xffdd: osfile_argument_finder_hook,
-        0xfff1: osword_argument_finder_hook,
-        0xfff4: osbyte_argument_finder_hook,
-        0xfff7: oscli_argument_finder_hook,
-    }
-    if target in d:
-        (d[target])(a_addr, x_addr, y_addr)
 
 # ENHANCE: Split this up somehow into "tube or host" and "just host"?
 def mos_labels():
@@ -421,7 +415,10 @@ def mos_labels():
     optional_label(0xfff4, "osbyte")
     optional_label(0xfff7, "oscli")
 
-    trace.subroutine_argument_finder_hooks.append(acorn_argument_finder_hook)
+    subroutine(0xfff4, "osbyte", "OSBYTE", "A multi purpose operating system routine.", hook=osbyte_hook)
+    subroutine(0xfff1, "osword", "OSWORD", "A multi purpose operating system routine.", hook=osword_hook)
+    subroutine(0xffdd, "osfile", "OSFILE", "A multi purpose operating system routine.", hook=osfile_hook)
+    subroutine(0xfff7, "oscli",  "OSCLI",  "A multi purpose operating system routine.", hook=oscli_hook)
 
     trace.substitute_constant_list.append(SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
     trace.substitute_constant_list.append(SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
