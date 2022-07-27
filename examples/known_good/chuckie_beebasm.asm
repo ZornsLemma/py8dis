@@ -1572,20 +1572,20 @@ osbyte                  = &fff4
     ldx #inkey_key_h                                                  ; 1a3b: a2 ab       ..
     ldy #&ff                                                          ; 1a3d: a0 ff       ..
     lda #osbyte_inkey                                                 ; 1a3f: a9 81       ..
-    jsr osbyte                                                        ; 1a41: 20 f4 ff     ..
+    jsr osbyte                                                        ; 1a41: 20 f4 ff     ..            ; Is 'H' key pressed?
     cpy #0                                                            ; 1a44: c0 00       ..
     beq checkkeys                                                     ; 1a46: f0 26       .&
 .paused
     ldx #inkey_key_h                                                  ; 1a48: a2 ab       ..
     ldy #&ff                                                          ; 1a4a: a0 ff       ..
     lda #osbyte_inkey                                                 ; 1a4c: a9 81       ..
-    jsr osbyte                                                        ; 1a4e: 20 f4 ff     ..
+    jsr osbyte                                                        ; 1a4e: 20 f4 ff     ..            ; Is 'H' key pressed?
     cpy #0                                                            ; 1a51: c0 00       ..
     beq stillpaused                                                   ; 1a53: f0 12       ..
     ldx #inkey_key_escape                                             ; 1a55: a2 8f       ..
     ldy #&ff                                                          ; 1a57: a0 ff       ..
     lda #osbyte_inkey                                                 ; 1a59: a9 81       ..
-    jsr osbyte                                                        ; 1a5b: 20 f4 ff     ..
+    jsr osbyte                                                        ; 1a5b: 20 f4 ff     ..            ; Is 'ESCAPE' key pressed?
     cpy #0                                                            ; 1a5e: c0 00       ..
     beq stillpaused                                                   ; 1a60: f0 05       ..
     lda #&80                                                          ; 1a62: a9 80       ..
@@ -1619,7 +1619,7 @@ osbyte                  = &fff4
 .checkkey
     ldy #&ff                                                          ; 1a90: a0 ff       ..
     lda #osbyte_inkey                                                 ; 1a92: a9 81       ..
-    jsr osbyte                                                        ; 1a94: 20 f4 ff     ..
+    jsr osbyte                                                        ; 1a94: 20 f4 ff     ..            ; Read a specific key (or read machine type)
     cpy #0                                                            ; 1a97: c0 00       ..
     beq keynotpressed                                                 ; 1a99: f0 06       ..
     lda keys                                                          ; 1a9b: a5 60       .`
@@ -1720,7 +1720,7 @@ osbyte                  = &fff4
     lda #osword_read_interval_timer                                   ; 1b10: a9 03       ..
     ldx #<(intervaltimerblock)                                        ; 1b12: a2 00       ..
     ldy #>(intervaltimerblock)                                        ; 1b14: a0 00       ..
-    jsr osword                                                        ; 1b16: 20 f1 ff     ..
+    jsr osword                                                        ; 1b16: 20 f1 ff     ..            ; Read interval timer
     lda intervaltimerblock + 1                                        ; 1b19: a5 01       ..
     bne finisheddelay                                                 ; 1b1b: d0 06       ..
     lda intervaltimerblock                                            ; 1b1d: a5 00       ..
@@ -1733,7 +1733,7 @@ osbyte                  = &fff4
     lda #osword_write_interval_timer                                  ; 1b29: a9 04       ..
     ldx #<(intervaltimerblock)                                        ; 1b2b: a2 00       ..
     ldy #>(intervaltimerblock)                                        ; 1b2d: a0 00       ..
-    jsr osword                                                        ; 1b2f: 20 f1 ff     ..
+    jsr osword                                                        ; 1b2f: 20 f1 ff     ..            ; Write interval timer
     rts                                                               ; 1b32: 60          `
 
 ; ----------------------------------------------------------------------------------
@@ -2797,7 +2797,7 @@ osbyte                  = &fff4
     ldx #<(eggsoundblock)                                             ; 2216: a2 a8       ..
     ldy #>(eggsoundblock)                                             ; 2218: a0 0c       ..
     lda #osword_sound                                                 ; 221a: a9 07       ..
-    jsr osword                                                        ; 221c: 20 f1 ff     ..
+    jsr osword                                                        ; 221c: 20 f1 ff     ..            ; SOUND command
     lda temp1                                                         ; 221f: a5 88       ..
     lsr a                                                             ; 2221: 4a          J
     lsr a                                                             ; 2222: 4a          J
@@ -2829,7 +2829,7 @@ osbyte                  = &fff4
     ldx #<(eggsoundblock)                                             ; 224d: a2 a8       ..
     ldy #>(eggsoundblock)                                             ; 224f: a0 0c       ..
     lda #osword_sound                                                 ; 2251: a9 07       ..
-    jsr osword                                                        ; 2253: 20 f1 ff     ..
+    jsr osword                                                        ; 2253: 20 f1 ff     ..            ; SOUND command
     lda temp1                                                         ; 2256: a5 88       ..
     lsr a                                                             ; 2258: 4a          J
     lsr a                                                             ; 2259: 4a          J
@@ -3958,18 +3958,18 @@ osbyte                  = &fff4
     jsr printstring                                                   ; 2906: 20 26 1a     &.
     lda #osbyte_set_cursor_editing                                    ; 2909: a9 04       ..
     ldx #1                                                            ; 290b: a2 01       ..
-    jsr osbyte                                                        ; 290d: 20 f4 ff     ..
+    jsr osbyte                                                        ; 290d: 20 f4 ff     ..            ; Disable cursor editing (edit keys give ASCII 135-139)
     lda #osbyte_flush_buffer_class                                    ; 2910: a9 0f       ..
     ldx #1                                                            ; 2912: a2 01       ..
-    jsr osbyte                                                        ; 2914: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2914: 20 f4 ff     ..            ; Flush all input buffers
     lda #osbyte_read_write_escape_status                              ; 2917: a9 e5       ..
     ldx #1                                                            ; 2919: a2 01       ..
     ldy #0                                                            ; 291b: a0 00       ..
-    jsr osbyte                                                        ; 291d: 20 f4 ff     ..
+    jsr osbyte                                                        ; 291d: 20 f4 ff     ..            ; Set ESCAPE key status to produce ASCII code 1
     ldx #<osword0block                                                ; 2920: a2 9d       ..
     ldy #>osword0block                                                ; 2922: a0 29       .)
     lda #osword_read_line                                             ; 2924: a9 00       ..
-    jsr osword                                                        ; 2926: 20 f1 ff     ..
+    jsr osword                                                        ; 2926: 20 f1 ff     ..            ; Read line from input stream
     ldx temp1                                                         ; 2929: a6 88       ..
     jsr gethiscoreaddr                                                ; 292b: 20 7c 27     |'
     ldy #8                                                            ; 292e: a0 08       ..
@@ -4064,7 +4064,7 @@ osbyte                  = &fff4
     jsr initmap                                                       ; 29d2: 20 33 1b     3.
     jsr initcharacters                                                ; 29d5: 20 9c 2e     ..
     lda #osbyte_clear_escape                                          ; 29d8: a9 7c       .|
-    jsr osbyte                                                        ; 29da: 20 f4 ff     ..
+    jsr osbyte                                                        ; 29da: 20 f4 ff     ..            ; Clear escape condition
 ; ----------------------------------------------------------------------------------
 ; Main loop
 ; ----------------------------------------------------------------------------------
@@ -4108,7 +4108,7 @@ osbyte                  = &fff4
     ldx #<(bonussoundblock)                                           ; 2a23: a2 b0       ..
     ldy #>(bonussoundblock)                                           ; 2a25: a0 0c       ..
     lda #osword_sound                                                 ; 2a27: a9 07       ..
-    jsr osword                                                        ; 2a29: 20 f1 ff     ..
+    jsr osword                                                        ; 2a29: 20 f1 ff     ..            ; SOUND command
 .dontplaybonussound
     lda bonusexpiredflag                                              ; 2a2c: a5 3d       .=
     beq awardbonusloop                                                ; 2a2e: f0 de       ..
@@ -4143,7 +4143,7 @@ osbyte                  = &fff4
     lda #&0a                                                          ; 2a64: a9 0a       ..
     jsr string_howmanyplayers_end                                     ; 2a66: 20 5e 2c     ^,
     lda #osbyte_clear_escape                                          ; 2a69: a9 7c       .|
-    jsr osbyte                                                        ; 2a6b: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2a6b: 20 f4 ff     ..            ; Clear escape condition
     jsr updatehiscoretab                                              ; 2a6e: 20 be 28     .(
     lda #5                                                            ; 2a71: a9 05       ..
     jsr string_howmanyplayers_end                                     ; 2a73: 20 5e 2c     ^,
@@ -4204,7 +4204,7 @@ osbyte                  = &fff4
     lda #osbyte_tape                                                  ; 2ad7: a9 8c       ..
     ldx #&0c                                                          ; 2ad9: a2 0c       ..
     ldy #0                                                            ; 2adb: a0 00       ..
-    jsr osbyte                                                        ; 2add: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2add: 20 f4 ff     ..            ; Select TAPE filing system (1200 baud)
     ldx #0                                                            ; 2ae0: a2 00       ..
 .copyloop
     lda codemain_end,x                                                ; 2ae2: bd 00 30    ..0
@@ -4247,15 +4247,15 @@ osbyte                  = &fff4
     ldx #<(deathtune_end)                                             ; 2b40: a2 d1       ..
     ldy #>(deathtune_end)                                             ; 2b42: a0 2f       ./
     lda #osword_envelope                                              ; 2b44: a9 08       ..
-    jsr osword                                                        ; 2b46: 20 f1 ff     ..
+    jsr osword                                                        ; 2b46: 20 f1 ff     ..            ; ENVELOPE command
     ldx #<(envelope2)                                                 ; 2b49: a2 df       ..
     ldy #>(envelope2)                                                 ; 2b4b: a0 2f       ./
     lda #osword_envelope                                              ; 2b4d: a9 08       ..
-    jsr osword                                                        ; 2b4f: 20 f1 ff     ..
+    jsr osword                                                        ; 2b4f: 20 f1 ff     ..            ; ENVELOPE command
     ldx #<(envelope3)                                                 ; 2b52: a2 ed       ..
     ldy #>(envelope3)                                                 ; 2b54: a0 2f       ./
     lda #osword_envelope                                              ; 2b56: a9 08       ..
-    jsr osword                                                        ; 2b58: 20 f1 ff     ..
+    jsr osword                                                        ; 2b58: 20 f1 ff     ..            ; ENVELOPE command
     ldx #&0f                                                          ; 2b5b: a2 0f       ..
     stx temp1                                                         ; 2b5d: 86 88       ..
 .initpalette
@@ -4295,7 +4295,7 @@ osbyte                  = &fff4
     ldx #inkey_key_1                                                  ; 2b9c: a2 cf       ..
     ldy #&ff                                                          ; 2b9e: a0 ff       ..
     lda #osbyte_inkey                                                 ; 2ba0: a9 81       ..
-    jsr osbyte                                                        ; 2ba2: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2ba2: 20 f4 ff     ..            ; Is '1' key pressed?
     cpy #0                                                            ; 2ba5: c0 00       ..
     beq not1player                                                    ; 2ba7: f0 05       ..
     lda #1                                                            ; 2ba9: a9 01       ..
@@ -4305,7 +4305,7 @@ osbyte                  = &fff4
     ldx #inkey_key_2                                                  ; 2bae: a2 ce       ..
     ldy #&ff                                                          ; 2bb0: a0 ff       ..
     lda #osbyte_inkey                                                 ; 2bb2: a9 81       ..
-    jsr osbyte                                                        ; 2bb4: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2bb4: 20 f4 ff     ..            ; Is '2' key pressed?
     cpy #0                                                            ; 2bb7: c0 00       ..
     beq not2player                                                    ; 2bb9: f0 05       ..
     lda #2                                                            ; 2bbb: a9 02       ..
@@ -4315,7 +4315,7 @@ osbyte                  = &fff4
     ldx #inkey_key_3                                                  ; 2bc0: a2 ee       ..
     ldy #&ff                                                          ; 2bc2: a0 ff       ..
     lda #osbyte_inkey                                                 ; 2bc4: a9 81       ..
-    jsr osbyte                                                        ; 2bc6: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2bc6: 20 f4 ff     ..            ; Is '3' key pressed?
     cpy #0                                                            ; 2bc9: c0 00       ..
     beq not3player                                                    ; 2bcb: f0 05       ..
     lda #3                                                            ; 2bcd: a9 03       ..
@@ -4325,7 +4325,7 @@ osbyte                  = &fff4
     ldx #inkey_key_4                                                  ; 2bd2: a2 ed       ..
     ldy #&ff                                                          ; 2bd4: a0 ff       ..
     lda #osbyte_inkey                                                 ; 2bd6: a9 81       ..
-    jsr osbyte                                                        ; 2bd8: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2bd8: 20 f4 ff     ..            ; Is '4' key pressed?
     cpy #0                                                            ; 2bdb: c0 00       ..
     beq not4player                                                    ; 2bdd: f0 05       ..
     lda #4                                                            ; 2bdf: a9 04       ..
@@ -4568,7 +4568,7 @@ osbyte                  = &fff4
     lda #osbyte_inkey                                                 ; 2d88: a9 81       ..
     ldx #inkey_key_s                                                  ; 2d8a: a2 ae       ..
     ldy #&ff                                                          ; 2d8c: a0 ff       ..
-    jsr osbyte                                                        ; 2d8e: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2d8e: 20 f4 ff     ..            ; Is 'S' key pressed?
     cpy #0                                                            ; 2d91: c0 00       ..
     beq didntpressS                                                   ; 2d93: f0 04       ..
     ldx savesp                                                        ; 2d95: a6 1b       ..
@@ -4579,7 +4579,7 @@ osbyte                  = &fff4
     lda #osbyte_inkey                                                 ; 2d99: a9 81       ..
     ldx #inkey_key_k                                                  ; 2d9b: a2 b9       ..
     ldy #&ff                                                          ; 2d9d: a0 ff       ..
-    jsr osbyte                                                        ; 2d9f: 20 f4 ff     ..
+    jsr osbyte                                                        ; 2d9f: 20 f4 ff     ..            ; Is 'K' key pressed?
     cpy #0                                                            ; 2da2: c0 00       ..
     bne pressedK                                                      ; 2da4: d0 01       ..
     rts                                                               ; 2da6: 60          `
@@ -4914,7 +4914,7 @@ osbyte                  = &fff4
     ldx #<(deathsoundblock)                                           ; 2fa2: a2 a0       ..
     ldy #>(deathsoundblock)                                           ; 2fa4: a0 0c       ..
     lda #osword_sound                                                 ; 2fa6: a9 07       ..
-    jsr osword                                                        ; 2fa8: 20 f1 ff     ..
+    jsr osword                                                        ; 2fa8: 20 f1 ff     ..            ; SOUND command
     dec temp3                                                         ; 2fab: c6 8a       ..
     bne playdeathtuneloop                                             ; 2fad: d0 e3       ..
     rts                                                               ; 2faf: 60          `
@@ -4980,7 +4980,7 @@ osbyte                  = &fff4
     lda #osbyte_read_key_table_low                                    ; 300a: a9 ac       ..  :090a[1]
     ldx #0                                                            ; 300c: a2 00       ..  :090c[1]
     ldy #&ff                                                          ; 300e: a0 ff       ..  :090e[1]
-    jsr osbyte                                                        ; 3010: 20 f4 ff     .. :0910[1]
+    jsr osbyte                                                        ; 3010: 20 f4 ff     .. :0910[1]   ; Read keyboard translation table address
     stx read                                                          ; 3013: 86 76       .v  :0913[1]
     sty read + 1                                                      ; 3015: 84 77       .w  :0915[1]
 ; Make note of how many keys have so far been defined
@@ -5021,7 +5021,7 @@ osbyte                  = &fff4
 .waitforkey
     lda #osbyte_scan_keyboard                                         ; 305c: a9 79       .y  :095c[1]
     ldx #&80                                                          ; 305e: a2 80       ..  :095e[1]
-    jsr osbyte                                                        ; 3060: 20 f4 ff     .. :0960[1]
+    jsr osbyte                                                        ; 3060: 20 f4 ff     .. :0960[1]   ; Keyboard scan for 'SHIFT' key
     txa                                                               ; 3063: 8a          .   :0963[1]
     bpl didntpressshift                                               ; 3064: 10 05       ..  :0964[1]
     ldx #0                                                            ; 3066: a2 00       ..  :0966[1]
@@ -5030,7 +5030,7 @@ osbyte                  = &fff4
 .didntpressshift
     lda #osbyte_scan_keyboard                                         ; 306b: a9 79       .y  :096b[1]
     ldx #&81                                                          ; 306d: a2 81       ..  :096d[1]
-    jsr osbyte                                                        ; 306f: 20 f4 ff     .. :096f[1]
+    jsr osbyte                                                        ; 306f: 20 f4 ff     .. :096f[1]   ; Keyboard scan for 'CTRL' key
     txa                                                               ; 3072: 8a          .   :0972[1]
     bpl didntpressctrl                                                ; 3073: 10 05       ..  :0973[1]
     ldx #1                                                            ; 3075: a2 01       ..  :0975[1]
@@ -5038,7 +5038,7 @@ osbyte                  = &fff4
 
 .didntpressctrl
     lda #osbyte_scan_keyboard_from_16                                 ; 307a: a9 7a       .z  :097a[1]
-    jsr osbyte                                                        ; 307c: 20 f4 ff     .. :097c[1]
+    jsr osbyte                                                        ; 307c: 20 f4 ff     .. :097c[1]   ; Keyboard scan from key 16
     cpx #&ff                                                          ; 307f: e0 ff       ..  :097f[1]
     beq waitforkey                                                    ; 3081: f0 d9       ..  :0981[1]
 .gotakey
@@ -5081,7 +5081,7 @@ osbyte                  = &fff4
     lda #osbyte_read_write_bell_duration                              ; 30c3: a9 d6       ..  :09c3[1]
     ldx #1                                                            ; 30c5: a2 01       ..  :09c5[1]
     ldy #0                                                            ; 30c7: a0 00       ..  :09c7[1]
-    jsr osbyte                                                        ; 30c9: 20 f4 ff     .. :09c9[1]
+    jsr osbyte                                                        ; 30c9: 20 f4 ff     .. :09c9[1]   ; Write CTRL G sound duration, value 1
     lda #7                                                            ; 30cc: a9 07       ..  :09cc[1]
     jsr oswrch                                                        ; 30ce: 20 ee ff     .. :09ce[1]
     jmp waitforkey                                                    ; 30d1: 4c 5c 09    L\. :09d1[1]
@@ -5348,7 +5348,7 @@ osbyte                  = &fff4
     lda #osbyte_read_key_table_low                                    ; 329f: a9 ac       ..  :0b9f[1]
     ldx #0                                                            ; 32a1: a2 00       ..  :0ba1[1]
     ldy #&ff                                                          ; 32a3: a0 ff       ..  :0ba3[1]
-    jsr osbyte                                                        ; 32a5: 20 f4 ff     .. :0ba5[1]
+    jsr osbyte                                                        ; 32a5: 20 f4 ff     .. :0ba5[1]   ; Read keyboard translation table address
     stx read                                                          ; 32a8: 86 76       .v  :0ba8[1]
     sty read + 1                                                      ; 32aa: 84 77       .w  :0baa[1]
     ldx #&dc                                                          ; 32ac: a2 dc       ..  :0bac[1]
@@ -5481,7 +5481,7 @@ osbyte                  = &fff4
     ldx #<(blipsoundblock)                                            ; 338e: a2 98       ..  :0c8e[1]
     ldy #>(blipsoundblock)                                            ; 3390: a0 0c       ..  :0c90[1]
     lda #osword_sound                                                 ; 3392: a9 07       ..  :0c92[1]
-    jsr osword                                                        ; 3394: 20 f1 ff     .. :0c94[1]
+    jsr osword                                                        ; 3394: 20 f1 ff     .. :0c94[1]   ; SOUND command
     rts                                                               ; 3397: 60          `   :0c97[1]
 
 .blipsoundblock

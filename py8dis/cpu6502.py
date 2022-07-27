@@ -974,7 +974,7 @@ class Cpu6502(trace.Cpu):
         def transfer(addr, state):
             state[dest_reg].value = state[src_reg].value
 
-            # If we have a load immediate address, keep it. This allows
+            # If we have a load address, keep it. This allows
             # the code (from basic4) to understand X and Y form an
             # address <const> here:
             #
@@ -984,6 +984,8 @@ class Cpu6502(trace.Cpu):
             #    jsr OSWORD
             #
             state[dest_reg].previous_load_imm = state[src_reg].previous_load_imm
+            state[dest_reg].previous_load = addr
+            state[dest_reg].previous_adjust = addr
 
             v = state[dest_reg].value
             if v is not None:
@@ -1092,7 +1094,8 @@ class Cpu6502(trace.Cpu):
 
                 if isinstance(c, trace.cpu.Opcode):
                     could_be_call_to_subroutine = c.could_be_call_to_subroutine()
-                    target = c.target(memorymanager.BinaryAddr(addr))
+                    addr = memorymanager.BinaryAddr(addr)
+                    target = c.target(addr)
 
                     # check each subroutine
                     for subroutine in trace.subroutines_list:
@@ -1112,7 +1115,7 @@ class Cpu6502(trace.Cpu):
                             found = True
 
                         if found:
-                            subroutine.hook_function(addr, state, subroutine)
+                            subroutine.hook_function(movemanager.b2r(addr), state, subroutine)
 
                 state = trace.cpu.cpu_state_optimistic[addr]
                 addr += c.length()

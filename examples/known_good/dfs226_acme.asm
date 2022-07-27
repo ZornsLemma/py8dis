@@ -2884,7 +2884,7 @@ sub_c8f3f
     lda #osbyte_read_tube_presence                                    ; 8f3f: a9 ea       ..
     ldx #0                                                            ; 8f41: a2 00       ..
     ldy #$ff                                                          ; 8f43: a0 ff       ..
-    jsr osbyte                                                        ; 8f45: 20 f4 ff     ..
+    jsr osbyte                                                        ; 8f45: 20 f4 ff     ..            ; Read Tube present flag
     txa                                                               ; 8f48: 8a          .
     eor #$ff                                                          ; 8f49: 49 ff       I.
     sta l10d6                                                         ; 8f4b: 8d d6 10    ...
@@ -2895,7 +2895,7 @@ sub_c8f4f
     lda #osbyte_issue_service_request                                 ; 8f4f: a9 8f       ..
     ldx #$0c                                                          ; 8f51: a2 0c       ..
     ldy #$ff                                                          ; 8f53: a0 ff       ..
-    jsr osbyte                                                        ; 8f55: 20 f4 ff     ..
+    jsr osbyte                                                        ; 8f55: 20 f4 ff     ..            ; Issue paged ROM service call, Reason 12 - NMI claim
     sty l00a0                                                         ; 8f58: 84 a0       ..
     inc l10d3                                                         ; 8f5a: ee d3 10    ...
     rts                                                               ; 8f5d: 60          `
@@ -2905,7 +2905,7 @@ sub_c8f5e
     ldy l00a0                                                         ; 8f5e: a4 a0       ..
     lda #osbyte_issue_service_request                                 ; 8f60: a9 8f       ..
     ldx #$0b                                                          ; 8f62: a2 0b       ..
-    jsr osbyte                                                        ; 8f64: 20 f4 ff     ..
+    jsr osbyte                                                        ; 8f64: 20 f4 ff     ..            ; Issue paged ROM service call, Reason 11 - NMI released
     dec l10d3                                                         ; 8f67: ce d3 10    ...
     rts                                                               ; 8f6a: 60          `
 
@@ -2939,7 +2939,7 @@ sub_c8f82
     lda #osbyte_read_write_startup_options                            ; 8f82: a9 ff       ..
     ldx #0                                                            ; 8f84: a2 00       ..
     tay                                                               ; 8f86: a8          .
-    jsr osbyte                                                        ; 8f87: 20 f4 ff     ..
+    jsr osbyte                                                        ; 8f87: 20 f4 ff     ..            ; Read start-up option byte
     txa                                                               ; 8f8a: 8a          .
     lsr                                                               ; 8f8b: 4a          J
     lsr                                                               ; 8f8c: 4a          J
@@ -4181,7 +4181,7 @@ c96c3
     lda #0                                                            ; 96cc: a9 00       ..
     sta l10de                                                         ; 96ce: 8d de 10    ...
     lda #osbyte_scan_keyboard_from_16                                 ; 96d1: a9 7a       .z
-    jsr osbyte                                                        ; 96d3: 20 f4 ff     ..
+    jsr osbyte                                                        ; 96d3: 20 f4 ff     ..            ; Keyboard scan from key 16
     txa                                                               ; 96d6: 8a          .
     bmi c96e9                                                         ; 96d7: 30 10       0.
     cmp #$32 ; '2'                                                    ; 96d9: c9 32       .2
@@ -4192,7 +4192,7 @@ c96c3
 ; $96e4 referenced 1 time by $96db
 c96e4
     lda #osbyte_write_keys_pressed                                    ; 96e4: a9 78       .x
-    jsr osbyte                                                        ; 96e6: 20 f4 ff     ..
+    jsr osbyte                                                        ; 96e6: 20 f4 ff     ..            ; Write current keys pressed
 ; $96e9 referenced 1 time by $96d7
 c96e9
     jmp c9556                                                         ; 96e9: 4c 56 95    LV.
@@ -4803,10 +4803,10 @@ c9a8c
 ; $9a8d referenced 4 times by $929d, $a267, $a34a, $a64f
 sub_c9a8d
     lda #osbyte_read_oshwm                                            ; 9a8d: a9 83       ..
-    jsr osbyte                                                        ; 9a8f: 20 f4 ff     ..
+    jsr osbyte                                                        ; 9a8f: 20 f4 ff     ..            ; Read top of operating system RAM address (OSHWM)
     sty l10cf                                                         ; 9a92: 8c cf 10    ...
     lda #osbyte_read_himem                                            ; 9a95: a9 84       ..
-    jsr osbyte                                                        ; 9a97: 20 f4 ff     ..
+    jsr osbyte                                                        ; 9a97: 20 f4 ff     ..            ; Read top of user memory (HIMEM)
     tya                                                               ; 9a9a: 98          .
     sec                                                               ; 9a9b: 38          8
     sbc l10cf                                                         ; 9a9c: ed cf 10    ...
@@ -4868,7 +4868,7 @@ osbyte_read
     ldy #$ff                                                          ; 9ae7: a0 ff       ..
 ; $9ae9 referenced 4 times by $9ad1, $9ad6, $9add, $9ae1
 c9ae9
-    jmp osbyte                                                        ; 9ae9: 4c f4 ff    L..
+    jmp osbyte                                                        ; 9ae9: 4c f4 ff    L..            ; Read start-up option byte
 
 ; $9aec referenced 1 time by $957d
 l9aec
@@ -4920,7 +4920,7 @@ loop_c9b50
 sub_c9b51
     jsr sub_c83e3                                                     ; 9b51: 20 e3 83     ..
     lda #osbyte_close_spool_exec                                      ; 9b54: a9 77       .w
-    jmp osbyte                                                        ; 9b56: 4c f4 ff    L..
+    jmp osbyte                                                        ; 9b56: 4c f4 ff    L..            ; Close any *SPOOL/*EXEC files
 
 sub_c9b59
     lda #$20 ; ' '                                                    ; 9b59: a9 20       .
@@ -5402,9 +5402,9 @@ c9e41
     lda #osbyte_read_write_spool_file_handle                          ; 9e4b: a9 c7       ..
 ; $9e4d referenced 1 time by $9e3f
 osbyte_write_0
-    ldx #0                                                            ; 9e4d: a2 00       ..
+    ldx #0                                                            ; 9e4d: a2 00       ..             ; X=File handle
     ldy #0                                                            ; 9e4f: a0 00       ..
-    jmp osbyte                                                        ; 9e51: 4c f4 ff    L..
+    jmp osbyte                                                        ; 9e51: 4c f4 ff    L..            ; Write *SPOOL file handle, value 0
 
 ; $9e54 referenced 2 times by $9e38, $9e46
 sub_c9e54
@@ -7940,7 +7940,7 @@ caed7
     beq just_rts                                                      ; aedf: f0 56       .V
     ldx #6                                                            ; aee1: a2 06       ..
     lda #osbyte_explode_chars                                         ; aee3: a9 14       ..
-    jsr osbyte                                                        ; aee5: 20 f4 ff     ..
+    jsr osbyte                                                        ; aee5: 20 f4 ff     ..            ; Explode character definition RAM for all characters 32-255
 ; $aee8 referenced 2 times by $aeeb, $aef5
 tube_banner_loop
     bit tube_host_r1_status                                           ; aee8: 2c e0 fe    ,..
@@ -8638,13 +8638,13 @@ cb3ba
 ; $b3de referenced 1 time by $b3be
 cb3de
     lda #osbyte_read_himem                                            ; b3de: a9 84       ..
-    jsr osbyte                                                        ; b3e0: 20 f4 ff     ..
+    jsr osbyte                                                        ; b3e0: 20 f4 ff     ..            ; Read top of user memory (HIMEM)
     tya                                                               ; b3e3: 98          .
     pha                                                               ; b3e4: 48          H
     txa                                                               ; b3e5: 8a          .
     pha                                                               ; b3e6: 48          H
     lda #osbyte_read_oshwm                                            ; b3e7: a9 83       ..
-    jsr osbyte                                                        ; b3e9: 20 f4 ff     ..
+    jsr osbyte                                                        ; b3e9: 20 f4 ff     ..            ; Read top of operating system RAM address (OSHWM)
     jsr cb82b                                                         ; b3ec: 20 2b b8     +.
     stx l00ba                                                         ; b3ef: 86 ba       ..
     sty l00bb                                                         ; b3f1: 84 bb       ..
@@ -8683,7 +8683,7 @@ cb40e
     dex                                                               ; b421: ca          .
     ldy #1                                                            ; b422: a0 01       ..
     lda #osfile_read_catalogue_info                                   ; b424: a9 05       ..
-    jsr osfile                                                        ; b426: 20 dd ff     ..
+    jsr osfile                                                        ; b426: 20 dd ff     ..            ; Read catalogue information
     jsr cb82b                                                         ; b429: 20 2b b8     +.
     tsx                                                               ; b42c: ba          .
     lda l010b,x                                                       ; b42d: bd 0b 01    ...
@@ -8762,7 +8762,7 @@ cb470
     inx                                                               ; b49b: e8          .
     ldy #1                                                            ; b49c: a0 01       ..
     lda #osfile_load                                                  ; b49e: a9 ff       ..
-    jsr osfile                                                        ; b4a0: 20 dd ff     ..
+    jsr osfile                                                        ; b4a0: 20 dd ff     ..            ; Load named file (if XY+6 contains 0, use specified address)
     jsr cb82b                                                         ; b4a3: 20 2b b8     +.
     ldx #$12                                                          ; b4a6: a2 12       ..
 ; $b4a8 referenced 1 time by $b4aa
@@ -8893,7 +8893,7 @@ loop_cb55e
     pha                                                               ; b56b: 48          H
     ldy #1                                                            ; b56c: a0 01       ..
     lda #osfile_save                                                  ; b56e: a9 00       ..
-    jsr osfile                                                        ; b570: 20 dd ff     ..
+    jsr osfile                                                        ; b570: 20 dd ff     ..            ; Save a block of memory (returning file length and attributes)
     jsr cb82b                                                         ; b573: 20 2b b8     +.
     ldx #$12                                                          ; b576: a2 12       ..
 ; $b578 referenced 1 time by $b57a
@@ -10481,7 +10481,7 @@ sub_cbe91
     lda #osbyte_read_tube_presence                                    ; be91: a9 ea       ..
     ldx #0                                                            ; be93: a2 00       ..
     ldy #$ff                                                          ; be95: a0 ff       ..
-    jsr osbyte                                                        ; be97: 20 f4 ff     ..
+    jsr osbyte                                                        ; be97: 20 f4 ff     ..            ; Read Tube present flag
     cpx #$ff                                                          ; be9a: e0 ff       ..
     rts                                                               ; be9c: 60          `
 
@@ -10500,7 +10500,7 @@ loop_cbeab
     lda #osbyte_read_rom_info_table_low                               ; beac: a9 aa       ..
     ldx #0                                                            ; beae: a2 00       ..
     ldy #$ff                                                          ; beb0: a0 ff       ..
-    jsr osbyte                                                        ; beb2: 20 f4 ff     ..
+    jsr osbyte                                                        ; beb2: 20 f4 ff     ..            ; Read address of ROM info table
     jsr cb82b                                                         ; beb5: 20 2b b8     +.
     stx l00ba                                                         ; beb8: 86 ba       ..
     sty l00bb                                                         ; beba: 84 bb       ..
@@ -10528,7 +10528,7 @@ service_handler
     lda #osbyte_issue_service_request                                 ; becf: a9 8f       ..
     ldx #service_check_swr_presence                                   ; bed1: a2 2b       .+
     ldy romsel_copy                                                   ; bed3: a4 f4       ..
-    jsr osbyte                                                        ; bed5: 20 f4 ff     ..
+    jsr osbyte                                                        ; bed5: 20 f4 ff     ..            ; Issue paged ROM service call, Reason 43 - Report memory size
     pla                                                               ; bed8: 68          h
     tay                                                               ; bed9: a8          .
     ldx romsel_copy                                                   ; beda: a6 f4       ..

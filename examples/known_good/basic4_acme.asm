@@ -225,7 +225,7 @@ c8040
     lda #osbyte_read_write_basic_rom_bank                             ; 8040: a9 bb       ..
     ldx romsel_copy                                                   ; 8042: a6 f4       ..
     ldy #0                                                            ; 8044: a0 00       ..
-    jsr osbyte                                                        ; 8046: 20 f4 ff     ..
+    jsr osbyte                                                        ; 8046: 20 f4 ff     ..            ; Write BASIC ROM number
     jmp c806a                                                         ; 8049: 4c 6a 80    Lj.
 
 ; $804c referenced 1 time by $8032
@@ -319,10 +319,10 @@ l80c2
 c80cc
     lda romsel_copy                                                   ; 80cc: a5 f4       ..
     eor #$40 ; '@'                                                    ; 80ce: 49 40       I@
-    tax                                                               ; 80d0: aa          .
+    tax                                                               ; 80d0: aa          .              ; X=ROM number
     lda #osbyte_enter_language                                        ; 80d1: a9 8e       ..
     ldy #0                                                            ; 80d3: a0 00       ..
-    jmp osbyte                                                        ; 80d5: 4c f4 ff    L..
+    jmp osbyte                                                        ; 80d5: 4c f4 ff    L..            ; Enter language ROM
 
 ; $80d8 referenced 3 times by $8067, $808a, $80b1
 sub_c80d8
@@ -354,7 +354,7 @@ language_handler
 ; $80ff referenced 1 time by $80f1
 c80ff
     lda #osbyte_read_himem                                            ; 80ff: a9 84       ..
-    jsr osbyte                                                        ; 8101: 20 f4 ff     ..
+    jsr osbyte                                                        ; 8101: 20 f4 ff     ..            ; Read top of user memory (HIMEM)
     stx l0006                                                         ; 8104: 86 06       ..
     sty l0007                                                         ; 8106: 84 07       ..
     dec                                                               ; 8108: 3a          :
@@ -3958,7 +3958,7 @@ sub_c982e
     bne c9808                                                         ; 9847: d0 bf       ..
     ldx l002a                                                         ; 9849: a6 2a       .*
     lda #osbyte_read_himem_for_mode                                   ; 984b: a9 85       ..
-    jsr osbyte                                                        ; 984d: 20 f4 ff     ..
+    jsr osbyte                                                        ; 984d: 20 f4 ff     ..            ; Read top of user memory for a given screen mode
     cpx l0002                                                         ; 9850: e4 02       ..
     tya                                                               ; 9852: 98          .
     sbc l0003                                                         ; 9853: e5 03       ..
@@ -7325,7 +7325,7 @@ sub_caa6e
     lda #osbyte_inkey                                                 ; aa71: a9 81       ..
     ldx l002a                                                         ; aa73: a6 2a       .*
     ldy l002b                                                         ; aa75: a4 2b       .+
-    jmp osbyte                                                        ; aa77: 4c f4 ff    L..
+    jmp osbyte                                                        ; aa77: 4c f4 ff    L..            ; Read key within time limit, or read a specific key, or read machine type
 
 ; $aa7a referenced 2 times by $aaae, $aab0
 caa7a
@@ -7428,7 +7428,7 @@ sub_cab01
 ; $ab14 referenced 1 time by $aafb
 sub_cab14
     lda #osbyte_read_text_cursor_pos                                  ; ab14: a9 86       ..
-    jsr osbyte                                                        ; ab16: 20 f4 ff     ..
+    jsr osbyte                                                        ; ab16: 20 f4 ff     ..            ; Read input cursor position (POS and VPOS)
     tya                                                               ; ab19: 98          .
 ; $ab1a referenced 2 times by $ab35, $ab52
 cab1a
@@ -7606,9 +7606,9 @@ cac1c
 
 sub_cac1f
     jsr sub_cba7a                                                     ; ac1f: 20 7a ba     z.
-    tax                                                               ; ac22: aa          .
+    tax                                                               ; ac22: aa          .              ; X=File handle
     lda #osbyte_check_eof                                             ; ac23: a9 7f       ..
-    jsr osbyte                                                        ; ac25: 20 f4 ff     ..
+    jsr osbyte                                                        ; ac25: 20 f4 ff     ..            ; Check for EOF
     txa                                                               ; ac28: 8a          .
     beq cac2d                                                         ; ac29: f0 02       ..
 ; $ac2b referenced 6 times by $ac0a, $ac16, $ac44, $ac4f, $ac7b, $b3dd
@@ -7665,7 +7665,7 @@ sub_cac5d
     ldy #>(l002a)                                                     ; ac70: a0 00       ..
     ldx #<(l002a)                                                     ; ac72: a2 2a       .*
     lda #osword_read_pixel                                            ; ac74: a9 09       ..
-    jsr osword                                                        ; ac76: 20 f1 ff     ..
+    jsr osword                                                        ; ac76: 20 f1 ff     ..            ; Read pixel value
     lda l002e                                                         ; ac79: a5 2e       ..
     bmi cac2b                                                         ; ac7b: 30 ae       0.
     bra cac5b                                                         ; ac7d: 80 dc       ..
@@ -8007,7 +8007,7 @@ sub_cae34
     jsr sub_c9779                                                     ; ae34: 20 79 97     y.
     ldx l002a                                                         ; ae37: a6 2a       .*
     lda #osbyte_read_adc_or_get_buffer_status                         ; ae39: a9 80       ..
-    jsr osbyte                                                        ; ae3b: 20 f4 ff     ..
+    jsr osbyte                                                        ; ae3b: 20 f4 ff     ..            ; Read buffer status or ADC channel
     txa                                                               ; ae3e: 8a          .
 ; $ae3f referenced 1 time by $adcc
 cae3f
@@ -8074,7 +8074,7 @@ sub_cae8c
     ldx #<(l002a)                                                     ; ae93: a2 2a       .*
     ldy #>(l002a)                                                     ; ae95: a0 00       ..
     lda #osword_read_clock                                            ; ae97: a9 01       ..
-    jsr osword                                                        ; ae99: 20 f1 ff     ..
+    jsr osword                                                        ; ae99: 20 f1 ff     ..            ; Read system clock
     lda #$40 ; '@'                                                    ; ae9c: a9 40       .@
     rts                                                               ; ae9e: 60          `
 
@@ -8085,7 +8085,7 @@ cae9f
     ldx #<(l0600)                                                     ; aea3: a2 00       ..
     ldy #>(l0600)                                                     ; aea5: a0 06       ..
     stz l0600                                                         ; aea7: 9c 00 06    ...
-    jsr osword                                                        ; aeaa: 20 f1 ff     ..
+    jsr osword                                                        ; aeaa: 20 f1 ff     ..            ; Read CMOS clock
     lda #$18                                                          ; aead: a9 18       ..
     bra caed7                                                         ; aeaf: 80 26       .&
 sub_caeb1
@@ -10685,7 +10685,7 @@ sub_cbe17
     ldy #>(l0037)                                                     ; be1c: a0 00       ..
     lda #osfile_load                                                  ; be1e: a9 ff       ..
     ldx #<(l0037)                                                     ; be20: a2 37       .7
-    jsr osfile                                                        ; be22: 20 dd ff     ..
+    jsr osfile                                                        ; be22: 20 dd ff     ..            ; Load named file (if XY+6 contains 0, use specified address)
 ; $be25 referenced 6 times by $8fd2, $8fed, $944f, $b42f, $bb8b, $be95
 sub_cbe25
     lda l0018                                                         ; be25: a5 18       ..
@@ -10767,7 +10767,7 @@ sub_cbe81
 ; $be8b referenced 1 time by $9834
 sub_cbe8b
     lda #osbyte_read_high_order_address                               ; be8b: a9 82       ..
-    jsr osbyte                                                        ; be8d: 20 f4 ff     ..
+    jsr osbyte                                                        ; be8d: 20 f4 ff     ..            ; Read machine high order address
     stx l003b                                                         ; be90: 86 3b       .;
     sty l003c                                                         ; be92: 84 3c       .<
     rts                                                               ; be94: 60          `
@@ -10795,7 +10795,7 @@ sub_cbe95
     lda #osfile_save                                                  ; bebd: a9 00       ..
     tay                                                               ; bebf: a8          .
     ldx #<(l0037)                                                     ; bec0: a2 37       .7
-    jsr osfile                                                        ; bec2: 20 dd ff     ..
+    jsr osfile                                                        ; bec2: 20 dd ff     ..            ; Save a block of memory (returning file length and attributes)
     bra cbeeb                                                         ; bec5: 80 24       .$
 sub_cbec7
     jsr sub_cbe76                                                     ; bec7: 20 76 be     v.
@@ -10870,7 +10870,7 @@ sub_cbf22
     phx                                                               ; bf24: da          .
     ldx #<(l002a)                                                     ; bf25: a2 2a       .*
     ldy #>(l002a)                                                     ; bf27: a0 00       ..
-    jsr osword                                                        ; bf29: 20 f1 ff     ..
+    jsr osword                                                        ; bf29: 20 f1 ff     ..            ; Read byte of I/O processor memory
     plx                                                               ; bf2c: fa          .
     lda l002e                                                         ; bf2d: a5 2e       ..
 ; $bf2f referenced 4 times by $9400, $958e, $965e, $aabc
@@ -10919,7 +10919,7 @@ sub_cbf66
     lda #osbyte_read_tube_presence                                    ; bf66: a9 ea       ..
     ldx #0                                                            ; bf68: a2 00       ..
     ldy #$ff                                                          ; bf6a: a0 ff       ..
-    jsr osbyte                                                        ; bf6c: 20 f4 ff     ..
+    jsr osbyte                                                        ; bf6c: 20 f4 ff     ..            ; Read Tube present flag
     txa                                                               ; bf6f: 8a          .
     rts                                                               ; bf70: 60          `
 

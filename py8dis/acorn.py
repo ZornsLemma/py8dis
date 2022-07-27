@@ -42,6 +42,25 @@ osword_enum = {
     0x0f: "osword_write_cmos_clock",
 }
 
+osword_descriptions = {
+    0x00: "Read line from input stream",
+    0x01: "Read system clock",
+    0x02: "Write system clock",
+    0x03: "Read interval timer",
+    0x04: "Write interval timer",
+    0x05: "Read byte of I/O processor memory",
+    0x06: "Write byte of I/O processor memory",
+    0x07: "SOUND command",
+    0x08: "ENVELOPE command",
+    0x09: "Read pixel value",
+    0x0a: "Read character definition",
+    0x0b: "Read palette",
+    0x0c: "Write Palette",
+    0x0d: "Read graphics cursor position",
+    0x0e: "Read CMOS clock",
+    0x0f: "Write CMOS clock",
+}
+
 osbyte_enum = {
     0x00: "osbyte_read_os_version",
     0x01: "osbyte_user",
@@ -317,40 +336,428 @@ inkey_enum = {
 }
 inkey_enum = {k & 0xff: v for k, v in inkey_enum.items()}
 
-def enum_lookup(r_addr, e):
-    if r_addr is None:
+paged_rom_reasons = {
+    0: "Reason 0 - No operation",
+    1: "Reason 1 - Absolute public workspace claim",
+    2: "Reason 2 - Relative private workspace claim",
+    3: "Reason 3 - Auto-boot call",
+    4: "Reason 4 - Unrecognised *command",
+    5: "Reason 5 - Unknown interrupt",
+    6: "Reason 6 - BRK has been executed",
+    7: "Reason 7 - Unrecognised OSBYTE call",
+    8: "Reason 8 - Unrecognised OSWORD call",
+    9: "Reason 9 - *HELP command interception",
+    10: "Reason 10 - Claim absolute workspace",
+    11: "Reason 11 - NMI released",
+    12: "Reason 12 - NMI claim",
+    13: "Reason 13 - ROM filing system initialise",
+    14: "Reason 14 - ROM filing system get byte",
+    15: "Reason 15 - Vectors claimed",
+    16: "Reason 16 - Close any *SPOOL or *EXEC files",
+    17: "Reason 17 - Font implosion/explosion warning",
+    18: "Reason 18 - Initialise filing system",
+    19: "Reason 19 - Character placed in RS423 buffer",
+    20: "Reason 20 - Character placed in printer buffer",
+    21: "Reason 21 - 100 Hz poll",
+    22: "Reason 22 - A BEL request has been made",
+    23: "Reason 23 - SOUND buffer purged",
+    24: "Reason 24 - Interactive *HELP request",
+    33: "Reason 33 - Claim absolute workspace in Hazel",
+    34: "Reason 34 - Claim private workspace in Hazel",
+    35: "Reason 35 - Report top of absolute workspace in Hazel",
+    36: "Reason 36 - Request private workspace in Hazel",
+    37: "Reason 37 - Return filing system information",
+    38: "Reason 38 - *SHUT command issued",
+    39: "Reason 39 - Reset call",
+    40: "Reason 40 - Unknown *CONFIGURE command",
+    41: "Reason 41 - Unknown *STATUS command",
+    42: "Reason 42 - Language about to be initialised",
+    43: "Reason 43 - Report memory size",
+    44: "Reason 44 - Compact joystick call",
+    254: "Reason 254 - Post initialisation Tube system call",
+    255: "Reason 255 - Tube system main initialisation",
+}
+
+osfile_descriptions = {
+    0: "Save a block of memory (returning file length and attributes)",
+    1: "Write catalogue information for a named file",
+    2: "Write load address for a named file",
+    3: "Write execution address for a named file",
+    4: "Write attributes for a named file",
+    5: "Read catalogue information",
+    6: "Delete named file (returning catalogue information)",
+    7: "Create empty file of a defined size",
+    255: "Load named file (if XY+6 contains 0, use specified address)"
+}
+
+negative_buffer_names = {
+    255: "keyboard buffer",
+    254: "RS423 input buffer",
+    253: "RS423 output buffer",
+    252: "printer buffer",
+    251: "sound channel 0",
+    250: "sound channel 1",
+    249: "sound channel 2",
+    248: "sound channel 3",
+    247: "speech buffer"
+}
+
+negative_buffer_actions = {
+    255: "Read number of characters in keyboard buffer",
+    254: "Read number of characters in RS423 input buffer",
+    253: "Read number of spaces remaining in RS423 output buffer",
+    252: "Read number of spaces remaining in printer buffer",
+    251: "Read number of spaces remaining in sound channel 0",
+    250: "Read number of spaces remaining in sound channel 1",
+    249: "Read number of spaces remaining in sound channel 2",
+    248: "Read number of spaces remaining in sound channel 3",
+    247: "Read number of spaces remaining in speech buffer"
+}
+
+event_names = {
+    0: "Output buffer empty",
+    1: "Input buffer full",
+    2: "Character entering input buffer",
+    3: "ADC conversion complete",
+    4: "Start of vertical sync",
+    5: "Interval timer crossing zero",
+    6: "ESCAPE condition detected",
+    7: "RS423 error event",
+    8: "Network error event",
+    9: "User event",
+}
+
+def enum_lookup(reg_addr, e):
+    if reg_addr is None:
         return
-    r = memorymanager.memory_binary[r_addr]
+    r = memorymanager.memory_binary[reg_addr]
     if r in e:
         constant(r, e[r])
-        classification.add_expression(r_addr, e[r])
+        classification.add_expression(reg_addr, e[r])
 
 
-def osfile_hook(addr, state, subroutine):
+def osfile_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
     x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osfile_enum)
     xy_addr(x_addr, y_addr)
 
-def osword_hook(addr, state, subroutine):
+    if a_addr is None:
+        return
+
+    action = memory_binary[a_addr]
+
+    if action in osfile_descriptions:
+        comment(runtime_addr, osfile_descriptions[action], inline=True)
+
+def osword_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
     x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osword_enum)
     xy_addr(x_addr, y_addr)
 
-def osbyte_hook(addr, state, subroutine):
+    if a_addr is None:
+        return
+
+    action = memory_binary[a_addr]
+    if action in osword_descriptions:
+        com = osword_descriptions[action]
+        comment(runtime_addr, com, inline=True)
+
+def osbyte_rw(x_addr, y_addr):
+    com = "Read/Write"
+    write_value=None
+    if y_addr is not None:
+        if memory_binary[y_addr] == 0:
+            com = "Write"
+            if x_addr is not None:
+                write_value = memory_binary[x_addr]
+        elif x_addr is not None:
+            if (memory_binary[x_addr] == 0) and (memory_binary[y_addr] == 255):
+                com = "Read"
+
+    return (com, write_value)
+
+def format_osbyte_rw(x_addr, y_addr, comment_name):
+    com, write_value = osbyte_rw(x_addr, y_addr)
+    result = com + " " + comment_name
+    if write_value != None:
+        result += ", value " + str(write_value)
+
+    return result
+
+def key_name(key):
+    if key in inkey_enum:
+        return "'" + inkey_enum[key][10:].upper() + "'"
+    return "unknown"
+
+
+def osbyte_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
     x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osbyte_enum)
 
-    # TODO: Should we check Y=&FF? Or at least Y is not known to be <128?
-    if a_addr is not None and memory_binary[a_addr] == 0x81:
-        enum_lookup(x_addr, inkey_enum)
+    if a_addr is None:
+        return
 
-def oscli_hook(addr, state, subroutine):
+    action = memory_binary[a_addr]
+
+    if action == 0x00:
+        com = "Read OS version number"
+        if x_addr is not None:
+            if memory_binary[x_addr] == 0:
+                com = "Execute BRK, print OS version"
+            else:
+                com = "Read OS version into X"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x04:
+        com = "Enable/disable cursor editing"
+        if x_addr is not None:
+            if memory_binary[x_addr] == 0:
+                com = "Enable cursor editing"
+            elif memory_binary[x_addr] == 1:
+                com = "Disable cursor editing (edit keys give ASCII 135-139)"
+            elif memory_binary[x_addr] == 2:
+                com = "Disable cursor editing (edit keys act as soft keys f11 to f15)"
+            elif memory_binary[x_addr] == 3:
+                com = "Cursor editing keys and COPY simulate a joystick (Master Compact only)"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x0d:
+        com = "Disable event"
+        if x_addr is not None:
+            event_number = memory_binary[x_addr]
+            if event_number in event_names:
+                com = "Disable '" + event_names[event_number] + "' event"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x0e:
+        com = "Enable event"
+        if x_addr is not None:
+            event_number = memory_binary[x_addr]
+            if event_number in event_names:
+                com = "Enable '" + event_names[event_number] + "' event"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x0f:
+        com = "Flush selected buffer class"
+        if x_addr is not None:
+            if memory_binary[x_addr] == 0:
+                com = "Flush all buffers"
+            else:
+                com = "Flush all input buffers"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x13:
+        comment(runtime_addr, "Wait for vertical sync", inline=True)
+    elif action == 0x14:
+        com = "Explode character definition RAM"
+        if x_addr is not None:
+            exp = memory_binary[x_addr]
+            if exp == 0:
+                com = "Implode character definitions"
+            elif exp == 1:
+                com += " for characters 128-159"
+            elif exp == 2:
+                com += " for characters 128-191"
+            elif exp == 3:
+                com += " for characters 128-255"
+            elif exp == 4:
+                com += " for characters 128-255 and 32-63"
+            elif exp == 5:
+                com += " for characters 128-255 and 32-95"
+            elif exp == 6:
+                com += " for all characters 32-255"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x77:
+        comment(runtime_addr, "Close any *SPOOL/*EXEC files", inline=True)
+    elif action == 0x78:
+        comment(runtime_addr, "Write current keys pressed", inline=True)
+    elif action == 0x79:
+        com = "Keyboard scan"
+        if x_addr is not None:
+            key = memory_binary[x_addr]
+            if key >= 0x80:
+                inkey_key = 255-(key ^ 0x80)
+                com = "Keyboard scan for " + key_name(inkey_key) + " key"
+            else:
+                inkey_key = 255-key
+                com = "Keyboard scan starting from " + key_name(inkey_key) + " key"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x7a:
+        comment(runtime_addr, "Keyboard scan from key 16", inline=True)
+    elif action == 0x7c:
+        comment(runtime_addr, "Clear escape condition", inline=True)
+    elif action == 0x7e:
+        comment(runtime_addr, "Clear escape condition and perform escape effects", inline=True)
+    elif action == 0x7f:
+        comment(runtime_addr, "Check for EOF", inline=True)
+        x_adjust_addr = state.get_previous_adjust('x')
+        if x_adjust_addr is not None:
+            x_adjust_runtime_addr = movemanager.b2r(x_adjust_addr)
+            comment(x_adjust_runtime_addr, "X=File handle", inline=True)
+    elif action == 0x80:
+        com = "Read buffer status or ADC channel"
+        if x_addr is not None:
+            x_action = memory_binary[x_addr]
+            if x_action == 0:
+                com = "Read the channel number last used for an ADC conversion"
+            elif x_action < 128:
+                com = "Read the ADC conversion value for channel %d" % (x_action)
+            elif x_action in negative_buffer_actions:
+                com = negative_buffer_actions[x_action]
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x81:
+        enum_lookup(x_addr, inkey_enum)
+        com = "Read key within time limit, or read a specific key, or read machine type"
+        if y_addr is not None:
+            if memory_binary[y_addr] >= 0x80:
+                com = "Read a specific key (or read machine type)"
+                if x_addr is not None:
+                    key = memory_binary[x_addr]
+                    if key == 0:
+                        com = "Read the machine type"
+                    else:
+                        com = "Is " + key_name(key) + " key pressed?"
+            else:
+                com = "Wait for key press with a time limit"
+                if x_addr is not None:
+                    com += " of " + str(memory_binary[x_addr] + 256*memory_binary[y_addr]) + " centiseconds"
+
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x82:
+        comment(runtime_addr, "Read machine high order address", inline=True)
+    elif action == 0x83:
+        comment(runtime_addr, "Read top of operating system RAM address (OSHWM)", inline=True)
+    elif action == 0x84:
+        comment(runtime_addr, "Read top of user memory (HIMEM)", inline=True)
+    elif action == 0x85:
+        com = "Read top of user memory for a given screen mode"
+        if x_addr is not None:
+            mode = memory_binary[x_addr]
+            com = "Read top of user memory for screen MODE %d" % (mode)
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x86:
+        comment(runtime_addr, "Read input cursor position (POS and VPOS)", inline=True)
+    elif action == 0x8c:
+        com = "Select TAPE filing system"
+        if x_addr is not None:
+            baud = memory_binary[x_addr]
+            if baud == 3:
+                com += " (300 baud)"
+            else:
+                com += " (1200 baud)"
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x8e:
+        comment(runtime_addr, "Enter language ROM", inline=True)
+        x_adjust_addr = state.get_previous_adjust('x')
+        if x_adjust_addr is not None:
+            x_adjust_runtime_addr = movemanager.b2r(x_adjust_addr)
+            comment(x_adjust_runtime_addr, "X=ROM number", inline=True)
+    elif action == 0x8f:
+        com = "Issue paged ROM service call"
+        if x_addr is not None:
+            reason = memory_binary[x_addr]
+            if reason in paged_rom_reasons:
+                com += ", " + paged_rom_reasons[reason]
+        comment(runtime_addr, com, inline=True)
+    elif action == 0x99:
+        com = "Insert character into input buffer"
+        if x_addr is not None:
+            buffer = memory_binary[x_addr]
+            if buffer == 0:
+                com = "Insert character into keyboard buffer"
+            elif buffer == 1:
+                com = "Insert character into RS423 input buffer"
+        if y_addr is not None:
+            com = ", character " + str(memory_binary[y_addr])
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xaa:
+        com = format_osbyte_rw(x_addr, y_addr, "address of ROM info table")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xab:
+        com = format_osbyte_rw(x_addr, y_addr, "address of ROM info table (high byte)")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xac:
+        comment(runtime_addr, "Read keyboard translation table address", inline=True)
+    elif action == 0xad:
+        comment(runtime_addr, "Read keyboard translation table address (high byte)", inline=True)
+    elif action == 0xb3:
+        com = format_osbyte_rw(x_addr, y_addr, "Primary OSHWM (or for Master, the paged ROM 100Hz polling semaphore)")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xb4:
+        com = format_osbyte_rw(x_addr, y_addr, "OSHWM")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xbb:
+        com = format_osbyte_rw(x_addr, y_addr, "BASIC ROM number")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xc6:
+        com = format_osbyte_rw(x_addr, y_addr, "*EXEC file handle")
+        comment(runtime_addr, com, inline=True)
+        x_adjust_addr = state.get_previous_adjust('x')
+        if x_adjust_addr is not None:
+            x_adjust_runtime_addr = movemanager.b2r(x_adjust_addr)
+            comment(x_adjust_runtime_addr, "X=File handle", inline=True)
+    elif action == 0xc7:
+        com = format_osbyte_rw(x_addr, y_addr, "*SPOOL file handle")
+        comment(runtime_addr, com, inline=True)
+        x_adjust_addr = state.get_previous_adjust('x')
+        if x_adjust_addr is not None:
+            x_adjust_runtime_addr = movemanager.b2r(x_adjust_addr)
+            comment(x_adjust_runtime_addr, "X=File handle", inline=True)
+    elif action == 0xc8:
+        com, write_value = osbyte_rw(x_addr, y_addr)
+        result = com + " ESCAPE+BREAK effects"
+        if write_value != None:
+            if write_value & 1:
+                result += ": disable ESCAPE, "
+            else:
+                result = ": normal ESCAPE action, "
+            if (write_value & 0xfe) == 0:
+                result += "normal BREAK action"
+            else:
+                result += "clear memory on BREAK"
+        comment(runtime_addr, result, inline=True)
+    elif action == 0xc9:
+        com, write_value = osbyte_rw(x_addr, y_addr)
+        result = com + " keyboard disable (for Econet)"
+        if write_value != None:
+            if write_value == 0:
+                result = "Enable keyboard (for Econet)"
+            else:
+                result = "Disable keyboard (for Econet)"
+        comment(runtime_addr, result, inline=True)
+    elif action == 0xce:
+        com = format_osbyte_rw(x_addr, y_addr, "OSBYTE and OSWORD call interception status")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xcf:
+        com = format_osbyte_rw(x_addr, y_addr, "OSRDCH call interception status")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xd0:
+        com = format_osbyte_rw(x_addr, y_addr, "OSWRCH call interception status")
+        comment(runtime_addr, com, inline=True)
+    elif (action == 0xd3) or (action == 0xd4) or (action == 0xd5) or (action == 0xd6):
+        title = "CTRL G sound " + { 0xd3: "channel", 0xd4: "amplitude/envelope", 0xd5: "frequency", 0xd6: "duration"}[action]
+        com = format_osbyte_rw(x_addr, y_addr, title)
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xe5:
+        com, write_value = osbyte_rw(x_addr, y_addr)
+        if write_value == None:
+            com += " ESCAPE key status"
+        elif write_value == 0:
+            com = "Set ESCAPE key status to normal action"
+        else:
+            com = "Set ESCAPE key status to produce ASCII code " + str(write_value)
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xea:
+        com = format_osbyte_rw(x_addr, y_addr, "Tube present flag")
+        comment(runtime_addr, com, inline=True)
+    elif action == 0xff:
+        com = format_osbyte_rw(x_addr, y_addr, "start-up option byte")
+        comment(runtime_addr, com, inline=True)
+
+
+def oscli_hook(runtime_addr, state, subroutine):
     x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
     xy_addr(x_addr, y_addr)
