@@ -387,9 +387,9 @@ l8004 = service_entry+1
     jsr sub_c8f75                                                     ; 8071: 20 75 8f     u.
     jmp l0100                                                         ; 8074: 4c 00 01    L..
 
-; Print (XXX: using l809f, which seems to be quite fancy) an inline
-; string terminated by a top-bit set instruction to execute after
-; printing the string. Carry is always clear on exit.
+; Print (XXX: using l809f, which seems to be quite fancy) an inline string terminated
+; by a top-bit set instruction to execute after printing the string. Carry is always
+; clear on exit.
 ; &8077 referenced 31 times by &84a5, &84b0, &84c8, &84dc, &84f1, &850d, &87ce, &9558, &a10c, &a247, &a298, &a34d, &a364, &a394, &a3a3, &a3ae, &a3bd, &a3e4, &a3ec, &a5f0, &a5fb, &a605, &a667, &a678, &a68a, &a699, &a70a, &a719, &aa5a, &aa65, &aebf
 .print_inline_l809f_top_bit_clear
     sta l00b3                                                         ; 8077: 85 b3       ..
@@ -3034,10 +3034,8 @@ l8004 = service_entry+1
 .l0d1f
 nmi_XXX5 = l0d1f+1
     bcc l0d26                                                         ; 8ff1: 90 05       ..  :0d1f[4]
-; One patched variant of the code transfers control to nmi_XXX5, which
-; is the
-; second byte of the following bcc instruction. That is always &05,
-; which is
+; One patched variant of the code transfers control to nmi_XXX5, which is the
+; second byte of the following bcc instruction. That is always &05, which is
 ; ORA #. XXX: correct?
 ; The operand of this lda is modified at runtime.
 .nmi_lda_immXXX4
@@ -3060,8 +3058,7 @@ nmi_XXX5 = l0d1f+1
 ; The operand of this sta is modified at runtime.
 .nmi_sta_abs
     sta tube_host_r3_data                                             ; 900e: 8d e5 fe    ... :0d3c[4]
-; The first two bytes of the following instruction may be patched at
-; runtime.
+; The first two bytes of the following instruction may be patched at runtime.
 .nmi_XXX6
     inc nmi_sta_abs+1                                                 ; 9011: ee 3d 0d    .=. :0d3f[4]
     bne nmi_XXX7                                                      ; 9014: d0 03       ..  :0d42[4]
@@ -7616,8 +7613,7 @@ nmi_XXX5 = l0d1f+1
     equw          sub_c0607,          sub_c0627, tube_host_osword_0   ; ace1: 07 06 27... ..' :0506[2]
     equw          sub_c055e,          sub_c052d,          sub_c0520   ; ace7: 5e 05 2d... ^.- :050c[2]
     equw          sub_c0542,          sub_c05a9,          sub_c05d1   ; aced: 42 05 a9... B.. :0512[2]
-; Table of flags used by tube_entry_small_a to set up registers 1/4
-; for the
+; Table of flags used by tube_entry_small_a to set up registers 1/4 for the
 ; selected operation.
 ; &acf3 referenced 1 time by &0453
 .tube_entry_flags

@@ -217,5 +217,5 @@ def format_comment(text):
     """
 
     prefix = config.get_assembler().comment_prefix() + " "
-    text_width = config.get_inline_comment_column() - len(prefix)
+    text_width = config.get_word_wrap_comment_column() - len(prefix)
     return "\n".join(textwrap.fill(paragraph, text_width) for paragraph in text.split("\n"))

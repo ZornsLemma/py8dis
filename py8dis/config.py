@@ -1,11 +1,12 @@
 
 
-# Config variables should all have leading underscores.
+# Config variables all have leading underscores.
 # Best practice is to not access these directly, but access via the getters and setters below.
 _lower_case                 = True
 _hex_dump                   = True
 _label_references           = True
 _inline_comment_column      = 70
+_word_wrap_comment_column   = 87
 _indent_string              = " "*4
 _hex_dump_max_bytes         = 3
 _indent_loops               = False
@@ -17,6 +18,8 @@ _show_char_literals         = True
 _show_all_labels            = False
 _constants_are_decimal      = True
 _show_cycles                = False
+_subroutine_header          = "*"*87
+_subroutine_footer          = "*"*87
 
 def get_lower_case():
     return _lower_case
@@ -45,6 +48,13 @@ def get_inline_comment_column():
 def set_inline_comment_column(n):
     global _inline_comment_column
     _inline_comment_column = n
+
+def get_word_wrap_comment_column():
+    return _word_wrap_comment_column
+
+def set_word_wrap_comment_column(n):
+    global _word_wrap_comment_column
+    _word_wrap_comment_column = n
 
 def get_indent_string():
     global _indent_string
@@ -133,6 +143,20 @@ def get_show_cycles():
 def set_show_cycles(b):
     global _show_cycles
     _show_cycles = b
+
+def get_subroutine_header():
+    return _subroutine_header
+
+def set_subroutine_header(s):
+    _subroutine_header = s
+
+def get_subroutine_footer():
+    return _subroutine_footer
+
+def set_subroutine_footer(s):
+    _subroutine_footer = s
+
+
 
 # For internal use only:
 _assembler                  = None      # Internal variable holding the assembler object used to emit disassembly, e.g. beebasm.py, acme.py etc

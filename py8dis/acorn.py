@@ -435,6 +435,22 @@ def enum_lookup(reg_addr, e):
         constant(r, e[r])
         classification.add_expression(reg_addr, e[r])
 
+def oseven_hook(runtime_addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
+
+    if y_addr is None:
+        comment(runtime_addr, "Generate an event", inline=True)
+        return
+
+    event_number = memory_binary[y_addr]
+    if event_number in event_names:
+        com = "Generate event '" + event_names[event_number] + "'"
+    else:
+        com = "Generate an unknown event"
+    comment(runtime_addr, com, inline=True)
+
 
 def osfile_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
@@ -822,10 +838,11 @@ def mos_labels():
     optional_label(0xfff4, "osbyte")
     optional_label(0xfff7, "oscli")
 
-    subroutine(0xfff4, "osbyte", "OSBYTE", "A multi purpose operating system routine.", hook=osbyte_hook)
-    subroutine(0xfff1, "osword", "OSWORD", "A multi purpose operating system routine.", hook=osword_hook)
-    subroutine(0xffdd, "osfile", "OSFILE", "A multi purpose operating system routine.", hook=osfile_hook)
-    subroutine(0xfff7, "oscli",  "OSCLI",  "A multi purpose operating system routine.", hook=oscli_hook)
+    subroutine(0xffbf, "oseven", None, None, hook=oseven_hook, is_entry=False)
+    subroutine(0xfff4, "osbyte", "OSBYTE", "A multi purpose OS routine with A as an action, and X and Y as parameters for the action.", hook=osbyte_hook, is_entry=False)
+    subroutine(0xfff1, "osword", "OSWORD", "A multi purpose OS routine with A as an action, and XY the address of a block of data.", hook=osword_hook, is_entry=False)
+    subroutine(0xffdd, "osfile", "OSFILE", "Read or write a whole file or its attributes.", hook=osfile_hook, is_entry=False)
+    subroutine(0xfff7, "oscli",  "OSCLI",  "Execute a command using the Command Line Interpreter.", hook=oscli_hook, is_entry=False)
 
     trace.substitute_constant_list.append(SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
     trace.substitute_constant_list.append(SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))

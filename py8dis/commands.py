@@ -222,9 +222,42 @@ def substitute_constants(instruction, reg, constants_dict, define_all_constants=
 
     trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
 
-def subroutine(runtime_addr, name, title, description, entry=None, exit=None, hook=None, move_id=None):
-    optional_label(runtime_addr, name, move_id)
-    trace.add_subroutine(runtime_addr, name, title, description, entry, exit, hook, move_id)
+def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=None, move_id=None, is_entry=True):
+    if name is not None and len(name)>0:
+        if is_entry:
+            entry(runtime_addr, name)
+        else:
+            optional_label(runtime_addr, name, move_id)
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+
+    # if the subroutine in within the binary, output a header comment for it.
+    if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
+        # Format a comment for the subroutine header
+        formatted_comment(runtime_addr, config.get_subroutine_header())
+        com = "";
+        middle = ""
+        if title is not None and len(title)>0:
+            middle += title + "\n";
+        if description is not None and len(description)>0:
+            middle += "\n" + description + "\n"
+        if on_entry is not None and len(on_entry)>0:
+            middle += "\nOn Entry:\n"
+            for reg in on_entry:
+                middle += config.get_indent_string() + reg.upper() + ": " + on_entry[reg] + "\n"
+        if on_exit is not None and len(on_exit)>0:
+            middle += "\nOn Exit:\n"
+            for reg in on_exit:
+                middle += config.get_indent_string() + reg.upper() + ": " + on_exit[reg] + "\n"
+        if middle.startswith("\n"):
+            middle = middle[1:]
+        if middle.endswith("\n"):
+            middle = middle[:-1]
+        if len(middle)>0:
+            comment(runtime_addr, middle)
+            formatted_comment(runtime_addr, config.get_subroutine_footer())
+    trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
 def comment(runtime_addr, text, inline=False):
     """Add a comment.

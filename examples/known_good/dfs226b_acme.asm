@@ -354,10 +354,8 @@ c8040
 ;         jsr XXX:equb errnum, "error message", 0
 ;     to actually generate an error now, or as:
 ;         jsr XXX:equb errnum, "partial error message", instruction...
-;     to partially construct an error (on the stack) and continue
-; executing
-;     'instruction' afterwards; its opcode must have its top bit set.
-; Carry is
+;     to partially construct an error (on the stack) and continue executing
+;     'instruction' afterwards; its opcode must have its top bit set. Carry is
 ;     always clear on exit.
 ; $2048 referenced 4 times by $822a, $9439, $947c, $a14f
 generate_error
@@ -389,10 +387,8 @@ loop_c8064
     jsr sub_c8f75                                                     ; 2071: 20 75 8f     u. :8071[1]
     jmp l0100                                                         ; 2074: 4c 00 01    L.. :8074[1]
 
-; Print (XXX: using l809f, which seems to be quite fancy) an inline
-; string
-;     terminated by a top-bit set instruction to execute after
-; printing the string.
+; Print (XXX: using l809f, which seems to be quite fancy) an inline string
+;     terminated by a top-bit set instruction to execute after printing the string.
 ;     Carry is always clear on exit.
 ; $2077 referenced 31 times by $84a5, $84b0, $84c8, $84dc, $84f1, $850d, $87ce, $9558, $a10c, $a247, $a298, $a34d, $a364, $a394, $a3a3, $a3ae, $a3bd, $a3e4, $a3ec, $a5f0, $a5fb, $a605, $a667, $a678, $a68a, $a699, $a70a, $a719, $aa5a, $aa65, $aebf
 print_inline_l809f_top_bit_clear
@@ -3037,10 +3033,8 @@ nmi_cmp_imm_or_bcs
 l0d1f
 nmi_XXX5 = l0d1f+1
     bcc l0d26                                                         ; 2ff1: 90 05       ..  :0d1f[5]
-; One patched variant of the code transfers control to nmi_XXX5, which
-; is the
-;     second byte of the following bcc instruction. That is always
-; &05, which is
+; One patched variant of the code transfers control to nmi_XXX5, which is the
+;     second byte of the following bcc instruction. That is always &05, which is
 ;     ORA #. XXX: correct?
 ; The operand of this lda is modified at runtime.
 nmi_lda_immXXX4
@@ -3063,8 +3057,7 @@ nmi_XXX2
 ; The operand of this sta is modified at runtime.
 nmi_sta_abs
     sta tube_host_r3_data                                             ; 300e: 8d e5 fe    ... :0d3c[5]
-; The first two bytes of the following instruction may be patched at
-; runtime.
+; The first two bytes of the following instruction may be patched at runtime.
 nmi_XXX6
     inc nmi_sta_abs+1                                                 ; 3011: ee 3d 0d    .=. :0d3f[5]
     bne nmi_XXX7                                                      ; 3014: d0 03       ..  :0d42[5]
@@ -7613,8 +7606,7 @@ l0500
     !word          sub_c0607,          sub_c0627, tube_host_osword_0  ; 4ce1: 07 06 27... ..' :0506[3]
     !word          sub_c055e,          sub_c052d,          sub_c0520  ; 4ce7: 5e 05 2d... ^.- :050c[3]
     !word          sub_c0542,          sub_c05a9,          sub_c05d1  ; 4ced: 42 05 a9... B.. :0512[3]
-; Table of flags used by tube_entry_small_a to set up registers 1/4
-; for the
+; Table of flags used by tube_entry_small_a to set up registers 1/4 for the
 ; selected operation.
 ; $4cf3 referenced 1 time by $0453
 tube_entry_flags

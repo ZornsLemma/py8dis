@@ -1099,6 +1099,9 @@ class Cpu6502(trace.Cpu):
 
                     # check each subroutine
                     for subroutine in trace.subroutines_list:
+                        if not subroutine.hook_function:
+                            continue
+
                         found = False
 
                         # convert to binary address

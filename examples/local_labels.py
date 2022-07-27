@@ -14,7 +14,12 @@ load(0x2000, "local_labels.orig", "6502", "ac64dbf0050be82f97f01b22262406a8")
 
 # Start tracing instructions at 0x2000.
 entry(0x2000)
-comment(0x2000, "output some characters")
+subroutine(0x2000, "test_for_local_labels",
+    "Local Labels Test",
+    "This is just a jumble of code to test: the local labels feature, CRTC register substitution, and subroutine headers. It outputs some characters then reuses a variable to count some bits. It doesn't really make sense as a program in its own right. It also shows the subroutine header.",
+    on_entry={'a': "File handle", 'y': "0 to write, otherwise read"},
+    on_exit={'x': "Holds the number of bits set."} )
+comment(0x2004, "output some characters")
 label(0x2006, "print_loop")
 char(0x2007)
 blank(0x2015)

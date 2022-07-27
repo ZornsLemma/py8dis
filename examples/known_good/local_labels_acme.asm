@@ -9,10 +9,26 @@ oswrch                  = $ffee
 
     * = $2000
 
-; output some characters
+; ***************************************************************************************
+; Local Labels Test
+; 
+; This is just a jumble of code to test: the local labels feature, CRTC register
+; substitution, and subroutine headers. It outputs some characters then reuses a
+; variable to count some bits. It doesn't really make sense as a program in its own
+; right. It also shows the subroutine header.
+; 
+; On Entry:
+;     A: File handle
+;     Y: 0 to write, otherwise read
+; 
+; On Exit:
+;     X: Holds the number of bits set.
+; ***************************************************************************************
+test_for_local_labels
 pydis_start
     lda #5                                                            ; 2000: a9 05       ..
     sta char_to_print                                                 ; 2002: 85 70       .p
+; output some characters
     ldx #$0a                                                          ; 2004: a2 0a       ..
 print_loop
     lda #'A'                                                          ; 2006: a9 41       .A
