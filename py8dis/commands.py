@@ -251,7 +251,8 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
     # if the subroutine in within the binary, output a header comment for it.
     if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
         # Format a comment for the subroutine header
-        formatted_comment(runtime_addr, config.get_subroutine_header())
+        if config.get_subroutine_header() is not None:
+            formatted_comment(runtime_addr, config.get_subroutine_header())
         com = "";
         middle = ""
         if title is not None and len(title)>0:
@@ -272,7 +273,8 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
             middle = middle[:-1]
         if len(middle)>0:
             comment(runtime_addr, middle)
-            formatted_comment(runtime_addr, config.get_subroutine_footer())
+            if config.get_subroutine_footer() is not None:
+                formatted_comment(runtime_addr, config.get_subroutine_footer())
     trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
 def comment(runtime_addr, text, inline=False):
