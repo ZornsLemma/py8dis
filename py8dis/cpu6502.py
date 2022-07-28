@@ -491,6 +491,8 @@ class Cpu6502(trace.Cpu):
             for reg in ('a','x','y'):
                 c = self.reg_changes[reg]
                 if c == 'O':
+                    state[reg].value              = None      # Current value, if known
+                    state[reg].previous_load_imm  = None      # The address of the previous load immediate instruction if no adjustments made since
                     state[reg].previous_load      = addr      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
                     state[reg].previous_adjust    = addr      # The address of the previous load or adjust instruction if present
                 if c == 'A':
