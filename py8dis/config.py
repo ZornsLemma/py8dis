@@ -148,12 +148,14 @@ def get_subroutine_header():
     return _subroutine_header
 
 def set_subroutine_header(s):
+    global _subroutine_header
     _subroutine_header = s
 
 def get_subroutine_footer():
     return _subroutine_footer
 
 def set_subroutine_footer(s):
+    global _subroutine_footer
     _subroutine_footer = s
 
 
