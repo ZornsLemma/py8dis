@@ -950,6 +950,8 @@ class Cpu6502(trace.Cpu):
 
                 state['n'] = ((v & 0x80) == 0x80)
                 state['z'] = (v == 0)
+            else:
+                self.update_nz(addr, state)
         return decrement
 
     def make_increment(self, reg):
@@ -966,6 +968,8 @@ class Cpu6502(trace.Cpu):
 
                 state['n'] = ((v & 0x80) == 0x80)
                 state['z'] = (v == 0)
+            else:
+                self.update_nz(addr, state)
         return increment
 
     def make_load_immediate(self, reg):
