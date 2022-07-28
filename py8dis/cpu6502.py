@@ -935,7 +935,7 @@ class Cpu6502(trace.Cpu):
     # probably make adc # and sbc # update the value where possible.
     #
     # Also, when they are a loop counter being decremented, we can't keep track of
-    # the value each time around the loop, so the value is not not helpful.
+    # the value each time around the loop, so the value is not helpful.
     def make_decrement(self, reg):
         def decrement(addr, state):
             v = state[reg].value
