@@ -1,16 +1,17 @@
 ; Memory locations
-oswrch  = $ffee
+test_byte   = $70
+oswrch      = $ffee
 
     * = $2000
 
 ; ***************************************************************************************
 start
 pydis_start
-    jsr print_message                                                 ; 2000: 20 0e 20     .
-    lda #$aa                                                          ; 2003: a9 aa       ..
+    jsr print_message                                                 ; 2000: 20 0e 20     .             ; Print welcome message
+    lda #$aa                                                          ; 2003: a9 aa       ..             ; A=number to print
     jsr print_decimal_number                                          ; 2005: 20 26 20     &
-    lda #$7c ; '|'                                                    ; 2008: a9 7c       .|
-    jsr print_hex_number                                              ; 200a: 20 42 20     B
+    lda test_byte                                                     ; 2008: a5 70       .p             ; A=number to print
+    jsr print_hex_number                                              ; 200a: 20 42 20     B             ; Print a byte as hexadecimal
     rts                                                               ; 200d: 60          `
 
 ; ***************************************************************************************

@@ -18,6 +18,7 @@ import copy
 
 import config
 import labelmanager
+import mainformatter
 import memorymanager
 import movemanager
 import trace
@@ -68,18 +69,36 @@ def set_user_label_maker_hook(hook):
     assert user_label_maker_hook is None
     user_label_maker_hook = hook
 
-def add_comment(addr, text, inline=False, priority=None):
+def comment(runtime_addr, text, inline=False, word_wrap=True):
+    """Add a comment.
+
+    Define a comment string to appear in the assembly code at the
+    given address in the output. The comment can be inlined (added
+    to the end of the line), or standalone (a separate line of output).
+    The comment can be automatically word wrapped.
+    """
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
+    comment_binary(binary_addr, text, inline, word_wrap)
+
+def comment_binary(binary_addr, text, inline, word_wrap, priority=None):
     """Add a comment, either inline or standalone."""
+
+    if word_wrap:
+        if not inline:
+            text = mainformatter.format_comment(text)
 
     # TODO: The Comment object may no longer add value. And/or we may
     # want to tweak how this works so Comment objects can contain
     # LazyStrings that aren't evaluated immediately on construction.
-    annotations[addr].append(Comment(text, inline, priority))
+    annotations[binary_addr].append(Comment(text, inline, priority))
 
-def add_raw_annotation(addr, text, inline=False, priority=None):
+def add_raw_annotation(binary_addr, text, inline=False, priority=None):
     """Add a raw string to the output."""
 
-    annotations[addr].append(Annotation(text, inline, priority))
+    annotations[binary_addr].append(Annotation(text, inline, priority))
 
 def add_constant(value, name):
     """Create a named constant value."""

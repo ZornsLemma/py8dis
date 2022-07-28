@@ -4,7 +4,7 @@ start
     jsr show_title_message
     lda #$aa
     jsr print_decimal_number
-    lda #$7c
+    lda $70
     jsr print_hex_byte
     rts
 
@@ -59,4 +59,3 @@ print_hex_digit
     ADC #'0'
     CLD
     JMP $FFEE
-

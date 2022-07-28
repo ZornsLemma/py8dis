@@ -6,7 +6,7 @@ acorn.bbc()
 
 config.set_label_references(False)
 
-load(0x2000, "subroutine_test.orig", "6502", "52d93da8d794477b145689a691d864d8")
+load(0x2000, "subroutine_test.orig", "6502", "c7eb4093b2e75b26e5023107db152f27")
 
 subroutine(0x2000, "start")
 subroutine(0x200e, "print_message", "Print welcome message", "Displays the welcome message at the start of the code. Only used once.")
@@ -29,5 +29,7 @@ subroutine(0x2042,
     on_exit={'a': "corrupted", 'x': "preserved", 'y': "preserved"})
 label(0x204d, "print_hex_digit")
 char(0x2051)
+
+label(0x70, "test_byte")
 
 go()

@@ -222,12 +222,26 @@ def substitute_constants(instruction, reg, constants_dict, define_all_constants=
 
     trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
 
-def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=None, move_id=None, is_entry=True):
+def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=False, move_id=None, is_entry=True):
+    """
+    Define a subroutine.
+
+    All parameters except the address are optional. These are used to
+    create a header comment above the definition of the subroutine.
+
+    They are also used to decorate calling code with explanatory text.
+    This is done by the default hook function. If this is not wanted
+    specify hook=None.
+    """
     if name is not None and len(name)>0:
         if is_entry:
             entry(runtime_addr, name)
         else:
             optional_label(runtime_addr, name, move_id)
+
+    # Use default hook function
+    if hook == False and trace.cpu.default_subroutine_hook:
+        hook = trace.cpu.default_subroutine_hook
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
@@ -268,18 +282,12 @@ def comment(runtime_addr, text, inline=False):
     The comment is automatically word wrapped.
     """
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    if not inline:
-        text = mainformatter.format_comment(text)
-    formatted_comment(runtime_addr, text, inline)
+    disassembly.comment(runtime_addr, text, inline, word_wrap=True)
 
 def formatted_comment(runtime_addr, text, inline=False):
     """Add a comment without word wrapping."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
-    disassembly.add_comment(binary_addr, text, inline)
+    disassembly.comment(runtime_addr, text, inline, word_wrap=False)
 
 def annotate(runtime_addr, s, priority=None):
     """Add a raw string directly to the assembly code output at the

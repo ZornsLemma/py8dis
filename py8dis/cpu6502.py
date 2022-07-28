@@ -431,6 +431,16 @@ class Cpu6502(trace.Cpu):
         self.add_entry(binary_addr, name, move_id)
         self.subroutine_hooks[runtime_addr] = hook
 
+    def default_subroutine_hook(self, runtime_addr, state, subroutine):
+        for reg in {'a', 'x', 'y'}:
+            reg_addr = state.get_previous_adjust(reg)
+            if reg_addr is not None:
+                if reg in subroutine.on_entry:
+                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], inline=True, word_wrap=False)
+        if subroutine.title and subroutine.runtime_addr != runtime_addr:
+            disassembly.comment(runtime_addr, subroutine.title, inline=True, word_wrap=False)
+
+
     class Opcode(object):
         def __init__(self, instruction_template, reg_change, update=None, cycles="???"):
 
@@ -465,7 +475,7 @@ class Cpu6502(trace.Cpu):
         def indent(self, addr):
             trace.cpu.indent_level_dict[addr] += 1
 
-        def regular_update(self, addr):
+        def regular_update(self, addr, state):
             """
             Update state based on reg_changes.
 
@@ -481,18 +491,18 @@ class Cpu6502(trace.Cpu):
             for reg in ('a','x','y'):
                 c = self.reg_changes[reg]
                 if c == 'O':
-                    self.previous_load      = addr      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
-                    self.previous_adjust    = addr      # The address of the previous load or adjust instruction if present
+                    state[reg].previous_load      = addr      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
+                    state[reg].previous_adjust    = addr      # The address of the previous load or adjust instruction if present
                 if c == 'A':
-                    self.previous_load_imm  = None      # The address of the previous load immediate instruction if no adjustments made since
-                    self.previous_load      = None      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
-                    self.previous_adjust    = addr      # The address of the previous load or adjust instruction if present
+                    state[reg].previous_load_imm  = None      # The address of the previous load immediate instruction if no adjustments made since
+                    state[reg].previous_load      = None      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
+                    state[reg].previous_adjust    = addr      # The address of the previous load or adjust instruction if present
                 if c == 'U':
-                    self.previous_use       = addr      # The address of the previous use of the register if present
+                    state[reg].previous_use       = addr      # The address of the previous use of the register if present
 
         def update_cpu_state(self, addr, state):
             if self.update is not None:
-                self.regular_update(addr)
+                self.regular_update(addr, state)
                 self.update(addr, state)
             else:
                 state.clear()

@@ -16,20 +16,20 @@ subroutines_list = []
 class Subroutine(object):
     """Data concerning a subroutine."""
 
-    def __init__(self, runtime_addr, label_name, title, description, entry, exit, hook_function, move_id):
+    def __init__(self, runtime_addr, label_name, title, description, on_entry, on_exit, hook_function, move_id):
         self.runtime_addr   = memorymanager.RuntimeAddr(runtime_addr)
         self.move_id        = move_id
         self.label_name     = label_name
         self.title          = title
         self.description    = description
-        if entry:
-            self.entry = entry
+        if on_entry:
+            self.on_entry = on_entry
         else:
-            self.entry = {}
-        if exit:
-            self.exit = exit
+            self.on_entry = {}
+        if on_exit:
+            self.on_exit = on_exit
         else:
-            self.exit = {}
+            self.on_exit = {}
 
 
         self.hook_function  = hook_function
@@ -198,7 +198,7 @@ class Cpu(object):
             # labels for the same address) - for the moment I am always
             # including 'addr' in the comment which helps a bit but
             # isn't ideal
-            disassembly.add_comment(addr, comment, False)
+            disassembly.comment_binary(addr, comment, inline=False, word_wrap=False)
 
     def add_reference_histogram(self):
         """Output a histogram of label references."""
