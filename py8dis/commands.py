@@ -15,6 +15,8 @@ constant()              Define a name for a constant value.
 comment()               Add a comment. Word wraps.
 formatted_comment()     Add a comment, as is.
 
+subroutine()            Define a subroutine.
+
 byte()                  Categorise 8 bit bytes at the given address as byte data.
 word()                  Categorise 16 bit words at the given address as word data.
 stringterm()            Terminates at a specified value.

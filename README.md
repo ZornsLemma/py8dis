@@ -108,6 +108,7 @@ To change the configuration, add `import config` and call the following as neede
 | `config.set_hex_dump(b)`                 | True    | Show or hide hex dump output.                                    |
 | `config.set_label_references(b)`         | True    | Show or hide output of label references.                         |
 | `config.set_inline_comment_column(n)`    | 70      | Specify the character column where inline comments start.        |
+| `config.set_word_wrap_comment_column(n)` | 87      | Specify the character column where word wrapping occurs.         |
 | `config.set_indent_string(s)`            | " "*4   | Set the string (usually spaces) for one indent level.            |
 | `config.set_indent_loops(b)`             | False   | Set whether looping code is indented or not.                     |
 | `config.set_blank_line_at_block_end(b)`  | True    | Add a blank line at the end of a block of data.                  |
@@ -118,6 +119,8 @@ To change the configuration, add `import config` and call the following as neede
 | `config.set_show_all_labels(b)`          | False   | Show or hide a list of all labels used (for debugging py8dis).   |
 | `config.set_hex_dump_max_bytes(i)`       | 3       | Set the number of hex bytes output on a single line.             |
 | `config.set_show_cycles(b)`              | False   | Show the number of cycles taken by each instruction.             |
+| `config.set_subroutine_header(s)`        | "*"*87  | A dividing line at the start of a subroutine comment.            |
+| `config.set_subroutine_footer(s)`        | "*"*87  | A dividing line at the end of a subroutine comment.              |
 
 ## Command reference
 
@@ -169,7 +172,7 @@ Simple rule of thumb: use `label` only for addresses, use `constant()` for every
 
 :pencil:`substitute_constants(instruction, reg, constants_dict, define_all_constants=None)`
 
-The idea of this command is to replace load immediate numbers with constants. 
+The idea of this command is to replace load immediate numbers with constants.
 
 For example: `substitute_constants("sta sprite_number", 'a', sprite_dict)`
 
@@ -301,7 +304,27 @@ By default numerical values are formatted as decimals for single digits or hex o
 | :pencil:`padded_uint(addr,n=1)`           | Specifies padded uint formatting for data in the given block                               |
 | :pencil:`set_formatter(addr,n,formatter)` | The `formatter` function converts a data value into a string. Used by the above functions. |
 
-### Comments and blank lines
+### Commentary and blank lines
+
+:pencil:`subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=False, move_id=None, is_entry=True)`
+
+Define a subroutine. All parameters except the address are optional. These are used to create a header comment above the definition of the subroutine. They are also used to decorate calling code with explanatory text. If this is not wanted specify `hook=None`. The subroutine is commented as below. The initial and final row of stars is configurable.
+
+```
+; ***************************************************************************************
+; Print a byte as hexadecimal
+;
+; Prints a two digit hex number 00-FF.
+;
+; On Entry:
+;     A: number to print
+;
+; On Exit:
+;     A: corrupted
+; ***************************************************************************************
+```
+
+The `on_entry` and `on_exit` optional parameters are dictionaries that specify a comment for each register as required. e.g. `on_entry={ 'a': "number to print" }`. The `is_entry` parameter adds the address as an entry point for code. The `hook` parameter is a callback to allow for the decoration of the calling code.
 
 :pencil:`comment(addr, text, inline=False)`
 
