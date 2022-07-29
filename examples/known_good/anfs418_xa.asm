@@ -1089,7 +1089,7 @@ service_handler
     pha                                                               // 8a1b: 48          H
     lda #osbyte_read_os_version                                       // 8a1c: a9 00       ..
     ldx #1                                                            // 8a1e: a2 01       ..
-    jsr osbyte                                                        // 8a20: 20 f4 ff     ..            // Read OS version into X
+    jsr osbyte                                                        // 8a20: 20 f4 ff     ..            // Read OS version number into X
     cpx #1                                                            // 8a23: e0 01       ..
     beq c8a38                                                         // 8a25: f0 11       ..
     cpx #2                                                            // 8a27: e0 02       ..
@@ -1666,7 +1666,7 @@ sub_c8d79
     pha                                                               // 8d7a: 48          H
     lda #osbyte_close_spool_exec                                      // 8d7b: a9 77       .w
     sta l0e07                                                         // 8d7d: 8d 07 0e    ...
-    jsr osbyte                                                        // 8d80: 20 f4 ff     ..            // Close any *SPOOL/*EXEC files
+    jsr osbyte                                                        // 8d80: 20 f4 ff     ..            // Close any *SPOOL / *EXEC files
     ldy #0                                                            // 8d83: a0 00       ..
     sty l00b4                                                         // 8d85: 84 b4       ..
     jsr sub_cb799                                                     // 8d87: 20 99 b7     ..
@@ -2007,7 +2007,7 @@ sub_c8f99
     ldy #0                                                            // 8f9e: a0 00       ..
     jsr sub_cb799                                                     // 8fa0: 20 99 b7     ..
     lda #osbyte_close_spool_exec                                      // 8fa3: a9 77       .w
-    jsr osbyte                                                        // 8fa5: 20 f4 ff     ..            // Close any *SPOOL/*EXEC files
+    jsr osbyte                                                        // 8fa5: 20 f4 ff     ..            // Close any *SPOOL / *EXEC files
     jsr c8f8c                                                         // 8fa8: 20 8c 8f     ..
     ldy #$76 // 'v'                                                   // 8fab: a0 76       .v
     lda #0                                                            // 8fad: a9 00       ..
@@ -2694,7 +2694,7 @@ sub_c949e
     ldy #0                                                            // 949e: a0 00       ..
     jsr sub_cb799                                                     // 94a0: 20 99 b7     ..
     lda #osbyte_close_spool_exec                                      // 94a3: a9 77       .w
-    jsr osbyte                                                        // 94a5: 20 f4 ff     ..            // Close any *SPOOL/*EXEC files
+    jsr osbyte                                                        // 94a5: 20 f4 ff     ..            // Close any *SPOOL / *EXEC files
     jsr sub_cb559                                                     // 94a8: 20 59 b5     Y.
     ldy #$17                                                          // 94ab: a0 17       ..
 // $94ad referenced 15 times by $8e24, $9423, $9446, $9459, $9b5d, $9de4, $a1d6, $a1fe, $ad41, $adb8, $adf6, $ae65, $b381, $b418, $b917
@@ -6619,7 +6619,7 @@ cb369
     bne cb39c                                                         // b387: d0 13       ..
     lda #osbyte_flush_buffer_class                                    // b389: a9 0f       ..
     ldx #1                                                            // b38b: a2 01       ..
-    jsr osbyte                                                        // b38d: 20 f4 ff     ..            // Flush all input buffers
+    jsr osbyte                                                        // b38d: 20 f4 ff     ..            // Flush input buffers
     lda #osbyte_scan_keyboard_from_16                                 // b390: a9 7a       .z
     jsr osbyte                                                        // b392: 20 f4 ff     ..            // Keyboard scan from key 16
     ldy #0                                                            // b395: a0 00       ..
@@ -6734,7 +6734,7 @@ sub_cb431
 
     lda #osbyte_flush_buffer_class                                    // b439: a9 0f       ..
     ldx #1                                                            // b43b: a2 01       ..
-    jsr osbyte                                                        // b43d: 20 f4 ff     ..            // Flush all input buffers
+    jsr osbyte                                                        // b43d: 20 f4 ff     ..            // Flush input buffers
     jsr osrdch                                                        // b440: 20 e0 ff     ..
     bcc cb448                                                         // b443: 90 03       ..
     jmp c9576                                                         // b445: 4c 76 95    Lv.
@@ -8036,7 +8036,7 @@ service_handler_tube_service_calls
     beq cbec2                                                         // be6a: f0 56       .V
     ldx #6                                                            // be6c: a2 06       ..
     lda #osbyte_explode_chars                                         // be6e: a9 14       ..
-    jsr osbyte                                                        // be70: 20 f4 ff     ..            // Explode character definition RAM for all characters 32-255
+    jsr osbyte                                                        // be70: 20 f4 ff     ..            // Explode character definition RAM (taking six extra pages of memory), for all characters 32-255
 // $be73 referenced 2 times by $be76, $be80
 cbe73
     bit tube_host_r1_status                                           // be73: 2c e0 fe    ,..

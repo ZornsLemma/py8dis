@@ -3956,7 +3956,7 @@ sub_c982e
     bne c9808                                                         // 9847: d0 bf       ..
     ldx l002a                                                         // 9849: a6 2a       .*
     lda #osbyte_read_himem_for_mode                                   // 984b: a9 85       ..
-    jsr osbyte                                                        // 984d: 20 f4 ff     ..            // Read top of user memory for a given screen mode
+    jsr osbyte                                                        // 984d: 20 f4 ff     ..            // Read top of user memory for a given screen mode X
     cpx l0002                                                         // 9850: e4 02       ..
     tya                                                               // 9852: 98          .
     sbc l0003                                                         // 9853: e5 03       ..
@@ -7426,7 +7426,7 @@ sub_cab01
 // $ab14 referenced 1 time by $aafb
 sub_cab14
     lda #osbyte_read_text_cursor_pos                                  // ab14: a9 86       ..
-    jsr osbyte                                                        // ab16: 20 f4 ff     ..            // Read input cursor position (POS and VPOS)
+    jsr osbyte                                                        // ab16: 20 f4 ff     ..            // Read input cursor position (X=POS and Y=VPOS)
     tya                                                               // ab19: 98          .
 // $ab1a referenced 2 times by $ab35, $ab52
 cab1a
@@ -7606,7 +7606,7 @@ sub_cac1f
     jsr sub_cba7a                                                     // ac1f: 20 7a ba     z.
     tax                                                               // ac22: aa          .              // X=File handle
     lda #osbyte_check_eof                                             // ac23: a9 7f       ..
-    jsr osbyte                                                        // ac25: 20 f4 ff     ..            // Check for EOF
+    jsr osbyte                                                        // ac25: 20 f4 ff     ..            // Check for EOF, set X non-zero if EOF
     txa                                                               // ac28: 8a          .
     beq cac2d                                                         // ac29: f0 02       ..
 // $ac2b referenced 6 times by $ac0a, $ac16, $ac44, $ac4f, $ac7b, $b3dd

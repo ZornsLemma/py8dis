@@ -3961,7 +3961,7 @@ promptpositioned
     jsr osbyte                                                        ; 290d: 20 f4 ff     ..            ; Disable cursor editing (edit keys give ASCII 135-139)
     lda #osbyte_flush_buffer_class                                    ; 2910: a9 0f       ..
     ldx #1                                                            ; 2912: a2 01       ..
-    jsr osbyte                                                        ; 2914: 20 f4 ff     ..            ; Flush all input buffers
+    jsr osbyte                                                        ; 2914: 20 f4 ff     ..            ; Flush input buffers
     lda #osbyte_read_write_escape_status                              ; 2917: a9 e5       ..
     ldx #1                                                            ; 2919: a2 01       ..
     ldy #0                                                            ; 291b: a0 00       ..
