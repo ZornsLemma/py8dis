@@ -85,8 +85,12 @@ def count_with_units(n, unit_name_singular, unit_name_plural):
     Returns a string with the amount given and the unit name either
     in singular or plural form.
     """
-
-    return "%d %s" % (n, unit_name_singular if n == 1 else unit_name_plural)
+    if is_string_type(n) and (n == "1"):
+        n = 1
+    if is_integer_type(n):
+        return "%d %s" % (n, unit_name_singular if n == 1 else unit_name_plural)
+    else:
+        return "%s %s" % (n, unit_name_plural)
 
 # Create string types and integer types depending on python version
 if sys.version_info[0] == 2:

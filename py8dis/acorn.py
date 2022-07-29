@@ -1,7 +1,8 @@
 from commands import *
+import classification
+import config
 import trace
 import utils
-import classification
 
 def xy_addr(x_addr, y_addr):
     if x_addr is not None and y_addr is not None:
@@ -63,7 +64,7 @@ osword_descriptions = {
 
 osbyte_enum = {
     0x00: "osbyte_read_os_version",
-    0x01: "osbyte_user",
+    0x01: "osbyte_set_user_flag",
     0x02: "osbyte_select_input_stream",
     0x03: "osbyte_select_output_stream",
     0x04: "osbyte_set_cursor_editing",
@@ -148,7 +149,7 @@ osbyte_enum = {
     0xb7: "osbyte_read_write_cfs_rfs_switch",
     0xb8: "osbyte_read_video_ula_control",
     0xb9: "osbyte_read_video_ula_palette",
-    0xba: "osbyte read_write_rom_bank_at_last_brk",
+    0xba: "osbyte_read_write_rom_bank_at_last_brk",
     0xbb: "osbyte_read_write_basic_rom_bank",
     0xbc: "osbyte_read_current_adc_channel",
     0xbd: "osbyte_read_write_max_adc_channel",
@@ -390,16 +391,16 @@ osfile_descriptions = {
     255: "Load named file (if XY+6 contains 0, use specified address)"
 }
 
-negative_buffer_names = {
-    255: "keyboard buffer",
-    254: "RS423 input buffer",
-    253: "RS423 output buffer",
-    252: "printer buffer",
-    251: "sound channel 0",
-    250: "sound channel 1",
-    249: "sound channel 2",
-    248: "sound channel 3",
-    247: "speech buffer"
+buffer_names = {
+    0: "keyboard buffer",
+    1: "RS423 input buffer",
+    2: "RS423 output buffer",
+    3: "printer buffer",
+    4: "sound channel 0",
+    5: "sound channel 1",
+    6: "sound channel 2",
+    7: "sound channel 3",
+    8: "speech buffer"
 }
 
 negative_buffer_actions = {
@@ -422,9 +423,48 @@ event_names = {
     4: "Start of vertical sync",
     5: "Interval timer crossing zero",
     6: "ESCAPE condition detected",
-    7: "RS423 error event",
-    8: "Network error event",
-    9: "User event",
+    7: "RS423 error",
+    8: "Network error",
+    9: "User",
+}
+
+baud_rates = {
+    0: "9600 baud",
+    1: "75 baud",
+    2: "150 baud",
+    3: "300 baud",
+    4: "1200 baud",
+    5: "2400 baud",
+    6: "4800 baud",
+    7: "9600 baud",
+    8: "19200 baud",
+}
+
+opt_descriptions = {
+    "1,0": "no messages issued",
+    "1,1": "short messages issued",
+    "1,2": "detailed messages issued",
+    "2,0": "ignore errors",
+    "2,1": "on error, prompt to rewind cassette",
+    "2,2": "abort on error",
+}
+
+read_or_write_memory_mapped_device = {
+    0x92: "Read from FRED",
+    0x93: "Write to FRED",
+    0x94: "Read from JIM",
+    0x95: "Write to JIM",
+    0x96: "Read from SHEILA",
+    0x97: "Write to SHEILA",
+}
+
+read_or_write_memory_mapped_address = {
+    0x92: 0xfc00,
+    0x93: 0xfc00,
+    0x94: 0xfd00,
+    0x95: 0xfd00,
+    0x96: 0xfe00,
+    0x97: 0xfe00,
 }
 
 def enum_lookup(reg_addr, e):
@@ -509,6 +549,14 @@ def key_name(key):
         return "'" + inkey_enum[key][10:].upper() + "'"
     return "unknown"
 
+def append_bit_string(str, x, bit, result1, result0):
+    if len(str) > 0:
+        str += ", "
+    if (x & (1<<bit)) == 0:
+        str += result0
+    else:
+        str += result1
+    return str
 
 def osbyte_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
@@ -525,10 +573,46 @@ def osbyte_hook(runtime_addr, state, subroutine):
         com = "Read OS version number"
         if x_addr is not None:
             if memory_binary[x_addr] == 0:
-                com = "Execute BRK, print OS version"
+                com = "Execute BRK and print OS version"
             else:
-                com = "Read OS version into X"
+                com = "Read OS version number into X"
         comment(runtime_addr, com, inline=True)
+
+    elif action == 0x01:
+        com = "Set user flag byte"
+        if x_addr is not None:
+            com += " to " + str(memory_binary[x_addr])
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x02:
+        com = "Select input stream"
+        if x_addr is not None:
+            if memory_binary[x_addr] == 0:
+                com = "Select keyboard as input stream (RS232 disabled)"
+            elif memory_binary[x_addr] == 1:
+                com = "Select RS232 as input stream (keyboard disabled)"
+            elif memory_binary[x_addr] == 2:
+                com = "Select keyboard as input stream (RS232 enabled)"
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x03:
+        com = "Select output stream"
+        if x_addr is not None:
+            x_runtime_addr = movemanager.b2r(x_addr)
+            binary(x_runtime_addr)
+            x = memory_binary[x_addr]
+            com += ": "
+            bit_str = ""
+            bit_str = append_bit_string(bit_str, x, 0, "enable RS232 output", "disable RS232 output")
+            bit_str = append_bit_string(bit_str, x, 1, "disable VDU driver", "enable VDU driver")
+            bit_str = append_bit_string(bit_str, x, 2, "disable printer output", "enable printer output")
+            bit_str = append_bit_string(bit_str, x, 3, "enable printer despite CTRL-B/C state", "disable printer despite CTRL-B/C state")
+            bit_str = append_bit_string(bit_str, x, 4, "disable SPOOLed output", "enable SPOOLed output")
+            bit_str = append_bit_string(bit_str, x, 6, "disable printer output unless VDU 1 first", "enable printer output even without VDU 1 first")
+            com += bit_str
+
+        comment(runtime_addr, com, inline=True)
+
     elif action == 0x04:
         com = "Enable/disable cursor editing"
         if x_addr is not None:
@@ -541,6 +625,87 @@ def osbyte_hook(runtime_addr, state, subroutine):
             elif memory_binary[x_addr] == 3:
                 com = "Cursor editing keys and COPY simulate a joystick (Master Compact only)"
         comment(runtime_addr, com, inline=True)
+
+    elif action == 0x05:
+        com = "Select printer destination"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com += ": Ignore printer output"
+            elif x == 1:
+                com += ": Parallel output"
+            elif x == 2:
+                com += ": RS423 output"
+            elif x == 3:
+                com += ": User printer routine"
+            elif x == 4:
+                com += ": Net printer"
+            else:
+                com += ": User printer routine"
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x06:
+        com = "Set printer ignore character"
+        if x_addr is not None:
+            com += " to " + str(memory_binary[x_addr])
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x07:
+        com = "Set serial receive rate"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x in baud_rates:
+                com += ": " + baud_rates[x]
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x08:
+        com = "Set serial transmission rate"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x in baud_rates:
+                com += ": " + baud_rates[x]
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x09:
+        com = "Set mark duration of flashing colours"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com += " to infinity"
+            else:
+                com += " to " + utils.count_with_units(x, "vsync (fiftieth of a second)", "vsyncs (fiftieths of a second)")
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x0a:
+        com = "Set space duration of flashing colours"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com += " to infinity"
+            else:
+                com += " to " + utils.count_with_units(x, "vsync (fiftieth of a second)", "vsyncs (fiftieths of a second)")
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x0b:
+        com = "Set keyboard auto-repeat delay"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com = "Disable keyboard auto-repeat"
+            else:
+                com += " to " + utils.count_with_units(x, "centisecond", "centiseconds")
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x0c:
+        com = "Set keyboard auto-repeat interval"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com = "Reset keyboard delay and repeat to default values"
+            else:
+                com += " to " + utils.count_with_units(x, "centisecond", "centiseconds")
+        comment(runtime_addr, com, inline=True)
+
     elif action == 0x0d:
         com = "Disable event"
         if x_addr is not None:
@@ -548,6 +713,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
             if event_number in event_names:
                 com = "Disable '" + event_names[event_number] + "' event"
         comment(runtime_addr, com, inline=True)
+
     elif action == 0x0e:
         com = "Enable event"
         if x_addr is not None:
@@ -555,39 +721,79 @@ def osbyte_hook(runtime_addr, state, subroutine):
             if event_number in event_names:
                 com = "Enable '" + event_names[event_number] + "' event"
         comment(runtime_addr, com, inline=True)
+
     elif action == 0x0f:
         com = "Flush selected buffer class"
         if x_addr is not None:
             if memory_binary[x_addr] == 0:
                 com = "Flush all buffers"
             else:
-                com = "Flush all input buffers"
+                com = "Flush input buffers"
         comment(runtime_addr, com, inline=True)
+
+    elif action == 0x10:
+        com = "Select number of ADC channels"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com = "Disable ADC channel sampling"
+            else:
+                com = "Select " + utils.count_with_units(x, "ADC channel", "ADC channels")
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x11:
+        com = "Force ADC conversion"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            com += " on channel " + str(x)
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x12:
+        comment(runtime_addr, "Reset function keys", inline=True)
+
     elif action == 0x13:
         comment(runtime_addr, "Wait for vertical sync", inline=True)
+
     elif action == 0x14:
         com = "Explode character definition RAM"
         if x_addr is not None:
             exp = memory_binary[x_addr]
             if exp == 0:
-                com = "Implode character definitions"
+                com = "Implode character definition RAM, for characters 128-159"
             elif exp == 1:
-                com += " for characters 128-159"
+                com += " (taking one extra page of memory), for characters 128-191"
             elif exp == 2:
-                com += " for characters 128-191"
+                com += " (taking two extra pages of memory), for characters 128-223"
             elif exp == 3:
-                com += " for characters 128-255"
+                com += " (taking three extra pages of memory), for characters 128-255"
             elif exp == 4:
-                com += " for characters 128-255 and 32-63"
+                com += " (taking four extra pages of memory), for characters 128-255 and 32-63"
             elif exp == 5:
-                com += " for characters 128-255 and 32-95"
+                com += " (taking five extra pages of memory), for characters 128-255 and 32-95"
             elif exp == 6:
-                com += " for all characters 32-255"
+                com += " (taking six extra pages of memory), for all characters 32-255"
         comment(runtime_addr, com, inline=True)
+
+    elif action == 0x15:
+        com = "Flush specific buffer"
+        if x_addr is not None:
+            buffer = memory_binary[x_addr]
+            if buffer in buffer_names:
+                com = "Flush " + buffer_names[buffer]
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x75:
+        comment(runtime_addr, "Read VDU status byte", inline=True)
+
+    elif action == 0x76:
+        comment(runtime_addr, "Reflect keyboard status in keyboard LEDs", inline=True)
+
     elif action == 0x77:
-        comment(runtime_addr, "Close any *SPOOL/*EXEC files", inline=True)
+        comment(runtime_addr, "Close any *SPOOL / *EXEC files", inline=True)
+
     elif action == 0x78:
         comment(runtime_addr, "Write current keys pressed", inline=True)
+
     elif action == 0x79:
         com = "Keyboard scan"
         if x_addr is not None:
@@ -599,18 +805,29 @@ def osbyte_hook(runtime_addr, state, subroutine):
                 inkey_key = 255-key
                 com = "Keyboard scan starting from " + key_name(inkey_key) + " key"
         comment(runtime_addr, com, inline=True)
+
     elif action == 0x7a:
         comment(runtime_addr, "Keyboard scan from key 16", inline=True)
+
+    elif action == 0x7b:
+        comment(runtime_addr, "Printer driver going dormant", inline=True)
+
     elif action == 0x7c:
         comment(runtime_addr, "Clear escape condition", inline=True)
+
+    elif action == 0x7d:
+        comment(runtime_addr, "Set escape condition", inline=True)
+
     elif action == 0x7e:
         comment(runtime_addr, "Clear escape condition and perform escape effects", inline=True)
+
     elif action == 0x7f:
-        comment(runtime_addr, "Check for EOF", inline=True)
+        comment(runtime_addr, "Check for EOF, set X non-zero if EOF", inline=True)
         x_adjust_addr = state.get_previous_adjust('x')
         if x_adjust_addr is not None:
             x_adjust_runtime_addr = movemanager.b2r(x_adjust_addr)
             comment(x_adjust_runtime_addr, "X=File handle", inline=True)
+
     elif action == 0x80:
         com = "Read buffer status or ADC channel"
         if x_addr is not None:
@@ -638,45 +855,166 @@ def osbyte_hook(runtime_addr, state, subroutine):
             else:
                 com = "Wait for key press with a time limit"
                 if x_addr is not None:
-                    com += " of " + str(memory_binary[x_addr] + 256*memory_binary[y_addr]) + " centiseconds"
+                    com = "Wait for key press within " + utils.count_with_units(memory_binary[x_addr] + 256*memory_binary[y_addr], "centisecond", "centiseconds")
 
         comment(runtime_addr, com, inline=True)
+
     elif action == 0x82:
         comment(runtime_addr, "Read machine high order address", inline=True)
+
     elif action == 0x83:
         comment(runtime_addr, "Read top of operating system RAM address (OSHWM)", inline=True)
+
     elif action == 0x84:
         comment(runtime_addr, "Read top of user memory (HIMEM)", inline=True)
+
     elif action == 0x85:
-        com = "Read top of user memory for a given screen mode"
+        com = "Read top of user memory for a given screen mode X"
         if x_addr is not None:
             mode = memory_binary[x_addr]
             com = "Read top of user memory for screen MODE %d" % (mode)
         comment(runtime_addr, com, inline=True)
+
     elif action == 0x86:
-        comment(runtime_addr, "Read input cursor position (POS and VPOS)", inline=True)
+        comment(runtime_addr, "Read input cursor position (X=POS and Y=VPOS)", inline=True)
+
+    elif action == 0x87:
+        comment(runtime_addr, "Read X=character at the text cursor, and Y=screen MODE", inline=True)
+
+    elif action == 0x88:
+        comment(runtime_addr, "*CODE X,Y", inline=True)
+
+    elif action == 0x89:
+        com = "Switch cassette motor relay"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com += " off"
+            else:
+                com += " on"
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x8a:
+        if y_addr is not None:
+            y = str(memory_binary[y_addr]) + " "
+        else:
+            y = ""
+        com = "Insert value %sinto buffer" % (y)
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x in buffer_names:
+                com = "Insert value %sinto %s" % (y, buffer_names[x])
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x8b:
+        com = "Select filing system options"
+        opt = []
+
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            x = str(x)
+        else:
+            x = "X"
+
+        if y_addr is not None:
+            y = memory_binary[y_addr]
+            y = str(y)
+        else:
+            y = "Y"
+        key = x+","+y
+        if key in opt_descriptions:
+            com += ": " + opt_descriptions[key]
+        elif x == "3":
+            com += ": set interblock gap to " + utils.count_with_units(y, "tenth of a second", "tenths of a second")
+        com += " (*OPT " + x + "," + y + ")"
+        comment(runtime_addr, com, inline=True)
+
     elif action == 0x8c:
         com = "Select TAPE filing system"
         if x_addr is not None:
             baud = memory_binary[x_addr]
-            if baud == 3:
+            if baud == 0:
+                com += " (default 1200 baud)"
+            elif baud == 3:
                 com += " (300 baud)"
             else:
                 com += " (1200 baud)"
         comment(runtime_addr, com, inline=True)
+
+    elif action == 0x8d:
+        comment(runtime_addr, "Select ROM filing system", inline=True)
+
     elif action == 0x8e:
         comment(runtime_addr, "Enter language ROM", inline=True)
         x_adjust_addr = state.get_previous_adjust('x')
         if x_adjust_addr is not None:
             x_adjust_runtime_addr = movemanager.b2r(x_adjust_addr)
             comment(x_adjust_runtime_addr, "X=ROM number", inline=True)
+
     elif action == 0x8f:
         com = "Issue paged ROM service call"
         if x_addr is not None:
             reason = memory_binary[x_addr]
             if reason in paged_rom_reasons:
                 com += ", " + paged_rom_reasons[reason]
+            else:
+                com += ", Reason " + str(reason)
         comment(runtime_addr, com, inline=True)
+
+    elif action == 0x90:
+        suffix = ""
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x >= 128:
+                suffix = "shift display down " + utils.count_with_units(256-x, "line", "lines")
+            elif x != 0:
+                suffix = "shift display up " + utils.count_with_units(x, "line", "lines")
+            x = str(x)
+        else:
+            x = "X"
+
+        if y_addr is not None:
+            y = str(memory_binary[y_addr])
+            if len(suffix)>0:
+                suffix += ", "
+            if y == "0":
+                suffix += "turn interlace on"
+            else:
+                suffix += "turn interlace off"
+        else:
+            y = "Y"
+
+        if len(suffix)>0:
+            suffix = " " + suffix
+        com = "*TV " + x + "," + y + suffix
+        comment(runtime_addr, com, inline=True)
+
+    elif action == 0x91:
+        com = "Get character from input buffer"
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            if x == 0:
+                com = "Get character from keyboard buffer"
+            elif x == 1:
+                com = "Get character from RS423 input buffer"
+        comment(runtime_addr, com, inline=True)
+
+    elif (action >= 0x92) and (action <=0x97):
+        com = read_or_write_memory_mapped_device[action]
+        if x_addr is not None:
+            x = memory_binary[x_addr]
+            mmio_address = read_or_write_memory_mapped_address[action] + x
+            com += " address " + config.get_assembler().hex4(mmio_address)
+        else:
+            com += " address " + config.get_assembler().hex4(read_or_write_memory_mapped_address[action]) + " + X"
+
+        if y_addr is not None:
+            y = memory_binary[y_addr]
+            if (action == 0x93) or (action == 0x95) or (action == 0x97):
+                com += ", value " + str(y)
+
+        comment(runtime_addr, com, inline=True)
+
     elif action == 0x99:
         com = "Insert character into input buffer"
         if x_addr is not None:
@@ -686,7 +1024,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
             elif buffer == 1:
                 com = "Insert character into RS423 input buffer"
         if y_addr is not None:
-            com = ", character " + str(memory_binary[y_addr])
+            com += ", character " + str(memory_binary[y_addr])
         comment(runtime_addr, com, inline=True)
     elif action == 0xaa:
         com = format_osbyte_rw(x_addr, y_addr, "address of ROM info table")
