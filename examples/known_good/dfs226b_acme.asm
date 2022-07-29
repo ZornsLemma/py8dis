@@ -4920,7 +4920,7 @@ loop_c9b50
 sub_c9b51
     jsr sub_c83e3                                                     ; 3b51: 20 e3 83     .. :9b51[1]
     lda #osbyte_close_spool_exec                                      ; 3b54: a9 77       .w  :9b54[1]
-    jmp osbyte                                                        ; 3b56: 4c f4 ff    L.. :9b56[1]   ; Close any *SPOOL/*EXEC files
+    jmp osbyte                                                        ; 3b56: 4c f4 ff    L.. :9b56[1]   ; Close any *SPOOL / *EXEC files
 
 sub_c9b59
     lda #$20 ; ' '                                                    ; 3b59: a9 20       .   :9b59[1]
@@ -7945,7 +7945,7 @@ caed7
     beq just_rts                                                      ; 4edf: f0 56       .V  :aedf[1]
     ldx #6                                                            ; 4ee1: a2 06       ..  :aee1[1]
     lda #osbyte_explode_chars                                         ; 4ee3: a9 14       ..  :aee3[1]
-    jsr osbyte                                                        ; 4ee5: 20 f4 ff     .. :aee5[1]   ; Explode character definition RAM for all characters 32-255
+    jsr osbyte                                                        ; 4ee5: 20 f4 ff     .. :aee5[1]   ; Explode character definition RAM (taking six extra pages of memory), for all characters 32-255
 ; $4ee8 referenced 2 times by $aeeb, $aef5
 tube_banner_loop
     bit tube_host_r1_status                                           ; 4ee8: 2c e0 fe    ,.. :aee8[1]
