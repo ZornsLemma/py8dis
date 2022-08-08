@@ -1,7 +1,10 @@
 * = $2000
 
+message_length = $70
+
 start
     jsr show_title_message
+    stx message_length
     lda #$aa
     jsr print_decimal_number
     lda $70
@@ -14,12 +17,12 @@ show_title_message
     lda welcome_message,x
     jsr $FFEE
     inx
-    cpx #welcome_message_end - welcome_message
+    cmp #0
     bne -
     rts
 
 welcome_message
-    !text "Welcome!",10,13
+    !text "Welcome!",10,13,0
 welcome_message_end
 
 print_decimal_number

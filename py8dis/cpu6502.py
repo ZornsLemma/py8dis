@@ -440,6 +440,21 @@ class Cpu6502(trace.Cpu):
         if subroutine.title and subroutine.runtime_addr != runtime_addr:
             disassembly.comment(runtime_addr, subroutine.title, inline=True, word_wrap=False)
 
+        # Post exit
+        if subroutine.on_exit:
+            if subroutine.runtime_addr != runtime_addr:
+                for reg in ('a', 'x', 'y'):
+                    next_use = state.next_use[reg]
+                    if next_use:
+                        reg_runtime_addr = None if next_use is None else movemanager.b2r(next_use)
+                        if reg_runtime_addr:
+                            com = subroutine.on_exit[reg]
+                            if com:
+                                is_private_comment = com.startswith("()") and com.endswith(")")
+                                if not is_private_comment:
+                                    disassembly.comment(reg_runtime_addr, reg.upper() + "=" + subroutine.on_exit[reg], inline=True)
+
+
 
     class Opcode(object):
         def __init__(self, instruction_template, reg_change, update=None, cycles="???"):
