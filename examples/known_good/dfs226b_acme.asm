@@ -13,6 +13,7 @@ osbyte_read_write_startup_options     = 255
 osbyte_rw_exec_handle                 = 198
 osbyte_scan_keyboard_from_16          = 122
 osbyte_write_keys_pressed             = 120
+osbyte_write_shadow_memory_use        = 114
 osfile_load                           = 255
 osfile_read_catalogue_info            = 5
 osfile_save                           = 0
@@ -2892,7 +2893,7 @@ sub_c8f3f
     ldx #0                                                            ; 2f41: a2 00       ..  :8f41[1]
     ldy #$ff                                                          ; 2f43: a0 ff       ..  :8f43[1]
     jsr osbyte                                                        ; 2f45: 20 f4 ff     .. :8f45[1]   ; Read Tube present flag
-    txa                                                               ; 2f48: 8a          .   :8f48[1]
+    txa                                                               ; 2f48: 8a          .   :8f48[1]   ; X=value of Tube present flag
     eor #$ff                                                          ; 2f49: 49 ff       I.  :8f49[1]
     sta l10d6                                                         ; 2f4b: 8d d6 10    ... :8f4b[1]
     rts                                                               ; 2f4e: 60          `   :8f4e[1]
@@ -2902,8 +2903,8 @@ sub_c8f4f
     lda #osbyte_issue_service_request                                 ; 2f4f: a9 8f       ..  :8f4f[1]
     ldx #$0c                                                          ; 2f51: a2 0c       ..  :8f51[1]
     ldy #$ff                                                          ; 2f53: a0 ff       ..  :8f53[1]
-    jsr osbyte                                                        ; 2f55: 20 f4 ff     .. :8f55[1]   ; Issue paged ROM service call, Reason 12 - NMI claim
-    sty l00a0                                                         ; 2f58: 84 a0       ..  :8f58[1]
+    jsr osbyte                                                        ; 2f55: 20 f4 ff     .. :8f55[1]   ; Issue paged ROM service call, Reason X=12 - NMI claim
+    sty l00a0                                                         ; 2f58: 84 a0       ..  :8f58[1]   ; Y contains a return argument from the ROM service call
     inc l10d3                                                         ; 2f5a: ee d3 10    ... :8f5a[1]
     rts                                                               ; 2f5d: 60          `   :8f5d[1]
 
@@ -2912,7 +2913,7 @@ sub_c8f5e
     ldy l00a0                                                         ; 2f5e: a4 a0       ..  :8f5e[1]
     lda #osbyte_issue_service_request                                 ; 2f60: a9 8f       ..  :8f60[1]
     ldx #$0b                                                          ; 2f62: a2 0b       ..  :8f62[1]
-    jsr osbyte                                                        ; 2f64: 20 f4 ff     .. :8f64[1]   ; Issue paged ROM service call, Reason 11 - NMI released
+    jsr osbyte                                                        ; 2f64: 20 f4 ff     .. :8f64[1]   ; Issue paged ROM service call, Reason X=11 - NMI released
     dec l10d3                                                         ; 2f67: ce d3 10    ... :8f67[1]
     rts                                                               ; 2f6a: 60          `   :8f6a[1]
 
@@ -2947,7 +2948,24 @@ sub_c8f82
     ldx #0                                                            ; 2f84: a2 00       ..  :8f84[1]
     tay                                                               ; 2f86: a8          .   :8f86[1]
     jsr osbyte                                                        ; 2f87: 20 f4 ff     .. :8f87[1]   ; Read start-up option byte
-    txa                                                               ; 2f8a: 8a          .   :8f8a[1]
+    ; X is the startup option byte:
+    ; bits 0 to 2     screen MODE selected following reset
+    ; bit 3           if clear reverse action of SHIFT+BREAK
+    ; bits 4 and 5    used to set disc drive timings (see below)
+    ; bit 6           not used by OS (reserved for future applications)
+    ; bit 7           if clear select NFS, if set select DFS
+    ; 
+    ; Disc drive timing links:
+    ; |                           |                8271                 |          1770           |          1772           |
+    ; |---------------------------|-------------------------------------|-------------------------|-------------------------|
+    ; | b5 | b4 | link 3 | link 4 | step time | settle time | head load | step time | settle time | step time | settle time |
+    ; |----|----|--------|--------|-----------|-------------|-----------|-----------|-------------|-----------|-------------|
+    ; |  0 | 0  | 1      | 1      | 4         | 16          | 0         | 6         | 30          | 6         | 15          |
+    ; |  0 | 1  | 1      | 0      | 6         | 16          | 0         | 12        | 30          | 12        | 15          |
+    ; |  1 | 0  | 0      | 1      | 6         | 50          | 32        | 20        | 30          | 2         | 15          |
+    ; |  1 | 1  | 0      | 0      | 24        | 20          | 64        | 30        | 30          | 3         | 15          |
+    ; |---------------------------------------------------------------------------------------------------------------------|
+    txa                                                               ; 2f8a: 8a          .   :8f8a[1]   ; X=value of start-up option byte
     lsr                                                               ; 2f8b: 4a          J   :8f8b[1]
     lsr                                                               ; 2f8c: 4a          J   :8f8c[1]
     lsr                                                               ; 2f8d: 4a          J   :8f8d[1]
@@ -4181,8 +4199,8 @@ c96c3
     lda #0                                                            ; 36cc: a9 00       ..  :96cc[1]
     sta l10de                                                         ; 36ce: 8d de 10    ... :96ce[1]
     lda #osbyte_scan_keyboard_from_16                                 ; 36d1: a9 7a       .z  :96d1[1]
-    jsr osbyte                                                        ; 36d3: 20 f4 ff     .. :96d3[1]   ; Keyboard scan from key 16
-    txa                                                               ; 36d6: 8a          .   :96d6[1]
+    jsr osbyte                                                        ; 36d3: 20 f4 ff     .. :96d3[1]   ; Keyboard scan starting from key 16
+    txa                                                               ; 36d6: 8a          .   :96d6[1]   ; X is key number if key is pressed, or $ff otherwise
     bmi c96e9                                                         ; 36d7: 30 10       0.  :96d7[1]
     cmp #$32 ; '2'                                                    ; 36d9: c9 32       .2  :96d9[1]
     beq c96e4                                                         ; 36db: f0 07       ..  :96db[1]
@@ -4192,7 +4210,7 @@ c96c3
 ; $36e4 referenced 1 time by $96db
 c96e4
     lda #osbyte_write_keys_pressed                                    ; 36e4: a9 78       .x  :96e4[1]
-    jsr osbyte                                                        ; 36e6: 20 f4 ff     .. :96e6[1]   ; Write current keys pressed
+    jsr osbyte                                                        ; 36e6: 20 f4 ff     .. :96e6[1]   ; Write current keys pressed (X and Y)
 ; $36e9 referenced 1 time by $96d7
 c96e9
     jmp c9556                                                         ; 36e9: 4c 56 95    LV. :96e9[1]
@@ -4804,10 +4822,10 @@ c9a8c
 sub_c9a8d
     lda #osbyte_read_oshwm                                            ; 3a8d: a9 83       ..  :9a8d[1]
     jsr osbyte                                                        ; 3a8f: 20 f4 ff     .. :9a8f[1]   ; Read top of operating system RAM address (OSHWM)
-    sty l10cf                                                         ; 3a92: 8c cf 10    ... :9a92[1]
+    sty l10cf                                                         ; 3a92: 8c cf 10    ... :9a92[1]   ; X and Y contain the address of OSHWM (low, high)
     lda #osbyte_read_himem                                            ; 3a95: a9 84       ..  :9a95[1]
     jsr osbyte                                                        ; 3a97: 20 f4 ff     .. :9a97[1]   ; Read top of user memory (HIMEM)
-    tya                                                               ; 3a9a: 98          .   :9a9a[1]
+    tya                                                               ; 3a9a: 98          .   :9a9a[1]   ; X and Y contain the address of HIMEM (low, high)
     sec                                                               ; 3a9b: 38          8   :9a9b[1]
     sbc l10cf                                                         ; 3a9c: ed cf 10    ... :9a9c[1]
     sta l10d0                                                         ; 3a9f: 8d d0 10    ... :9a9f[1]
@@ -4920,7 +4938,7 @@ loop_c9b50
 sub_c9b51
     jsr sub_c83e3                                                     ; 3b51: 20 e3 83     .. :9b51[1]
     lda #osbyte_close_spool_exec                                      ; 3b54: a9 77       .w  :9b54[1]
-    jmp osbyte                                                        ; 3b56: 4c f4 ff    L.. :9b56[1]   ; Close any *SPOOL / *EXEC files
+    jmp osbyte                                                        ; 3b56: 4c f4 ff    L.. :9b56[1]   ; Close any *SPOOL and *EXEC files
 
 sub_c9b59
     lda #$20 ; ' '                                                    ; 3b59: a9 20       .   :9b59[1]
@@ -5404,7 +5422,7 @@ c9e41
 osbyte_write_0
     ldx #0                                                            ; 3e4d: a2 00       ..  :9e4d[1]   ; X=File handle
     ldy #0                                                            ; 3e4f: a0 00       ..  :9e4f[1]
-    jmp osbyte                                                        ; 3e51: 4c f4 ff    L.. :9e51[1]   ; Write *SPOOL file handle, value 0
+    jmp osbyte                                                        ; 3e51: 4c f4 ff    L.. :9e51[1]   ; Write *SPOOL file handle, value X=0
 
 ; $3e54 referenced 2 times by $9e38, $9e46
 sub_c9e54
@@ -7945,7 +7963,7 @@ caed7
     beq just_rts                                                      ; 4edf: f0 56       .V  :aedf[1]
     ldx #6                                                            ; 4ee1: a2 06       ..  :aee1[1]
     lda #osbyte_explode_chars                                         ; 4ee3: a9 14       ..  :aee3[1]
-    jsr osbyte                                                        ; 4ee5: 20 f4 ff     .. :aee5[1]   ; Explode character definition RAM (taking six extra pages of memory), for all characters 32-255
+    jsr osbyte                                                        ; 4ee5: 20 f4 ff     .. :aee5[1]   ; Explode character definition RAM (six extra pages), can redefine all characters 32-255 (X=6)
 ; $4ee8 referenced 2 times by $aeeb, $aef5
 tube_banner_loop
     bit tube_host_r1_status                                           ; 4ee8: 2c e0 fe    ,.. :aee8[1]
@@ -8646,7 +8664,7 @@ cb3ba
 cb3de
     lda #osbyte_read_himem                                            ; 53de: a9 84       ..  :b3de[1]
     jsr osbyte                                                        ; 53e0: 20 f4 ff     .. :b3e0[1]   ; Read top of user memory (HIMEM)
-    tya                                                               ; 53e3: 98          .   :b3e3[1]
+    tya                                                               ; 53e3: 98          .   :b3e3[1]   ; X and Y contain the address of HIMEM (low, high)
     pha                                                               ; 53e4: 48          H   :b3e4[1]
     txa                                                               ; 53e5: 8a          .   :b3e5[1]
     pha                                                               ; 53e6: 48          H   :b3e6[1]
@@ -10489,7 +10507,7 @@ sub_cbe91
     ldx #0                                                            ; 5e93: a2 00       ..  :be93[1]
     ldy #$ff                                                          ; 5e95: a0 ff       ..  :be95[1]
     jsr osbyte                                                        ; 5e97: 20 f4 ff     .. :be97[1]   ; Read Tube present flag
-    cpx #$ff                                                          ; 5e9a: e0 ff       ..  :be9a[1]
+    cpx #$ff                                                          ; 5e9a: e0 ff       ..  :be9a[1]   ; X=value of Tube present flag
     rts                                                               ; 5e9c: 60          `   :be9c[1]
 
 ; $5e9d referenced 2 times by $b338, $bcf1
@@ -10535,7 +10553,7 @@ service_handler
     lda #osbyte_issue_service_request                                 ; 5ecf: a9 8f       ..  :becf[1]
     ldx #service_check_swr_presence                                   ; 5ed1: a2 2b       .+  :bed1[1]
     ldy romsel_copy                                                   ; 5ed3: a4 f4       ..  :bed3[1]
-    jsr osbyte                                                        ; 5ed5: 20 f4 ff     .. :bed5[1]   ; Issue paged ROM service call, Reason 43 - Report memory size
+    jsr osbyte                                                        ; 5ed5: 20 f4 ff     .. :bed5[1]   ; Issue paged ROM service call, Reason X=43 - Report memory size
     pla                                                               ; 5ed8: 68          h   :bed8[1]
     tay                                                               ; 5ed9: a8          .   :bed9[1]
     ldx romsel_copy                                                   ; 5eda: a6 f4       ..  :beda[1]
@@ -10557,9 +10575,9 @@ cbee8
     beq general_service_handler_indirect                              ; 5eec: f0 ef       ..  :beec[1]
 ; $5eee referenced 1 time by $bee6
 cbeee
-    lda #$72 ; 'r'                                                    ; 5eee: a9 72       .r  :beee[1]
+    lda #osbyte_write_shadow_memory_use                               ; 5eee: a9 72       .r  :beee[1]
     ldx #0                                                            ; 5ef0: a2 00       ..  :bef0[1]
-    jsr osbyte                                                        ; 5ef2: 20 f4 ff     .. :bef2[1]
+    jsr osbyte                                                        ; 5ef2: 20 f4 ff     .. :bef2[1]   ; B+ and Master only: Select shadow memory always used (X=0)
     jsr osbyte                                                        ; 5ef5: 20 f4 ff     .. :bef5[1]
     bvs cbee8                                                         ; 5ef8: 70 ee       p.  :bef8[1]
     lda #$ea                                                          ; 5efa: a9 ea       ..  :befa[1]
@@ -14990,6 +15008,9 @@ pydis_end
 }
 !if (osbyte_write_keys_pressed) != $78 {
     !error "Assertion failed: osbyte_write_keys_pressed == $78"
+}
+!if (osbyte_write_shadow_memory_use) != $72 {
+    !error "Assertion failed: osbyte_write_shadow_memory_use == $72"
 }
 !if (osfile_load) != $ff {
     !error "Assertion failed: osfile_load == $ff"

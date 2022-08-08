@@ -777,13 +777,6 @@ os_variable_names = {
     0xff: "start-up option byte",
 }
 
-def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False,):
-    #if runtime_addr not in banned_auto_comment_set:
-    if True:
-        if show_blank:
-            blank()
-        comment(runtime_addr, text, inline=inline, indent=indent)
-
 def enum_lookup(reg_addr, e):
     if reg_addr is None:
         return
@@ -912,7 +905,6 @@ def osbyte_hook(runtime_addr, state, subroutine):
             else:
                 com = "Read OS version number into X"
                 if x_runtime_next_use:
-                    blank(x_runtime_next_use)
                     auto_comment(x_runtime_next_use,
 """X is the OS version number:
     X=0, OS 1.00 (Early BBC B or Electron OS 1.00)
@@ -921,7 +913,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
     X=3, OS 3.2/3.5 (Master 128)
     X=4, OS 4.0 (Master Econet Terminal)
     X=5, OS 5.0 (Master Compact)""", indent=1)
-        auto_comment(runtime_addr, com, inline=True)
+        auto_comment(runtime_addr, com, inline=True, show_blank=True)
 
     elif action == 0x01:
         com = "Set user flag byte to "
@@ -986,13 +978,12 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
         # Post exit:
         if x_runtime_next_use:
-            blank(x_runtime_next_use)
             auto_comment(x_runtime_next_use,
 """X is the previous status of the cursor editing keys:
     X=0, cursor editing was enabled (the default setting)
     X=1, cursor editing was disabled, edit keys gave ASCII codes (135 to 139)
     X=2, cursor editing was disabled, edit keys acted as soft keys (11 to 15)
-    X=3, cursor editing keys and COPY simulated a joystick (Master Compact only)""", indent=1)
+    X=3, cursor editing keys and COPY simulated a joystick (Master Compact only)""", indent=1, show_blank=True)
 
     elif action == 0x05:
         com = "Select printer destination"
@@ -1016,7 +1007,6 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
         # Post exit:
         if x_runtime_next_use:
-            blank(x_runtime_next_use)
             auto_comment(x_runtime_next_use,
 """X is the previous printer destination:
     X=0, printer sink (printer output ignored)
@@ -1024,7 +1014,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
     X=2, RS423 output (will act as sink if RS423 is enabled using OSBYTE 3)
     X=3, user printer routine
     X=4, net printer
-    X=5+, user printer routine""", indent=1)
+    X=5+, user printer routine""", indent=1, show_blank=True)
 
     elif action == 0x06:
         com = "Set printer ignore character to "
@@ -1057,12 +1047,11 @@ def osbyte_hook(runtime_addr, state, subroutine):
         # Post exit:
         if x_runtime_next_use or y_runtime_next_use:
             next_use = min(z for z in [x_runtime_next_use, y_runtime_next_use] if z is not None)
-            blank(next_use)
             auto_comment(next_use, """X and Y contain the previous serial ULA register contents (not Electron).
 Bits 0-2 = transmit rate
 Bits 3-5 = receive rate
 Bit 6    = RS423 in control (if set) / Tape in control (if clear)
-Bit 7    = cassette motor""", indent=1)
+Bit 7    = cassette motor""", indent=1, show_blank=True)
 
     elif action == 0x09:
         com = "Set 'mark' duration of flashing colours to "
@@ -1351,7 +1340,6 @@ Bit 7    = cassette motor""", indent=1)
 
         # Post exit:
         if x_runtime_next_use:
-            blank(x_runtime_next_use)
             auto_comment(x_runtime_next_use, """X is VDU status byte:
 bit 0=printer output enabled by a VDU 2
 bit 1=scrolling disabled (cursor editing)
@@ -1360,7 +1348,7 @@ bit 3=software scrolling selected (text window)
 bit 4=shadow mode selected
 bit 5=text at graphics cursor (VDU 5)
 bit 6=two cursor editing mode
-bit 7=screen disabled via VDU 21""", indent=1)
+bit 7=screen disabled via VDU 21""", indent=1, show_blank=True)
 
     elif action == 0x76:
         auto_comment(runtime_addr, "Reflect keyboard status in keyboard LEDs", inline=True)
@@ -1515,7 +1503,6 @@ bit 7=screen disabled via VDU 21""", indent=1)
         # Post exit:
         if x_runtime_next_use:
             if is_read_machine_type:
-                blank(x_runtime_next_use)
                 auto_comment(x_runtime_next_use, """X is the machine type:
     X=0, BBC microcomputer OS 0.10
     X=1, Acorn Electron OS 1.00
@@ -1525,7 +1512,7 @@ bit 7=screen disabled via VDU 21""", indent=1)
     X=251, BBC B+ OS 2.00
     X=250, Acorn Business Computer OS 1.00 or 2.00
     X=247, Master Econet Terminal OS 4.00
-    X=245, Master Compact OS 5.10""", indent=1)
+    X=245, Master Compact OS 5.10""", indent=1, show_blank=True)
             elif is_read_ascii_key:
                 auto_comment(x_runtime_next_use, "X is the ASCII value of the key pressed (assuming Y=0)")
 
@@ -1653,6 +1640,8 @@ bit 7=screen disabled via VDU 21""", indent=1)
     elif action == 0x8c:
         com = "Select TAPE filing system"
         if x_addr is not None:
+            if x_runtime_addr is not None:
+                decimal(x_runtime_addr)
             baud = memory_binary[x_addr]
             if baud == 0:
                 com += " at default 1200 baud (X=0)"
@@ -1984,6 +1973,7 @@ bit 7=screen disabled via VDU 21""", indent=1)
                 next_next_name = os_variable_names[action + 2]
 
             # Exceptions
+            skip_normal_comment = False
             if (action == 0xc6) or (action == 0xc7):
                 if x_runtime_adjust_addr is not None:
                     auto_comment(x_runtime_adjust_addr, "X=File handle", inline=True)
@@ -2005,14 +1995,18 @@ bit 7=screen disabled via VDU 21""", indent=1)
                     else:
                         result = "Disable keyboard (for Econet)"
                 auto_comment(runtime_addr, result, inline=True)
+                skip_normal_comment = True
             elif action == 0xe5:
                 if write_value == 0:
                     name = "Set ESCAPE key status to normal action"
                 else:
-                    name = "Set ESCAPE key status to produce ASCII code " + str(write_value)
+                    name = "Set ESCAPE key to produce ASCII code " + str(write_value)
+                auto_comment(runtime_addr, name, inline=True)
+                skip_normal_comment = True
 
-            com = format_osbyte_rw(x_addr, y_addr, name)
-            auto_comment(runtime_addr, com, inline=True)
+            if not skip_normal_comment:
+                com = format_osbyte_rw(x_addr, y_addr, name)
+                auto_comment(runtime_addr, com, inline=True)
 
             # Post exit:
             # Exit parameters specify low byte for a corresponding high byte.
@@ -2028,6 +2022,27 @@ bit 7=screen disabled via VDU 21""", indent=1)
             if y_runtime_next_use:
                 if next_name:
                     auto_comment(y_runtime_next_use, "Y=value of " + next_name, inline=True)
+
+            # Exceptions
+            if action == 0xff:
+                if x_runtime_next_use:
+                    auto_comment(x_runtime_next_use, """X is the startup option byte:
+bits 0 to 2     screen MODE selected following reset
+bit 3           if clear reverse action of SHIFT+BREAK
+bits 4 and 5    used to set disc drive timings (see below)
+bit 6           not used by OS (reserved for future applications)
+bit 7           if clear select NFS, if set select DFS
+
+Disc drive timing links:
+|                           |                8271                 |          1770           |          1772           |
+|---------------------------|-------------------------------------|-------------------------|-------------------------|
+| b5 | b4 | link 3 | link 4 | step time | settle time | head load | step time | settle time | step time | settle time |
+|----|----|--------|--------|-----------|-------------|-----------|-----------|-------------|-----------|-------------|
+|  0 | 0  | 1      | 1      | 4         | 16          | 0         | 6         | 30          | 6         | 15          |
+|  0 | 1  | 1      | 0      | 6         | 16          | 0         | 12        | 30          | 12        | 15          |
+|  1 | 0  | 0      | 1      | 6         | 50          | 32        | 20        | 30          | 2         | 15          |
+|  1 | 1  | 0      | 0      | 24        | 20          | 64        | 30        | 30          | 3         | 15          |
+|---------------------------------------------------------------------------------------------------------------------|""", indent=1, show_blank=True, word_wrap=False)
 
 def oscli_hook(runtime_addr, state, subroutine):
     x_addr = state.get_previous_load_imm('x')

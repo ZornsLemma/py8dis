@@ -322,7 +322,7 @@ c80cc
     tax                                                               ; 80d0: aa          .              ; X=ROM number
     lda #osbyte_enter_language                                        ; 80d1: a9 8e       ..
     ldy #0                                                            ; 80d3: a0 00       ..
-    jmp osbyte                                                        ; 80d5: 4c f4 ff    L..            ; Enter language ROM
+    jmp osbyte                                                        ; 80d5: 4c f4 ff    L..            ; Enter language ROM X
 
 ; $80d8 referenced 3 times by $8067, $808a, $80b1
 sub_c80d8
@@ -355,7 +355,7 @@ language_handler
 c80ff
     lda #osbyte_read_himem                                            ; 80ff: a9 84       ..
     jsr osbyte                                                        ; 8101: 20 f4 ff     ..            ; Read top of user memory (HIMEM)
-    stx l0006                                                         ; 8104: 86 06       ..
+    stx l0006                                                         ; 8104: 86 06       ..             ; X and Y contain the address of HIMEM (low, high)
     sty l0007                                                         ; 8106: 84 07       ..
     dec                                                               ; 8108: 3a          :
     jsr osbyte                                                        ; 8109: 20 f4 ff     ..
@@ -3956,10 +3956,10 @@ sub_c982e
     lda l0005                                                         ; 9843: a5 05       ..
     cmp l0007                                                         ; 9845: c5 07       ..
     bne c9808                                                         ; 9847: d0 bf       ..
-    ldx l002a                                                         ; 9849: a6 2a       .*
+    ldx l002a                                                         ; 9849: a6 2a       .*             ; X=MODE number
     lda #osbyte_read_himem_for_mode                                   ; 984b: a9 85       ..
     jsr osbyte                                                        ; 984d: 20 f4 ff     ..            ; Read top of user memory for a given screen mode X
-    cpx l0002                                                         ; 9850: e4 02       ..
+    cpx l0002                                                         ; 9850: e4 02       ..             ; X and Y contain the address (low, high)
     tya                                                               ; 9852: 98          .
     sbc l0003                                                         ; 9853: e5 03       ..
     bcc c9808                                                         ; 9855: 90 b1       ..
@@ -7428,8 +7428,8 @@ sub_cab01
 ; $ab14 referenced 1 time by $aafb
 sub_cab14
     lda #osbyte_read_text_cursor_pos                                  ; ab14: a9 86       ..
-    jsr osbyte                                                        ; ab16: 20 f4 ff     ..            ; Read input cursor position (X=POS and Y=VPOS)
-    tya                                                               ; ab19: 98          .
+    jsr osbyte                                                        ; ab16: 20 f4 ff     ..            ; Read input cursor position (Sets X=POS and Y=VPOS)
+    tya                                                               ; ab19: 98          .              ; Y is the vertical text position ('VPOS')
 ; $ab1a referenced 2 times by $ab35, $ab52
 cab1a
     jmp cae60                                                         ; ab1a: 4c 60 ae    L`.
@@ -7608,8 +7608,8 @@ sub_cac1f
     jsr sub_cba7a                                                     ; ac1f: 20 7a ba     z.
     tax                                                               ; ac22: aa          .              ; X=File handle
     lda #osbyte_check_eof                                             ; ac23: a9 7f       ..
-    jsr osbyte                                                        ; ac25: 20 f4 ff     ..            ; Check for EOF, set X non-zero if EOF
-    txa                                                               ; ac28: 8a          .
+    jsr osbyte                                                        ; ac25: 20 f4 ff     ..            ; Check for EOF in file handle X
+    txa                                                               ; ac28: 8a          .              ; X is non-zero if reached end of file, zero otherwise
     beq cac2d                                                         ; ac29: f0 02       ..
 ; $ac2b referenced 6 times by $ac0a, $ac16, $ac44, $ac4f, $ac7b, $b3dd
 cac2b
@@ -10767,8 +10767,8 @@ sub_cbe81
 ; $be8b referenced 1 time by $9834
 sub_cbe8b
     lda #osbyte_read_high_order_address                               ; be8b: a9 82       ..
-    jsr osbyte                                                        ; be8d: 20 f4 ff     ..            ; Read machine high order address
-    stx l003b                                                         ; be90: 86 3b       .;
+    jsr osbyte                                                        ; be8d: 20 f4 ff     ..            ; Read the filing system 'machine high order address'
+    stx l003b                                                         ; be90: 86 3b       .;             ; X and Y contain the machine high order address (low, high)
     sty l003c                                                         ; be92: 84 3c       .<
     rts                                                               ; be94: 60          `
 
@@ -10920,7 +10920,7 @@ sub_cbf66
     ldx #0                                                            ; bf68: a2 00       ..
     ldy #$ff                                                          ; bf6a: a0 ff       ..
     jsr osbyte                                                        ; bf6c: 20 f4 ff     ..            ; Read Tube present flag
-    txa                                                               ; bf6f: 8a          .
+    txa                                                               ; bf6f: 8a          .              ; X=value of Tube present flag
     rts                                                               ; bf70: 60          `
 
 ; $bf71 referenced 1 time by $bbed

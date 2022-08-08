@@ -1090,7 +1090,15 @@ l89a6 = c89a4+2
     pha                                                               ; 8a1b: 48          H
     lda #osbyte_read_os_version                                       ; 8a1c: a9 00       ..
     ldx #1                                                            ; 8a1e: a2 01       ..
+
     jsr osbyte                                                        ; 8a20: 20 f4 ff     ..            ; Read OS version number into X
+    ; X is the OS version number:
+    ;     X=0, OS 1.00 (Early BBC B or Electron OS 1.00)
+    ;     X=1, OS 1.20 or American OS
+    ;     X=2, OS 2.00 (BBC B+)
+    ;     X=3, OS 3.2/3.5 (Master 128)
+    ;     X=4, OS 4.0 (Master Econet Terminal)
+    ;     X=5, OS 5.0 (Master Compact)
     cpx #1                                                            ; 8a23: e0 01       ..
     beq c8a38                                                         ; 8a25: f0 11       ..
     cpx #2                                                            ; 8a27: e0 02       ..
@@ -1571,8 +1579,8 @@ l89a6 = c89a4+2
 
 .sub_c8cca
     lda #osbyte_scan_keyboard_from_16                                 ; 8cca: a9 7a       .z
-    jsr osbyte                                                        ; 8ccc: 20 f4 ff     ..            ; Keyboard scan from key 16
-    txa                                                               ; 8ccf: 8a          .
+    jsr osbyte                                                        ; 8ccc: 20 f4 ff     ..            ; Keyboard scan starting from key 16
+    txa                                                               ; 8ccf: 8a          .              ; X is key number if key is pressed, or &ff otherwise
     bmi c8ce0                                                         ; 8cd0: 30 0e       0.
     cmp #&19                                                          ; 8cd2: c9 19       ..
     beq c8cda                                                         ; 8cd4: f0 04       ..
@@ -1580,9 +1588,9 @@ l89a6 = c89a4+2
     bne c8c70                                                         ; 8cd8: d0 96       ..
 ; &8cda referenced 1 time by &8cd4
 .c8cda
-    tay                                                               ; 8cda: a8          .
+    tay                                                               ; 8cda: a8          .              ; Y=key
     lda #osbyte_write_keys_pressed                                    ; 8cdb: a9 78       .x
-    jsr osbyte                                                        ; 8cdd: 20 f4 ff     ..            ; Write current keys pressed
+    jsr osbyte                                                        ; 8cdd: 20 f4 ff     ..            ; Write current keys pressed (X and Y)
 ; &8ce0 referenced 1 time by &8cd0
 .c8ce0
     jsr sub_c8b1a                                                     ; 8ce0: 20 1a 8b     ..
@@ -1613,7 +1621,7 @@ l89a6 = c89a4+2
 ; &8d0a referenced 1 time by &8d03
 .c8d0a
     lda #osbyte_issue_service_request                                 ; 8d0a: a9 8f       ..
-    jmp osbyte                                                        ; 8d0c: 4c f4 ff    L..            ; Issue paged ROM service call, Reason 15 - Vectors claimed
+    jmp osbyte                                                        ; 8d0c: 4c f4 ff    L..            ; Issue paged ROM service call, Reason X=15 - Vectors claimed
 
     equs "i .boot"                                                    ; 8d0f: 69 20 2e... i .
     equb &0d                                                          ; 8d16: 0d          .
@@ -1667,7 +1675,7 @@ l89a6 = c89a4+2
     pha                                                               ; 8d7a: 48          H
     lda #osbyte_close_spool_exec                                      ; 8d7b: a9 77       .w
     sta l0e07                                                         ; 8d7d: 8d 07 0e    ...
-    jsr osbyte                                                        ; 8d80: 20 f4 ff     ..            ; Close any *SPOOL / *EXEC files
+    jsr osbyte                                                        ; 8d80: 20 f4 ff     ..            ; Close any *SPOOL and *EXEC files
     ldy #0                                                            ; 8d83: a0 00       ..
     sty l00b4                                                         ; 8d85: 84 b4       ..
     jsr sub_cb799                                                     ; 8d87: 20 99 b7     ..
@@ -1885,7 +1893,7 @@ l8e54 = sub_c8e52+2
     lda #osbyte_issue_service_request                                 ; 8ed6: a9 8f       ..
     ldx #service_claim_absolute_workspace                             ; 8ed8: a2 01       ..
     ldy #&0e                                                          ; 8eda: a0 0e       ..
-    jsr osbyte                                                        ; 8edc: 20 f4 ff     ..            ; Issue paged ROM service call, Reason 1 - Absolute public workspace claim
+    jsr osbyte                                                        ; 8edc: 20 f4 ff     ..            ; Issue paged ROM service call, Reason X=1 - Absolute public workspace claim
     jsr clamp_absolute_workspace_and_save                             ; 8edf: 20 ac 8e     ..
     lda l028d                                                         ; 8ee2: ad 8d 02    ...
     beq c8f40                                                         ; 8ee5: f0 59       .Y
@@ -2008,7 +2016,7 @@ l8f48 = loop_c8f46+2
     ldy #0                                                            ; 8f9e: a0 00       ..
     jsr sub_cb799                                                     ; 8fa0: 20 99 b7     ..
     lda #osbyte_close_spool_exec                                      ; 8fa3: a9 77       .w
-    jsr osbyte                                                        ; 8fa5: 20 f4 ff     ..            ; Close any *SPOOL / *EXEC files
+    jsr osbyte                                                        ; 8fa5: 20 f4 ff     ..            ; Close any *SPOOL and *EXEC files
     jsr c8f8c                                                         ; 8fa8: 20 8c 8f     ..
     ldy #&76 ; 'v'                                                    ; 8fab: a0 76       .v
     lda #0                                                            ; 8fad: a9 00       ..
@@ -2695,7 +2703,7 @@ l8f48 = loop_c8f46+2
     ldy #0                                                            ; 949e: a0 00       ..
     jsr sub_cb799                                                     ; 94a0: 20 99 b7     ..
     lda #osbyte_close_spool_exec                                      ; 94a3: a9 77       .w
-    jsr osbyte                                                        ; 94a5: 20 f4 ff     ..            ; Close any *SPOOL / *EXEC files
+    jsr osbyte                                                        ; 94a5: 20 f4 ff     ..            ; Close any *SPOOL and *EXEC files
     jsr sub_cb559                                                     ; 94a8: 20 59 b5     Y.
     ldy #&17                                                          ; 94ab: a0 17       ..
 ; &94ad referenced 15 times by &8e24, &9423, &9446, &9459, &9b5d, &9de4, &a1d6, &a1fe, &ad41, &adb8, &adf6, &ae65, &b381, &b418, &b917
@@ -2899,7 +2907,7 @@ l8f48 = loop_c8f46+2
     ldx #0                                                            ; 95d3: a2 00       ..
     jsr cacdd                                                         ; 95d5: 20 dd ac     ..
     lda #osbyte_insert_input_buffer                                   ; 95d8: a9 99       ..
-    jmp osbyte                                                        ; 95da: 4c f4 ff    L..            ; Insert character into input buffer
+    jmp osbyte                                                        ; 95da: 4c f4 ff    L..            ; Insert character Y into input buffer X
 
 ; &95dd referenced 5 times by &94f4, &99b2, &9aea, &abd1, &ac73
 .sub_c95dd
@@ -4760,8 +4768,8 @@ error_template_minus_1 = sub_c96b3+1
     bne ca3e3                                                         ; a3c2: d0 1f       ..
     lda #osbyte_scan_keyboard                                         ; a3c4: a9 79       .y
     ldx #&81                                                          ; a3c6: a2 81       ..
-    jsr osbyte                                                        ; a3c8: 20 f4 ff     ..            ; Keyboard scan for 'CTRL' key
-    txa                                                               ; a3cb: 8a          .
+    jsr osbyte                                                        ; a3c8: 20 f4 ff     ..            ; Test for 'CTRL' key pressed (X=129)
+    txa                                                               ; a3cb: 8a          .              ; X has top bit set if 'CTRL' pressed
     bpl ca3e3                                                         ; a3cc: 10 15       ..
 ; &a3ce referenced 1 time by &a3e6
 .loop_ca3ce
@@ -6620,12 +6628,12 @@ lb13f = sub_cb13e+1
     bne cb39c                                                         ; b387: d0 13       ..
     lda #osbyte_flush_buffer_class                                    ; b389: a9 0f       ..
     ldx #1                                                            ; b38b: a2 01       ..
-    jsr osbyte                                                        ; b38d: 20 f4 ff     ..            ; Flush input buffers
+    jsr osbyte                                                        ; b38d: 20 f4 ff     ..            ; Flush input buffers (X non-zero)
     lda #osbyte_scan_keyboard_from_16                                 ; b390: a9 7a       .z
-    jsr osbyte                                                        ; b392: 20 f4 ff     ..            ; Keyboard scan from key 16
-    ldy #0                                                            ; b395: a0 00       ..
+    jsr osbyte                                                        ; b392: 20 f4 ff     ..            ; Keyboard scan starting from key 16
+    ldy #0                                                            ; b395: a0 00       ..             ; Y=key
     lda #osbyte_write_keys_pressed                                    ; b397: a9 78       .x
-    jmp osbyte                                                        ; b399: 4c f4 ff    L..            ; Write current keys pressed
+    jmp osbyte                                                        ; b399: 4c f4 ff    L..            ; Write current keys pressed (X and Y)
 
 ; &b39c referenced 1 time by &b387
 .cb39c
@@ -6735,7 +6743,7 @@ lb13f = sub_cb13e+1
 
     lda #osbyte_flush_buffer_class                                    ; b439: a9 0f       ..
     ldx #1                                                            ; b43b: a2 01       ..
-    jsr osbyte                                                        ; b43d: 20 f4 ff     ..            ; Flush input buffers
+    jsr osbyte                                                        ; b43d: 20 f4 ff     ..            ; Flush input buffers (X non-zero)
     jsr osrdch                                                        ; b440: 20 e0 ff     ..
     bcc cb448                                                         ; b443: 90 03       ..
     jmp c9576                                                         ; b445: 4c 76 95    Lv.
@@ -8037,7 +8045,7 @@ lb487 = sub_cb485+2
     beq cbec2                                                         ; be6a: f0 56       .V
     ldx #6                                                            ; be6c: a2 06       ..
     lda #osbyte_explode_chars                                         ; be6e: a9 14       ..
-    jsr osbyte                                                        ; be70: 20 f4 ff     ..            ; Explode character definition RAM (taking six extra pages of memory), for all characters 32-255
+    jsr osbyte                                                        ; be70: 20 f4 ff     ..            ; Explode character definition RAM (six extra pages), can redefine all characters 32-255 (X=6)
 ; &be73 referenced 2 times by &be76, &be80
 .cbe73
     bit tube_host_r1_status                                           ; be73: 2c e0 fe    ,..

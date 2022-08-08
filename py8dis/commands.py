@@ -12,8 +12,8 @@ set_label_maker_hook()  Sets a user defined 'hook' function that can make label 
 
 constant()              Define a name for a constant value.
 
-comment()               Add a comment. Word wraps.
-formatted_comment()     Add a comment, as is.
+comment()               Add a comment, with word_wrapping by default.
+formatted_comment()     Add a comment, with no word wrapping.
 
 subroutine()            Define a subroutine.
 
@@ -121,6 +121,9 @@ def load(binary_addr, filename, cpu_name, md5sum=None):
             utils.die("Unknown CPU or missing CPU parameter '%s' specified for load()." % (cpu_name))
 
     memorymanager.load(filename, binary_addr, md5sum)
+
+    # Clear the no-automatic comments, for lack of a better place to clear them
+    trace.no_auto_comment_set = set()
 
 def move(dest, src, length):
     """Indicates that a block of memory is copied at runtime.
@@ -252,7 +255,7 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
     if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
         # Format a comment for the subroutine header
         if config.get_subroutine_header() is not None:
-            formatted_comment(runtime_addr, config.get_subroutine_header())
+            auto_comment(runtime_addr, config.get_subroutine_header(), word_wrap=False)
         com = "";
         middle = ""
         if title is not None and len(title)>0:
@@ -272,26 +275,36 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
         if middle.endswith("\n"):
             middle = middle[:-1]
         if len(middle)>0:
-            comment(runtime_addr, middle)
+            auto_comment(runtime_addr, middle)
             if config.get_subroutine_footer() is not None:
-                formatted_comment(runtime_addr, config.get_subroutine_footer())
+                auto_comment(runtime_addr, config.get_subroutine_footer(), word_wrap=False)
     trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
-def comment(runtime_addr, text, inline=False, indent=0):
+def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
     given address in the output. The comment can be inlined (added
     to the end of the line), or standalone (a separate line of output).
-    The comment is automatically word wrapped.
+    The comment is word wrapped by default.
     """
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=True, indent=indent)
+    disassembly.comment(runtime_addr, text, inline, word_wrap=word_wrap, indent=indent)
 
 def formatted_comment(runtime_addr, text, inline=False, indent=0):
     """Add a comment without word wrapping."""
 
     disassembly.comment(runtime_addr, text, inline, word_wrap=False, indent=indent)
+
+def no_automatic_comment(runtime_addr):
+    trace.no_auto_comment_set.add(runtime_addr)
+
+def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, word_wrap=True):
+    """For internal use only. Generates a comment if not inhibited."""
+    if not (runtime_addr in trace.no_auto_comment_set):
+        if show_blank:
+            blank(runtime_addr)
+        comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap)
 
 def annotate(runtime_addr, s, priority=None):
     """Add a raw string directly to the assembly code output at the

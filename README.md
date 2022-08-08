@@ -326,13 +326,17 @@ Define a subroutine. All parameters except the address are optional. These are u
 
 The `on_entry` and `on_exit` optional parameters are dictionaries that specify a comment for each register as required. e.g. `on_entry={ 'a': "number to print" }`. The `is_entry_point` parameter adds the address as an entry point for code. The `hook` parameter is a callback to allow for the decoration of the calling code.
 
-:pencil:`comment(addr, text, inline=False, indent=0)`
+:pencil:`no_automatic_comment(addr)`
 
-Insert `text` as a comment at address `addr` in the disassembly on it's own separate line. If `inline` is true, then add it to the end of the current line instead. If not inline, the number of indents is applied and the comment is automatically word wrapped.
+Disables the automatic commentary at the given address, to allow the user to write their own.
+
+:pencil:`comment(addr, text, inline=False, indent=0, word_wrap=True)`
+
+Insert `text` as a comment at address `addr` in the disassembly on it's own separate line. If `inline` is true, then add it to the end of the current line instead. If not inline, the number of indents is applied and the comment is word wrapped by default.
 
 :pencil:`formatted_comment(addr, text, inline=False, indent=0)`
 
-As `comment` but the text is assumed to be pre-formatted and is not word wrapped.
+As `comment` but the text is assumed to be pre-formatted and is therefore not word wrapped. Equivalent to `comment()` with `word_wrap=False`.
 
 :pencil:`blank(addr, priority=None)`
 
