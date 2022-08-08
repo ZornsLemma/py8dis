@@ -3969,7 +3969,7 @@ osbyte                  = &fff4
     ldx #<osword0block                                                ; 2920: a2 9d       ..
     ldy #>osword0block                                                ; 2922: a0 29       .)
     lda #osword_read_line                                             ; 2924: a9 00       ..
-    jsr osword                                                        ; 2926: 20 f1 ff     ..            ; Read line from input stream
+    jsr osword                                                        ; 2926: 20 f1 ff     ..            ; Read line from input stream (exits with C=1 if ESCAPE pressed)
     ldx temp1                                                         ; 2929: a6 88       ..
     jsr gethiscoreaddr                                                ; 292b: 20 7c 27     |'
     ldy #8                                                            ; 292e: a0 08       ..
@@ -4021,10 +4021,10 @@ osbyte                  = &fff4
     equs "er "                                                        ; 299a: 65 72 20    er
 .string_enteryourname_end
 .osword0block
-    equw hiscorenamebuffer                                            ; 299d: a2 29       .)
-    equb hiscorenamebuffer_end - hiscorenamebuffer - 1                ; 299f: 08          .
-    equb &20                                                          ; 29a0: 20
-    equb &7f                                                          ; 29a1: 7f          .
+    equw hiscorenamebuffer                                            ; 299d: a2 29       .)             ; Buffer address for input (2 bytes)
+    equb hiscorenamebuffer_end - hiscorenamebuffer - 1                ; 299f: 08          .              ; Maximum line length
+    equb &20                                                          ; 29a0: 20                         ; Min. acceptable character value
+    equb &7f                                                          ; 29a1: 7f          .              ; Max. acceptable character value
 .hiscorenamebuffer
     equb 0, 0, 0, 0, 0, 0, 0, 0, 0                                    ; 29a2: 00 00 00... ...
 
@@ -4946,11 +4946,11 @@ osbyte                  = &fff4
 ; ----------------------------------------------------------------------------------
 .deathtune_end
 .envelope1
-    equb &01, &01, &00, &00, &00, &00, &00, &00, &7e, &ce, &00, &00, &64, &00; 2fd1: 01 01 00... ...
+    equb &01, &01, &00, &00, &00, &00, &00, &00, &7e, &ce, &00, &00, &64, &00; 2fd1: 01 01 00... ...            ; Envelope Number (1-16) and rest of definition (14 bytes)
 .envelope2
-    equb &02, &01, &00, &00, &00, &00, &00, &00, &7e, &fe, &00, &fb, &7e, &64; 2fdf: 02 01 00... ...
+    equb &02, &01, &00, &00, &00, &00, &00, &00, &7e, &fe, &00, &fb, &7e, &64; 2fdf: 02 01 00... ...            ; Envelope Number (1-16) and rest of definition (14 bytes)
 .envelope3
-    equb &03, &01, &00, &00, &00, &00, &00, &00, &32, &00, &00, &e7, &64, &00; 2fed: 03 01 00... ...
+    equb &03, &01, &00, &00, &00, &00, &00, &00, &32, &00, &00, &e7, &64, &00; 2fed: 03 01 00... ...            ; Envelope Number (1-16) and rest of definition (14 bytes)
     equb 0, 0, 0, 0, 0                                                ; 2ffb: 00 00 00... ...
 ; ----------------------------------------------------------------------------------
 ; Show the currently defined keys on screen
@@ -5485,37 +5485,37 @@ osbyte                  = &fff4
     rts                                                               ; 3397: 60          `   :0c97[1]
 
 .blipsoundblock
-    equw &0013                                                        ; 3398: 13 00       ..  :0c98[1]
+    equw &0013                                                        ; 3398: 13 00       ..  :0c98[1]   ; Channel (2 bytes)
 .blipsoundblock_envelope
-    equw 1                                                            ; 339a: 01 00       ..  :0c9a[1]
+    equw 1                                                            ; 339a: 01 00       ..  :0c9a[1]   ; Amplitude (2 bytes)
 .blipsoundblock_pitch
-    equw 0                                                            ; 339c: 00 00       ..  :0c9c[1]
+    equw 0                                                            ; 339c: 00 00       ..  :0c9c[1]   ; Pitch (2 bytes)
 .blipsoundblock_length
-    equw 1                                                            ; 339e: 01 00       ..  :0c9e[1]
+    equw 1                                                            ; 339e: 01 00       ..  :0c9e[1]   ; Duration (2 bytes)
 .deathsoundblock
-    equw 3                                                            ; 33a0: 03 00       ..  :0ca0[1]
+    equw 3                                                            ; 33a0: 03 00       ..  :0ca0[1]   ; Channel (2 bytes)
 .deathsoundblock_envelope
-    equw 2                                                            ; 33a2: 02 00       ..  :0ca2[1]
+    equw 2                                                            ; 33a2: 02 00       ..  :0ca2[1]   ; Amplitude (2 bytes)
 .deathsoundblock_pitch
-    equw &0078                                                        ; 33a4: 78 00       x.  :0ca4[1]
+    equw &0078                                                        ; 33a4: 78 00       x.  :0ca4[1]   ; Pitch (2 bytes)
 .deathsoundblock_length
-    equw &001e                                                        ; 33a6: 1e 00       ..  :0ca6[1]
+    equw &001e                                                        ; 33a6: 1e 00       ..  :0ca6[1]   ; Duration (2 bytes)
 .eggsoundblock
-    equw &0010                                                        ; 33a8: 10 00       ..  :0ca8[1]
+    equw &0010                                                        ; 33a8: 10 00       ..  :0ca8[1]   ; Channel (2 bytes); Channel (2 bytes)
 .eggsoundblock_envelope
-    equw 3                                                            ; 33aa: 03 00       ..  :0caa[1]
+    equw 3                                                            ; 33aa: 03 00       ..  :0caa[1]   ; Amplitude (2 bytes); Amplitude (2 bytes)
 .eggsoundblock_pitch
-    equw 0                                                            ; 33ac: 00 00       ..  :0cac[1]
+    equw 0                                                            ; 33ac: 00 00       ..  :0cac[1]   ; Pitch (2 bytes); Pitch (2 bytes)
 .eggsoundblock_length
-    equw 4                                                            ; 33ae: 04 00       ..  :0cae[1]
+    equw 4                                                            ; 33ae: 04 00       ..  :0cae[1]   ; Duration (2 bytes); Duration (2 bytes)
 .bonussoundblock
-    equw &0010                                                        ; 33b0: 10 00       ..  :0cb0[1]
+    equw &0010                                                        ; 33b0: 10 00       ..  :0cb0[1]   ; Channel (2 bytes)
 .bonussoundblock_envelope
-    equw 1                                                            ; 33b2: 01 00       ..  :0cb2[1]
+    equw 1                                                            ; 33b2: 01 00       ..  :0cb2[1]   ; Amplitude (2 bytes)
 .bonussoundblock_pitch
-    equw 4                                                            ; 33b4: 04 00       ..  :0cb4[1]
+    equw 4                                                            ; 33b4: 04 00       ..  :0cb4[1]   ; Pitch (2 bytes)
 .bonussoundblock_length
-    equw 1                                                            ; 33b6: 01 00       ..  :0cb6[1]
+    equw 1                                                            ; 33b6: 01 00       ..  :0cb6[1]   ; Duration (2 bytes)
 .unused2
     equb 0, 0, 0, 0, 0, 0, 0, 0                                       ; 33b8: 00 00 00... ... :0cb8[1]
 ; ----------------------------------------------------------------------------------

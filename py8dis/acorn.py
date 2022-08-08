@@ -12,6 +12,8 @@ def xy_addr(x_addr, y_addr):
 
         classification.add_expression(x_addr, utils.LazyString("<(%s)", label))
         classification.add_expression(y_addr, utils.LazyString(">(%s)", label))
+        return (memory_binary[y_addr] << 8) | memory_binary[x_addr]
+    return None
 
 osfile_enum = {
     0x00: "osfile_save",
@@ -44,7 +46,7 @@ osword_enum = {
 }
 
 osword_descriptions = {
-    0x00: "Read line from input stream",
+    0x00: "Read line from input stream (exits with C=1 if ESCAPE pressed)",
     0x01: "Read system clock",
     0x02: "Write system clock",
     0x03: "Read interval timer",
@@ -56,10 +58,50 @@ osword_descriptions = {
     0x09: "Read pixel value",
     0x0a: "Read character definition",
     0x0b: "Read palette",
-    0x0c: "Write Palette",
+    0x0c: "Write palette",
     0x0d: "Read graphics cursor position",
     0x0e: "Read CMOS clock",
     0x0f: "Write CMOS clock",
+}
+
+osword_block_descriptions = {
+    0x00: { 0: "Buffer address for input (2 bytes)",
+            2: "Maximum line length",
+            3: "Min. acceptable character value",
+            4: "Max. acceptable character value" },
+    0x01: { 0: "Five byte clock value (low byte to high byte)"},
+    0x02: { 0: "Five byte clock value (low byte to high byte)"},
+    0x03: { 0: "Five byte timer value (low byte to high byte)"},
+    0x04: { 0: "Five byte timer value (low byte to high byte)"},
+    0x05: { 0: "Four byte I/O processor address",
+            4: "Byte read" },
+    0x06: { 0: "Four byte I/O processor address",
+            4: "Byte to write" },
+    0x07: { 0: "Channel (2 bytes)",
+            2: "Amplitude (2 bytes)",
+            4: "Pitch (2 bytes)",
+            6: "Duration (2 bytes)" },
+    0x08: { 0: "Envelope Number (1-16) and rest of definition (14 bytes)" },
+    0x09: { 0: "X coordinate (2 bytes)",
+            2: "Y coordinate (2 bytes)",
+            4: "Logical colour read" },
+    0x0a: { 0: "character number required, followed by 8 bytes of character definition" },
+    0x0b: { 0: "logical colour",
+            1: "physical colour",
+            2: "zero",
+            3: "zero",
+            4: "zero"},
+    0x0c: { 0: "logical colour",
+            1: "physical colour",
+            2: "zero",
+            3: "zero",
+            4: "zero" },
+    0x0d: { 0: "Previous graphics X coordinate (2 bytes)",
+            2: "Previous graphics Y coordinate (2 bytes)",
+            4: "Current graphics X coordinate (2 bytes)",
+            6: "Current graphics Y coordinate (2 bytes)" },
+    0x0e: {0: "read clock time format (0,1,2)" },
+    0x0f: {0: "write clock time format (8,15,24)" },
 }
 
 osbyte_enum = {
@@ -822,7 +864,7 @@ def osword_hook(runtime_addr, state, subroutine):
     x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
     enum_lookup(a_addr, osword_enum)
-    xy_addr(x_addr, y_addr)
+    block_addr = xy_addr(x_addr, y_addr)
 
     if a_addr is None:
         return
@@ -831,6 +873,24 @@ def osword_hook(runtime_addr, state, subroutine):
     if action in osword_descriptions:
         com = osword_descriptions[action]
         auto_comment(runtime_addr, com, inline=True)
+
+    # Block descriptions
+    if block_addr is not None:
+        if action in osword_block_descriptions:
+            desc_dict = osword_block_descriptions[action]
+
+            if action == 0:
+                input_buffer_addr, _ = movemanager.r2b(memorymanager.RuntimeAddr(block_addr))
+                xy_addr(input_buffer_addr, input_buffer_addr+1)
+
+            for i in desc_dict:
+                auto_comment(memorymanager.RuntimeAddr(block_addr + i), desc_dict[i], inline=True)
+
+    # Post-exit
+    if action == 0:
+        y_runtime_next_use = None if state.next_use['y'] is None else movemanager.b2r(state.next_use['y'])
+        if y_runtime_next_use:
+            auto_comment(y_runtime_next_use, "Y contains line length, including carriage return if used.", inline=True)
 
 def osbyte_rw(x_addr, y_addr):
     com = "Read/Write"

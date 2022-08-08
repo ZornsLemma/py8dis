@@ -301,10 +301,15 @@ def no_automatic_comment(runtime_addr):
 
 def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, word_wrap=True):
     """For internal use only. Generates a comment if not inhibited."""
+
     if not (runtime_addr in trace.no_auto_comment_set):
-        if show_blank:
-            blank(runtime_addr)
-        comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap)
+        # Make sure we are within the binary
+        binary_addr, _ = movemanager.r2b(runtime_addr)
+        if binary_addr:
+            if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
+                if show_blank:
+                    blank(runtime_addr)
+                comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap)
 
 def annotate(runtime_addr, s, priority=None):
     """Add a raw string directly to the assembly code output at the

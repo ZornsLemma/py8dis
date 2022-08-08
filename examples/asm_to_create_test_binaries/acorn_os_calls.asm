@@ -4694,4 +4694,157 @@ start
     ldy #123
     jsr osbyte
 
+    ; ***** OSWORD 0 *****
+    lda #0
+    ldx #<osword0block
+    ldy #>osword0block
+    jsr osword
+
+    ; ***** OSWORD 1 *****
+    lda #1
+    ldx #<osword1block
+    ldy #>osword1block
+    jsr osword
+
+    ; ***** OSWORD 2 *****
+    lda #2
+    ldx #<osword2block
+    ldy #>osword2block
+    jsr osword
+
+    ; ***** OSWORD 3 *****
+    lda #3
+    ldx #<osword3block
+    ldy #>osword3block
+    jsr osword
+
+    ; ***** OSWORD 4 *****
+    lda #4
+    ldx #<osword4block
+    ldy #>osword4block
+    jsr osword
+
+    ; ***** OSWORD 5 *****
+    lda #5
+    ldx #<osword5block
+    ldy #>osword5block
+    jsr osword
+
+    ; ***** OSWORD 6 *****
+    lda #6
+    ldx #<osword6block
+    ldy #>osword6block
+    jsr osword
+
+    ; ***** OSWORD 7 *****
+    lda #7
+    ldx #<osword7block
+    ldy #>osword7block
+    jsr osword
+
+    ; ***** OSWORD 8 *****
+    lda #8
+    ldx #<osword8block
+    ldy #>osword8block
+    jsr osword
+
+    ; ***** OSWORD 9 *****
+    lda #9
+    ldx #<osword9block
+    ldy #>osword9block
+    jsr osword
+
+    ; ***** OSWORD 10 *****
+    lda #10
+    ldx #<osword10block
+    ldy #>osword10block
+    jsr osword
+
+    ; ***** OSWORD 11 *****
+    lda #11
+    ldx #<osword11block
+    ldy #>osword11block
+    jsr osword
+
+    ; ***** OSWORD 12 *****
+    lda #12
+    ldx #<osword12block
+    ldy #>osword12block
+    jsr osword
+
+    ; ***** OSWORD 13 *****
+    lda #13
+    ldx #<osword13block
+    ldy #>osword13block
+    jsr osword
+
+    ; ***** OSWORD 14 *****
+    lda #14
+    ldx #<osword14block
+    ldy #>osword14block
+    jsr osword
+
+    ; ***** OSWORD 15 *****
+    lda #15
+    ldx #<osword15block
+    ldy #>osword15block
+    jsr osword
+
     rts
+
+* = $4000
+osword0block
+    !word string_addr
+    !byte 127
+    !byte 32
+    !byte 126
+string_addr
+    !byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    !byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    !byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    !byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+osword1block
+    !byte 0,0,0,0,0
+
+osword2block
+    !byte 0,0,0,0,0
+
+osword3block
+    !byte 0,0,0,0,0
+
+osword4block
+    !byte 0,0,0,0,0
+
+osword5block
+    !byte 0,0,0,0,0
+
+osword6block
+    !byte 0,0,0,0,0
+
+osword7block
+    !byte 0,0,0,0,0,0,0,0
+
+osword8block
+    !byte 1,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+osword9block
+    !byte 0,0,0,0,0
+
+osword10block
+    !byte 0,0,0,0,0,0,0,0,0
+
+osword11block
+    !byte 0,0,0,0,0
+
+osword12block
+    !byte 0,0,0,0,0
+
+osword13block
+    !byte 0,0,0,0,0,0,0,0
+
+osword14block
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osword15block
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0

@@ -194,5 +194,32 @@ label(0x1be5, "buffer_empty")
 for entry in dict:
     mycom(dict[entry], entry)
 
+comment(0x3123, "OSWORD")
+
+for i in range(0,5):
+    byte(0x4000+i)
+
+for i in range(0,8):
+    byte(0x40a3+i)
+    byte(0x40d1+i)
+
+label(0x4000, "osword0block")
+label(0x4005, "input_buffer")
+label(0x4085, "osword1block")
+label(0x408a, "osword2block")
+label(0x408f, "osword3block")
+label(0x4094, "osword4block")
+label(0x4099, "osword5block")
+label(0x409e, "osword6block")
+label(0x40a3, "osword7block")
+label(0x40ab, "osword8block")
+label(0x40b9, "osword9block")
+label(0x40be, "osword10block")
+label(0x40c7, "osword11block")
+label(0x40cc, "osword12block")
+label(0x40d1, "osword13block")
+label(0x40d9, "osword14block")
+label(0x40f1, "osword15block")
+
 # Use all the information provided to actually disassemble the program.
 go()
