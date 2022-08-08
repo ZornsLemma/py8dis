@@ -224,7 +224,7 @@ def substitute_constants(instruction, reg, constants_dict, define_all_constants=
 
     trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
 
-def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=False, move_id=None, is_entry=True):
+def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=False, move_id=None, is_entry_point=True):
     """
     Define a subroutine.
 
@@ -236,7 +236,7 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
     specify hook=None.
     """
     if name is not None and len(name)>0:
-        if is_entry:
+        if is_entry_point:
             entry(runtime_addr, name)
         else:
             optional_label(runtime_addr, name, move_id)
@@ -277,7 +277,7 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
                 formatted_comment(runtime_addr, config.get_subroutine_footer())
     trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
-def comment(runtime_addr, text, inline=False):
+def comment(runtime_addr, text, inline=False, indent=0):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
@@ -286,12 +286,12 @@ def comment(runtime_addr, text, inline=False):
     The comment is automatically word wrapped.
     """
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=True)
+    disassembly.comment(runtime_addr, text, inline, word_wrap=True, indent=indent)
 
-def formatted_comment(runtime_addr, text, inline=False):
+def formatted_comment(runtime_addr, text, inline=False, indent=0):
     """Add a comment without word wrapping."""
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=False)
+    disassembly.comment(runtime_addr, text, inline, word_wrap=False, indent=indent)
 
 def annotate(runtime_addr, s, priority=None):
     """Add a raw string directly to the assembly code output at the
