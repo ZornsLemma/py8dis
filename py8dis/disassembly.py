@@ -69,7 +69,7 @@ def set_user_label_maker_hook(hook):
     assert user_label_maker_hook is None
     user_label_maker_hook = hook
 
-def comment(runtime_addr, text, inline=False, word_wrap=True):
+def comment(runtime_addr, text, inline=False, word_wrap=True, indent=0):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
@@ -81,19 +81,19 @@ def comment(runtime_addr, text, inline=False, word_wrap=True):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
-    comment_binary(binary_addr, text, inline, word_wrap)
+    comment_binary(binary_addr, text, inline, word_wrap, indent)
 
-def comment_binary(binary_addr, text, inline, word_wrap, priority=None):
+def comment_binary(binary_addr, text, inline, word_wrap, indent=0, priority=None):
     """Add a comment, either inline or standalone."""
 
-    if word_wrap:
-        if not inline:
-            text = mainformatter.format_comment(text)
+    new_comment = Comment(text, inline, word_wrap, indent, priority)
 
-    # TODO: The Comment object may no longer add value. And/or we may
-    # want to tweak how this works so Comment objects can contain
-    # LazyStrings that aren't evaluated immediately on construction.
-    annotations[binary_addr].append(Comment(text, inline, priority))
+    # Avoid adding the same comment multiple times at the same address
+    for entry in annotations[binary_addr]:
+        if entry.as_string(binary_addr) == new_comment.as_string(binary_addr):
+            return
+
+    annotations[binary_addr].append(new_comment)
 
 def add_raw_annotation(binary_addr, text, inline=False, priority=None):
     """Add a raw string to the output."""
@@ -775,16 +775,19 @@ class Annotation(object):
     def as_string(self, addr):
         return str(self.text)
 
-
 class Comment(Annotation):
     """A comment, either inline or standalone.
 
     Derives from the Annotation class."""
 
-    def __init__(self, text, inline=False, priority=None):
+    def __init__(self, text, inline=False, word_wrap=True, indent=0, priority=None):
 
         def late_formatter():
-            return "\n".join("%s %s" % (config.get_assembler().comment_prefix(), line) for line in str(text).split("\n"))
+            strtext = str(text)
+            if word_wrap:
+                if not inline:
+                    strtext = mainformatter.format_comment(strtext, indent)
+            return "\n".join("%s%s %s" % (config.get_indent_string() * indent, config.get_assembler().comment_prefix(), line) for line in strtext.split("\n"))
 
         Annotation.__init__(self, utils.LazyString("%s", late_formatter), inline, priority)
 

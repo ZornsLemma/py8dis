@@ -210,12 +210,12 @@ def constant16(binary_addr):
     n = memorymanager.get_u16_binary(binary_addr)
     return constant(binary_addr, n, 16)
 
-def format_comment(text):
+def format_comment(text, indent):
     """Format a standalone (i.e. not inline) multiline comment.
 
     Text is word wrapped.
     """
 
-    prefix = config.get_assembler().comment_prefix() + " "
+    prefix = config.get_indent_string() * indent + config.get_assembler().comment_prefix() + " "
     text_width = config.get_word_wrap_comment_column() - len(prefix)
     return "\n".join(textwrap.fill(paragraph, text_width) for paragraph in text.split("\n"))

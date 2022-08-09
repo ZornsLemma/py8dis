@@ -14,7 +14,7 @@ osasci  = &ffe3
 
 ; &0908 referenced 1 time by &0902
 .sub_c0908
-    jsr osasci                                                        ; 0908: 20 e3 ff     ..
+    jsr osasci                                                        ; 0908: 20 e3 ff     ..            ; Write character
     clc                                                               ; 090b: 18          .
     adc #1                                                            ; 090c: 69 01       i.
     rts                                                               ; 090e: 60          `
@@ -31,7 +31,7 @@ osasci  = &ffe3
     dex                                                               ; 2009: ca          .
     bne loop_c2006                                                    ; 200a: d0 fa       ..
     lda #&0d                                                          ; 200c: a9 0d       ..
-    jmp osasci                                                        ; 200e: 4c e3 ff    L..
+    jmp osasci                                                        ; 200e: 4c e3 ff    L..            ; Write character 13
 
 .pydis_end
 

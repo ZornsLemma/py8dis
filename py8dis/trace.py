@@ -12,6 +12,7 @@ cpu = None
 subroutine_argument_finder_hooks = []
 substitute_constant_list = []
 subroutines_list = []
+no_auto_comment_set = set()            # runtime addresses not to be auto-commented
 
 class Subroutine(object):
     """Data concerning a subroutine."""

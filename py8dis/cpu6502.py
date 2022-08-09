@@ -432,13 +432,28 @@ class Cpu6502(trace.Cpu):
         self.subroutine_hooks[runtime_addr] = hook
 
     def default_subroutine_hook(self, runtime_addr, state, subroutine):
-        for reg in {'a', 'x', 'y'}:
+        for reg in ('a', 'x', 'y'):
             reg_addr = state.get_previous_adjust(reg)
             if reg_addr is not None:
                 if reg in subroutine.on_entry:
                     disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], inline=True, word_wrap=False)
         if subroutine.title and subroutine.runtime_addr != runtime_addr:
             disassembly.comment(runtime_addr, subroutine.title, inline=True, word_wrap=False)
+
+        # Post exit
+        if subroutine.on_exit:
+            if subroutine.runtime_addr != runtime_addr:
+                for reg in ('a', 'x', 'y'):
+                    next_use = state.next_use[reg]
+                    if next_use:
+                        reg_runtime_addr = None if next_use is None else movemanager.b2r(next_use)
+                        if reg_runtime_addr:
+                            com = subroutine.on_exit[reg]
+                            if com:
+                                is_private_comment = com.startswith("()") and com.endswith(")")
+                                if not is_private_comment:
+                                    disassembly.comment(reg_runtime_addr, reg.upper() + "=" + subroutine.on_exit[reg], inline=True)
+
 
 
     class Opcode(object):
@@ -579,6 +594,9 @@ class Cpu6502(trace.Cpu):
             return result
 
         def could_be_call_to_subroutine(self):
+            return False
+
+        def is_unconditional_branch(self):
             return False
 
         def as_string_list(self, addr, annotations):
@@ -749,6 +767,9 @@ class Cpu6502(trace.Cpu):
         def is_block_end(self):
             return True
 
+        def is_unconditional_branch(self):
+            return True
+
         def disassemble(self, binary_addr):
             return [None]
 
@@ -762,6 +783,9 @@ class Cpu6502(trace.Cpu):
             #trace.references[self.target(addr)].add(addr)
 
         def could_be_call_to_subroutine(self):
+            return True
+
+        def is_unconditional_branch(self):
             return True
 
         def disassemble(self, binary_addr):
@@ -869,6 +893,7 @@ class Cpu6502(trace.Cpu):
                 "z": None,
                 "c": None,
             }
+            self.next_instruction = None
 
         def __getitem__(self, key):
             assert key in "axynvdizc"
@@ -1088,6 +1113,54 @@ class Cpu6502(trace.Cpu):
             else:
                 addr += 1
 
+    def scan_ahead_for_post_exit_state(self, binary_addr, state):
+        scanning_for_register_usage = {'a': True, 'x': True, 'y': True }
+
+        state.next_instruction = None
+        state.next_use = {'a': None, 'x': None, 'y': None }
+
+        newstate = trace.cpu.cpu_state_optimistic[binary_addr]    # State after instruction following JSR
+
+        while binary_addr < 0x10000:
+            c = disassembly.classifications[binary_addr]
+
+            # Must be classified
+            if c is None:
+                return
+
+            # Stop at the end of a code block
+            if c.is_block_end():
+                return
+
+            # Must have known state
+            if newstate == None:
+                return
+
+            # Must be an opcode
+            if not isinstance(c, trace.cpu.Opcode):
+                return
+
+            if state.next_instruction is not None:
+                # Beyond the first instruction as the call to the subroutine, a JSR/BRA is enough to end any register use knowledge
+                if c.is_unconditional_branch():
+                    return
+
+            for reg in scanning_for_register_usage:
+                if scanning_for_register_usage[reg]:
+                    if c.reg_changes[reg] == 'U':
+                        state.next_use[reg] = binary_addr
+
+                    if c.reg_changes[reg] != '-':
+                        scanning_for_register_usage[reg] = False
+                        if not any(scanning_for_register_usage.values()):
+                            return
+
+            binary_addr += c.length()                               # Move to next instruction
+            if state.next_instruction == None:
+                state.next_instruction = binary_addr                # Set to the instruction address following the JSR
+            newstate = trace.cpu.cpu_state_optimistic[binary_addr]  # State after instruction at addr has executed
+
+
     def find_subroutine_calls(self):
         """Finds calls to subroutines, and calls its hook function.
 
@@ -1119,6 +1192,7 @@ class Cpu6502(trace.Cpu):
                             continue
 
                         found = False
+                        fall_through = False
 
                         # convert to binary address
                         binary_addr, _ = movemanager.r2b(subroutine.runtime_addr)
@@ -1127,6 +1201,7 @@ class Cpu6502(trace.Cpu):
                             # We might have fallen through from above
                             # and so we count this as a match.
                             found = True
+                            fall_through = True
                         elif could_be_call_to_subroutine and (target == subroutine.runtime_addr):
                             # If our instruction is a call to the
                             # address of the subroutine, then we have
@@ -1134,7 +1209,13 @@ class Cpu6502(trace.Cpu):
                             found = True
 
                         if found:
-                            subroutine.hook_function(movemanager.b2r(addr), state, subroutine)
+                            state.next_instruction = None
+                            state.next_use = {'a': None, 'x': None, 'y': None }
+
+                            runtime_addr = movemanager.b2r(addr)
+                            if not fall_through and isinstance(c, trace.cpu.OpcodeJsr):
+                                self.scan_ahead_for_post_exit_state(addr, state)
+                            subroutine.hook_function(runtime_addr, state, subroutine)
 
                 state = trace.cpu.cpu_state_optimistic[addr]
                 addr += c.length()

@@ -106,6 +106,9 @@ class Cpu65C02(Cpu6502):
         def could_be_call_to_subroutine(self):
             return True
 
+        def is_unconditional_branch(self):
+            return True
+
         def disassemble(self, binary_addr):
             return [None] + trace.cpu.apply_move2(self.target(binary_addr), binary_addr)
 
