@@ -1,3 +1,4 @@
+oswrsc = $ffb3
 osrdsc = $ffb9
 vduchr = $ffbc
 oseven = $ffbf
@@ -4790,6 +4791,177 @@ start
     ldy #>osword15block
     jsr osword
 
+    ; ***** OSRDSC *****
+    ldy #3
+    jsr osrdsc
+    cmp #3
+
+    lda #4
+    ldy #90
+    jsr oswrsc
+
+    ldy #2
+    jsr oseven
+
+    jsr osrdch
+    cmp #32
+
+    jsr nvrdch
+    cmp #42
+
+    lda #0
+    ldy #0
+    jsr osfind
+
+    lda #0
+    ldy #1
+    jsr osfind
+
+    lda #64
+    ldx #<filename
+    ldy #>filename
+    jsr osfind
+    sta mem
+
+    lda #128
+    ldx #<filename
+    ldy #>filename
+    jsr osfind
+    sta mem
+
+    lda #192
+    ldx #<filename
+    ldy #>filename
+    jsr osfind
+    sta mem
+
+    lda #42
+    ldx #<filename
+    ldy #>filename
+    jsr osfind
+    sta mem
+
+    jsr osrdch
+    sta mem
+
+    ldy mem
+    jsr osgbpb
+
+    lda mem
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #0
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #1
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #2
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #3
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #4
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #5
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #6
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #7
+    ldx #<osgbpb_block
+    ldy #>osgbpb_block
+    jsr osgbpb
+
+    lda #8
+    ldx #<osgbpb8_block
+    ldy #>osgbpb8_block
+    jsr osgbpb
+
+    lda #42
+    ldy mem
+    jsr osbput
+
+    ldy mem
+    jsr osbget
+    cmp #0
+
+    jsr osnewl
+    jsr oswrcr
+
+    lda #65
+    jsr oswrch
+
+    lda #0
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #1
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #2
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #3
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #4
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #5
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+    cmp #1
+
+    lda #6
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #7
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #255
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
+    lda #8
+    ldx #<osfileblock
+    ldy #>osfileblock
+    jsr osfile
+
     rts
 
 * = $4000
@@ -4848,3 +5020,15 @@ osword14block
 
 osword15block
     !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osfileblock
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0
+
+osgbpb_block
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0
+
+osgbpb8_block
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0
+
+filename
+    !text "!BOOT"

@@ -23,7 +23,6 @@ oswrch                  = &ffee
 ; 
 ; On Exit:
 ;     X: Holds the number of bits set.
-; ***************************************************************************************
 .test_for_local_labels
 .pydis_start
     lda #5                                                            ; 2000: a9 05       ..
@@ -34,7 +33,7 @@ oswrch                  = &ffee
     lda #'A'                                                          ; 2006: a9 41       .A
     clc                                                               ; 2008: 18          .
     adc char_to_print                                                 ; 2009: 65 70       ep
-    jsr oswrch                                                        ; 200b: 20 ee ff     ..
+    jsr oswrch                                                        ; 200b: 20 ee ff     ..            ; Write character
     inc char_to_print                                                 ; 200e: e6 70       .p
     inc char_to_print                                                 ; 2010: e6 70       .p
     dex                                                               ; 2012: ca          .

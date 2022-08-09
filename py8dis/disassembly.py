@@ -86,10 +86,14 @@ def comment(runtime_addr, text, inline=False, word_wrap=True, indent=0):
 def comment_binary(binary_addr, text, inline, word_wrap, indent=0, priority=None):
     """Add a comment, either inline or standalone."""
 
-    # TODO: The Comment object may no longer add value. And/or we may
-    # want to tweak how this works so Comment objects can contain
-    # LazyStrings that aren't evaluated immediately on construction.
-    annotations[binary_addr].append(Comment(text, inline, word_wrap, indent, priority))
+    new_comment = Comment(text, inline, word_wrap, indent, priority)
+
+    # Avoid adding the same comment multiple times at the same address
+    for entry in annotations[binary_addr]:
+        if entry.as_string(binary_addr) == new_comment.as_string(binary_addr):
+            return
+
+    annotations[binary_addr].append(new_comment)
 
 def add_raw_annotation(binary_addr, text, inline=False, priority=None):
     """Add a raw string to the output."""
@@ -770,7 +774,6 @@ class Annotation(object):
 
     def as_string(self, addr):
         return str(self.text)
-
 
 class Comment(Annotation):
     """A comment, either inline or standalone.

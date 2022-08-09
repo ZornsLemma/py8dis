@@ -23,12 +23,11 @@ oswrch      = &ffee
 ; On Exit:
 ;     X: Length of the message just printed
 ;     Y: (preserved)
-; ***************************************************************************************
 .print_message
     ldx #0                                                            ; 2010: a2 00       ..
 .print_loop
     lda welcome_message,x                                             ; 2012: bd 1e 20    ..
-    jsr oswrch                                                        ; 2015: 20 ee ff     ..
+    jsr oswrch                                                        ; 2015: 20 ee ff     ..            ; Write character
     inx                                                               ; 2018: e8          .
     cmp #0                                                            ; 2019: c9 00       ..
     bne print_loop                                                    ; 201b: d0 f5       ..
@@ -43,7 +42,6 @@ oswrch      = &ffee
 ; 
 ; On Entry:
 ;     A: number to print
-; ***************************************************************************************
 .print_decimal_number
     ldy #2                                                            ; 2029: a0 02       ..
 .loop_next_decimal_digit
@@ -57,7 +55,7 @@ oswrch      = &ffee
 .found_digit
     pha                                                               ; 2038: 48          H
     txa                                                               ; 2039: 8a          .
-    jsr oswrch                                                        ; 203a: 20 ee ff     ..
+    jsr oswrch                                                        ; 203a: 20 ee ff     ..            ; Write character
     pla                                                               ; 203d: 68          h
     dey                                                               ; 203e: 88          .
     bpl loop_next_decimal_digit                                       ; 203f: 10 ea       ..
@@ -78,7 +76,6 @@ oswrch      = &ffee
 ;     A: (corrupted)
 ;     X: (preserved)
 ;     Y: (preserved)
-; ***************************************************************************************
 .print_hex_number
     pha                                                               ; 2045: 48          H
     lsr a                                                             ; 2046: 4a          J
@@ -93,7 +90,7 @@ oswrch      = &ffee
     cmp #&0a                                                          ; 2051: c9 0a       ..
     adc #'0'                                                          ; 2053: 69 30       i0
     cld                                                               ; 2055: d8          .
-    jmp oswrch                                                        ; 2056: 4c ee ff    L..
+    jmp oswrch                                                        ; 2056: 4c ee ff    L..            ; Write character
 
 .pydis_end
 

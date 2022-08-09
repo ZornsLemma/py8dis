@@ -1,3 +1,5 @@
+set -e
+
 acme -o ../subroutine_test.orig subroutine_test.asm
 acme -o ../acorn_os_calls.orig acorn_os_calls.asm
 cd ..

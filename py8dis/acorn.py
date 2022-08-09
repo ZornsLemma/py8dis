@@ -12,8 +12,30 @@ def xy_addr(x_addr, y_addr):
 
         classification.add_expression(x_addr, utils.LazyString("<(%s)", label))
         classification.add_expression(y_addr, utils.LazyString(">(%s)", label))
-        return (memory_binary[y_addr] << 8) | memory_binary[x_addr]
+        return memorymanager.RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
     return None
+
+osgbpb_enum = {
+    0x01: "osgbpb_write_bytes",
+    0x02: "osgbpb_append_bytes",
+    0x03: "osgbpb_read_bytes_from_position",
+    0x04: "osgbpb_read_bytes_from_current_position",
+    0x05: "osgbpb_read_title_option_and_drive",
+    0x06: "osgbpb_read_current_directory",
+    0x07: "osgbpb_read_current_library",
+    0x08: "osgbpb_read_file_names",
+}
+
+osgbpb_desc = {
+    0x01: "write bytes to file at sequential file pointer specified",
+    0x02: "append bytes to file at current file pointer",
+    0x03: "read bytes from specified position in file",
+    0x04: "read bytes from current position in file",
+    0x05: "read title, option and drive to memory",
+    0x06: "read current directory and drive names",
+    0x07: "read current library and drive names",
+    0x08: "read file names from the current directory",
+}
 
 osfile_enum = {
     0x00: "osfile_save",
@@ -23,6 +45,7 @@ osfile_enum = {
     0x04: "osfile_write_attributes",
     0x05: "osfile_read_catalogue_info",
     0x06: "osfile_delete",
+    0x07: "osfile_create",
     0xff: "osfile_load",
 }
 
@@ -821,28 +844,154 @@ os_variable_names = {
 
 def enum_lookup(reg_addr, e):
     if reg_addr is None:
-        return
+        return None
     r = memorymanager.memory_binary[reg_addr]
     if r in e:
         constant(r, e[r])
         classification.add_expression(reg_addr, e[r])
+    return r
+
+def oswrsc_hook(runtime_addr, state, subroutine):
+    a_adjust_addr = state.get_previous_adjust('a')
+    a_runtime_adjust = None if a_adjust_addr is None else movemanager.b2r(a_adjust_addr)
+    y_adjust_addr = state.get_previous_adjust('y')
+    y_runtime_adjust = None if y_adjust_addr is None else movemanager.b2r(y_adjust_addr)
+
+    if a_runtime_adjust:
+        auto_comment(a_runtime_adjust, "A=value to be written", inline=True)
+    if y_runtime_adjust:
+        auto_comment(y_runtime_adjust, "Y=offset from base address", inline=True)
+    auto_comment(runtime_addr, "Write byte to screen", inline=True)
+
+def osrdsc_hook(runtime_addr, state, subroutine):
+    y_adjust_addr = state.get_previous_adjust('y')
+    y_runtime_adjust = None if y_adjust_addr is None else movemanager.b2r(y_adjust_addr)
+    if y_runtime_adjust:
+        auto_comment(y_runtime_adjust, "Y=ROM number", inline=True)
+
+    # Post-exit
+    a_runtime_next_use = None if state.next_use['a'] is None else movemanager.b2r(state.next_use['a'])
+    if a_runtime_next_use:
+        auto_comment(a_runtime_next_use, "A=byte read", inline=True)
+    auto_comment(runtime_addr, "Read byte from ROM Y or screen", inline=True)
 
 def oseven_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
-    x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
 
     if y_addr is None:
-        auto_comment(runtime_addr, "Generate an event", inline=True)
+        auto_comment(runtime_addr, "Generate event Y", inline=True)
         return
 
     event_number = memory_binary[y_addr]
     if event_number in event_names:
-        com = "Generate event '" + event_names[event_number] + "'"
+        com = "Generate event Y='" + event_names[event_number] + "'"
     else:
-        com = "Generate an unknown event"
+        com = "Generate an unknown event Y"
     auto_comment(runtime_addr, com, inline=True)
 
+def osfind_hook(runtime_addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
+
+    com = "Open or close file(s)"
+    if a_addr is not None:
+        action = memory_binary[a_addr]
+        if action == 0:
+            com = "Close one or all files"
+            if y_addr:
+                com = "Close file Y"
+                y = memory_binary[y_addr]
+                if y == 0:
+                    com = "Close all files (Y=0)"
+        elif action == 64:
+            com = "Open file for input (A=64)"
+        elif action == 128:
+            com = "Open file for output (A=128)"
+        elif action == 192:
+            com = "Open file for random access (A=192)"
+
+        if action != 0:
+            xy_addr(x_addr, y_addr)
+
+            # Post-exit
+            a_runtime_next_use = None if state.next_use['a'] is None else movemanager.b2r(state.next_use['a'])
+            if a_runtime_next_use:
+                auto_comment(a_runtime_next_use, "A=file handle (or zero on failure)", inline=True)
+
+    auto_comment(runtime_addr, com, inline=True)
+
+def osrdch_hook(runtime_addr, state, subroutine):
+    auto_comment(runtime_addr, "Read a character from the current input stream", inline=True)
+
+    # Post-exit
+    a_runtime_next_use = None if state.next_use['a'] is None else movemanager.b2r(state.next_use['a'])
+    if a_runtime_next_use:
+        auto_comment(a_runtime_next_use, "A=character read", inline=True)
+
+def osgbpb_hook(runtime_addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
+    action = enum_lookup(a_addr, osgbpb_enum)
+    block_addr = xy_addr(x_addr, y_addr)
+
+    if block_addr is not None:
+        if action == 8:
+            auto_comment(block_addr, "osgbpb block: disc cycle number", inline=True)
+            auto_comment(memorymanager.RuntimeAddr(block_addr + 1), "address for returned data (4 bytes)", inline=True)
+            auto_comment(memorymanager.RuntimeAddr(block_addr + 5), "number of filenames (4 bytes)", inline=True)
+        else:
+            auto_comment(block_addr, "osgbpb block: file handle", inline=True)
+            auto_comment(memorymanager.RuntimeAddr(block_addr + 1), "start address of data (4 bytes)", inline=True)
+            auto_comment(memorymanager.RuntimeAddr(block_addr + 5), "number of bytes to transfer (4 bytes)", inline=True)
+        auto_comment(memorymanager.RuntimeAddr(block_addr + 9), "sequential pointer value to be used (4 bytes)", inline=True)
+
+
+    if action in osgbpb_desc:
+        auto_comment(runtime_addr, osgbpb_desc[action] + " (A=%d)" % action, inline=True)
+    elif action is not None:
+        auto_comment(runtime_addr, "unknown OSGBPB call, (A=%d)" % action, inline=True)
+    else:
+        auto_comment(runtime_addr, "Read or write multiple bytes to an open file", inline=True)
+
+def osbput_hook(runtime_addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    y_addr = state.get_previous_adjust('y')
+    y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
+
+    if a_addr is not None:
+        reg = "A=" + str(memory_binary[a_addr])
+    else:
+        reg = "A"
+
+    com = "Write a single byte %s to an open file Y" % reg
+    auto_comment(runtime_addr, com, inline=True)
+    if y_runtime_addr is not None:
+        auto_comment(y_runtime_addr, "Y=file handle", inline=True)
+
+def osbget_hook(runtime_addr, state, subroutine):
+    y_addr = state.get_previous_adjust('y')
+    y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
+
+    auto_comment(runtime_addr, "Read a single byte from an open file Y", inline=True)
+    if y_runtime_addr is not None:
+        auto_comment(y_runtime_addr, "Y=file handle", inline=True)
+
+def osnewl_hook(runtime_addr, state, subroutine):
+    auto_comment(runtime_addr, "Write newline (character 10)", inline=True)
+
+def oswrcr_hook(runtime_addr, state, subroutine):
+    auto_comment(runtime_addr, "Write carriage return (character 13)", inline=True)
+
+def oswrch_hook(runtime_addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    if a_addr is not None:
+        a = " " + str(memory_binary[a_addr])
+    else:
+        a = ""
+    auto_comment(runtime_addr, "Write character%s" % a, inline=True)
 
 def osfile_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
@@ -857,7 +1006,9 @@ def osfile_hook(runtime_addr, state, subroutine):
     action = memory_binary[a_addr]
 
     if action in osfile_descriptions:
-        auto_comment(runtime_addr, osfile_descriptions[action], inline=True)
+        auto_comment(runtime_addr, osfile_descriptions[action] + " (A=%d)" % action, inline=True)
+    elif action is not None:
+        auto_comment(runtime_addr, "unknown OSFILE call (A=%d)" % action, inline=True)
 
 def osword_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
@@ -880,7 +1031,7 @@ def osword_hook(runtime_addr, state, subroutine):
             desc_dict = osword_block_descriptions[action]
 
             if action == 0:
-                input_buffer_addr, _ = movemanager.r2b(memorymanager.RuntimeAddr(block_addr))
+                input_buffer_addr, _ = movemanager.r2b(block_addr)
                 xy_addr(input_buffer_addr, input_buffer_addr+1)
 
             for i in desc_dict:
@@ -1107,11 +1258,12 @@ def osbyte_hook(runtime_addr, state, subroutine):
         # Post exit:
         if x_runtime_next_use or y_runtime_next_use:
             next_use = min(z for z in [x_runtime_next_use, y_runtime_next_use] if z is not None)
-            auto_comment(next_use, """X and Y contain the previous serial ULA register contents (not Electron).
-Bits 0-2 = transmit rate
-Bits 3-5 = receive rate
-Bit 6    = RS423 in control (if set) / Tape in control (if clear)
-Bit 7    = cassette motor""", indent=1, show_blank=True)
+            auto_comment(next_use,
+"""X and Y contain the previous serial ULA register contents (not Electron).
+    Bits 0-2 = transmit rate
+    Bits 3-5 = receive rate
+    Bit 6    = RS423 in control (if set) / Tape in control (if clear)
+    Bit 7    = cassette motor""", indent=1, show_blank=True)
 
     elif action == 0x09:
         com = "Set 'mark' duration of flashing colours to "
@@ -1400,15 +1552,16 @@ Bit 7    = cassette motor""", indent=1, show_blank=True)
 
         # Post exit:
         if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, """X is VDU status byte:
-bit 0=printer output enabled by a VDU 2
-bit 1=scrolling disabled (cursor editing)
-bit 2=paged scrolling selected
-bit 3=software scrolling selected (text window)
-bit 4=shadow mode selected
-bit 5=text at graphics cursor (VDU 5)
-bit 6=two cursor editing mode
-bit 7=screen disabled via VDU 21""", indent=1, show_blank=True)
+            auto_comment(x_runtime_next_use,
+"""X is VDU status byte:
+    bit 0=printer output enabled by a VDU 2
+    bit 1=scrolling disabled (cursor editing)
+    bit 2=paged scrolling selected
+    bit 3=software scrolling selected (text window)
+    bit 4=shadow mode selected
+    bit 5=text at graphics cursor (VDU 5)
+    bit 6=two cursor editing mode
+    bit 7=screen disabled via VDU 21""", indent=1, show_blank=True)
 
     elif action == 0x76:
         auto_comment(runtime_addr, "Reflect keyboard status in keyboard LEDs", inline=True)
@@ -1563,7 +1716,8 @@ bit 7=screen disabled via VDU 21""", indent=1, show_blank=True)
         # Post exit:
         if x_runtime_next_use:
             if is_read_machine_type:
-                auto_comment(x_runtime_next_use, """X is the machine type:
+                auto_comment(x_runtime_next_use,
+"""X is the machine type:
     X=0, BBC microcomputer OS 0.10
     X=1, Acorn Electron OS 1.00
     X=255, BBC microcomputer OS 1.00 or 1.20
@@ -2086,12 +2240,13 @@ bit 7=screen disabled via VDU 21""", indent=1, show_blank=True)
             # Exceptions
             if action == 0xff:
                 if x_runtime_next_use:
-                    auto_comment(x_runtime_next_use, """X is the startup option byte:
-bits 0 to 2     screen MODE selected following reset
-bit 3           if clear reverse action of SHIFT+BREAK
-bits 4 and 5    used to set disc drive timings (see below)
-bit 6           not used by OS (reserved for future applications)
-bit 7           if clear select NFS, if set select DFS
+                    auto_comment(x_runtime_next_use,
+"""X is the startup option byte:
+    bits 0 to 2     screen MODE selected following reset
+    bit 3           if clear reverse action of SHIFT+BREAK
+    bits 4 and 5    used to set disc drive timings (see below)
+    bit 6           not used by OS (reserved for future applications)
+    bit 7           if clear select NFS, if set select DFS
 
 Disc drive timing links:
 |                           |                8271                 |          1770           |          1772           |
@@ -2147,33 +2302,30 @@ def mos_labels():
     ol2(0x0232, "ind2v")
     ol2(0x0234, "ind3v")
 
-    optional_label(0xffb9, "osrdsc")
-    optional_label(0xffbc, "vduchr")
-    optional_label(0xffbf, "oseven")
     optional_label(0xffc2, "gsinit")
     optional_label(0xffc5, "gsread")
-    optional_label(0xffc8, "nvrdch")
-    optional_label(0xffcb, "nvwrch")
-    optional_label(0xffce, "osfind")
-    optional_label(0xffd1, "osgbpb")
-    optional_label(0xffd4, "osbput")
-    optional_label(0xffd7, "osbget")
-    optional_label(0xffda, "osargs")
-    optional_label(0xffdd, "osfile")
-    optional_label(0xffe0, "osrdch")
-    optional_label(0xffe3, "osasci")
-    optional_label(0xffe7, "osnewl")
-    optional_label(0xffec, "oswrcr")
-    optional_label(0xffee, "oswrch")
-    optional_label(0xfff1, "osword")
-    optional_label(0xfff4, "osbyte")
-    optional_label(0xfff7, "oscli")
 
+    optional_label(0xffda, "osargs")
+
+    subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=False)
+    subroutine(0xffb9, "osrdsc", None, None, hook=osrdsc_hook, is_entry_point=False)
+    subroutine(0xffbc, "vduchr", None, None, hook=oswrch_hook, is_entry_point=False)
     subroutine(0xffbf, "oseven", None, None, hook=oseven_hook, is_entry_point=False)
-    subroutine(0xfff4, "osbyte", "OSBYTE", "A multi purpose OS routine with A as an action, and X and Y as parameters for the action.", hook=osbyte_hook, is_entry_point=False)
-    subroutine(0xfff1, "osword", "OSWORD", "A multi purpose OS routine with A as an action, and XY the address of a block of data.", hook=osword_hook, is_entry_point=False)
-    subroutine(0xffdd, "osfile", "OSFILE", "Read or write a whole file or its attributes.", hook=osfile_hook, is_entry_point=False)
-    subroutine(0xfff7, "oscli",  "OSCLI",  "Execute a command using the Command Line Interpreter.", hook=oscli_hook, is_entry_point=False)
+    subroutine(0xffce, "osfind", None, None, hook=osfind_hook, is_entry_point=False)
+    subroutine(0xffc8, "nvrdch", None, None, hook=osrdch_hook, is_entry_point=False)
+    subroutine(0xffcb, "nvwrch", None, None, hook=oswrch_hook, is_entry_point=False)
+    subroutine(0xffd1, "osgbpb", None, None, hook=osgbpb_hook, is_entry_point=False)
+    subroutine(0xffd4, "osbput", None, None, hook=osbput_hook, is_entry_point=False)
+    subroutine(0xffd7, "osbget", None, None, hook=osbget_hook, is_entry_point=False)
+    subroutine(0xffe0, "osrdch", None, None, hook=osrdch_hook, is_entry_point=False)
+    subroutine(0xffe3, "osasci", None, None, hook=oswrch_hook, is_entry_point=False)
+    subroutine(0xffe7, "osnewl", None, None, hook=osnewl_hook, is_entry_point=False)
+    subroutine(0xffec, "oswrcr", None, None, hook=oswrcr_hook, is_entry_point=False)
+    subroutine(0xffee, "oswrch", None, None, hook=oswrch_hook, is_entry_point=False)
+    subroutine(0xfff4, "osbyte", None, None, hook=osbyte_hook, is_entry_point=False)
+    subroutine(0xfff1, "osword", None, None, hook=osword_hook, is_entry_point=False)
+    subroutine(0xffdd, "osfile", None, None, hook=osfile_hook, is_entry_point=False)
+    subroutine(0xfff7, "oscli",  None, None, hook=oscli_hook,  is_entry_point=False)
 
     trace.substitute_constant_list.append(SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
     trace.substitute_constant_list.append(SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))

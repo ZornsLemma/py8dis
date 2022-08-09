@@ -70,10 +70,13 @@ class Acme(assembler.Assembler):
     def disassembly_end(self):
         result = []
         spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
+        old = ("", 0)
         for expr, value in spa:
-            result.append("%s (%s) != %s {" % (utils.force_case("!if"), expr, value))
-            result.append('%s%s "Assertion failed: %s == %s"' % (utils.make_indent(1), utils.force_case("!error"), expr, value))
-            result.append("}")
+            if (expr != old[0]) or (value != old[1]):
+                result.append("%s (%s) != %s {" % (utils.force_case("!if"), expr, value))
+                result.append('%s%s "Assertion failed: %s == %s"' % (utils.make_indent(1), utils.force_case("!error"), expr, value))
+                result.append("}")
+            old = (expr, value)
         return result
 
     def force_abs_instruction(self, instruction, prefix, operand, suffix):

@@ -1560,7 +1560,7 @@ printstring
 printstringloop
     iny                                                               // 1a30: c8          .
     lda (write),y                                                     // 1a31: b1 70       .p
-    jsr oswrch                                                        // 1a33: 20 ee ff     ..
+    jsr oswrch                                                        // 1a33: 20 ee ff     ..            // Write character
     cpy stringlength                                                  // 1a36: c4 75       .u
     bne printstringloop                                               // 1a38: d0 f6       ..
     rts                                                               // 1a3a: 60          `
@@ -1741,7 +1741,7 @@ finisheddelay
 // ----------------------------------------------------------------------------------
 initmap
     lda #$10                                                          // 1b33: a9 10       ..
-    jsr oswrch                                                        // 1b35: 20 ee ff     ..
+    jsr oswrch                                                        // 1b35: 20 ee ff     ..            // Write character 16
     jsr drawtopstatus                                                 // 1b38: 20 c3 1c     ..
     lda screen                                                        // 1b3b: a5 5c       .\ 
     asl                                                               // 1b3d: 0a          .
@@ -3863,11 +3863,11 @@ showhiscoresloop
     ldx #0                                                            // 2860: a2 00       ..
     stx temp4                                                         // 2862: 86 8b       ..
 nothiscore10
-    jsr oswrch                                                        // 2864: 20 ee ff     ..
+    jsr oswrch                                                        // 2864: 20 ee ff     ..            // Write character 49
     lda temp4                                                         // 2867: a5 8b       ..
     clc                                                               // 2869: 18          .
     adc #'0'                                                          // 286a: 69 30       i0
-    jsr oswrch                                                        // 286c: 20 ee ff     ..
+    jsr oswrch                                                        // 286c: 20 ee ff     ..            // Write character
     ldx temp3                                                         // 286f: a6 8a       ..
     jsr gethiscoreaddr                                                // 2871: 20 7c 27     |'
     ldy #0                                                            // 2874: a0 00       ..
@@ -3885,15 +3885,15 @@ printhighscoredigit
     adc #'0'                                                          // 2886: 69 30       i0
     inc temp4                                                         // 2888: e6 8b       ..
 printhighscorechar
-    jsr oswrch                                                        // 288a: 20 ee ff     ..
+    jsr oswrch                                                        // 288a: 20 ee ff     ..            // Write character
     iny                                                               // 288d: c8          .
     cpy #8                                                            // 288e: c0 08       ..
     bcc hiscoredigitsloop                                             // 2890: 90 e6       ..
     lda #' '                                                          // 2892: a9 20       .
-    jsr oswrch                                                        // 2894: 20 ee ff     ..
+    jsr oswrch                                                        // 2894: 20 ee ff     ..            // Write character 32
 hiscorenameloop
     lda (read),y                                                      // 2897: b1 76       .v
-    jsr oswrch                                                        // 2899: 20 ee ff     ..
+    jsr oswrch                                                        // 2899: 20 ee ff     ..            // Write character
     iny                                                               // 289c: c8          .
     cpy #$10                                                          // 289d: c0 10       ..
     bcc hiscorenameloop                                               // 289f: 90 f6       ..
@@ -3951,7 +3951,7 @@ promptpositioned
     lda playernum                                                     // 28f7: a5 5d       .]
     clc                                                               // 28f9: 18          .
     adc #$31                                                          // 28fa: 69 31       i1
-    jsr oswrch                                                        // 28fc: 20 ee ff     ..
+    jsr oswrch                                                        // 28fc: 20 ee ff     ..            // Write character
     jsr showhiscores                                                  // 28ff: 20 38 28     8(
     ldx #<string_hiscoreprompt                                        // 2902: a2 5e       .^
     ldy #>string_hiscoreprompt                                        // 2904: a0 29       .)
@@ -4053,7 +4053,7 @@ restartplayer
     lda playernum                                                     // 29c2: a5 5d       .]
     clc                                                               // 29c4: 18          .
     adc #$31                                                          // 29c5: 69 31       i1
-    jsr oswrch                                                        // 29c7: 20 ee ff     ..
+    jsr oswrch                                                        // 29c7: 20 ee ff     ..            // Write character
     lda #$14                                                          // 29ca: a9 14       ..
     jsr string_howmanyplayers_end                                     // 29cc: 20 5e 2c     ^,
 // ----------------------------------------------------------------------------------
@@ -4139,7 +4139,7 @@ playerdead
     lda playernum                                                     // 2a5c: a5 5d       .]
     clc                                                               // 2a5e: 18          .
     adc #$31                                                          // 2a5f: 69 31       i1
-    jsr oswrch                                                        // 2a61: 20 ee ff     ..
+    jsr oswrch                                                        // 2a61: 20 ee ff     ..            // Write character
     lda #$0a                                                          // 2a64: a9 0a       ..
     jsr string_howmanyplayers_end                                     // 2a66: 20 5e 2c     ^,
     lda #osbyte_clear_escape                                          // 2a69: a9 7c       .|
@@ -4226,13 +4226,13 @@ copyloop
     dex                                                               // 2b12: ca          .
     bne copyloop                                                      // 2b13: d0 cd       ..
     lda #$16                                                          // 2b15: a9 16       ..
-    jsr oswrch                                                        // 2b17: 20 ee ff     ..
+    jsr oswrch                                                        // 2b17: 20 ee ff     ..            // Write character 22
     lda #2                                                            // 2b1a: a9 02       ..
-    jsr oswrch                                                        // 2b1c: 20 ee ff     ..
+    jsr oswrch                                                        // 2b1c: 20 ee ff     ..            // Write character 2
     lda #5                                                            // 2b1f: a9 05       ..
-    jsr oswrch                                                        // 2b21: 20 ee ff     ..
+    jsr oswrch                                                        // 2b21: 20 ee ff     ..            // Write character 5
     lda #5                                                            // 2b24: a9 05       ..
-    jsr oswrch                                                        // 2b26: 20 ee ff     ..
+    jsr oswrch                                                        // 2b26: 20 ee ff     ..            // Write character 5
     lda #$9d                                                          // 2b29: a9 9d       ..
     sta keynum_jump                                                   // 2b2b: 85 65       .e
     lda #$be                                                          // 2b2d: a9 be       ..
@@ -4348,7 +4348,7 @@ startgame
     sta numaliveplayers                                               // 2bf3: 85 5f       ._
     clc                                                               // 2bf5: 18          .
     adc #$30                                                          // 2bf6: 69 30       i0
-    jsr oswrch                                                        // 2bf8: 20 ee ff     ..
+    jsr oswrch                                                        // 2bf8: 20 ee ff     ..            // Write character
     lda #5                                                            // 2bfb: a9 05       ..
     jsr string_howmanyplayers_end                                     // 2bfd: 20 5e 2c     ^,
 // ----------------------------------------------------------------------------------
@@ -4395,7 +4395,7 @@ resetperplayerloop
     bne resetperplayerloop                                            // 2c39: d0 f7       ..
     jsr restoreplayerdata                                             // 2c3b: 20 37 2e     7.
     lda #$1a                                                          // 2c3e: a9 1a       ..
-    jsr oswrch                                                        // 2c40: 20 ee ff     ..
+    jsr oswrch                                                        // 2c40: 20 ee ff     ..            // Write character 26
     rts                                                               // 2c43: 60          `
 
 string_howmanyplayers
@@ -4431,7 +4431,7 @@ titlepage
     jsr initplayersfordemo                                            // 2c72: 20 d8 2c     .,
 titlepageloop
     lda #$10                                                          // 2c75: a9 10       ..
-    jsr oswrch                                                        // 2c77: 20 ee ff     ..
+    jsr oswrch                                                        // 2c77: 20 ee ff     ..            // Write character 16
     jsr showlogo                                                      // 2c7a: 20 e5 2c     .,
     jsr showhiscores                                                  // 2c7d: 20 38 28     8(
     jsr showkeyhelp                                                   // 2c80: 20 44 2d     D-
@@ -4449,7 +4449,7 @@ titlepagewait2
     dec temp3                                                         // 2c98: c6 8a       ..
     bne titlepagewait2                                                // 2c9a: d0 f9       ..
     lda #$10                                                          // 2c9c: a9 10       ..
-    jsr oswrch                                                        // 2c9e: 20 ee ff     ..
+    jsr oswrch                                                        // 2c9e: 20 ee ff     ..            // Write character 16
     jsr showlogo                                                      // 2ca1: 20 e5 2c     .,
     jsr showkeys                                                      // 2ca4: 20 00 09     ..
     jsr showkeyhelp                                                   // 2ca7: 20 44 2d     D-
@@ -5082,7 +5082,7 @@ notsamecolumn
     ldy #0                                                            // 30c7: a0 00       ..  :09c7[1]
     jsr osbyte                                                        // 30c9: 20 f4 ff     .. :09c9[1]   // Write CTRL G duration, value X=1
     lda #7                                                            // 30cc: a9 07       ..  :09cc[1]
-    jsr oswrch                                                        // 30ce: 20 ee ff     .. :09ce[1]
+    jsr oswrch                                                        // 30ce: 20 ee ff     .. :09ce[1]   // Write character 7
     jmp waitforkey                                                    // 30d1: 4c 5c 09    L\. :09d1[1]
 
 keyok
@@ -5113,11 +5113,11 @@ notshiftorctrl
     bcs keywithspecialname                                            // 30fc: b0 12       ..  :09fc[1]
     pha                                                               // 30fe: 48          H   :09fe[1]
     lda #$27                                                          // 30ff: a9 27       .'  :09ff[1]
-    jsr oswrch                                                        // 3101: 20 ee ff     .. :0a01[1]
+    jsr oswrch                                                        // 3101: 20 ee ff     .. :0a01[1]   // Write character 39
     pla                                                               // 3104: 68          h   :0a04[1]
-    jsr oswrch                                                        // 3105: 20 ee ff     .. :0a05[1]
+    jsr oswrch                                                        // 3105: 20 ee ff     .. :0a05[1]   // Write character
     lda #$27                                                          // 3108: a9 27       .'  :0a08[1]
-    jsr oswrch                                                        // 310a: 20 ee ff     .. :0a0a[1]
+    jsr oswrch                                                        // 310a: 20 ee ff     .. :0a0a[1]   // Write character 39
     jmp returninkey                                                   // 310d: 4c af 0a    L.. :0a0d[1]
 
 keywithspecialname
@@ -5211,11 +5211,11 @@ notuparrow
     bcs returninkey                                                   // 319a: b0 13       ..  :0a9a[1]
     pha                                                               // 319c: 48          H   :0a9c[1]
     lda #$66                                                          // 319d: a9 66       .f  :0a9d[1]
-    jsr oswrch                                                        // 319f: 20 ee ff     .. :0a9f[1]
+    jsr oswrch                                                        // 319f: 20 ee ff     .. :0a9f[1]   // Write character 102
     pla                                                               // 31a2: 68          h   :0aa2[1]
     sec                                                               // 31a3: 38          8   :0aa3[1]
     sbc #$50                                                          // 31a4: e9 50       .P  :0aa4[1]
-    jsr oswrch                                                        // 31a6: 20 ee ff     .. :0aa6[1]
+    jsr oswrch                                                        // 31a6: 20 ee ff     .. :0aa6[1]   // Write character
     jmp returninkey                                                   // 31a9: 4c af 0a    L.. :0aa9[1]
 
 printstringandreturninkey
@@ -5500,13 +5500,13 @@ deathsoundblock_pitch
 deathsoundblock_length
     .word $001e                                                       // 33a6: 1e 00       ..  :0ca6[1]   // Duration (2 bytes)
 eggsoundblock
-    .word $0010                                                       // 33a8: 10 00       ..  :0ca8[1]   // Channel (2 bytes)// Channel (2 bytes)
+    .word $0010                                                       // 33a8: 10 00       ..  :0ca8[1]   // Channel (2 bytes)
 eggsoundblock_envelope
-    .word 3                                                           // 33aa: 03 00       ..  :0caa[1]   // Amplitude (2 bytes)// Amplitude (2 bytes)
+    .word 3                                                           // 33aa: 03 00       ..  :0caa[1]   // Amplitude (2 bytes)
 eggsoundblock_pitch
-    .word 0                                                           // 33ac: 00 00       ..  :0cac[1]   // Pitch (2 bytes)// Pitch (2 bytes)
+    .word 0                                                           // 33ac: 00 00       ..  :0cac[1]   // Pitch (2 bytes)
 eggsoundblock_length
-    .word 4                                                           // 33ae: 04 00       ..  :0cae[1]   // Duration (2 bytes)// Duration (2 bytes)
+    .word 4                                                           // 33ae: 04 00       ..  :0cae[1]   // Duration (2 bytes)
 bonussoundblock
     .word $0010                                                       // 33b0: 10 00       ..  :0cb0[1]   // Channel (2 bytes)
 bonussoundblock_envelope
