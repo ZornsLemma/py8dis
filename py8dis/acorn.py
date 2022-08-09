@@ -900,7 +900,7 @@ def osfind_hook(runtime_addr, state, subroutine):
         action = memory_binary[a_addr]
         if action == 0:
             com = "Close one or all files"
-            if y_addr:
+            if y_addr is not None:
                 com = "Close file Y"
                 y = memory_binary[y_addr]
                 if y == 0:
@@ -978,6 +978,82 @@ def osbget_hook(runtime_addr, state, subroutine):
     auto_comment(runtime_addr, "Read a single byte from an open file Y", inline=True)
     if y_runtime_addr is not None:
         auto_comment(y_runtime_addr, "Y=file handle", inline=True)
+
+def osargs_hook(runtime_addr, state, subroutine):
+    a_addr = state.get_previous_load_imm('a')
+    x_addr = state.get_previous_load_imm('x')
+    y_addr = state.get_previous_load_imm('y')
+    x_adjust_addr = state.get_previous_adjust('x')
+    y_adjust_addr = state.get_previous_adjust('y')
+
+    # Runtime equivalents
+    x_runtime_adjust_addr = None if x_adjust_addr is None else movemanager.b2r(x_adjust_addr)
+    y_runtime_adjust_addr = None if y_adjust_addr is None else movemanager.b2r(y_adjust_addr)
+
+    a_next_use = state.next_use['a']
+    # Equivalent runtime addresses
+    a_runtime_next_use = None if a_next_use is None else movemanager.b2r(a_next_use)
+
+    a = None if a_addr is None else memory_binary[a_addr]
+    x = None if x_addr is None else memory_binary[x_addr]
+    y = None if y_addr is None else memory_binary[y_addr]
+
+    if (a == 0) and (y == 0):
+        auto_comment(runtime_addr, "Get filing system number (A=0, Y=0)", inline=True)
+        if a_runtime_next_use is not None:
+            auto_comment(a_runtime_next_use, "A=filing system number", inline=True)
+            auto_comment(a_runtime_next_use,
+"""A is the filing system number:
+    A=0, no filing system selected
+    A=1, 1200 baud CFS
+    A=2, 300 baud CFS
+    A=3, ROM filing system
+    A=4, Disc filing system
+    A=5, Network filing system
+    A=6, Teletext filing system
+    A=7, IEEE filing system
+    A=8, ADFS
+    A=9, Host filing system
+    A=10, Videodisc filing system""", indent=1)
+
+    elif a == 0:
+        if x_runtime_adjust_addr is not None:
+            auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
+        if y_runtime_adjust_addr is not None:
+            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+
+        auto_comment(runtime_addr, "Get sequential file pointer into zero page address X (A=0)", inline=True)
+    elif (a == 1) and (y == 0):
+        if x_runtime_adjust_addr is not None:
+            auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
+
+        auto_comment(runtime_addr, "Get address of remaining command line into zero page address X (A=1, Y=0)", inline=True)
+    elif a == 1:
+        if x_runtime_adjust_addr is not None:
+            auto_comment(x_runtime_adjust_addr, "X=zero page address to write from", inline=True)
+        if y_runtime_adjust_addr is not None:
+            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+
+        auto_comment(runtime_addr, "Write sequential file pointer from zero page address X (A=1)", inline=True)
+    elif a == 2:
+        if x_runtime_adjust_addr is not None:
+            auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
+        if y_runtime_adjust_addr is not None:
+            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+
+        auto_comment(runtime_addr, "Get length of file into zero page address X (A=2)", inline=True)
+    elif (a == 255) and (y == 0):
+        auto_comment(runtime_addr, "Write any buffered data to all pending files (A=255, Y=0)", inline=True)
+
+    elif a == 255:
+        if y_runtime_adjust_addr is not None:
+            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+
+        auto_comment(runtime_addr, "Write any buffered data to file Y", inline=True)
+    elif a is not None:
+        auto_comment(runtime_addr, "Read or write a file's attributes (unknown action A=%d)" % a, inline=True)
+    else:
+        auto_comment(runtime_addr, "Read or write a file's attributes", inline=True)
 
 def osnewl_hook(runtime_addr, state, subroutine):
     auto_comment(runtime_addr, "Write newline (character 10)", inline=True)
@@ -2305,8 +2381,6 @@ def mos_labels():
     optional_label(0xffc2, "gsinit")
     optional_label(0xffc5, "gsread")
 
-    optional_label(0xffda, "osargs")
-
     subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=False)
     subroutine(0xffb9, "osrdsc", None, None, hook=osrdsc_hook, is_entry_point=False)
     subroutine(0xffbc, "vduchr", None, None, hook=oswrch_hook, is_entry_point=False)
@@ -2317,6 +2391,7 @@ def mos_labels():
     subroutine(0xffd1, "osgbpb", None, None, hook=osgbpb_hook, is_entry_point=False)
     subroutine(0xffd4, "osbput", None, None, hook=osbput_hook, is_entry_point=False)
     subroutine(0xffd7, "osbget", None, None, hook=osbget_hook, is_entry_point=False)
+    subroutine(0xffda, "osargs", None, None, hook=osargs_hook, is_entry_point=False)
     subroutine(0xffe0, "osrdch", None, None, hook=osrdch_hook, is_entry_point=False)
     subroutine(0xffe3, "osasci", None, None, hook=oswrch_hook, is_entry_point=False)
     subroutine(0xffe7, "osnewl", None, None, hook=osnewl_hook, is_entry_point=False)

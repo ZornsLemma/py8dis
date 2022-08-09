@@ -7668,7 +7668,7 @@ loop_c0564
     dex                                                               // ad44: ca          .   :0569[2]
     bne loop_c0564                                                    // ad45: d0 f8       ..  :056a[2]
     jsr read_tube_r2_data                                             // ad47: 20 c5 06     .. :056c[2]
-    jsr osargs                                                        // ad4a: 20 da ff     .. :056f[2]
+    jsr osargs                                                        // ad4a: 20 da ff     .. :056f[2]   // Read or write a file's attributes
     jsr write_tube_r2_data                                            // ad4d: 20 95 06     .. :0572[2]
     ldx #3                                                            // ad50: a2 03       ..  :0575[2]
 // $ad52 referenced 1 time by $057d
@@ -8526,7 +8526,7 @@ cb314
     bne cb300                                                         // b324: d0 da       ..
     tay                                                               // b326: a8          .
     ldx #$ba                                                          // b327: a2 ba       ..
-    jsr osargs                                                        // b329: 20 da ff     ..
+    jsr osargs                                                        // b329: 20 da ff     ..            // Read or write a file's attributes
     jsr cb82b                                                         // b32c: 20 2b b8     +.
     tax                                                               // b32f: aa          .
     bne cb337                                                         // b330: d0 05       ..

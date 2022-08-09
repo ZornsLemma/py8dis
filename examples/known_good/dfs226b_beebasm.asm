@@ -7710,7 +7710,7 @@ nmi_XXX5 = l0d1f+1
     dex                                                               ; 4d44: ca          .   :0569[3]
     bne loop_c0564                                                    ; 4d45: d0 f8       ..  :056a[3]
     jsr read_tube_r2_data                                             ; 4d47: 20 c5 06     .. :056c[3]
-    jsr osargs                                                        ; 4d4a: 20 da ff     .. :056f[3]
+    jsr osargs                                                        ; 4d4a: 20 da ff     .. :056f[3]   ; Read or write a file's attributes
     jsr write_tube_r2_data                                            ; 4d4d: 20 95 06     .. :0572[3]
     ldx #3                                                            ; 4d50: a2 03       ..  :0575[3]
 ; &4d52 referenced 1 time by &057d
@@ -8586,7 +8586,7 @@ jump_address_low = sub_c0050+1
     bne cb300                                                         ; 5324: d0 da       ..  :b324[1]
     tay                                                               ; 5326: a8          .   :b326[1]
     ldx #&ba                                                          ; 5327: a2 ba       ..  :b327[1]
-    jsr osargs                                                        ; 5329: 20 da ff     .. :b329[1]
+    jsr osargs                                                        ; 5329: 20 da ff     .. :b329[1]   ; Read or write a file's attributes
     jsr cb82b                                                         ; 532c: 20 2b b8     +. :b32c[1]
     tax                                                               ; 532f: aa          .   :b32f[1]
     bne cb337                                                         ; 5330: d0 05       ..  :b330[1]

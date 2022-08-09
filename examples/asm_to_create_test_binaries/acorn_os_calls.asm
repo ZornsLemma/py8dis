@@ -4962,6 +4962,43 @@ start
     ldy #>osfileblock
     jsr osfile
 
+    lda mem
+    ldy mem
+    jsr osargs
+
+    lda #0
+    ldy #0
+    jsr osargs
+    sta mem
+
+    lda #0
+    ldx mem
+    ldy mem
+    jsr osargs
+
+    lda #1
+    ldx mem
+    ldy #0
+    jsr osargs
+
+    lda #1
+    ldx mem
+    ldy mem
+    jsr osargs
+
+    lda #2
+    ldx mem
+    ldy mem
+    jsr osargs
+
+    lda #255
+    ldy #0
+    jsr osargs
+
+    lda #255
+    ldy mem
+    jsr osargs
+
     rts
 
 * = $4000

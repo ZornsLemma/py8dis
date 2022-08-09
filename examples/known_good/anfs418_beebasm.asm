@@ -7805,10 +7805,10 @@ lb487 = sub_cb485+2
     bcs cbba2                                                         ; bb81: b0 1f       ..
     tya                                                               ; bb83: 98          .
     pha                                                               ; bb84: 48          H
-    ldy l00a8                                                         ; bb85: a4 a8       ..
-    ldx #&aa                                                          ; bb87: a2 aa       ..
+    ldy l00a8                                                         ; bb85: a4 a8       ..             ; Y=file handle
+    ldx #&aa                                                          ; bb87: a2 aa       ..             ; X=zero page address for result
     lda #2                                                            ; bb89: a9 02       ..
-    jsr osargs                                                        ; bb8b: 20 da ff     ..
+    jsr osargs                                                        ; bb8b: 20 da ff     ..            ; Get length of file into zero page address X (A=2)
     ldy #3                                                            ; bb8e: a0 03       ..
 ; &bb90 referenced 1 time by &bb98
 .loop_cbb90
@@ -7839,10 +7839,10 @@ lb487 = sub_cb485+2
     iny                                                               ; bbbc: c8          .
     cpy #4                                                            ; bbbd: c0 04       ..
     bne loop_cbbb7                                                    ; bbbf: d0 f6       ..
-    ldx #&aa                                                          ; bbc1: a2 aa       ..
-    ldy l00a8                                                         ; bbc3: a4 a8       ..
+    ldx #&aa                                                          ; bbc1: a2 aa       ..             ; X=zero page address to write from
+    ldy l00a8                                                         ; bbc3: a4 a8       ..             ; Y=file handle
     lda #1                                                            ; bbc5: a9 01       ..
-    jsr osargs                                                        ; bbc7: 20 da ff     ..
+    jsr osargs                                                        ; bbc7: 20 da ff     ..            ; Write sequential file pointer from zero page address X (A=1)
     pla                                                               ; bbca: 68          h
     tay                                                               ; bbcb: a8          .
     lda (os_text_ptr),y                                               ; bbcc: b1 f2       ..

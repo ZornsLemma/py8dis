@@ -7445,7 +7445,7 @@ l8993 = sub_c8992+1
     jsr sub_cba7a                                                     ; ab24: 20 7a ba     z.
     ldx #&2a ; '*'                                                    ; ab27: a2 2a       .*
     pla                                                               ; ab29: 68          h
-    jsr osargs                                                        ; ab2a: 20 da ff     ..
+    jsr osargs                                                        ; ab2a: 20 da ff     ..            ; Read or write a file's attributes
     bra caae8                                                         ; ab2d: 80 b9       ..
 .sub_cab2f
     jsr sub_cba7a                                                     ; ab2f: 20 7a ba     z.
@@ -10823,7 +10823,7 @@ lbecd = sub_cbecc+1
     ply                                                               ; bee4: 7a          z
     ldx #&2a ; '*'                                                    ; bee5: a2 2a       .*
     pla                                                               ; bee7: 68          h
-    jsr osargs                                                        ; bee8: 20 da ff     ..
+    jsr osargs                                                        ; bee8: 20 da ff     ..            ; Read or write a file's attributes
 ; &beeb referenced 4 times by &bec5, &bed1, &befb, &bf0d
 .cbeeb
     jmp c90ca                                                         ; beeb: 4c ca 90    L..
