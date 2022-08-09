@@ -4206,7 +4206,7 @@ sub_ca07b
     lda #$13                                                          // a092: a9 13       ..
     ldx #<(l00b4)                                                     // a094: a2 b4       ..
     ldy #>(l00b4)                                                     // a096: a0 00       ..
-    jmp osword                                                        // a098: 4c f1 ff    L..
+    jmp osword                                                        // a098: 4c f1 ff    L..            // Read/Write NFS information (see https://beebwiki.mdfs.net/OSWORDs)
 
 // $a09b referenced 1 time by $a089
 ca09b

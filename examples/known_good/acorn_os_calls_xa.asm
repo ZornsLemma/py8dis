@@ -3357,26 +3357,26 @@ buffer_empty
     ldy #0                                                            // 29e8: a0 00       ..
     jsr osbyte                                                        // 29ea: 20 f4 ff     ..            // Write OS copies of video ULA palette register, value X=42
     stx mem                                                           // 29ed: 86 70       .p             // X=old value of OS copies of video ULA palette register
-    sty mem                                                           // 29ef: 84 70       .p             // Y=value of Read ROM number active at last BRK
+    sty mem                                                           // 29ef: 84 70       .p             // Y=value of ROM number active at last BRK
     lda #osbyte_read_video_ula_palette                                // 29f1: a9 b9       ..
     ldx #0                                                            // 29f3: a2 00       ..
     ldy #$ff                                                          // 29f5: a0 ff       ..
     jsr osbyte                                                        // 29f7: 20 f4 ff     ..            // Read OS copies of video ULA palette register
     stx mem                                                           // 29fa: 86 70       .p             // X=value of OS copies of video ULA palette register
-    sty mem                                                           // 29fc: 84 70       .p             // Y=value of Read ROM number active at last BRK
+    sty mem                                                           // 29fc: 84 70       .p             // Y=value of ROM number active at last BRK
 
     // *************** Test OSBYTE 0xba ***************
     lda #osbyte_read_write_rom_bank_at_last_brk                       // 29fe: a9 ba       ..
     ldx #$2a // '*'                                                   // 2a00: a2 2a       .*
     ldy #0                                                            // 2a02: a0 00       ..
-    jsr osbyte                                                        // 2a04: 20 f4 ff     ..            // Write Read ROM number active at last BRK, value X=42
-    stx mem                                                           // 2a07: 86 70       .p             // X=old value of Read ROM number active at last BRK
+    jsr osbyte                                                        // 2a04: 20 f4 ff     ..            // Write ROM number active at last BRK, value X=42
+    stx mem                                                           // 2a07: 86 70       .p             // X=old value of ROM number active at last BRK
     sty mem                                                           // 2a09: 84 70       .p             // Y=value of BASIC ROM number
     lda #osbyte_read_write_rom_bank_at_last_brk                       // 2a0b: a9 ba       ..
     ldx #0                                                            // 2a0d: a2 00       ..
     ldy #$ff                                                          // 2a0f: a0 ff       ..
-    jsr osbyte                                                        // 2a11: 20 f4 ff     ..            // Read Read ROM number active at last BRK
-    stx mem                                                           // 2a14: 86 70       .p             // X=value of Read ROM number active at last BRK
+    jsr osbyte                                                        // 2a11: 20 f4 ff     ..            // Read ROM number active at last BRK
+    stx mem                                                           // 2a14: 86 70       .p             // X=value of ROM number active at last BRK
     sty mem                                                           // 2a16: 84 70       .p             // Y=value of BASIC ROM number
 
     // *************** Test OSBYTE 0xbb ***************
@@ -4113,26 +4113,26 @@ buffer_empty
     ldy #0                                                            // 2f64: a0 00       ..
     jsr osbyte                                                        // 2f66: 20 f4 ff     ..            // Write flag that stores the value of OSBYTE 114 (shadow memory use), value X=42
     stx mem                                                           // 2f69: 86 70       .p             // X=old value of flag that stores the value of OSBYTE 114 (shadow memory use)
-    sty mem                                                           // 2f6b: 84 70       .p             // Y=value of Read country code
+    sty mem                                                           // 2f6b: 84 70       .p             // Y=value of country code (0=UK; 1=US)
     lda #osbyte_read_write_27f                                        // 2f6d: a9 ef       ..
     ldx #0                                                            // 2f6f: a2 00       ..
     ldy #$ff                                                          // 2f71: a0 ff       ..
     jsr osbyte                                                        // 2f73: 20 f4 ff     ..            // Read flag that stores the value of OSBYTE 114 (shadow memory use)
     stx mem                                                           // 2f76: 86 70       .p             // X=value of flag that stores the value of OSBYTE 114 (shadow memory use)
-    sty mem                                                           // 2f78: 84 70       .p             // Y=value of Read country code
+    sty mem                                                           // 2f78: 84 70       .p             // Y=value of country code (0=UK; 1=US)
 
     // *************** Test OSBYTE 0xf0 ***************
     lda #osbyte_read_write_280                                        // 2f7a: a9 f0       ..
     ldx #$2a // '*'                                                   // 2f7c: a2 2a       .*
     ldy #0                                                            // 2f7e: a0 00       ..
-    jsr osbyte                                                        // 2f80: 20 f4 ff     ..            // Write Read country code, value X=42
-    stx mem                                                           // 2f83: 86 70       .p             // X=old value of Read country code
+    jsr osbyte                                                        // 2f80: 20 f4 ff     ..            // Write country code (0=UK; 1=US), value X=42
+    stx mem                                                           // 2f83: 86 70       .p             // X=old value of country code (0=UK; 1=US)
     sty mem                                                           // 2f85: 84 70       .p             // Y=value of user flag byte
     lda #osbyte_read_write_280                                        // 2f87: a9 f0       ..
     ldx #0                                                            // 2f89: a2 00       ..
     ldy #$ff                                                          // 2f8b: a0 ff       ..
-    jsr osbyte                                                        // 2f8d: 20 f4 ff     ..            // Read Read country code
-    stx mem                                                           // 2f90: 86 70       .p             // X=value of Read country code
+    jsr osbyte                                                        // 2f8d: 20 f4 ff     ..            // Read country code (0=UK; 1=US)
+    stx mem                                                           // 2f90: 86 70       .p             // X=value of country code (0=UK; 1=US)
     sty mem                                                           // 2f92: 84 70       .p             // Y=value of user flag byte
 
     // *************** Test OSBYTE 0xf1 ***************
@@ -4309,26 +4309,26 @@ buffer_empty
     ldy #0                                                            // 30d0: a0 00       ..
     jsr osbyte                                                        // 30d2: 20 f4 ff     ..            // Write type of last reset, value X=42
     stx mem                                                           // 30d5: 86 70       .p             // X=old value of type of last reset
-    sty mem                                                           // 30d7: 84 70       .p             // Y=value of RAM size (or Master only: Read/write shift key effect)
+    sty mem                                                           // 30d7: 84 70       .p             // Y=value of RAM size (or Master only: shift key effect)
     lda #osbyte_read_write_last_break_type                            // 30d9: a9 fd       ..
     ldx #0                                                            // 30db: a2 00       ..
     ldy #$ff                                                          // 30dd: a0 ff       ..
     jsr osbyte                                                        // 30df: 20 f4 ff     ..            // Read type of last reset
     stx mem                                                           // 30e2: 86 70       .p             // X=value of type of last reset
-    sty mem                                                           // 30e4: 84 70       .p             // Y=value of RAM size (or Master only: Read/write shift key effect)
+    sty mem                                                           // 30e4: 84 70       .p             // Y=value of RAM size (or Master only: shift key effect)
 
     // *************** Test OSBYTE 0xfe ***************
     lda #osbyte_read_write_available_ram                              // 30e6: a9 fe       ..
     ldx #$2a // '*'                                                   // 30e8: a2 2a       .*
     ldy #0                                                            // 30ea: a0 00       ..
-    jsr osbyte                                                        // 30ec: 20 f4 ff     ..            // Write RAM size (or Master only: Read/write shift key effect), value X=42
-    stx mem                                                           // 30ef: 86 70       .p             // X=old value of RAM size (or Master only: Read/write shift key effect)
+    jsr osbyte                                                        // 30ec: 20 f4 ff     ..            // Write RAM size (or Master only: shift key effect), value X=42
+    stx mem                                                           // 30ef: 86 70       .p             // X=old value of RAM size (or Master only: shift key effect)
     sty mem                                                           // 30f1: 84 70       .p             // Y=value of start-up option byte
     lda #osbyte_read_write_available_ram                              // 30f3: a9 fe       ..
     ldx #0                                                            // 30f5: a2 00       ..
     ldy #$ff                                                          // 30f7: a0 ff       ..
-    jsr osbyte                                                        // 30f9: 20 f4 ff     ..            // Read RAM size (or Master only: Read/write shift key effect)
-    stx mem                                                           // 30fc: 86 70       .p             // X=value of RAM size (or Master only: Read/write shift key effect)
+    jsr osbyte                                                        // 30f9: 20 f4 ff     ..            // Read RAM size (or Master only: shift key effect)
+    stx mem                                                           // 30fc: 86 70       .p             // X=value of RAM size (or Master only: shift key effect)
     sty mem                                                           // 30fe: 84 70       .p             // Y=value of start-up option byte
 
     // *************** Test OSBYTE 0xff ***************
@@ -4469,23 +4469,23 @@ buffer_empty
     ldy #1                                                            // 31d9: a0 01       ..
     jsr osfind                                                        // 31db: 20 ce ff     ..            // Close file Y
     lda #$40 // '@'                                                   // 31de: a9 40       .@
-    ldx #<(l4137)                                                     // 31e0: a2 37       .7
-    ldy #>(l4137)                                                     // 31e2: a0 41       .A
+    ldx #<(osfind_block)                                              // 31e0: a2 c7       ..
+    ldy #>(osfind_block)                                              // 31e2: a0 41       .A
     jsr osfind                                                        // 31e4: 20 ce ff     ..            // Open file for input (A=64)
     sta mem                                                           // 31e7: 85 70       .p             // A=file handle (or zero on failure)
     lda #$80                                                          // 31e9: a9 80       ..
-    ldx #<(l4137)                                                     // 31eb: a2 37       .7
-    ldy #>(l4137)                                                     // 31ed: a0 41       .A
+    ldx #<(osfind_block)                                              // 31eb: a2 c7       ..
+    ldy #>(osfind_block)                                              // 31ed: a0 41       .A
     jsr osfind                                                        // 31ef: 20 ce ff     ..            // Open file for output (A=128)
     sta mem                                                           // 31f2: 85 70       .p             // A=file handle (or zero on failure)
     lda #$c0                                                          // 31f4: a9 c0       ..
-    ldx #<(l4137)                                                     // 31f6: a2 37       .7
-    ldy #>(l4137)                                                     // 31f8: a0 41       .A
+    ldx #<(osfind_block)                                              // 31f6: a2 c7       ..
+    ldy #>(osfind_block)                                              // 31f8: a0 41       .A
     jsr osfind                                                        // 31fa: 20 ce ff     ..            // Open file for random access (A=192)
     sta mem                                                           // 31fd: 85 70       .p             // A=file handle (or zero on failure)
     lda #$2a // '*'                                                   // 31ff: a9 2a       .*
-    ldx #<(l4137)                                                     // 3201: a2 37       .7
-    ldy #>(l4137)                                                     // 3203: a0 41       .A
+    ldx #<(osfind_block)                                              // 3201: a2 c7       ..
+    ldy #>(osfind_block)                                              // 3203: a0 41       .A
     jsr osfind                                                        // 3205: 20 ce ff     ..            // Open or close file(s)
     sta mem                                                           // 3208: 85 70       .p             // A=file handle (or zero on failure)
     jsr osrdch                                                        // 320a: 20 e0 ff     ..            // Read a character from the current input stream
@@ -4493,43 +4493,43 @@ buffer_empty
     ldy mem                                                           // 320f: a4 70       .p
     jsr osgbpb                                                        // 3211: 20 d1 ff     ..            // Read or write multiple bytes to an open file
     lda mem                                                           // 3214: a5 70       .p
-    ldx #<(osgbpb_block)                                              // 3216: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 3216: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 3218: a0 41       .A
     jsr osgbpb                                                        // 321a: 20 d1 ff     ..            // Read or write multiple bytes to an open file
     lda #0                                                            // 321d: a9 00       ..
-    ldx #<(osgbpb_block)                                              // 321f: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 321f: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 3221: a0 41       .A
     jsr osgbpb                                                        // 3223: 20 d1 ff     ..            // unknown OSGBPB call, (A=0)
     lda #osgbpb_write_bytes                                           // 3226: a9 01       ..
-    ldx #<(osgbpb_block)                                              // 3228: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 3228: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 322a: a0 41       .A
     jsr osgbpb                                                        // 322c: 20 d1 ff     ..            // write bytes to file at sequential file pointer specified (A=1)
     lda #osgbpb_append_bytes                                          // 322f: a9 02       ..
-    ldx #<(osgbpb_block)                                              // 3231: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 3231: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 3233: a0 41       .A
     jsr osgbpb                                                        // 3235: 20 d1 ff     ..            // append bytes to file at current file pointer (A=2)
     lda #osgbpb_read_bytes_from_position                              // 3238: a9 03       ..
-    ldx #<(osgbpb_block)                                              // 323a: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 323a: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 323c: a0 41       .A
     jsr osgbpb                                                        // 323e: 20 d1 ff     ..            // read bytes from specified position in file (A=3)
     lda #osgbpb_read_bytes_from_current_position                      // 3241: a9 04       ..
-    ldx #<(osgbpb_block)                                              // 3243: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 3243: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 3245: a0 41       .A
     jsr osgbpb                                                        // 3247: 20 d1 ff     ..            // read bytes from current position in file (A=4)
     lda #osgbpb_read_title_option_and_drive                           // 324a: a9 05       ..
-    ldx #<(osgbpb_block)                                              // 324c: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 324c: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 324e: a0 41       .A
     jsr osgbpb                                                        // 3250: 20 d1 ff     ..            // read title, option and drive to memory (A=5)
     lda #osgbpb_read_current_directory                                // 3253: a9 06       ..
-    ldx #<(osgbpb_block)                                              // 3255: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 3255: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 3257: a0 41       .A
     jsr osgbpb                                                        // 3259: 20 d1 ff     ..            // read current directory and drive names (A=6)
     lda #osgbpb_read_current_library                                  // 325c: a9 07       ..
-    ldx #<(osgbpb_block)                                              // 325e: a2 1d       ..
+    ldx #<(osgbpb_block)                                              // 325e: a2 ad       ..
     ldy #>(osgbpb_block)                                              // 3260: a0 41       .A
     jsr osgbpb                                                        // 3262: 20 d1 ff     ..            // read current library and drive names (A=7)
     lda #osgbpb_read_file_names                                       // 3265: a9 08       ..
-    ldx #<(osgbpb8_block)                                             // 3267: a2 2a       .*
+    ldx #<(osgbpb8_block)                                             // 3267: a2 ba       ..
     ldy #>(osgbpb8_block)                                             // 3269: a0 41       .A
     jsr osgbpb                                                        // 326b: 20 d1 ff     ..            // read file names from the current directory (A=8)
     lda #$2a // '*'                                                   // 326e: a9 2a       .*
@@ -4543,44 +4543,44 @@ buffer_empty
     lda #$41 // 'A'                                                   // 3282: a9 41       .A
     jsr oswrch                                                        // 3284: 20 ee ff     ..            // Write character 65
     lda #osfile_save                                                  // 3287: a9 00       ..
-    ldx #<(osfile_block)                                              // 3289: a2 09       ..
+    ldx #<(osfile_block)                                              // 3289: a2 99       ..
     ldy #>(osfile_block)                                              // 328b: a0 41       .A
     jsr osfile                                                        // 328d: 20 dd ff     ..            // Save a block of memory (returning file length and attributes) (A=0)
     lda #osfile_write_catalogue_info                                  // 3290: a9 01       ..
-    ldx #<(osfile_block)                                              // 3292: a2 09       ..
+    ldx #<(osfile_block)                                              // 3292: a2 99       ..
     ldy #>(osfile_block)                                              // 3294: a0 41       .A
     jsr osfile                                                        // 3296: 20 dd ff     ..            // Write catalogue information for a named file (A=1)
     lda #osfile_write_load_addr                                       // 3299: a9 02       ..
-    ldx #<(osfile_block)                                              // 329b: a2 09       ..
+    ldx #<(osfile_block)                                              // 329b: a2 99       ..
     ldy #>(osfile_block)                                              // 329d: a0 41       .A
     jsr osfile                                                        // 329f: 20 dd ff     ..            // Write load address for a named file (A=2)
     lda #osfile_write_exec_addr                                       // 32a2: a9 03       ..
-    ldx #<(osfile_block)                                              // 32a4: a2 09       ..
+    ldx #<(osfile_block)                                              // 32a4: a2 99       ..
     ldy #>(osfile_block)                                              // 32a6: a0 41       .A
     jsr osfile                                                        // 32a8: 20 dd ff     ..            // Write execution address for a named file (A=3)
     lda #osfile_write_attributes                                      // 32ab: a9 04       ..
-    ldx #<(osfile_block)                                              // 32ad: a2 09       ..
+    ldx #<(osfile_block)                                              // 32ad: a2 99       ..
     ldy #>(osfile_block)                                              // 32af: a0 41       .A
     jsr osfile                                                        // 32b1: 20 dd ff     ..            // Write attributes for a named file (A=4)
     lda #osfile_read_catalogue_info                                   // 32b4: a9 05       ..
-    ldx #<(osfile_block)                                              // 32b6: a2 09       ..
+    ldx #<(osfile_block)                                              // 32b6: a2 99       ..
     ldy #>(osfile_block)                                              // 32b8: a0 41       .A
     jsr osfile                                                        // 32ba: 20 dd ff     ..            // Read catalogue information (A=5)
     cmp #1                                                            // 32bd: c9 01       ..
     lda #osfile_delete                                                // 32bf: a9 06       ..
-    ldx #<(osfile_block)                                              // 32c1: a2 09       ..
+    ldx #<(osfile_block)                                              // 32c1: a2 99       ..
     ldy #>(osfile_block)                                              // 32c3: a0 41       .A
     jsr osfile                                                        // 32c5: 20 dd ff     ..            // Delete named file (returning catalogue information) (A=6)
     lda #osfile_create                                                // 32c8: a9 07       ..
-    ldx #<(osfile_block)                                              // 32ca: a2 09       ..
+    ldx #<(osfile_block)                                              // 32ca: a2 99       ..
     ldy #>(osfile_block)                                              // 32cc: a0 41       .A
     jsr osfile                                                        // 32ce: 20 dd ff     ..            // Create empty file of a defined size (A=7)
     lda #osfile_load                                                  // 32d1: a9 ff       ..
-    ldx #<(osfile_block)                                              // 32d3: a2 09       ..
+    ldx #<(osfile_block)                                              // 32d3: a2 99       ..
     ldy #>(osfile_block)                                              // 32d5: a0 41       .A
     jsr osfile                                                        // 32d7: 20 dd ff     ..            // Load named file (if XY+6 contains 0, use specified address) (A=255)
     lda #8                                                            // 32da: a9 08       ..
-    ldx #<(osfile_block)                                              // 32dc: a2 09       ..
+    ldx #<(osfile_block)                                              // 32dc: a2 99       ..
     ldy #>(osfile_block)                                              // 32de: a0 41       .A
     jsr osfile                                                        // 32e0: 20 dd ff     ..            // unknown OSFILE call (A=8)
     lda mem                                                           // 32e3: a5 70       .p
@@ -4624,173 +4624,1083 @@ buffer_empty
     lda #$ff                                                          // 331e: a9 ff       ..
     ldy mem                                                           // 3320: a4 70       .p             // Y=file handle
     jsr osargs                                                        // 3322: 20 da ff     ..            // Write any buffered data to file Y
-    rts                                                               // 3325: 60          `
+    lda #$10                                                          // 3325: a9 10       ..
+    ldx #<(osword255block)                                            // 3327: a2 81       ..
+    ldy #>(osword255block)                                            // 3329: a0 41       .A
+    jsr osword                                                        // 332b: 20 f1 ff     ..            // Network transmit (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$11                                                          // 332e: a9 11       ..
+    ldx #<(osword255block)                                            // 3330: a2 81       ..
+    ldy #>(osword255block)                                            // 3332: a0 41       .A
+    jsr osword                                                        // 3334: 20 f1 ff     ..            // Open or read network receive block (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$12                                                          // 3337: a9 12       ..
+    ldx #<(osword255block)                                            // 3339: a2 81       ..
+    ldy #>(osword255block)                                            // 333b: a0 41       .A
+    jsr osword                                                        // 333d: 20 f1 ff     ..            // Read argument block and restore protection mask NFS (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$13                                                          // 3340: a9 13       ..
+    ldx #<(osword255block)                                            // 3342: a2 81       ..
+    ldy #>(osword255block)                                            // 3344: a0 41       .A
+    jsr osword                                                        // 3346: 20 f1 ff     ..            // Read/Write NFS information (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$14                                                          // 3349: a9 14       ..
+    ldx #<(osword255block)                                            // 334b: a2 81       ..
+    ldy #>(osword255block)                                            // 334d: a0 41       .A
+    jsr osword                                                        // 334f: 20 f1 ff     ..            // Various NFS/Network functions (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$15                                                          // 3352: a9 15       ..
+    ldx #<(osword255block)                                            // 3354: a2 81       ..
+    ldy #>(osword255block)                                            // 3356: a0 41       .A
+    jsr osword                                                        // 3358: 20 f1 ff     ..            // Read/Write mouse and pointer infomation (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$16                                                          // 335b: a9 16       ..
+    ldx #<(osword255block)                                            // 335d: a2 81       ..
+    ldy #>(osword255block)                                            // 335f: a0 41       .A
+    jsr osword                                                        // 3361: 20 f1 ff     ..            // Set screen base start (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$17                                                          // 3364: a9 17       ..
+    ldx #<(osword255block)                                            // 3366: a2 81       ..
+    ldy #>(osword255block)                                            // 3368: a0 41       .A
+    jsr osword                                                        // 336a: 20 f1 ff     ..
+    lda #$18                                                          // 336d: a9 18       ..
+    ldx #<(osword255block)                                            // 336f: a2 81       ..
+    ldy #>(osword255block)                                            // 3371: a0 41       .A
+    jsr osword                                                        // 3373: 20 f1 ff     ..            // IP Network transmit (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$19                                                          // 3376: a9 19       ..
+    ldx #<(osword255block)                                            // 3378: a2 81       ..
+    ldy #>(osword255block)                                            // 337a: a0 41       .A
+    jsr osword                                                        // 337c: 20 f1 ff     ..            // Watford Electronics Speech control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$1a                                                          // 337f: a9 1a       ..
+    ldx #<(osword255block)                                            // 3381: a2 81       ..
+    ldy #>(osword255block)                                            // 3383: a0 41       .A
+    jsr osword                                                        // 3385: 20 f1 ff     ..
+    lda #$1b                                                          // 3388: a9 1b       ..
+    ldx #<(osword255block)                                            // 338a: a2 81       ..
+    ldy #>(osword255block)                                            // 338c: a0 41       .A
+    jsr osword                                                        // 338e: 20 f1 ff     ..
+    lda #$1c                                                          // 3391: a9 1c       ..
+    ldx #<(osword255block)                                            // 3393: a2 81       ..
+    ldy #>(osword255block)                                            // 3395: a0 41       .A
+    jsr osword                                                        // 3397: 20 f1 ff     ..
+    lda #$1d                                                          // 339a: a9 1d       ..
+    ldx #<(osword255block)                                            // 339c: a2 81       ..
+    ldy #>(osword255block)                                            // 339e: a0 41       .A
+    jsr osword                                                        // 33a0: 20 f1 ff     ..
+    lda #$1e                                                          // 33a3: a9 1e       ..
+    ldx #<(osword255block)                                            // 33a5: a2 81       ..
+    ldy #>(osword255block)                                            // 33a7: a0 41       .A
+    jsr osword                                                        // 33a9: 20 f1 ff     ..
+    lda #$1f                                                          // 33ac: a9 1f       ..
+    ldx #<(osword255block)                                            // 33ae: a2 81       ..
+    ldy #>(osword255block)                                            // 33b0: a0 41       .A
+    jsr osword                                                        // 33b2: 20 f1 ff     ..
+    lda #$20 // ' '                                                   // 33b5: a9 20       .
+    ldx #<(osword255block)                                            // 33b7: a2 81       ..
+    ldy #>(osword255block)                                            // 33b9: a0 41       .A
+    jsr osword                                                        // 33bb: 20 f1 ff     ..            // Transfer data between Tube and I/O (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$21 // '!'                                                   // 33be: a9 21       .!
+    ldx #<(osword255block)                                            // 33c0: a2 81       ..
+    ldy #>(osword255block)                                            // 33c2: a0 41       .A
+    jsr osword                                                        // 33c4: 20 f1 ff     ..            // Execute code in I/O processor (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$22 // '"'                                                   // 33c7: a9 22       ."
+    ldx #<(osword255block)                                            // 33c9: a2 81       ..
+    ldy #>(osword255block)                                            // 33cb: a0 41       .A
+    jsr osword                                                        // 33cd: 20 f1 ff     ..            // Colin Dean Utility RAM - read memory (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$23 // '#'                                                   // 33d0: a9 23       .#
+    ldx #<(osword255block)                                            // 33d2: a2 81       ..
+    ldy #>(osword255block)                                            // 33d4: a0 41       .A
+    jsr osword                                                        // 33d6: 20 f1 ff     ..            // Colin Dean Utility RAM - write memory (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$24 // '$'                                                   // 33d9: a9 24       .$
+    ldx #<(osword255block)                                            // 33db: a2 81       ..
+    ldy #>(osword255block)                                            // 33dd: a0 41       .A
+    jsr osword                                                        // 33df: 20 f1 ff     ..
+    lda #$25 // '%'                                                   // 33e2: a9 25       .%
+    ldx #<(osword255block)                                            // 33e4: a2 81       ..
+    ldy #>(osword255block)                                            // 33e6: a0 41       .A
+    jsr osword                                                        // 33e8: 20 f1 ff     ..
+    lda #$26 // '&'                                                   // 33eb: a9 26       .&
+    ldx #<(osword255block)                                            // 33ed: a2 81       ..
+    ldy #>(osword255block)                                            // 33ef: a0 41       .A
+    jsr osword                                                        // 33f1: 20 f1 ff     ..
+    lda #$27 // '''                                                   // 33f4: a9 27       .'
+    ldx #<(osword255block)                                            // 33f6: a2 81       ..
+    ldy #>(osword255block)                                            // 33f8: a0 41       .A
+    jsr osword                                                        // 33fa: 20 f1 ff     ..
+    lda #$28 // '('                                                   // 33fd: a9 28       .(
+    ldx #<(osword255block)                                            // 33ff: a2 81       ..
+    ldy #>(osword255block)                                            // 3401: a0 41       .A
+    jsr osword                                                        // 3403: 20 f1 ff     ..            // Read PRISMA information table (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$29 // ')'                                                   // 3406: a9 29       .)
+    ldx #<(osword255block)                                            // 3408: a2 81       ..
+    ldy #>(osword255block)                                            // 340a: a0 41       .A
+    jsr osword                                                        // 340c: 20 f1 ff     ..            // Read PRISMA pixel value (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$2a // '*'                                                   // 340f: a9 2a       .*
+    ldx #<(osword255block)                                            // 3411: a2 81       ..
+    ldy #>(osword255block)                                            // 3413: a0 41       .A
+    jsr osword                                                        // 3415: 20 f1 ff     ..            // Read PRISMA logical screen size (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$2b // '+'                                                   // 3418: a9 2b       .+
+    ldx #<(osword255block)                                            // 341a: a2 81       ..
+    ldy #>(osword255block)                                            // 341c: a0 41       .A
+    jsr osword                                                        // 341e: 20 f1 ff     ..            // Read PRISMA colour palette (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$2c // ','                                                   // 3421: a9 2c       .,
+    ldx #<(osword255block)                                            // 3423: a2 81       ..
+    ldy #>(osword255block)                                            // 3425: a0 41       .A
+    jsr osword                                                        // 3427: 20 f1 ff     ..            // Send VDU code direct to PRISMA (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$2d // '-'                                                   // 342a: a9 2d       .-
+    ldx #<(osword255block)                                            // 342c: a2 81       ..
+    ldy #>(osword255block)                                            // 342e: a0 41       .A
+    jsr osword                                                        // 3430: 20 f1 ff     ..            // Read last two PRISMA graphics positions (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$2e // '.'                                                   // 3433: a9 2e       ..
+    ldx #<(osword255block)                                            // 3435: a2 81       ..
+    ldy #>(osword255block)                                            // 3437: a0 41       .A
+    jsr osword                                                        // 3439: 20 f1 ff     ..            // Read PRISMA BASE screen visible origin (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$2f // '/'                                                   // 343c: a9 2f       ./
+    ldx #<(osword255block)                                            // 343e: a2 81       ..
+    ldy #>(osword255block)                                            // 3440: a0 41       .A
+    jsr osword                                                        // 3442: 20 f1 ff     ..            // Read PRISMA graphics origin (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$30 // '0'                                                   // 3445: a9 30       .0
+    ldx #<(osword255block)                                            // 3447: a2 81       ..
+    ldy #>(osword255block)                                            // 3449: a0 41       .A
+    jsr osword                                                        // 344b: 20 f1 ff     ..            // Read PRISMA interrupt status (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$31 // '1'                                                   // 344e: a9 31       .1
+    ldx #<(osword255block)                                            // 3450: a2 81       ..
+    ldy #>(osword255block)                                            // 3452: a0 41       .A
+    jsr osword                                                        // 3454: 20 f1 ff     ..            // Direct call to PRISMA command (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$32 // '2'                                                   // 3457: a9 32       .2
+    ldx #<(osword255block)                                            // 3459: a2 81       ..
+    ldy #>(osword255block)                                            // 345b: a0 41       .A
+    jsr osword                                                        // 345d: 20 f1 ff     ..            // Read position of PRISMA roller screen (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$33 // '3'                                                   // 3460: a9 33       .3
+    ldx #<(osword255block)                                            // 3462: a2 81       ..
+    ldy #>(osword255block)                                            // 3464: a0 41       .A
+    jsr osword                                                        // 3466: 20 f1 ff     ..            // Read/write PRISMA non-volatitle memory (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$34 // '4'                                                   // 3469: a9 34       .4
+    ldx #<(osword255block)                                            // 346b: a2 81       ..
+    ldy #>(osword255block)                                            // 346d: a0 41       .A
+    jsr osword                                                        // 346f: 20 f1 ff     ..
+    lda #$35 // '5'                                                   // 3472: a9 35       .5
+    ldx #<(osword255block)                                            // 3474: a2 81       ..
+    ldy #>(osword255block)                                            // 3476: a0 41       .A
+    jsr osword                                                        // 3478: 20 f1 ff     ..
+    lda #$36 // '6'                                                   // 347b: a9 36       .6
+    ldx #<(osword255block)                                            // 347d: a2 81       ..
+    ldy #>(osword255block)                                            // 347f: a0 41       .A
+    jsr osword                                                        // 3481: 20 f1 ff     ..            // Stop Press Routines (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$37 // '7'                                                   // 3484: a9 37       .7
+    ldx #<(osword255block)                                            // 3486: a2 81       ..
+    ldy #>(osword255block)                                            // 3488: a0 41       .A
+    jsr osword                                                        // 348a: 20 f1 ff     ..
+    lda #$38 // '8'                                                   // 348d: a9 38       .8
+    ldx #<(osword255block)                                            // 348f: a2 81       ..
+    ldy #>(osword255block)                                            // 3491: a0 41       .A
+    jsr osword                                                        // 3493: 20 f1 ff     ..
+    lda #$39 // '9'                                                   // 3496: a9 39       .9
+    ldx #<(osword255block)                                            // 3498: a2 81       ..
+    ldy #>(osword255block)                                            // 349a: a0 41       .A
+    jsr osword                                                        // 349c: 20 f1 ff     ..
+    lda #$3a // ':'                                                   // 349f: a9 3a       .:
+    ldx #<(osword255block)                                            // 34a1: a2 81       ..
+    ldy #>(osword255block)                                            // 34a3: a0 41       .A
+    jsr osword                                                        // 34a5: 20 f1 ff     ..
+    lda #$3b // ';'                                                   // 34a8: a9 3b       .;
+    ldx #<(osword255block)                                            // 34aa: a2 81       ..
+    ldy #>(osword255block)                                            // 34ac: a0 41       .A
+    jsr osword                                                        // 34ae: 20 f1 ff     ..
+    lda #$3c // '<'                                                   // 34b1: a9 3c       .<
+    ldx #<(osword255block)                                            // 34b3: a2 81       ..
+    ldy #>(osword255block)                                            // 34b5: a0 41       .A
+    jsr osword                                                        // 34b7: 20 f1 ff     ..
+    lda #$3d // '='                                                   // 34ba: a9 3d       .=
+    ldx #<(osword255block)                                            // 34bc: a2 81       ..
+    ldy #>(osword255block)                                            // 34be: a0 41       .A
+    jsr osword                                                        // 34c0: 20 f1 ff     ..
+    lda #$3e // '>'                                                   // 34c3: a9 3e       .>
+    ldx #<(osword255block)                                            // 34c5: a2 81       ..
+    ldy #>(osword255block)                                            // 34c7: a0 41       .A
+    jsr osword                                                        // 34c9: 20 f1 ff     ..
+    lda #$3f // '?'                                                   // 34cc: a9 3f       .?
+    ldx #<(osword255block)                                            // 34ce: a2 81       ..
+    ldy #>(osword255block)                                            // 34d0: a0 41       .A
+    jsr osword                                                        // 34d2: 20 f1 ff     ..
+    lda #$40 // '@'                                                   // 34d5: a9 40       .@
+    ldx #<(osword255block)                                            // 34d7: a2 81       ..
+    ldy #>(osword255block)                                            // 34d9: a0 41       .A
+    jsr osword                                                        // 34db: 20 f1 ff     ..            // Read mouse pointer and button state (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$41 // 'A'                                                   // 34de: a9 41       .A
+    ldx #<(osword255block)                                            // 34e0: a2 81       ..
+    ldy #>(osword255block)                                            // 34e2: a0 41       .A
+    jsr osword                                                        // 34e4: 20 f1 ff     ..            // Miscellaneous graphics commands (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$42 // 'B'                                                   // 34e7: a9 42       .B
+    ldx #<(osword255block)                                            // 34e9: a2 81       ..
+    ldy #>(osword255block)                                            // 34eb: a0 41       .A
+    jsr osword                                                        // 34ed: 20 f1 ff     ..            // Sideways RAM transfer (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$43 // 'C'                                                   // 34f0: a9 43       .C
+    ldx #<(osword255block)                                            // 34f2: a2 81       ..
+    ldy #>(osword255block)                                            // 34f4: a0 41       .A
+    jsr osword                                                        // 34f6: 20 f1 ff     ..            // Load/Save into/from sideways RAM (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$44 // 'D'                                                   // 34f9: a9 44       .D
+    ldx #<(osword255block)                                            // 34fb: a2 81       ..
+    ldy #>(osword255block)                                            // 34fd: a0 41       .A
+    jsr osword                                                        // 34ff: 20 f1 ff     ..            // AMX Super Art ROM commands (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$45 // 'E'                                                   // 3502: a9 45       .E
+    ldx #<(osword255block)                                            // 3504: a2 81       ..
+    ldy #>(osword255block)                                            // 3506: a0 41       .A
+    jsr osword                                                        // 3508: 20 f1 ff     ..            // Digitise picture (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$46 // 'F'                                                   // 350b: a9 46       .F
+    ldx #<(osword255block)                                            // 350d: a2 81       ..
+    ldy #>(osword255block)                                            // 350f: a0 41       .A
+    jsr osword                                                        // 3511: 20 f1 ff     ..            // Allocated to BBC soft, probably unused (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$47 // 'G'                                                   // 3514: a9 47       .G
+    ldx #<(osword255block)                                            // 3516: a2 81       ..
+    ldy #>(osword255block)                                            // 3518: a0 41       .A
+    jsr osword                                                        // 351a: 20 f1 ff     ..            // PrettyPrint (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$48 // 'H'                                                   // 351d: a9 48       .H
+    ldx #<(osword255block)                                            // 351f: a2 81       ..
+    ldy #>(osword255block)                                            // 3521: a0 41       .A
+    jsr osword                                                        // 3523: 20 f1 ff     ..
+    lda #$49 // 'I'                                                   // 3526: a9 49       .I
+    ldx #<(osword255block)                                            // 3528: a2 81       ..
+    ldy #>(osword255block)                                            // 352a: a0 41       .A
+    jsr osword                                                        // 352c: 20 f1 ff     ..            // Integra-B calls (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$4a // 'J'                                                   // 352f: a9 4a       .J
+    ldx #<(osword255block)                                            // 3531: a2 81       ..
+    ldy #>(osword255block)                                            // 3533: a0 41       .A
+    jsr osword                                                        // 3535: 20 f1 ff     ..
+    lda #$4b // 'K'                                                   // 3538: a9 4b       .K
+    ldx #<(osword255block)                                            // 353a: a2 81       ..
+    ldy #>(osword255block)                                            // 353c: a0 41       .A
+    jsr osword                                                        // 353e: 20 f1 ff     ..
+    lda #$4c // 'L'                                                   // 3541: a9 4c       .L
+    ldx #<(osword255block)                                            // 3543: a2 81       ..
+    ldy #>(osword255block)                                            // 3545: a0 41       .A
+    jsr osword                                                        // 3547: 20 f1 ff     ..            // Extended communications control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$4d // 'M'                                                   // 354a: a9 4d       .M
+    ldx #<(osword255block)                                            // 354c: a2 81       ..
+    ldy #>(osword255block)                                            // 354e: a0 41       .A
+    jsr osword                                                        // 3550: 20 f1 ff     ..
+    lda #$4e // 'N'                                                   // 3553: a9 4e       .N
+    ldx #<(osword255block)                                            // 3555: a2 81       ..
+    ldy #>(osword255block)                                            // 3557: a0 41       .A
+    jsr osword                                                        // 3559: 20 f1 ff     ..            // Initialise heap (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$4f // 'O'                                                   // 355c: a9 4f       .O
+    ldx #<(osword255block)                                            // 355e: a2 81       ..
+    ldy #>(osword255block)                                            // 3560: a0 41       .A
+    jsr osword                                                        // 3562: 20 f1 ff     ..            // Claim area from heap (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$50 // 'P'                                                   // 3565: a9 50       .P
+    ldx #<(osword255block)                                            // 3567: a2 81       ..
+    ldy #>(osword255block)                                            // 3569: a0 41       .A
+    jsr osword                                                        // 356b: 20 f1 ff     ..            // Read Real-Time Clock (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$51 // 'Q'                                                   // 356e: a9 51       .Q
+    ldx #<(osword255block)                                            // 3570: a2 81       ..
+    ldy #>(osword255block)                                            // 3572: a0 41       .A
+    jsr osword                                                        // 3574: 20 f1 ff     ..            // TORCH (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$52 // 'R'                                                   // 3577: a9 52       .R
+    ldx #<(osword255block)                                            // 3579: a2 81       ..
+    ldy #>(osword255block)                                            // 357b: a0 41       .A
+    jsr osword                                                        // 357d: 20 f1 ff     ..            // TORCH (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$53 // 'S'                                                   // 3580: a9 53       .S
+    ldx #<(osword255block)                                            // 3582: a2 81       ..
+    ldy #>(osword255block)                                            // 3584: a0 41       .A
+    jsr osword                                                        // 3586: 20 f1 ff     ..            // TORCH (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$54 // 'T'                                                   // 3589: a9 54       .T
+    ldx #<(osword255block)                                            // 358b: a2 81       ..
+    ldy #>(osword255block)                                            // 358d: a0 41       .A
+    jsr osword                                                        // 358f: 20 f1 ff     ..            // Flush file buffer (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$55 // 'U'                                                   // 3592: a9 55       .U
+    ldx #<(osword255block)                                            // 3594: a2 81       ..
+    ldy #>(osword255block)                                            // 3596: a0 41       .A
+    jsr osword                                                        // 3598: 20 f1 ff     ..            // Get bytes from file buffer (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$56 // 'V'                                                   // 359b: a9 56       .V
+    ldx #<(osword255block)                                            // 359d: a2 81       ..
+    ldy #>(osword255block)                                            // 359f: a0 41       .A
+    jsr osword                                                        // 35a1: 20 f1 ff     ..            // Put bytes to file buffer (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$57 // 'W'                                                   // 35a4: a9 57       .W
+    ldx #<(osword255block)                                            // 35a6: a2 81       ..
+    ldy #>(osword255block)                                            // 35a8: a0 41       .A
+    jsr osword                                                        // 35aa: 20 f1 ff     ..            // Create new binary tree node (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$58 // 'X'                                                   // 35ad: a9 58       .X
+    ldx #<(osword255block)                                            // 35af: a2 81       ..
+    ldy #>(osword255block)                                            // 35b1: a0 41       .A
+    jsr osword                                                        // 35b3: 20 f1 ff     ..            // Insert node into binary tree (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$59 // 'Y'                                                   // 35b6: a9 59       .Y
+    ldx #<(osword255block)                                            // 35b8: a2 81       ..
+    ldy #>(osword255block)                                            // 35ba: a0 41       .A
+    jsr osword                                                        // 35bc: 20 f1 ff     ..            // Delete node from binary tree (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$5a // 'Z'                                                   // 35bf: a9 5a       .Z
+    ldx #<(osword255block)                                            // 35c1: a2 81       ..
+    ldy #>(osword255block)                                            // 35c3: a0 41       .A
+    jsr osword                                                        // 35c5: 20 f1 ff     ..            // HADFS Sector read/write/access (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$5b // '['                                                   // 35c8: a9 5b       .[
+    ldx #<(osword255block)                                            // 35ca: a2 81       ..
+    ldy #>(osword255block)                                            // 35cc: a0 41       .A
+    jsr osword                                                        // 35ce: 20 f1 ff     ..            // Traverse binary tree (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$5c // '\'                                                   // 35d1: a9 5c       .\ 
+    ldx #<(osword255block)                                            // 35d3: a2 81       ..
+    ldy #>(osword255block)                                            // 35d5: a0 41       .A
+    jsr osword                                                        // 35d7: 20 f1 ff     ..            // Balance binary tree (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$5d // ']'                                                   // 35da: a9 5d       .]
+    ldx #<(osword255block)                                            // 35dc: a2 81       ..
+    ldy #>(osword255block)                                            // 35de: a0 41       .A
+    jsr osword                                                        // 35e0: 20 f1 ff     ..            // Parse option patterns (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$5e // '^'                                                   // 35e3: a9 5e       .^
+    ldx #<(osword255block)                                            // 35e5: a2 81       ..
+    ldy #>(osword255block)                                            // 35e7: a0 41       .A
+    jsr osword                                                        // 35e9: 20 f1 ff     ..            // Get string with control character interpretation DVR (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$5f // '_'                                                   // 35ec: a9 5f       ._
+    ldx #<(osword255block)                                            // 35ee: a2 81       ..
+    ldy #>(osword255block)                                            // 35f0: a0 41       .A
+    jsr osword                                                        // 35f2: 20 f1 ff     ..            // Read/write I/O memory across Tube (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$60 // '`'                                                   // 35f5: a9 60       .`
+    ldx #<(osword255block)                                            // 35f7: a2 81       ..
+    ldy #>(osword255block)                                            // 35f9: a0 41       .A
+    jsr osword                                                        // 35fb: 20 f1 ff     ..            // Read Videodisk MSN and status byte (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$61 // 'a'                                                   // 35fe: a9 61       .a
+    ldx #<(osword255block)                                            // 3600: a2 81       ..
+    ldy #>(osword255block)                                            // 3602: a0 41       .A
+    jsr osword                                                        // 3604: 20 f1 ff     ..            // Read free space on VFS disk (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$62 // 'b'                                                   // 3607: a9 62       .b
+    ldx #<(osword255block)                                            // 3609: a2 81       ..
+    ldy #>(osword255block)                                            // 360b: a0 41       .A
+    jsr osword                                                        // 360d: 20 f1 ff     ..            // Access LVROM controller (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$63 // 'c'                                                   // 3610: a9 63       .c
+    ldx #<(osword255block)                                            // 3612: a2 81       ..
+    ldy #>(osword255block)                                            // 3614: a0 41       .A
+    jsr osword                                                        // 3616: 20 f1 ff     ..            // Read last VFS error number (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$64 // 'd'                                                   // 3619: a9 64       .d
+    ldx #<(osword255block)                                            // 361b: a2 81       ..
+    ldy #>(osword255block)                                            // 361d: a0 41       .A
+    jsr osword                                                        // 361f: 20 f1 ff     ..            // Read current F-code (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$65 // 'e'                                                   // 3622: a9 65       .e
+    ldx #<(osword255block)                                            // 3624: a2 81       ..
+    ldy #>(osword255block)                                            // 3626: a0 41       .A
+    jsr osword                                                        // 3628: 20 f1 ff     ..            // WiFi control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$66 // 'f'                                                   // 362b: a9 66       .f
+    ldx #<(osword255block)                                            // 362d: a2 81       ..
+    ldy #>(osword255block)                                            // 362f: a0 41       .A
+    jsr osword                                                        // 3631: 20 f1 ff     ..
+    lda #$67 // 'g'                                                   // 3634: a9 67       .g
+    ldx #<(osword255block)                                            // 3636: a2 81       ..
+    ldy #>(osword255block)                                            // 3638: a0 41       .A
+    jsr osword                                                        // 363a: 20 f1 ff     ..
+    lda #$68 // 'h'                                                   // 363d: a9 68       .h
+    ldx #<(osword255block)                                            // 363f: a2 81       ..
+    ldy #>(osword255block)                                            // 3641: a0 41       .A
+    jsr osword                                                        // 3643: 20 f1 ff     ..
+    lda #$69 // 'i'                                                   // 3646: a9 69       .i
+    ldx #<(osword255block)                                            // 3648: a2 81       ..
+    ldy #>(osword255block)                                            // 364a: a0 41       .A
+    jsr osword                                                        // 364c: 20 f1 ff     ..
+    lda #$6a // 'j'                                                   // 364f: a9 6a       .j
+    ldx #<(osword255block)                                            // 3651: a2 81       ..
+    ldy #>(osword255block)                                            // 3653: a0 41       .A
+    jsr osword                                                        // 3655: 20 f1 ff     ..
+    lda #$6b // 'k'                                                   // 3658: a9 6b       .k
+    ldx #<(osword255block)                                            // 365a: a2 81       ..
+    ldy #>(osword255block)                                            // 365c: a0 41       .A
+    jsr osword                                                        // 365e: 20 f1 ff     ..
+    lda #$6c // 'l'                                                   // 3661: a9 6c       .l
+    ldx #<(osword255block)                                            // 3663: a2 81       ..
+    ldy #>(osword255block)                                            // 3665: a0 41       .A
+    jsr osword                                                        // 3667: 20 f1 ff     ..
+    lda #$6d // 'm'                                                   // 366a: a9 6d       .m
+    ldx #<(osword255block)                                            // 366c: a2 81       ..
+    ldy #>(osword255block)                                            // 366e: a0 41       .A
+    jsr osword                                                        // 3670: 20 f1 ff     ..
+    lda #$6e // 'n'                                                   // 3673: a9 6e       .n
+    ldx #<(osword255block)                                            // 3675: a2 81       ..
+    ldy #>(osword255block)                                            // 3677: a0 41       .A
+    jsr osword                                                        // 3679: 20 f1 ff     ..            // Read byte from shadow RAM board (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$6f // 'o'                                                   // 367c: a9 6f       .o
+    ldx #<(osword255block)                                            // 367e: a2 81       ..
+    ldy #>(osword255block)                                            // 3680: a0 41       .A
+    jsr osword                                                        // 3682: 20 f1 ff     ..            // Write byte to shadow RAM board (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$70 // 'p'                                                   // 3685: a9 70       .p
+    ldx #<(osword255block)                                            // 3687: a2 81       ..
+    ldy #>(osword255block)                                            // 3689: a0 41       .A
+    jsr osword                                                        // 368b: 20 f1 ff     ..            // Read master sequence number and status byte (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$71 // 'q'                                                   // 368e: a9 71       .q
+    ldx #<(osword255block)                                            // 3690: a2 81       ..
+    ldy #>(osword255block)                                            // 3692: a0 41       .A
+    jsr osword                                                        // 3694: 20 f1 ff     ..            // Read free space on disc (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$72 // 'r'                                                   // 3697: a9 72       .r
+    ldx #<(osword255block)                                            // 3699: a2 81       ..
+    ldy #>(osword255block)                                            // 369b: a0 41       .A
+    jsr osword                                                        // 369d: 20 f1 ff     ..            // Read/Write MFM sectors (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$73 // 's'                                                   // 36a0: a9 73       .s
+    ldx #<(osword255block)                                            // 36a2: a2 81       ..
+    ldy #>(osword255block)                                            // 36a4: a0 41       .A
+    jsr osword                                                        // 36a6: 20 f1 ff     ..            // Read information about last error (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$74 // 't'                                                   // 36a9: a9 74       .t
+    ldx #<(osword255block)                                            // 36ab: a2 81       ..
+    ldy #>(osword255block)                                            // 36ad: a0 41       .A
+    jsr osword                                                        // 36af: 20 f1 ff     ..
+    lda #$75 // 'u'                                                   // 36b2: a9 75       .u
+    ldx #<(osword255block)                                            // 36b4: a2 81       ..
+    ldy #>(osword255block)                                            // 36b6: a0 41       .A
+    jsr osword                                                        // 36b8: 20 f1 ff     ..
+    lda #$76 // 'v'                                                   // 36bb: a9 76       .v
+    ldx #<(osword255block)                                            // 36bd: a2 81       ..
+    ldy #>(osword255block)                                            // 36bf: a0 41       .A
+    jsr osword                                                        // 36c1: 20 f1 ff     ..            // RAMFS MFM sector access (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$77 // 'w'                                                   // 36c4: a9 77       .w
+    ldx #<(osword255block)                                            // 36c6: a2 81       ..
+    ldy #>(osword255block)                                            // 36c8: a0 41       .A
+    jsr osword                                                        // 36ca: 20 f1 ff     ..            // RAMFS FM sector access (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$78 // 'x'                                                   // 36cd: a9 78       .x
+    ldx #<(osword255block)                                            // 36cf: a2 81       ..
+    ldy #>(osword255block)                                            // 36d1: a0 41       .A
+    jsr osword                                                        // 36d3: 20 f1 ff     ..
+    lda #$79 // 'y'                                                   // 36d6: a9 79       .y
+    ldx #<(osword255block)                                            // 36d8: a2 81       ..
+    ldy #>(osword255block)                                            // 36da: a0 41       .A
+    jsr osword                                                        // 36dc: 20 f1 ff     ..
+    lda #$7a // 'z'                                                   // 36df: a9 7a       .z
+    ldx #<(osword255block)                                            // 36e1: a2 81       ..
+    ldy #>(osword255block)                                            // 36e3: a0 41       .A
+    jsr osword                                                        // 36e5: 20 f1 ff     ..            // Teletext commands (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$7b // '{'                                                   // 36e8: a9 7b       .{
+    ldx #<(osword255block)                                            // 36ea: a2 81       ..
+    ldy #>(osword255block)                                            // 36ec: a0 41       .A
+    jsr osword                                                        // 36ee: 20 f1 ff     ..            // Move a block of memory (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$7c // '|'                                                   // 36f1: a9 7c       .|
+    ldx #<(osword255block)                                            // 36f3: a2 81       ..
+    ldy #>(osword255block)                                            // 36f5: a0 41       .A
+    jsr osword                                                        // 36f7: 20 f1 ff     ..            // Multiple track single density FDC command (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$7d // '}'                                                   // 36fa: a9 7d       .}
+    ldx #<(osword255block)                                            // 36fc: a2 81       ..
+    ldy #>(osword255block)                                            // 36fe: a0 41       .A
+    jsr osword                                                        // 3700: 20 f1 ff     ..            // Read cycle number of disc (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$7e // '~'                                                   // 3703: a9 7e       .~
+    ldx #<(osword255block)                                            // 3705: a2 81       ..
+    ldy #>(osword255block)                                            // 3707: a0 41       .A
+    jsr osword                                                        // 3709: 20 f1 ff     ..            // Read disc (or directory) size (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$7f                                                          // 370c: a9 7f       ..
+    ldx #<(osword255block)                                            // 370e: a2 81       ..
+    ldy #>(osword255block)                                            // 3710: a0 41       .A
+    jsr osword                                                        // 3712: 20 f1 ff     ..            // Single track single density FDC command (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$80                                                          // 3715: a9 80       ..
+    ldx #<(osword255block)                                            // 3717: a2 81       ..
+    ldy #>(osword255block)                                            // 3719: a0 41       .A
+    jsr osword                                                        // 371b: 20 f1 ff     ..            // Springboard DOS INT (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$81                                                          // 371e: a9 81       ..
+    ldx #<(osword255block)                                            // 3720: a2 81       ..
+    ldy #>(osword255block)                                            // 3722: a0 41       .A
+    jsr osword                                                        // 3724: 20 f1 ff     ..            // Merlin M2100 Terminal control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$82                                                          // 3727: a9 82       ..
+    ldx #<(osword255block)                                            // 3729: a2 81       ..
+    ldy #>(osword255block)                                            // 372b: a0 41       .A
+    jsr osword                                                        // 372d: 20 f1 ff     ..            // Cambridge Ring: Read/Write parameters (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$83                                                          // 3730: a9 83       ..
+    ldx #<(osword255block)                                            // 3732: a2 81       ..
+    ldy #>(osword255block)                                            // 3734: a0 41       .A
+    jsr osword                                                        // 3736: 20 f1 ff     ..            // Cambridge Ring: Data transmission (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$84                                                          // 3739: a9 84       ..
+    ldx #<(osword255block)                                            // 373b: a2 81       ..
+    ldy #>(osword255block)                                            // 373d: a0 41       .A
+    jsr osword                                                        // 373f: 20 f1 ff     ..            // Cambridge Ring: Ring polling (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$85                                                          // 3742: a9 85       ..
+    ldx #<(osword255block)                                            // 3744: a2 81       ..
+    ldy #>(osword255block)                                            // 3746: a0 41       .A
+    jsr osword                                                        // 3748: 20 f1 ff     ..            // Springboard (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$86                                                          // 374b: a9 86       ..
+    ldx #<(osword255block)                                            // 374d: a2 81       ..
+    ldy #>(osword255block)                                            // 374f: a0 41       .A
+    jsr osword                                                        // 3751: 20 f1 ff     ..            // Springboard (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$87                                                          // 3754: a9 87       ..
+    ldx #<(osword255block)                                            // 3756: a2 81       ..
+    ldy #>(osword255block)                                            // 3758: a0 41       .A
+    jsr osword                                                        // 375a: 20 f1 ff     ..
+    lda #$88                                                          // 375d: a9 88       ..
+    ldx #<(osword255block)                                            // 375f: a2 81       ..
+    ldy #>(osword255block)                                            // 3761: a0 41       .A
+    jsr osword                                                        // 3763: 20 f1 ff     ..
+    lda #$89                                                          // 3766: a9 89       ..
+    ldx #<(osword255block)                                            // 3768: a2 81       ..
+    ldy #>(osword255block)                                            // 376a: a0 41       .A
+    jsr osword                                                        // 376c: 20 f1 ff     ..            // Read teletext pixel (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$8a                                                          // 376f: a9 8a       ..
+    ldx #<(osword255block)                                            // 3771: a2 81       ..
+    ldy #>(osword255block)                                            // 3773: a0 41       .A
+    jsr osword                                                        // 3775: 20 f1 ff     ..            // Set teletext pixel (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$8b                                                          // 3778: a9 8b       ..
+    ldx #<(osword255block)                                            // 377a: a2 81       ..
+    ldy #>(osword255block)                                            // 377c: a0 41       .A
+    jsr osword                                                        // 377e: 20 f1 ff     ..            // Read soft teletext font (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$8c                                                          // 3781: a9 8c       ..
+    ldx #<(osword255block)                                            // 3783: a2 81       ..
+    ldy #>(osword255block)                                            // 3785: a0 41       .A
+    jsr osword                                                        // 3787: 20 f1 ff     ..            // Write soft teletext font (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$8d                                                          // 378a: a9 8d       ..
+    ldx #<(osword255block)                                            // 378c: a2 81       ..
+    ldy #>(osword255block)                                            // 378e: a0 41       .A
+    jsr osword                                                        // 3790: 20 f1 ff     ..
+    lda #$8e                                                          // 3793: a9 8e       ..
+    ldx #<(osword255block)                                            // 3795: a2 81       ..
+    ldy #>(osword255block)                                            // 3797: a0 41       .A
+    jsr osword                                                        // 3799: 20 f1 ff     ..
+    lda #$8f                                                          // 379c: a9 8f       ..
+    ldx #<(osword255block)                                            // 379e: a2 81       ..
+    ldy #>(osword255block)                                            // 37a0: a0 41       .A
+    jsr osword                                                        // 37a2: 20 f1 ff     ..
+    lda #$90                                                          // 37a5: a9 90       ..
+    ldx #<(osword255block)                                            // 37a7: a2 81       ..
+    ldy #>(osword255block)                                            // 37a9: a0 41       .A
+    jsr osword                                                        // 37ab: 20 f1 ff     ..            // Acorn X25 Gateway (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$91                                                          // 37ae: a9 91       ..
+    ldx #<(osword255block)                                            // 37b0: a2 81       ..
+    ldy #>(osword255block)                                            // 37b2: a0 41       .A
+    jsr osword                                                        // 37b4: 20 f1 ff     ..
+    lda #$92                                                          // 37b7: a9 92       ..
+    ldx #<(osword255block)                                            // 37b9: a2 81       ..
+    ldy #>(osword255block)                                            // 37bb: a0 41       .A
+    jsr osword                                                        // 37bd: 20 f1 ff     ..
+    lda #$93                                                          // 37c0: a9 93       ..
+    ldx #<(osword255block)                                            // 37c2: a2 81       ..
+    ldy #>(osword255block)                                            // 37c4: a0 41       .A
+    jsr osword                                                        // 37c6: 20 f1 ff     ..
+    lda #$94                                                          // 37c9: a9 94       ..
+    ldx #<(osword255block)                                            // 37cb: a2 81       ..
+    ldy #>(osword255block)                                            // 37cd: a0 41       .A
+    jsr osword                                                        // 37cf: 20 f1 ff     ..
+    lda #$95                                                          // 37d2: a9 95       ..
+    ldx #<(osword255block)                                            // 37d4: a2 81       ..
+    ldy #>(osword255block)                                            // 37d6: a0 41       .A
+    jsr osword                                                        // 37d8: 20 f1 ff     ..
+    lda #$96                                                          // 37db: a9 96       ..
+    ldx #<(osword255block)                                            // 37dd: a2 81       ..
+    ldy #>(osword255block)                                            // 37df: a0 41       .A
+    jsr osword                                                        // 37e1: 20 f1 ff     ..
+    lda #$97                                                          // 37e4: a9 97       ..
+    ldx #<(osword255block)                                            // 37e6: a2 81       ..
+    ldy #>(osword255block)                                            // 37e8: a0 41       .A
+    jsr osword                                                        // 37ea: 20 f1 ff     ..
+    lda #$98                                                          // 37ed: a9 98       ..
+    ldx #<(osword255block)                                            // 37ef: a2 81       ..
+    ldy #>(osword255block)                                            // 37f1: a0 41       .A
+    jsr osword                                                        // 37f3: 20 f1 ff     ..
+    lda #$99                                                          // 37f6: a9 99       ..
+    ldx #<(osword255block)                                            // 37f8: a2 81       ..
+    ldy #>(osword255block)                                            // 37fa: a0 41       .A
+    jsr osword                                                        // 37fc: 20 f1 ff     ..            // BeebLink: perform request (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$9a                                                          // 37ff: a9 9a       ..
+    ldx #<(osword255block)                                            // 3801: a2 81       ..
+    ldy #>(osword255block)                                            // 3803: a0 41       .A
+    jsr osword                                                        // 3805: 20 f1 ff     ..
+    lda #$9b                                                          // 3808: a9 9b       ..
+    ldx #<(osword255block)                                            // 380a: a2 81       ..
+    ldy #>(osword255block)                                            // 380c: a0 41       .A
+    jsr osword                                                        // 380e: 20 f1 ff     ..
+    lda #$9c                                                          // 3811: a9 9c       ..
+    ldx #<(osword255block)                                            // 3813: a2 81       ..
+    ldy #>(osword255block)                                            // 3815: a0 41       .A
+    jsr osword                                                        // 3817: 20 f1 ff     ..
+    lda #$9d                                                          // 381a: a9 9d       ..
+    ldx #<(osword255block)                                            // 381c: a2 81       ..
+    ldy #>(osword255block)                                            // 381e: a0 41       .A
+    jsr osword                                                        // 3820: 20 f1 ff     ..
+    lda #$9e                                                          // 3823: a9 9e       ..
+    ldx #<(osword255block)                                            // 3825: a2 81       ..
+    ldy #>(osword255block)                                            // 3827: a0 41       .A
+    jsr osword                                                        // 3829: 20 f1 ff     ..
+    lda #$9f                                                          // 382c: a9 9f       ..
+    ldx #<(osword255block)                                            // 382e: a2 81       ..
+    ldy #>(osword255block)                                            // 3830: a0 41       .A
+    jsr osword                                                        // 3832: 20 f1 ff     ..
+    lda #$a0                                                          // 3835: a9 a0       ..
+    ldx #<(osword255block)                                            // 3837: a2 81       ..
+    ldy #>(osword255block)                                            // 3839: a0 41       .A
+    jsr osword                                                        // 383b: 20 f1 ff     ..            // Isolated word recogniser (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$a1                                                          // 383e: a9 a1       ..
+    ldx #<(osword255block)                                            // 3840: a2 81       ..
+    ldy #>(osword255block)                                            // 3842: a0 41       .A
+    jsr osword                                                        // 3844: 20 f1 ff     ..
+    lda #$a2                                                          // 3847: a9 a2       ..
+    ldx #<(osword255block)                                            // 3849: a2 81       ..
+    ldy #>(osword255block)                                            // 384b: a0 41       .A
+    jsr osword                                                        // 384d: 20 f1 ff     ..
+    lda #$a3                                                          // 3850: a9 a3       ..
+    ldx #<(osword255block)                                            // 3852: a2 81       ..
+    ldy #>(osword255block)                                            // 3854: a0 41       .A
+    jsr osword                                                        // 3856: 20 f1 ff     ..
+    lda #$a4                                                          // 3859: a9 a4       ..
+    ldx #<(osword255block)                                            // 385b: a2 81       ..
+    ldy #>(osword255block)                                            // 385d: a0 41       .A
+    jsr osword                                                        // 385f: 20 f1 ff     ..
+    lda #$a5                                                          // 3862: a9 a5       ..
+    ldx #<(osword255block)                                            // 3864: a2 81       ..
+    ldy #>(osword255block)                                            // 3866: a0 41       .A
+    jsr osword                                                        // 3868: 20 f1 ff     ..
+    lda #$a6                                                          // 386b: a9 a6       ..
+    ldx #<(osword255block)                                            // 386d: a2 81       ..
+    ldy #>(osword255block)                                            // 386f: a0 41       .A
+    jsr osword                                                        // 3871: 20 f1 ff     ..
+    lda #$a7                                                          // 3874: a9 a7       ..
+    ldx #<(osword255block)                                            // 3876: a2 81       ..
+    ldy #>(osword255block)                                            // 3878: a0 41       .A
+    jsr osword                                                        // 387a: 20 f1 ff     ..
+    lda #$a8                                                          // 387d: a9 a8       ..
+    ldx #<(osword255block)                                            // 387f: a2 81       ..
+    ldy #>(osword255block)                                            // 3881: a0 41       .A
+    jsr osword                                                        // 3883: 20 f1 ff     ..
+    lda #$a9                                                          // 3886: a9 a9       ..
+    ldx #<(osword255block)                                            // 3888: a2 81       ..
+    ldy #>(osword255block)                                            // 388a: a0 41       .A
+    jsr osword                                                        // 388c: 20 f1 ff     ..
+    lda #$aa                                                          // 388f: a9 aa       ..
+    ldx #<(osword255block)                                            // 3891: a2 81       ..
+    ldy #>(osword255block)                                            // 3893: a0 41       .A
+    jsr osword                                                        // 3895: 20 f1 ff     ..
+    lda #$ab                                                          // 3898: a9 ab       ..
+    ldx #<(osword255block)                                            // 389a: a2 81       ..
+    ldy #>(osword255block)                                            // 389c: a0 41       .A
+    jsr osword                                                        // 389e: 20 f1 ff     ..
+    lda #$ac                                                          // 38a1: a9 ac       ..
+    ldx #<(osword255block)                                            // 38a3: a2 81       ..
+    ldy #>(osword255block)                                            // 38a5: a0 41       .A
+    jsr osword                                                        // 38a7: 20 f1 ff     ..
+    lda #$ad                                                          // 38aa: a9 ad       ..
+    ldx #<(osword255block)                                            // 38ac: a2 81       ..
+    ldy #>(osword255block)                                            // 38ae: a0 41       .A
+    jsr osword                                                        // 38b0: 20 f1 ff     ..
+    lda #$ae                                                          // 38b3: a9 ae       ..
+    ldx #<(osword255block)                                            // 38b5: a2 81       ..
+    ldy #>(osword255block)                                            // 38b7: a0 41       .A
+    jsr osword                                                        // 38b9: 20 f1 ff     ..
+    lda #$af                                                          // 38bc: a9 af       ..
+    ldx #<(osword255block)                                            // 38be: a2 81       ..
+    ldy #>(osword255block)                                            // 38c0: a0 41       .A
+    jsr osword                                                        // 38c2: 20 f1 ff     ..
+    lda #$b0                                                          // 38c5: a9 b0       ..
+    ldx #<(osword255block)                                            // 38c7: a2 81       ..
+    ldy #>(osword255block)                                            // 38c9: a0 41       .A
+    jsr osword                                                        // 38cb: 20 f1 ff     ..            // GoMMC/GoSDC access & control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$b1                                                          // 38ce: a9 b1       ..
+    ldx #<(osword255block)                                            // 38d0: a2 81       ..
+    ldy #>(osword255block)                                            // 38d2: a0 41       .A
+    jsr osword                                                        // 38d4: 20 f1 ff     ..
+    lda #$b2                                                          // 38d7: a9 b2       ..
+    ldx #<(osword255block)                                            // 38d9: a2 81       ..
+    ldy #>(osword255block)                                            // 38db: a0 41       .A
+    jsr osword                                                        // 38dd: 20 f1 ff     ..            // Advanced BASIC (BASIC V) support (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$b3                                                          // 38e0: a9 b3       ..
+    ldx #<(osword255block)                                            // 38e2: a2 81       ..
+    ldy #>(osword255block)                                            // 38e4: a0 41       .A
+    jsr osword                                                        // 38e6: 20 f1 ff     ..
+    lda #$b4                                                          // 38e9: a9 b4       ..
+    ldx #<(osword255block)                                            // 38eb: a2 81       ..
+    ldy #>(osword255block)                                            // 38ed: a0 41       .A
+    jsr osword                                                        // 38ef: 20 f1 ff     ..
+    lda #$b5                                                          // 38f2: a9 b5       ..
+    ldx #<(osword255block)                                            // 38f4: a2 81       ..
+    ldy #>(osword255block)                                            // 38f6: a0 41       .A
+    jsr osword                                                        // 38f8: 20 f1 ff     ..            // PRES Editor and Utilities (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$b6                                                          // 38fb: a9 b6       ..
+    ldx #<(osword255block)                                            // 38fd: a2 81       ..
+    ldy #>(osword255block)                                            // 38ff: a0 41       .A
+    jsr osword                                                        // 3901: 20 f1 ff     ..
+    lda #$b7                                                          // 3904: a9 b7       ..
+    ldx #<(osword255block)                                            // 3906: a2 81       ..
+    ldy #>(osword255block)                                            // 3908: a0 41       .A
+    jsr osword                                                        // 390a: 20 f1 ff     ..
+    lda #$b8                                                          // 390d: a9 b8       ..
+    ldx #<(osword255block)                                            // 390f: a2 81       ..
+    ldy #>(osword255block)                                            // 3911: a0 41       .A
+    jsr osword                                                        // 3913: 20 f1 ff     ..
+    lda #$b9                                                          // 3916: a9 b9       ..
+    ldx #<(osword255block)                                            // 3918: a2 81       ..
+    ldy #>(osword255block)                                            // 391a: a0 41       .A
+    jsr osword                                                        // 391c: 20 f1 ff     ..
+    lda #$ba                                                          // 391f: a9 ba       ..
+    ldx #<(osword255block)                                            // 3921: a2 81       ..
+    ldy #>(osword255block)                                            // 3923: a0 41       .A
+    jsr osword                                                        // 3925: 20 f1 ff     ..
+    lda #$bb                                                          // 3928: a9 bb       ..
+    ldx #<(osword255block)                                            // 392a: a2 81       ..
+    ldy #>(osword255block)                                            // 392c: a0 41       .A
+    jsr osword                                                        // 392e: 20 f1 ff     ..            // Morley Electronics RAMdisc (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$bc                                                          // 3931: a9 bc       ..
+    ldx #<(osword255block)                                            // 3933: a2 81       ..
+    ldy #>(osword255block)                                            // 3935: a0 41       .A
+    jsr osword                                                        // 3937: 20 f1 ff     ..
+    lda #$bd                                                          // 393a: a9 bd       ..
+    ldx #<(osword255block)                                            // 393c: a2 81       ..
+    ldy #>(osword255block)                                            // 393e: a0 41       .A
+    jsr osword                                                        // 3940: 20 f1 ff     ..
+    lda #$be                                                          // 3943: a9 be       ..
+    ldx #<(osword255block)                                            // 3945: a2 81       ..
+    ldy #>(osword255block)                                            // 3947: a0 41       .A
+    jsr osword                                                        // 3949: 20 f1 ff     ..            // Disassemble data (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$bf                                                          // 394c: a9 bf       ..
+    ldx #<(osword255block)                                            // 394e: a2 81       ..
+    ldy #>(osword255block)                                            // 3950: a0 41       .A
+    jsr osword                                                        // 3952: 20 f1 ff     ..            // Fetch URI (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$c0                                                          // 3955: a9 c0       ..
+    ldx #<(osword255block)                                            // 3957: a2 81       ..
+    ldy #>(osword255block)                                            // 3959: a0 41       .A
+    jsr osword                                                        // 395b: 20 f1 ff     ..            // Eureka memory control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$c1                                                          // 395e: a9 c1       ..
+    ldx #<(osword255block)                                            // 3960: a2 81       ..
+    ldy #>(osword255block)                                            // 3962: a0 41       .A
+    jsr osword                                                        // 3964: 20 f1 ff     ..            // Acorn User Windowing System (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$c2                                                          // 3967: a9 c2       ..
+    ldx #<(osword255block)                                            // 3969: a2 81       ..
+    ldy #>(osword255block)                                            // 396b: a0 41       .A
+    jsr osword                                                        // 396d: 20 f1 ff     ..
+    lda #$c3                                                          // 3970: a9 c3       ..
+    ldx #<(osword255block)                                            // 3972: a2 81       ..
+    ldy #>(osword255block)                                            // 3974: a0 41       .A
+    jsr osword                                                        // 3976: 20 f1 ff     ..
+    lda #$c4                                                          // 3979: a9 c4       ..
+    ldx #<(osword255block)                                            // 397b: a2 81       ..
+    ldy #>(osword255block)                                            // 397d: a0 41       .A
+    jsr osword                                                        // 397f: 20 f1 ff     ..
+    lda #$c5                                                          // 3982: a9 c5       ..
+    ldx #<(osword255block)                                            // 3984: a2 81       ..
+    ldy #>(osword255block)                                            // 3986: a0 41       .A
+    jsr osword                                                        // 3988: 20 f1 ff     ..
+    lda #$c6                                                          // 398b: a9 c6       ..
+    ldx #<(osword255block)                                            // 398d: a2 81       ..
+    ldy #>(osword255block)                                            // 398f: a0 41       .A
+    jsr osword                                                        // 3991: 20 f1 ff     ..
+    lda #$c7                                                          // 3994: a9 c7       ..
+    ldx #<(osword255block)                                            // 3996: a2 81       ..
+    ldy #>(osword255block)                                            // 3998: a0 41       .A
+    jsr osword                                                        // 399a: 20 f1 ff     ..
+    lda #$c8                                                          // 399d: a9 c8       ..
+    ldx #<(osword255block)                                            // 399f: a2 81       ..
+    ldy #>(osword255block)                                            // 39a1: a0 41       .A
+    jsr osword                                                        // 39a3: 20 f1 ff     ..            // SWI Operation on Host ARM (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$c9                                                          // 39a6: a9 c9       ..
+    ldx #<(osword255block)                                            // 39a8: a2 81       ..
+    ldy #>(osword255block)                                            // 39aa: a0 41       .A
+    jsr osword                                                        // 39ac: 20 f1 ff     ..
+    lda #$ca                                                          // 39af: a9 ca       ..
+    ldx #<(osword255block)                                            // 39b1: a2 81       ..
+    ldy #>(osword255block)                                            // 39b3: a0 41       .A
+    jsr osword                                                        // 39b5: 20 f1 ff     ..
+    lda #$cb                                                          // 39b8: a9 cb       ..
+    ldx #<(osword255block)                                            // 39ba: a2 81       ..
+    ldy #>(osword255block)                                            // 39bc: a0 41       .A
+    jsr osword                                                        // 39be: 20 f1 ff     ..
+    lda #$cc                                                          // 39c1: a9 cc       ..
+    ldx #<(osword255block)                                            // 39c3: a2 81       ..
+    ldy #>(osword255block)                                            // 39c5: a0 41       .A
+    jsr osword                                                        // 39c7: 20 f1 ff     ..
+    lda #$cd                                                          // 39ca: a9 cd       ..
+    ldx #<(osword255block)                                            // 39cc: a2 81       ..
+    ldy #>(osword255block)                                            // 39ce: a0 41       .A
+    jsr osword                                                        // 39d0: 20 f1 ff     ..
+    lda #$ce                                                          // 39d3: a9 ce       ..
+    ldx #<(osword255block)                                            // 39d5: a2 81       ..
+    ldy #>(osword255block)                                            // 39d7: a0 41       .A
+    jsr osword                                                        // 39d9: 20 f1 ff     ..
+    lda #$cf                                                          // 39dc: a9 cf       ..
+    ldx #<(osword255block)                                            // 39de: a2 81       ..
+    ldy #>(osword255block)                                            // 39e0: a0 41       .A
+    jsr osword                                                        // 39e2: 20 f1 ff     ..
+    lda #$d0                                                          // 39e5: a9 d0       ..
+    ldx #<(osword255block)                                            // 39e7: a2 81       ..
+    ldy #>(osword255block)                                            // 39e9: a0 41       .A
+    jsr osword                                                        // 39eb: 20 f1 ff     ..
+    lda #$d1                                                          // 39ee: a9 d1       ..
+    ldx #<(osword255block)                                            // 39f0: a2 81       ..
+    ldy #>(osword255block)                                            // 39f2: a0 41       .A
+    jsr osword                                                        // 39f4: 20 f1 ff     ..
+    lda #$d2                                                          // 39f7: a9 d2       ..
+    ldx #<(osword255block)                                            // 39f9: a2 81       ..
+    ldy #>(osword255block)                                            // 39fb: a0 41       .A
+    jsr osword                                                        // 39fd: 20 f1 ff     ..
+    lda #$d3                                                          // 3a00: a9 d3       ..
+    ldx #<(osword255block)                                            // 3a02: a2 81       ..
+    ldy #>(osword255block)                                            // 3a04: a0 41       .A
+    jsr osword                                                        // 3a06: 20 f1 ff     ..
+    lda #$d4                                                          // 3a09: a9 d4       ..
+    ldx #<(osword255block)                                            // 3a0b: a2 81       ..
+    ldy #>(osword255block)                                            // 3a0d: a0 41       .A
+    jsr osword                                                        // 3a0f: 20 f1 ff     ..
+    lda #$d5                                                          // 3a12: a9 d5       ..
+    ldx #<(osword255block)                                            // 3a14: a2 81       ..
+    ldy #>(osword255block)                                            // 3a16: a0 41       .A
+    jsr osword                                                        // 3a18: 20 f1 ff     ..
+    lda #$d6                                                          // 3a1b: a9 d6       ..
+    ldx #<(osword255block)                                            // 3a1d: a2 81       ..
+    ldy #>(osword255block)                                            // 3a1f: a0 41       .A
+    jsr osword                                                        // 3a21: 20 f1 ff     ..
+    lda #$d7                                                          // 3a24: a9 d7       ..
+    ldx #<(osword255block)                                            // 3a26: a2 81       ..
+    ldy #>(osword255block)                                            // 3a28: a0 41       .A
+    jsr osword                                                        // 3a2a: 20 f1 ff     ..
+    lda #$d8                                                          // 3a2d: a9 d8       ..
+    ldx #<(osword255block)                                            // 3a2f: a2 81       ..
+    ldy #>(osword255block)                                            // 3a31: a0 41       .A
+    jsr osword                                                        // 3a33: 20 f1 ff     ..
+    lda #$d9                                                          // 3a36: a9 d9       ..
+    ldx #<(osword255block)                                            // 3a38: a2 81       ..
+    ldy #>(osword255block)                                            // 3a3a: a0 41       .A
+    jsr osword                                                        // 3a3c: 20 f1 ff     ..
+    lda #$da                                                          // 3a3f: a9 da       ..
+    ldx #<(osword255block)                                            // 3a41: a2 81       ..
+    ldy #>(osword255block)                                            // 3a43: a0 41       .A
+    jsr osword                                                        // 3a45: 20 f1 ff     ..
+    lda #$db                                                          // 3a48: a9 db       ..
+    ldx #<(osword255block)                                            // 3a4a: a2 81       ..
+    ldy #>(osword255block)                                            // 3a4c: a0 41       .A
+    jsr osword                                                        // 3a4e: 20 f1 ff     ..
+    lda #$dc                                                          // 3a51: a9 dc       ..
+    ldx #<(osword255block)                                            // 3a53: a2 81       ..
+    ldy #>(osword255block)                                            // 3a55: a0 41       .A
+    jsr osword                                                        // 3a57: 20 f1 ff     ..
+    lda #$dd                                                          // 3a5a: a9 dd       ..
+    ldx #<(osword255block)                                            // 3a5c: a2 81       ..
+    ldy #>(osword255block)                                            // 3a5e: a0 41       .A
+    jsr osword                                                        // 3a60: 20 f1 ff     ..
+    lda #$de                                                          // 3a63: a9 de       ..
+    ldx #<(osword255block)                                            // 3a65: a2 81       ..
+    ldy #>(osword255block)                                            // 3a67: a0 41       .A
+    jsr osword                                                        // 3a69: 20 f1 ff     ..
+    lda #$df                                                          // 3a6c: a9 df       ..
+    ldx #<(osword255block)                                            // 3a6e: a2 81       ..
+    ldy #>(osword255block)                                            // 3a70: a0 41       .A
+    jsr osword                                                        // 3a72: 20 f1 ff     ..
+    lda #$e0                                                          // 3a75: a9 e0       ..
+    ldx #<(osword255block)                                            // 3a77: a2 81       ..
+    ldy #>(osword255block)                                            // 3a79: a0 41       .A
+    jsr osword                                                        // 3a7b: 20 f1 ff     ..
+    lda #$e1                                                          // 3a7e: a9 e1       ..
+    ldx #<(osword255block)                                            // 3a80: a2 81       ..
+    ldy #>(osword255block)                                            // 3a82: a0 41       .A
+    jsr osword                                                        // 3a84: 20 f1 ff     ..
+    lda #$e2                                                          // 3a87: a9 e2       ..
+    ldx #<(osword255block)                                            // 3a89: a2 81       ..
+    ldy #>(osword255block)                                            // 3a8b: a0 41       .A
+    jsr osword                                                        // 3a8d: 20 f1 ff     ..
+    lda #$e3                                                          // 3a90: a9 e3       ..
+    ldx #<(osword255block)                                            // 3a92: a2 81       ..
+    ldy #>(osword255block)                                            // 3a94: a0 41       .A
+    jsr osword                                                        // 3a96: 20 f1 ff     ..
+    lda #$e4                                                          // 3a99: a9 e4       ..
+    ldx #<(osword255block)                                            // 3a9b: a2 81       ..
+    ldy #>(osword255block)                                            // 3a9d: a0 41       .A
+    jsr osword                                                        // 3a9f: 20 f1 ff     ..
+    lda #$e5                                                          // 3aa2: a9 e5       ..
+    ldx #<(osword255block)                                            // 3aa4: a2 81       ..
+    ldy #>(osword255block)                                            // 3aa6: a0 41       .A
+    jsr osword                                                        // 3aa8: 20 f1 ff     ..
+    lda #$e6                                                          // 3aab: a9 e6       ..
+    ldx #<(osword255block)                                            // 3aad: a2 81       ..
+    ldy #>(osword255block)                                            // 3aaf: a0 41       .A
+    jsr osword                                                        // 3ab1: 20 f1 ff     ..
+    lda #$e7                                                          // 3ab4: a9 e7       ..
+    ldx #<(osword255block)                                            // 3ab6: a2 81       ..
+    ldy #>(osword255block)                                            // 3ab8: a0 41       .A
+    jsr osword                                                        // 3aba: 20 f1 ff     ..
+    lda #$e8                                                          // 3abd: a9 e8       ..
+    ldx #<(osword255block)                                            // 3abf: a2 81       ..
+    ldy #>(osword255block)                                            // 3ac1: a0 41       .A
+    jsr osword                                                        // 3ac3: 20 f1 ff     ..
+    lda #$e9                                                          // 3ac6: a9 e9       ..
+    ldx #<(osword255block)                                            // 3ac8: a2 81       ..
+    ldy #>(osword255block)                                            // 3aca: a0 41       .A
+    jsr osword                                                        // 3acc: 20 f1 ff     ..
+    lda #$ea                                                          // 3acf: a9 ea       ..
+    ldx #<(osword255block)                                            // 3ad1: a2 81       ..
+    ldy #>(osword255block)                                            // 3ad3: a0 41       .A
+    jsr osword                                                        // 3ad5: 20 f1 ff     ..
+    lda #$eb                                                          // 3ad8: a9 eb       ..
+    ldx #<(osword255block)                                            // 3ada: a2 81       ..
+    ldy #>(osword255block)                                            // 3adc: a0 41       .A
+    jsr osword                                                        // 3ade: 20 f1 ff     ..
+    lda #$ec                                                          // 3ae1: a9 ec       ..
+    ldx #<(osword255block)                                            // 3ae3: a2 81       ..
+    ldy #>(osword255block)                                            // 3ae5: a0 41       .A
+    jsr osword                                                        // 3ae7: 20 f1 ff     ..
+    lda #$ed                                                          // 3aea: a9 ed       ..
+    ldx #<(osword255block)                                            // 3aec: a2 81       ..
+    ldy #>(osword255block)                                            // 3aee: a0 41       .A
+    jsr osword                                                        // 3af0: 20 f1 ff     ..
+    lda #$ee                                                          // 3af3: a9 ee       ..
+    ldx #<(osword255block)                                            // 3af5: a2 81       ..
+    ldy #>(osword255block)                                            // 3af7: a0 41       .A
+    jsr osword                                                        // 3af9: 20 f1 ff     ..
+    lda #$ef                                                          // 3afc: a9 ef       ..
+    ldx #<(osword255block)                                            // 3afe: a2 81       ..
+    ldy #>(osword255block)                                            // 3b00: a0 41       .A
+    jsr osword                                                        // 3b02: 20 f1 ff     ..
+    lda #$f0                                                          // 3b05: a9 f0       ..
+    ldx #<(osword255block)                                            // 3b07: a2 81       ..
+    ldy #>(osword255block)                                            // 3b09: a0 41       .A
+    jsr osword                                                        // 3b0b: 20 f1 ff     ..
+    lda #$f1                                                          // 3b0e: a9 f1       ..
+    ldx #<(osword255block)                                            // 3b10: a2 81       ..
+    ldy #>(osword255block)                                            // 3b12: a0 41       .A
+    jsr osword                                                        // 3b14: 20 f1 ff     ..
+    lda #$f2                                                          // 3b17: a9 f2       ..
+    ldx #<(osword255block)                                            // 3b19: a2 81       ..
+    ldy #>(osword255block)                                            // 3b1b: a0 41       .A
+    jsr osword                                                        // 3b1d: 20 f1 ff     ..
+    lda #$f3                                                          // 3b20: a9 f3       ..
+    ldx #<(osword255block)                                            // 3b22: a2 81       ..
+    ldy #>(osword255block)                                            // 3b24: a0 41       .A
+    jsr osword                                                        // 3b26: 20 f1 ff     ..
+    lda #$f4                                                          // 3b29: a9 f4       ..
+    ldx #<(osword255block)                                            // 3b2b: a2 81       ..
+    ldy #>(osword255block)                                            // 3b2d: a0 41       .A
+    jsr osword                                                        // 3b2f: 20 f1 ff     ..
+    lda #$f5                                                          // 3b32: a9 f5       ..
+    ldx #<(osword255block)                                            // 3b34: a2 81       ..
+    ldy #>(osword255block)                                            // 3b36: a0 41       .A
+    jsr osword                                                        // 3b38: 20 f1 ff     ..
+    lda #$f6                                                          // 3b3b: a9 f6       ..
+    ldx #<(osword255block)                                            // 3b3d: a2 81       ..
+    ldy #>(osword255block)                                            // 3b3f: a0 41       .A
+    jsr osword                                                        // 3b41: 20 f1 ff     ..
+    lda #$f7                                                          // 3b44: a9 f7       ..
+    ldx #<(osword255block)                                            // 3b46: a2 81       ..
+    ldy #>(osword255block)                                            // 3b48: a0 41       .A
+    jsr osword                                                        // 3b4a: 20 f1 ff     ..
+    lda #$f8                                                          // 3b4d: a9 f8       ..
+    ldx #<(osword255block)                                            // 3b4f: a2 81       ..
+    ldy #>(osword255block)                                            // 3b51: a0 41       .A
+    jsr osword                                                        // 3b53: 20 f1 ff     ..
+    lda #$f9                                                          // 3b56: a9 f9       ..
+    ldx #<(osword255block)                                            // 3b58: a2 81       ..
+    ldy #>(osword255block)                                            // 3b5a: a0 41       .A
+    jsr osword                                                        // 3b5c: 20 f1 ff     ..
+    lda #$fa                                                          // 3b5f: a9 fa       ..
+    ldx #<(osword255block)                                            // 3b61: a2 81       ..
+    ldy #>(osword255block)                                            // 3b63: a0 41       .A
+    jsr osword                                                        // 3b65: 20 f1 ff     ..            // Data transfer over Tube (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$fb                                                          // 3b68: a9 fb       ..
+    ldx #<(osword255block)                                            // 3b6a: a2 81       ..
+    ldy #>(osword255block)                                            // 3b6c: a0 41       .A
+    jsr osword                                                        // 3b6e: 20 f1 ff     ..            // WD1770/2 Floppy Disk Control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$fc                                                          // 3b71: a9 fc       ..
+    ldx #<(osword255block)                                            // 3b73: a2 81       ..
+    ldy #>(osword255block)                                            // 3b75: a0 41       .A
+    jsr osword                                                        // 3b77: 20 f1 ff     ..            // DOS CRTC Control (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$fd                                                          // 3b7a: a9 fd       ..
+    ldx #<(osword255block)                                            // 3b7c: a2 81       ..
+    ldy #>(osword255block)                                            // 3b7e: a0 41       .A
+    jsr osword                                                        // 3b80: 20 f1 ff     ..
+    lda #$fe                                                          // 3b83: a9 fe       ..
+    ldx #<(osword255block)                                            // 3b85: a2 81       ..
+    ldy #>(osword255block)                                            // 3b87: a0 41       .A
+    jsr osword                                                        // 3b89: 20 f1 ff     ..            // Z80 MFM disk access (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$ff                                                          // 3b8c: a9 ff       ..
+    ldx #<(osword255block)                                            // 3b8e: a2 81       ..
+    ldy #>(osword255block)                                            // 3b90: a0 41       .A
+    jsr osword                                                        // 3b92: 20 f1 ff     ..            // Z80 Data transfer over Tube (see https://beebwiki.mdfs.net/OSWORDs)
+    lda #$1a                                                          // 3b95: a9 1a       ..
+    jsr osbyte                                                        // 3b97: 20 f4 ff     ..            // Handset detection (Communicator); BASIC Editor toggle configuration (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$1e                                                          // 3b9a: a9 1e       ..
+    jsr osbyte                                                        // 3b9c: 20 f4 ff     ..            // Enable SLAVE ROM commands (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$20 // ' '                                                   // 3b9f: a9 20       .
+    jsr osbyte                                                        // 3ba1: 20 f4 ff     ..            // Watford32K - Read top of memory (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$21 // '!'                                                   // 3ba4: a9 21       .!
+    jsr osbyte                                                        // 3ba6: 20 f4 ff     ..            // Watford32K - Read top of memory for mode (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$22 // '"'                                                   // 3ba9: a9 22       ."
+    jsr osbyte                                                        // 3bab: 20 f4 ff     ..            // Watford32K - Read/Write RAM switch (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$23 // '#'                                                   // 3bae: a9 23       .#
+    jsr osbyte                                                        // 3bb0: 20 f4 ff     ..            // Watford32K - Read workspace address (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$24 // '$'                                                   // 3bb3: a9 24       .$
+    jsr osbyte                                                        // 3bb5: 20 f4 ff     ..            // Watford32K - Read/Write RAM buffer bank (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$28 // '('                                                   // 3bb8: a9 28       .(
+    jsr osbyte                                                        // 3bba: 20 f4 ff     ..            // EasyTalk speech ROM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$29 // ')'                                                   // 3bbd: a9 29       .)
+    jsr osbyte                                                        // 3bbf: 20 f4 ff     ..            // EasyTalk speech ROM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$2a // '*'                                                   // 3bc2: a9 2a       .*
+    jsr osbyte                                                        // 3bc4: 20 f4 ff     ..            // EasyTalk speech ROM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$2b // '+'                                                   // 3bc7: a9 2b       .+
+    jsr osbyte                                                        // 3bc9: 20 f4 ff     ..            // EasyTalk speech ROM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$2c // ','                                                   // 3bcc: a9 2c       .,
+    jsr osbyte                                                        // 3bce: 20 f4 ff     ..            // EasyTalk speech ROM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$2d // '-'                                                   // 3bd1: a9 2d       .-
+    jsr osbyte                                                        // 3bd3: 20 f4 ff     ..            // EasyTalk speech ROM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$32 // '2'                                                   // 3bd6: a9 32       .2
+    jsr osbyte                                                        // 3bd8: 20 f4 ff     ..            // NetFS - Poll transmit (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$33 // '3'                                                   // 3bdb: a9 33       .3
+    jsr osbyte                                                        // 3bdd: 20 f4 ff     ..            // NetFS - Poll receive (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$34 // '4'                                                   // 3be0: a9 34       .4
+    jsr osbyte                                                        // 3be2: 20 f4 ff     ..            // NetFS - Delete receive block, enable/disable events on reception (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$35 // '5'                                                   // 3be5: a9 35       .5
+    jsr osbyte                                                        // 3be7: 20 f4 ff     ..            // NetFS - Disconnect REMOTE (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$3f // '?'                                                   // 3bea: a9 3f       .?
+    jsr osbyte                                                        // 3bec: 20 f4 ff     ..            // ZNOS CP/M - Reload CCP and BDOS (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$40 // '@'                                                   // 3bef: a9 40       .@
+    jsr osbyte                                                        // 3bf1: 20 f4 ff     ..            // Merlin: Read modem handshake (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$41 // 'A'                                                   // 3bf4: a9 41       .A
+    jsr osbyte                                                        // 3bf6: 20 f4 ff     ..            // Merlin: Select RAM page (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$42 // 'B'                                                   // 3bf9: a9 42       .B
+    jsr osbyte                                                        // 3bfb: 20 f4 ff     ..            // Merlin: Enable/disable paged RAM (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$43 // 'C'                                                   // 3bfe: a9 43       .C
+    jsr osbyte                                                        // 3c00: 20 f4 ff     ..            // ParaMax - Enter CNC control program (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$46 // 'F'                                                   // 3c03: a9 46       .F
+    jsr osbyte                                                        // 3c05: 20 f4 ff     ..            // Read/write country number (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$47 // 'G'                                                   // 3c08: a9 47       .G
+    jsr osbyte                                                        // 3c0a: 20 f4 ff     ..            // Read/write alphabet or keyboard number (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$49 // 'I'                                                   // 3c0d: a9 49       .I
+    jsr osbyte                                                        // 3c0f: 20 f4 ff     ..            // Integra-B calls (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$5a // 'Z'                                                   // 3c12: a9 5a       .Z
+    jsr osbyte                                                        // 3c14: 20 f4 ff     ..            // Find/set ROM status or Enable/disable PRES ADFS (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$60 // '`'                                                   // 3c17: a9 60       .`
+    jsr osbyte                                                        // 3c19: 20 f4 ff     ..            // Terminal Emulator flow control (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$61 // 'a'                                                   // 3c1c: a9 61       .a
+    jsr osbyte                                                        // 3c1e: 20 f4 ff     ..            // HKSET Page timeout monitor (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$62 // 'b'                                                   // 3c21: a9 62       .b
+    jsr osbyte                                                        // 3c23: 20 f4 ff     ..            // HKSET Poll received page status (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$64 // 'd'                                                   // 3c26: a9 64       .d
+    jsr osbyte                                                        // 3c28: 20 f4 ff     ..            // Enter SPY debugger (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$6a // 'j'                                                   // 3c2b: a9 6a       .j
+    jsr osbyte                                                        // 3c2d: 20 f4 ff     ..            // Select pointer/activate mouse (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$6e // 'n'                                                   // 3c30: a9 6e       .n
+    jsr osbyte                                                        // 3c32: 20 f4 ff     ..            // Write to ROMSTROBE (or Early Watford DFS: Control drive double-stepping, superceeded by *OPT40, *OPT80) (see https://beebwiki.mdfs.net/OSBYTEs)
+    lda #$6f // 'o'                                                   // 3c35: a9 6f       .o
+    jsr osbyte                                                        // 3c37: 20 f4 ff     ..            // Read/Write shadow RAM switch (see https://beebwiki.mdfs.net/OSBYTEs)
+    rts                                                               // 3c3a: 60          `
 
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3326: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 333a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 334e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3362: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3376: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 338a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 339e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 33b2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 33c6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 33da: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 33ee: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3402: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3416: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 342a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 343e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3452: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3466: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 347a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 348e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 34a2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 34b6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 34ca: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 34de: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 34f2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3506: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 351a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 352e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3542: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3556: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 356a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 357e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3592: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 35a6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 35ba: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 35ce: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 35e2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 35f6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 360a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 361e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3632: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3646: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 365a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 366e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3682: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3696: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 36aa: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 36be: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 36d2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 36e6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 36fa: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 370e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3722: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3736: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 374a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 375e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3772: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3786: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 379a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 37ae: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 37c2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 37d6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 37ea: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 37fe: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3812: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3826: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 383a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 384e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3862: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3876: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 388a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 389e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 38b2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 38c6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 38da: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 38ee: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3902: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3916: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 392a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 393e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3952: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3966: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 397a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 398e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 39a2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 39b6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 39ca: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 39de: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 39f2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a06: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a1a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a2e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a42: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a56: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a6a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a7e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3a92: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3aa6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3aba: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ace: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ae2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3af6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b0a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b1e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b32: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b46: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b5a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b6e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b82: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3b96: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3baa: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3bbe: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3bd2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3be6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3bfa: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c0e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c22: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c36: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c4a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c5e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c72: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c86: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c9a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cae: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cc2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cd6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cea: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cfe: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d12: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d26: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d3a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d4e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d62: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d76: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d8a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d9e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3db2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3dc6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3dda: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3dee: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e02: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e16: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e2a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e3e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e52: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e66: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e7a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e8e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ea2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3eb6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3eca: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ede: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ef2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f06: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f1a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f2e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f42: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f56: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f6a: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f7e: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f92: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fa6: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fba: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fce: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fe2: 00 00 00... ...
-    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0                                 // 3ff6: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c3b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c4f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c63: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c77: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c8b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3c9f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cb3: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cc7: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cdb: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3cef: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d03: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d17: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d2b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d3f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d53: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d67: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d7b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3d8f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3da3: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3db7: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3dcb: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ddf: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3df3: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e07: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e1b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e2f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e43: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e57: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e6b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e7f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3e93: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ea7: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ebb: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ecf: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ee3: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3ef7: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f0b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f1f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f33: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f47: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f5b: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f6f: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f83: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3f97: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fab: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fbf: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fd3: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 3fe7: 00 00 00... ...
+    .byt 0, 0, 0, 0, 0                                                // 3ffb: 00 00 00... ...
 osword0block
     .byt <(input_buffer)                                              // 4000: 05          .              // Buffer address for input (2 bytes)
     .byt >(input_buffer)                                              // 4001: 40          @
@@ -4851,44 +5761,62 @@ osword14block
 osword15block
     .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 40f1: 00 00 00... ...            // write clock time format (8,15,24)
     .byt 0, 0, 0, 0                                                   // 4105: 00 00 00... ...
-osfile_block
+osword122block
     .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 4109: 00 00 00... ...
-osgbpb_block
-    .byt 0                                                            // 411d: 00          .              // osgbpb block: file handle
-    .byt 0                                                            // 411e: 00          .              // start address of data (4 bytes)
+    .byt 0                                                            // 411d: 00          .
+    .byt 0                                                            // 411e: 00          .
     .byt 0                                                            // 411f: 00          .
     .byt 0                                                            // 4120: 00          .
+osword125block
     .byt 0                                                            // 4121: 00          .
-    .byt 0                                                            // 4122: 00          .              // number of bytes to transfer (4 bytes)
+    .byt 0                                                            // 4122: 00          .
     .byt 0                                                            // 4123: 00          .
     .byt 0                                                            // 4124: 00          .
     .byt 0                                                            // 4125: 00          .
-    .byt 0                                                            // 4126: 00          .              // sequential pointer value to be used (4 bytes)
+    .byt 0                                                            // 4126: 00          .
     .byt 0                                                            // 4127: 00          .
     .byt 0                                                            // 4128: 00          .
     .byt 0                                                            // 4129: 00          .
-osgbpb8_block
-    .byt 0                                                            // 412a: 00          .              // osgbpb block: disc cycle number
-    .byt 0                                                            // 412b: 00          .              // address for returned data (4 bytes)
+    .byt 0                                                            // 412a: 00          .
+    .byt 0                                                            // 412b: 00          .
     .byt 0                                                            // 412c: 00          .
     .byt 0                                                            // 412d: 00          .
     .byt 0                                                            // 412e: 00          .
-    .byt 0                                                            // 412f: 00          .              // number of filenames (4 bytes)
+    .byt 0                                                            // 412f: 00          .
     .byt 0                                                            // 4130: 00          .
     .byt 0                                                            // 4131: 00          .
     .byt 0                                                            // 4132: 00          .
-    .byt 0                                                            // 4133: 00          .              // sequential pointer value to be used (4 bytes)
+    .byt 0                                                            // 4133: 00          .
     .byt 0                                                            // 4134: 00          .
     .byt 0                                                            // 4135: 00          .
     .byt 0                                                            // 4136: 00          .
-l4137
-    .asc "!BOOT"                                                      // 4137: 21 42 4f... !BO
+    .byt 0, 0                                                         // 4137: 00 00       ..
+osword126block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 4139: 00 00 00... ...
+    .byt 0, 0, 0, 0                                                   // 414d: 00 00 00... ...
+osword127block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 4151: 00 00 00... ...
+    .byt 0, 0, 0, 0                                                   // 4165: 00 00 00... ...
+osword128block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 4169: 00 00 00... ...
+    .byt 0, 0, 0, 0                                                   // 417d: 00 00 00... ...
+osword255block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 4181: 00 00 00... ...
+    .byt 0, 0, 0, 0                                                   // 4195: 00 00 00... ...
+osfile_block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 4199: 00 00 00... ...
+osgbpb_block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0                        // 41ad: 00 00 00... ...            // osgbpb block: file handle// start address of data (4 bytes)// number of bytes to transfer (4 bytes)// sequential pointer value to be used (4 bytes)
+osgbpb8_block
+    .byt 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0                        // 41ba: 00 00 00... ...            // osgbpb block: disc cycle number// address for returned data (4 bytes)// number of filenames (4 bytes)// sequential pointer value to be used (4 bytes)
+osfind_block
+    .asc "!BOOT"                                                      // 41c7: 21 42 4f... !BO
 pydis_end
 
 // Label references by decreasing frequency:
-//     osbyte:       770
+//     osbyte:       803
 //     mem:          735
-//     osword:        16
+//     osword:       256
 //     osgbpb:        11
 //     osfile:        10
 //     osargs:         8
@@ -4904,6 +5832,3 @@ pydis_end
 //     osnewl:         1
 //     oswrcr:         1
 //     oswrch:         1
-
-// Automatically generated labels:
-//     l4137

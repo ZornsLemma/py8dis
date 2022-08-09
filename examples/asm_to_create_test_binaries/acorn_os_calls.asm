@@ -4999,6 +4999,1307 @@ start
     ldy mem
     jsr osargs
 
+    ; ***** EXTRA OSWORDs *****
+    lda #16
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #17
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #18
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #19
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #20
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #21
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #22
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #23
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #24
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #25
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #26
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #27
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #28
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #29
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #30
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #31
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #32
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #33
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #34
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #35
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #36
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #37
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #38
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #39
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #40
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #41
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #42
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #43
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #44
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #45
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #46
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #47
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #48
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #49
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #50
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #51
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #52
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #53
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #54
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #55
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #56
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #57
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #58
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #59
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #60
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #61
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #62
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #63
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #64
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #65
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #66
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #67
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #68
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #69
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #70
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #71
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #72
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #73
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #74
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #75
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #76
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #77
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #78
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #79
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #80
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #81
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #82
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #83
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #84
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #85
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #86
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #87
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #88
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #89
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #90
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #91
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #92
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #93
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #94
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #95
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #96
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #97
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #98
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #99
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #100
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #101
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #102
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #103
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #104
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #105
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #106
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #107
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #108
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #109
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #110
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #111
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #112
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #113
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #114
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #115
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #116
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #117
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #118
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #119
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #120
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #121
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #122
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #123
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #124
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #125
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #126
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #127
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #128
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #129
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #130
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #131
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #132
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #133
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #134
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #135
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #136
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #137
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #138
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #139
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #140
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #141
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #142
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #143
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #144
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #145
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #146
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #147
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #148
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #149
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #150
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #151
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #152
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #153
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #154
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #155
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #156
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #157
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #158
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #159
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #160
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #161
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #162
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #163
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #164
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #165
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #166
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #167
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #168
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #169
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #170
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #171
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #172
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #173
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #174
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #175
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #176
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #177
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #178
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #179
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #180
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #181
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #182
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #183
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #184
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #185
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #186
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #187
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #188
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #189
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #190
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #191
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #192
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #193
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #194
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #195
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #196
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #197
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #198
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #199
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #200
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #201
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #202
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #203
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #204
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #205
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #206
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #207
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #208
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #209
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #210
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #211
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #212
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #213
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #214
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #215
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #216
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #217
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #218
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #219
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #220
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #221
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #222
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #223
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #224
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #225
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #226
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #227
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #228
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #229
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #230
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #231
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #232
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #233
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #234
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #235
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #236
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #237
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #238
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #239
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #240
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #241
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #242
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #243
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #244
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #245
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #246
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #247
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #248
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #249
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #250
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #251
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #252
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #253
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #254
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    lda #255
+    ldx #<oswordffblock
+    ldy #>oswordffblock
+    jsr osword
+
+    ; ***** EXTRA OSBYTES *****
+    lda #$1A
+    jsr osbyte
+
+    lda #$1E
+    jsr osbyte
+
+    lda #$20
+    jsr osbyte
+
+    lda #$21
+    jsr osbyte
+
+    lda #$22
+    jsr osbyte
+
+    lda #$23
+    jsr osbyte
+
+    lda #$24
+    jsr osbyte
+
+    lda #$28
+    jsr osbyte
+
+    lda #$29
+    jsr osbyte
+
+    lda #$2A
+    jsr osbyte
+
+    lda #$2B
+    jsr osbyte
+
+    lda #$2C
+    jsr osbyte
+
+    lda #$2D
+    jsr osbyte
+
+    lda #$32
+    jsr osbyte
+
+    lda #$33
+    jsr osbyte
+
+    lda #$34
+    jsr osbyte
+
+    lda #$35
+    jsr osbyte
+
+    lda #$3F
+    jsr osbyte
+
+    lda #$40
+    jsr osbyte
+
+    lda #$41
+    jsr osbyte
+
+    lda #$42
+    jsr osbyte
+
+    lda #$43
+    jsr osbyte
+
+    lda #$46
+    jsr osbyte
+
+    lda #$47
+    jsr osbyte
+
+    lda #$49
+    jsr osbyte
+
+    lda #$5A
+    jsr osbyte
+
+    lda #$60
+    jsr osbyte
+
+    lda #$61
+    jsr osbyte
+
+    lda #$62
+    jsr osbyte
+
+    lda #$64
+    jsr osbyte
+
+    lda #$6A
+    jsr osbyte
+
+    lda #$6E
+    jsr osbyte
+
+    lda #$6F
+    jsr osbyte
+
     rts
 
 * = $4000
@@ -5056,6 +6357,24 @@ osword14block
     !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
 
 osword15block
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osword7ablock
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osword7dblock
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osword7eblock
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osword7fblock
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+osword80block
+    !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
+
+oswordffblock
     !byte 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 ,0,0,0,0
 
 osfileblock
