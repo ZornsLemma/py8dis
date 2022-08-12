@@ -48,14 +48,14 @@ with move(0x8000, 0x2000, 0x4000):
     entry(0x49b) # XXX: how is this reached?
     entry(0x4ce) # XXX: how is this reached?
     entry(0x06ad, "tube_evntv_handler")
-    expr(0xaef9, "<tube_evntv_handler")
-    expr(0xaefe, ">tube_evntv_handler")
+    expr(0xaef9, make_lo("tube_evntv_handler"))
+    expr(0xaefe, make_hi("tube_evntv_handler"))
     # ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. I'm not sure we can handle this automatically, but perhaps we could.
     constant(0x0016, "tube_brkv_handler_fwd")
     expr(0xaf31, "tube_brkv_handler_fwd")
     entry(0x0016, "tube_brkv_handler") # TODO: This is breaking beebasm because it gets emitted "inline" too late for other code to realise on the first pass it is a zero page label (and we can't declare it *also* as a constant, as we then get a redefinition error)
-    expr(0xaf03, "<tube_brkv_handler")
-    expr(0xaf08, ">tube_brkv_handler")
+    expr(0xaf03, make_lo("tube_brkv_handler"))
+    expr(0xaf08, make_hi("tube_brkv_handler"))
     # TODO: Possible bug: we should be inlining a label definition l06a7 at binary &ae82; this *is* within a move() region but (perhaps due to the order things happen to be identified in) that label is associated with move ID 0, which means it never gets emitted inline at all and so it is emitted as an explicit value. The two possible areas of problem are a) should we (even if only by heuristic) be assigning it to a different move ID, or allowing it to change move ID/exist in multiple move IDs b) since it will never be emitted inline using the sole move ID 0 which it has, should be we realising that it's probably smart to output it in move 2 which *does* cover this address implicitly?
     # - OK, the reason this is assigned to move ID 0 is that the sole reference to 06a7 is from code in move ID 1 where 6a7 is in move ID 2, so (not unreasonably) we don't heuristically assign move ID 2 but leave it with a default of 0. TODO: Probably too hard for the benefit, but if we could somehow arrange for the two disjoint tube host code move()s to either *be* the same move ID or for their move IDs to be linked by the user, we could potentially then DTRT heuristically.
     # - TODO: don't forget the separate issue of "should we improve label emitting so we can use an implicit label where possible despite move ID"?

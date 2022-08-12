@@ -101,10 +101,12 @@ inkey_key_1                       = 207
 inkey_key_2                       = 206
 inkey_key_3                       = 238
 inkey_key_4                       = 237
+inkey_key_ctrl                    = 254
 inkey_key_escape                  = 143
 inkey_key_h                       = 171
 inkey_key_k                       = 185
 inkey_key_s                       = 174
+inkey_key_shift                   = 255
 osbyte_clear_escape               = 124
 osbyte_flush_buffer_class         = 15
 osbyte_inkey                      = 129
@@ -1569,20 +1571,20 @@ printstringloop
 // Handle keyboard input
 // ----------------------------------------------------------------------------------
 handlekeyboard
-    ldx #inkey_key_h                                                  // 1a3b: a2 ab       ..
+    ldx #inkey_key_h                                                  // 1a3b: a2 ab       ..             // X=inkey key value
     ldy #$ff                                                          // 1a3d: a0 ff       ..
     lda #osbyte_inkey                                                 // 1a3f: a9 81       ..
     jsr osbyte                                                        // 1a41: 20 f4 ff     ..            // Is the 'H' key pressed?
     cpy #0                                                            // 1a44: c0 00       ..             // X and Y contain $ff if the key is pressed
     beq checkkeys                                                     // 1a46: f0 26       .&
 paused
-    ldx #inkey_key_h                                                  // 1a48: a2 ab       ..
+    ldx #inkey_key_h                                                  // 1a48: a2 ab       ..             // X=inkey key value
     ldy #$ff                                                          // 1a4a: a0 ff       ..
     lda #osbyte_inkey                                                 // 1a4c: a9 81       ..
     jsr osbyte                                                        // 1a4e: 20 f4 ff     ..            // Is the 'H' key pressed?
     cpy #0                                                            // 1a51: c0 00       ..             // X and Y contain $ff if the key is pressed
     beq stillpaused                                                   // 1a53: f0 12       ..
-    ldx #inkey_key_escape                                             // 1a55: a2 8f       ..
+    ldx #inkey_key_escape                                             // 1a55: a2 8f       ..             // X=inkey key value
     ldy #$ff                                                          // 1a57: a0 ff       ..
     lda #osbyte_inkey                                                 // 1a59: a9 81       ..
     jsr osbyte                                                        // 1a5b: 20 f4 ff     ..            // Is the 'ESCAPE' key pressed?
@@ -3958,7 +3960,7 @@ promptpositioned
     jsr printstring                                                   // 2906: 20 26 1a     &.
     lda #osbyte_set_cursor_editing                                    // 2909: a9 04       ..
     ldx #1                                                            // 290b: a2 01       ..
-    jsr osbyte                                                        // 290d: 20 f4 ff     ..            // Disable cursor editing (edit keys give ASCII 135-139)
+    jsr osbyte                                                        // 290d: 20 f4 ff     ..            // Disable cursor editing (edit keys give ASCII 135-139) (X=1)
     lda #osbyte_flush_buffer_class                                    // 2910: a9 0f       ..
     ldx #1                                                            // 2912: a2 01       ..
     jsr osbyte                                                        // 2914: 20 f4 ff     ..            // Flush input buffers (X non-zero)
@@ -4292,7 +4294,7 @@ choosenumplayers
     lda #$64                                                          // 2b98: a9 64       .d
     sta temp5                                                         // 2b9a: 85 8c       ..
 inputnumplayers
-    ldx #inkey_key_1                                                  // 2b9c: a2 cf       ..
+    ldx #inkey_key_1                                                  // 2b9c: a2 cf       ..             // X=inkey key value
     ldy #$ff                                                          // 2b9e: a0 ff       ..
     lda #osbyte_inkey                                                 // 2ba0: a9 81       ..
     jsr osbyte                                                        // 2ba2: 20 f4 ff     ..            // Is the '1' key pressed?
@@ -4302,7 +4304,7 @@ inputnumplayers
     jmp startgame                                                     // 2bab: 4c f1 2b    L.+
 
 not1player
-    ldx #inkey_key_2                                                  // 2bae: a2 ce       ..
+    ldx #inkey_key_2                                                  // 2bae: a2 ce       ..             // X=inkey key value
     ldy #$ff                                                          // 2bb0: a0 ff       ..
     lda #osbyte_inkey                                                 // 2bb2: a9 81       ..
     jsr osbyte                                                        // 2bb4: 20 f4 ff     ..            // Is the '2' key pressed?
@@ -4312,7 +4314,7 @@ not1player
     jmp startgame                                                     // 2bbd: 4c f1 2b    L.+
 
 not2player
-    ldx #inkey_key_3                                                  // 2bc0: a2 ee       ..
+    ldx #inkey_key_3                                                  // 2bc0: a2 ee       ..             // X=inkey key value
     ldy #$ff                                                          // 2bc2: a0 ff       ..
     lda #osbyte_inkey                                                 // 2bc4: a9 81       ..
     jsr osbyte                                                        // 2bc6: 20 f4 ff     ..            // Is the '3' key pressed?
@@ -4322,7 +4324,7 @@ not2player
     jmp startgame                                                     // 2bcf: 4c f1 2b    L.+
 
 not3player
-    ldx #inkey_key_4                                                  // 2bd2: a2 ed       ..
+    ldx #inkey_key_4                                                  // 2bd2: a2 ed       ..             // X=inkey key value
     ldy #$ff                                                          // 2bd4: a0 ff       ..
     lda #osbyte_inkey                                                 // 2bd6: a9 81       ..
     jsr osbyte                                                        // 2bd8: 20 f4 ff     ..            // Is the '4' key pressed?
@@ -4566,7 +4568,7 @@ string_keyhelp_start
 string_keyhelp_end
 checktitlepagekeys_core
     lda #osbyte_inkey                                                 // 2d88: a9 81       ..
-    ldx #inkey_key_s                                                  // 2d8a: a2 ae       ..
+    ldx #inkey_key_s                                                  // 2d8a: a2 ae       ..             // X=inkey key value
     ldy #$ff                                                          // 2d8c: a0 ff       ..
     jsr osbyte                                                        // 2d8e: 20 f4 ff     ..            // Is the 'S' key pressed?
     cpy #0                                                            // 2d91: c0 00       ..             // X and Y contain $ff if the key is pressed
@@ -4577,7 +4579,7 @@ checktitlepagekeys_core
 
 didntpressS
     lda #osbyte_inkey                                                 // 2d99: a9 81       ..
-    ldx #inkey_key_k                                                  // 2d9b: a2 b9       ..
+    ldx #inkey_key_k                                                  // 2d9b: a2 b9       ..             // X=inkey key value
     ldy #$ff                                                          // 2d9d: a0 ff       ..
     jsr osbyte                                                        // 2d9f: 20 f4 ff     ..            // Is the 'K' key pressed?
     cpy #0                                                            // 2da2: c0 00       ..             // X and Y contain $ff if the key is pressed
@@ -5019,7 +5021,7 @@ choosekeys
 // ----------------------------------------------------------------------------------
 waitforkey
     lda #osbyte_scan_keyboard                                         // 305c: a9 79       .y  :095c[1]
-    ldx #$80                                                          // 305e: a2 80       ..  :095e[1]
+    ldx #(255 - inkey_key_shift) ^ 128                                // 305e: a2 80       ..  :095e[1]   // X=internal key number EOR 128
     jsr osbyte                                                        // 3060: 20 f4 ff     .. :0960[1]   // Test for 'SHIFT' key pressed (X=128)
     txa                                                               // 3063: 8a          .   :0963[1]   // X has top bit set if 'SHIFT' pressed
     bpl didntpressshift                                               // 3064: 10 05       ..  :0964[1]
@@ -5028,7 +5030,7 @@ waitforkey
 
 didntpressshift
     lda #osbyte_scan_keyboard                                         // 306b: a9 79       .y  :096b[1]
-    ldx #$81                                                          // 306d: a2 81       ..  :096d[1]
+    ldx #(255 - inkey_key_ctrl) ^ 128                                 // 306d: a2 81       ..  :096d[1]   // X=internal key number EOR 128
     jsr osbyte                                                        // 306f: 20 f4 ff     .. :096f[1]   // Test for 'CTRL' key pressed (X=129)
     txa                                                               // 3072: 8a          .   :0972[1]   // X has top bit set if 'CTRL' pressed
     bpl didntpressctrl                                                // 3073: 10 05       ..  :0973[1]

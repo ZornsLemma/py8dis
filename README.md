@@ -214,6 +214,38 @@ Associate expression `s` with address `addr`. Any reference to `addr` in an inst
 
 Example: `lda $1ee4,x` could be replaced with `lda current_level_data+1,x`
 
+#### Making expression strings
+There are functions to help construct expression strings that will work across all assemblers:
+
+:pencil:make_op1(op, expr)
+
+For unary operators. For example `make_op1('NOT', 'input_bits')` might return `'!input_bits'` or `'NOT(input_bits)'` depending on the assembler.
+
+:pencil:make_op2(expr1, op, expr2)
+
+For binary operators, e.g. `make_op2('address', 'DIV', 8)`
+
+All the usual operators, +, -, *, / and so on can be used. It will accept common alternatives, 'AND' or '&' for example, 'XOR' or 'EOR'. These will be translated appropriately for the current assembler.
+
+There are convenience functions for common uses of the above:
+
+| Function                                  | Description                                                   |
+| :---------------------------------------- | :------------------------------------------------------------ |
+| :pencil:`make_lo(expr)`                   | for the low byte of a number                                  |
+| :pencil:`make_hi(expr)`                   | for the high byte of a number                                 |
+| :pencil:`make_add(expr1, expr2)`          | add                                                           |
+| :pencil:`make_subtract(expr1, expr2)`     | subtract                                                      |
+| :pencil:`make_multiply(expr1, expr2)`     | multiply                                                      |
+| :pencil:`make_divide(expr1, expr2)`       | divide                                                        |
+| :pencil:`make_or(expr1, expr2)`           | bitwise or                                                    |
+| :pencil:`make_and(expr1, expr2)`          | bitwise and                                                   |
+| :pencil:`make_eor(expr1, expr2)`          | bitwise eor (synonym for make_xor)                            |
+| :pencil:`make_xor(expr1, expr2)`          | bitwise xor                                                   |
+| :pencil:`make_modulo(expr1, expr2)`       | remainder after division                                      |
+
+Calls can be strung together: `make_lo(make_add('level_data', 1))` 
+
+
 ### Marking data
 
 #### Bytes and Words
@@ -324,7 +356,11 @@ Define a subroutine. All parameters except the address are optional. These are u
 ; ***************************************************************************************
 ```
 
-The `on_entry` and `on_exit` optional parameters are dictionaries that specify a comment for each register as required. e.g. `on_entry={ 'a': "number to print" }`. The `is_entry_point` parameter adds the address as an entry point for code. The `hook` parameter is a callback to allow for the decoration of the calling code.
+The `on_entry` and `on_exit` optional parameters are dictionaries that specify a comment for each register as required. e.g. `on_entry={ 'a': "number to print" }`. If a parameter description is in brackets, it is not used when decorating calls to this routine. This allows for `{ 'x': '(preserved)' }` style descriptions.
+
+The `is_entry_point` parameter adds the address as an entry point for code. 
+
+The `hook` parameter is a callback to allow for the decoration of the calling code. 
 
 :pencil:`no_automatic_comment(addr)`
 

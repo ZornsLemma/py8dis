@@ -11,6 +11,7 @@ osbyte_read_tube_presence              = 234
 osbyte_read_write_basic_rom_bank       = 187
 osfile_load                            = 255
 osfile_save                            = 0
+osfind_close                           = 0
 osword_read_clock                      = 1
 osword_read_cmos_clock                 = 14
 osword_read_io_memory                  = 5
@@ -231,7 +232,7 @@ c804c
     lda (os_text_ptr),y                                               // 804c: b1 f2       ..
     cmp #$0d                                                          // 804e: c9 0d       ..
     bne c806a                                                         // 8050: d0 18       ..
-    jsr osnewl                                                        // 8052: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // 8052: 20 e7 ff     ..            // Write newline (characters 10 and 13)
     ldx #$f6                                                          // 8055: a2 f6       ..
 // $8057 referenced 1 time by $8062
 loop_c8057
@@ -243,7 +244,7 @@ c805e
     jsr osasci                                                        // 805e: 20 e3 ff     ..            // Write character 32
     inx                                                               // 8061: e8          .
     bne loop_c8057                                                    // 8062: d0 f3       ..
-    jsr osnewl                                                        // 8064: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // 8064: 20 e7 ff     ..            // Write newline (characters 10 and 13)
 // $8067 referenced 2 times by $809c, $80a6
 c8067
     jsr sub_c80d8                                                     // 8067: 20 d8 80     ..
@@ -10026,7 +10027,7 @@ cbaa6
 
 // $bac2 referenced 8 times by $8a14, $8a68, $9285, $9319, $932a, $9538, $98c6, $bdc6
 sub_cbac2
-    jsr osnewl                                                        // bac2: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // bac2: 20 e7 ff     ..            // Write newline (characters 10 and 13)
 // $bac5 referenced 2 times by $babd, $bddf
 cbac5
     stz l001e                                                         // bac5: 64 1e       d.
@@ -10830,7 +10831,7 @@ sub_cbeee
     jsr sub_cba6e                                                     // beee: 20 6e ba     n.
     jsr sub_c9c5a                                                     // bef1: 20 5a 9c     Z.
     ldy l002a                                                         // bef4: a4 2a       .*
-    lda #0                                                            // bef6: a9 00       ..
+    lda #osfind_close                                                 // bef6: a9 00       ..
     jsr osfind                                                        // bef8: 20 ce ff     ..            // Close one or all files
     bra cbeeb                                                         // befb: 80 ee       ..
 sub_cbefd

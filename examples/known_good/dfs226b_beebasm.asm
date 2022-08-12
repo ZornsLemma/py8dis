@@ -17,6 +17,9 @@ osbyte_write_shadow_memory_use        = 114
 osfile_load                           = 255
 osfile_read_catalogue_info            = 5
 osfile_save                           = 0
+osfind_close                          = 0
+osfind_open_input                     = 64
+osfind_open_output                    = 128
 service_absolute_workspace_claimed    = 10
 service_boot                          = 3
 service_check_swr_presence            = 43
@@ -7331,7 +7334,7 @@ nmi_XXX5 = l0d1f+1
 ; &4b09 referenced 1 time by &ab02
 .cab09
     sta l00ab                                                         ; 4b09: 85 ab       ..  :ab09[1]
-    lda #&40 ; '@'                                                    ; 4b0b: a9 40       .@  :ab0b[1]
+    lda #osfind_open_input                                            ; 4b0b: a9 40       .@  :ab0b[1]
     jsr osfind                                                        ; 4b0d: 20 ce ff     .. :ab0d[1]   ; Open file for input (A=64)
     tay                                                               ; 4b10: a8          .   :ab10[1]   ; A=file handle (or zero on failure)
     lda #&0d                                                          ; 4b11: a9 0d       ..  :ab11[1]
@@ -7368,15 +7371,15 @@ nmi_XXX5 = l0d1f+1
 ; &4b3d referenced 1 time by &ab1d
 .cab3d
     plp                                                               ; 4b3d: 28          (   :ab3d[1]
-    jsr osnewl                                                        ; 4b3e: 20 e7 ff     .. :ab3e[1]   ; Write newline (character 10)
+    jsr osnewl                                                        ; 4b3e: 20 e7 ff     .. :ab3e[1]   ; Write newline (characters 10 and 13)
 ; &4b41 referenced 2 times by &aba5, &abbf
 .cab41
-    lda #0                                                            ; 4b41: a9 00       ..  :ab41[1]
+    lda #osfind_close                                                 ; 4b41: a9 00       ..  :ab41[1]
     jmp osfind                                                        ; 4b43: 4c ce ff    L.. :ab43[1]   ; Close one or all files
 
 .sub_cab46
     jsr sub_cac18                                                     ; 4b46: 20 18 ac     .. :ab46[1]
-    lda #&40 ; '@'                                                    ; 4b49: a9 40       .@  :ab49[1]
+    lda #osfind_open_input                                            ; 4b49: a9 40       .@  :ab49[1]
     jsr osfind                                                        ; 4b4b: 20 ce ff     .. :ab4b[1]   ; Open file for input (A=64)
     tay                                                               ; 4b4e: a8          .   :ab4e[1]   ; A=file handle (or zero on failure)
     beq cab17                                                         ; 4b4f: f0 c6       ..  :ab4f[1]
@@ -7420,7 +7423,7 @@ nmi_XXX5 = l0d1f+1
 ; &4b93 referenced 1 time by &ab7e
 .cab93
     jsr sub_caba9                                                     ; 4b93: 20 a9 ab     .. :ab93[1]
-    jsr osnewl                                                        ; 4b96: 20 e7 ff     .. :ab96[1]   ; Write newline (character 10)
+    jsr osnewl                                                        ; 4b96: 20 e7 ff     .. :ab96[1]   ; Write newline (characters 10 and 13)
     lda #8                                                            ; 4b99: a9 08       ..  :ab99[1]
     clc                                                               ; 4b9b: 18          .   :ab9b[1]
     adc l00a8                                                         ; 4b9c: 65 a8       e.  :ab9c[1]
@@ -7454,7 +7457,7 @@ nmi_XXX5 = l0d1f+1
 
 .sub_cabc5
     jsr sub_cac18                                                     ; 4bc5: 20 18 ac     .. :abc5[1]
-    lda #&80                                                          ; 4bc8: a9 80       ..  :abc8[1]
+    lda #osfind_open_output                                           ; 4bc8: a9 80       ..  :abc8[1]
     jsr osfind                                                        ; 4bca: 20 ce ff     .. :abca[1]   ; Open file for output (A=128)
     sta l00ab                                                         ; 4bcd: 85 ab       ..  :abcd[1]   ; A=file handle (or zero on failure)
 ; &4bcf referenced 1 time by &ac09
@@ -7695,7 +7698,7 @@ nmi_XXX5 = l0d1f+1
 .c0552
     jsr read_tube_r2_data                                             ; 4d2d: 20 c5 06     .. :0552[3]
     tay                                                               ; 4d30: a8          .   :0555[3]
-    lda #0                                                            ; 4d31: a9 00       ..  :0556[3]
+    lda #osfind_close                                                 ; 4d31: a9 00       ..  :0556[3]
     jsr osfind                                                        ; 4d33: 20 ce ff     .. :0558[3]   ; Close one or all files
     jmp c059c                                                         ; 4d36: 4c 9c 05    L.. :055b[3]
 
@@ -9069,7 +9072,7 @@ jump_address_low = sub_c0050+1
     sta (l00b8),y                                                     ; 55fb: 91 b8       ..  :b5fb[1]
     pla                                                               ; 55fd: 68          h   :b5fd[1]
     tay                                                               ; 55fe: a8          .   :b5fe[1]
-    lda #0                                                            ; 55ff: a9 00       ..  :b5ff[1]
+    lda #osfind_close                                                 ; 55ff: a9 00       ..  :b5ff[1]
     jsr osfind                                                        ; 5601: 20 ce ff     .. :b601[1]   ; Close one or all files
     jmp cb82b                                                         ; 5604: 4c 2b b8    L+. :b604[1]
 
@@ -10623,7 +10626,7 @@ lb6ce = sub_cb6cd+1
     ldy #&7f                                                          ; 5f03: a0 7f       ..  :bf03[1]
     jsr sub_cbf84                                                     ; 5f05: 20 84 bf     .. :bf05[1]
     bpl cbee8                                                         ; 5f08: 10 de       ..  :bf08[1]
-    jsr osnewl                                                        ; 5f0a: 20 e7 ff     .. :bf0a[1]   ; Write newline (character 10)
+    jsr osnewl                                                        ; 5f0a: 20 e7 ff     .. :bf0a[1]   ; Write newline (characters 10 and 13)
     ldx #0                                                            ; 5f0d: a2 00       ..  :bf0d[1]
     jsr sub_cbf7c                                                     ; 5f0f: 20 7c bf     |. :bf0f[1]
     lda #&fd                                                          ; 5f12: a9 fd       ..  :bf12[1]
@@ -10666,8 +10669,8 @@ lb6ce = sub_cb6cd+1
     jsr sub_cbf7c                                                     ; 5f43: 20 7c bf     |. :bf43[1]
 ; &5f46 referenced 1 time by &bf17
 .cbf46
-    jsr osnewl                                                        ; 5f46: 20 e7 ff     .. :bf46[1]   ; Write newline (character 10)
-    jsr osnewl                                                        ; 5f49: 20 e7 ff     .. :bf49[1]   ; Write newline (character 10)
+    jsr osnewl                                                        ; 5f46: 20 e7 ff     .. :bf46[1]   ; Write newline (characters 10 and 13)
+    jsr osnewl                                                        ; 5f49: 20 e7 ff     .. :bf49[1]   ; Write newline (characters 10 and 13)
     jmp cbee8                                                         ; 5f4c: 4c e8 be    L.. :bf4c[1]
 
 ; &5f4f referenced 1 time by &bf7c
@@ -14826,6 +14829,9 @@ lb6ce = sub_cb6cd+1
     assert osfile_load == &ff
     assert osfile_read_catalogue_info == &05
     assert osfile_save == &00
+    assert osfind_close == &00
+    assert osfind_open_input == &40
+    assert osfind_open_output == &80
     assert service_absolute_workspace_claimed == &0a
     assert service_boot == &03
     assert service_check_swr_presence == &2b
