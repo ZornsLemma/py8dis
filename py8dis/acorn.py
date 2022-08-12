@@ -9,11 +9,21 @@ def xy_addr(x_addr, y_addr):
         assert isinstance(x_addr, memorymanager.BinaryAddr)
         assert isinstance(y_addr, memorymanager.BinaryAddr)
         label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
+        x_runtime_addr = None if x_addr is None else movemanager.b2r(x_addr)
+        y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
 
-        classification.add_expression(x_addr, utils.LazyString("<(%s)", label))
-        classification.add_expression(y_addr, utils.LazyString(">(%s)", label))
+        auto_expr(x_runtime_addr, make_lo(label))
+        auto_expr(y_runtime_addr, make_hi(label))
+
         return memorymanager.RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
     return None
+
+osfind_enum = {
+      0: "osfind_close",
+     64: "osfind_open_input",
+    128: "osfind_open_output",
+    192: "osfind_open_random_access",
+}
 
 osgbpb_enum = {
     0x01: "osgbpb_write_bytes",
@@ -651,6 +661,18 @@ buffer_names = {
     8: "the speech buffer"
 }
 
+buffer_enum = {
+    0: "buffer_keyboard",
+    1: "buffer_rs423_input",
+    2: "buffer_rs423_output",
+    3: "buffer_printer",
+    4: "buffer_sound_channel_0",
+    5: "buffer_sound_channel_1",
+    6: "buffer_sound_channel_2",
+    7: "buffer_sound_channel_3",
+    8: "buffer_speech"
+}
+
 negative_buffer_actions = {
     255: "Read number of characters in keyboard buffer (X=255)",
     254: "Read number of characters in RS423 input buffer (X=254)",
@@ -676,8 +698,21 @@ event_names = {
     9: "User",
 }
 
+event_enum = {
+    0: "event_output_buffer_empty",
+    1: "event_input_buffer_full",
+    2: "event_character_entering_input_buffer",
+    3: "event_adc_conversion_complete",
+    4: "event_start_of_vertical_sync",
+    5: "event_interval_timer_crossing_zero",
+    6: "event_escape_condition_detected",
+    7: "event_rs423_error",
+    8: "event_network_error",
+    9: "event_user",
+}
+
 baud_rates = {
-    0: "9600 baud",
+    0: "default 9600 baud",
     1: "75 baud",
     2: "150 baud",
     3: "300 baud",
@@ -686,6 +721,18 @@ baud_rates = {
     6: "4800 baud",
     7: "9600 baud",
     8: "19200 baud",
+}
+
+baud_rate_enum = {
+    0: "baud_rate_default_9600",
+    1: "baud_rate_75",
+    2: "baud_rate_150",
+    3: "baud_rate_300",
+    4: "baud_rate_1200",
+    5: "baud_rate_2400",
+    6: "baud_rate_4800",
+    7: "baud_rate_9600",
+    8: "baud_rate_19200",
 }
 
 opt_descriptions = {
@@ -1006,13 +1053,16 @@ os_variable_names = {
     0xff: "start-up option byte",
 }
 
-def enum_lookup(reg_addr, e):
+def enum_lookup(reg_addr, e, comment=None):
     if reg_addr is None:
         return None
     r = memorymanager.memory_binary[reg_addr]
     if r in e:
         constant(r, e[r])
-        classification.add_expression(reg_addr, e[r])
+        runtime_addr = None if reg_addr is None else movemanager.b2r(reg_addr)
+        auto_expr(runtime_addr, e[r])
+    if comment is not None:
+        auto_comment(r, comment)
     return r
 
 def oswrsc_hook(runtime_addr, state, subroutine):
@@ -1021,22 +1071,18 @@ def oswrsc_hook(runtime_addr, state, subroutine):
     y_adjust_addr = state.get_previous_adjust('y')
     y_runtime_adjust = None if y_adjust_addr is None else movemanager.b2r(y_adjust_addr)
 
-    if a_runtime_adjust:
-        auto_comment(a_runtime_adjust, "A=value to be written", inline=True)
-    if y_runtime_adjust:
-        auto_comment(y_runtime_adjust, "Y=offset from base address", inline=True)
+    auto_comment(a_runtime_adjust, "A=value to be written", inline=True)
+    auto_comment(y_runtime_adjust, "Y=offset from base address", inline=True)
     auto_comment(runtime_addr, "Write byte to screen", inline=True)
 
 def osrdsc_hook(runtime_addr, state, subroutine):
     y_adjust_addr = state.get_previous_adjust('y')
     y_runtime_adjust = None if y_adjust_addr is None else movemanager.b2r(y_adjust_addr)
-    if y_runtime_adjust:
-        auto_comment(y_runtime_adjust, "Y=ROM number", inline=True)
+    auto_comment(y_runtime_adjust, "Y=ROM number", inline=True)
 
     # Post-exit
     a_runtime_next_use = None if state.next_use['a'] is None else movemanager.b2r(state.next_use['a'])
-    if a_runtime_next_use:
-        auto_comment(a_runtime_next_use, "A=byte read", inline=True)
+    auto_comment(a_runtime_next_use, "A=byte read", inline=True)
     auto_comment(runtime_addr, "Read byte from ROM Y or screen", inline=True)
 
 def oseven_hook(runtime_addr, state, subroutine):
@@ -1048,6 +1094,7 @@ def oseven_hook(runtime_addr, state, subroutine):
         return
 
     event_number = memory_binary[y_addr]
+    enum_lookup(y_addr, event_enum, "Y=event number")
     if event_number in event_names:
         com = "Generate event Y='" + event_names[event_number] + "'"
     else:
@@ -1058,6 +1105,8 @@ def osfind_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
     x_addr = state.get_previous_load_imm('x')
     y_addr = state.get_previous_load_imm('y')
+
+    enum_lookup(a_addr, osfind_enum)
 
     com = "Open or close file(s)"
     if a_addr is not None:
@@ -1081,8 +1130,7 @@ def osfind_hook(runtime_addr, state, subroutine):
 
             # Post-exit
             a_runtime_next_use = None if state.next_use['a'] is None else movemanager.b2r(state.next_use['a'])
-            if a_runtime_next_use:
-                auto_comment(a_runtime_next_use, "A=file handle (or zero on failure)", inline=True)
+            auto_comment(a_runtime_next_use, "A=file handle (or zero on failure)", inline=True)
 
     auto_comment(runtime_addr, com, inline=True)
 
@@ -1091,8 +1139,7 @@ def osrdch_hook(runtime_addr, state, subroutine):
 
     # Post-exit
     a_runtime_next_use = None if state.next_use['a'] is None else movemanager.b2r(state.next_use['a'])
-    if a_runtime_next_use:
-        auto_comment(a_runtime_next_use, "A=character read", inline=True)
+    auto_comment(a_runtime_next_use, "A=character read", inline=True)
 
 def osgbpb_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
@@ -1132,16 +1179,14 @@ def osbput_hook(runtime_addr, state, subroutine):
 
     com = "Write a single byte %s to an open file Y" % reg
     auto_comment(runtime_addr, com, inline=True)
-    if y_runtime_addr is not None:
-        auto_comment(y_runtime_addr, "Y=file handle", inline=True)
+    auto_comment(y_runtime_addr, "Y=file handle", inline=True)
 
 def osbget_hook(runtime_addr, state, subroutine):
     y_addr = state.get_previous_adjust('y')
     y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
 
     auto_comment(runtime_addr, "Read a single byte from an open file Y", inline=True)
-    if y_runtime_addr is not None:
-        auto_comment(y_runtime_addr, "Y=file handle", inline=True)
+    auto_comment(y_runtime_addr, "Y=file handle", inline=True)
 
 def osargs_hook(runtime_addr, state, subroutine):
     a_addr = state.get_previous_load_imm('a')
@@ -1164,9 +1209,8 @@ def osargs_hook(runtime_addr, state, subroutine):
 
     if (a == 0) and (y == 0):
         auto_comment(runtime_addr, "Get filing system number (A=0, Y=0)", inline=True)
-        if a_runtime_next_use is not None:
-            auto_comment(a_runtime_next_use, "A=filing system number", inline=True)
-            auto_comment(a_runtime_next_use,
+        auto_comment(a_runtime_next_use, "A=filing system number", inline=True)
+        auto_comment(a_runtime_next_use,
 """A is the filing system number:
     A=0, no filing system selected
     A=1, 1200 baud CFS
@@ -1181,37 +1225,29 @@ def osargs_hook(runtime_addr, state, subroutine):
     A=10, Videodisc filing system""", indent=1)
 
     elif a == 0:
-        if x_runtime_adjust_addr is not None:
-            auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
-        if y_runtime_adjust_addr is not None:
-            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
 
         auto_comment(runtime_addr, "Get sequential file pointer into zero page address X (A=0)", inline=True)
     elif (a == 1) and (y == 0):
-        if x_runtime_adjust_addr is not None:
-            auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
 
         auto_comment(runtime_addr, "Get address of remaining command line into zero page address X (A=1, Y=0)", inline=True)
     elif a == 1:
-        if x_runtime_adjust_addr is not None:
-            auto_comment(x_runtime_adjust_addr, "X=zero page address to write from", inline=True)
-        if y_runtime_adjust_addr is not None:
-            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=zero page address to write from", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
 
         auto_comment(runtime_addr, "Write sequential file pointer from zero page address X (A=1)", inline=True)
     elif a == 2:
-        if x_runtime_adjust_addr is not None:
-            auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
-        if y_runtime_adjust_addr is not None:
-            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=zero page address for result", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
 
         auto_comment(runtime_addr, "Get length of file into zero page address X (A=2)", inline=True)
     elif (a == 255) and (y == 0):
         auto_comment(runtime_addr, "Write any buffered data to all pending files (A=255, Y=0)", inline=True)
 
     elif a == 255:
-        if y_runtime_adjust_addr is not None:
-            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
 
         auto_comment(runtime_addr, "Write any buffered data to file Y", inline=True)
     elif a is not None:
@@ -1282,8 +1318,7 @@ def osword_hook(runtime_addr, state, subroutine):
     # Post-exit
     if action == 0:
         y_runtime_next_use = None if state.next_use['y'] is None else movemanager.b2r(state.next_use['y'])
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y contains line length, including carriage return if used.", inline=True)
+        auto_comment(y_runtime_next_use, "Y contains line length, including carriage return if used.", inline=True)
 
 def osbyte_rw(x_addr, y_addr):
     com = "Read/Write"
@@ -1357,8 +1392,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
                 com = "Execute BRK and print OS version (X=0)"
             else:
                 com = "Read OS version number into X"
-                if x_runtime_next_use:
-                    auto_comment(x_runtime_next_use,
+                auto_comment(x_runtime_next_use,
 """X is the OS version number:
     X=0, OS 1.00 (Early BBC B or Electron OS 1.00)
     X=1, OS 1.20 or American OS
@@ -1377,8 +1411,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous value of the user flag byte", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous value of the user flag byte", inline=True)
 
     elif action == 0x02:
         com = "Select input stream X (0=keyboard, 1=RS232, 2=both)"
@@ -1392,13 +1425,13 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous input stream (0=keyboard, 1=RS232)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous input stream (0=keyboard, 1=RS232)", inline=True)
 
     elif action == 0x03:
         com = "Select output stream based on X"
         if x_addr is not None:
-            binary(x_runtime_addr)
+            if x_runtime_addr is not None:
+                binary(x_runtime_addr)
             x = memory_binary[x_addr]
             com += ": "
             bit_str = ""
@@ -1413,25 +1446,23 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous output stream status byte", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous output stream status byte", inline=True)
 
     elif action == 0x04:
         com = "Enable/disable cursor editing based on X"
         if x_addr is not None:
             if memory_binary[x_addr] == 0:
-                com = "Enable cursor editing"
+                com = "Enable cursor editing (X=0)"
             elif memory_binary[x_addr] == 1:
-                com = "Disable cursor editing (edit keys give ASCII 135-139)"
+                com = "Disable cursor editing (edit keys give ASCII 135-139) (X=1)"
             elif memory_binary[x_addr] == 2:
-                com = "Disable cursor editing (edit keys act as soft keys f11 to f15)"
+                com = "Disable cursor editing (edit keys act as soft keys f11 to f15) (X=2)"
             elif memory_binary[x_addr] == 3:
-                com = "Cursor editing keys and COPY simulate a joystick (Master Compact only)"
+                com = "Cursor editing keys and COPY simulate a joystick (Master Compact only) (X=3)"
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use,
+        auto_comment(x_runtime_next_use,
 """X is the previous status of the cursor editing keys:
     X=0, cursor editing was enabled (the default setting)
     X=1, cursor editing was disabled, edit keys gave ASCII codes (135 to 139)
@@ -1459,8 +1490,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use,
+        auto_comment(x_runtime_next_use,
 """X is the previous printer destination:
     X=0, printer sink (printer output ignored)
     X=1, parallel output
@@ -1473,20 +1503,23 @@ def osbyte_hook(runtime_addr, state, subroutine):
         com = "Set printer ignore character to "
         if x_addr is not None:
             com += "X=" + str(memory_binary[x_addr])
-            char(x_runtime_addr)
+            if x_runtime_addr is not None:
+                char(x_runtime_addr)
         else:
             com += "X"
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous printer ignore character", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous printer ignore character", inline=True)
 
     elif (action == 0x07) or (action == 0x08):
         if action == 0x07:
             com = "Set serial receive rate "
         else:
             com = "Set serial transmission rate "
+
+        enum_lookup(x_addr, baud_rate_enum, "X=baud rate")
+
         if x_addr is not None:
             x = memory_binary[x_addr]
             if x in baud_rates:
@@ -1520,8 +1553,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous mark duration (in fiftieths of a second)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous mark duration (in fiftieths of a second)", inline=True)
 
     elif action == 0x0a:
         com = "Set 'space' duration of flashing colours to "
@@ -1536,8 +1568,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous space duration (in fiftieths of a second)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous space duration (in fiftieths of a second)", inline=True)
 
     elif action == 0x0b:
         com = "Set keyboard auto-repeat delay"
@@ -1552,8 +1583,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous keyboard auto-repeat delay (in centiseconds)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous keyboard auto-repeat delay (in centiseconds)", inline=True)
 
     elif action == 0x0c:
         com = "Set keyboard auto-repeat interval"
@@ -1568,32 +1598,31 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous keyboard auto-repeat interval (in centiseconds)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous keyboard auto-repeat interval (in centiseconds)", inline=True)
 
     elif action == 0x0d:
         com = "Disable event X"
         if x_addr is not None:
             event_number = memory_binary[x_addr]
+            enum_lookup(x_addr, event_enum, "X=event number")
             if event_number in event_names:
                 com = "Disable '" + event_names[event_number] + "' event (X=" + str(event_number) + ")"
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous event enable flag (0=disabled, non-zero=enabled)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous event enable flag (0=disabled, non-zero=enabled)", inline=True)
 
     elif action == 0x0e:
         com = "Enable event X"
         if x_addr is not None:
             event_number = memory_binary[x_addr]
+            enum_lookup(x_addr, event_enum, "X=event number")
             if event_number in event_names:
                 com = "Enable '" + event_names[event_number] + "' event (X=" + str(event_number) + ")"
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous event enable flag (0=disabled, non-zero=enabled)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous event enable flag (0=disabled, non-zero=enabled)", inline=True)
 
     elif action == 0x0f:
         com = "Flush all buffers (X=0), or just input buffers (X non-zero)"
@@ -1615,8 +1644,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous ADC channel 1-4 or zero if disabled", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous ADC channel 1-4 or zero if disabled", inline=True)
 
     elif action == 0x11:
         com = "Force ADC conversion on channel X"
@@ -1652,12 +1680,12 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the new OSHWM (high byte)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the new OSHWM (high byte)", inline=True)
 
     elif action == 0x15:
         com = "Flush specific buffer X"
         if x_addr is not None:
+            enum_lookup(x_addr, buffer_enum, "X=buffer number")
             buffer = memory_binary[x_addr]
             if buffer in buffer_names:
                 com = "Flush " + buffer_names[buffer] + " (X=" + str(buffer) + ")"
@@ -1687,15 +1715,13 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, "Master and B+ only: Test for sideways RAM", inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "Bits 0-3 of X indicate use of ROM numbers 4-7 as RAM", inline=True)
+        auto_comment(x_runtime_next_use, "Bits 0-3 of X indicate use of ROM numbers 4-7 as RAM", inline=True)
 
     elif action == 0x45:
         auto_comment(runtime_addr, "Master and B+ only: Get sideways RAM allocation", inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "Bits 0-3 of X indicate ROM numbers 4-7 in use for extended addressing", inline=True)
+        auto_comment(x_runtime_next_use, "Bits 0-3 of X indicate ROM numbers 4-7 in use for extended addressing", inline=True)
 
     elif action == 0x6B:
         com = "Master, Compact & Electron: "
@@ -1741,8 +1767,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous VDU access memory setting (0=main or shadow memory according to current mode, 1=main memory, 2=shadow memory)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous VDU access memory setting (0=main or shadow memory according to current mode, 1=main memory, 2=shadow memory)", inline=True)
 
     elif action == 0x71:
         com = "Master: Select main/shadow memory for display"
@@ -1759,8 +1784,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous display memory setting (0=main/shadow memory according to current mode, 1=main memory, 2=shadow memory)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous display memory setting (0=main/shadow memory according to current mode, 1=main memory, 2=shadow memory)", inline=True)
 
     elif action == 0x72:
         com = "B+ and Master only: Write shadow memory use (X=0 is always; X non-zero is no shadow memory for MODEs 0-7)"
@@ -1773,8 +1797,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous display memory setting (0=main/shadow memory according to current mode, 1=main memory, 2=shadow memory)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous display memory setting (0=main/shadow memory according to current mode, 1=main memory, 2=shadow memory)", inline=True)
 
     elif action == 0x73:
         com = "Electron: Blank (X non-zero) or restore (X=0) palette"
@@ -1793,8 +1816,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, "Read VDU status byte", inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use,
+        auto_comment(x_runtime_next_use,
 """X is VDU status byte:
     bit 0=printer output enabled by a VDU 2
     bit 1=scrolling disabled (cursor editing)
@@ -1813,10 +1835,8 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
     elif action == 0x78:
         auto_comment(runtime_addr, "Write current keys pressed (X and Y)", inline=True)
-        if x_runtime_adjust_addr:
-            auto_comment(x_runtime_adjust_addr, "X=key", inline=True)
-        if y_runtime_adjust_addr:
-            auto_comment(y_runtime_adjust_addr, "Y=key", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=key", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=key", inline=True)
 
     elif action == 0x79:
         com = "Keyboard scan, or test for a specific key"
@@ -1825,11 +1845,22 @@ def osbyte_hook(runtime_addr, state, subroutine):
         if x_addr is not None:
             key = memory_binary[x_addr]
             if key >= 0x80:
-                inkey_key = 255-(key ^ 0x80)
+                inkey_key = (255-key) ^ 0x80
+                if inkey_key in inkey_enum:
+                    constant(inkey_key, inkey_enum[inkey_key])
+                    key_exp = make_eor(make_op2(255, "-", inkey_enum[inkey_key]), 128)
+                    auto_expr(x_runtime_addr, key_exp)
+                    auto_comment(x_runtime_addr, "X=internal key number EOR 128", inline=True)
                 com = "Test for " + key_name(inkey_key) + " key pressed (X=%d)" % key
                 one_key_scan = key_name(inkey_key)
             else:
                 inkey_key = 255-key
+                if inkey_key in inkey_enum:
+                    constant(inkey_key, inkey_enum[inkey_key])
+                    key_exp = make_op2(255, "-", inkey_enum[inkey_key])
+                    auto_expr(x_runtime_addr, key_exp)
+                    auto_comment(x_runtime_addr, "X=internal key number", inline=True)
+
                 com = "Keyboard scan starting from " + key_name(inkey_key) + " key (X=%d)" % key
                 many_key_scan = True
         auto_comment(runtime_addr, com, inline=True)
@@ -1876,13 +1907,10 @@ def osbyte_hook(runtime_addr, state, subroutine):
     elif action == 0x7f:
         auto_comment(runtime_addr, "Check for EOF in file handle X", inline=True)
         x_adjust_addr = state.get_previous_adjust('x')
-        if x_adjust_addr is not None:
-            auto_comment(x_runtime_adjust_addr, "X=File handle", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=File handle", inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            com = "X is non-zero if reached end of file, zero otherwise"
-            auto_comment(x_runtime_next_use, com, inline=True)
+        auto_comment(x_runtime_next_use, "X is non-zero if reached end of file, zero otherwise", inline=True)
 
     elif action == 0x80:
         com = "Read buffer status or ADC channel"
@@ -1939,12 +1967,13 @@ def osbyte_hook(runtime_addr, state, subroutine):
             if memory_binary[y_addr] >= 0x80:
                 com = "Read a specific key (or read machine type)"
                 if x_addr is not None:
-                    enum_lookup(x_addr, inkey_enum)
+                    enum_lookup(x_addr, inkey_enum, "X=inkey number")
                     key = memory_binary[x_addr]
                     if key == 0:
                         com = "Read the machine type"
                         is_read_machine_type = True
                     else:
+                        auto_comment(x_runtime_addr, "X=inkey key value", inline=True)
                         com = "Is the " + key_name(key) + " key pressed?"
                         is_checking_specific_key_pressed = True
             else:
@@ -2007,8 +2036,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
     elif action == 0x85:
         com = "Read top of user memory for a given screen mode X"
-        if x_runtime_load_addr is not None:
-            auto_comment(x_runtime_load_addr, "X=MODE number", inline=True)
+        auto_comment(x_runtime_load_addr, "X=MODE number", inline=True)
 
         if x_addr is not None:
             mode = memory_binary[x_addr]
@@ -2024,19 +2052,15 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, "Read input cursor position (Sets X=POS and Y=VPOS)", inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the horizontal text position ('POS')", inline=True)
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y is the vertical text position ('VPOS')", inline=True)
+        auto_comment(x_runtime_next_use, "X is the horizontal text position ('POS')", inline=True)
+        auto_comment(y_runtime_next_use, "Y is the vertical text position ('VPOS')", inline=True)
 
     elif action == 0x87:
         auto_comment(runtime_addr, "Read character at the text cursor, and current screen MODE", inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the character at the text cursor", inline=True)
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y is the current screen MODE (0-7)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the character at the text cursor", inline=True)
+        auto_comment(y_runtime_next_use, "Y is the current screen MODE (0-7)", inline=True)
 
     elif action == 0x88:
         auto_comment(runtime_addr, "*CODE X,Y", inline=True)
@@ -2058,6 +2082,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
             y = "Y "
         com = "Insert value %sinto buffer" % (y)
         if x_addr is not None:
+            enum_lookup(x_addr, buffer_enum, "X=buffer number")
             x = memory_binary[x_addr]
             if x in buffer_names:
                 com = "Insert value %sinto %s (X=%d)" % (y, buffer_names[x], x)
@@ -2112,8 +2137,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
     elif action == 0x8e:
         auto_comment(runtime_addr, "Enter language ROM X", inline=True)
-        if x_runtime_adjust_addr is not None:
-            auto_comment(x_runtime_adjust_addr, "X=ROM number", inline=True)
+        auto_comment(x_runtime_adjust_addr, "X=ROM number", inline=True)
 
     elif action == 0x8f:
         com = "Issue paged ROM service call"
@@ -2126,10 +2150,8 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is zero if a paged ROM claimed the service call", inline=True)
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y contains a return argument from the ROM service call", inline=True)
+        auto_comment(x_runtime_next_use, "X is zero if a paged ROM claimed the service call", inline=True)
+        auto_comment(y_runtime_next_use, "Y contains a return argument from the ROM service call", inline=True)
 
     elif action == 0x90:
         suffix = ""
@@ -2160,14 +2182,13 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous screen shift setting", inline=True)
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y is the previous interlace option (0=interlace on, 1=off)", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous screen shift setting", inline=True)
+        auto_comment(y_runtime_next_use, "Y is the previous interlace option (0=interlace on, 1=off)", inline=True)
 
     elif action == 0x91:
         com = "Get character from input buffer"
         if x_addr is not None:
+            enum_lookup(x_addr, buffer_enum, "X=buffer number")
             x = memory_binary[x_addr]
             if x == 0:
                 com = "Get character from keyboard buffer"
@@ -2177,8 +2198,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y is the character extracted from the buffer", inline=True)
+        auto_comment(y_runtime_next_use, "Y is the character extracted from the buffer", inline=True)
 
     elif (action >= 0x92) and (action <=0x97):
         com = read_or_write_memory_mapped_device[action]
@@ -2204,12 +2224,12 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
         # Post exit:
         if not is_writing:
-            if y_runtime_next_use:
-                auto_comment(y_runtime_next_use, "Y is the byte read", inline=True)
+            auto_comment(y_runtime_next_use, "Y is the byte read", inline=True)
 
     elif action == 0x98:
         com = "Examine status of buffer X"
         if x_addr is not None:
+            enum_lookup(x_addr, buffer_enum, "X=buffer number")
             buffer = memory_binary[x_addr]
             if buffer in buffer_names:
                 com = "Examine " + buffer_names[buffer]
@@ -2219,8 +2239,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y is: on BBC Micro: offset to next character to be read from address stored at (" + config.get_assembler().hex2(0xFA) + ", "+ config.get_assembler().hex2(0xFB) + "); or Master, B+, Electron: the byte read", inline=True)
+        auto_comment(y_runtime_next_use, "Y is: on BBC Micro: offset to next character to be read from address stored at (" + config.get_assembler().hex2(0xFA) + ", "+ config.get_assembler().hex2(0xFB) + "); or Master, B+, Electron: the byte read", inline=True)
 
     elif action == 0x99:
         # Get value to insert if available
@@ -2295,8 +2314,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the previous value of the control register", inline=True)
+        auto_comment(x_runtime_next_use, "X is the previous value of the control register", inline=True)
 
     elif action == 0x9d:
         com = "Fast Tube BPUT value "
@@ -2307,8 +2325,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         com += " to file handle Y"
         auto_comment(runtime_addr, com, inline=True)
 
-        if y_runtime_adjust_addr:
-            auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=file handle", inline=True)
 
     elif action == 0x9e:
         com = "Read command/data byte from speech processor"
@@ -2323,8 +2340,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
         com += " to speech processor"
         auto_comment(runtime_addr, com, inline=True)
 
-        if y_runtime_adjust_addr:
-            auto_comment(y_runtime_adjust_addr, "Y=byte to write", inline=True)
+        auto_comment(y_runtime_adjust_addr, "Y=byte to write", inline=True)
 
     elif action == 0xa0:
         com = "Read VDU variable X"
@@ -2342,10 +2358,8 @@ def osbyte_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X is the " + var1, inline=True)
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y is the " + var2, inline=True)
+        auto_comment(x_runtime_next_use, "X is the " + var1, inline=True)
+        auto_comment(y_runtime_next_use, "Y is the " + var2, inline=True)
 
     elif action == 0xa1:
         com = "Master and Compact: Read CMOS RAM/EEPROM byte X"
@@ -2400,20 +2414,16 @@ def osbyte_hook(runtime_addr, state, subroutine):
     elif action == 0xa4:
         com = "Check for 6502 code in paged ROM format, where XY is the address to check."
         auto_comment(runtime_addr, com, inline=True)
-        if x_runtime_addr:
-            auto_comment(x_runtime_addr, "X=Address of ROM format code to check (low byte)", inline=True)
-        if y_runtime_addr:
-            auto_comment(y_runtime_addr, "Y=Address of ROM format code to check (high byte)", inline=True)
+        auto_comment(x_runtime_addr, "X=Address of ROM format code to check (low byte)", inline=True)
+        auto_comment(y_runtime_addr, "Y=Address of ROM format code to check (high byte)", inline=True)
 
     elif action == 0xa5:
         com = "Read output cursor position (Master only)"
         auto_comment(runtime_addr, com, inline=True)
 
         # Post exit:
-        if x_runtime_next_use:
-            auto_comment(x_runtime_next_use, "X=text cursor 'POS'", inline=True)
-        if y_runtime_next_use:
-            auto_comment(y_runtime_next_use, "Y=text cursor 'VPOS'", inline=True)
+        auto_comment(x_runtime_next_use, "X=text cursor 'POS'", inline=True)
+        auto_comment(y_runtime_next_use, "Y=text cursor 'VPOS'", inline=True)
 
     elif (action >= 0xa6) and (action <= 0xff):
         write_value = None
@@ -2481,8 +2491,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
 
             # Exceptions
             if action == 0xff:
-                if x_runtime_next_use:
-                    auto_comment(x_runtime_next_use,
+                auto_comment(x_runtime_next_use,
 """X is the startup option byte:
     bits 0 to 2     screen MODE selected following reset
     bit 3           if clear reverse action of SHIFT+BREAK
@@ -2577,7 +2586,7 @@ def mos_labels():
     trace.substitute_constant_list.append(SubConst("sty crtc_address_register", 'y', crtc_registers_enum, True))
 
 def is_sideways_rom():
-    comment(0x8000, "Sideways ROM header")
+    auto_comment(0x8000, "Sideways ROM header")
     label(0x8000, "rom_header")
     def check_entry(runtime_addr, entry_type):
         runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
@@ -2593,7 +2602,7 @@ def is_sideways_rom():
     label(0x8006, "rom_type")
     label(0x8007, "copyright_offset")
     copyright_offset = memory[0x8007]
-    expr(0x8007, "copyright - rom_header")
+    auto_expr(0x8007, "copyright - rom_header")
     label(0x8008, "binary_version")
     label(0x8009, "title")
     nul_at_title_end = stringz(0x8009, True) - 1

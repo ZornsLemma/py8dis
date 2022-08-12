@@ -302,8 +302,12 @@ def no_automatic_comment(runtime_addr):
 def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, word_wrap=True):
     """For internal use only. Generates a comment if not inhibited."""
 
+    if runtime_addr == None:
+        return
+
     if not (runtime_addr in trace.no_auto_comment_set):
         # Make sure we are within the binary
+        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
         binary_addr, _ = movemanager.r2b(runtime_addr)
         if binary_addr:
             if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
@@ -350,6 +354,20 @@ def expr(runtime_addr, s):
         classification.add_expression(binary_addr, s[val])
     else:
         classification.add_expression(binary_addr, s)
+
+def auto_expr(runtime_addr, s):
+    """For internal use only. Generates an expression if not inhibited."""
+
+    if runtime_addr == None:
+        return
+
+    if not (runtime_addr in trace.no_auto_comment_set):
+        # Make sure we are within the binary
+        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+        binary_addr, _ = movemanager.r2b(runtime_addr)
+        if binary_addr:
+            if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
+                expr(runtime_addr, s)
 
 def byte(runtime_addr, n=1, cols=None):
     """Categorise a number of bytes at the given address as byte data."""
@@ -472,8 +490,6 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     tables. An optional offset can be applied to the subroutine
     address.
 
-    Assumes the assembler understands expressions like '<(my_label+1)'.
-
     Code tracing, see entry(), is applied to the subroutine.
     """
 
@@ -501,9 +517,9 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     else:
         # TODO: Use byte()/expr() variants which take a binary addr directly?
         byte(runtime_addr)
-        expr(runtime_addr, utils.LazyString("<(%s%s)", label, offset_string))
+        expr(runtime_addr, make_lo(utils.LazyString("%s%s", label, offset_string)))
         byte(runtime_addr_high)
-        expr(runtime_addr_high, utils.LazyString(">(%s%s)", label, offset_string))
+        expr(runtime_addr_high, make_hi(utils.LazyString("%s%s", label, offset_string)))
     if abs(runtime_addr_high - runtime_addr) == 1:
         return max(runtime_addr, runtime_addr_high) + 1
     return None
@@ -600,6 +616,123 @@ def is_assembler(s):
         return True
     return False
 
+def get_assembler_index():
+    assembler_index = 0
+    for a in ["acme", "beebasm", "xa", "z88dk_8080"]:
+        if is_assembler(a):
+            return assembler_index
+        assembler_index += 1
+    return None
+
+#
+# Assembler specific expression strings can be built using these functions:
+#
+
+#          generic name: ( acme,  beebasm,   xa,   z88dk )
+_trans = {          'OR': ( '|',     'OR',    '|',  None  ),
+                     '|': ( '|',     'OR',    '|',  None  ),
+                   'AND': ( '&',     'AND',   '&',  None  ),
+                     '&': ( '&',     'AND',   '&',  None  ),
+                   'EOR': ( 'XOR',   'EOR',   '^',  None  ),
+                   'XOR': ( 'XOR',   'EOR',   '^',  None  ),
+                     '^': ( 'XOR',   'EOR',   '^',  None  ),
+                   'DIV': ( 'DIV',   'DIV',   '/',  None  ),
+                     '/': ( 'DIV',   'DIV',   '/',  None  ),
+                   'MOD': ( '%',     'MOD',   None, None  ),
+                     '%': ( '%',     'MOD',   None, None  ),
+                    '!=': ( '!=',    '!=',    '<>', None  ),
+}
+
+def is_simple_name(s):
+    return disassembly.is_simple_name(s)
+
+def bracket(expr):
+    """Add brackets to an expression if it's not a simple label name or number"""
+
+    if isinstance(expr, utils.LazyString):
+        return utils.LazyString("(%s)", expr)
+    elif utils.is_integer_type(expr) or expr.isdigit() or is_simple_name(expr):
+        return str(expr)
+    return "(" + expr + ")"
+
+# Get assembler specific operator name from a generic operator name
+def assembler_op_name(s):
+    """Translate an operator name into one that is assembler specific"""
+
+    global _assembler_index
+
+    if s in _trans:
+        result = _trans[s][_assembler_index]
+        if result == None:
+            utils.error("Assembler can't handle operator " + s)
+        return result
+    return s
+
+# Unary operators
+def make_op1(op, expr):
+    """Make a unary operator expression for the assembler"""
+
+    if (op == None) or (expr == None):
+        return None
+
+    if op == 'NOT':
+        op = '!'
+    if is_assembler('beebasm') and (op == '!'):
+        if isinstance(expr, utils.LazyString):
+            return utils.LazyString("NOT(%s)", expr)
+        return 'NOT(' + expr + ')'
+    if isinstance(expr, utils.LazyString):
+        return utils.LazyString("%s%s", op, bracket(expr))
+    return op + bracket(expr)
+
+# Binary operators
+def make_op2(expr1, op, expr2):
+    """Make a binary operator expression for the assembler"""
+    if (expr1 == None) or (op == None) or (expr2 == None):
+        return None
+    op_name = assembler_op_name(op)
+    if op_name == None:
+        return None
+
+    if isinstance(expr1, utils.LazyString) or isinstance(expr2, utils.LazyString):
+        return utils.LazyString("%s %s %s", bracket(expr1), op_name, bracket(expr2))
+    return bracket(expr1) + " " + op_name + " " + bracket(expr2)
+
+# Convenience functions
+def make_lo(expr):
+    return make_op1('<', expr)
+
+def make_hi(expr):
+    return make_op1('>', expr)
+
+def make_or(expr1, expr2):
+    return make_op2(expr1, 'OR', expr2)
+
+def make_and(expr1, expr2):
+    return make_op2(expr1, 'AND', expr2)
+
+def make_eor(expr1, expr2):
+    return make_op2(expr1, 'EOR', expr2)
+
+def make_xor(expr1, expr2):
+    return make_op2(expr1, 'EOR', expr2)
+
+def make_add(expr1, expr2):
+    return make_op2(expr1, '+', expr2)
+
+def make_subtract(expr1, expr2):
+    return make_op2(expr1, '-', expr2)
+
+def make_multiply(expr1, expr2):
+    return make_op2(expr1, '*', expr2)
+
+def make_divide(expr1, expr2):
+    return make_op2(expr1, 'DIV', expr2)
+
+def make_modulo(expr1, expr2):
+    return make_op2(expr1, 'MOD', expr2)
+
+
 def go(post_trace_steps=None, autostring_min_length=3):
     """
     Classifies code and data, calculates labels and emits assembly.
@@ -666,6 +799,7 @@ elif args.z88dk_8080:
 else:
     import beebasm
 
+_assembler_index = get_assembler_index()
 set_output_filename = config.get_assembler().set_output_filename
 
 if args.upper:

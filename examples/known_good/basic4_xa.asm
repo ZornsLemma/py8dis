@@ -11,6 +11,7 @@ osbyte_read_tube_presence              = 234
 osbyte_read_write_basic_rom_bank       = 187
 osfile_load                            = 255
 osfile_save                            = 0
+osfind_close                           = 0
 osword_read_clock                      = 1
 osword_read_cmos_clock                 = 14
 osword_read_io_memory                  = 5
@@ -10830,7 +10831,7 @@ sub_cbeee
     jsr sub_cba6e                                                     // beee: 20 6e ba     n.
     jsr sub_c9c5a                                                     // bef1: 20 5a 9c     Z.
     ldy l002a                                                         // bef4: a4 2a       .*
-    lda #0                                                            // bef6: a9 00       ..
+    lda #osfind_close                                                 // bef6: a9 00       ..
     jsr osfind                                                        // bef8: 20 ce ff     ..            // Close one or all files
     bra cbeeb                                                         // befb: 80 ee       ..
 sub_cbefd

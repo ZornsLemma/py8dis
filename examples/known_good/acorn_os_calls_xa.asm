@@ -1,4 +1,34 @@
 // Constants
+baud_rate_1200                                     = 4
+baud_rate_150                                      = 2
+baud_rate_19200                                    = 8
+baud_rate_2400                                     = 5
+baud_rate_300                                      = 3
+baud_rate_4800                                     = 6
+baud_rate_75                                       = 1
+baud_rate_9600                                     = 7
+baud_rate_default_9600                             = 0
+buffer_keyboard                                    = 0
+buffer_printer                                     = 3
+buffer_rs423_input                                 = 1
+buffer_rs423_output                                = 2
+buffer_sound_channel_0                             = 4
+buffer_sound_channel_1                             = 5
+buffer_sound_channel_2                             = 6
+buffer_sound_channel_3                             = 7
+buffer_speech                                      = 8
+event_adc_conversion_complete                      = 3
+event_character_entering_input_buffer              = 2
+event_escape_condition_detected                    = 6
+event_input_buffer_full                            = 1
+event_interval_timer_crossing_zero                 = 5
+event_network_error                                = 8
+event_output_buffer_empty                          = 0
+event_rs423_error                                  = 7
+event_start_of_vertical_sync                       = 4
+event_user                                         = 9
+inkey_key_ctrl                                     = 254
+inkey_key_f0                                       = 223
 inkey_key_shift                                    = 255
 osbyte_acknowledge_escape                          = 126
 osbyte_check_eof                                   = 127
@@ -177,6 +207,10 @@ osfile_write_attributes                            = 4
 osfile_write_catalogue_info                        = 1
 osfile_write_exec_addr                             = 3
 osfile_write_load_addr                             = 2
+osfind_close                                       = 0
+osfind_open_input                                  = 64
+osfind_open_output                                 = 128
+osfind_open_random_access                          = 192
 osgbpb_append_bytes                                = 2
 osgbpb_read_bytes_from_current_position            = 4
 osgbpb_read_bytes_from_position                    = 3
@@ -311,19 +345,19 @@ pydis_start
     lda #osbyte_set_cursor_editing                                    // 118f: a9 04       ..
     ldx #0                                                            // 1191: a2 00       ..
     ldy #0                                                            // 1193: a0 00       ..
-    jsr osbyte                                                        // 1195: 20 f4 ff     ..            // Enable cursor editing
+    jsr osbyte                                                        // 1195: 20 f4 ff     ..            // Enable cursor editing (X=0)
     lda #osbyte_set_cursor_editing                                    // 1198: a9 04       ..
     ldx #1                                                            // 119a: a2 01       ..
     ldy #0                                                            // 119c: a0 00       ..
-    jsr osbyte                                                        // 119e: 20 f4 ff     ..            // Disable cursor editing (edit keys give ASCII 135-139)
+    jsr osbyte                                                        // 119e: 20 f4 ff     ..            // Disable cursor editing (edit keys give ASCII 135-139) (X=1)
     lda #osbyte_set_cursor_editing                                    // 11a1: a9 04       ..
     ldx #2                                                            // 11a3: a2 02       ..
     ldy #0                                                            // 11a5: a0 00       ..
-    jsr osbyte                                                        // 11a7: 20 f4 ff     ..            // Disable cursor editing (edit keys act as soft keys f11 to f15)
+    jsr osbyte                                                        // 11a7: 20 f4 ff     ..            // Disable cursor editing (edit keys act as soft keys f11 to f15) (X=2)
     lda #osbyte_set_cursor_editing                                    // 11aa: a9 04       ..
     ldx #3                                                            // 11ac: a2 03       ..
     ldy #0                                                            // 11ae: a0 00       ..
-    jsr osbyte                                                        // 11b0: 20 f4 ff     ..            // Cursor editing keys and COPY simulate a joystick (Master Compact only)
+    jsr osbyte                                                        // 11b0: 20 f4 ff     ..            // Cursor editing keys and COPY simulate a joystick (Master Compact only) (X=3)
     lda #osbyte_set_cursor_editing                                    // 11b3: a9 04       ..
     ldx #4                                                            // 11b5: a2 04       ..
     ldy #0                                                            // 11b7: a0 00       ..
@@ -392,39 +426,39 @@ pydis_start
     ldy #0                                                            // 1217: a0 00       ..
     jsr osbyte                                                        // 1219: 20 f4 ff     ..            // Set serial receive rate based on X
     lda #osbyte_set_serial_receive_rate                               // 121c: a9 07       ..
-    ldx #0                                                            // 121e: a2 00       ..
+    ldx #baud_rate_default_9600                                       // 121e: a2 00       ..
     ldy #0                                                            // 1220: a0 00       ..
-    jsr osbyte                                                        // 1222: 20 f4 ff     ..            // Set serial receive rate to 9600 baud (X=0)
+    jsr osbyte                                                        // 1222: 20 f4 ff     ..            // Set serial receive rate to default 9600 baud (X=0)
     lda #osbyte_set_serial_receive_rate                               // 1225: a9 07       ..
-    ldx #1                                                            // 1227: a2 01       ..
+    ldx #baud_rate_75                                                 // 1227: a2 01       ..
     ldy #0                                                            // 1229: a0 00       ..
     jsr osbyte                                                        // 122b: 20 f4 ff     ..            // Set serial receive rate to 75 baud (X=1)
     lda #osbyte_set_serial_receive_rate                               // 122e: a9 07       ..
-    ldx #2                                                            // 1230: a2 02       ..
+    ldx #baud_rate_150                                                // 1230: a2 02       ..
     ldy #0                                                            // 1232: a0 00       ..
     jsr osbyte                                                        // 1234: 20 f4 ff     ..            // Set serial receive rate to 150 baud (X=2)
     lda #osbyte_set_serial_receive_rate                               // 1237: a9 07       ..
-    ldx #3                                                            // 1239: a2 03       ..
+    ldx #baud_rate_300                                                // 1239: a2 03       ..
     ldy #0                                                            // 123b: a0 00       ..
     jsr osbyte                                                        // 123d: 20 f4 ff     ..            // Set serial receive rate to 300 baud (X=3)
     lda #osbyte_set_serial_receive_rate                               // 1240: a9 07       ..
-    ldx #4                                                            // 1242: a2 04       ..
+    ldx #baud_rate_1200                                               // 1242: a2 04       ..
     ldy #0                                                            // 1244: a0 00       ..
     jsr osbyte                                                        // 1246: 20 f4 ff     ..            // Set serial receive rate to 1200 baud (X=4)
     lda #osbyte_set_serial_receive_rate                               // 1249: a9 07       ..
-    ldx #5                                                            // 124b: a2 05       ..
+    ldx #baud_rate_2400                                               // 124b: a2 05       ..
     ldy #0                                                            // 124d: a0 00       ..
     jsr osbyte                                                        // 124f: 20 f4 ff     ..            // Set serial receive rate to 2400 baud (X=5)
     lda #osbyte_set_serial_receive_rate                               // 1252: a9 07       ..
-    ldx #6                                                            // 1254: a2 06       ..
+    ldx #baud_rate_4800                                               // 1254: a2 06       ..
     ldy #0                                                            // 1256: a0 00       ..
     jsr osbyte                                                        // 1258: 20 f4 ff     ..            // Set serial receive rate to 4800 baud (X=6)
     lda #osbyte_set_serial_receive_rate                               // 125b: a9 07       ..
-    ldx #7                                                            // 125d: a2 07       ..
+    ldx #baud_rate_9600                                               // 125d: a2 07       ..
     ldy #0                                                            // 125f: a0 00       ..
     jsr osbyte                                                        // 1261: 20 f4 ff     ..            // Set serial receive rate to 9600 baud (X=7)
     lda #osbyte_set_serial_receive_rate                               // 1264: a9 07       ..
-    ldx #8                                                            // 1266: a2 08       ..
+    ldx #baud_rate_19200                                              // 1266: a2 08       ..
     ldy #0                                                            // 1268: a0 00       ..
     jsr osbyte                                                        // 126a: 20 f4 ff     ..            // Set serial receive rate to 19200 baud (X=8)
     lda #osbyte_set_serial_receive_rate                               // 126d: a9 07       ..
@@ -446,39 +480,39 @@ pydis_start
     ldy #0                                                            // 127e: a0 00       ..
     jsr osbyte                                                        // 1280: 20 f4 ff     ..            // Set serial transmission rate based on X
     lda #osbyte_set_serial_transmit_rate                              // 1283: a9 08       ..
-    ldx #0                                                            // 1285: a2 00       ..
+    ldx #baud_rate_default_9600                                       // 1285: a2 00       ..
     ldy #0                                                            // 1287: a0 00       ..
-    jsr osbyte                                                        // 1289: 20 f4 ff     ..            // Set serial transmission rate to 9600 baud (X=0)
+    jsr osbyte                                                        // 1289: 20 f4 ff     ..            // Set serial transmission rate to default 9600 baud (X=0)
     lda #osbyte_set_serial_transmit_rate                              // 128c: a9 08       ..
-    ldx #1                                                            // 128e: a2 01       ..
+    ldx #baud_rate_75                                                 // 128e: a2 01       ..
     ldy #0                                                            // 1290: a0 00       ..
     jsr osbyte                                                        // 1292: 20 f4 ff     ..            // Set serial transmission rate to 75 baud (X=1)
     lda #osbyte_set_serial_transmit_rate                              // 1295: a9 08       ..
-    ldx #2                                                            // 1297: a2 02       ..
+    ldx #baud_rate_150                                                // 1297: a2 02       ..
     ldy #0                                                            // 1299: a0 00       ..
     jsr osbyte                                                        // 129b: 20 f4 ff     ..            // Set serial transmission rate to 150 baud (X=2)
     lda #osbyte_set_serial_transmit_rate                              // 129e: a9 08       ..
-    ldx #3                                                            // 12a0: a2 03       ..
+    ldx #baud_rate_300                                                // 12a0: a2 03       ..
     ldy #0                                                            // 12a2: a0 00       ..
     jsr osbyte                                                        // 12a4: 20 f4 ff     ..            // Set serial transmission rate to 300 baud (X=3)
     lda #osbyte_set_serial_transmit_rate                              // 12a7: a9 08       ..
-    ldx #4                                                            // 12a9: a2 04       ..
+    ldx #baud_rate_1200                                               // 12a9: a2 04       ..
     ldy #0                                                            // 12ab: a0 00       ..
     jsr osbyte                                                        // 12ad: 20 f4 ff     ..            // Set serial transmission rate to 1200 baud (X=4)
     lda #osbyte_set_serial_transmit_rate                              // 12b0: a9 08       ..
-    ldx #5                                                            // 12b2: a2 05       ..
+    ldx #baud_rate_2400                                               // 12b2: a2 05       ..
     ldy #0                                                            // 12b4: a0 00       ..
     jsr osbyte                                                        // 12b6: 20 f4 ff     ..            // Set serial transmission rate to 2400 baud (X=5)
     lda #osbyte_set_serial_transmit_rate                              // 12b9: a9 08       ..
-    ldx #6                                                            // 12bb: a2 06       ..
+    ldx #baud_rate_4800                                               // 12bb: a2 06       ..
     ldy #0                                                            // 12bd: a0 00       ..
     jsr osbyte                                                        // 12bf: 20 f4 ff     ..            // Set serial transmission rate to 4800 baud (X=6)
     lda #osbyte_set_serial_transmit_rate                              // 12c2: a9 08       ..
-    ldx #7                                                            // 12c4: a2 07       ..
+    ldx #baud_rate_9600                                               // 12c4: a2 07       ..
     ldy #0                                                            // 12c6: a0 00       ..
     jsr osbyte                                                        // 12c8: 20 f4 ff     ..            // Set serial transmission rate to 9600 baud (X=7)
     lda #osbyte_set_serial_transmit_rate                              // 12cb: a9 08       ..
-    ldx #8                                                            // 12cd: a2 08       ..
+    ldx #baud_rate_19200                                              // 12cd: a2 08       ..
     ldy #0                                                            // 12cf: a0 00       ..
     jsr osbyte                                                        // 12d1: 20 f4 ff     ..            // Set serial transmission rate to 19200 baud (X=8)
     lda #osbyte_set_serial_transmit_rate                              // 12d4: a9 08       ..
@@ -571,43 +605,43 @@ pydis_start
 
     // *************** Test OSBYTE 0x0d ***************
     lda #osbyte_disable_event                                         // 1377: a9 0d       ..
-    ldx #0                                                            // 1379: a2 00       ..
+    ldx #event_output_buffer_empty                                    // 1379: a2 00       ..
     ldy #0                                                            // 137b: a0 00       ..
     jsr osbyte                                                        // 137d: 20 f4 ff     ..            // Disable 'Output buffer empty' event (X=0)
     lda #osbyte_disable_event                                         // 1380: a9 0d       ..
-    ldx #1                                                            // 1382: a2 01       ..
+    ldx #event_input_buffer_full                                      // 1382: a2 01       ..
     ldy #0                                                            // 1384: a0 00       ..
     jsr osbyte                                                        // 1386: 20 f4 ff     ..            // Disable 'Input buffer full' event (X=1)
     lda #osbyte_disable_event                                         // 1389: a9 0d       ..
-    ldx #2                                                            // 138b: a2 02       ..
+    ldx #event_character_entering_input_buffer                        // 138b: a2 02       ..
     ldy #0                                                            // 138d: a0 00       ..
     jsr osbyte                                                        // 138f: 20 f4 ff     ..            // Disable 'Character entering input buffer' event (X=2)
     lda #osbyte_disable_event                                         // 1392: a9 0d       ..
-    ldx #3                                                            // 1394: a2 03       ..
+    ldx #event_adc_conversion_complete                                // 1394: a2 03       ..
     ldy #0                                                            // 1396: a0 00       ..
     jsr osbyte                                                        // 1398: 20 f4 ff     ..            // Disable 'ADC conversion complete' event (X=3)
     lda #osbyte_disable_event                                         // 139b: a9 0d       ..
-    ldx #4                                                            // 139d: a2 04       ..
+    ldx #event_start_of_vertical_sync                                 // 139d: a2 04       ..
     ldy #0                                                            // 139f: a0 00       ..
     jsr osbyte                                                        // 13a1: 20 f4 ff     ..            // Disable 'Start of vertical sync' event (X=4)
     lda #osbyte_disable_event                                         // 13a4: a9 0d       ..
-    ldx #5                                                            // 13a6: a2 05       ..
+    ldx #event_interval_timer_crossing_zero                           // 13a6: a2 05       ..
     ldy #0                                                            // 13a8: a0 00       ..
     jsr osbyte                                                        // 13aa: 20 f4 ff     ..            // Disable 'Interval timer crossing zero' event (X=5)
     lda #osbyte_disable_event                                         // 13ad: a9 0d       ..
-    ldx #6                                                            // 13af: a2 06       ..
+    ldx #event_escape_condition_detected                              // 13af: a2 06       ..
     ldy #0                                                            // 13b1: a0 00       ..
     jsr osbyte                                                        // 13b3: 20 f4 ff     ..            // Disable 'ESCAPE condition detected' event (X=6)
     lda #osbyte_disable_event                                         // 13b6: a9 0d       ..
-    ldx #7                                                            // 13b8: a2 07       ..
+    ldx #event_rs423_error                                            // 13b8: a2 07       ..
     ldy #0                                                            // 13ba: a0 00       ..
     jsr osbyte                                                        // 13bc: 20 f4 ff     ..            // Disable 'RS423 error' event (X=7)
     lda #osbyte_disable_event                                         // 13bf: a9 0d       ..
-    ldx #8                                                            // 13c1: a2 08       ..
+    ldx #event_network_error                                          // 13c1: a2 08       ..
     ldy #0                                                            // 13c3: a0 00       ..
     jsr osbyte                                                        // 13c5: 20 f4 ff     ..            // Disable 'Network error' event (X=8)
     lda #osbyte_disable_event                                         // 13c8: a9 0d       ..
-    ldx #9                                                            // 13ca: a2 09       ..
+    ldx #event_user                                                   // 13ca: a2 09       ..
     ldy #0                                                            // 13cc: a0 00       ..
     jsr osbyte                                                        // 13ce: 20 f4 ff     ..            // Disable 'User' event (X=9)
     lda #osbyte_disable_event                                         // 13d1: a9 0d       ..
@@ -618,43 +652,43 @@ pydis_start
 
     // *************** Test OSBYTE 0x0e ***************
     lda #osbyte_enable_event                                          // 13dc: a9 0e       ..
-    ldx #0                                                            // 13de: a2 00       ..
+    ldx #event_output_buffer_empty                                    // 13de: a2 00       ..
     ldy #0                                                            // 13e0: a0 00       ..
     jsr osbyte                                                        // 13e2: 20 f4 ff     ..            // Enable 'Output buffer empty' event (X=0)
     lda #osbyte_enable_event                                          // 13e5: a9 0e       ..
-    ldx #1                                                            // 13e7: a2 01       ..
+    ldx #event_input_buffer_full                                      // 13e7: a2 01       ..
     ldy #0                                                            // 13e9: a0 00       ..
     jsr osbyte                                                        // 13eb: 20 f4 ff     ..            // Enable 'Input buffer full' event (X=1)
     lda #osbyte_enable_event                                          // 13ee: a9 0e       ..
-    ldx #2                                                            // 13f0: a2 02       ..
+    ldx #event_character_entering_input_buffer                        // 13f0: a2 02       ..
     ldy #0                                                            // 13f2: a0 00       ..
     jsr osbyte                                                        // 13f4: 20 f4 ff     ..            // Enable 'Character entering input buffer' event (X=2)
     lda #osbyte_enable_event                                          // 13f7: a9 0e       ..
-    ldx #3                                                            // 13f9: a2 03       ..
+    ldx #event_adc_conversion_complete                                // 13f9: a2 03       ..
     ldy #0                                                            // 13fb: a0 00       ..
     jsr osbyte                                                        // 13fd: 20 f4 ff     ..            // Enable 'ADC conversion complete' event (X=3)
     lda #osbyte_enable_event                                          // 1400: a9 0e       ..
-    ldx #4                                                            // 1402: a2 04       ..
+    ldx #event_start_of_vertical_sync                                 // 1402: a2 04       ..
     ldy #0                                                            // 1404: a0 00       ..
     jsr osbyte                                                        // 1406: 20 f4 ff     ..            // Enable 'Start of vertical sync' event (X=4)
     lda #osbyte_enable_event                                          // 1409: a9 0e       ..
-    ldx #5                                                            // 140b: a2 05       ..
+    ldx #event_interval_timer_crossing_zero                           // 140b: a2 05       ..
     ldy #0                                                            // 140d: a0 00       ..
     jsr osbyte                                                        // 140f: 20 f4 ff     ..            // Enable 'Interval timer crossing zero' event (X=5)
     lda #osbyte_enable_event                                          // 1412: a9 0e       ..
-    ldx #6                                                            // 1414: a2 06       ..
+    ldx #event_escape_condition_detected                              // 1414: a2 06       ..
     ldy #0                                                            // 1416: a0 00       ..
     jsr osbyte                                                        // 1418: 20 f4 ff     ..            // Enable 'ESCAPE condition detected' event (X=6)
     lda #osbyte_enable_event                                          // 141b: a9 0e       ..
-    ldx #7                                                            // 141d: a2 07       ..
+    ldx #event_rs423_error                                            // 141d: a2 07       ..
     ldy #0                                                            // 141f: a0 00       ..
     jsr osbyte                                                        // 1421: 20 f4 ff     ..            // Enable 'RS423 error' event (X=7)
     lda #osbyte_enable_event                                          // 1424: a9 0e       ..
-    ldx #8                                                            // 1426: a2 08       ..
+    ldx #event_network_error                                          // 1426: a2 08       ..
     ldy #0                                                            // 1428: a0 00       ..
     jsr osbyte                                                        // 142a: 20 f4 ff     ..            // Enable 'Network error' event (X=8)
     lda #osbyte_enable_event                                          // 142d: a9 0e       ..
-    ldx #9                                                            // 142f: a2 09       ..
+    ldx #event_user                                                   // 142f: a2 09       ..
     ldy #0                                                            // 1431: a0 00       ..
     jsr osbyte                                                        // 1433: 20 f4 ff     ..            // Enable 'User' event (X=9)
     lda #osbyte_enable_event                                          // 1436: a9 0e       ..
@@ -771,39 +805,39 @@ pydis_start
     ldy #0                                                            // 150f: a0 00       ..
     jsr osbyte                                                        // 1511: 20 f4 ff     ..            // Flush specific buffer X
     lda #osbyte_flush_buffer                                          // 1514: a9 15       ..
-    ldx #0                                                            // 1516: a2 00       ..
+    ldx #buffer_keyboard                                              // 1516: a2 00       ..
     ldy #0                                                            // 1518: a0 00       ..
     jsr osbyte                                                        // 151a: 20 f4 ff     ..            // Flush the keyboard buffer (X=0)
     lda #osbyte_flush_buffer                                          // 151d: a9 15       ..
-    ldx #1                                                            // 151f: a2 01       ..
+    ldx #buffer_rs423_input                                           // 151f: a2 01       ..
     ldy #0                                                            // 1521: a0 00       ..
     jsr osbyte                                                        // 1523: 20 f4 ff     ..            // Flush the RS423 input buffer (X=1)
     lda #osbyte_flush_buffer                                          // 1526: a9 15       ..
-    ldx #2                                                            // 1528: a2 02       ..
+    ldx #buffer_rs423_output                                          // 1528: a2 02       ..
     ldy #0                                                            // 152a: a0 00       ..
     jsr osbyte                                                        // 152c: 20 f4 ff     ..            // Flush the RS423 output buffer (X=2)
     lda #osbyte_flush_buffer                                          // 152f: a9 15       ..
-    ldx #3                                                            // 1531: a2 03       ..
+    ldx #buffer_printer                                               // 1531: a2 03       ..
     ldy #0                                                            // 1533: a0 00       ..
     jsr osbyte                                                        // 1535: 20 f4 ff     ..            // Flush the printer buffer (X=3)
     lda #osbyte_flush_buffer                                          // 1538: a9 15       ..
-    ldx #4                                                            // 153a: a2 04       ..
+    ldx #buffer_sound_channel_0                                       // 153a: a2 04       ..
     ldy #0                                                            // 153c: a0 00       ..
     jsr osbyte                                                        // 153e: 20 f4 ff     ..            // Flush sound channel 0 (X=4)
     lda #osbyte_flush_buffer                                          // 1541: a9 15       ..
-    ldx #5                                                            // 1543: a2 05       ..
+    ldx #buffer_sound_channel_1                                       // 1543: a2 05       ..
     ldy #0                                                            // 1545: a0 00       ..
     jsr osbyte                                                        // 1547: 20 f4 ff     ..            // Flush sound channel 1 (X=5)
     lda #osbyte_flush_buffer                                          // 154a: a9 15       ..
-    ldx #6                                                            // 154c: a2 06       ..
+    ldx #buffer_sound_channel_2                                       // 154c: a2 06       ..
     ldy #0                                                            // 154e: a0 00       ..
     jsr osbyte                                                        // 1550: 20 f4 ff     ..            // Flush sound channel 2 (X=6)
     lda #osbyte_flush_buffer                                          // 1553: a9 15       ..
-    ldx #7                                                            // 1555: a2 07       ..
+    ldx #buffer_sound_channel_3                                       // 1555: a2 07       ..
     ldy #0                                                            // 1557: a0 00       ..
     jsr osbyte                                                        // 1559: 20 f4 ff     ..            // Flush sound channel 3 (X=7)
     lda #osbyte_flush_buffer                                          // 155c: a9 15       ..
-    ldx #8                                                            // 155e: a2 08       ..
+    ldx #buffer_speech                                                // 155e: a2 08       ..
     ldy #0                                                            // 1560: a0 00       ..
     jsr osbyte                                                        // 1562: 20 f4 ff     ..            // Flush the speech buffer (X=8)
     lda #osbyte_flush_buffer                                          // 1565: a9 15       ..
@@ -931,15 +965,15 @@ pydis_start
     jsr osbyte                                                        // 162d: 20 f4 ff     ..            // Keyboard scan, or test for a specific key
     cpx #0                                                            // 1630: e0 00       ..             // X is either the internal key number (0-127) pressed (for a keyboard scan), or the top bit is the key state (when testing a specific key)
     lda #osbyte_scan_keyboard                                         // 1632: a9 79       .y
-    ldx #0                                                            // 1634: a2 00       ..
+    ldx #255 - inkey_key_shift                                        // 1634: a2 00       ..             // X=internal key number
     jsr osbyte                                                        // 1636: 20 f4 ff     ..            // Keyboard scan starting from 'SHIFT' key (X=0)
     cpx #0                                                            // 1639: e0 00       ..             // X is the internal key number (0-127) if a key is pressed, or $ff otherwise
     lda #osbyte_scan_keyboard                                         // 163b: a9 79       .y
-    ldx #1                                                            // 163d: a2 01       ..
+    ldx #255 - inkey_key_ctrl                                         // 163d: a2 01       ..             // X=internal key number
     jsr osbyte                                                        // 163f: 20 f4 ff     ..            // Keyboard scan starting from 'CTRL' key (X=1)
     cpx #0                                                            // 1642: e0 00       ..             // X is the internal key number (0-127) if a key is pressed, or $ff otherwise
     lda #osbyte_scan_keyboard                                         // 1644: a9 79       .y
-    ldx #$80                                                          // 1646: a2 80       ..
+    ldx #(255 - inkey_key_shift) ^ 128                                // 1646: a2 80       ..             // X=internal key number EOR 128
     jsr osbyte                                                        // 1648: 20 f4 ff     ..            // Test for 'SHIFT' key pressed (X=128)
     cpx #0                                                            // 164b: e0 00       ..             // X has top bit set if 'SHIFT' pressed
     lda #osbyte_scan_keyboard                                         // 164d: a9 79       .y
@@ -947,7 +981,7 @@ pydis_start
     jsr osbyte                                                        // 1651: 20 f4 ff     ..            // Test for an unknown key pressed (X=255)
     cpx #0                                                            // 1654: e0 00       ..             // X has top bit set if an unknown pressed
     lda #osbyte_scan_keyboard                                         // 1656: a9 79       .y
-    ldx #$20 // ' '                                                   // 1658: a2 20       .
+    ldx #255 - inkey_key_f0                                           // 1658: a2 20       .              // X=internal key number
     jsr osbyte                                                        // 165a: 20 f4 ff     ..            // Keyboard scan starting from 'F0' key (X=32)
     cpx #0                                                            // 165d: e0 00       ..             // X is the internal key number (0-127) if a key is pressed, or $ff otherwise
 
@@ -1115,7 +1149,7 @@ pydis_start
     //     X=245, Master Compact OS 5.10
     cpx #0                                                            // 178a: e0 00       ..
     lda #osbyte_inkey                                                 // 178c: a9 81       ..
-    ldx #inkey_key_shift                                              // 178e: a2 ff       ..
+    ldx #inkey_key_shift                                              // 178e: a2 ff       ..             // X=inkey key value
     ldy #$80                                                          // 1790: a0 80       ..
     jsr osbyte                                                        // 1792: 20 f4 ff     ..            // Is the 'SHIFT' key pressed?
     cpy #0                                                            // 1795: c0 00       ..             // X and Y contain $ff if the key is pressed
@@ -1246,43 +1280,43 @@ pydis_start
     ldy #0                                                            // 1881: a0 00       ..
     jsr osbyte                                                        // 1883: 20 f4 ff     ..            // Insert value 0 into buffer X; carry is clear if successful
     lda #osbyte_insert_buffer                                         // 1886: a9 8a       ..
-    ldx #1                                                            // 1888: a2 01       ..
+    ldx #buffer_rs423_input                                           // 1888: a2 01       ..
     ldy mem                                                           // 188a: a4 70       .p
     jsr osbyte                                                        // 188c: 20 f4 ff     ..            // Insert value Y into the RS423 input buffer (X=1); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 188f: a9 8a       ..
-    ldx #0                                                            // 1891: a2 00       ..
+    ldx #buffer_keyboard                                              // 1891: a2 00       ..
     ldy #2                                                            // 1893: a0 02       ..
     jsr osbyte                                                        // 1895: 20 f4 ff     ..            // Insert value 2 into the keyboard buffer (X=0); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 1898: a9 8a       ..
-    ldx #1                                                            // 189a: a2 01       ..
+    ldx #buffer_rs423_input                                           // 189a: a2 01       ..
     ldy #3                                                            // 189c: a0 03       ..
     jsr osbyte                                                        // 189e: 20 f4 ff     ..            // Insert value 3 into the RS423 input buffer (X=1); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18a1: a9 8a       ..
-    ldx #2                                                            // 18a3: a2 02       ..
+    ldx #buffer_rs423_output                                          // 18a3: a2 02       ..
     ldy #$63 // 'c'                                                   // 18a5: a0 63       .c
     jsr osbyte                                                        // 18a7: 20 f4 ff     ..            // Insert value 99 into the RS423 output buffer (X=2); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18aa: a9 8a       ..
-    ldx #3                                                            // 18ac: a2 03       ..
+    ldx #buffer_printer                                               // 18ac: a2 03       ..
     ldy #$17                                                          // 18ae: a0 17       ..
     jsr osbyte                                                        // 18b0: 20 f4 ff     ..            // Insert value 23 into the printer buffer (X=3); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18b3: a9 8a       ..
-    ldx #4                                                            // 18b5: a2 04       ..
+    ldx #buffer_sound_channel_0                                       // 18b5: a2 04       ..
     ldy #$ce                                                          // 18b7: a0 ce       ..
     jsr osbyte                                                        // 18b9: 20 f4 ff     ..            // Insert value 206 into sound channel 0 (X=4); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18bc: a9 8a       ..
-    ldx #5                                                            // 18be: a2 05       ..
+    ldx #buffer_sound_channel_1                                       // 18be: a2 05       ..
     ldy #$63 // 'c'                                                   // 18c0: a0 63       .c
     jsr osbyte                                                        // 18c2: 20 f4 ff     ..            // Insert value 99 into sound channel 1 (X=5); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18c5: a9 8a       ..
-    ldx #6                                                            // 18c7: a2 06       ..
+    ldx #buffer_sound_channel_2                                       // 18c7: a2 06       ..
     ldy #$2a // '*'                                                   // 18c9: a0 2a       .*
     jsr osbyte                                                        // 18cb: 20 f4 ff     ..            // Insert value 42 into sound channel 2 (X=6); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18ce: a9 8a       ..
-    ldx #7                                                            // 18d0: a2 07       ..
+    ldx #buffer_sound_channel_3                                       // 18d0: a2 07       ..
     ldy #1                                                            // 18d2: a0 01       ..
     jsr osbyte                                                        // 18d4: 20 f4 ff     ..            // Insert value 1 into sound channel 3 (X=7); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18d7: a9 8a       ..
-    ldx #8                                                            // 18d9: a2 08       ..
+    ldx #buffer_speech                                                // 18d9: a2 08       ..
     ldy #$5a // 'Z'                                                   // 18db: a0 5a       .Z
     jsr osbyte                                                        // 18dd: 20 f4 ff     ..            // Insert value 90 into the speech buffer (X=8); carry is clear if successful
     lda #osbyte_insert_buffer                                         // 18e0: a9 8a       ..
@@ -1638,7 +1672,7 @@ pydis_start
 
     // *************** Test OSBYTE 0x91 ***************
     lda #osbyte_read_buffer                                           // 1bd8: a9 91       ..
-    ldx #0                                                            // 1bda: a2 00       ..
+    ldx #buffer_keyboard                                              // 1bda: a2 00       ..
     ldy #0                                                            // 1bdc: a0 00       ..
     jsr osbyte                                                        // 1bde: 20 f4 ff     ..            // Get character from keyboard buffer (C is set if the buffer is empty, otherwise Y=extracted character)
     bcs buffer_empty                                                  // 1be1: b0 02       ..
@@ -1733,31 +1767,31 @@ buffer_empty
     ldy #0                                                            // 1c85: a0 00       ..
     jsr osbyte                                                        // 1c87: 20 f4 ff     ..            // Examine status of buffer X (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1c8a: a9 98       ..
-    ldx #0                                                            // 1c8c: a2 00       ..
+    ldx #buffer_keyboard                                              // 1c8c: a2 00       ..
     jsr osbyte                                                        // 1c8e: 20 f4 ff     ..            // Examine the keyboard buffer (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1c91: a9 98       ..
-    ldx #1                                                            // 1c93: a2 01       ..
+    ldx #buffer_rs423_input                                           // 1c93: a2 01       ..
     jsr osbyte                                                        // 1c95: 20 f4 ff     ..            // Examine the RS423 input buffer (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1c98: a9 98       ..
-    ldx #2                                                            // 1c9a: a2 02       ..
+    ldx #buffer_rs423_output                                          // 1c9a: a2 02       ..
     jsr osbyte                                                        // 1c9c: 20 f4 ff     ..            // Examine the RS423 output buffer (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1c9f: a9 98       ..
-    ldx #3                                                            // 1ca1: a2 03       ..
+    ldx #buffer_printer                                               // 1ca1: a2 03       ..
     jsr osbyte                                                        // 1ca3: 20 f4 ff     ..            // Examine the printer buffer (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1ca6: a9 98       ..
-    ldx #4                                                            // 1ca8: a2 04       ..
+    ldx #buffer_sound_channel_0                                       // 1ca8: a2 04       ..
     jsr osbyte                                                        // 1caa: 20 f4 ff     ..            // Examine sound channel 0 (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1cad: a9 98       ..
-    ldx #5                                                            // 1caf: a2 05       ..
+    ldx #buffer_sound_channel_1                                       // 1caf: a2 05       ..
     jsr osbyte                                                        // 1cb1: 20 f4 ff     ..            // Examine sound channel 1 (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1cb4: a9 98       ..
-    ldx #6                                                            // 1cb6: a2 06       ..
+    ldx #buffer_sound_channel_2                                       // 1cb6: a2 06       ..
     jsr osbyte                                                        // 1cb8: 20 f4 ff     ..            // Examine sound channel 2 (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1cbb: a9 98       ..
-    ldx #7                                                            // 1cbd: a2 07       ..
+    ldx #buffer_sound_channel_3                                       // 1cbd: a2 07       ..
     jsr osbyte                                                        // 1cbf: 20 f4 ff     ..            // Examine sound channel 3 (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1cc2: a9 98       ..
-    ldx #8                                                            // 1cc4: a2 08       ..
+    ldx #buffer_speech                                                // 1cc4: a2 08       ..
     jsr osbyte                                                        // 1cc6: 20 f4 ff     ..            // Examine the speech buffer (exits with carry clear on success)
     lda #osbyte_examine_buffer                                        // 1cc9: a9 98       ..
     ldx #9                                                            // 1ccb: a2 09       ..
@@ -4456,29 +4490,29 @@ buffer_empty
     lda #4                                                            // 31ba: a9 04       ..             // A=value to be written
     ldy #$5a // 'Z'                                                   // 31bc: a0 5a       .Z             // Y=offset from base address
     jsr oswrsc                                                        // 31be: 20 b3 ff     ..            // Write byte to screen
-    ldy #2                                                            // 31c1: a0 02       ..
+    ldy #event_character_entering_input_buffer                        // 31c1: a0 02       ..
     jsr oseven                                                        // 31c3: 20 bf ff     ..            // Generate event Y='Character entering input buffer'
     jsr osrdch                                                        // 31c6: 20 e0 ff     ..            // Read a character from the current input stream
     cmp #$20 // ' '                                                   // 31c9: c9 20       .              // A=character read
     jsr nvrdch                                                        // 31cb: 20 c8 ff     ..            // Read a character from the current input stream
     cmp #$2a // '*'                                                   // 31ce: c9 2a       .*             // A=character read
-    lda #0                                                            // 31d0: a9 00       ..
+    lda #osfind_close                                                 // 31d0: a9 00       ..
     ldy #0                                                            // 31d2: a0 00       ..
     jsr osfind                                                        // 31d4: 20 ce ff     ..            // Close all files (Y=0)
-    lda #0                                                            // 31d7: a9 00       ..
+    lda #osfind_close                                                 // 31d7: a9 00       ..
     ldy #1                                                            // 31d9: a0 01       ..
     jsr osfind                                                        // 31db: 20 ce ff     ..            // Close file Y
-    lda #$40 // '@'                                                   // 31de: a9 40       .@
+    lda #osfind_open_input                                            // 31de: a9 40       .@
     ldx #<(osfind_block)                                              // 31e0: a2 c7       ..
     ldy #>(osfind_block)                                              // 31e2: a0 41       .A
     jsr osfind                                                        // 31e4: 20 ce ff     ..            // Open file for input (A=64)
     sta mem                                                           // 31e7: 85 70       .p             // A=file handle (or zero on failure)
-    lda #$80                                                          // 31e9: a9 80       ..
+    lda #osfind_open_output                                           // 31e9: a9 80       ..
     ldx #<(osfind_block)                                              // 31eb: a2 c7       ..
     ldy #>(osfind_block)                                              // 31ed: a0 41       .A
     jsr osfind                                                        // 31ef: 20 ce ff     ..            // Open file for output (A=128)
     sta mem                                                           // 31f2: 85 70       .p             // A=file handle (or zero on failure)
-    lda #$c0                                                          // 31f4: a9 c0       ..
+    lda #osfind_open_random_access                                    // 31f4: a9 c0       ..
     ldx #<(osfind_block)                                              // 31f6: a2 c7       ..
     ldy #>(osfind_block)                                              // 31f8: a0 41       .A
     jsr osfind                                                        // 31fa: 20 ce ff     ..            // Open file for random access (A=192)

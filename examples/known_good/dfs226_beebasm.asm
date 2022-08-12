@@ -17,6 +17,9 @@ osbyte_write_shadow_memory_use        = 114
 osfile_load                           = 255
 osfile_read_catalogue_info            = 5
 osfile_save                           = 0
+osfind_close                          = 0
+osfind_open_input                     = 64
+osfind_open_output                    = 128
 service_absolute_workspace_claimed    = 10
 service_boot                          = 3
 service_check_swr_presence            = 43
@@ -7314,7 +7317,7 @@ nmi_XXX5 = l0d1f+1
 ; &ab09 referenced 1 time by &ab02
 .cab09
     sta l00ab                                                         ; ab09: 85 ab       ..
-    lda #&40 ; '@'                                                    ; ab0b: a9 40       .@
+    lda #osfind_open_input                                            ; ab0b: a9 40       .@
     jsr osfind                                                        ; ab0d: 20 ce ff     ..            ; Open file for input (A=64)
     tay                                                               ; ab10: a8          .              ; A=file handle (or zero on failure)
     lda #&0d                                                          ; ab11: a9 0d       ..
@@ -7354,12 +7357,12 @@ nmi_XXX5 = l0d1f+1
     jsr osnewl                                                        ; ab3e: 20 e7 ff     ..            ; Write newline (character 10)
 ; &ab41 referenced 2 times by &aba5, &abbf
 .cab41
-    lda #0                                                            ; ab41: a9 00       ..
+    lda #osfind_close                                                 ; ab41: a9 00       ..
     jmp osfind                                                        ; ab43: 4c ce ff    L..            ; Close one or all files
 
 .sub_cab46
     jsr sub_cac18                                                     ; ab46: 20 18 ac     ..
-    lda #&40 ; '@'                                                    ; ab49: a9 40       .@
+    lda #osfind_open_input                                            ; ab49: a9 40       .@
     jsr osfind                                                        ; ab4b: 20 ce ff     ..            ; Open file for input (A=64)
     tay                                                               ; ab4e: a8          .              ; A=file handle (or zero on failure)
     beq cab17                                                         ; ab4f: f0 c6       ..
@@ -7437,7 +7440,7 @@ nmi_XXX5 = l0d1f+1
 
 .sub_cabc5
     jsr sub_cac18                                                     ; abc5: 20 18 ac     ..
-    lda #&80                                                          ; abc8: a9 80       ..
+    lda #osfind_open_output                                           ; abc8: a9 80       ..
     jsr osfind                                                        ; abca: 20 ce ff     ..            ; Open file for output (A=128)
     sta l00ab                                                         ; abcd: 85 ab       ..             ; A=file handle (or zero on failure)
 ; &abcf referenced 1 time by &ac09
@@ -7673,7 +7676,7 @@ nmi_XXX5 = l0d1f+1
 .c0552
     jsr read_tube_r2_data                                             ; ad2d: 20 c5 06     .. :0552[2]
     tay                                                               ; ad30: a8          .   :0555[2]
-    lda #0                                                            ; ad31: a9 00       ..  :0556[2]
+    lda #osfind_close                                                 ; ad31: a9 00       ..  :0556[2]
     jsr osfind                                                        ; ad33: 20 ce ff     .. :0558[2]   ; Close one or all files
     jmp c059c                                                         ; ad36: 4c 9c 05    L.. :055b[2]
 
@@ -9040,7 +9043,7 @@ jump_address_low = sub_c0050+1
     sta (l00b8),y                                                     ; b5fb: 91 b8       ..
     pla                                                               ; b5fd: 68          h
     tay                                                               ; b5fe: a8          .
-    lda #0                                                            ; b5ff: a9 00       ..
+    lda #osfind_close                                                 ; b5ff: a9 00       ..
     jsr osfind                                                        ; b601: 20 ce ff     ..            ; Close one or all files
     jmp cb82b                                                         ; b604: 4c 2b b8    L+.
 
@@ -13702,6 +13705,9 @@ lb6ce = sub_cb6cd+1
     assert osfile_load == &ff
     assert osfile_read_catalogue_info == &05
     assert osfile_save == &00
+    assert osfind_close == &00
+    assert osfind_open_input == &40
+    assert osfind_open_output == &80
     assert service_absolute_workspace_claimed == &0a
     assert service_boot == &03
     assert service_check_swr_presence == &2b

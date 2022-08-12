@@ -1,4 +1,5 @@
 // Constants
+inkey_key_ctrl                                  = 254
 osbyte_acknowledge_escape                       = 126
 osbyte_close_spool_exec                         = 119
 osbyte_explode_chars                            = 20
@@ -13,6 +14,8 @@ osbyte_scan_keyboard_from_16                    = 122
 osbyte_vsync                                    = 19
 osbyte_write_keys_pressed                       = 120
 osfile_read_catalogue_info                      = 5
+osfind_close                                    = 0
+osfind_open_input                               = 64
 osword_read_palette                             = 11
 service_claim_absolute_workspace                = 1
 service_vectors_changed                         = 15
@@ -3147,7 +3150,7 @@ c9722
     jsr sub_c8e8c                                                     // 9722: 20 8c 8e     ..
     pla                                                               // 9725: 68          h
     tay                                                               // 9726: a8          .
-    lda #0                                                            // 9727: a9 00       ..
+    lda #osfind_close                                                 // 9727: a9 00       ..
     jsr osfind                                                        // 9729: 20 ce ff     ..            // Close one or all files
 // $972c referenced 1 time by $9717
 c972c
@@ -4766,7 +4769,7 @@ ca3b4
     plp                                                               // a3c1: 28          (
     bne ca3e3                                                         // a3c2: d0 1f       ..
     lda #osbyte_scan_keyboard                                         // a3c4: a9 79       .y
-    ldx #$81                                                          // a3c6: a2 81       ..
+    ldx #(255 - inkey_key_ctrl) ^ 128                                 // a3c6: a2 81       ..             // X=internal key number EOR 128
     jsr osbyte                                                        // a3c8: 20 f4 ff     ..            // Test for 'CTRL' key pressed (X=129)
     txa                                                               // a3cb: 8a          .              // X has top bit set if 'CTRL' pressed
     bpl ca3e3                                                         // a3cc: 10 15       ..
@@ -7435,7 +7438,7 @@ sub_cb98f
     rts                                                               // b993: 60          `
 
 sub_cb994
-    lda #0                                                            // b994: a9 00       ..
+    lda #osfind_close                                                 // b994: a9 00       ..
     tay                                                               // b996: a8          .
     jmp osfind                                                        // b997: 4c ce ff    L..            // Close all files (Y=0)
 
@@ -7923,7 +7926,7 @@ loop_cbc34
 // $bc3d referenced 6 times by $b9b0, $ba04, $ba57, $bb68, $bba2, $bc0f
 cbc3d
     ldy l00a8                                                         // bc3d: a4 a8       ..
-    lda #0                                                            // bc3f: a9 00       ..
+    lda #osfind_close                                                 // bc3f: a9 00       ..
     jmp osfind                                                        // bc41: 4c ce ff    L..            // Close one or all files
 
 // $bc44 referenced 2 times by $b9a0, $ba1b
@@ -7938,7 +7941,7 @@ sub_cbc44
     adc l00f3                                                         // bc4d: 65 f3       e.
     pha                                                               // bc4f: 48          H
     tay                                                               // bc50: a8          .
-    lda #$40 // '@'                                                   // bc51: a9 40       .@
+    lda #osfind_open_input                                            // bc51: a9 40       .@
     jsr osfind                                                        // bc53: 20 ce ff     ..            // Open file for input (A=64)
     tay                                                               // bc56: a8          .              // A=file handle (or zero on failure)
     sta l00a8                                                         // bc57: 85 a8       ..
