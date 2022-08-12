@@ -219,7 +219,7 @@ There are functions to help construct expression strings that will work across a
 
 :pencil:make_op1(op, expr)
 
-For unary operators. For example `make_op1('<', 'input_bits')` might return `'<input_bits'` or `'LO(input_bits)'` depending on the assembler.
+For unary operators. For example `make_op1('NOT', 'input_bits')` might return `'!input_bits'` or `'NOT(input_bits)'` depending on the assembler.
 
 :pencil:make_op2(expr1, op, expr2)
 
