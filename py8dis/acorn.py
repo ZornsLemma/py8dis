@@ -376,7 +376,7 @@ osbyte_enum = {
     0xbd: "osbyte_read_write_max_adc_channel",
     0xbe: "osbyte_read_write_adc_conversion_type",
     0xbf: "osbyte_read_write_serial_user_flag",
-    0xc0: "osbyte_read_serial_control_flag",
+    0xc0: "osbyte_read_serial_control_register_copy",
     0xc1: "osbyte_read_write_flash_counter",
     0xc2: "osbyte_read_write_mark_count",
     0xc3: "osbyte_read_write_space_count",
@@ -405,16 +405,16 @@ osbyte_enum = {
     0xda: "osbyte_read_write_vdu_queue_size",
     0xdb: "osbyte_read_write_tab_char",
     0xdc: "osbyte_read_write_escape_char",
-    0xdd: "osbyte_read_write_c0_cf_status",
-    0xde: "osbyte_read_write_d0_df_status",
-    0xdf: "osbyte_read_write_e0_ef_status",
-    0xe0: "osbyte_read_write_f0_ff_status",
+    0xdd: "osbyte_read_write_characters_c0_cf_status",
+    0xde: "osbyte_read_write_characters_d0_df_status",
+    0xdf: "osbyte_read_write_characters_e0_ef_status",
+    0xe0: "osbyte_read_write_characters_f0_ff_status",
     0xe1: "osbyte_read_write_function_key_status",
     0xe2: "osbyte_read_write_shift_function_key_status",
     0xe3: "osbyte_read_write_ctrl_function_key_status",
     0xe4: "osbyte_read_write_ctrl_shift_function_key_status",
     0xe5: "osbyte_read_write_escape_status",
-    0xe6: "osbyte_read_write_escape_flags",
+    0xe6: "osbyte_read_write_escape_effects",
     0xe7: "osbyte_read_write_user_via_irq_mask",
     0xe8: "osbyte_read_write_6850_irq_mark",
     0xe9: "osbyte_read_write_system_via_irq_mask",
@@ -429,7 +429,7 @@ osbyte_enum = {
     0xf2: "osbyte_read_serial_ula",
     0xf3: "osbyte_read_write_timer_switch_state",
     0xf4: "osbyte_read_write_soft_key_consistency_flag",
-    0xf5: "osbyte_read_write_printer_destination_flag",
+    0xf5: "osbyte_read_write_printer_destination",
     0xf6: "osbyte_read_write_printer_ignore_char",
     0xf7: "osbyte_read_write_first_byte_break_intercept",
     0xf8: "osbyte_read_write_second_byte_break_intercept",
@@ -2469,6 +2469,11 @@ def osbyte_hook(runtime_addr, state, subroutine):
                     name = "Set ESCAPE key to produce ASCII code " + str(write_value)
                 auto_comment(runtime_addr, name, inline=True)
                 skip_normal_comment = True
+            elif action == 0xff:
+                # If writing the startup byte, show it in binary
+                if write_value is not None:
+                    if x_runtime_addr is not None:
+                        binary(x_runtime_addr)
 
             if not skip_normal_comment:
                 com = format_osbyte_rw(x_addr, y_addr, name)

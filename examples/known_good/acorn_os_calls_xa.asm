@@ -78,7 +78,7 @@ osbyte_read_rom_info_table_high                    = 171
 osbyte_read_rom_info_table_low                     = 170
 osbyte_read_rom_ptr_table_high                     = 169
 osbyte_read_rom_ptr_table_low                      = 168
-osbyte_read_serial_control_flag                    = 192
+osbyte_read_serial_control_register_copy           = 192
 osbyte_read_serial_ula                             = 242
 osbyte_read_sheila                                 = 150
 osbyte_read_speech                                 = 158
@@ -106,28 +106,28 @@ osbyte_read_write_bell_channel                     = 211
 osbyte_read_write_bell_duration                    = 214
 osbyte_read_write_bell_envelope                    = 212
 osbyte_read_write_bell_frequency                   = 213
-osbyte_read_write_c0_cf_status                     = 221
 osbyte_read_write_cassette_serial_selection        = 205
 osbyte_read_write_cfs_rfs_switch                   = 183
 osbyte_read_write_cfs_timeout                      = 176
 osbyte_read_write_char_destination_status          = 236
+osbyte_read_write_characters_c0_cf_status          = 221
+osbyte_read_write_characters_d0_df_status          = 222
+osbyte_read_write_characters_e0_ef_status          = 223
+osbyte_read_write_characters_f0_ff_status          = 224
 osbyte_read_write_ctrl_function_key_status         = 227
 osbyte_read_write_ctrl_shift_function_key_status   = 228
 osbyte_read_write_current_language_rom_bank        = 252
 osbyte_read_write_current_oshwm                    = 180
 osbyte_read_write_cursor_editing_status            = 237
-osbyte_read_write_d0_df_status                     = 222
-osbyte_read_write_e0_ef_status                     = 223
 osbyte_read_write_econet_keyboard_disable          = 201
 osbyte_read_write_econet_os_call_interception      = 206
 osbyte_read_write_econet_osrdch_interception       = 207
 osbyte_read_write_econet_oswrch_interception       = 208
 osbyte_read_write_escape_break_effect              = 200
 osbyte_read_write_escape_char                      = 220
-osbyte_read_write_escape_flags                     = 230
+osbyte_read_write_escape_effects                   = 230
 osbyte_read_write_escape_status                    = 229
 osbyte_read_write_exec_file_handle                 = 198
-osbyte_read_write_f0_ff_status                     = 224
 osbyte_read_write_first_byte_break_intercept       = 247
 osbyte_read_write_flash_counter                    = 193
 osbyte_read_write_function_key_status              = 225
@@ -141,7 +141,7 @@ osbyte_read_write_lines_since_last_page            = 217
 osbyte_read_write_mark_count                       = 194
 osbyte_read_write_max_adc_channel                  = 189
 osbyte_read_write_primary_oshwm                    = 179
-osbyte_read_write_printer_destination_flag         = 245
+osbyte_read_write_printer_destination              = 245
 osbyte_read_write_printer_ignore_char              = 246
 osbyte_read_write_rom_bank_at_last_brk             = 186
 osbyte_read_write_second_byte_break_intercept      = 248
@@ -3484,13 +3484,13 @@ buffer_empty
     sty mem                                                           // 2a98: 84 70       .p             // Y=value of OS copy of 6850 (ACIA) control register
 
     // *************** Test OSBYTE 0xc0 ***************
-    lda #osbyte_read_serial_control_flag                              // 2a9a: a9 c0       ..
+    lda #osbyte_read_serial_control_register_copy                     // 2a9a: a9 c0       ..
     ldx #$2a // '*'                                                   // 2a9c: a2 2a       .*
     ldy #0                                                            // 2a9e: a0 00       ..
     jsr osbyte                                                        // 2aa0: 20 f4 ff     ..            // Write OS copy of 6850 (ACIA) control register, value X=42
     stx mem                                                           // 2aa3: 86 70       .p             // X=old value of OS copy of 6850 (ACIA) control register
     sty mem                                                           // 2aa5: 84 70       .p             // Y=value of flash counter in fiftieths of a second
-    lda #osbyte_read_serial_control_flag                              // 2aa7: a9 c0       ..
+    lda #osbyte_read_serial_control_register_copy                     // 2aa7: a9 c0       ..
     ldx #0                                                            // 2aa9: a2 00       ..
     ldy #$ff                                                          // 2aab: a0 ff       ..
     jsr osbyte                                                        // 2aad: 20 f4 ff     ..            // Read OS copy of 6850 (ACIA) control register
@@ -3890,13 +3890,13 @@ buffer_empty
     sty mem                                                           // 2d8a: 84 70       .p             // Y=value of character status flag ($c0-$cf)
 
     // *************** Test OSBYTE 0xdd ***************
-    lda #osbyte_read_write_c0_cf_status                               // 2d8c: a9 dd       ..
+    lda #osbyte_read_write_characters_c0_cf_status                    // 2d8c: a9 dd       ..
     ldx #$2a // '*'                                                   // 2d8e: a2 2a       .*
     ldy #0                                                            // 2d90: a0 00       ..
     jsr osbyte                                                        // 2d92: 20 f4 ff     ..            // Write character status flag ($c0-$cf), value X=42
     stx mem                                                           // 2d95: 86 70       .p             // X=old value of character status flag ($c0-$cf)
     sty mem                                                           // 2d97: 84 70       .p             // Y=value of character status flag ($d0-$df)
-    lda #osbyte_read_write_c0_cf_status                               // 2d99: a9 dd       ..
+    lda #osbyte_read_write_characters_c0_cf_status                    // 2d99: a9 dd       ..
     ldx #0                                                            // 2d9b: a2 00       ..
     ldy #$ff                                                          // 2d9d: a0 ff       ..
     jsr osbyte                                                        // 2d9f: 20 f4 ff     ..            // Read character status flag ($c0-$cf)
@@ -3904,13 +3904,13 @@ buffer_empty
     sty mem                                                           // 2da4: 84 70       .p             // Y=value of character status flag ($d0-$df)
 
     // *************** Test OSBYTE 0xde ***************
-    lda #osbyte_read_write_d0_df_status                               // 2da6: a9 de       ..
+    lda #osbyte_read_write_characters_d0_df_status                    // 2da6: a9 de       ..
     ldx #$2a // '*'                                                   // 2da8: a2 2a       .*
     ldy #0                                                            // 2daa: a0 00       ..
     jsr osbyte                                                        // 2dac: 20 f4 ff     ..            // Write character status flag ($d0-$df), value X=42
     stx mem                                                           // 2daf: 86 70       .p             // X=old value of character status flag ($d0-$df)
     sty mem                                                           // 2db1: 84 70       .p             // Y=value of character status flag ($e0-$ef)
-    lda #osbyte_read_write_d0_df_status                               // 2db3: a9 de       ..
+    lda #osbyte_read_write_characters_d0_df_status                    // 2db3: a9 de       ..
     ldx #0                                                            // 2db5: a2 00       ..
     ldy #$ff                                                          // 2db7: a0 ff       ..
     jsr osbyte                                                        // 2db9: 20 f4 ff     ..            // Read character status flag ($d0-$df)
@@ -3918,13 +3918,13 @@ buffer_empty
     sty mem                                                           // 2dbe: 84 70       .p             // Y=value of character status flag ($e0-$ef)
 
     // *************** Test OSBYTE 0xdf ***************
-    lda #osbyte_read_write_e0_ef_status                               // 2dc0: a9 df       ..
+    lda #osbyte_read_write_characters_e0_ef_status                    // 2dc0: a9 df       ..
     ldx #$2a // '*'                                                   // 2dc2: a2 2a       .*
     ldy #0                                                            // 2dc4: a0 00       ..
     jsr osbyte                                                        // 2dc6: 20 f4 ff     ..            // Write character status flag ($e0-$ef), value X=42
     stx mem                                                           // 2dc9: 86 70       .p             // X=old value of character status flag ($e0-$ef)
     sty mem                                                           // 2dcb: 84 70       .p             // Y=value of character status flag ($f0-$ff)
-    lda #osbyte_read_write_e0_ef_status                               // 2dcd: a9 df       ..
+    lda #osbyte_read_write_characters_e0_ef_status                    // 2dcd: a9 df       ..
     ldx #0                                                            // 2dcf: a2 00       ..
     ldy #$ff                                                          // 2dd1: a0 ff       ..
     jsr osbyte                                                        // 2dd3: 20 f4 ff     ..            // Read character status flag ($e0-$ef)
@@ -3932,13 +3932,13 @@ buffer_empty
     sty mem                                                           // 2dd8: 84 70       .p             // Y=value of character status flag ($f0-$ff)
 
     // *************** Test OSBYTE 0xe0 ***************
-    lda #osbyte_read_write_f0_ff_status                               // 2dda: a9 e0       ..
+    lda #osbyte_read_write_characters_f0_ff_status                    // 2dda: a9 e0       ..
     ldx #$2a // '*'                                                   // 2ddc: a2 2a       .*
     ldy #0                                                            // 2dde: a0 00       ..
     jsr osbyte                                                        // 2de0: 20 f4 ff     ..            // Write character status flag ($f0-$ff), value X=42
     stx mem                                                           // 2de3: 86 70       .p             // X=old value of character status flag ($f0-$ff)
     sty mem                                                           // 2de5: 84 70       .p             // Y=value of function key status
-    lda #osbyte_read_write_f0_ff_status                               // 2de7: a9 e0       ..
+    lda #osbyte_read_write_characters_f0_ff_status                    // 2de7: a9 e0       ..
     ldx #0                                                            // 2de9: a2 00       ..
     ldy #$ff                                                          // 2deb: a0 ff       ..
     jsr osbyte                                                        // 2ded: 20 f4 ff     ..            // Read character status flag ($f0-$ff)
@@ -4016,13 +4016,13 @@ buffer_empty
     sty mem                                                           // 2e74: 84 70       .p             // Y=value of ESCAPE effects
 
     // *************** Test OSBYTE 0xe6 ***************
-    lda #osbyte_read_write_escape_flags                               // 2e76: a9 e6       ..
+    lda #osbyte_read_write_escape_effects                             // 2e76: a9 e6       ..
     ldx #$2a // '*'                                                   // 2e78: a2 2a       .*
     ldy #0                                                            // 2e7a: a0 00       ..
     jsr osbyte                                                        // 2e7c: 20 f4 ff     ..            // Write ESCAPE effects, value X=42
     stx mem                                                           // 2e7f: 86 70       .p             // X=old value of ESCAPE effects
     sty mem                                                           // 2e81: 84 70       .p             // Y=value of User 6522 IRQ bit mask
-    lda #osbyte_read_write_escape_flags                               // 2e83: a9 e6       ..
+    lda #osbyte_read_write_escape_effects                             // 2e83: a9 e6       ..
     ldx #0                                                            // 2e85: a2 00       ..
     ldy #$ff                                                          // 2e87: a0 ff       ..
     jsr osbyte                                                        // 2e89: 20 f4 ff     ..            // Read ESCAPE effects
@@ -4226,13 +4226,13 @@ buffer_empty
     sty mem                                                           // 2ffa: 84 70       .p             // Y=value of printer destination
 
     // *************** Test OSBYTE 0xf5 ***************
-    lda #osbyte_read_write_printer_destination_flag                   // 2ffc: a9 f5       ..
+    lda #osbyte_read_write_printer_destination                        // 2ffc: a9 f5       ..
     ldx #$2a // '*'                                                   // 2ffe: a2 2a       .*
     ldy #0                                                            // 3000: a0 00       ..
     jsr osbyte                                                        // 3002: 20 f4 ff     ..            // Write printer destination, value X=42
     stx mem                                                           // 3005: 86 70       .p             // X=old value of printer destination
     sty mem                                                           // 3007: 84 70       .p             // Y=value of printer ignore character
-    lda #osbyte_read_write_printer_destination_flag                   // 3009: a9 f5       ..
+    lda #osbyte_read_write_printer_destination                        // 3009: a9 f5       ..
     ldx #0                                                            // 300b: a2 00       ..
     ldy #$ff                                                          // 300d: a0 ff       ..
     jsr osbyte                                                        // 300f: 20 f4 ff     ..            // Read printer destination
@@ -4367,7 +4367,7 @@ buffer_empty
 
     // *************** Test OSBYTE 0xff ***************
     lda #osbyte_read_write_startup_options                            // 3100: a9 ff       ..
-    ldx #$2a // '*'                                                   // 3102: a2 2a       .*
+    ldx #%00101010                                                    // 3102: a2 2a       .*
     ldy #0                                                            // 3104: a0 00       ..
     jsr osbyte                                                        // 3106: 20 f4 ff     ..            // Write start-up option byte, value X=42
 
