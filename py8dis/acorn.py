@@ -1256,7 +1256,7 @@ def osargs_hook(runtime_addr, state, subroutine):
         auto_comment(runtime_addr, "Read or write a file's attributes", inline=True)
 
 def osnewl_hook(runtime_addr, state, subroutine):
-    auto_comment(runtime_addr, "Write newline (character 10)", inline=True)
+    auto_comment(runtime_addr, "Write newline (characters 10 and 13)", inline=True)
 
 def oswrcr_hook(runtime_addr, state, subroutine):
     auto_comment(runtime_addr, "Write carriage return (character 13)", inline=True)

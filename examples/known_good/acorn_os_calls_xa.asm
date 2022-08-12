@@ -4572,7 +4572,7 @@ buffer_empty
     ldy mem                                                           // 3275: a4 70       .p             // Y=file handle
     jsr osbget                                                        // 3277: 20 d7 ff     ..            // Read a single byte from an open file Y
     cmp #0                                                            // 327a: c9 00       ..
-    jsr osnewl                                                        // 327c: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // 327c: 20 e7 ff     ..            // Write newline (characters 10 and 13)
     jsr oswrcr                                                        // 327f: 20 ec ff     ..            // Write carriage return (character 13)
     lda #$41 // 'A'                                                   // 3282: a9 41       .A
     jsr oswrch                                                        // 3284: 20 ee ff     ..            // Write character 65

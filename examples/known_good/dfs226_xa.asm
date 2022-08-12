@@ -7335,7 +7335,7 @@ cab35
 // $ab3d referenced 1 time by $ab1d
 cab3d
     plp                                                               // ab3d: 28          (
-    jsr osnewl                                                        // ab3e: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // ab3e: 20 e7 ff     ..            // Write newline (characters 10 and 13)
 // $ab41 referenced 2 times by $aba5, $abbf
 cab41
     lda #osfind_close                                                 // ab41: a9 00       ..
@@ -7387,7 +7387,7 @@ loop_cab80
 // $ab93 referenced 1 time by $ab7e
 cab93
     jsr sub_caba9                                                     // ab93: 20 a9 ab     ..
-    jsr osnewl                                                        // ab96: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // ab96: 20 e7 ff     ..            // Write newline (characters 10 and 13)
     lda #8                                                            // ab99: a9 08       ..
     clc                                                               // ab9b: 18          .
     adc l00a8                                                         // ab9c: 65 a8       e.
@@ -10566,7 +10566,7 @@ cbeee
     ldy #$7f                                                          // bf03: a0 7f       ..
     jsr sub_cbf84                                                     // bf05: 20 84 bf     ..
     bpl cbee8                                                         // bf08: 10 de       ..
-    jsr osnewl                                                        // bf0a: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // bf0a: 20 e7 ff     ..            // Write newline (characters 10 and 13)
     ldx #0                                                            // bf0d: a2 00       ..
     jsr sub_cbf7c                                                     // bf0f: 20 7c bf     |.
     lda #$fd                                                          // bf12: a9 fd       ..
@@ -10609,8 +10609,8 @@ cbf33
     jsr sub_cbf7c                                                     // bf43: 20 7c bf     |.
 // $bf46 referenced 1 time by $bf17
 cbf46
-    jsr osnewl                                                        // bf46: 20 e7 ff     ..            // Write newline (character 10)
-    jsr osnewl                                                        // bf49: 20 e7 ff     ..            // Write newline (character 10)
+    jsr osnewl                                                        // bf46: 20 e7 ff     ..            // Write newline (characters 10 and 13)
+    jsr osnewl                                                        // bf49: 20 e7 ff     ..            // Write newline (characters 10 and 13)
     jmp cbee8                                                         // bf4c: 4c e8 be    L..
 
 // $bf4f referenced 1 time by $bf7c
