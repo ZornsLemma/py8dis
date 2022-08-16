@@ -45,9 +45,15 @@ class Cpu(object):
         self.memory_binary = memorymanager.memory_binary
         self.labels = labelmanager.labels
 
+        # It's possible to accidentally re-initialise a Cpu object; make it
+        # obvious if this happens when there's data. TODO: This feels a bit of
+        # a hack, but split2.py fails if we just do hasattr().
+        assert not hasattr(self, "entry_points") or len(self.entry_points) == 0
+
         self.subroutine_hooks = {}
         self.opcodes = {}
         self.entry_points = []
+        self.forced_entry_points = set()
         self.traced_entry_points = set()
         self.code_analysis_fns = []
         self.trace_done = False
@@ -69,9 +75,12 @@ class Cpu(object):
 
         assert isinstance(binary_addr, memorymanager.BinaryAddr)
         opcode_value = self.memory_binary[binary_addr]
-        if opcode_value not in self.opcodes:
+        if opcode_value in self.opcodes:
+            opcode = self.opcodes[opcode_value]
+        elif binary_addr in self.forced_entry_points and opcode_value in self.extra_opcodes:
+            opcode = self.extra_opcodes[opcode_value]
+        else:
             return [None]
-        opcode = self.opcodes[opcode_value]
 
         # If we hit something that's already classified, we can't/don't
         # re-classify it but that doesn't mean we can't continue to
@@ -91,10 +100,12 @@ class Cpu(object):
 
         return opcode.disassemble(binary_addr)
 
-    def add_entry(self, binary_addr, name, move_id):
+    def add_entry(self, binary_addr, name, move_id, force):
         """Add code entry point"""
 
         self.entry_points.append(binary_addr)
+        if force:
+            self.forced_entry_points.add(binary_addr)
         disassembly.add_label(movemanager.b2r(binary_addr), name, move_id)
 
     def analyse_code(self):
@@ -142,7 +153,7 @@ class Cpu(object):
                 for new_entry_point in new_entry_points:
                     #print("AQB %04x %04x" % (entry_point, new_entry_point))
                     #assert new_entry_point != 0x9030
-                    self.add_entry(new_entry_point, name=None, move_id=movemanager.move_id_for_binary_addr[new_entry_point])
+                    self.add_entry(new_entry_point, name=None, move_id=movemanager.move_id_for_binary_addr[new_entry_point], force=False)
 
         # Debugging
         if False:

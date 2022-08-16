@@ -388,7 +388,7 @@ def word(runtime_addr, n=1, cols=None):
         return
     disassembly.add_classification(binary_addr, classification.Word(n * 2, cols=cols))
 
-def entry(runtime_addr, label=None, warn=True):
+def entry(runtime_addr, label=None, warn=True, force=False):
     """
     Specifies that there is code at the given runtime address.
 
@@ -402,7 +402,7 @@ def entry(runtime_addr, label=None, warn=True):
     # TODO: Should probably warn rather than assert in other fns too
     memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
 
-    trace.cpu.add_entry(binary_addr, label, move_id)
+    trace.cpu.add_entry(binary_addr, label, move_id, force)
     if utils.is_string_type(label):
         return label
     return disassembly.get_label(runtime_addr, binary_addr, move_id)

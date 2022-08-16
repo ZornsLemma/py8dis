@@ -143,6 +143,23 @@ def parse_instruction_template(instruction):
 
     return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
 
+# TODO: Add to README.md
+# TODO: Add to cpu65c02.py, factoring out common code if appropriate.
+def recognise_opcode(opcodes):
+    """Add opcodes to the set considered valid when tracing code.
+
+    Undocumented/illegal opcodes are not considered by default to reduce the
+    scope for the tracing code to trace through data by mistake. This function
+    adds opcodes (which may be an integer or a list of integers) to the set of
+    instructions understood during tracing."""
+
+    if not hasattr(opcodes, "__iter__"):
+        opcodes = [opcodes]
+    cpu = trace.cpu
+    for opcode in opcodes:
+        if opcode not in cpu.opcodes and opcode in cpu.extra_opcodes:
+            cpu.opcodes[opcode] = cpu.extra_opcodes[opcode]
+
 class SubConst(object):
     """Data about a constant substitution.
 
@@ -404,6 +421,13 @@ class Cpu6502(trace.Cpu):
             0xfd: self.OpcodeDataAbs(           "SBC addr,X", "AU-", cycles="4f", update=self.update_adc_sbc),
             0xfe: self.OpcodeDataAbs(           "INC addr,X", "-U-", cycles="7",  update=self.update_nz),
         }
+        # Extra opcodes which are undocumented/illegal but may sometimes be
+        # used. These are not considered valid for tracing by default.
+        # TODO: Extend this to include the full set
+        self.extra_opcodes = {
+            0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral),
+            0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral),
+        }
 
 
     # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
@@ -428,7 +452,7 @@ class Cpu6502(trace.Cpu):
         runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
         binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
         memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
-        self.add_entry(binary_addr, name, move_id)
+        self.add_entry(binary_addr, name, move_id, force=False)
         self.subroutine_hooks[runtime_addr] = hook
 
     def default_subroutine_hook(self, runtime_addr, state, subroutine):

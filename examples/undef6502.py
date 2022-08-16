@@ -1,0 +1,22 @@
+from commands import *
+
+# Load the program to be disassembled into the debugger's memory.
+# The md5sum is optional but helps avoid confusion if there are
+# multiple versions of the same program.
+load(0x1100, "undef6502.orig", "6502") # TODO: add md5sum
+
+# Start tracing instructions at 0x1100.
+entry(0x1100)
+
+# Recognise the undefined/illegal opcode $80.
+recognise_opcode(0x80)
+
+# The illegal opcode $82 at $1104 won't be recognised and will stop tracing; force
+# a restart after it.
+entry(0x1106)
+
+# Recognise the undefined/illegal opcode $82 at $1108 only.
+entry(0x1108, force=True)
+
+# Use all the information provided to actually disassemble the program.
+go()
