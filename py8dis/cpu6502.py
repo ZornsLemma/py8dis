@@ -425,8 +425,9 @@ class Cpu6502(trace.Cpu):
         # used. These are not considered valid for tracing by default.
         # TODO: Extend this to include the full set
         self.extra_opcodes = {
-            0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral),
-            0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral),
+            0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
+            0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
+            0x8b: self.OpcodeImmediate(         "ANE #imm",   "A--", cycles="2",  update=self.update_nz, nonstandard=True),
         }
 
 
@@ -481,7 +482,7 @@ class Cpu6502(trace.Cpu):
 
 
     class Opcode(object):
-        def __init__(self, instruction_template, reg_change, update=None, cycles="???"):
+        def __init__(self, instruction_template, reg_change, update=None, cycles="???", nonstandard=False):
 
             self.instruction_template = instruction_template
 
@@ -503,6 +504,7 @@ class Cpu6502(trace.Cpu):
             self.update         = update
             self.indent_level   = 0
             self.cycles         = cycles
+            self.nonstandard    = nonstandard
 
 
         def length(self):
@@ -649,8 +651,8 @@ class Cpu6502(trace.Cpu):
 
 
     class OpcodeImplied(Opcode):
-        def __init__(self, instruction_template, reg_change, cycles="???", update=None):
-            super(Cpu6502.OpcodeImplied, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
+        def __init__(self, instruction_template, reg_change, cycles="???", update=None, nonstandard=False):
+            super(Cpu6502.OpcodeImplied, self).__init__(instruction_template, reg_change, cycles=cycles, update=update, nonstandard=nonstandard)
 
         def update_references(self, addr):
             pass
@@ -666,8 +668,8 @@ class Cpu6502(trace.Cpu):
 
 
     class OpcodeImmediate(Opcode):
-        def __init__(self, instruction_template, reg_change, cycles="???", update=None):
-            super(Cpu6502.OpcodeImmediate, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
+        def __init__(self, instruction_template, reg_change, cycles="???", update=None, nonstandard=False):
+            super(Cpu6502.OpcodeImmediate, self).__init__(instruction_template, reg_change, cycles=cycles, update=update, nonstandard=nonstandard)
 
         def update_references(self, addr):
             pass
@@ -676,7 +678,15 @@ class Cpu6502(trace.Cpu):
             return [binary_addr + 2]
 
         def as_string(self, addr):
-            s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
+            if not self.nonstandard:
+                s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
+            else:
+                opcode = trace.cpu.memory_binary[addr]
+                mnemonic = config.get_assembler().nonstandard_mnemonic(opcode)
+                if mnemonic is not None:
+                    s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(mnemonic), classification.get_constant8(addr + 1))
+                else:
+                    s = "%s%s%s, %s %s %s #" % (utils.make_indent(1), config.get_assembler().byte_prefix(), config.get_assembler().hex2(opcode), classification.get_constant8(addr + 1), config.get_assembler().comment_prefix(), self.mnemonic)
             if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
                 c = trace.cpu.memory_binary[addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):

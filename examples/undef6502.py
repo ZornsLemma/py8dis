@@ -8,8 +8,9 @@ load(0x1100, "undef6502.orig", "6502") # TODO: add md5sum
 # Start tracing instructions at 0x1100.
 entry(0x1100)
 
-# Recognise the undefined/illegal opcode $80.
+# Recognise some undefined/illegal opcodes.
 recognise_opcode(0x80)
+recognise_opcode(0x8b)
 
 # The illegal opcode $82 at $1104 won't be recognised and will stop tracing; force
 # a restart after it.

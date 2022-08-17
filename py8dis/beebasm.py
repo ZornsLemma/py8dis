@@ -144,4 +144,7 @@ class Beebasm(assembler.Assembler):
     def sanitise(self, s):
         return s
 
+    def nonstandard_mnemonic(self, opcode):
+        return None
+
 config.set_assembler(Beebasm())

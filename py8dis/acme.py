@@ -9,6 +9,7 @@ import assembler
 class Acme(assembler.Assembler):
     def __init__(self):
         super(assembler.Assembler, self).__init__()
+        self.nonstandard_used = False
 
     def get_name(self):
         return "acme"
@@ -53,6 +54,9 @@ class Acme(assembler.Assembler):
 
         if config.get_cmos():
             result.extend(["!cpu 65c02", ""])
+        elif self.nonstandard_used:
+            # TODO: Is this the right !cpu argument?
+            result.extend(["!cpu 6510", ""])
         return result
 
     def code_start(self, start_addr, end_addr, first):
@@ -111,5 +115,14 @@ class Acme(assembler.Assembler):
 
     def sanitise(self, s):
         return s
+
+    def nonstandard_mnemonic(self, opcode):
+        # TODO: Populate this fully
+        mnemonic = {
+            0x8b: "ANE",
+        }.get(opcode, None)
+        if mnemonic is not None:
+            self.nonstandard_used = True
+        return mnemonic
 
 config.set_assembler(Acme())

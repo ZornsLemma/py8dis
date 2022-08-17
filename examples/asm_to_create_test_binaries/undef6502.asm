@@ -6,4 +6,5 @@
     sta $70
     !byte $82, $25 ; NOP #$25
     lda #99
+    !byte $8b, $00 ; ANE #$00
     rts

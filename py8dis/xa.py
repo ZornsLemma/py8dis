@@ -190,4 +190,8 @@ class Xa(assembler.Assembler):
             return s + " "
         return s
 
+    def nonstandard_mnemonic(self, opcode):
+        # TODO: Does xa support nonstandard mnemonics?
+        return None
+
 config.set_assembler(Xa())
