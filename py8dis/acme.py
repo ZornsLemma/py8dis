@@ -119,6 +119,7 @@ class Acme(assembler.Assembler):
     def nonstandard_mnemonic(self, opcode):
         # TODO: Populate this fully
         mnemonic = {
+            0x03: "SLO",
             0x8b: "ANE",
         }.get(opcode, None)
         if mnemonic is not None:

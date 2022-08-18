@@ -425,10 +425,12 @@ class Cpu6502(trace.Cpu):
         # used. These are not considered valid for tracing by default.
         # TODO: Extend this to include the full set
         self.extra_opcodes = {
+            0x03: self.OpcodeZp(                "SLO (zp,X)", "UU-", cycles="8", update=self.neutral, nonstandard=True),
             0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x8b: self.OpcodeImmediate(         "ANE #imm",   "A--", cycles="2",  update=self.update_nz, nonstandard=True),
         }
+        assert all(opcode.nonstandard for opcode in self.extra_opcodes.values())
 
 
     # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
@@ -686,7 +688,7 @@ class Cpu6502(trace.Cpu):
                 if mnemonic is not None:
                     s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(mnemonic), classification.get_constant8(addr + 1))
                 else:
-                    s = "%s%s%s, %s %s %s #" % (utils.make_indent(1), config.get_assembler().byte_prefix(), config.get_assembler().hex2(opcode), classification.get_constant8(addr + 1), config.get_assembler().comment_prefix(), self.mnemonic)
+                    s = "%s%s%s, %s %s %s #" % (utils.make_indent(1), config.get_assembler().byte_prefix(), config.get_assembler().hex2(opcode), classification.get_constant8(addr + 1), config.get_assembler().comment_prefix(), utils.force_case(self.mnemonic))
             if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
                 c = trace.cpu.memory_binary[addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
@@ -695,8 +697,8 @@ class Cpu6502(trace.Cpu):
 
 
     class OpcodeZp(Opcode):
-        def __init__(self, instruction_template, reg_change, cycles="???", update=None):
-            super(Cpu6502.OpcodeZp, self).__init__(instruction_template, reg_change, update=update, cycles=cycles)
+        def __init__(self, instruction_template, reg_change, cycles="???", update=None, nonstandard=False):
+            super(Cpu6502.OpcodeZp, self).__init__(instruction_template, reg_change, update=update, cycles=cycles, nonstandard=nonstandard)
 
         def abs_operand(self, addr):
             return trace.cpu.memory_binary[addr + 1]
@@ -711,7 +713,20 @@ class Cpu6502(trace.Cpu):
             return [binary_addr + 2]
 
         def as_string(self, addr):
-            return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
+            assembler_support = True
+            opcode = trace.cpu.memory_binary[addr]
+            if self.nonstandard:
+                mnemonic = config.get_assembler().nonstandard_mnemonic(opcode)
+                if mnemonic is None:
+                    assembler_support = False
+                    mnemonic = self.mnemonic
+            else:
+                mnemonic = self.mnemonic
+            s = utils.LazyString("%s %s%s%s", utils.force_case(mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
+            if assembler_support:
+                return utils.LazyString("%s%s", utils.make_indent(1), s)
+            else:
+                return utils.LazyString("%s%s%s, %s %s %s", utils.make_indent(1), config.get_assembler().byte_prefix(), config.get_assembler().hex2(opcode), classification.get_constant8(addr + 1), config.get_assembler().comment_prefix(), s)
 
 
     class OpcodeAbs(Opcode):
