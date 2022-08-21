@@ -8,4 +8,5 @@
     lda #99
     !byte $8b, $00 ; ANE #$00
     !byte $03, $70 ; SLO ($70,X)
+    !byte $07, $80 ; SLO $80
     rts

@@ -425,7 +425,8 @@ class Cpu6502(trace.Cpu):
         # used. These are not considered valid for tracing by default.
         # TODO: Extend this to include the full set
         self.extra_opcodes = {
-            0x03: self.OpcodeZp(                "SLO (zp,X)", "UU-", cycles="8", update=self.neutral, nonstandard=True),
+            0x03: self.OpcodeZp(                "SLO (zp,X)", "AU-", cycles="8", update=self.neutral, nonstandard=True),
+            0x07: self.OpcodeZp(                "SLO zp",     "A--", cycles="5",  update=self.neutral, nonstandard=True),
             0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x8b: self.OpcodeImmediate(         "ANE #imm",   "A--", cycles="2",  update=self.update_nz, nonstandard=True),
