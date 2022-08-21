@@ -9,4 +9,6 @@
     !byte $8b, $00 ; ANE #$00
     !byte $03, $70 ; SLO ($70,X)
     !byte $07, $80 ; SLO $80
+    !byte $0f, $34, $12 ; SLO $1234
+    !byte $0f, $72, $00 ; SLO+2 $0072
     rts

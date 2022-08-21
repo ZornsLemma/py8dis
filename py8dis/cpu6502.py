@@ -427,6 +427,7 @@ class Cpu6502(trace.Cpu):
         self.extra_opcodes = {
             0x03: self.OpcodeZp(                "SLO (zp,X)", "AU-", cycles="8", update=self.neutral, nonstandard=True),
             0x07: self.OpcodeZp(                "SLO zp",     "A--", cycles="5",  update=self.neutral, nonstandard=True),
+            0x0f: self.OpcodeDataAbs(           "SLO addr",   "A--", cycles="6",  update=self.neutral, nonstandard=True),
             0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x8b: self.OpcodeImmediate(         "ANE #imm",   "A--", cycles="2",  update=self.update_nz, nonstandard=True),
@@ -731,8 +732,8 @@ class Cpu6502(trace.Cpu):
 
 
     class OpcodeAbs(Opcode):
-        def __init__(self, instruction_template, reg_change, has_zp_version=True, cycles="???", update=None):
-            super(Cpu6502.OpcodeAbs, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
+        def __init__(self, instruction_template, reg_change, has_zp_version=True, cycles="???", update=None, nonstandard=False):
+            super(Cpu6502.OpcodeAbs, self).__init__(instruction_template, reg_change, cycles=cycles, update=update, nonstandard=nonstandard)
             self._has_zp_version = has_zp_version
 
         def abs_operand(self, addr):
@@ -745,6 +746,25 @@ class Cpu6502(trace.Cpu):
             return self._has_zp_version
 
         def as_string(self, addr):
+            result1 = utils.force_case(self.mnemonic)
+            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+
+            # TODO: This is a bit lazy - if this is a nonstandard instruction we
+            # don't go through the logic below to handle absolute instructions
+            # with zero-page operands as nicely as possible. We just always emit
+            # such instructions as raw bytes, even if the assembler could handle
+            # it more nicely.
+            if self.nonstandard:
+                opcode = trace.cpu.memory_binary[addr]
+                mnemonic = config.get_assembler().nonstandard_mnemonic(opcode)
+                if mnemonic is not None and self.has_zp_version() and memorymanager.get_u16_binary(addr + 1) < 0x100:
+                    mnemonic = None
+                if mnemonic is not None:
+                    return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(mnemonic), result2)
+                else:
+                    operand = classification.get_address16(addr + 1)
+                    return utils.LazyString("%s%s%s, <(%s), >(%s) ; %s %s", utils.make_indent(1), config.get_assembler().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
+
             # We need to avoid misassembly of absolute instructions with zero-page
             # operands. These are relatively rare in real code, but apart from the
             # fact we should still handle them even if they're rare, they can also
@@ -755,8 +775,6 @@ class Cpu6502(trace.Cpu):
             # fail at disassembly time when we spot the mismatch, we should force
             # absolute addressing if the expression is a zero page value and the
             # value in the input is not.
-            result1 = utils.force_case(self.mnemonic)
-            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
             if not self.has_zp_version() or memorymanager.get_u16_binary(addr + 1) >= 0x100:
                 return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
@@ -775,8 +793,8 @@ class Cpu6502(trace.Cpu):
 
 
     class OpcodeDataAbs(OpcodeAbs):
-        def __init__(self, instruction_template, reg_change, has_zp_version=True, cycles="???", update=None):
-            super(Cpu6502.OpcodeDataAbs, self).__init__(instruction_template, reg_change, has_zp_version, cycles=cycles, update=update)
+        def __init__(self, instruction_template, reg_change, has_zp_version=True, cycles="???", update=None, nonstandard=False):
+            super(Cpu6502.OpcodeDataAbs, self).__init__(instruction_template, reg_change, has_zp_version, cycles=cycles, update=update, nonstandard=nonstandard)
 
         def update_references(self, addr):
             trace.cpu.labels[self.abs_operand(addr)].add_reference(addr)
