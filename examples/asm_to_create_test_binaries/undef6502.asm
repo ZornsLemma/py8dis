@@ -14,4 +14,5 @@
     !byte $1f, $34, $12 ; SLO $1234,X
     !byte $1b, $34, $12 ; SLO $1234,Y
     !byte $17, $70 ; SLO $70,X
+    !byte $13, $70 ; SLO ($70),Y
     rts
