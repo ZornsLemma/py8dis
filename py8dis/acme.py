@@ -122,6 +122,7 @@ class Acme(assembler.Assembler):
             0x03: "SLO",
             0x07: "SLO",
             0x0f: "SLO",
+            0x17: "SLO",
             0x1b: "SLO",
             0x1f: "SLO",
             0x8b: "ANE",
