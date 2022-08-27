@@ -10,7 +10,7 @@ entry(0x1100)
 
 # Recognise some undefined/illegal opcodes.
 recognise_opcode(0x80)
-recognise_opcode([0x03, 0x07, 0x0f, 0x8b])
+recognise_opcode([0x03, 0x07, 0x0f, 0x1b, 0x1f, 0x8b])
 
 # The illegal opcode $82 at $1104 won't be recognised and will stop tracing; force
 # a restart after it.

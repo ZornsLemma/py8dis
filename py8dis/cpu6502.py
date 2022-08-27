@@ -428,6 +428,8 @@ class Cpu6502(trace.Cpu):
             0x03: self.OpcodeZp(                "SLO (zp,X)", "AU-", cycles="8", update=self.neutral, nonstandard=True),
             0x07: self.OpcodeZp(                "SLO zp",     "A--", cycles="5",  update=self.neutral, nonstandard=True),
             0x0f: self.OpcodeDataAbs(           "SLO addr",   "A--", cycles="6",  update=self.neutral, nonstandard=True),
+            0x1b: self.OpcodeDataAbs(           "SLO addr,Y", "A-U", cycles="7",  update=self.neutral, nonstandard=True),
+            0x1f: self.OpcodeDataAbs(           "SLO addr,X", "AU-", cycles="7",  update=self.neutral, nonstandard=True),
             0x80: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x82: self.OpcodeImmediate(         "NOP #imm",   "---", cycles="2",  update=self.neutral, nonstandard=True),
             0x8b: self.OpcodeImmediate(         "ANE #imm",   "A--", cycles="2",  update=self.update_nz, nonstandard=True),
