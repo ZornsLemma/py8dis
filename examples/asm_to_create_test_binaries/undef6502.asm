@@ -15,4 +15,5 @@
     !byte $1b, $34, $12 ; SLO $1234,Y
     !byte $17, $70 ; SLO $70,X
     !byte $13, $70 ; SLO ($70),Y
+    !byte $4B, $12 ; ALR #$12
     rts

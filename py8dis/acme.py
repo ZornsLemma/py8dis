@@ -126,6 +126,7 @@ class Acme(assembler.Assembler):
             0x17: "SLO",
             0x1b: "SLO",
             0x1f: "SLO",
+            0x4b: "ALR",
             0x8b: "ANE",
         }.get(opcode, None)
         if mnemonic is not None:
