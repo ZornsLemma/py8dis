@@ -121,6 +121,7 @@ class Acme(assembler.Assembler):
         mnemonic = {
             0x03: "SLO",
             0x07: "SLO",
+            0x0b: "ANC",
             0x0f: "SLO",
             0x13: "SLO",
             0x17: "SLO",

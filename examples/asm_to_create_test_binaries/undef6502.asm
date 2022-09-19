@@ -16,4 +16,5 @@
     !byte $17, $70 ; SLO $70,X
     !byte $13, $70 ; SLO ($70),Y
     !byte $4B, $12 ; ALR #$12
+    !byte $0B, $34 ; ANC #$34
     rts
