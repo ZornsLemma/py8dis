@@ -2,6 +2,7 @@ from commands import *
 import config
 import trace
 import utils
+import classification
 
 def xy_addr(x_addr, y_addr):
     if x_addr is not None and y_addr is not None:
@@ -11,8 +12,15 @@ def xy_addr(x_addr, y_addr):
         x_runtime_addr = None if x_addr is None else movemanager.b2r(x_addr)
         y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
 
-        auto_expr(x_runtime_addr, make_lo(label))
-        auto_expr(y_runtime_addr, make_hi(label))
+        if isinstance(disassembly.get_classification(x_addr), classification.Word) and (y_runtime_addr == (x_runtime_addr+1)):
+            # If memory is classified as Word, we can have the expression be for the whole address
+            auto_expr(x_runtime_addr, label)
+        else:
+            # If memory is classified as bytes or 0 (not classified) then code them as individual bytes
+            if isinstance(disassembly.get_classification(x_addr), classification.Byte) or not disassembly.get_classification(x_addr):
+                auto_expr(x_runtime_addr, make_lo(label))
+            if isinstance(disassembly.get_classification(y_addr), classification.Byte) or not disassembly.get_classification(y_addr):
+                auto_expr(y_runtime_addr, make_hi(label))
 
         return memorymanager.RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
     return None
