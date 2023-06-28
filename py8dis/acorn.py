@@ -16,10 +16,10 @@ def xy_addr(x_addr, y_addr):
             # If memory is classified as Word, we can have the expression be for the whole address
             auto_expr(x_runtime_addr, label)
         else:
-            # If memory is classified as bytes or 0 (not classified) then code them as individual bytes
-            if isinstance(disassembly.get_classification(x_addr), classification.Byte) or not disassembly.get_classification(x_addr):
+            # If memory is classified as a byte or an operand of an instruction (aka 'partial_classification') then code them as individual bytes
+            if isinstance(disassembly.get_classification(x_addr), classification.Byte) or (disassembly.get_classification(x_addr) == disassembly.partial_classification):
                 auto_expr(x_runtime_addr, make_lo(label))
-            if isinstance(disassembly.get_classification(y_addr), classification.Byte) or not disassembly.get_classification(y_addr):
+            if isinstance(disassembly.get_classification(y_addr), classification.Byte) or (disassembly.get_classification(y_addr) == disassembly.partial_classification):
                 auto_expr(y_runtime_addr, make_hi(label))
 
         return memorymanager.RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
