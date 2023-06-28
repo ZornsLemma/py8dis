@@ -11,8 +11,6 @@ pydis_start
     lda #$42 // 'B'                                                   // 200b: a9 42       .B
     jmp lffee                                                         // 200d: 4c ee ff    L..
 
-// $2010 referenced 3 times by $2008, $2022, $2025
-// $2010 referenced 3 times by $2008, $2022, $2025
 * = $0900
 // $2010 referenced 3 times by $2008, $2022, $2025
 low_a
@@ -30,9 +28,7 @@ l090d = l090c+1
     jsr sub_c2039                                                     // 201c: 20 39 20     9  :090c[1]
     jmp l090d                                                         // 201f: 4c 0d 09    L.. :090f[1]
 
-// $2022 referenced 1 time by $2005
 * = $2022
-// $2022 referenced 1 time by $2005
 sub_c2022
 // $2022 referenced 1 time by $2005
     lda low_a,y                                                       // 2022: b9 00 09    ...
@@ -54,9 +50,7 @@ l090a
 low_b_baz
     ldx #2                                                            // 2035: a2 02       ..  :090d[2]
     bne l0903                                                         // 2037: d0 f2       ..  :090f[2]
-// $2039 referenced 1 time by $090c
 * = $2039
-// $2039 referenced 1 time by $090c
 sub_c2039
 // $2039 referenced 1 time by $090c
     lda low_b,x                                                       // 2039: bd 01 09    ...

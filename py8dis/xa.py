@@ -1,7 +1,10 @@
+"""
+XA assembler
+"""
+
 from __future__ import print_function
 import sys
 
-import classification
 import config
 import disassembly
 import movemanager
@@ -9,6 +12,8 @@ import utils
 import assembler
 
 class Xa(assembler.Assembler):
+    """This class encapsulates xa-specific syntax and features."""
+
     def __init__(self):
         super(assembler.Assembler, self).__init__()
         self.pseudopc_index=0
@@ -35,6 +40,12 @@ class Xa(assembler.Assembler):
         return "%s" % name
 
     def explicit_label(self, name, value, offset=None, align=0):
+        # Output when declaring a label with an explicit value:
+        #
+        #   i.e. 'label = value'
+        #
+        # with an optional offset added to the value, and optional column
+        # alignment at the equals sign.
         return "%s= %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
 
     # xa supports ";" as a comment prefix, but by default colons terminate ";"
@@ -42,13 +53,12 @@ class Xa(assembler.Assembler):
     def comment_prefix(self):
         return "//"
 
-    def assert_expr(self, expr, value):
-        self.pending_assertions[expr] = value
-
     def disassembly_start(self):
+        # Preamble to be output at the start of the disassembly.
         return []
 
     def code_start(self, start_addr, end_addr, first):
+        # At the start of the code we provide the address at which to assemble.
         global _code_index
 
         # The first code block is just a "* = $xxxx" style line
@@ -117,6 +127,7 @@ class Xa(assembler.Assembler):
     # indicate a sub-optimal choice of label in general, I will just
     # hard-code the use of these labels. OK, that *still* doesn't work...
     def pseudopc_start(self, dest, source, length):
+        # Used when assembling code at a different address to where it will actually execute.
         move_id = movemanager.move_id_for_binary_addr[source]
 
         #disassembly.add_label(dest, "pseudopc_start_%d" % self.pseudopc_index, move_id)
@@ -133,6 +144,7 @@ class Xa(assembler.Assembler):
         return [utils.LazyString("* = %s", self.hex(source + length))]
 
     def disassembly_end(self):
+        # At the end of the assembly, we output assertions.
         result = []
         return result # TODO!
         spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
@@ -143,32 +155,42 @@ class Xa(assembler.Assembler):
         return result
 
     def force_abs_instruction(self, instruction, prefix, operand, suffix):
+        # Ensure the instruction uses an absolute address rather than a zero
+        # page address. e.g. 'lda !addr,x'
+
         # It's tempting to put brackets around "operand" in case it contains an
         # expression, but the "!" prefix operator doesn't seem to like this and
         # probably doesn't need it.
         return utils.LazyString("%s%s %s!%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
     def force_zp_label_prefix(self):
+        # Prefix to take the low byte of a label
         return "`"
 
     def byte_prefix(self):
+        # For outputting bytes
         return utils.force_case(".byt ")
 
     def word_prefix(self):
+        # For outputting words
         return utils.force_case(".word ")
 
     def string_prefix(self):
+        # For outputting strings
         return utils.force_case(".asc ")
 
     def string_chr(self, c):
-        # Workaround for a bug in xa that means an escaped double quote in a string
-        # doesn't play well with a // comment, causing a syntax error
+        # When composing a literal character, this returns a character string
+        # from an integer, or None if not possible
+
+        # Workaround for a bug in xa that means an escaped double quote in a
+        # string doesn't play well with a // comment, causing a syntax error
         if chr(c) == '"':
             return "\", 34, \""
         if chr(c) == '^':
             return "^" + chr(c)
-        # xa has a bug which can affect strings containing '/', so we force them to
-        # be encoded specially. See
+        # xa has a bug which can affect strings containing '/', so we force them
+        # to be encoded specially. See
         # https://stardot.org.uk/forums/viewtopic.php?p=351954#p351954 for more.
         if chr(c) == '/':
             return None
@@ -177,15 +199,18 @@ class Xa(assembler.Assembler):
         return None
 
     def binary_format(self, s):
+        # For outputting a value as binary
         return "%" + s
 
     def picture_binary(self, s):
+        # Converts a string of '0' and '1's into '.' and '#'s for visualising
+        # data. Sadly xa does not support this.
         return s
 
     def sanitise(self, s):
-        # xa uses "\" as a line continuation character, so if a line (e.g. an ASCII
-        # dump of some byte data) happens to end with that, add a space to stop it
-        # being misinterpreted.
+        # xa uses "\" as a line continuation character, so if a line (e.g. an
+        # ASCII dump of some byte data) happens to end with that, add a space to
+        # stop it being misinterpreted.
         if len(s) > 0 and s[-1] == "\\":
             return s + " "
         return s

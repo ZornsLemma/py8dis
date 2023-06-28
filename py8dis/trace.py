@@ -1,3 +1,10 @@
+"""
+Trace
+
+Follows ('traces') instructions from known entry points in order to discover
+which bytes of the binary are actually code and which are data.
+"""
+
 import collections
 import copy
 import config
@@ -8,14 +15,14 @@ import memorymanager
 import movemanager
 import utils
 
-cpu = None
-subroutine_argument_finder_hooks = []
-substitute_constant_list = []
-subroutines_list = []
-no_auto_comment_set = set()            # runtime addresses not to be auto-commented
+cpu                              = None     # an object of class Cpu
+subroutine_argument_finder_hooks = []       # Python routines ('hooks') for naming constant arguments to subroutines
+substitute_constant_list         = []       # List of SubConst() objects (see cpu6502) for naming constants
+subroutines_list                 = []       # List of Subroutine() objects
+no_auto_comment_set              = set()    # runtime addresses not to be auto-commented
 
 class Subroutine(object):
-    """Data concerning a subroutine."""
+    """Data describing a subroutine."""
 
     def __init__(self, runtime_addr, label_name, title, description, on_entry, on_exit, hook_function, move_id):
         self.runtime_addr   = memorymanager.RuntimeAddr(runtime_addr)
@@ -23,16 +30,8 @@ class Subroutine(object):
         self.label_name     = label_name
         self.title          = title
         self.description    = description
-        if on_entry:
-            self.on_entry = on_entry
-        else:
-            self.on_entry = {}
-        if on_exit:
-            self.on_exit = on_exit
-        else:
-            self.on_exit = {}
-
-
+        self.on_entry       = on_entry if on_entry else {}
+        self.on_exit        = on_exit if on_exit else {}
         self.hook_function  = hook_function
 
 def add_subroutine(runtime_addr, name, title, description, entry, exit, hook_function, move_id):
@@ -52,10 +51,16 @@ class Cpu(object):
         self.code_analysis_fns = []
         self.trace_done = False
 
-        # TODO: Experimental, "optimistic" because it's based on
-        # straight line code "this is *a* possible execution". We may
-        # want to add a "pessimistic" variant which does its best to
-        # *guess* at the "common to all possible executions" behaviour
+        # After we have traced to classify where the code is, we record what we
+        # know about the CPU state after each instruction. This is used to
+        # analyse the code. e.g. We look to see if we set a register with an
+        # immediate mode constant before a subroutine call so that we can give
+        # that constant a proper symbol name.
+
+        # TODO: This is called "optimistic" because it's based on straight line
+        # code "this is *a* possible execution path". We may want to add a
+        # "pessimistic" variant which does its best to *guess* at the "common to
+        # all possible executions" behaviour.
         self.cpu_state_optimistic = [None] * 64*1024
 
 
@@ -86,9 +91,11 @@ class Cpu(object):
 
             disassembly.add_raw_annotation(binary_addr, utils.LazyString("%s", late_formatter))
         else:
+            # Classify the address as code
             disassembly.add_classification(binary_addr, opcode)
             opcode.update_references(binary_addr)
 
+        # Call the opcode routine to actually disassemble the instruction
         return opcode.disassemble(binary_addr)
 
     def add_entry(self, binary_addr, name, move_id):
@@ -98,9 +105,12 @@ class Cpu(object):
         disassembly.add_label(movemanager.b2r(binary_addr), name, move_id)
 
     def analyse_code(self):
-        """Calculates CPU state for all memory then runs code analysis."""
+        """Calculates what we know about the CPU state for each instruction
+        then runs code analysis. e.g. We look to see if we set a register with
+        an immediate mode constant before a subroutine call so that we can give
+        that constant a proper symbol name."""
 
-        # Calculate the CPU state
+        # Calculate the CPU state at each instruction
         binary_addr = 0
         state = self.CpuState()
         while binary_addr < 0x10000:
@@ -122,40 +132,41 @@ class Cpu(object):
     def trace(self):
         """Trace all the code from the entry points."""
 
+        # As each instruction is processed, the next possible instructions
+        # are added to the 'entry_points' list. The first of these will be
+        # the following instruction (if there is one; it might be None).
+
         # Work through each entry point
         while len(self.entry_points) > 0:
             entry_point = self.entry_points.pop(0)
             if entry_point not in self.traced_entry_points:
                 self.traced_entry_points.add(entry_point)
-                #print("AXP", hex(entry_point))
                 new_entry_points = self.disassemble_instruction(entry_point)
 
                 # The first element of new_entry_points is the implicit
                 # next instruction (if there is one; it might be None)
                 # which is handled slightly differently, as it *isn't*
-                # automatically assigned a label.
+                # automatically assigned a label (but still gets added
+                # to the 'entry_points' list).
                 assert len(new_entry_points) >= 1
                 implied_entry_point = new_entry_points.pop(0)
                 if implied_entry_point is not None:
-                    #assert implied_entry_point != 0x9030
                     self.entry_points.append(implied_entry_point)
+
                 for new_entry_point in new_entry_points:
-                    #print("AQB %04x %04x" % (entry_point, new_entry_point))
-                    #assert new_entry_point != 0x9030
                     self.add_entry(new_entry_point, name=None, move_id=movemanager.move_id_for_binary_addr[new_entry_point])
 
         # Debugging
         if False:
             for addr, label in sorted(self.labels.items(), key=lambda x: x[0]):
-                print("XXX %04x %s" % (label.addr, " ".join("%04x" % x for x in label.references)))
+                print("XXX %04x %s" % (label.addr, " ".join("%04x" % x[0] for x in label.references)))
 
         # Calculate the CPU states and analyse the code
         self.analyse_code()
 
-        # We defer label name generating using LazyString so that label
-        # names aren't assigned based on incomplete tracing. For
-        # example, part way through tracing we may not have identified
-        # any code at address X and that might affect the label name
+        # We defer final label name generating (using LazyString) until tracing
+        # is complete, since e.g. part way through tracing we may not have
+        # identified any code at address X and that can affect the label name
         # used for address X.
         self.trace_done = True
 
@@ -163,27 +174,26 @@ class Cpu(object):
     def generate_references(self):
         """Generate references from the label data.
 
-        References are indexed by binary_address."""
+        A label holds the binary_address of each location that references the label."""
 
         global references
-        references = collections.defaultdict(set)
+        references = collections.defaultdict(list)
         for runtime_addr, label in self.labels.items():
             runtime_addr = memorymanager.RuntimeAddr(runtime_addr) # TODO: OK? Should keys in this dict be RuntimeAddrs to start with?
             binary_addr, _ = movemanager.r2b(runtime_addr)
+
             if binary_addr is not None:
-                for reference in label.references: # TODO: rename reference->binary_reference_address?
-                    references[binary_addr].add(reference)
+                for ref_binary_addr in label.references:
+                    references[binary_addr].append(ref_binary_addr)
 
     def add_references_comments(self):
         """Add comments showing the references"""
 
         global references
-        if len(references) == 0:
-            return
-        for addr, addr_refs in references.items():
-            count = utils.count_with_units(len(addr_refs), "time", "times")
-            address_list = ", ".join(sorted(config.get_assembler().hex4(movemanager.b2r(addr_ref)) for addr_ref in addr_refs))
-            comment = "%s referenced %s by %s" % (config.get_assembler().hex4(addr), count, address_list)
+        for binary_addr, binary_addr_refs in references.items():
+            count = utils.count_with_units(len(binary_addr_refs), "time", "times")
+            address_list = ", ".join(sorted(config.get_assembler().hex4(movemanager.b2r(ref_binary_addr)) for ref_binary_addr in binary_addr_refs))
+            comment = "%s referenced %s by %s" % (config.get_assembler().hex4(binary_addr), count, address_list)
 
             # TODO: Where the comment has to be emitted slightly out of
             # place due to a classification, this becomes a bit
@@ -199,7 +209,7 @@ class Cpu(object):
             # labels for the same address) - for the moment I am always
             # including 'addr' in the comment which helps a bit but
             # isn't ideal
-            disassembly.comment_binary(addr, comment, inline=False, word_wrap=False)
+            disassembly.comment_binary(binary_addr, comment, inline=False, word_wrap=False)
 
     def add_reference_histogram(self):
         """Output a histogram of label references."""

@@ -147,42 +147,41 @@ def move_ids_for_runtime_addr(runtime_addr):
         cache_move_definitions_len = len(move_definitions)
     return cache[runtime_addr]
 
-def r2b(runtime_addr):
+def r2b(runtime_addr, selected_move_id=None):
     """
     Return (binary address, move ID) corresponding to a runtime address.
+    If a selected_move_id is specified, use that move_id.
 
-    Because a runtime address can be the target of multiple moves,
-    there may be no single correct answer - active_move_ids is used
-    to help disambiguate, but if that fails (None, None) will be
+    Otherwise, because a runtime address can be the target of multiple
+    moves, there may be no single correct answer - active_move_ids is
+    used to help disambiguate, but if that fails (None, None) will be
     returned.
     """
 
-    # TODO: It might be useful to provide a variant of this function which
-    # returns a list of *all* possible binary addresses corresponding to
-    # runtime_addr; I am not sure yet.
     assert isinstance(runtime_addr, memorymanager.RuntimeAddr)
 
-    # Get a list of move_ids for the runtime address
-    relevant_move_ids = move_ids_for_runtime_addr(runtime_addr)
-
-    # Early out if we have no relevant move ids
-    if len(relevant_move_ids) == 0:
-        return memorymanager.BinaryAddr(int(runtime_addr)), base_move_id
-
-    selected_move_id = None
-    if len(relevant_move_ids) == 1:
-        # Only one relevant move id, use that
-        selected_move_id = min(relevant_move_ids)
-    else:
-        # Check for a relevant move id that is active
-        for move_id in active_move_ids[::-1]:
-            if move_id in relevant_move_ids:
-                selected_move_id = move_id
-                break
-
-    # If no relevant move is active, give up.
     if selected_move_id is None:
-        return (None, None)
+        # Get a list of move_ids for the runtime address
+        relevant_move_ids = move_ids_for_runtime_addr(runtime_addr)
+
+        # Early out if we have no relevant move ids
+        if len(relevant_move_ids) == 0:
+            return memorymanager.BinaryAddr(int(runtime_addr)), base_move_id
+
+        selected_move_id = None
+        if len(relevant_move_ids) == 1:
+            # Only one relevant move id, use that
+            selected_move_id = min(relevant_move_ids)
+        else:
+            # Check for a relevant move id that is active
+            for move_id in active_move_ids[::-1]:
+                if move_id in relevant_move_ids:
+                    selected_move_id = move_id
+                    break
+
+        # If no relevant move is active, give up.
+        if selected_move_id is None:
+            return (None, None)
 
     # Return the binary address for the runtime address and the selected move id.
     move_dest, move_source, move_length = move_definitions[selected_move_id]

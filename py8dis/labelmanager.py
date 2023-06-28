@@ -36,7 +36,7 @@ addresses. They override regular labels.
 So what do move IDs do for us?
 
 Firstly, they help us emit label definitions in the "right" places. If
-we have two separate fragments of code which are move()d to runtime
+we have two separate fragments of code which are each move()d to runtime
 address &900 and both contain a branch to address &903, we'd like each
 of those fragments to have a separate inline label definition at
 address &903, so one fragment isn't "missing" a label to show control
@@ -72,19 +72,16 @@ import movemanager
 import utils
 
 class Label(object):
-    # TODO: General point - perhaps having this class called Name and
-    # thus it being natural to use "name" as a local variable holding
-    # an instance of this class and then having to say "name.name" is a
-    # bit confusing.
     class Name(object):
+        """Class for a label's name"""
         def __init__(self, name):
-            self.name = name
+            self.text = name
             self.emitted = False
 
-    def __init__(self, addr):
-        self.addr = int(addr)
+    def __init__(self, runtime_addr):
+        self.addr = int(runtime_addr)
         self.move_id = movemanager.base_move_id
-        self.references = set()
+        self.references = []         # Holds the binary addresses that reference this label
 
         # `local_labels` stores tuples (name, start_addr, end_addr)
         # indexed by move_id, as created by `add_local_label()`
@@ -96,11 +93,12 @@ class Label(object):
 
         # Non-simple names go in a different list
         self.expressions = collections.defaultdict(list)
+
+        # List of move_id's that apply at this label's address
         self.emit_opportunities = set()
 
-    def add_reference(self, reference):
-        assert disassembly.classifications[reference].abs_operand(reference) == self.addr
-        self.references.add(reference)
+    def add_reference(self, reference_binary_addr):
+        self.references.append(reference_binary_addr)
 
     def all_names(self):
         """Return all label names and expressions for this label"""
@@ -118,7 +116,7 @@ class Label(object):
         # guaranteed consistency over speed.
         for name_list in self.explicit_names.values():
             for name in name_list:
-                result.add(name.name)
+                result.add(name.text)
 
         # Add expressions
         for expression_list in self.expressions.values():
@@ -178,7 +176,7 @@ class Label(object):
         for name_list in self.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    max_name_length = max(max_name_length, name.name)
+                    max_name_length = max(max_name_length, name.text)
         return max_name_length
 
     def explicit_definition_string_list(self, align_column):
@@ -195,7 +193,7 @@ class Label(object):
         for name_list in self.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    gathered_names.append(name.name)
+                    gathered_names.append(name.text)
                     name.emitted = True
         gathered_names = sorted(gathered_names)
 
@@ -208,7 +206,8 @@ class Label(object):
     def notify_emit_opportunity(self, move_id):
         """Record that the move_id is used."""
 
-        self.emit_opportunities.add(move_id)
+        if move_id not in self.emit_opportunities:
+            self.emit_opportunities.add(move_id)
 
     def definition_string_list(self, emit_addr, move_id):
         """Get a list of the labels in a move_id as a list of strings."""
@@ -246,7 +245,7 @@ class Label(object):
         # the pseudo-pc regions first, so let's not worry about that
         # yet.
         for name in self.explicit_names[move_id]:
-            #print("PXX", name.name)
+            #print("PXX", name.text)
             # TODO: Our callers are probably expecting us to be calling
             # get_label() if we don't have any explicit names, but I
             # don't think this is actually a good way to work - but
@@ -254,16 +253,14 @@ class Label(object):
             if name.emitted:
                 continue
             if offset == 0:
-                if disassembly.is_simple_name(name.name):
-                    result.append(assembler.inline_label(name.name))
+                if disassembly.is_simple_name(name.text):
+                    result.append(assembler.inline_label(name.text))
             else:
-                if disassembly.is_simple_name(name.name):
+                if disassembly.is_simple_name(name.text):
                     # TODO: I suspect get_label() call here will want tweaking eventually
-                    result.append(assembler.explicit_label(name.name, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
+                    result.append(assembler.explicit_label(name.text, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
             name.emitted = True
         return result
-
-
 
 labels = utils.keydefaultdict(Label)
 
@@ -273,7 +270,7 @@ def addr(label_name):
         # Check explicit label names
         for name_list in label.explicit_names.values():
             for name in name_list:
-                if label_name == name.name:
+                if label_name == name.text:
                     return addr
         # Check local labels
         for label_list in label.local_labels.values():
@@ -293,7 +290,7 @@ def find_max_explicit_name_length():
         for name_list in label.explicit_names.values():
             for name in name_list:
                 if not name.emitted:
-                    max_name_length = max(max_name_length, len(name.name))
+                    max_name_length = max(max_name_length, len(name.text))
     return max_name_length
 
 # For debugging...
@@ -310,5 +307,5 @@ def all_labels_as_comments():
     for addr, label in sorted(labels.items()):
         result.append("%s %s:" % (c, utils.plainhex4(addr)))
         for move_id, name_list in sorted(label.explicit_names.items()):
-            result.append("%s     %4s: %s" % (c, move_id, ", ".join(sorted(x.name for x in name_list))))
+            result.append("%s     %4s: %s" % (c, move_id, ", ".join(sorted(x.text for x in name_list))))
     return result

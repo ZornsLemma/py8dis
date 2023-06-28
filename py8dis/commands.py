@@ -145,7 +145,8 @@ def move(dest, src, length):
 
     dest = memorymanager.RuntimeAddr(dest)
     src = memorymanager.BinaryAddr(src)
-    # You can't move from a region that hasn't been populated with data. TODO: Move this check into add_move()?
+
+    # You can't move from a region that hasn't been populated with data.
     assert all(memory_binary[i] is not None for i in range(src, src+length))
     return movemanager.add_move(dest, src, length)
 
@@ -320,7 +321,9 @@ def annotate(runtime_addr, s, priority=None):
     given address."""
 
     # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
-    disassembly.add_raw_annotation(runtime_addr, s, priority)
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    disassembly.add_raw_annotation(binary_addr, s, priority)
 
 def blank(runtime_addr, priority=None):
     annotate(runtime_addr, "", priority)
@@ -408,7 +411,6 @@ def entry(runtime_addr, label=None, warn=True):
     return disassembly.get_label(runtime_addr, binary_addr, move_id)
 
 # TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
-# TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(runtime_addr):
     """
     Marks an address as 'not to be traced as code'.

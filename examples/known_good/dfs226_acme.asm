@@ -3012,9 +3012,7 @@ c8fc7
     sta nmi_XXX6+1                                                    ; 8fce: 8d 40 0d    .@.
     rts                                                               ; 8fd1: 60          `
 
-; $8fd2 referenced 1 time by $8f96
 nmi_handler_rom_start
-; $8fd2 referenced 1 time by $8f96
 
 !pseudopc $0d00 {
 ; $8fd2 referenced 1 time by $8f96
@@ -3101,13 +3099,10 @@ nmi_XXX8
 ; $902f referenced 1 time by $8fac
     rti                                                               ; 902f: 40          @   :0d5d[4]
 
-; The operand of this lda is modified at runtime.
 }
 
-; The operand of this lda is modified at runtime.
 nmi_handler_rom_end
 nmi3_handler_rom_start
-; The operand of this lda is modified at runtime.
 
 !pseudopc $0d39 {
 ; The operand of this lda is modified at runtime.
@@ -3117,10 +3112,8 @@ nmi_lda_abs
     inc nmi_lda_abs+1                                                 ; 9036: ee 3a 0d    .:. :0d3f[5]
     bne nmi_XXX7                                                      ; 9039: d0 03       ..  :0d42[5]
     inc nmi_lda_abs+2                                                 ; 903b: ee 3b 0d    .;. :0d44[5]
-; $903e referenced 1 time by $8de2
 }
 
-; $903e referenced 1 time by $8de2
 nmi3_handler_rom_end
 ; $903e referenced 1 time by $8de2
     ldx nmi_sta_abs+1                                                 ; 903e: ae 3d 0d    .=.
@@ -3254,10 +3247,8 @@ nmi_XXX20
     bne nmi_XXX23                                                     ; 90f5: d0 a3       ..  :0d8e[6]
     lda #nmi_XXX21-(nmi_bcs+2)                                        ; 90f7: a9 26       .&  :0d90[6]
     bne l0d30                                                         ; 90f9: d0 9c       ..  :0d92[6]
-; $90fb referenced 3 times by $8d41, $8d92, $9101
 }
 
-; $90fb referenced 3 times by $8d41, $8d92, $9101
 nmi_handler2_rom_end
 ; $90fb referenced 3 times by $8d41, $8d92, $9101
     sta lfe86                                                         ; 90fb: 8d 86 fe    ...
@@ -7611,9 +7602,7 @@ cacc7
     plp                                                               ; acd9: 28          (
     rts                                                               ; acda: 60          `
 
-; $acdb referenced 3 times by $50, $af19, $af1c
 tube_host_code2
-; $acdb referenced 3 times by $50, $af19, $af1c
 
 !pseudopc $0500 {
 ; $acdb referenced 3 times by $50, $af19, $af1c
@@ -7922,10 +7911,8 @@ read_tube_r2_data
     lda tube_host_r2_data                                             ; aea5: ad e3 fe    ... :06ca[2]
     rts                                                               ; aea8: 60          `   :06cd[2]
 
-; $aea9 referenced 1 time by $965d
 }
 
-; $aea9 referenced 1 time by $965d
 service_handler_help_and_tube
 ; $aea9 referenced 1 time by $965d
     cmp #service_help                                                 ; aea9: c9 09       ..
@@ -8006,9 +7993,7 @@ lda_0_rts
 just_rts
     rts                                                               ; af37: 60          `
 
-; $af38 referenced 2 times by $af2d, $af30
 tube_host_code3
-; $af38 referenced 2 times by $af2d, $af30
 
 !pseudopc $16 {
 ; $af38 referenced 2 times by $af2d, $af30
@@ -8070,12 +8055,9 @@ l0055
 ; $af78 referenced 2 times by $04ba, $04f7
 l0056
     !byte 0                                                           ; af78: 00          .   :0056[3]
-; $af79 referenced 2 times by $af13, $af16
 }
 
-; $af79 referenced 2 times by $af13, $af16
 tube_host_code1
-; $af79 referenced 2 times by $af13, $af16
 
 !pseudopc $0400 {
 ; $af79 referenced 2 times by $af13, $af16
@@ -8260,10 +8242,8 @@ c04f7
     sty l0055                                                         ; b072: 84 55       .U  :04f9[1]
     rts                                                               ; b074: 60          `   :04fb[1]
 
-; $b075 referenced 1 time by $b2b4
 }
 
-; $b075 referenced 1 time by $b2b4
 lb075
 ; $b075 referenced 1 time by $b2b4
     !byte $0a                                                         ; b075: 0a          .

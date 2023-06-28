@@ -10,6 +10,8 @@ import movemanager
 import trace
 import utils
 
+memory_binary = memorymanager.memory_binary
+
 class Cpu8080(trace.Cpu):
     """Singleton class representing an 8080 CPU"""
 
@@ -337,26 +339,26 @@ class Cpu8080(trace.Cpu):
         def length(self):
             return 1 + self.operand_length
 
-        def is_code(self, addr):
+        def is_code(self, binary_addr):
             return True
 
-        def update_cpu_state(self, addr, state):
+        def update_cpu_state(self, binary_addr, state):
             if self.update is not None:
-                self.update(addr, state)
+                self.update(binary_addr, state)
             else:
                 state.clear()
 
-        def update_references(self, addr):
+        def update_references(self, binary_addr):
             pass
 
         def is_block_end(self):
             return False
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             return "%s%s" % (utils.make_indent(1), utils.force_case(self.mnemonic))
 
-        def as_string_list(self, addr, annotations):
-            result = [mainformatter.add_inline_comment(addr, self.length(), "", annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr)))]
+        def as_string_list(self, binary_addr, annotations):
+            result = [mainformatter.add_inline_comment(binary_addr, self.length(), "", annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_addr, 0)) + "%s", self.as_string(binary_addr)))]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result
@@ -377,10 +379,10 @@ class Cpu8080(trace.Cpu):
         def disassemble(self, binary_addr):
             return [binary_addr + 2]
 
-        def as_string(self, addr):
-            s = "%s%s %s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
-            if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
-                c = trace.cpu.memory_binary[addr + 1]
+        def as_string(self, binary_addr):
+            s = "%s%s %s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(binary_addr + 1))
+            if (binary_addr + 1) not in classification.expressions and disassembly.format_hint.get(binary_addr + 1) is None:
+                c = memory_binary[binary_addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
                     s += " %s '%s'" % (config.get_assembler().comment_prefix(), chr(c))
             return s
@@ -393,10 +395,10 @@ class Cpu8080(trace.Cpu):
         def disassemble(self, binary_addr):
             return [binary_addr + 3]
 
-        def as_string(self, addr):
-            s = "%s%s %s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant16(addr + 1))
-            if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
-                c = trace.cpu.memory_binary[addr + 1]
+        def as_string(self, binary_addr):
+            s = "%s%s %s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant16(binary_addr + 1))
+            if (binary_addr + 1) not in classification.expressions and disassembly.format_hint.get(binary_addr + 1) is None:
+                c = memory_binary[binary_addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
                     s += " %s '%s'" % (config.get_assembler().comment_prefix(), chr(c))
             return s
@@ -405,16 +407,16 @@ class Cpu8080(trace.Cpu):
         def __init__(self, mnemonic, update=None):
             super(Cpu8080.OpcodeAddr16, self).__init__(mnemonic, 2, update=update)
 
-        def abs_operand(self, addr):
-            return memorymanager.get_u16_binary(addr + 1)
+        def abs_operand(self, binary_addr):
+            return memorymanager.get_u16_binary(binary_addr + 1)
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             result1 = utils.force_case(self.mnemonic)
-            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
-        def update_references(self, addr):
-            trace.cpu.labels[self.abs_operand(addr)].add_reference(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
 
         def disassemble(self, binary_addr):
             return [binary_addr + 3]
@@ -423,21 +425,20 @@ class Cpu8080(trace.Cpu):
         def __init__(self, mnemonic, update=None):
             super(Cpu8080.OpcodeJmp, self).__init__(mnemonic, 2, update=update)
 
-        def _target(self, addr):
-            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(addr + 1))
+        def _target(self, binary_addr):
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
-        def abs_operand(self, addr):
-            return self._target(addr)
+        def abs_operand(self, binary_addr):
+            return self._target(binary_addr)
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             result1 = utils.force_case(self.mnemonic)
-            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
         # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
-        def update_references(self, addr):
-            trace.cpu.labels[self._target(addr)].add_reference(addr)
-            #trace.references[self._target(addr)].add(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[self._target(binary_addr)].add_reference(binary_addr)
 
         def is_block_end(self):
             return True
@@ -470,13 +471,12 @@ class Cpu8080(trace.Cpu):
 
         def update_references(self, binary_addr):
             trace.cpu.labels[self._target(binary_addr)].add_reference(binary_addr)
-            #trace.references[self._target(binary_addr)].add(binary_addr)
 
         def disassemble(self, binary_addr):
             # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..
             return [binary_addr + 3] + trace.cpu.apply_move2(self._target(binary_addr), binary_addr)
 
-        def update_cpu_state(self, addr, state):
+        def update_cpu_state(self, binary_addr, state):
             # In our optimistic model (at least), a branch invalidates everything.
             # Consider "ldy #3:.label:dey:bne label" - in the optimistic model we ignore
             # labels and the only way we don't finish that sequence assuming y=2 is if
@@ -491,15 +491,14 @@ class Cpu8080(trace.Cpu):
         def __init__(self, mnemonic, update=None):
             super(Cpu8080.OpcodeCall, self).__init__(mnemonic, 2, update=update)
 
-        def _target(self, addr):
-            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(addr + 1))
+        def _target(self, binary_addr):
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
-        def abs_operand(self, addr):
-            return self._target(addr)
+        def abs_operand(self, binary_addr):
+            return self._target(binary_addr)
 
-        def update_references(self, addr):
-            trace.cpu.labels[self._target(addr)].add_reference(addr)
-            #trace.references[self._target(addr)].add(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[self._target(binary_addr)].add_reference(binary_addr)
 
         def disassemble(self, binary_addr):
             assert isinstance(binary_addr, memorymanager.BinaryAddr)
@@ -542,9 +541,9 @@ class Cpu8080(trace.Cpu):
             result += trace.cpu.apply_move(target_runtime_addr)
             return result
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             result1 = utils.force_case(self.mnemonic)
-            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
     class OpcodeReturn(Opcode):
@@ -622,14 +621,14 @@ class Cpu8080(trace.Cpu):
             return s
 
 
-    def is_subroutine_call(self, addr):
+    def is_subroutine_call(self, binary_addr):
         return False
 
-    def is_branch_to(self, addr, target):
-        c = disassembly.classifications[addr]
+    def is_branch_to(self, binary_addr, target_runtime_addr):
+        c = disassembly.classifications[binary_addr]
 
         # TODO: hacky use of isinstance()
         if isinstance(c, self.OpcodeConditionalBranch):
-            return c._target(addr) == target
+            return c._target(binary_addr) == target_runtime_addr
         return False
 
