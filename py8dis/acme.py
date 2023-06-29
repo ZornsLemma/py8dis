@@ -33,6 +33,7 @@ class Acme(assembler.Assembler):
             return "$%s" % utils.plainhex4(n)
 
     def hex4(self, n):
+        # Normally this should output four digits of hex, but...
         # Older versions of acme don't like things like:
         #
         #     L00A4 = $00A4
@@ -91,7 +92,7 @@ class Acme(assembler.Assembler):
         spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
         old = ("", 0)
         for expr, value in spa:
-            if (expr != old[0]) or (value != old[1]):
+            if old != (expr, value):
                 result.append("%s (%s) != %s {" % (utils.force_case("!if"), expr, value))
                 result.append('%s%s "Assertion failed: %s == %s"' % (utils.make_indent(1), utils.force_case("!error"), expr, value))
                 result.append("}")

@@ -73,13 +73,13 @@ import utils
 
 class Label(object):
     class Name(object):
-        """Class for a label's name"""
+        """Class for a label's name. Records whether it has been emitted yet."""
         def __init__(self, name):
             self.text = name
             self.emitted = False
 
     def __init__(self, runtime_addr):
-        self.addr = int(runtime_addr)
+        self.runtime_addr = int(runtime_addr)
         self.move_id = movemanager.base_move_id
         self.references = []         # Holds the binary addresses that reference this label
 
@@ -94,7 +94,7 @@ class Label(object):
         # Non-simple names go in a different list
         self.expressions = collections.defaultdict(list)
 
-        # List of move_id's that apply at this label's address
+        # Set of move_id's that apply at this label's address
         self.emit_opportunities = set()
 
     def add_reference(self, reference_binary_addr):
@@ -199,12 +199,12 @@ class Label(object):
 
         result = []
         for name in gathered_names:
-            result.append(assembler.explicit_label(name, assembler.hex4(self.addr), offset=None, align=align_column))
+            result.append(assembler.explicit_label(name, assembler.hex4(self.runtime_addr), offset=None, align=align_column))
 
         return result
 
     def notify_emit_opportunity(self, move_id):
-        """Record that the move_id is used."""
+        """Record that the move_id is used at this label's address'."""
 
         if move_id not in self.emit_opportunities:
             self.emit_opportunities.add(move_id)
@@ -218,7 +218,6 @@ class Label(object):
         # Definitions for move IDs which will never get an opportunity
         # to be emitted inline in their preferred move ID are emitted
         # in the lowest-numbered move ID they can be emitted inline for.
-        #print("ZZZ", hex(emit_addr), move_id, self.emit_opportunities)
         if (len(self.emit_opportunities) > 0) and (move_id == min(self.emit_opportunities)):
             leftover_move_ids = set(self.explicit_names.keys()) - self.emit_opportunities
             for move_id in leftover_move_ids:
@@ -226,13 +225,13 @@ class Label(object):
         return result
 
     def definition_string_list_internal(self, emit_addr, move_id):
-        """Get a list of the labels in a move_id as a list of strings."""
+        """Get a list of the explicit labels in a move_id as a list of strings."""
 
         assert movemanager.is_valid_move_id(move_id)
         assembler = config.get_assembler()
         result = []
-        assert emit_addr <= self.addr
-        offset = self.addr - emit_addr
+        assert emit_addr <= self.runtime_addr
+        offset = self.runtime_addr - emit_addr
         # TODO: It's probably OK, but note that we only emit for
         # "matching" move_id; we leave it for
         # explicit_definition_string_list() to return any things which
@@ -245,7 +244,6 @@ class Label(object):
         # the pseudo-pc regions first, so let's not worry about that
         # yet.
         for name in self.explicit_names[move_id]:
-            #print("PXX", name.text)
             # TODO: Our callers are probably expecting us to be calling
             # get_label() if we don't have any explicit names, but I
             # don't think this is actually a good way to work - but
@@ -258,7 +256,7 @@ class Label(object):
             else:
                 if disassembly.is_simple_name(name.text):
                     # TODO: I suspect get_label() call here will want tweaking eventually
-                    result.append(assembler.explicit_label(name.text, disassembly.get_label(emit_addr, self.addr, move_id=move_id), offset))
+                    result.append(assembler.explicit_label(name.text, disassembly.get_label(emit_addr, self.runtime_addr, move_id=move_id), offset))
             name.emitted = True
         return result
 

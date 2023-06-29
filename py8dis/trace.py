@@ -159,7 +159,7 @@ class Cpu(object):
         # Debugging
         if False:
             for addr, label in sorted(self.labels.items(), key=lambda x: x[0]):
-                print("XXX %04x %s" % (label.addr, " ".join("%04x" % x[0] for x in label.references)))
+                print("XXX %04x %s" % (label.runtime_addr, " ".join("%04x" % x[0] for x in label.references)))
 
         # Calculate the CPU states and analyse the code
         self.analyse_code()

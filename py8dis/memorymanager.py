@@ -132,11 +132,14 @@ def load(filename, binary_addr, md5sum=None):
 
     binary_addr = BinaryAddr(binary_addr)
 
-    with open(filename, "rb") as f:
-        data = bytearray(f.read())
-        if binary_addr + len(data) > 0x10000:
-            utils.die("load() would overflow memory")
-        memory_binary[binary_addr:binary_addr+len(data)] = data
+    try:
+        with open(filename, "rb") as f:
+            data = bytearray(f.read())
+            if binary_addr + len(data) > 0x10000:
+                utils.die("load() would overflow memory")
+            memory_binary[binary_addr:binary_addr+len(data)] = data
+    except FileNotFoundError:
+        utils.die("File '{0}' not found".format(filename))
 
     if md5sum is not None:
         import hashlib

@@ -1,9 +1,13 @@
 """
-Classifies the data bytes of a binary file.
+Classifies every byte of a binary file.
 
 Bytes that are loaded from a binary file are classified by type. Data
 is marked with a Byte, Word or String object, and code is marked with
 an Opcode* object, as defined by the configured CPU.
+
+Each classification object has a length, so the object is stored in the
+first address of the classification, and the remainder are set to the
+'inside_a_classification' constant so it's known to be classified.
 
 Users can mark data as Byte, Word or String. They use functions
 byte() and word() for the first two types. For strings there are a

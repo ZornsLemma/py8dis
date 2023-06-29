@@ -1,4 +1,6 @@
-
+"""
+Configuration
+"""
 
 # Config variables all have leading underscores.
 # Best practice is to not access these directly, but access via the getters and setters below.

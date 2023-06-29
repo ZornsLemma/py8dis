@@ -1,5 +1,5 @@
 """
-Assembler class
+Assembler base class
 """
 
 class Assembler(object):

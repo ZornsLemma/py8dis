@@ -89,9 +89,9 @@ cpu_names = { "6502"  : lambda : Cpu6502(),
             }
 
 memory_binary = memorymanager.memory_binary
-memory = memorymanager.memory
+memory        = memorymanager.memory
 
-def load(binary_addr, filename, cpu_name, md5sum=None):
+def load(binary_load_addr, filename, cpu_name, md5sum=None):
     """Loads a binary file to analyse at the given address.
 
     Load a binary file and optionally verify the checksum of the data."""
@@ -120,7 +120,8 @@ def load(binary_addr, filename, cpu_name, md5sum=None):
         else:
             utils.die("Unknown CPU or missing CPU parameter '%s' specified for load()." % (cpu_name))
 
-    memorymanager.load(filename, binary_addr, md5sum)
+    # Load the file
+    memorymanager.load(filename, binary_load_addr, md5sum)
 
     # Clear the no-automatic comments, for lack of a better place to clear them
     trace.no_auto_comment_set = set()
@@ -161,7 +162,7 @@ def constant(value, name):
 def label(runtime_addr, name, move_id=None):
     """Define a label name for a runtime address."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr) # TODO: OK?
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if move_id is None: # TODO: not super happy with this
         # We don't care about the equivalent binary address, but the process of looking
         # it up gives us a move ID to associate with this label.
@@ -735,7 +736,7 @@ def make_modulo(expr1, expr2):
     return make_op2(expr1, 'MOD', expr2)
 
 
-def go(post_trace_steps=None, autostring_min_length=3):
+def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     """
     Classifies code and data, calculates labels and emits assembly.
     """
@@ -774,7 +775,7 @@ def go(post_trace_steps=None, autostring_min_length=3):
     classification.classify_leftovers()
 
     # Output assembly code
-    disassembly.emit()
+    return disassembly.emit(print_output=print_output)
 
 # Command line parsing
 parser = argparse.ArgumentParser()

@@ -56,12 +56,12 @@ constants = []
 # annotation type.
 annotations = collections.defaultdict(list)
 
-# `partial_classification` is an arbitrary constant value.
+# `inside_a_classification` is an arbitrary constant value.
 #
 # We assign this value to the second and subsequent bytes of a multi-byte
 # classification (e.g. the operands of an instruction). Its actual value doesn't
 # matter, as long as it's not None so we know these bytes have been classified.
-partial_classification = 0
+inside_a_classification = 0
 
 
 def set_user_label_maker_hook(hook):
@@ -206,7 +206,7 @@ def is_code(binary_addr):
     """Is the given `binary_addr` classified as an instruction opcode?"""
 
     classification = classifications[binary_addr]
-    if classification is None or classification == partial_classification:
+    if classification is None or classification == inside_a_classification:
         return False
     return classification.is_code(binary_addr)
 
@@ -448,7 +448,7 @@ def add_classification(binary_addr, classification):
 
     A classification has a length in bytes. The first byte is
     classified with the given classification and all following bytes
-    are marked with `partial_classification`.
+    are marked with `inside_a_classification`.
     """
 
     binary_addr = memorymanager.BinaryAddr(binary_addr)
@@ -457,7 +457,7 @@ def add_classification(binary_addr, classification):
 
     classifications[binary_addr] = classification
     for i in range(1, classification.length()):
-        classifications[binary_addr+i] = partial_classification
+        classifications[binary_addr+i] = inside_a_classification
 
 def get_classification(binary_addr):
     return classifications[binary_addr]
@@ -509,7 +509,7 @@ def calculate_move_ranges():
     return move_ranges
 
 
-def emit():
+def emit(print_output=True):
     """Outputs the disassembly.
     """
 
@@ -677,7 +677,9 @@ def emit():
     result = "\n".join(formatter.sanitise(str(line)) for line in output)
 
     # Actually print the listing
-    print(result)
+    if print_output:
+        print(result)
+    return result
 
 def split_classification(binary_addr):
     """If a move boundary is in the middle of an instruction etc, then
@@ -685,13 +687,13 @@ def split_classification(binary_addr):
 
     if binary_addr >= 0x10000:
         return
-    if classifications[binary_addr] != partial_classification:
+    if classifications[binary_addr] != inside_a_classification:
         return
 
     # TODO: Do we need to check and not warn if this is just an automatic string/byte classification?
     utils.warn("move boundary at binary address %s splits a classification" % config.get_assembler().hex(binary_addr))
     split_addr = binary_addr
-    while classifications[binary_addr] == partial_classification:
+    while classifications[binary_addr] == inside_a_classification:
         binary_addr -= 1
     first_split_length = split_addr - binary_addr
     classifications[split_addr] = classification.Byte(classifications[binary_addr].length() - first_split_length)
