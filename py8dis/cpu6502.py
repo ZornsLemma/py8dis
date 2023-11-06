@@ -9,6 +9,9 @@ import movemanager
 import re
 import trace
 import utils
+import sys
+
+memory_binary = memorymanager.memory_binary
 
 def parse_instruction(instruction):
     instruction = instruction.strip()
@@ -484,13 +487,13 @@ class Cpu6502(trace.Cpu):
         def length(self):
             return 1 + self.operand_length
 
-        def is_code(self, addr):
+        def is_code(self, binary_addr):
             return True
 
-        def indent(self, addr):
-            trace.cpu.indent_level_dict[addr] += 1
+        def indent(self, binary_addr):
+            trace.cpu.indent_level_dict[binary_addr] += 1
 
-        def regular_update(self, addr, state):
+        def regular_update(self, binary_addr, state):
             """
             Update state based on reg_changes.
 
@@ -506,28 +509,28 @@ class Cpu6502(trace.Cpu):
             for reg in ('a','x','y'):
                 c = self.reg_changes[reg]
                 if c == 'O':
-                    state[reg].value              = None      # Current value, if known
-                    state[reg].previous_load_imm  = None      # The address of the previous load immediate instruction if no adjustments made since
-                    state[reg].previous_load      = addr      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
-                    state[reg].previous_adjust    = addr      # The address of the previous load or adjust instruction if present
+                    state[reg].value              = None        # Current value, if known
+                    state[reg].previous_load_imm  = None        # The address of the previous load immediate instruction if no adjustments made since
+                    state[reg].previous_load      = binary_addr # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
+                    state[reg].previous_adjust    = binary_addr # The address of the previous load or adjust instruction if present
                 if c == 'A':
-                    state[reg].previous_load_imm  = None      # The address of the previous load immediate instruction if no adjustments made since
-                    state[reg].previous_load      = None      # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
-                    state[reg].previous_adjust    = addr      # The address of the previous load or adjust instruction if present
+                    state[reg].previous_load_imm  = None        # The address of the previous load immediate instruction if no adjustments made since
+                    state[reg].previous_load      = None        # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
+                    state[reg].previous_adjust    = binary_addr # The address of the previous load or adjust instruction if present
                 if c == 'U':
-                    state[reg].previous_use       = addr      # The address of the previous use of the register if present
+                    state[reg].previous_use       = binary_addr # The address of the previous use of the register if present
 
-        def update_cpu_state(self, addr, state):
+        def update_cpu_state(self, binary_addr, state):
             if self.update is not None:
-                self.regular_update(addr, state)
-                self.update(addr, state)
+                self.regular_update(binary_addr, state)
+                self.update(binary_addr, state)
             else:
                 state.clear()
 
         def is_block_end(self):
             return False
 
-        def target(self, addr):
+        def target(self, binary_addr):
             return None
 
         def cycles_description(self, binary_addr):
@@ -599,9 +602,9 @@ class Cpu6502(trace.Cpu):
         def is_unconditional_branch(self):
             return False
 
-        def as_string_list(self, addr, annotations):
-            lazy_string = utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(addr, 0)) + "%s", self.as_string(addr))
-            result = [mainformatter.add_inline_comment(addr, self.length(), self.cycles_description(addr), annotations, lazy_string)]
+        def as_string_list(self, binary_addr, annotations):
+            lazy_string = utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_addr, 0)) + "%s", self.as_string(binary_addr))
+            result = [mainformatter.add_inline_comment(binary_addr, self.length(), self.cycles_description(binary_addr), annotations, lazy_string)]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result
@@ -611,7 +614,7 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeReturn, self).__init__(instruction_template, reg_change, cycles=cycles)
 
-        def update_references(self, addr):
+        def update_references(self, binary_addr):
             pass
 
         def disassemble(self, binary_addr):
@@ -620,7 +623,7 @@ class Cpu6502(trace.Cpu):
         def is_block_end(self):
             return True
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             return "%s%s" % (utils.make_indent(1), utils.force_case(self.mnemonic))
 
 
@@ -628,13 +631,13 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???", update=None):
             super(Cpu6502.OpcodeImplied, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
 
-        def update_references(self, addr):
+        def update_references(self, binary_addr):
             pass
 
         def disassemble(self, binary_addr):
             return [binary_addr + 1]
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             mnemonic = self.mnemonic
             if config.get_assembler().explicit_a and (self.addr_mode == Cpu6502.mode_accumulator):
                 mnemonic += " A"
@@ -645,16 +648,16 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???", update=None):
             super(Cpu6502.OpcodeImmediate, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
 
-        def update_references(self, addr):
+        def update_references(self, binary_addr):
             pass
 
         def disassemble(self, binary_addr):
             return [binary_addr + 2]
 
-        def as_string(self, addr):
-            s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(addr + 1))
-            if (addr + 1) not in classification.expressions and disassembly.format_hint.get(addr + 1) is None:
-                c = trace.cpu.memory_binary[addr + 1]
+        def as_string(self, binary_addr):
+            s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(binary_addr + 1))
+            if (binary_addr + 1) not in classification.expressions and disassembly.format_hint.get(binary_addr + 1) is None:
+                c = memory_binary[binary_addr + 1]
                 if config.get_show_char_literals() and utils.isprint(c):
                     s += " %s '%s'" % (config.get_assembler().comment_prefix(), chr(c))
             return s
@@ -664,20 +667,20 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???", update=None):
             super(Cpu6502.OpcodeZp, self).__init__(instruction_template, reg_change, update=update, cycles=cycles)
 
-        def abs_operand(self, addr):
-            return trace.cpu.memory_binary[addr + 1]
+        def abs_operand(self, binary_addr):
+            return memory_binary[binary_addr + 1]
 
-        def target(self, addr):
-            return memorymanager.RuntimeAddr(self.abs_operand(addr))
+        def target(self, binary_addr):
+            return memorymanager.RuntimeAddr(self.abs_operand(binary_addr))
 
-        def update_references(self, addr):
-            trace.cpu.labels[self.abs_operand(addr)].add_reference(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
 
         def disassemble(self, binary_addr):
             return [binary_addr + 2]
 
-        def as_string(self, addr):
-            return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), utils.force_case(self.mnemonic), self.prefix, classification.get_address8(addr + 1), utils.force_case(self.suffix))
+        def as_string(self, binary_addr):
+            return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), utils.force_case(self.mnemonic), self.prefix, classification.get_address8(binary_addr + 1), utils.force_case(self.suffix))
 
 
     class OpcodeAbs(Opcode):
@@ -685,16 +688,16 @@ class Cpu6502(trace.Cpu):
             super(Cpu6502.OpcodeAbs, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
             self._has_zp_version = has_zp_version
 
-        def abs_operand(self, addr):
-            return memorymanager.get_u16_binary(addr + 1)
+        def abs_operand(self, binary_addr):
+            return memorymanager.get_u16_binary(binary_addr + 1)
 
-        def target(self, addr):
-            return memorymanager.RuntimeAddr(self.abs_operand(addr))
+        def target(self, binary_addr):
+            return memorymanager.RuntimeAddr(self.abs_operand(binary_addr))
 
         def has_zp_version(self):
             return self._has_zp_version
 
-        def as_string(self, addr):
+        def as_string(self, binary_addr):
             # We need to avoid misassembly of absolute instructions with zero-page
             # operands. These are relatively rare in real code, but apart from the
             # fact we should still handle them even if they're rare, they can also
@@ -706,30 +709,32 @@ class Cpu6502(trace.Cpu):
             # absolute addressing if the expression is a zero page value and the
             # value in the input is not.
             result1 = utils.force_case(self.mnemonic)
-            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
-            if not self.has_zp_version() or memorymanager.get_u16_binary(addr + 1) >= 0x100:
+            result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
+            if not self.has_zp_version() or memorymanager.get_u16_binary(binary_addr + 1) >= 0x100:
                 return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
             # This is an absolute instruction with a zero-page operand which could
             # be misassembled. If the assembler has a way to explicitly request
             # absolute addressing, we use that.
-            force_abs_instruction = config.get_assembler().force_abs_instruction(result1, self.prefix, classification.get_address16(addr + 1), utils.force_case(self.suffix))
+            force_abs_instruction = config.get_assembler().force_abs_instruction(result1, self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             if force_abs_instruction is not None:
                 return force_abs_instruction
 
             # This assembler has no way to force absolute addressing, so emit the
             # instruction as data with a comment showing what it is; the comment
             # includes an acme-style "+2" suffix to help indicate what's going on.
-            operand = classification.get_address16(addr + 1)
-            return utils.LazyString("%s%s%s, <(%s), >(%s) ; %s+2 %s", utils.make_indent(1), config.get_assembler().byte_prefix(), classification.get_constant8(addr), operand, operand, result1, result2)
+            operand = classification.get_address16(binary_addr + 1)
+            return utils.LazyString("%s%s%s, <(%s), >(%s) ; %s+2 %s", utils.make_indent(1), config.get_assembler().byte_prefix(), classification.get_constant8(binary_addr), operand, operand, result1, result2)
 
 
     class OpcodeDataAbs(OpcodeAbs):
         def __init__(self, instruction_template, reg_change, has_zp_version=True, cycles="???", update=None):
             super(Cpu6502.OpcodeDataAbs, self).__init__(instruction_template, reg_change, has_zp_version, cycles=cycles, update=update)
 
-        def update_references(self, addr):
-            trace.cpu.labels[self.abs_operand(addr)].add_reference(addr)
+        def update_references(self, binary_addr):
+            ref = self.abs_operand(binary_addr)
+
+            trace.cpu.labels[ref].add_reference(binary_addr)
 
         def disassemble(self, binary_addr):
             return [binary_addr + 3]
@@ -740,9 +745,8 @@ class Cpu6502(trace.Cpu):
             super(Cpu6502.OpcodeJmpAbs, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
         # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
-        def update_references(self, addr):
-            trace.cpu.labels[self.target(addr)].add_reference(addr)
-            #trace.references[self.target(addr)].add(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[self.target(binary_addr)].add_reference(binary_addr)
 
         def is_block_end(self):
             return True
@@ -761,8 +765,8 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeJmpInd, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        def update_references(self, addr):
-            trace.cpu.labels[memorymanager.get_u16_binary(addr + 1)].add_reference(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[memorymanager.get_u16_binary(binary_addr + 1)].add_reference(binary_addr)
 
         def is_block_end(self):
             return True
@@ -778,9 +782,8 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeJsr, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        def update_references(self, addr):
-            trace.cpu.labels[self.target(addr)].add_reference(addr)
-            #trace.references[self.target(addr)].add(addr)
+        def update_references(self, binary_addr):
+            trace.cpu.labels[self.target(binary_addr)].add_reference(binary_addr)
 
         def could_be_call_to_subroutine(self):
             return True
@@ -843,7 +846,6 @@ class Cpu6502(trace.Cpu):
 
         def update_references(self, binary_addr):
             trace.cpu.labels[self.target(binary_addr)].add_reference(binary_addr)
-            #trace.references[self.target(binary_addr)].add(binary_addr)
 
         def disassemble(self, binary_addr):
             # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..
@@ -852,7 +854,7 @@ class Cpu6502(trace.Cpu):
         def could_be_call_to_subroutine(self):
             return True
 
-        def update_cpu_state(self, addr, state):
+        def update_cpu_state(self, binary_addr, state):
             # In our optimistic model (at least), a branch invalidates everything.
             # Consider "ldy #3:.label:dey:bne label" - in the optimistic model we ignore
             # labels and the only way we don't finish that sequence assuming y=2 is if
@@ -1001,7 +1003,7 @@ class Cpu6502(trace.Cpu):
 
     def make_load_immediate(self, reg):
         def load_immediate(addr, state):
-            v = trace.cpu.memory_binary[addr+1]
+            v = memory_binary[addr+1]
             state[reg].value = v
             state[reg].previous_load_imm = addr
             state[reg].previous_load     = addr
@@ -1034,30 +1036,36 @@ class Cpu6502(trace.Cpu):
                 state['z'] = (v == 0)
         return transfer
 
-    def neutral(self, addr, state):
+    def neutral(self, binary_addr, state):
+        assert(binary_addr is not None)
         pass
 
-    def update_nz(self, addr, state):
+    def update_nz(self, binary_addr, state):
+        assert(binary_addr is not None)
         state['n'] = None
         state['z'] = None
 
-    def update_nzc(self, addr, state):
+    def update_nzc(self, binary_addr, state):
+        assert(binary_addr is not None)
         state['n'] = None
         state['z'] = None
         state['c'] = None
 
-    def update_bit(self, addr, state):
+    def update_bit(self, binary_addr, state):
+        assert(binary_addr is not None)
         state['n'] = None
         state['v'] = None
         state['z'] = None
 
-    def update_adc_sbc(self, addr, state):
+    def update_adc_sbc(self, binary_addr, state):
+        assert(binary_addr is not None)
         state['n'] = None
         state['v'] = None
         state['z'] = None
         state['c'] = None
 
-    def update_all_flags(self, addr, state):
+    def update_all_flags(self, binary_addr, state):
+        assert(binary_addr is not None)
         state['n'] = None
         state['v'] = None
         state['d'] = None
@@ -1065,18 +1073,21 @@ class Cpu6502(trace.Cpu):
         state['z'] = None
         state['c'] = None
 
-    def is_subroutine_call(self, addr):
-        c = disassembly.classifications[addr]
+    def is_subroutine_call(self, binary_addr):
+        assert(binary_addr is not None)
+        c = disassembly.classifications[binary_addr]
         return isinstance(c, trace.cpu.Opcode) and c.mnemonic == "JSR"
 
-    def is_branch_to(self, addr, target):
-        c = disassembly.classifications[addr]
+    def is_branch_to(self, binary_addr, target_runtime_addr):
+        assert(binary_addr is not None)
+
+        c = disassembly.classifications[binary_addr]
 
         # TODO: hacky use of isinstance()
         if isinstance(c, self.OpcodeConditionalBranch):
-            return c.target(addr) == target
+            return c.target(binary_addr) == target_runtime_addr
         if isinstance(c, self.OpcodeJmpAbs):
-            return memorymanager.get_u16_binary(addr + 1) == target
+            return memorymanager.get_u16_binary(binary_addr + 1) == target_runtime_addr
         return False
 
     # Note that this does *not* check for labels breaking up a
@@ -1097,7 +1108,7 @@ class Cpu6502(trace.Cpu):
                     state = trace.cpu.CpuState()
 
                 if isinstance(c, trace.cpu.Opcode):
-                    opcode = trace.cpu.memory_binary[addr]
+                    opcode = memory_binary[addr]
                     opcode_jsr = 0x20
                     opcode_jmp = 0x4c
                     if opcode in (opcode_jsr, opcode_jmp):
@@ -1114,6 +1125,7 @@ class Cpu6502(trace.Cpu):
                 addr += 1
 
     def scan_ahead_for_post_exit_state(self, binary_addr, state):
+        assert(binary_addr is not None)
         scanning_for_register_usage = {'a': True, 'x': True, 'y': True }
 
         state.next_instruction = None
@@ -1128,8 +1140,12 @@ class Cpu6502(trace.Cpu):
             if c is None:
                 return
 
+            # Stop at a nonentry point (i.e. not an instruction)
+            if binary_addr not in self.traced_entry_points:
+                return
+
             # Stop at the end of a code block
-            if c.is_block_end():
+            if not c.is_code(binary_addr) or c.is_block_end():
                 return
 
             # Must have known state
@@ -1236,7 +1252,7 @@ class Cpu6502(trace.Cpu):
                     state = trace.cpu.CpuState()
 
                 if isinstance(c, trace.cpu.Opcode):
-                    opcode = trace.cpu.memory_binary[addr]
+                    opcode = memory_binary[addr]
                     # for each const_sub
                     for const_sub in trace.substitute_constant_list:
                         # check we have the right opcode

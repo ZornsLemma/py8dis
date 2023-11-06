@@ -1,12 +1,17 @@
+"""
+z88dk assembler (for 8080)
+"""
+
 from __future__ import print_function
 import sys
 
-import classification
 import config
 import utils
 import assembler
 
 class Z88DK(assembler.Assembler):
+    """This class encapsulates z88dk-specific syntax and features."""
+
     def __init__(self):
         super(assembler.Assembler, self).__init__()
 
@@ -37,25 +42,28 @@ class Z88DK(assembler.Assembler):
     def comment_prefix(self):
         return ";"
 
-    def assert_expr(self, expr, value):
-        self.pending_assertions[expr] = value
-
     def disassembly_start(self):
+        # Preamble to be output at the start of the disassembly.
         return []
 
     def code_start(self, start_addr, end_addr, first):
+        # At the start of the code we provide the address at which to assemble.
         return ["", "%sORG %s" % (utils.make_indent(1), self.hex4(start_addr)), ""]
 
     def code_end(self):
         return []
 
     def pseudopc_start(self, dest, source, length):
+        # Used when assembling code at a different address to where it will
+        # actually execute. Sadly, z88dk does not support this.
         return ["", utils.force_case("; TODO: !pseudopc %s {" % self.hex(dest))]
 
     def pseudopc_end(self, dest, source, length):
+        # Sadly, z88dk does not support this
         return ["; TODO: }", ""]
 
     def disassembly_end(self):
+        # At the end of the assembly, we output assertions.
         result = []
         spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
         for expr, value in spa:
@@ -63,21 +71,29 @@ class Z88DK(assembler.Assembler):
         return result
 
     def force_abs_instruction(self, instruction, prefix, operand, suffix):
+        # Ensure the instruction uses an absolute address rather than a zero
+        # page address. e.g. 'lda !addr,x'
         return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
     def force_zp_label_prefix(self):
+        # Prefix to take the low byte of a label
         return ""
 
     def byte_prefix(self):
+        # For outputting bytes
         return utils.force_case("DB ")
 
     def word_prefix(self):
+        # For outputting words
         return utils.force_case("DW ")
 
     def string_prefix(self):
+        # For outputting strings
         return utils.force_case("DB ")
 
     def string_chr(self, i):
+        # When composing a literal character, this returns a character string
+        # from an integer, or None if not possible
         if i == ord('\\'):
             return '\\\\'
         if i == ord('"'):
@@ -87,9 +103,12 @@ class Z88DK(assembler.Assembler):
         return None
 
     def binary_format(self, s):
+        # For outputting a value as binary
         return "%" + s
 
     def picture_binary(self, s):
+        # Converts a string of '0' and '1's into '-' and '#'s for visualising
+        # data
         return "%\"" + s.replace("0", "-").replace("1", "#").replace("%", "") + "\""
 
     def sanitise(self, s):

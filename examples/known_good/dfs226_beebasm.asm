@@ -3019,9 +3019,7 @@ l8004 = service_entry+1
     sta nmi_XXX6+1                                                    ; 8fce: 8d 40 0d    .@.
     rts                                                               ; 8fd1: 60          `
 
-; &8fd2 referenced 1 time by &8f96
 .nmi_handler_rom_start
-; &8fd2 referenced 1 time by &8f96
 
     org &0d00
 ; &8fd2 referenced 1 time by &8f96
@@ -3108,15 +3106,12 @@ nmi_XXX5 = l0d1f+1
 ; &902f referenced 1 time by &8fac
     rti                                                               ; 902f: 40          @   :0d5d[4]
 
-; The operand of this lda is modified at runtime.
     org nmi_handler_rom_start + (sub_c0d5e - nmi_handler_ram)
     copyblock nmi_handler_ram, sub_c0d5e, nmi_handler_rom_start
     clear nmi_handler_ram, sub_c0d5e
 
-; The operand of this lda is modified at runtime.
 .nmi_handler_rom_end
 .nmi3_handler_rom_start
-; The operand of this lda is modified at runtime.
 
     org &0d39
 ; The operand of this lda is modified at runtime.
@@ -3126,12 +3121,10 @@ nmi_XXX5 = l0d1f+1
     inc nmi_lda_abs+1                                                 ; 9036: ee 3a 0d    .:. :0d3f[5]
     bne nmi_XXX7                                                      ; 9039: d0 03       ..  :0d42[5]
     inc nmi_lda_abs+2                                                 ; 903b: ee 3b 0d    .;. :0d44[5]
-; &903e referenced 1 time by &8de2
     org nmi_handler_rom_end + (l0d47 - nmi_lda_abs)
     copyblock nmi_lda_abs, l0d47, nmi_handler_rom_end
     clear nmi_lda_abs, l0d47
 
-; &903e referenced 1 time by &8de2
 .nmi3_handler_rom_end
 ; &903e referenced 1 time by &8de2
     ldx nmi_sta_abs+1                                                 ; 903e: ae 3d 0d    .=.
@@ -3265,12 +3258,10 @@ nmi_XXX5 = l0d1f+1
     bne nmi_XXX23                                                     ; 90f5: d0 a3       ..  :0d8e[6]
     lda #nmi_XXX21-(nmi_bcs+2)                                        ; 90f7: a9 26       .&  :0d90[6]
     bne l0d30                                                         ; 90f9: d0 9c       ..  :0d92[6]
-; &90fb referenced 3 times by &8d41, &8d92, &9101
     org nmi_handler2_rom_start + (l0d94 - l0d00)
     copyblock l0d00, l0d94, nmi_handler2_rom_start
     clear l0d00, l0d94
 
-; &90fb referenced 3 times by &8d41, &8d92, &9101
 .nmi_handler2_rom_end
 ; &90fb referenced 3 times by &8d41, &8d92, &9101
     sta lfe86                                                         ; 90fb: 8d 86 fe    ...
@@ -7624,9 +7615,7 @@ nmi_XXX5 = l0d1f+1
     plp                                                               ; acd9: 28          (
     rts                                                               ; acda: 60          `
 
-; &acdb referenced 3 times by &0050, &af19, &af1c
 .tube_host_code2
-; &acdb referenced 3 times by &0050, &af19, &af1c
 
     org &0500
 ; &acdb referenced 3 times by &0050, &af19, &af1c
@@ -7935,12 +7924,10 @@ l0600 = sub_c05ff+1
     lda tube_host_r2_data                                             ; aea5: ad e3 fe    ... :06ca[2]
     rts                                                               ; aea8: 60          `   :06cd[2]
 
-; &aea9 referenced 1 time by &965d
     org tube_host_code2 + (l06ce - l0500)
     copyblock l0500, l06ce, tube_host_code2
     clear l0500, l06ce
 
-; &aea9 referenced 1 time by &965d
 .service_handler_help_and_tube
 ; &aea9 referenced 1 time by &965d
     cmp #service_help                                                 ; aea9: c9 09       ..
@@ -8021,9 +8008,7 @@ l0600 = sub_c05ff+1
 .just_rts
     rts                                                               ; af37: 60          `
 
-; &af38 referenced 2 times by &af2d, &af30
 .tube_host_code3
-; &af38 referenced 2 times by &af2d, &af30
 
     org &16
 ; &af38 referenced 2 times by &af2d, &af30
@@ -8085,14 +8070,11 @@ jump_address_low = sub_c0050+1
 ; &af78 referenced 2 times by &04ba, &04f7
 .l0056
     equb 0                                                            ; af78: 00          .   :0056[3]
-; &af79 referenced 2 times by &af13, &af16
     org tube_host_code3 + (l0057 - tube_brkv_handler)
     copyblock tube_brkv_handler, l0057, tube_host_code3
     clear tube_brkv_handler, l0057
 
-; &af79 referenced 2 times by &af13, &af16
 .tube_host_code1
-; &af79 referenced 2 times by &af13, &af16
 
     org &0400
 ; &af79 referenced 2 times by &af13, &af16
@@ -8277,12 +8259,10 @@ jump_address_low = sub_c0050+1
     sty l0055                                                         ; b072: 84 55       .U  :04f9[1]
     rts                                                               ; b074: 60          `   :04fb[1]
 
-; &b075 referenced 1 time by &b2b4
     org tube_host_code1 + (l04fc - c0400)
     copyblock c0400, l04fc, tube_host_code1
     clear c0400, l04fc
 
-; &b075 referenced 1 time by &b2b4
 .lb075
 ; &b075 referenced 1 time by &b2b4
     equb &0a                                                          ; b075: 0a          .

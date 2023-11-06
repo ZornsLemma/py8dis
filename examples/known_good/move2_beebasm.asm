@@ -15,8 +15,6 @@ lffee       = &ffee
     lda #&42 ; 'B'                                                    ; 200b: a9 42       .B
     jmp lffee                                                         ; 200d: 4c ee ff    L..
 
-; &2010 referenced 3 times by &2008, &2022, &2025
-; &2010 referenced 3 times by &2008, &2022, &2025
 
     org &0900
 ; &2010 referenced 3 times by &2008, &2022, &2025
@@ -35,12 +33,10 @@ l090d = l090c+1
     jsr sub_c2039                                                     ; 201c: 20 39 20     9  :090c[1]
     jmp l090d                                                         ; 201f: 4c 0d 09    L.. :090f[1]
 
-; &2022 referenced 1 time by &2005
     org c2010 + (l0912 - low_a)
     copyblock low_a, l0912, c2010
     clear low_a, l0912
 
-; &2022 referenced 1 time by &2005
 .sub_c2022
 ; &2022 referenced 1 time by &2005
     lda low_a,y                                                       ; 2022: b9 00 09    ...
@@ -63,12 +59,10 @@ l090d = l090c+1
 .low_b_baz
     ldx #2                                                            ; 2035: a2 02       ..  :090d[2]
     bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]
-; &2039 referenced 1 time by &090c
     org sub_c2029 + (l0911 - low_b)
     copyblock low_b, l0911, sub_c2029
     clear low_b, l0911
 
-; &2039 referenced 1 time by &090c
 .sub_c2039
 ; &2039 referenced 1 time by &090c
     lda low_b,x                                                       ; 2039: bd 01 09    ...

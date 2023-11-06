@@ -288,8 +288,6 @@ oscli                   = $fff7
 
     * = $2000
 
-; Sideways ROM header
-; $2000 referenced 1 time by $04e2
 pydis_start
 
 !pseudopc $8000 {
@@ -2951,6 +2949,7 @@ sub_c8f82
     ldx #0                                                            ; 2f84: a2 00       ..  :8f84[1]
     tay                                                               ; 2f86: a8          .   :8f86[1]
     jsr osbyte                                                        ; 2f87: 20 f4 ff     .. :8f87[1]   ; Read start-up option byte
+
     ; X is the startup option byte:
     ;     bits 0 to 2     screen MODE selected following reset
     ;     bit 3           if clear reverse action of SHIFT+BREAK
@@ -3105,11 +3104,8 @@ nmi_XXX8
     pla                                                               ; 302e: 68          h   :0d5c[5]
     rti                                                               ; 302f: 40          @   :0d5d[5]
 
-; The operand of this lda is modified at runtime.
 }
 
-; The operand of this lda is modified at runtime.
-; The operand of this lda is modified at runtime.
 
 !pseudopc $0d39 {
 ; The operand of this lda is modified at runtime.
@@ -3119,11 +3115,8 @@ nmi_lda_abs
     inc nmi_lda_abs+1                                                 ; 3036: ee 3a 0d    .:. :0d3f[6]
     bne nmi_XXX7                                                      ; 3039: d0 03       ..  :0d42[6]
     inc nmi_lda_abs+2                                                 ; 303b: ee 3b 0d    .;. :0d44[6]
-; $303e referenced 1 time by $8de2
 }
 
-; $303e referenced 1 time by $8de2
-; $303e referenced 1 time by $8de2
 
 !pseudopc $903e {
 ; $303e referenced 1 time by $8de2
@@ -3261,11 +3254,8 @@ nmi_XXX20
     bne nmi_XXX23                                                     ; 30f5: d0 a3       ..  :0d8e[7]
     lda #nmi_XXX21-(nmi_bcs+2)                                        ; 30f7: a9 26       .&  :0d90[7]
     bne l0d30                                                         ; 30f9: d0 9c       ..  :0d92[7]
-; $30fb referenced 3 times by $8d41, $8d92, $9101
 }
 
-; $30fb referenced 3 times by $8d41, $8d92, $9101
-; $30fb referenced 3 times by $8d41, $8d92, $9101
 
 !pseudopc $90fb {
 ; $30fb referenced 3 times by $8d41, $8d92, $9101
@@ -7613,12 +7603,9 @@ cacc7
     plp                                                               ; 4cd9: 28          (   :acd9[1]
     rts                                                               ; 4cda: 60          `   :acda[1]
 
-; $4cdb referenced 2 times by $50, $af1c
 tube_host_code2
 }
 
-; $4cdb referenced 2 times by $50, $af1c
-; $4cdb referenced 2 times by $50, $af1c
 
 !pseudopc $0500 {
 ; $4cdb referenced 2 times by $50, $af1c
@@ -7927,11 +7914,8 @@ read_tube_r2_data
     lda tube_host_r2_data                                             ; 4ea5: ad e3 fe    ... :06ca[3]
     rts                                                               ; 4ea8: 60          `   :06cd[3]
 
-; $4ea9 referenced 1 time by $965d
 }
 
-; $4ea9 referenced 1 time by $965d
-; $4ea9 referenced 1 time by $965d
 
 !pseudopc $aea9 {
 ; $4ea9 referenced 1 time by $965d
@@ -8014,12 +7998,9 @@ lda_0_rts
 just_rts
     rts                                                               ; 4f37: 60          `   :af37[1]
 
-; $4f38 referenced 1 time by $af30
 tube_host_code3
 }
 
-; $4f38 referenced 1 time by $af30
-; $4f38 referenced 1 time by $af30
 
 !pseudopc $16 {
 ; $4f38 referenced 1 time by $af30
@@ -8078,11 +8059,8 @@ l0055
 ; $4f78 referenced 2 times by $04ba, $04f7
 l0056
     !byte 0                                                           ; 4f78: 00          .   :0056[4]
-; $4f79 referenced 1 time by $af16
 }
 
-; $4f79 referenced 1 time by $af16
-; $4f79 referenced 1 time by $af16
 
 !pseudopc $0400 {
 ; $4f79 referenced 1 time by $af16
@@ -8267,11 +8245,8 @@ c04f7
     sty l0055                                                         ; 5072: 84 55       .U  :04f9[2]
     rts                                                               ; 5074: 60          `   :04fb[2]
 
-; $5075 referenced 1 time by $b2b4
 }
 
-; $5075 referenced 1 time by $b2b4
-; $5075 referenced 1 time by $b2b4
 
 !pseudopc $b075 {
 ; $5075 referenced 1 time by $b2b4

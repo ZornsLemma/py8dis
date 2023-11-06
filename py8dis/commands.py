@@ -89,9 +89,9 @@ cpu_names = { "6502"  : lambda : Cpu6502(),
             }
 
 memory_binary = memorymanager.memory_binary
-memory = memorymanager.memory
+memory        = memorymanager.memory
 
-def load(binary_addr, filename, cpu_name, md5sum=None):
+def load(binary_load_addr, filename, cpu_name, md5sum=None):
     """Loads a binary file to analyse at the given address.
 
     Load a binary file and optionally verify the checksum of the data."""
@@ -120,7 +120,8 @@ def load(binary_addr, filename, cpu_name, md5sum=None):
         else:
             utils.die("Unknown CPU or missing CPU parameter '%s' specified for load()." % (cpu_name))
 
-    memorymanager.load(filename, binary_addr, md5sum)
+    # Load the file
+    memorymanager.load(filename, binary_load_addr, md5sum)
 
     # Clear the no-automatic comments, for lack of a better place to clear them
     trace.no_auto_comment_set = set()
@@ -145,7 +146,8 @@ def move(dest, src, length):
 
     dest = memorymanager.RuntimeAddr(dest)
     src = memorymanager.BinaryAddr(src)
-    # You can't move from a region that hasn't been populated with data. TODO: Move this check into add_move()?
+
+    # You can't move from a region that hasn't been populated with data.
     assert all(memory_binary[i] is not None for i in range(src, src+length))
     return movemanager.add_move(dest, src, length)
 
@@ -160,7 +162,7 @@ def constant(value, name):
 def label(runtime_addr, name, move_id=None):
     """Define a label name for a runtime address."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr) # TODO: OK?
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if move_id is None: # TODO: not super happy with this
         # We don't care about the equivalent binary address, but the process of looking
         # it up gives us a move ID to associate with this label.
@@ -320,7 +322,9 @@ def annotate(runtime_addr, s, priority=None):
     given address."""
 
     # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
-    disassembly.add_raw_annotation(runtime_addr, s, priority)
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    disassembly.add_raw_annotation(binary_addr, s, priority)
 
 def blank(runtime_addr, priority=None):
     annotate(runtime_addr, "", priority)
@@ -408,7 +412,6 @@ def entry(runtime_addr, label=None, warn=True):
     return disassembly.get_label(runtime_addr, binary_addr, move_id)
 
 # TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
-# TODO: Should I then get rid of this as an explicit command? (Possibly not. For example, using byte(addr) to get the behaviour of nonentry() would also prevent auto-detection of a string starting at addr. So I think nonentry() is useful as an explicit user command.)
 def nonentry(runtime_addr):
     """
     Marks an address as 'not to be traced as code'.
@@ -733,7 +736,7 @@ def make_modulo(expr1, expr2):
     return make_op2(expr1, 'MOD', expr2)
 
 
-def go(post_trace_steps=None, autostring_min_length=3):
+def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     """
     Classifies code and data, calculates labels and emits assembly.
     """
@@ -772,7 +775,7 @@ def go(post_trace_steps=None, autostring_min_length=3):
     classification.classify_leftovers()
 
     # Output assembly code
-    disassembly.emit()
+    return disassembly.emit(print_output=print_output)
 
 # Command line parsing
 parser = argparse.ArgumentParser()

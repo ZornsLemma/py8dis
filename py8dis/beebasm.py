@@ -1,8 +1,11 @@
+"""
+Beebasm assembler
+"""
+
 from __future__ import print_function
 import sys
 
 import assembler
-import classification
 import config
 import disassembly
 import memorymanager
@@ -10,11 +13,12 @@ import movemanager
 import utils
 
 class Beebasm(assembler.Assembler):
+    """This class encapsulates beebasm-specific syntax and features."""
+
     def __init__(self):
         super(assembler.Assembler, self).__init__()
 
-        self.explicit_a = True
-        self.output_filename = None
+        self.explicit_a = True          # e.g. Output 'ROR A', not just 'ROR'
 
     def get_name(self):
         return "beebasm"
@@ -38,20 +42,25 @@ class Beebasm(assembler.Assembler):
         return ".%s" % name
 
     def explicit_label(self, name, value, offset=None, align=0):
+        # Output when declaring a label with an explicit value:
+        #
+        #   i.e. 'label = value'
+        #
+        # with an optional offset added to the value, and optional column
+        # alignment at the equals sign.
         return "%s= %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
 
     def comment_prefix(self):
         return ";"
 
-    def assert_expr(self, expr, value):
-        self.pending_assertions[expr] = value
-
     def disassembly_start(self):
+        # Preamble to be output at the start of the disassembly.
         if config.get_cmos():
             return [utils.make_indent(1) + utils.force_case("cpu 1"), ""]
         return []
 
     def code_start(self, start_addr, end_addr, first):
+        # At the start of the code we provide the address at which to assemble.
         result = ["", utils.make_indent(1) + utils.force_case("org %s" % self.hex4(start_addr))]
         result.append("")
         return result
@@ -60,6 +69,9 @@ class Beebasm(assembler.Assembler):
         return []
 
     def pseudopc_start(self, dest, source, length):
+        # Used when assembling code at a different address to where it will
+        # actually execute.
+
         result = [""]
         result.append(utils.make_indent(1) + utils.force_case("org %s" % self.hex(dest)))
         # TODO: We will need some labels in pseudopc_end() but by then
@@ -97,6 +109,7 @@ class Beebasm(assembler.Assembler):
         return result
 
     def disassembly_end(self):
+        # At the end of the assembly, we output assertions.
         result = []
         spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
 
@@ -116,29 +129,41 @@ class Beebasm(assembler.Assembler):
         return result
 
     def force_abs_instruction(self, instruction, prefix, operand, suffix):
+        # Ensure the instruction uses an absolute address rather than a zero page address.
+        # e.g. 'lda+2 addr'
+        # Sadly beebasm doesn't currently have a way to do this.
         return None
 
     def force_zp_label_prefix(self):
+        # Prefix to take the low byte of a label
         return ""
 
     def byte_prefix(self):
+        # For outputting bytes
         return utils.force_case("equb ")
 
     def word_prefix(self):
+        # For outputting words
         return utils.force_case("equw ")
 
     def string_prefix(self):
+        # For outputting strings
         return utils.force_case("equs ")
 
     def string_chr(self, c):
+        # When composing a literal character, this returns a character string
+        # from an integer, or None if not possible
         if utils.isprint(c) and chr(c) not in ('"'):
             return chr(c)
         return None
 
     def binary_format(self, s):
+        # For outputting a value as binary
         return "%" + s
 
     def picture_binary(self, s):
+        # Converts a string of '0' and '1's into '.' and '#'s for visualising
+        # data. Sadly, beebasm does not support this.
         return s
 
     def sanitise(self, s):

@@ -101,7 +101,6 @@ class Cpu65C02(Cpu6502):
 
         def update_references(self, binary_addr):
             trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
-            #trace.references[self.target(binary_addr)].add(binary_addr)
 
         def could_be_call_to_subroutine(self):
             return True
@@ -129,13 +128,13 @@ class Cpu65C02(Cpu6502):
         def disassemble(self, binary_addr):
             return [None]
 
-    def update_z(self, addr, state):
+    def update_z(self, binary_addr, state):
         state['z'] = None
 
-    def is_branch_to(self, addr, target):
-        c = disassembly.classifications[addr]
+    def is_branch_to(self, binary_addr, target_runtime_addr):
+        c = disassembly.classifications[binary_addr]
         # TODO: hacky use of isinstance()
         if isinstance(c, Cpu65C02.OpcodeUnconditionalBranch):
-            return c.target(addr) == target
+            return c.target(binary_addr) == target_runtime_addr
 
-        return Cpu6502.is_branch_to(self, addr, target)
+        return Cpu6502.is_branch_to(self, binary_addr, target_runtime_addr)

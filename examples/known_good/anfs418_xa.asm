@@ -8103,9 +8103,7 @@ lbec3
     .byt   6, $ad, $e1, $fe, $20, $ee, $ff, $2c, $e2, $fe, $10, $f0   // bee7: 06 ad e1... ...
     .byt $2c, $e0, $fe, $30, $f0, $ae, $e3, $fe, $86, $51, $6c,   0   // bef3: 2c e0 fe... ,..
     .byt   5,   0, $80,   0,   0                                      // beff: 05 00 80... ...
-// $bf04 referenced 2 times by $be9e, $bea1
 lbf04
-// $bf04 referenced 2 times by $be9e, $bea1
 * = $0400
 // $bf04 referenced 2 times by $be9e, $bea1
 l0400
@@ -8205,9 +8203,7 @@ c0482
 
     .byt $58, $b0, $0a, $d0,   3, $4c, $9c,   5, $ae, $8d,   2, $f0   // bf88: 58 b0 0a... X.. :0484[1]
     .byt $e0                                                          // bf94: e0          .   :0490[1]
-// $bf95 referenced 1 time by $bf9a
 * = $bf95
-// $bf95 referenced 1 time by $bf9a
 loop_cbf95
 // $bf95 referenced 1 time by $bf9a
     lda #$ff                                                          // bf95: a9 ff       ..

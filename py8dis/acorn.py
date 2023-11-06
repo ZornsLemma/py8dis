@@ -1,10 +1,17 @@
+"""
+Acorn specific functions.
+"""
+
 from commands import *
-import classification
 import config
 import trace
 import utils
+import classification
 
 def xy_addr(x_addr, y_addr):
+    """Given two binary addresses holding the low byte and high byte of an address,
+    output expressions for each and return the address."""
+
     if x_addr is not None and y_addr is not None:
         assert isinstance(x_addr, memorymanager.BinaryAddr)
         assert isinstance(y_addr, memorymanager.BinaryAddr)
@@ -12,12 +19,20 @@ def xy_addr(x_addr, y_addr):
         x_runtime_addr = None if x_addr is None else movemanager.b2r(x_addr)
         y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
 
-        auto_expr(x_runtime_addr, make_lo(label))
-        auto_expr(y_runtime_addr, make_hi(label))
+        if isinstance(disassembly.get_classification(x_addr), classification.Word) and (y_runtime_addr == (x_runtime_addr+1)):
+            # If memory is classified as Word, we can have the expression be for the whole address
+            auto_expr(x_runtime_addr, label)
+        else:
+            # If memory is classified as a byte or 'inside_a_classification' (e.g. an operand of an instruction) then code them as individual bytes
+            if isinstance(disassembly.get_classification(x_addr), classification.Byte) or (disassembly.get_classification(x_addr) == disassembly.inside_a_classification):
+                auto_expr(x_runtime_addr, make_lo(label))
+            if isinstance(disassembly.get_classification(y_addr), classification.Byte) or (disassembly.get_classification(y_addr) == disassembly.inside_a_classification):
+                auto_expr(y_runtime_addr, make_hi(label))
 
         return memorymanager.RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
     return None
 
+# Acorn specific dictionaries
 osfind_enum = {
       0: "osfind_close",
      64: "osfind_open_input",
@@ -1053,13 +1068,18 @@ os_variable_names = {
     0xff: "start-up option byte",
 }
 
-def enum_lookup(reg_addr, e, comment=None):
-    if reg_addr is None:
+def enum_lookup(reg_binary_addr, e, comment=None):
+    """Given a binary_addr and a dictionary, read the byte at the address and look
+    it up in the dictionary and use the result to create a constant and use it as
+    an expression.
+    """
+
+    if reg_binary_addr is None:
         return None
-    r = memorymanager.memory_binary[reg_addr]
+    r = memorymanager.memory_binary[reg_binary_addr]
     if r in e:
         constant(r, e[r])
-        runtime_addr = None if reg_addr is None else movemanager.b2r(reg_addr)
+        runtime_addr = movemanager.b2r(reg_binary_addr)
         auto_expr(runtime_addr, e[r])
     if comment is not None:
         auto_comment(r, comment)
@@ -1320,16 +1340,16 @@ def osword_hook(runtime_addr, state, subroutine):
         y_runtime_next_use = None if state.next_use['y'] is None else movemanager.b2r(state.next_use['y'])
         auto_comment(y_runtime_next_use, "Y contains line length, including carriage return if used.", inline=True)
 
-def osbyte_rw(x_addr, y_addr):
+def osbyte_rw(x_binary_addr, y_binary_addr):
     com = "Read/Write"
     write_value=None
-    if y_addr is not None:
-        if memory_binary[y_addr] == 0:
+    if y_binary_addr is not None:
+        if memory_binary[y_binary_addr] == 0:
             com = "Write"
-            if x_addr is not None:
-                write_value = memory_binary[x_addr]
-        elif x_addr is not None:
-            if (memory_binary[x_addr] == 0) and (memory_binary[y_addr] == 255):
+            if x_binary_addr is not None:
+                write_value = memory_binary[x_binary_addr]
+        elif x_binary_addr is not None:
+            if (memory_binary[x_binary_addr] == 0) and (memory_binary[y_binary_addr] == 255):
                 com = "Read"
 
     return (com, write_value)

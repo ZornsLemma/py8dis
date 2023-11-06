@@ -1,20 +1,36 @@
+"""
+Memory Manager
+
+Loads binary data into memory ready to disassemble, and provides access to this
+memory.
+
+Code can sometimes be assembled at one address (the 'binary address') but will
+be executed at another (the 'runtime address'). We define classes that help
+distinguish these types of addresses.
+"""
+
 import utils
 
+# We make one class to hold a runtime address, and another for a binary address.
+# They are just integers underneath, but storing them in classes means we can
+# check they are of the correct type.
 class TypedInt(int):
+    """An abstract base class for address types"""
     def __add__(self, other):
         res = super(TypedInt, self).__add__(other)
         return self.__class__(res)
 
 class BinaryAddr(TypedInt):
+    """Address of data at load time"""
     def __new__(cls, value, *args, **kwargs):
         assert not isinstance(value, RuntimeAddr)
         return super(BinaryAddr, cls).__new__(cls, value)
 
 class RuntimeAddr(TypedInt):
+    """Address of data at execution time"""
     def __new__(cls, value, *args, **kwargs):
         assert not isinstance(value, BinaryAddr)
         return super(RuntimeAddr, cls).__new__(cls, value)
-
 
 # Address validation
 def is_valid_runtime_addr(runtime_addr):
@@ -30,7 +46,7 @@ def is_valid_binary_addr(binary_addr):
     return 0 <= binary_addr < 0x10000
 
 
-# Memory access
+# Memory access by binary address
 def get_u8_binary(binary_addr):
     """Get 8 bit number given a binary address"""
 
@@ -40,7 +56,8 @@ def get_u8_binary(binary_addr):
 def get_u16_binary(binary_addr):
     """Get 16 bit number (little-endian) given a binary address"""
 
-    assert memory_binary[binary_addr] is not None and memory_binary[binary_addr+1] is not None
+    assert memory_binary[binary_addr] is not None, "Nothing loaded at address {0}".format(hex(binary_addr))
+    assert memory_binary[binary_addr+1] is not None, "Nothing loaded at address {0} (supposed 2nd byte of 16 bit address)".format(hex(binary_addr+1))
     return memory_binary[binary_addr] + (memory_binary[binary_addr+1] << 8)
 
 def get_u16_be_binary(binary_addr):
@@ -51,6 +68,7 @@ def get_u16_be_binary(binary_addr):
 
 
 
+# Memory access by runtime address
 def get_u8_runtime(runtime_addr):
     """Get 8 bit number given a runtime address"""
 
@@ -74,6 +92,8 @@ def get_u16_be_runtime(runtime_addr):
 
 
 class MemoryRuntime(object):
+    """Class for reading runtime memory with address validation"""
+
     def __getitem__(self, runtime_addr):
         import movemanager
         assert is_valid_runtime_addr(runtime_addr)
@@ -82,29 +102,44 @@ class MemoryRuntime(object):
         return memory_binary[binary_address]
 
 
+# We store 64K of memory. Some portion of this will hold the binary file(s) to
+# disassemble. Use the get_u*() functions above to access this memory since this
+# includes proper address validation.
 memory_binary = [None] * 64*1024
 
-# This perhaps should more properly be called memory_runtime, but
-# earlier versions just had memory and this is the main memory access
-# for user code so probably reasonable to use a short name for it.
+# To read memory based on a runtime address we have a class to squirrel away
+# the address conversion and validation.
+# (This perhaps should more properly be called memory_runtime, but earlier
+# versions just had 'memory' and this is the main memory access for user code
+# so probably reasonable to use a short name for it.)
 memory = MemoryRuntime()
 
+# Stores a (start_binary_addr, end_binary_addr) pair for each load()
 load_ranges = []
 
 def get_entire_load_range():
+    """Get the whole binary address range for any loaded data"""
+
     pydis_start = min(start_addr for start_addr, end_addr in load_ranges)
     pydis_end   = max(end_addr for start_addr, end_addr in load_ranges)
 
     return (pydis_start, pydis_end)
 
 def load(filename, binary_addr, md5sum=None):
+    """Load a binary file into memory at the given address.
+
+    Checks the md5 checksum matches if given."""
+
     binary_addr = BinaryAddr(binary_addr)
 
-    with open(filename, "rb") as f:
-        data = bytearray(f.read())
-        if binary_addr + len(data) > 0x10000:
-            utils.die("load() would overflow memory")
-        memory_binary[binary_addr:binary_addr+len(data)] = data
+    try:
+        with open(filename, "rb") as f:
+            data = bytearray(f.read())
+            if binary_addr + len(data) > 0x10000:
+                utils.die("load() would overflow memory")
+            memory_binary[binary_addr:binary_addr+len(data)] = data
+    except FileNotFoundError:
+        utils.die("File '{0}' not found".format(filename))
 
     if md5sum is not None:
         import hashlib
