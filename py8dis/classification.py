@@ -1,9 +1,13 @@
 """
-Classifies the data bytes of a binary file.
+Classifies every byte of a binary file.
 
 Bytes that are loaded from a binary file are classified by type. Data
 is marked with a Byte, Word or String object, and code is marked with
 an Opcode* object, as defined by the configured CPU.
+
+Each classification object has a length, so the object is stored in the
+first address of the classification, and the remainder are set to the
+'inside_a_classification' constant so it's known to be classified.
 
 Users can mark data as Byte, Word or String. They use functions
 byte() and word() for the first two types. For strings there are a
@@ -66,7 +70,7 @@ class Byte(object):
         assert length > 0
         self._length = length
 
-    def is_code(self, addr):
+    def is_code(self, binary_addr):
         return False
 
     def as_string_list(self, binary_addr, annotations):
@@ -89,7 +93,7 @@ class Word(object):
         assert length % 2 == 0
         self._length = length
 
-    def is_code(self, addr):
+    def is_code(self, binary_addr):
         return False
 
     def as_string_list(self, binary_addr, annotations):
@@ -110,7 +114,7 @@ class String(object):
         assert length > 0
         self._length = length
 
-    def is_code(self, addr):
+    def is_code(self, binary_addr):
         return False
 
     def as_string_list(self, binary_addr, annotations):
@@ -218,7 +222,7 @@ def get_address16(binary_addr):
     if binary_addr not in expressions:
         return disassembly.get_label(operand, binary_addr)
 
-    assert isinstance(disassembly.get_classification(binary_addr), Word) or (isinstance(disassembly.get_classification(binary_addr - 1), trace.cpu.Opcode) and disassembly.get_classification(binary_addr - 1).length() == 3)
+    assert isinstance(disassembly.get_classification(binary_addr), Word) or (isinstance(disassembly.get_classification(binary_addr - 1), trace.cpu.Opcode) and disassembly.get_classification(binary_addr - 1).length() == 3), "Address: %s" % hex(binary_addr)
     return get_expression(binary_addr, operand)
 
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc

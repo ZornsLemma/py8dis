@@ -8104,9 +8104,7 @@ lb487 = sub_cb485+2
     equb   6, &ad, &e1, &fe, &20, &ee, &ff, &2c, &e2, &fe, &10, &f0   ; bee7: 06 ad e1... ...
     equb &2c, &e0, &fe, &30, &f0, &ae, &e3, &fe, &86, &51, &6c,   0   ; bef3: 2c e0 fe... ,..
     equb   5,   0, &80,   0,   0                                      ; beff: 05 00 80... ...
-; &bf04 referenced 2 times by &be9e, &bea1
 .lbf04
-; &bf04 referenced 2 times by &be9e, &bea1
 
     org &0400
 ; &bf04 referenced 2 times by &be9e, &bea1
@@ -8207,12 +8205,10 @@ lb487 = sub_cb485+2
 
     equb &58, &b0, &0a, &d0,   3, &4c, &9c,   5, &ae, &8d,   2, &f0   ; bf88: 58 b0 0a... X.. :0484[1]
     equb &e0                                                          ; bf94: e0          .   :0490[1]
-; &bf95 referenced 1 time by &bf9a
     org lbf04 + (l0491 - l0400)
     copyblock l0400, l0491, lbf04
     clear l0400, l0491
 
-; &bf95 referenced 1 time by &bf9a
 .loop_cbf95
 ; &bf95 referenced 1 time by &bf9a
     lda #&ff                                                          ; bf95: a9 ff       ..

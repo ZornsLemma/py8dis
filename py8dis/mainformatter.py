@@ -1,3 +1,9 @@
+"""
+Main Formatter
+
+Formats the component parts of a line of disassembly to output.
+"""
+
 import classification
 import config
 import disassembly
@@ -28,7 +34,10 @@ def add_hex_dump(binary_addr, length, cycles_description, s):
     dump_hex = utils.tab_to(dump_hex, 3 * config.get_hex_dump_max_bytes() + 3)
 
     # Add ASCII characters as a fixed width string
-    dump_chars = utils.tab_to("".join(chr(x) if utils.isprint(x) else "." for x in data), config.get_hex_dump_max_bytes())
+    if config.get_hex_dump_show_ascii():
+        dump_chars = utils.tab_to("".join(chr(x) if utils.isprint(x) else "." for x in data), config.get_hex_dump_max_bytes())
+    else:
+        dump_chars = ""
 
     # Add cycle counts
     if config.get_show_cycles() and cycles_description and len(cycles_description) > 0:

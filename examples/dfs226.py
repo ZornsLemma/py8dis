@@ -16,10 +16,6 @@ load(0x8000, "dfs226.orig", "6502", "f083f49d6fe66344c650d7e74249cb96")
 acorn.bbc()
 acorn.is_sideways_rom()
 
-# TODO: Loop detection doesn't seem to work with move() - see e.g. l0036
-
-# TODO: We don't seem to be getting the "references" comments generated for labels in move() e.g. l0446 - probably partly related at least to loop detection problem
-
 # TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.
 tube_host_move_id1 = move(0x400, 0xaf79, 0xb075 - 0xaf79)
 tube_host_move_id2 = move(0x500, 0xacdb, 0xaea9 - 0xacdb)
@@ -41,10 +37,6 @@ expr(0xaf31, "tube_brkv_handler_fwd")
 entry(0x0016, "tube_brkv_handler") # TODO: This is breaking beebasm because it gets emitted "inline" too late for other code to realise on the first pass it is a zero page label (and we can't declare it *also* as a constant, as we then get a redefinition error)
 expr(0xaf03, make_lo("tube_brkv_handler"))
 expr(0xaf08, make_hi("tube_brkv_handler"))
-# TODO: Possible bug: we should be inlining a label definition l06a7 at binary &ae82; this *is* within a move() region but (perhaps due to the order things happen to be identified in) that label is associated with move ID 0, which means it never gets emitted inline at all and so it is emitted as an explicit value. The two possible areas of problem are a) should we (even if only by heuristic) be assigning it to a different move ID, or allowing it to change move ID/exist in multiple move IDs b) since it will never be emitted inline using the sole move ID 0 which it has, should be we realising that it's probably smart to output it in move 2 which *does* cover this address implicitly?
-# - OK, the reason this is assigned to move ID 0 is that the sole reference to 06a7 is from code in move ID 1 where 6a7 is in move ID 2, so (not unreasonably) we don't heuristically assign move ID 2 but leave it with a default of 0. TODO: Probably too hard for the benefit, but if we could somehow arrange for the two disjoint tube host code move()s to either *be* the same move ID or for their move IDs to be linked by the user, we could potentially then DTRT heuristically.
-# - TODO: don't forget the separate issue of "should we improve label emitting so we can use an implicit label where possible despite move ID"?
-#label(0x6a7, "TODOEXP") # TODO: just to see what happens - OK, this automatically gets move ID 2 assigned, which is fair as that's the *sole* move covering this address - however, we *still* get a move ID 0 l06a7 label created, and I am not sure if that's good or not - I believe (not yet tested) we can override the creation of the new label by using expr(address referencing l06a7, "TODOEXP"), the question is "should" I have to do that? - I have now tweaked the heuristics so we re-use the label in move 2 rather than forcing creation of a name in move 0; we will see how that works out across different test cases.
 comment(0xaf70, "Patch the following JMP so we effectively do JMP (&500,X)")
 blank(0xaf70) # TODO: silly, just to test
 comment(0xaf70, "Extra comment after a blank line") # TODO: silly, just to test
@@ -245,12 +237,11 @@ patched_branch("nmi_beq", 0x8fa6, "nmi_XXX8")
 
 # The loop at &8fac doesn't make a pass with X=0.
 nmi3_move_id = move(0xd39, 0x9030, 0xe)
-label(0x9030, "nmi3_handler_rom_start") # TODO: not emitted inline because (I think) we have 0 bytes output in that region, but we could and probably should naturally emit this (perhaps check with acme report output, where it's probably clearer)
+label(0x9030, "nmi3_handler_rom_start")
 label(0x902f+0xf, "nmi3_handler_rom_end")
 expr(0x8fab, "nmi3_handler_rom_end-nmi3_handler_rom_start")
 expr_label(0x902f, "nmi3_handler_rom_start-1")
 expr(0x8fb0, "nmi_XXX2-1")
-#assert False # TODO: l0d3a (for example) is not being emitted in the "natural" place - have a look exactly why and maybe tweak logic/heuristics to make this work automatically if feasible - what might be more fundamental (and related) is that l0d39 is being created *despite* having a user-assigned label at that address, *and* it does not appear in the dump of labels and move regions (though on investigating this is more a small quirk of beebasm pseudopc implementation than anything fundamental)
 with nmi3_move_id:
     # Note that there are two different blocks of code move()d to 0xd39, so to get the labels
     # to appear in the desired place in the output we have to disambiguate with this "with".

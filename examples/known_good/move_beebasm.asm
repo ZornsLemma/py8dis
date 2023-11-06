@@ -25,9 +25,7 @@ lffe3   = &ffe3
     lda #&0d                                                          ; 2019: a9 0d       ..
     jmp lffe3                                                         ; 201b: 4c e3 ff    L..
 
-; &201e referenced 3 times by &2002, &2005, &2013
 .c201e
-; &201e referenced 3 times by &2002, &2005, &2013
 
     org &0900
 ; &201e referenced 3 times by &2002, &2005, &2013

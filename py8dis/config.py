@@ -1,4 +1,6 @@
-
+"""
+Configuration
+"""
 
 # Config variables all have leading underscores.
 # Best practice is to not access these directly, but access via the getters and setters below.
@@ -9,6 +11,7 @@ _inline_comment_column      = 70
 _word_wrap_comment_column   = 87
 _indent_string              = " "*4
 _hex_dump_max_bytes         = 3
+_hex_dump_show_ascii        = True
 _indent_loops               = False
 _blank_line_at_block_end    = True
 _loop_limit                 = 32
@@ -127,6 +130,14 @@ def get_hex_dump_max_bytes():
 def set_hex_dump_max_bytes(i):
     global _hex_dump_max_bytes
     _hex_dump_max_bytes = i
+
+def get_hex_dump_show_ascii():
+    global _hex_dump_show_ascii
+    return _hex_dump_show_ascii
+
+def set_hex_dump_show_ascii(i):
+    global _hex_dump_show_ascii
+    _hex_dump_show_ascii = i
 
 def get_constants_are_decimal():
     global _constants_are_decimal
