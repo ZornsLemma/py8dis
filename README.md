@@ -121,6 +121,7 @@ To change the configuration, add `import config` and call the following as neede
 | `config.set_show_cycles(b)`              | False   | Show the number of cycles taken by each instruction.             |
 | `config.set_subroutine_header(s)`        | "*"*87  | A dividing line at the start of a subroutine comment.            |
 | `config.set_subroutine_footer(s)`        | "*"*87  | A dividing line at the end of a subroutine comment.              |
+| `config.set_include_assertions(b)        | True    | Include assertions at end of output to detect misuse of expr().  |
 
 ## Command reference
 

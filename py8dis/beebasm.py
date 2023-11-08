@@ -109,17 +109,19 @@ class Beebasm(assembler.Assembler):
         return result
 
     def disassembly_end(self):
-        # At the end of the assembly, we output assertions.
         result = []
-        spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
 
-        old = ("", 0)
-        for expr, value in spa:
-            if (expr != old[0]) or (value != old[1]):
-                result.append(utils.make_indent(1) + utils.force_case("assert ") + "%s == %s" % (expr, value))
-            old = (expr, value)
+        # At the end of the assembly, we output assertions.
+        if config.get_include_assertions():
+            spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
+
+            old = ("", 0)
+            for expr, value in spa:
+                if (expr != old[0]) or (value != old[1]):
+                    result.append(utils.make_indent(1) + utils.force_case("assert ") + "%s == %s" % (expr, value))
+                old = (expr, value)
+
         result.append("")
-
         s = utils.force_case("save")
         if self.output_filename is None:
             s += " pydis_start, pydis_end"

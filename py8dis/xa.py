@@ -144,14 +144,16 @@ class Xa(assembler.Assembler):
         return [utils.LazyString("* = %s", self.hex(source + length))]
 
     def disassembly_end(self):
-        # At the end of the assembly, we output assertions.
         result = []
-        return result # TODO!
-        spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
-        for expr, value in spa:
-            result.append("%s %s <> %s" % (utils.force_case("#if"), expr, value))
-            result.append("    #echo TODO") # result.append(utils.make_indent(1) + '%s Assertion failed: %s == %s' % (utils.force_case("#echo"), expr, value))
-            result.append(utils.force_case("#endif"))
+
+        # At the end of the assembly, we output assertions.
+        if False: # TODO! config.get_include_assertions():
+            spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
+            for expr, value in spa:
+                result.append("%s %s <> %s" % (utils.force_case("#if"), expr, value))
+                result.append("    #echo TODO") # result.append(utils.make_indent(1) + '%s Assertion failed: %s == %s' % (utils.force_case("#echo"), expr, value))
+                result.append(utils.force_case("#endif"))
+
         return result
 
     def force_abs_instruction(self, instruction, prefix, operand, suffix):

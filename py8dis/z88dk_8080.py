@@ -63,11 +63,14 @@ class Z88DK(assembler.Assembler):
         return ["; TODO: }", ""]
 
     def disassembly_end(self):
-        # At the end of the assembly, we output assertions.
         result = []
-        spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
-        for expr, value in spa:
-            result.append("; ASSERT ((%s) == %s)" % (expr, value))
+
+        # At the end of the assembly, we output assertions.
+        if config.get_include_assertions():
+            spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
+            for expr, value in spa:
+                result.append("; ASSERT ((%s) == %s)" % (expr, value))
+
         return result
 
     def force_abs_instruction(self, instruction, prefix, operand, suffix):

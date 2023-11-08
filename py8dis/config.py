@@ -23,6 +23,7 @@ _constants_are_decimal      = True
 _show_cycles                = False
 _subroutine_header          = "*"*87
 _subroutine_footer          = "*"*87
+_include_assertions         = True
 
 def get_lower_case():
     return _lower_case
@@ -169,6 +170,12 @@ def set_subroutine_footer(s):
     global _subroutine_footer
     _subroutine_footer = s
 
+def get_include_assertions():
+    return _include_assertions
+
+def set_include_assertions(b):
+    global _include_assertions
+    _include_assertions = b
 
 
 # For internal use only:
