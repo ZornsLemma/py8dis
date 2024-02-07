@@ -130,7 +130,7 @@ def is_simple_name(s):
 def add_label(runtime_addr, s, move_id):
     """Add a label at the given runtime address and move_id."""
 
-    assert 0 <= runtime_addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
+    memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
 
     label = labelmanager.labels[runtime_addr]
     if s is not None:
@@ -185,7 +185,7 @@ def get_label(runtime_addr, context, move_id=None):
     runtime_addr = int(runtime_addr)
     context = memorymanager.BinaryAddr(context)
 
-    assert 0 <= runtime_addr <= 0x10000 # 0x10000 is valid for labels, not code/data TODO?
+    assert memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
     assert memorymanager.is_valid_binary_addr(context)
     assert move_id is None or movemanager.is_valid_move_id(move_id)
 

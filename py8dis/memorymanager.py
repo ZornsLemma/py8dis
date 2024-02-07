@@ -33,16 +33,20 @@ class RuntimeAddr(TypedInt):
         return super(RuntimeAddr, cls).__new__(cls, value)
 
 # Address validation
-def is_valid_runtime_addr(runtime_addr):
+def is_valid_runtime_addr(runtime_addr, allow_one_more_than_final_address = False):
     """Validate a runtime address."""
 
     assert not isinstance(runtime_addr, BinaryAddr)
+    if allow_one_more_than_final_address:
+        return 0 <= runtime_addr <= 0x10000
     return 0 <= runtime_addr < 0x10000
 
-def is_valid_binary_addr(binary_addr):
+def is_valid_binary_addr(binary_addr, allow_one_more_than_final_address = False):
     """Validate a binary address."""
 
     assert not isinstance(binary_addr, RuntimeAddr)
+    if allow_one_more_than_final_address:
+        return 0 <= runtime_addr <= 0x10000
     return 0 <= binary_addr < 0x10000
 
 

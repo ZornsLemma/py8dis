@@ -270,7 +270,7 @@ def string(runtime_addr, n=None):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_addr, _ = movemanager.r2b_checked(runtime_addr)
     if n is None:
-        assert not disassembly.is_classified(binary_addr)
+        assert not disassembly.is_classified(binary_addr), "Address " + hex(binary_addr) + " already classified"
         n = 0
         while not disassembly.is_classified(binary_addr + n) and utils.isprint(memory_binary[binary_addr + n]):
             n += 1
@@ -366,7 +366,7 @@ def classify_leftovers():
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
             i += 1
-            if movemanager.b2r(addr + i) in labelmanager.labels:
+            if (addr + i) >= len(memory_binary) or movemanager.b2r(addr + i) in labelmanager.labels:
                 break
         if i > 0:
             disassembly.add_classification(addr, Byte(i))
