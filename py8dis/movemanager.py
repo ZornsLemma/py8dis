@@ -134,7 +134,8 @@ def move_ids_for_runtime_addr(runtime_addr):
 
     global cache_move_definitions_len, cache
     assert isinstance(runtime_addr, memorymanager.RuntimeAddr)
-    assert memorymanager.is_valid_runtime_addr(runtime_addr)
+
+    assert memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
 
     # TODO: We might want to assert we are pre-tracing, since this function is probably not meaningful once we start tracing and there is no code manipulating active_move_ids. That's not quite true - we do use this in at least one place - but there is some truth in it.
 
