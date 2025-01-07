@@ -121,6 +121,9 @@ test_8080() {
     rm "build/${filename}_8080.o"
 }
 
+test "moving1.py" "moving.orig"
+test "moving2.py" "moving.orig"
+test "moving3.py" "moving.orig"
 #test_8080 "example8080.py" "example8080.orig"
 #test_8080 "test8080.py" "test8080.orig"
 test "helloworld.py" "helloworld.orig"

@@ -8,6 +8,7 @@ import sys
 import assembler
 import config
 import disassembly
+import mainformatter
 import memorymanager
 import movemanager
 import utils
@@ -68,11 +69,57 @@ class Beebasm(assembler.Assembler):
     def code_end(self):
         return []
 
+    def format_comment(self, s, indent=1):
+        text = mainformatter.format_comment(s, indent)
+        return "\n".join("%s%s %s" % (config.get_indent_string() * indent, config.get_assembler().comment_prefix(), line) for line in text.split("\n"))
+
+    def find_temporary_area(self, dest, source, length):
+        pydis_start, pydis_end = memorymanager.get_entire_load_range()
+
+        temp_start = -1
+        overlap_length = -1
+        overlap_start = -1
+        if dest < source:
+            if dest + length > pydis_start:
+                # What area is overlapping?
+                overlap_start  = max(dest, pydis_start)
+                overlap_length = source - overlap_start
+
+                # Find an area of the memory map that is not used by the binary file. Try the high end of memory first
+                temp_start = 0xffff - overlap_length
+                if temp_start < (source + length):
+                    # not enough room high in memory, so try low instead
+                    temp_start = 0
+                    assert (temp_start + length) <= pydis_start, "Not enough memory to assemble in beebasm!"
+
+            area_to_clear_start = dest
+            area_to_clear_end   = min(dest + length, source)
+        else:
+            area_to_clear_start = max(dest, source + length)
+            area_to_clear_end   = dest + length
+
+        return temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end
+
     def pseudopc_start(self, dest, source, length):
         # Used when assembling code at a different address to where it will
         # actually execute.
 
         result = [""]
+
+        # Find a temporary memory range we can use to move existing code out of the way (if needed)
+        temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end = self.find_temporary_area(dest, source, length)
+        if overlap_length > 0:
+            result.append(self.format_comment("1. We want to move to a lower memory address to assemble the next block of code at it's runtime address. First we temporarily copy the existing code/data that overlaps out of the way while we do so.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
+            result.append(utils.make_indent(1) + utils.force_case("copyblock %s, %s, %s" % (self.hex(overlap_start), self.hex(overlap_start + overlap_length), self.hex(temp_start))))
+
+            result.append("")
+            result.append(self.format_comment("2. Clear the existing code area so that we are allowed to assemble there again."))
+            result.append(utils.make_indent(1) + utils.force_case("clear %s, %s" % (self.hex(overlap_start), self.hex(overlap_start + overlap_length))))
+
+            result.append("")
+            result.append(self.format_comment("3. Assemble the new block at it's runtime address."))
+
+        move_id = movemanager.move_id_for_binary_addr[source]
         result.append(utils.make_indent(1) + utils.force_case("org %s" % self.hex(dest)))
         # TODO: We will need some labels in pseudopc_end() but by then
         # it will be too late to create them, so do it now. Is this
@@ -83,7 +130,6 @@ class Beebasm(assembler.Assembler):
         # which is both more readable and necessary in some cases to
         # avoid assembly problems where a label is not forward
         # declared. It isn't working quite right yet.
-        move_id = movemanager.move_id_for_binary_addr[source]
         disassembly.get_label(dest, source, move_id)
         disassembly.get_label(dest + length, source, move_id)
         disassembly.get_label(source, source, move_id)
@@ -99,12 +145,62 @@ class Beebasm(assembler.Assembler):
         assert isinstance(dest, memorymanager.RuntimeAddr)
         assert isinstance(source, memorymanager.BinaryAddr)
 
-        result = []
+        result = [""]
         # TODO: Use LazyString?
         move_id = movemanager.move_id_for_binary_addr[source]
-        result.append("%s%s %s + (%s - %s)" % (utils.make_indent(1), utils.force_case("org"), disassembly.get_label(source, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(dest, source, move_id)))
-        result.append("%s%s %s, %s, %s" % (utils.make_indent(1), utils.force_case("copyblock"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id), disassembly.get_label(source, source, move_id)))
-        result.append("%s%s %s, %s" % (utils.make_indent(1), utils.force_case("clear"), disassembly.get_label(dest, source, move_id), disassembly.get_label(dest + length, source, move_id)))
+
+        # Find a temporary memory range we can use to move existing code out of the way (if needed)
+        temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end = self.find_temporary_area(dest, source, length)
+        if overlap_length > 0:
+            comment_prefix = "4. "
+        else:
+            comment_prefix = ""
+        result.append(self.format_comment(comment_prefix + "Copy the newly assembled block of code back to it's proper place in the binary file.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
+
+        # Output COPYBLOCK command
+        result.append("%s%s %s, %s, %s" % (utils.make_indent(1),
+            utils.force_case("copyblock"),
+            disassembly.get_label(dest,          source, move_id),
+            disassembly.get_label(dest + length, source, move_id),
+            disassembly.get_label(source,        source, move_id)))
+
+        # Output CLEAR command
+        result.append("")
+        result.append(self.format_comment(comment_prefix + "Clear the area of memory we just temporarily used to assemble the new block, allowing us to assemble there again if needed"))
+        result.append("%s%s %s, %s" % (utils.make_indent(1),
+            utils.force_case("clear"),
+            self.hex(area_to_clear_start),
+            self.hex(area_to_clear_end)))
+
+        if overlap_length > 0:
+            # Output COPYBLOCK command
+            result.append("")
+            result.append(self.format_comment("5. Copy the previous existing code back to it's proper place in the binary file.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
+            result.append("%s%s %s, %s, %s" % (utils.make_indent(1),
+                utils.force_case("copyblock"),
+                self.hex(temp_start),
+                self.hex(temp_start + overlap_length),
+                disassembly.get_label(overlap_start, source, move_id)))
+            result.append("")
+            result.append(self.format_comment("6. Clear the temporary code area so we can assemble there in the future if needed."))
+            result.append("%s%s %s, %s" % (utils.make_indent(1),
+                utils.force_case("clear"),
+                self.hex(temp_start),
+                self.hex(temp_start + overlap_length)))
+
+        # Output ORG command
+        result.append("")
+        if overlap_length > 0:
+            comment_prefix = "7. "
+        else:
+            comment_prefix = ""
+        result.append(self.format_comment(comment_prefix + "Set the program counter to the next position in the binary file."))
+        result.append("%s%s %s + (%s - %s)" % (utils.make_indent(1),
+            utils.force_case("org"),
+            disassembly.get_label(source,        source, move_id),
+            disassembly.get_label(dest + length, source, move_id),
+            disassembly.get_label(dest,          source, move_id)))
+
         result.append("")
         return result
 
