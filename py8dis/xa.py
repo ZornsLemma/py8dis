@@ -190,7 +190,9 @@ class Xa(assembler.Assembler):
         if chr(c) == '"':
             return "\", 34, \""
         if chr(c) == '^':
-            return "^" + chr(c)
+            return "\", 94, \""
+        if chr(c) == '\\':
+            return "\\\\"
         # xa has a bug which can affect strings containing '/', so we force them
         # to be encoded specially. See
         # https://stardot.org.uk/forums/viewtopic.php?p=351954#p351954 for more.

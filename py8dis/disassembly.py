@@ -503,7 +503,8 @@ def calculate_move_ranges():
                 current_range_end = binary_addr + 1
                 current_range_move_id = movemanager.move_id_for_binary_addr[binary_addr]
             binary_addr += 1
-    if current_range_start  != (current_range_end - 1):
+
+    if current_range_start != current_range_end:
         move_ranges.append((current_range_start, current_range_end))
 
     return move_ranges
