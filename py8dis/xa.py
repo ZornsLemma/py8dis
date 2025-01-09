@@ -185,6 +185,10 @@ class Xa(assembler.Assembler):
         # When composing a literal character, this returns a character string
         # from an integer, or None if not possible
 
+        # Different versions of xa have different policies about which characters
+        # can be freely expressed in a string. We work around this by encoding any
+        # problematic characters as numbers.
+
         # Workaround for a bug in xa that means an escaped double quote in a
         # string doesn't play well with a // comment, causing a syntax error
         if chr(c) == '"':
@@ -192,7 +196,7 @@ class Xa(assembler.Assembler):
         if chr(c) == '^':
             return "\", 94, \""
         if chr(c) == '\\':
-            return "\\\\"
+            return "\", 92, \""
         # xa has a bug which can affect strings containing '/', so we force them
         # to be encoded specially. See
         # https://stardot.org.uk/forums/viewtopic.php?p=351954#p351954 for more.
