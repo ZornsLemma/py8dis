@@ -126,18 +126,15 @@ class Xa(assembler.Assembler):
     # "unacceptable" label for pseudopc_end(), so although this may
     # indicate a sub-optimal choice of label in general, I will just
     # hard-code the use of these labels. OK, that *still* doesn't work...
-    def pseudopc_start(self, dest, source, length):
+    def pseudopc_start(self, dest, source, length, move_id):
         # Used when assembling code at a different address to where it will actually execute.
-        move_id = movemanager.move_id_for_binary_addr[source]
 
         #disassembly.add_label(dest, "pseudopc_start_%d" % self.pseudopc_index, move_id)
         #disassembly.add_label(dest + length, "pseudopc_end_%d" % self.pseudopc_index, move_id)
         self.pseudopc_index += 1
         return ["* = %s" % self.hex(dest)]
 
-    def pseudopc_end(self, dest, source, length):
-        move_id = movemanager.move_id_for_binary_addr[source]
-
+    def pseudopc_end(self, dest, source, length, move_id):
         # TODO: Hard-coding a literal address here is very
         # unsatisfactory but (as noted in TODO just above
         # pseudopc_start()) I am struggling to make anything else work.

@@ -100,7 +100,7 @@ class Beebasm(assembler.Assembler):
 
         return temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end
 
-    def pseudopc_start(self, dest, source, length):
+    def pseudopc_start(self, dest, source, length, move_id):
         # Used when assembling code at a different address to where it will
         # actually execute.
 
@@ -119,12 +119,10 @@ class Beebasm(assembler.Assembler):
             result.append("")
             result.append(self.format_comment("3. Assemble the new block at it's runtime address."))
 
-        move_id = movemanager.move_id_for_binary_addr[source]
         result.append(utils.make_indent(1) + utils.force_case("org %s" % self.hex(dest)))
-        # TODO: We will need some labels in pseudopc_end() but by then
-        # it will be too late to create them, so do it now. Is this
-        # hacky or OK?
-        #
+        # We will need some labels in pseudopc_end() but by then
+        # it will be too late to create them, so do it now.
+
         # TODO: The idea of including move_id here is to force the
         # labels to be emitted "around" the pseudopc-emulation block,
         # which is both more readable and necessary in some cases to
@@ -132,7 +130,7 @@ class Beebasm(assembler.Assembler):
         # declared. It isn't working quite right yet.
         disassembly.get_label(dest, source, move_id)
         disassembly.get_label(dest + length, source, move_id)
-        disassembly.get_label(source, source, move_id)
+        disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id)
         return result
 
     # TODO: General comment - I've currently given up on generating
@@ -141,12 +139,11 @@ class Beebasm(assembler.Assembler):
     # "guard=x" and there's only one such guard active at a time, so we
     # need to set it at the end of distinct non-adjoining ranges (I
     # think)
-    def pseudopc_end(self, dest, source, length):
+    def pseudopc_end(self, dest, source, length, move_id):
         assert isinstance(dest, memorymanager.RuntimeAddr)
         assert isinstance(source, memorymanager.BinaryAddr)
 
         result = [""]
-        # TODO: Use LazyString?
         move_id = movemanager.move_id_for_binary_addr[source]
 
         # Find a temporary memory range we can use to move existing code out of the way (if needed)
@@ -158,11 +155,10 @@ class Beebasm(assembler.Assembler):
         result.append(self.format_comment(comment_prefix + "Copy the newly assembled block of code back to it's proper place in the binary file.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
 
         # Output COPYBLOCK command
-        result.append("%s%s %s, %s, %s" % (utils.make_indent(1),
+        result.append("%s%s %s, *, %s" % (utils.make_indent(1),
             utils.force_case("copyblock"),
-            disassembly.get_label(dest,          source, move_id),
-            disassembly.get_label(dest + length, source, move_id),
-            disassembly.get_label(source,        source, move_id)))
+            disassembly.get_label(dest,                                 source, move_id),
+            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id)))
 
         # Output CLEAR command
         result.append("")
@@ -180,7 +176,7 @@ class Beebasm(assembler.Assembler):
                 utils.force_case("copyblock"),
                 self.hex(temp_start),
                 self.hex(temp_start + overlap_length),
-                disassembly.get_label(overlap_start, source, move_id)))
+                self.hex(overlap_start)))
             result.append("")
             result.append(self.format_comment("6. Clear the temporary code area so we can assemble there in the future if needed."))
             result.append("%s%s %s, %s" % (utils.make_indent(1),
@@ -195,10 +191,9 @@ class Beebasm(assembler.Assembler):
         else:
             comment_prefix = ""
         result.append(self.format_comment(comment_prefix + "Set the program counter to the next position in the binary file."))
-        result.append("%s%s %s + (%s - %s)" % (utils.make_indent(1),
+        result.append("%s%s %s + (* - %s)" % (utils.make_indent(1),
             utils.force_case("org"),
-            disassembly.get_label(source,        source, move_id),
-            disassembly.get_label(dest + length, source, move_id),
+            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id),
             disassembly.get_label(dest,          source, move_id)))
 
         result.append("")

@@ -251,10 +251,10 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
         hook = trace.cpu.default_subroutine_hook
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
 
     # if the subroutine in within the binary, output a header comment for it.
-    if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
+    if memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr):
         # Format a comment for the subroutine header
         if config.get_subroutine_header() is not None:
             auto_comment(runtime_addr, config.get_subroutine_header(), word_wrap=False)
@@ -323,8 +323,8 @@ def annotate(runtime_addr, s, priority=None):
 
     # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    disassembly.add_raw_annotation(binary_addr, s, priority)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    disassembly.add_raw_annotation(binary_loc, s, priority)
 
 def blank(runtime_addr, priority=None):
     annotate(runtime_addr, "", priority)
@@ -348,16 +348,16 @@ def expr(runtime_addr, s):
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr)
 
     if isinstance(s, dict):
         # Dictionary supplied.
         # Look up value in binary, and use that as key in dictionary
-        val = get_u8_binary(binary_addr)
-        classification.add_expression(binary_addr, s[val])
+        val = get_u8_binary(binary_loc.binary_addr)
+        classification.add_expression(binary_loc.binary_addr, s[val])
     else:
-        classification.add_expression(binary_addr, s)
+        classification.add_expression(binary_loc.binary_addr, s)
 
 def auto_expr(runtime_addr, s):
     """For internal use only. Generates an expression if not inhibited."""
@@ -377,20 +377,20 @@ def byte(runtime_addr, n=1, cols=None):
     """Categorise a number of bytes at the given address as byte data."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    if not memorymanager.check_data_loaded_at_binary_addr(binary_addr, n, True):
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    if not memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, n, True):
         return
-    disassembly.add_classification(binary_addr, classification.Byte(n, cols=cols))
+    disassembly.add_classification(binary_loc.binary_addr, classification.Byte(n, cols=cols))
 
 # TODO: byte()/word() should probably optionally (via an optional arg or a variant function) allow the user to specify a format hint for the range without having to make a separate call to the relevant formatter function with the same arguments. Just maybe an optional argument "format_command=None" where we do "if format_command is not None: format_command(runtime_addr, n)" would work, then you could do "word(0x432, 4, picture_binary)" (if we squeezed formatter in before warn=True argument; this is all getting a smidge messy, especially if the user is forced to specify 1 for the n argument) - anyway, think about it...
 def word(runtime_addr, n=1, cols=None):
     """Categorise a number of 16 bit words at the given address as word data."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    if not memorymanager.check_data_loaded_at_binary_addr(binary_addr, n * 2, True):
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    if not memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, n * 2, True):
         return
-    disassembly.add_classification(binary_addr, classification.Word(n * 2, cols=cols))
+    disassembly.add_classification(binary_loc.binary_addr, classification.Word(n * 2, cols=cols))
 
 def entry(runtime_addr, label=None, warn=True):
     """
@@ -402,16 +402,16 @@ def entry(runtime_addr, label=None, warn=True):
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
-    # TODO: Should probably warn rather than assert in other fns too
-    memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
 
-    trace.cpu.add_entry(binary_addr, label, move_id)
-    if utils.is_string_type(label):
-        return label
-    return disassembly.get_label(runtime_addr, binary_addr, move_id)
+    memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, 1, warn)
 
-# TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
+    trace.cpu.add_entry(binary_loc.binary_addr, runtime_addr, binary_loc.move_id, label)
+
+    result = disassembly.get_label(runtime_addr, binary_loc.binary_addr, binary_loc.move_id)
+
+    return result
+
 def nonentry(runtime_addr):
     """
     Marks an address as 'not to be traced as code'.
@@ -424,10 +424,10 @@ def nonentry(runtime_addr):
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr)
 
-    trace.cpu.traced_entry_points.add(binary_addr)
+    trace.cpu.traced_entry_points.add(binary_loc.binary_addr)
 
 def wordentry(runtime_addr, n=1):
     """
@@ -441,10 +441,14 @@ def wordentry(runtime_addr, n=1):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     word(runtime_addr, n)
     for i in range(n):
-        binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-        assert memorymanager.is_data_loaded_at_binary_addr(binary_addr, 2)
-        expr(runtime_addr, entry(get_u16_binary(binary_addr)))
+        binary_loc = movemanager.r2b_checked(runtime_addr)
+        assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr, 2)
+        entry_runtime_addr = get_u16_binary(binary_loc.binary_addr)
+        entry_label = entry(entry_runtime_addr)
+        expr(runtime_addr, entry_label)
+
         runtime_addr += 2
+
     return runtime_addr
 
 # TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
@@ -572,8 +576,8 @@ def set_formatter(runtime_addr, n, formatter):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     assert n > 0
     for i in range(n):
-        binary_addr, _ = movemanager.r2b_checked(runtime_addr + i)
-        disassembly.format_hint[binary_addr] = formatter
+        binary_loc = movemanager.r2b_checked(runtime_addr + i)
+        disassembly.format_hint[binary_loc.binary_addr] = formatter
 
 def uint(runtime_addr, n=1):
     """Specifies uint formatting for data in the given block"""
@@ -774,8 +778,15 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     # Mark everything remaining as bytes
     classification.classify_leftovers()
 
-    # Output assembly code
-    return disassembly.emit(print_output=print_output)
+    # Get the assembly
+    result = disassembly.emit()
+
+    # Output assembly code if wanted
+    if print_output:
+        print(result)
+
+    # Return assembly code as a string
+    return result
 
 # Command line parsing
 parser = argparse.ArgumentParser()

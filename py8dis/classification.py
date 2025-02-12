@@ -73,8 +73,8 @@ class Byte(object):
     def is_code(self, binary_addr):
         return False
 
-    def as_string_list(self, binary_addr, annotations):
-        return mainformatter.format_data_block(binary_addr, self._length, self._cols, 1, annotations)
+    def as_string_list(self, binary_loc, annotations):
+        return mainformatter.format_data_block(binary_loc, self._length, self._cols, 1, annotations)
 
 
 class Word(object):
@@ -96,8 +96,8 @@ class Word(object):
     def is_code(self, binary_addr):
         return False
 
-    def as_string_list(self, binary_addr, annotations):
-        return mainformatter.format_data_block(binary_addr, self._length, self._cols, 2, annotations)
+    def as_string_list(self, binary_loc, annotations):
+        return mainformatter.format_data_block(binary_loc, self._length, self._cols, 2, annotations)
 
 
 class String(object):
@@ -117,14 +117,15 @@ class String(object):
     def is_code(self, binary_addr):
         return False
 
-    def as_string_list(self, binary_addr, annotations):
+    def as_string_list(self, binary_loc, annotations):
         result = []
         prefix = utils.make_indent(1) + assembler().string_prefix()
         s = prefix
         state = 0
         s_i = 0
+
         for i in range(self._length):
-            c = memory_binary[binary_addr + i]
+            c = memory_binary[binary_loc.binary_addr + i]
             c_in_string = assembler().string_chr(c)
             if c_in_string is not None:
                 if state == 0:
@@ -142,18 +143,20 @@ class String(object):
                 if c == ord('"'):
                     s += "'\"'"
                 else:
-                    s += get_constant8(binary_addr + i)
+                    s += get_constant8(binary_loc.binary_addr + i)
             if len(s) > (config.get_inline_comment_column() - 5):
                 if state == 1:
                     s += '"'
-                result.append(mainformatter.add_inline_comment(binary_addr + s_i, i - s_i, "", annotations, s))
+                temp_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + s_i, binary_loc.move_id)
+                result.append(mainformatter.add_inline_comment(temp_binary_loc, i - s_i, "", annotations, s))
                 s = prefix
                 s_i = i + 1
                 state = 0
         if s != prefix:
             if state == 1:
                 s += '"'
-            result.append(mainformatter.add_inline_comment(binary_addr + s_i, self._length - s_i, "", annotations, s))
+            temp_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + s_i, binary_loc.move_id)
+            result.append(mainformatter.add_inline_comment(temp_binary_loc, self._length - s_i, "", annotations, s))
         return result
 
 
@@ -233,16 +236,16 @@ def stringterm(runtime_addr, terminator, exclude_terminator=False):
     Returns the next available memory address after the string."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    initial_addr = binary_addr
-    while memory_binary[binary_addr] != terminator:
-        binary_addr += 1
-    string_length = (binary_addr + 1) - initial_addr
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    initial_addr = binary_loc.binary_addr
+    while memory_binary[binary_loc.binary_addr] != terminator:
+        binary_loc.binary_addr += 1
+    string_length = (binary_loc.binary_addr + 1) - initial_addr
     if exclude_terminator:
         string_length -= 1
     if string_length > 0:
         disassembly.add_classification(initial_addr, String(string_length))
-    return movemanager.b2r(binary_addr + 1)
+    return movemanager.b2r(binary_loc.binary_addr + 1)
 
 def stringcr(runtime_addr, exclude_terminator=False):
     """Classifies part of the binary as a string followed by ASCII 13.
@@ -268,15 +271,15 @@ def string(runtime_addr, n=None):
     Returns the next available memory address after the string."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
     if n is None:
-        assert not disassembly.is_classified(binary_addr), "Address " + hex(binary_addr) + " already classified"
+        assert not disassembly.is_classified(binary_loc.binary_addr), "Address " + hex(binary_loc.binary_addr) + " already classified"
         n = 0
-        while not disassembly.is_classified(binary_addr + n) and utils.isprint(memory_binary[binary_addr + n]):
+        while not disassembly.is_classified(binary_loc.binary_addr + n) and utils.isprint(memory_binary[binary_loc.binary_addr + n]):
             n += 1
     if n > 0:
-        disassembly.add_classification(binary_addr, String(n))
-    return movemanager.b2r(binary_addr + n)
+        disassembly.add_classification(binary_loc.binary_addr, String(n))
+    return movemanager.b2r(binary_loc.binary_addr + n)
 
 def stringhi(runtime_addr, include_terminator_fn=None):
     """Classifies a part of the binary as a string up to the next bit 7 set character.
@@ -287,45 +290,45 @@ def stringhi(runtime_addr, include_terminator_fn=None):
     Returns the next available memory address after the string."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert not disassembly.is_classified(binary_addr, 1)
-    initial_addr = binary_addr
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert not disassembly.is_classified(binary_loc.binary_addr, 1)
+    initial_addr = binary_loc.binary_addr
     while True:
-        if disassembly.is_classified(binary_addr, 1):
+        if disassembly.is_classified(binary_loc.binary_addr, 1):
             break
-        if memory_binary[binary_addr] & 0x80 != 0:
-            if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_addr]):
-                c = memory_binary[binary_addr] & 0x7f
+        if memory_binary[binary_loc.binary_addr] & 0x80 != 0:
+            if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_loc.binary_addr]):
+                c = memory_binary[binary_loc.binary_addr] & 0x7f
                 if utils.isprint(c) and c != ord('"') and c != ord('\''):
-                    add_expression(binary_addr, "%s+'%s'" % (assembler().hex2(0x80), chr(c)))
+                    add_expression(binary_loc.binary_addr, "%s+'%s'" % (assembler().hex2(0x80), chr(c)))
                 else:
-                    add_expression(binary_addr, "%s+%s" % (assembler().hex2(0x80), assembler().hex2(c)))
-                binary_addr += 1
+                    add_expression(binary_loc.binary_addr, "%s+%s" % (assembler().hex2(0x80), assembler().hex2(c)))
+                binary_loc.binary_addr += 1
             break
-        binary_addr += 1
-    if binary_addr > initial_addr:
-        disassembly.add_classification(initial_addr, String(binary_addr - initial_addr))
-    return movemanager.b2r(binary_addr)
+        binary_loc.binary_addr += 1
+    if binary_loc.binary_addr > initial_addr:
+        disassembly.add_classification(initial_addr, String(binary_loc.binary_addr - initial_addr))
+    return movemanager.b2r(binary_loc.binary_addr)
 
 # Behaviour with include_terminator_fn=None should be beebdis-compatible.
 def stringhiz(runtime_addr, include_terminator_fn=None):
     """Classifies a part of the binary as a string up to the next bit 7 set character or zero character."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert not disassembly.is_classified(binary_addr, 1)
-    initial_addr = binary_addr
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert not disassembly.is_classified(binary_loc.binary_addr, 1)
+    initial_addr = binary_loc.binary_addr
     while True:
-        if disassembly.is_classified(binary_addr, 1):
+        if disassembly.is_classified(binary_loc.binary_addr, 1):
             break
-        if memory_binary[binary_addr] == 0 or (memory_binary[binary_addr] & 0x80) != 0:
-            if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_addr]):
-                binary_addr += 1
+        if memory_binary[binary_loc.binary_addr] == 0 or (memory_binary[binary_loc.binary_addr] & 0x80) != 0:
+            if include_terminator_fn is not None and include_terminator_fn(memory_binary[binary_loc.binary_addr]):
+                binary_loc.binary_addr += 1
             break
-        binary_addr += 1
-    if binary_addr > initial_addr:
-        disassembly.add_classification(initial_addr, String(binary_addr - initial_addr))
-    return movemanager.b2r(binary_addr)
+        binary_loc.binary_addr += 1
+    if binary_loc.binary_addr > initial_addr:
+        disassembly.add_classification(initial_addr, String(binary_loc.binary_addr - initial_addr))
+    return movemanager.b2r(binary_loc.binary_addr)
 
 def stringn(runtime_addr):
     """Classifies a part of the binary as a string with the first byte
@@ -334,10 +337,10 @@ def stringn(runtime_addr):
     Returns the next available memory address after the string."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    disassembly.add_classification(binary_addr, Byte(1))
-    length = memory_binary[binary_addr]
-    add_expression(binary_addr, utils.LazyString("%s - %s", disassembly.get_label(runtime_addr + 1 + length, binary_addr), disassembly.get_label(runtime_addr + 1, binary_addr)))
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    disassembly.add_classification(binary_loc.binary_addr, Byte(1))
+    length = memory_binary[binary_loc.binary_addr]
+    add_expression(binary_loc.binary_addr, utils.LazyString("%s - %s", disassembly.get_label(runtime_addr + 1 + length, binary_loc.binary_addr), disassembly.get_label(runtime_addr + 1, binary_loc.binary_addr)))
     return string(runtime_addr + 1, length)
 
 def autostring(min_length=3):

@@ -14,12 +14,14 @@ import mainformatter
 import memorymanager
 import movemanager
 import utils
+from memorymanager import BinaryLocation
 
 cpu                              = None     # an object of class Cpu
 subroutine_argument_finder_hooks = []       # Python routines ('hooks') for naming constant arguments to subroutines
 substitute_constant_list         = []       # List of SubConst() objects (see cpu6502) for naming constants
 subroutines_list                 = []       # List of Subroutine() objects
 no_auto_comment_set              = set()    # runtime addresses not to be auto-commented
+references                       = None     # dictionary of references keyed by binary location
 
 class Subroutine(object):
     """Data describing a subroutine."""
@@ -70,6 +72,10 @@ class Cpu(object):
 
         Identifies the opcode and calls into the opcode object to do
         the actual disassembly.
+
+        Returns a list of possible new addresses, the first entry
+        being the address of the next instruction, and the next
+        entry being the destination of a jump or branch instruction.
         """
 
         assert isinstance(binary_addr, memorymanager.BinaryAddr)
@@ -78,31 +84,38 @@ class Cpu(object):
             return [None]
         opcode = self.opcodes[opcode_value]
 
-        # If we hit something that's already classified, we can't/don't
-        # re-classify it but that doesn't mean we can't continue to
-        # trace until something breaks the control flow.
-        if disassembly.is_classified(binary_addr, 1 + opcode.operand_length):
-            # TODO: The machinations required to format the comment
-            # here are a bit annoying.
-            s = opcode.as_string(binary_addr)
+        with movemanager.move_id_for_binary_addr[binary_addr] as move_id:
+            binary_loc = BinaryLocation(binary_addr, move_id)
 
-            def late_formatter():
-                return mainformatter.add_inline_comment(binary_addr, opcode.length(), "", None, config.get_assembler().comment_prefix() + " overlapping: " + str(s)[4:])
+            # If we hit something that's already classified, we can't/don't
+            # re-classify it but that doesn't mean we can't continue to
+            # trace until something breaks the control flow.
+            if disassembly.is_classified(binary_addr, 1 + opcode.operand_length):
+                # TODO: The machinations required to format the comment
+                # here are a bit annoying.
+                s = opcode.as_string(binary_addr)
 
-            disassembly.add_raw_annotation(binary_addr, utils.LazyString("%s", late_formatter))
-        else:
-            # Classify the address as code
-            disassembly.add_classification(binary_addr, opcode)
-            opcode.update_references(binary_addr)
+                def late_formatter():
+                    return mainformatter.add_inline_comment(binary_loc, opcode.length(), "", None, config.get_assembler().comment_prefix() + " overlapping: " + str(s)[4:])
 
-        # Call the opcode routine to actually disassemble the instruction
-        return opcode.disassemble(binary_addr)
+                disassembly.add_raw_annotation(binary_loc, utils.LazyString("%s", late_formatter))
+            else:
+                # Classify the address as code
+                disassembly.add_classification(binary_addr, opcode)
+                opcode.update_references(binary_loc)
 
-    def add_entry(self, binary_addr, name, move_id):
+            # Call the opcode routine to actually disassemble the instruction
+            result = opcode.disassemble(binary_loc)
+            return result
+
+    def add_entry(self, binary_addr, runtime_addr, move_id, name):
         """Add code entry point"""
 
+        assert not isinstance(binary_addr, memorymanager.RuntimeAddr)
+        assert not isinstance(runtime_addr, memorymanager.BinaryAddr)
         self.entry_points.append(binary_addr)
-        disassembly.add_label(movemanager.b2r(binary_addr), name, move_id)
+        runtime_addr = movemanager.b2r(binary_addr)
+        disassembly.add_label(runtime_addr, name, move_id)
 
     def analyse_code(self):
         """Calculates what we know about the CPU state for each instruction
@@ -154,12 +167,13 @@ class Cpu(object):
                     self.entry_points.append(implied_entry_point)
 
                 for new_entry_point in new_entry_points:
-                    self.add_entry(new_entry_point, name=None, move_id=movemanager.move_id_for_binary_addr[new_entry_point])
+                    move_id = movemanager.move_id_for_binary_addr[new_entry_point]
+                    runtime_addr = movemanager.b2r(new_entry_point)
+                    self.add_entry(new_entry_point, runtime_addr, move_id=move_id, name=None)
 
         # Debugging
-        if False:
-            for addr, label in sorted(self.labels.items(), key=lambda x: x[0]):
-                print("XXX %04x %s" % (label.runtime_addr, " ".join("%04x" % x[0] for x in label.references)))
+        #for addr, label in sorted(self.labels.items(), key=lambda x: x[0]):
+        #    print("XXX %04x %s" % (label.runtime_addr, " ".join("%04x" % x[0] for x in label.references)))
 
         # Calculate the CPU states and analyse the code
         self.analyse_code()
@@ -176,24 +190,51 @@ class Cpu(object):
 
         A label holds the binary_address of each location that references the label."""
 
+        # DEBUG
+        #for runtime_addr, label in self.labels.items():
+        #    utils.debug("label {0} at runtime_addr: {1} has references: {2}".format(label.all_names(), hex(runtime_addr), [hex(x.binary_addr) for x in label.references]))
+
         global references
         references = collections.defaultdict(list)
-        for runtime_addr, label in self.labels.items():
-            runtime_addr = memorymanager.RuntimeAddr(runtime_addr) # TODO: OK? Should keys in this dict be RuntimeAddrs to start with?
-            binary_addr, _ = movemanager.r2b(runtime_addr)
 
-            if binary_addr is not None:
-                for ref_binary_addr in label.references:
-                    references[binary_addr].append(ref_binary_addr)
+        for runtime_addr, label in self.labels.items():
+            if label.references:
+                label_move_id = label.relevant_active_move_ids[0] if label.relevant_active_move_ids else None
+
+                binary_addr, move_id = movemanager.r2b(runtime_addr, label_move_id)
+                if binary_addr == None:
+                    # get the first of the possible move_ids suggested by the references and try that
+                    best_guess_move_id = next(iter(sorted([ref_binary_loc.move_id for ref_binary_loc in label.references])), None)
+                    binary_addr, move_id = movemanager.r2b(runtime_addr, best_guess_move_id)
+                    if binary_addr == None:
+                        binary_addr, move_id = movemanager.r2b(runtime_addr, None)
+
+                if binary_addr != None:
+                    binary_loc = BinaryLocation(binary_addr, move_id)
+                    references[binary_loc].extend(label.references)
+
+        # DEBUG
+        #for runtime_addr, label in self.labels.items():
+        #    utils.debug("label {0} at runtime_addr: {1} has references: {2}".format(label.all_names(), hex(runtime_addr), [hex(x.binary_addr) for x in label.references]))
+
+    def format_runtime_location(self, runtime_addr, move_id):
+        result = config.get_assembler().hex4(runtime_addr)
+        #TODO: Once it's all working, re-add this bit
+        #if move_id != movemanager.base_move_id:
+        #    result += "[{0}]".format(move_id)
+        return result
+
+    def format_binary_location(self, binary_loc):
+        return config.get_assembler().hex4(binary_loc.binary_addr)
 
     def add_references_comments(self):
         """Add comments showing the references"""
 
         global references
-        for binary_addr, binary_addr_refs in references.items():
-            count = utils.count_with_units(len(binary_addr_refs), "time", "times")
-            address_list = ", ".join(sorted(config.get_assembler().hex4(movemanager.b2r(ref_binary_addr)) for ref_binary_addr in binary_addr_refs))
-            comment = "%s referenced %s by %s" % (config.get_assembler().hex4(binary_addr), count, address_list)
+        for binary_loc, ref_binary_locs in references.items():
+            count = utils.count_with_units(len(ref_binary_locs), "time", "times")
+            address_list = ", ".join(sorted(self.format_runtime_location(movemanager.b2r(ref_binary_loc.binary_addr), ref_binary_loc.move_id) for ref_binary_loc in ref_binary_locs))
+            comment = "{0} referenced {1} by {2}".format(self.format_binary_location(binary_loc), count, address_list)
 
             # TODO: Where the comment has to be emitted slightly out of
             # place due to a classification, this becomes a bit
@@ -209,7 +250,7 @@ class Cpu(object):
             # labels for the same address) - for the moment I am always
             # including 'addr' in the comment which helps a bit but
             # isn't ideal
-            disassembly.comment_binary(binary_addr, comment, inline=False, word_wrap=False)
+            disassembly.comment_binary(binary_loc, comment, inline=False, word_wrap=False)
 
     def add_reference_histogram(self):
         """Output a histogram of label references."""
@@ -218,13 +259,25 @@ class Cpu(object):
         if len(references) == 0:
             return []
         result = [""]
-        frequency_table = [(addr, len(addr_refs)) for addr, addr_refs in references.items()]
-        frequency_table = sorted(frequency_table, key=lambda x: (x[1], -x[0]), reverse=True)
-        longest_label = max(len(disassembly.get_label(addr, addr)) for addr in references)
+
         comment = config.get_assembler().comment_prefix()
         result.append("%s Label references by decreasing frequency:" % comment)
-        for addr, count in frequency_table:
-            result.append("%s     %-*s %3d" % (comment, longest_label+1, disassembly.get_label(addr, addr) + ":", count))
+
+        frequency_table = collections.defaultdict(int)
+
+        longest_label_length = 0
+        for runtime_addr, label in labelmanager.labels.items():
+            if label.references:
+                for move_id, names in label.all_names_by_move_id().items():
+                    for name in names:
+                        longest_label_length = max(longest_label_length, len(name))
+                        frequency_table[name] += len(label.references)
+
+        frequency_table = sorted(frequency_table.items(), key=lambda x: (-x[1], x[0]))
+        for name, count in frequency_table:
+            if count > 0:
+                result.append("%s     %-*s %3d" % (comment, longest_label_length+1, name + ":", count))
+
         return result
 
 # TODO: do commmands entry() and no_entry() need to do a lookup of

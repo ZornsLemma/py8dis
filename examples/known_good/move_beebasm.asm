@@ -1,6 +1,5 @@
 ; Memory locations
 l0070   = &0070
-l090f   = &090f
 lffe3   = &ffe3
 
     org &2000
@@ -25,10 +24,11 @@ lffe3   = &ffe3
     lda #&0d                                                          ; 2019: a9 0d       ..
     jmp lffe3                                                         ; 201b: 4c e3 ff    L..
 
+; &201e referenced 1 time by &2002
 .c201e
 
     org &0900
-; &201e referenced 3 times by &2002, &2005, &2013
+; &201e referenced 2 times by &2005, &2013
 .print_and_inc_zp
     lda l0070                                                         ; 201e: a5 70       .p  :0900[1]
     jsr sub_c0908                                                     ; 2020: 20 08 09     .. :0902[1]
@@ -42,28 +42,36 @@ lffe3   = &ffe3
     adc #1                                                            ; 202a: 69 01       i.  :090c[1]
     rts                                                               ; 202c: 60          `   :090e[1]
 
-    org c201e + (l090f - print_and_inc_zp)
-    copyblock print_and_inc_zp, l090f, c201e
-    clear print_and_inc_zp, l090f
+
+    ; Copy the newly assembled block of code back to it's proper place in the binary
+    ; file.
+    ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
+    copyblock print_and_inc_zp, *, c201e
+
+    ; Clear the area of memory we just temporarily used to assemble the new block,
+    ; allowing us to assemble there again if needed
+    clear &0900, &090f
+
+    ; Set the program counter to the next position in the binary file.
+    org c201e + (* - print_and_inc_zp)
 
 .pydis_end
 
 ; Label references by decreasing frequency:
-;     l0070:        3
-;     c201e:        3
-;     lffe3:        2
-;     loop_c2002:   1
-;     loop_c2013:   1
-;     sub_c2026:    1
+;     l0070:              3
+;     lffe3:              2
+;     print_and_inc_zp:   2
+;     c201e:              1
+;     loop_c2002:         1
+;     loop_c2013:         1
+;     sub_c0908:          1
 
 ; Automatically generated labels:
 ;     c201e
 ;     l0070
-;     l090f
 ;     lffe3
 ;     loop_c2002
 ;     loop_c2013
 ;     sub_c0908
-;     sub_c2026
 
 save pydis_start, pydis_end

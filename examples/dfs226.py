@@ -37,17 +37,17 @@ expr(0xaf31, "tube_brkv_handler_fwd")
 entry(0x0016, "tube_brkv_handler") # TODO: This is breaking beebasm because it gets emitted "inline" too late for other code to realise on the first pass it is a zero page label (and we can't declare it *also* as a constant, as we then get a redefinition error)
 expr(0xaf03, make_lo("tube_brkv_handler"))
 expr(0xaf08, make_hi("tube_brkv_handler"))
-comment(0xaf70, "Patch the following JMP so we effectively do JMP (&500,X)")
-blank(0xaf70) # TODO: silly, just to test
-comment(0xaf70, "Extra comment after a blank line") # TODO: silly, just to test
-annotate(0xaf70, "; manually-created comment") # TODO: silly, just to test
+comment(0x004e, "Patch the following JMP so we effectively do JMP (&500,X)")
+blank(0x004e) # TODO: silly, just to test
+comment(0x004e, "Extra comment after a blank line") # TODO: silly, just to test
+annotate(0x004e, "; manually-created comment") # TODO: silly, just to test
 
 label(0x51, "jump_address_low")
 expr(0x4f, config.get_assembler().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
 
 entry(0x435, "tube_entry_small_a")
 entry(0x428, "tube_entry_claim_tube")
-comment(0xaf87, "This is a call to release the tube.")
+comment(0x040e, "This is a call to release the tube.")
 comment(0x695, "Wait for register 2 to have space and write A to it.")
 entry(0x695, "write_tube_r2_data")
 comment(0x69e, "Wait for register 4 to have space and write A to it.")
@@ -182,7 +182,7 @@ for i in range(7):
     # which doesn't correspond to a valid address. (We could obviously cope with
     # this in other ways, such as disassembling the first part of the table
     # separately.)
-    code_at = memorymanager.get_u16_be_binary(pc) + 1
+    code_at = memorymanager.get_u16_be_runtime(pc) + 1
     if code_at <= 0xffff:
         rts_code_ptr(pc + 1, pc)
     pc += 2

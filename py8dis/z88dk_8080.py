@@ -53,12 +53,12 @@ class Z88DK(assembler.Assembler):
     def code_end(self):
         return []
 
-    def pseudopc_start(self, dest, source, length):
+    def pseudopc_start(self, dest, source, length, move_id):
         # Used when assembling code at a different address to where it will
         # actually execute. Sadly, z88dk does not support this.
         return ["", utils.force_case("; TODO: !pseudopc %s {" % self.hex(dest))]
 
-    def pseudopc_end(self, dest, source, length):
+    def pseudopc_end(self, dest, source, length, move_id):
         # Sadly, z88dk does not support this
         return ["; TODO: }", ""]
 

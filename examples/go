@@ -36,7 +36,7 @@ check_identical() {
 
     xxd -g1 "$original_dat" >build/temp1.hex
     xxd -g1 "$new_dat"      >build/temp2.hex
-    diff build/temp1.hex build/temp2.hex
+    diff --brief build/temp1.hex build/temp2.hex
 
     rm "build/temp1.hex"
     rm "build/temp2.hex"
@@ -48,7 +48,7 @@ check_disassemblies() {
 
     if [[ $check_disassembly -gt 0 ]]
     then
-        diff $known_good_asm $candidate_asm
+        diff --brief $known_good_asm $candidate_asm
     fi
 
     if [[ $make_known_good -gt 0 ]]

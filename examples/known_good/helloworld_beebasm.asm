@@ -21,9 +21,9 @@ lffe3   = &ffe3
 .pydis_end
 
 ; Label references by decreasing frequency:
-;     loop_c2002:   1
 ;     l200e:        1
 ;     lffe3:        1
+;     loop_c2002:   1
 
 ; Automatically generated labels:
 ;     l200e

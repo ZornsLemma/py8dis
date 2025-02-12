@@ -87,20 +87,19 @@ class Cpu65C02(Cpu6502):
             0xfd: self.OpcodeDataAbs(               "SBC addr,X",   "AU-", cycles="4c", update=self.update_adc_sbc),
         })
 
-    # TODO: This is probably wrong wrt moves; copy how OpcodeConditionalBranch works
     class OpcodeUnconditionalBranch(Cpu6502.Opcode):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu65C02.OpcodeUnconditionalBranch, self).__init__(instruction_template, reg_change, cycles=cycles)
 
         def target(self, binary_addr):
             base = movemanager.b2r(binary_addr)
-            return base + 2 + utils.signed8(memorymanager.get_u8_binary(binary_addr + 1))
+            return memorymanager.RuntimeAddr(base + 2 + utils.signed8(memorymanager.get_u8_binary(binary_addr + 1)))
 
         def abs_operand(self, binary_addr):
             return self.target(binary_addr)
 
-        def update_references(self, binary_addr):
-            trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.abs_operand(binary_loc.binary_addr)].add_reference(binary_loc)
 
         def could_be_call_to_subroutine(self):
             return True
@@ -108,8 +107,8 @@ class Cpu65C02(Cpu6502):
         def is_unconditional_branch(self):
             return True
 
-        def disassemble(self, binary_addr):
-            return [None] + trace.cpu.apply_move2(self.target(binary_addr), binary_addr)
+        def disassemble(self, binary_loc):
+            return [None] + trace.cpu.get_target_binary_addr_preferring_given_move_id(self.target(binary_loc.binary_addr), binary_loc.move_id)
 
         def as_string(self, binary_addr):
             return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self.target(binary_addr), binary_addr))
@@ -119,13 +118,13 @@ class Cpu65C02(Cpu6502):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu65C02.OpcodeJmpAbsX, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        def update_references(self, binary_addr):
-            trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.abs_operand(binary_loc.binary_addr)].add_reference(binary_loc)
 
         def is_block_end(self):
             return True
 
-        def disassemble(self, binary_addr):
+        def disassemble(self, binary_loc):
             return [None]
 
     def update_z(self, binary_addr, state):

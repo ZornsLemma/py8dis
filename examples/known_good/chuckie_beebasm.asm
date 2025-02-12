@@ -6140,9 +6140,18 @@ osbyte                  = &fff4
     equb 17, 17                                                       ; 37f6: 11 11       ..  :10f6[1]
 .unused3
     equs "UB(4): E"                                                   ; 37f8: 55 42 28... UB( :10f8[1]
-    org codemain_end + (spritetable - showkeys)
-    copyblock showkeys, spritetable, codemain_end
-    clear showkeys, spritetable
+
+    ; Copy the newly assembled block of code back to it's proper place in the binary
+    ; file.
+    ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
+    copyblock showkeys, *, codemain_end
+
+    ; Clear the area of memory we just temporarily used to assemble the new block,
+    ; allowing us to assemble there again if needed
+    clear &0900, &1100
+
+    ; Set the program counter to the next position in the binary file.
+    org codemain_end + (* - showkeys)
 
 .pydis_end
     assert ((map0ladder_end - map0ladder_start) / 3) == &04

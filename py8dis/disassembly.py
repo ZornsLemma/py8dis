@@ -23,6 +23,7 @@ import memorymanager
 import movemanager
 import trace
 import utils
+from movemanager import BinaryLocation
 
 # A user supplied function that creates a label name based on context
 user_label_maker_hook = None
@@ -80,27 +81,29 @@ def comment(runtime_addr, text, inline=False, word_wrap=True, indent=0):
     The comment can be automatically word wrapped.
     """
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
-    comment_binary(binary_addr, text, inline, word_wrap, indent)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr)
 
-def comment_binary(binary_addr, text, inline, word_wrap, indent=0, priority=None):
+    comment_binary(binary_loc, text, inline, word_wrap, indent)
+
+def comment_binary(binary_loc, text, inline, word_wrap, indent=0, priority=None):
     """Add a comment, either inline or standalone."""
 
+    binary_loc = movemanager.make_binloc(binary_loc)
     new_comment = Comment(text, inline, word_wrap, indent, priority)
 
-    # Avoid adding the same comment multiple times at the same address
-    for entry in annotations[binary_addr]:
-        if entry.as_string(binary_addr) == new_comment.as_string(binary_addr):
+    # Avoid adding the same comment multiple times at the same location
+    for entry in annotations[binary_loc]:
+        if entry.as_string(binary_loc.binary_addr) == new_comment.as_string(binary_loc.binary_addr):
             return
 
-    annotations[binary_addr].append(new_comment)
+    annotations[binary_loc].append(new_comment)
 
-def add_raw_annotation(binary_addr, text, inline=False, priority=None):
+def add_raw_annotation(binary_loc, text, inline=False, priority=None):
     """Add a raw string to the output."""
 
-    annotations[binary_addr].append(Annotation(text, inline, priority))
+    binary_loc = movemanager.make_binloc(binary_loc)
+    annotations[binary_loc].append(Annotation(text, inline, priority))
 
 def add_constant(value, name):
     """Create a named constant value."""
@@ -138,8 +141,11 @@ def add_label(runtime_addr, s, move_id):
             label.add_explicit_name(s, move_id)
         else:
             label.add_expression(s, move_id)
-    else:
-        label.move_id = move_id
+
+    # Make sure the move_id specified is in the list of relevant and active move ids, since it can
+    # be used to annotate the reference
+    if move_id and move_id not in label.relevant_active_move_ids:
+        label.relevant_active_move_ids.append(move_id)
 
     return label
 
@@ -175,18 +181,17 @@ def add_local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     label = labelmanager.labels[runtime_addr]
     label.add_local_label(name, start_addr, end_addr, move_id)
 
-# TODO: Later it might make sense for context to default to None, but for now don't want this.
-def get_label(runtime_addr, context, move_id=None):
+def get_label(runtime_addr, binary_addr, move_id=None):
     """Get a label name (a lazy string) for the given runtime address.
 
-    `context` is the equivalent binary address.
+    `binary_addr` is the equivalent binary address.
     `move_id` is for the active move."""
 
-    runtime_addr = int(runtime_addr)
-    context = memorymanager.BinaryAddr(context)
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_addr = memorymanager.BinaryAddr(binary_addr)
 
     assert memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
-    assert memorymanager.is_valid_binary_addr(context)
+    assert memorymanager.is_valid_binary_addr(binary_addr)
     assert move_id is None or movemanager.is_valid_move_id(move_id)
 
     # We ensure the labelmanager knows there's a label at this address so it can
@@ -195,10 +200,10 @@ def get_label(runtime_addr, context, move_id=None):
     # early as possible - for example, this means post-tracing code analysis can
     # see where labels exist and what references them.
 
-    # Ensure the label exists and has the appropriate move_id
-    labelmanager.labels[runtime_addr].move_id = move_id
+    # Ensure the label exists and has the appropriate active/relevant move ids
+    labelmanager.labels[runtime_addr]
 
-    return utils.LazyString("%s", lambda: get_final_label(runtime_addr, context, move_id))
+    return utils.LazyString("%s", lambda: get_final_label(runtime_addr, binary_addr, move_id))
 
 # TODO: May want to expose this to user as it may be useful in a user label maker hook
 # TODO: This might need tweaking so we don't classify "move source" as code - move.py currently shows this
@@ -210,21 +215,21 @@ def is_code(binary_addr):
         return False
     return classification.is_code(binary_addr)
 
-def suggest_label_name(runtime_addr, context, move_id):
+def suggest_label_name(runtime_addr, binary_addr, move_id):
     """Return a label name and move ID, auto-creating if needed.
 
-    `context` is the associated binary_address.
+    `binary_addr` is the associated binary_address.
 
     returns a tuple for the label (label name, move_id) and a boolean
     is_autogenerated_label"""
 
-    assert context is not None
+    assert binary_addr is not None
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
 
     # Work out the best move_id to use for the label.
     #
     # The basic idea is that:
-    # (a) if we can assign a move ID based on a matching of context and
+    # (a) if we can assign a move ID based on a matching of binary_addr and
     #     runtime_addr move IDs then do that
     # (b) else *if* there is any existing label at the address we will use
     #     it's move_id rather than forcing a new label in base_move_id to
@@ -248,38 +253,41 @@ def suggest_label_name(runtime_addr, context, move_id):
 
     # Rule 1
     if move_id is None:
-        move_id = movemanager.move_id_for_binary_addr[context]
-        move_ids2 = movemanager.move_ids_for_runtime_addr(runtime_addr)
+        move_id = movemanager.move_id_for_binary_addr[binary_addr]
+    move_ids2 = movemanager.move_ids_for_runtime_addr(runtime_addr)
 
-        # Rule 2
-        if move_id not in move_ids2:
-            move_ids3 = [move_id] + list(move_ids2)
+    # Rule 2
+    if move_id not in move_ids2:
+        candidate_move_ids = list(move_ids2)
+        if move_id != None:
+            candidate_move_ids = [move_id] + candidate_move_ids
 
-            # Get the label
-            label = labelmanager.labels.get(runtime_addr)
-            for candidate_move_id in move_ids3:
-                # Rule 3: Local labels
-                if candidate_move_id in label.local_labels:
-                    for (name, start_addr, end_addr) in label.local_labels[candidate_move_id]:
-                        if start_addr <= context < end_addr:
-                            return ((name, candidate_move_id), False)
+        # Get the label
+        label = labelmanager.labels.get(runtime_addr)
 
-                # Rule 3: Explicit labels
-                if candidate_move_id in label.explicit_names:
-                    for name in label.explicit_names[candidate_move_id]:
-                        return ((name.text, candidate_move_id), False)
+        for candidate_move_id in candidate_move_ids:
+            # Rule 3: Local labels
+            if candidate_move_id in label.local_labels:
+                for (name, start_addr, end_addr) in label.local_labels[candidate_move_id]:
+                    if start_addr <= binary_addr < end_addr:
+                        return ((name, candidate_move_id), False)
 
-                # Rule 3: Expressions
-                if candidate_move_id in label.expressions:
-                    for expression in label.expressions[candidate_move_id]:
-                        return ((expression, candidate_move_id), False)
+            # Rule 3: Explicit labels
+            if candidate_move_id in label.explicit_names:
+                for name in label.explicit_names[candidate_move_id]:
+                    return ((name.text, candidate_move_id), False)
 
-            if len(move_ids2) == 1:
-                # Rule 4
-                move_id = min(move_ids2)
-            else:
-                # Rule 5
-                move_id = movemanager.base_move_id
+            # Rule 3: Expressions
+            if candidate_move_id in label.expressions:
+                for expression in label.expressions[candidate_move_id]:
+                    return ((expression, candidate_move_id), False)
+
+        if len(move_ids2) == 1:
+            # Rule 4
+            move_id = min(move_ids2)
+        else:
+            # Rule 5
+            move_id = movemanager.base_move_id
 
     label = labelmanager.labels.get(runtime_addr)
     #print("YYY %04x" % runtime_addr)
@@ -291,7 +299,7 @@ def suggest_label_name(runtime_addr, context, move_id):
 
     # TODO: We might want to move this logic into the Label object, and
     # it could potentially pick one of its own explicit names out based
-    # on context. For now we prefer the first one, since that's how the
+    # on binary_addr. For now we prefer the first one, since that's how the
     # code used to behave and we're trying to gradually refactor.
 
     # We are just returning the first name arbitrarily, since we
@@ -300,15 +308,16 @@ def suggest_label_name(runtime_addr, context, move_id):
     # We look for a local label, explicit label or expression in the
     # current move_id, or failing that in the base_move_id.
     for (name, start_addr, end_addr) in label.local_labels[move_id]:
-        if start_addr <= context < end_addr:
+        if start_addr <= binary_addr < end_addr:
             return ((name, move_id), False)
+
     for name in label.explicit_names[move_id]:
         return ((name.text, move_id), False)
     for expression in label.expressions[move_id]:
         return ((expression, move_id), False)
 
     for (name, start_addr, end_addr) in label.local_labels[movemanager.base_move_id]:
-        if start_addr <= context < end_addr:
+        if start_addr <= binary_addr < end_addr:
             return ((name, move_id), False)
     for name in label.explicit_names[movemanager.base_move_id]:
         return ((name.text, None), False)
@@ -343,14 +352,10 @@ def suggest_label_name(runtime_addr, context, move_id):
         # Assume label is "cXXXX", c for code, but may change to
         # "sub_cXXXX" or "loop_cXXXX"
         label = utils.force_case("c%04x" % runtime_addr)
-        addr_refs = trace.references.get(binary_addr, [])
 
-        # Get all references as binary addresses
-        bin_addr_refs = set()
-        for ref_binary_addr in addr_refs:
-            bin_addr_refs.add(ref_binary_addr)
+        binary_loc_refs = trace.references.get(movemanager.BinaryLocation(binary_addr, move_id), [])
 
-        if all(trace.cpu.is_subroutine_call(bin_addr) for bin_addr in bin_addr_refs):
+        if all(trace.cpu.is_subroutine_call(ref_binary_loc.binary_addr) for ref_binary_loc in binary_loc_refs):
             # Found a subroutine, label is "sub_XXXX"
             label = "sub_" + label
         else:
@@ -359,8 +364,8 @@ def suggest_label_name(runtime_addr, context, move_id):
             # If there is one reference, and it's a branch backwards to
             # the target address, and within loop_limit bytes of the
             # current address then it's a "loop_cXXXX" name.
-            if len(addr_refs) == 1:
-                ref_binary_addr = list(addr_refs)[0]
+            if len(binary_loc_refs) == 1:
+                ref_binary_addr = list(binary_loc_refs)[0].binary_addr
                 ref_runtime_addr = movemanager.b2r(ref_binary_addr)
 
                 # TODO: Maybe check if the instruction at runtime_addr
@@ -385,22 +390,22 @@ def suggest_label_name(runtime_addr, context, move_id):
 # TODO: This could and probably should be memo-ised (cached)- this
 # would improve efficiency and would also avoid any risk of a
 # non-idempotent user label maker function causing weird behaviour
-def label_maker(addr, context, move_id):
+def label_maker(runtime_addr, binary_addr, move_id):
     """Get a label name via calling a user hook.
 
-    `context` is the associated binary address using the `move_id`.
+    `binary_addr` is the associated binary address using the `move_id`.
 
     Returns the tuple (label_name, move_id)."""
 
     assert trace.cpu.trace_done
 
     # Get a suggested label
-    suggestion, is_autogenerated = suggest_label_name(addr, context, move_id)
+    suggestion, is_autogenerated = suggest_label_name(runtime_addr, binary_addr, move_id)
 
     # if the user function is supplied, use it to select the name
     # passing in the suggestion we just made.
     if user_label_maker_hook is not None:
-        user_suggestion = user_label_maker_hook(addr, context, suggestion)
+        user_suggestion = user_label_maker_hook(runtime_addr, binary_addr, suggestion)
 
         # If return value is a string, then make it a (label, move_id)
         # tuple. Bit hacky but it feels nicer not to force user hooks
@@ -420,21 +425,17 @@ def label_maker(addr, context, move_id):
         autogenerated_labels.add(suggestion[0])
     return suggestion
 
-def get_final_label(addr, context, move_id):
-    """Create a final label name.
-
-    `context` is the associated binary address using the `move_id`.
+def get_final_label(runtime_addr, binary_addr, move_id):
+    """Create a final label name for the given location.
 
     Returns the final label name"""
-    #if addr == 0x6a7:
-    #    print("FFF", hex(context), move_id)
     assert trace.cpu.trace_done
-    assert memorymanager.is_valid_binary_addr(addr)
-    assert memorymanager.is_valid_binary_addr(context)
+    assert memorymanager.is_valid_runtime_addr(runtime_addr)
+    assert memorymanager.is_valid_binary_addr(binary_addr)
     assert move_id is None or movemanager.is_valid_move_id(move_id)
-    name, move_id = label_maker(addr, context, move_id)
+    name, move_id = label_maker(runtime_addr, binary_addr, move_id)
     if is_simple_name(name):
-        labelmanager.labels[addr].add_explicit_name(name, move_id)
+        labelmanager.labels[runtime_addr].add_explicit_name(name, move_id)
 
     return name
 
@@ -477,7 +478,8 @@ def fix_label_names():
     while binary_addr < len(classifications):
         c = classifications[binary_addr]
         if c is not None:
-            dummy = [str(x) for x in c.as_string_list(binary_addr, None)]
+            move_id = movemanager.move_id_for_binary_addr[binary_addr]
+            dummy = [str(x) for x in c.as_string_list(movemanager.BinaryLocation(binary_addr, move_id), None)]
             binary_addr += c.length()
         else:
             binary_addr += 1
@@ -590,7 +592,6 @@ def emit(print_output=True):
         if move_id != movemanager.base_move_id:
             record_emit_point(end_addr, movemanager.base_move_id)
 
-
     # Output disassembly for each range in turn
     old_end_addr = None
     for start_addr, end_addr in move_ranges:
@@ -604,10 +605,10 @@ def emit(print_output=True):
         # Handle start of a new !pseudopc block
         if move_id != movemanager.base_move_id:
             # Output any base move labels just before starting a new !pseudopc block
-            d.extend(emit_labels(start_addr, movemanager.base_move_id, False))
+            d.extend(emit_labels(BinaryLocation(start_addr, movemanager.base_move_id), False))
 
             # Output start of !pseudopc block
-            pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
+            pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr, move_id)
             d.extend(formatter.pseudopc_start(*pseudopc_args))
         else:
             # If a new ORG is needed, output that
@@ -625,23 +626,23 @@ def emit(print_output=True):
             was_code = now_is_code
 
             # output the line itself
-            d.extend(emit_addr(addr, move_id))
+            d.extend(emit_addr(BinaryLocation(addr, move_id)))
 
             # move to the next address
             addr += classifications[addr].length()
         assert addr == end_addr
 
         # Emit labels at the end address of the move range
-        d.extend(emit_labels(end_addr, move_id, False))
+        d.extend(emit_labels(BinaryLocation(end_addr, move_id), True))
 
         # Handle the end of the !pseudopc block
         if move_id != movemanager.base_move_id:
             # Output the end of the !pseudopc block
-            pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr)
+            pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr, move_id)
             d.extend(formatter.pseudopc_end(*pseudopc_args))
 
             # Output any base move labels after the !pseudopc block is done
-            d.extend(emit_labels(end_addr, movemanager.base_move_id, False))
+            d.extend(emit_labels(BinaryLocation(end_addr, movemanager.base_move_id), False))
         old_end_addr = end_addr
 
 
@@ -677,9 +678,7 @@ def emit(print_output=True):
     # Join all lines of output
     result = "\n".join(formatter.sanitise(str(line)) for line in output)
 
-    # Actually print the listing
-    if print_output:
-        print(result)
+    # Return the assembly listing
     return result
 
 def split_classification(binary_addr):
@@ -709,45 +708,48 @@ def isolate_range(start_addr, end_addr):
     split_classification(start_addr)
     split_classification(end_addr)
 
-def emit_labels(binary_addr, move_id, output_annotations=True):
+def emit_labels(binary_loc, output_annotations=True):
     """Emit labels and non-inline annotations for the given address"""
 
-    result = []
-    if output_annotations:
-        for annotation in utils.sorted_annotations(annotations[binary_addr]):
-            if not annotation.inline:
-                result.append(annotation.as_string(binary_addr))
+    binary_loc = movemanager.make_binloc(binary_loc)
 
-    md = movemanager.move_definitions[move_id]
-    runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
-    result.extend(labelmanager.labels[runtime_addr].definition_string_list(runtime_addr, move_id))
+    result = []
+    md = movemanager.move_definitions[binary_loc.move_id]
+    runtime_addr = movemanager.RuntimeAddr(md[0] + (binary_loc.binary_addr - md[1])) # TODO: OK!?
+
+    if output_annotations:
+        for annotation in utils.sorted_annotations(annotations[binary_loc]):
+            if not annotation.inline:
+                result.append(annotation.as_string(binary_loc.binary_addr))
+
+    result.extend(labelmanager.labels[runtime_addr].definition_string_list(runtime_addr, binary_loc))
     return result
 
-def emit_addr(binary_addr, move_id):
+def emit_addr(binary_loc):
     """Emit labels, the output for the classification, any remaining
     annotations in the range of the classification"""
 
     result = []
-    classification_length = classifications[binary_addr].length()
+    classification_length = classifications[binary_loc.binary_addr].length()
 
     # We queue up labels defined "within" a multi-byte classification first
-    # because we might need to create a new label at binary_addr to help in
-    # defining them.
+    # because we might need to create a new label at binary_loc.binary_addr
+    # to help in defining them.
     pending_labels = []
     for i in range(1, classification_length):
-        runtime_addr = movemanager.b2r(binary_addr + i)
+        runtime_addr = movemanager.b2r(binary_loc.binary_addr + i)
         if runtime_addr in labelmanager.labels:
-            label_list = labelmanager.labels[runtime_addr].definition_string_list(movemanager.b2r(binary_addr), move_id)
+            label_list = labelmanager.labels[runtime_addr].definition_string_list(movemanager.b2r(binary_loc.binary_addr), binary_loc)
             pending_labels.extend(label_list)
 
     # Emit label definitions for this address.
-    result.extend(emit_labels(binary_addr, move_id))
+    result.extend(emit_labels(binary_loc))
 
     # Emit any label definitions for addresses within the classification.
     result.extend(pending_labels)
 
     # Emit the classification itself.
-    result.extend(classifications[binary_addr].as_string_list(binary_addr, annotations))
+    result.extend(classifications[binary_loc.binary_addr].as_string_list(binary_loc, annotations))
 
     # Emit any annotations which would fall within the classification.
     # We do this after the classification itself; this does have some
@@ -755,15 +757,10 @@ def emit_addr(binary_addr, move_id):
     # particular this works better than "rounding to start" does with
     # the current way overlapping instructions are emitted as comments.
     for i in range(1, classification_length):
-        if len(annotations[binary_addr + i]) > 0:
-            # TODO: Get rid of this warning? It is perhaps annoying at
-            # least where "overlapping" instruction streams are added
-            # as annotations. I've commented it out for now as annoying
-            # is exactly right.
-            pass # utils.warn("annotation at binary address %s is being emitted at %s" % (config.get_assembler().hex(binary_addr + i), config.get_assembler().hex(binary_addr)))
-        for annotation in utils.sorted_annotations(annotations[binary_addr + i]):
+        binary_loc = BinaryLocation(binary_loc.binary_addr + 1, binary_loc.move_id)
+        for annotation in utils.sorted_annotations(annotations[binary_loc]):
             if not annotation.inline:
-                result.append(annotation.as_string(binary_addr))
+                result.append(annotation.as_string(binary_loc.binary_addr))
     return result
 
 

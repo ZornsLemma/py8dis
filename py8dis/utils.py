@@ -6,11 +6,17 @@ from __future__ import print_function
 import collections
 import re
 import sys
+import traceback
 
 import config
 
 def die(s):
     """Print an error message and halt execution."""
+
+    # Print callstack
+    print(traceback.format_exc(), file=sys.stderr)
+
+    # Print error message
     print(s, file=sys.stderr)
     sys.exit(1)
 
@@ -18,6 +24,9 @@ def warn(s):
     """Print a warning message but don't halt execution."""
     print("warning: %s" % (s), file=sys.stderr)
 
+def debug(s):
+    """Print a debug message but don't halt execution."""
+    print("debug: %s" % (s), file=sys.stderr)
 
 def force_case(s):
     """Change string to upper or lower case as configured."""

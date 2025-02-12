@@ -255,6 +255,9 @@ l111c                   = $111c
 l111d                   = $111d
 nmi3_handler_rom_start  = $9030
 nmi_handler_rom_end     = $9030
+nmi_handler2_rom_start  = $9067
+tube_host_code2         = $acdb
+tube_host_code3         = $af38
 tube_host_code1         = $af79
 romsel                  = $fe30
 lfe80                   = $fe80
@@ -3016,34 +3019,43 @@ c8fc7
     sta nmi_XXX6+1                                                    // 2fce: 8d 40 0d    .@. :8fce[1]
     rts                                                               // 2fd1: 60          `   :8fd1[1]
 
+// $2fd2 referenced 1 time by $8f96
 nmi_handler_rom_start
 * = $2fd2
 * = $0d00
+// $2fd2 referenced 2 times by $8e8f, $8f99
 nmi_handler_ram
     pha                                                               // 2fd2: 48          H   :0d00[5]
     lda lfe84                                                         // 2fd3: ad 84 fe    ... :0d01[5]
 // The operand of this and is modified at runtime.
 nmi_and_imm
     and #$18                                                          // 2fd6: 29 18       ).  :0d04[5]
+// $2fd7 referenced 1 time by $8e1e
     cmp #3                                                            // 2fd8: c9 03       ..  :0d06[5]
 // The operand of this "beq" is modified at runtime.
 nmi_beq
     beq nmi_XXX2                                                      // 2fda: f0 2f       ./  :0d08[5]
+// $2fdb referenced 4 times by $0d4d, $8e4a, $8eb4, $8ebb
     and #$fc                                                          // 2fdc: 29 fc       ).  :0d0a[5]
     bne l0d12                                                         // 2fde: d0 04       ..  :0d0c[5]
     dec l00a5                                                         // 2fe0: c6 a5       ..  :0d0e[5]
     bne nmi_lda_zp                                                    // 2fe2: d0 04       ..  :0d10[5]
+// $2fe4 referenced 1 time by $0d0c
 l0d12
     sta l00a2                                                         // 2fe4: 85 a2       ..  :0d12[5]
     pla                                                               // 2fe6: 68          h   :0d14[5]
     rti                                                               // 2fe7: 40          @   :0d15[5]
 
 // The operand of this lda is modified at runtime.
+// $2fe8 referenced 3 times by $0d10, $0d18, $9060
 nmi_lda_zp
     lda l00a5                                                         // 2fe8: a5 a5       ..  :0d16[5]
+// $2fe9 referenced 2 times by $0d1d, $9063
 // This instruction is patched at runtime to toggle between cmp #/bcs.
+// $2fea referenced 1 time by $9057
 nmi_cmp_imm_or_bcs
     cmp #1                                                            // 2fea: c9 01       ..  :0d18[5]
+// $2feb referenced 1 time by $905c
     bne l0d26                                                         // 2fec: d0 0a       ..  :0d1a[5]
     lda l00a1                                                         // 2fee: a5 a1       ..  :0d1c[5]
     ror                                                               // 2ff0: 6a          j   :0d1e[5]
@@ -3053,13 +3065,17 @@ nmi_XXX5 = l0d1f+1
 // One patched variant of the code transfers control to nmi_XXX5, which is the
 //     second byte of the following bcc instruction. That is always &05, which is
 //     ORA #. XXX: correct?
+// $2ff2 referenced 1 time by $0d1b
 // The operand of this lda is modified at runtime.
 nmi_lda_immXXX4
     lda #nmi_XXX1-(nmi_beq+2)                                         // 2ff3: a9 48       .H  :0d21[5]
+// $2ff4 referenced 2 times by $8d6e, $8fa7
     sta nmi_lda_immXXX3+1                                             // 2ff5: 8d 4c 0d    .L. :0d23[5]
+// $2ff8 referenced 2 times by $0d1a, $0d1f
 l0d26
     inc l00cf                                                         // 2ff8: e6 cf       ..  :0d26[5]
     lda l00cf                                                         // 2ffa: a5 cf       ..  :0d28[5]
+// $2ffc referenced 1 time by $0d30
 l0d2a
     sta lfe86                                                         // 2ffc: 8d 86 fe    ... :0d2a[5]
     cmp lfe86                                                         // 2fff: cd 86 fe    ... :0d2d[5]
@@ -3069,23 +3085,31 @@ l0d2a
     pla                                                               // 3009: 68          h   :0d37[5]
     rti                                                               // 300a: 40          @   :0d38[5]
 
+// $300b referenced 1 time by $0d08
 nmi_XXX2
     lda lfe87                                                         // 300b: ad 87 fe    ... :0d39[5]
 // The operand of this sta is modified at runtime.
 nmi_sta_abs
     sta tube_host_r3_data                                             // 300e: 8d e5 fe    ... :0d3c[5]
+// $300f referenced 3 times by $0d37, $0d3f, $903e
+// $3010 referenced 2 times by $0d44, $9041
 // The first two bytes of the following instruction may be patched at runtime.
+// $3011 referenced 1 time by $8fc9
 nmi_XXX6
     inc nmi_sta_abs+1                                                 // 3011: ee 3d 0d    .=. :0d3f[5]
+// $3012 referenced 1 time by $8fce
     bne nmi_XXX7                                                      // 3014: d0 03       ..  :0d42[5]
     inc nmi_sta_abs+2                                                 // 3016: ee 3e 0d    .>. :0d44[5]
+// $3019 referenced 2 times by $0d42, $0d42
 nmi_XXX7
     dec l00a6                                                         // 3019: c6 a6       ..  :0d47[5]
     bne l0d50                                                         // 301b: d0 05       ..  :0d49[5]
 // The operand of this lda is modified at runtime.
 nmi_lda_immXXX3
     lda #nmi_XXX2-(nmi_beq+2)                                         // 301d: a9 2f       ./  :0d4b[5]
+// $301e referenced 3 times by $0d23, $8d71, $8eb1
     sta nmi_beq+1                                                     // 301f: 8d 09 0d    ... :0d4d[5]
+// $3022 referenced 1 time by $0d49
 l0d50
     pla                                                               // 3022: 68          h   :0d50[5]
     rti                                                               // 3023: 40          @   :0d51[5]
@@ -3106,6 +3130,8 @@ nmi_XXX8
 // The operand of this lda is modified at runtime.
 nmi_lda_abs
     lda tube_host_r3_data                                             // 3030: ad e5 fe    ... :0d39[6]
+// $3031 referenced 2 times by $0d3f, $8fbd
+// $3032 referenced 2 times by $0d44, $8fc3
     sta lfe87                                                         // 3033: 8d 87 fe    ... :0d3c[6]
     inc nmi_lda_abs+1                                                 // 3036: ee 3a 0d    .:. :0d3f[6]
     bne nmi_XXX7                                                      // 3039: d0 03       ..  :0d42[6]
@@ -3140,7 +3166,6 @@ c9060
 // $3066 referenced 1 time by $9047
     rts                                                               // 3066: 60          `   :9066[1]
 
-nmi_handler2_rom_start
 * = $3067
 * = $0d00
     pha                                                               // 3067: 48          H   :0d00[7]
@@ -3152,6 +3177,8 @@ nmi_handler2_rom_start
 // The operand of this bcs is modified at runtime
 nmi_bcs
     bcs nmi_XXX21                                                     // 3074: b0 26       .&  :0d0d[7]
+// $3075 referenced 1 time by $0d30
+// $3076 referenced 1 time by $0d08
 l0d0f
     and #$fc                                                          // 3076: 29 fc       ).  :0d0f[7]
     sta l00a2                                                         // 3078: 85 a2       ..  :0d11[7]
@@ -3174,12 +3201,15 @@ nmi_XXX18
     dec l00a5                                                         // 3091: c6 a5       ..  :0d2a[7]
     bne l0d30                                                         // 3093: d0 02       ..  :0d2c[7]
     lda #nmi_XXX23-(nmi_bcs+2)                                        // 3095: a9 24       .$  :0d2e[7]
+// $3097 referenced 13 times by $0d2c, $0d3f, $0d48, $0d4c, $0d56, $0d5a, $0d62, $0d6a, $0d7e, $0d84, $0d88, $0d8c, $0d92
 l0d30
     sta nmi_bcs+1                                                     // 3097: 8d 0e 0d    ... :0d30[7]
+// $309a referenced 5 times by $0d22, $0d26, $0d3b, $0d72, $0d8e
 nmi_XXX23
     pla                                                               // 309a: 68          h   :0d33[7]
     rti                                                               // 309b: 40          @   :0d34[7]
 
+// $309c referenced 1 time by $0d0d
 nmi_XXX21
     cmp #$fe                                                          // 309c: c9 fe       ..  :0d35[7]
     beq l0d3d                                                         // 309e: f0 04       ..  :0d37[7]
@@ -4890,7 +4920,7 @@ l9aec
     .byt 0                                                            // 3b0e: 00          .   :9b0e[1]
 // $3b0f referenced 1 time by $97c1
 l9b0f
-    .asc "1\o"                                                        // 3b0f: 31 5c 6f    1\o :9b0f[1]
+    .asc "1", 92, "o"                                                 // 3b0f: 31 5c 6f    1\o :9b0f[1]
     .byt $fd, $6f, $82, $50, $4b, $9a                                 // 3b12: fd 6f 82... .o. :9b12[1]
 // $3b18 referenced 1 time by $97bd
 l9b18
@@ -7592,7 +7622,6 @@ cacc7
     plp                                                               // 4cd9: 28          (   :acd9[1]
     rts                                                               // 4cda: 60          `   :acda[1]
 
-tube_host_code2
 * = $4cdb
 * = $0500
 // $4cdb referenced 2 times by $0050, $af1c
@@ -7983,7 +8012,6 @@ lda_0_rts
 just_rts
     rts                                                               // 4f37: 60          `   :af37[1]
 
-tube_host_code3
 * = $4f38
 * = $16
 // $4f38 referenced 1 time by $af30
@@ -10668,1417 +10696,1447 @@ lbfff
 pydis_end
 
 // Label references by decreasing frequency:
-//     l00b8:                    125
-//     l00b0:                    105
-//     l00ba:                     44
-//     l00bf:                     42
-//     l00bc:                     41
-//     l00b6:                     35
-//     l00be:                     31
-//     l00cd:                     31
-//     sub_c2077:                 31
-//     l00c2:                     30
-//     l00b1:                     29
-//     sub_c23e3:                 29
-//     l00b9:                     28
-//     l00bb:                     28
-//     l00b5:                     26
-//     l00bd:                     26
-//     l00b4:                     25
-//     l00b3:                     23
-//     l00c1:                     23
-//     os_text_ptr:               23
-//     osbyte:                    22
-//     romsel_copy:               21
-//     l0f0e:                     21
-//     c4ea0:                     21
-//     l00c4:                     20
-//     c209f:                     20
-//     l00b2:                     19
-//     l10c2:                     19
-//     l0001:                     18
-//     l00a8:                     18
-//     l00aa:                     18
-//     l00c5:                     18
-//     l00c9:                     18
-//     l10de:                     18
-//     l0000:                     17
-//     l00b7:                     17
-//     l0e0f:                     17
-//     l0f06:                     17
-//     l1000:                     17
-//     l00a2:                     16
-//     l00ab:                     16
-//     l00ae:                     16
-//     c43dc:                     16
-//     c582b:                     16
-//     l00c0:                     15
-//     l00c3:                     15
-//     l00c7:                     15
-//     l0f05:                     15
-//     l00cc:                     14
-//     l1117:                     14
-//     c4e70:                     14
-//     c4f7f:                     14
-//     l00a1:                     13
-//     l00a5:                     13
-//     l00c8:                     13
-//     l0f07:                     13
-//     sub_c414a:                 13
-//     tube_host_r3_data:         13
-//     l00ac:                     12
-//     sub_c274c:                 12
-//     sub_c5841:                 12
-//     osasci:                    12
-//     l00c6:                     11
-//     osrdsc_ptr:                11
-//     l0e08:                     11
-//     sub_c2038:                 11
-//     sub_c2149:                 11
-//     c396e:                     11
-//     c4c0f:                     11
-//     lfe84:                     11
-//     tube_host_r2_data:         11
-//     l00a9:                     10
-//     l1111:                     10
-//     l1112:                     10
-//     sub_c20c3:                 10
-//     c33e6:                     10
-//     c5203:                     10
-//     lfe87:                     10
-//     tube_host_r2_status:       10
-//     l00ca:                      9
-//     l1074:                      9
-//     l108a:                      9
-//     l1097:                      9
-//     l10c0:                      9
-//     l1110:                      9
-//     c5bd0:                      9
-//     l00ce:                      8
-//     l00ff:                      8
-//     l0100:                      8
-//     l0df0:                      8
-//     l0f04:                      8
-//     l1060:                      8
-//     l1082:                      8
-//     l108b:                      8
-//     l1090:                      8
-//     l1096:                      8
-//     l10ca:                      8
-//     l10cf:                      8
-//     l10d1:                      8
-//     sub_c21b0:                  8
-//     sub_c21bf:                  8
-//     c2816:                      8
-//     sub_c2b7b:                  8
-//     sub_c3ae5:                  8
-//     c4e79:                      8
-//     sub_c585d:                  8
-//     tube_host_r1_status:        8
-//     osfind:                     8
-//     l00a7:                      7
-//     l00cf:                      7
-//     l0f08:                      7
-//     l1075:                      7
-//     l10c9:                      7
-//     l10d2:                      7
-//     l1114:                      7
-//     c204f:                      7
-//     sub_c2284:                  7
-//     sub_c2380:                  7
-//     c2b8b:                      7
-//     sub_c499c:                  7
-//     sub_c5580:                  7
-//     sub_c5ab9:                  7
-//     osrdsc:                     7
-//     l0015:                      6
-//     l00f3:                      6
-//     l00f7:                      6
-//     l0f0f:                      6
-//     l1100:                      6
-//     sub_c202e:                  6
-//     sub_c2280:                  6
-//     sub_c22fe:                  6
-//     l261c:                      6
-//     sub_c27da:                  6
-//     c340c:                      6
-//     sub_c39ac:                  6
-//     sub_c3d8e:                  6
-//     sub_c3e75:                  6
-//     c4f58:                      6
-//     sub_c55f2:                  6
-//     l5726:                      6
-//     c58fb:                      6
-//     oswrch:                     6
-//     l00a6:                      5
-//     l00af:                      5
-//     l00f0:                      5
-//     l1087:                      5
-//     l1088:                      5
-//     l1099:                      5
-//     l10c7:                      5
-//     l10dd:                      5
-//     l110c:                      5
-//     l1115:                      5
-//     l1116:                      5
-//     sub_c20bb:                  5
-//     sub_c20ed:                  5
-//     sub_c20f3:                  5
-//     c2125:                      5
-//     sub_c230a:                  5
-//     sub_c2335:                  5
-//     sub_c2386:                  5
-//     sub_c240c:                  5
-//     c2ba2:                      5
-//     sub_c2f3f:                  5
-//     c3257:                      5
-//     c39a3:                      5
-//     sub_c3a6e:                  5
-//     sub_c3ab8:                  5
-//     sub_c40de:                  5
-//     sub_c41b4:                  5
-//     c4e97:                      5
-//     sub_c56fe:                  5
-//     sub_c5745:                  5
-//     c5795:                      5
-//     sub_c5850:                  5
-//     sub_c5a67:                  5
-//     c5e7b:                      5
-//     osnewl:                     5
-//     l0002:                      4
-//     l0e00:                      4
-//     l0f0c:                      4
-//     l0f0d:                      4
-//     l1069:                      4
-//     l1076:                      4
-//     l1077:                      4
-//     l1081:                      4
-//     l1086:                      4
-//     l1095:                      4
-//     l10c4:                      4
-//     l10cb:                      4
-//     l10cc:                      4
-//     l10ce:                      4
-//     l10d9:                      4
-//     l10da:                      4
-//     l110d:                      4
-//     l1113:                      4
-//     l111a:                      4
-//     l111d:                      4
-//     sub_c2023:                  4
-//     sub_c2048:                  4
-//     sub_c20c8:                  4
-//     sub_c2174:                  4
-//     c21a7:                      4
-//     sub_c221d:                  4
-//     c2225:                      4
-//     sub_c22b2:                  4
-//     sub_c2327:                  4
-//     sub_c23dc:                  4
-//     c2d74:                      4
-//     c2d91:                      4
-//     c2e0e:                      4
-//     c2e12:                      4
-//     c2e64:                      4
-//     sub_c2f6b:                  4
-//     c340e:                      4
-//     c3436:                      4
-//     c393b:                      4
-//     sub_c3965:                  4
-//     sub_c3a8d:                  4
-//     c3adf:                      4
-//     c3ae9:                      4
-//     sub_c4379:                  4
-//     c45e5:                      4
-//     sub_c49ca:                  4
-//     sub_c4acf:                  4
-//     sub_c4c18:                  4
-//     sub_c4c62:                  4
-//     c4d79:                      4
-//     c5446:                      4
-//     l557f:                      4
-//     sub_c5616:                  4
-//     c568c:                      4
-//     sub_c568f:                  4
-//     sub_c583f:                  4
-//     sub_c5ac2:                  4
-//     sub_c5b00:                  4
-//     c5e7a:                      4
-//     c5ee8:                      4
-//     l5fff:                      4
-//     romsel:                     4
-//     lfe85:                      4
-//     lfe86:                      4
-//     osbput:                     4
-//     osbget:                     4
-//     osfile:                     4
-//     osrdch:                     4
-//     l00ef:                      3
-//     l0107:                      3
-//     l0109:                      3
-//     bytev:                      3
-//     bytev+1:                    3
-//     l0ef8:                      3
-//     l1092:                      3
-//     l1093:                      3
-//     l1094:                      3
-//     l1098:                      3
-//     l109d:                      3
-//     l109f:                      3
-//     l10c3:                      3
-//     l10c5:                      3
-//     l10c6:                      3
-//     l10d0:                      3
-//     l10d3:                      3
-//     l10d6:                      3
-//     l10d7:                      3
-//     l1119:                      3
-//     l111c:                      3
-//     c2103:                      3
-//     sub_c21be:                  3
-//     c2290:                      3
-//     c22e6:                      3
-//     sub_c233a:                  3
-//     sub_c236e:                  3
-//     c2454:                      3
-//     sub_c2456:                  3
-//     c29d7:                      3
-//     sub_c2b86:                  3
-//     c2d41:                      3
-//     c2e53:                      3
-//     c2ecc:                      3
-//     c2f2a:                      3
-//     sub_c2f7a:                  3
-//     c30fb:                      3
-//     c31af:                      3
-//     c3214:                      3
-//     sub_c33fd:                  3
-//     c3444:                      3
-//     c34bc:                      3
-//     sub_c3526:                  3
-//     c3738:                      3
-//     sub_c3940:                  3
-//     c39ed:                      3
-//     c3a8c:                      3
-//     sub_c3be5:                  3
-//     c3c82:                      3
-//     c3d5d:                      3
-//     sub_c3e30:                  3
-//     sub_c3f0f:                  3
-//     sub_c3f16:                  3
-//     sub_c3f1e:                  3
-//     c406b:                      3
-//     c414f:                      3
-//     c41c0:                      3
-//     sub_c4315:                  3
-//     sub_c4384:                  3
-//     sub_c4530:                  3
-//     c4660:                      3
-//     sub_c49c2:                  3
-//     c4a42:                      3
-//     c4a44:                      3
-//     sub_c4c0c:                  3
-//     c4cc4:                      3
-//     sub_c4d5d:                  3
-//     c4d77:                      3
-//     l4f76:                      3
-//     c51d5:                      3
-//     c5371:                      3
-//     sub_c558b:                  3
-//     c5684:                      3
-//     c56ca:                      3
-//     sub_c584e:                  3
-//     sub_c5986:                  3
-//     l5a30:                      3
-//     c5ab4:                      3
-//     sub_c5ac4:                  3
-//     c5e47:                      3
-//     c5e89:                      3
-//     c5e8d:                      3
-//     sub_c5f7c:                  3
-//     lfe80:                      3
-//     tube_host_r1_data:          3
-//     osword:                     3
-//     oscli:                      3
-//     l0003:                      2
-//     l0012:                      2
-//     l0014:                      2
-//     l00a0:                      2
-//     l00a3:                      2
-//     l00a4:                      2
-//     l00ad:                      2
-//     l00fd:                      2
-//     l0101:                      2
-//     l0102:                      2
-//     l0105:                      2
-//     l010b:                      2
-//     l0128:                      2
-//     fscv:                       2
-//     l0700:                      2
-//     l0e07:                      2
-//     l0f0a:                      2
-//     l0f0b:                      2
-//     l1045:                      2
-//     l1062:                      2
-//     l1065:                      2
-//     l1067:                      2
-//     l1078:                      2
-//     l107d:                      2
-//     l107e:                      2
-//     l107f:                      2
-//     l1089:                      2
-//     l108c:                      2
-//     l1091:                      2
-//     l109a:                      2
-//     l109b:                      2
-//     l109e:                      2
-//     l10c1:                      2
-//     l10cd:                      2
-//     l10d8:                      2
-//     l10db:                      2
-//     l10dc:                      2
-//     l10e2:                      2
-//     l10e3:                      2
-//     l10e4:                      2
-//     l1109:                      2
-//     l110b:                      2
-//     l110e:                      2
-//     l110f:                      2
-//     l111b:                      2
-//     sub_c209a:                  2
-//     sub_c20e3:                  2
-//     c215d:                      2
-//     sub_c21ae:                  2
-//     sub_c21c5:                  2
-//     c222a:                      2
-//     c225d:                      2
-//     sub_c2266:                  2
-//     sub_c226d:                  2
-//     sub_c22bb:                  2
-//     sub_c22e8:                  2
-//     c22fd:                      2
-//     sub_c241b:                  2
-//     sub_c2439:                  2
-//     c2543:                      2
-//     sub_c2555:                  2
-//     c2560:                      2
-//     c25bc:                      2
-//     c2703:                      2
-//     c2705:                      2
-//     c273b:                      2
-//     sub_c2745:                  2
-//     sub_c27db:                  2
-//     sub_c27e3:                  2
-//     c2808:                      2
-//     c283f:                      2
-//     sub_c2855:                  2
-//     sub_c2862:                  2
-//     c28a6:                      2
-//     c28f4:                      2
-//     sub_c2951:                  2
-//     c298a:                      2
-//     c29a5:                      2
-//     c29b4:                      2
-//     sub_c29da:                  2
-//     c2a00:                      2
-//     c2a6e:                      2
-//     sub_c2a77:                  2
-//     sub_c2ab3:                  2
-//     sub_c2b4d:                  2
-//     sub_c2b64:                  2
-//     c2be3:                      2
-//     c2c12:                      2
-//     c2cb2:                      2
-//     c2d0d:                      2
-//     c2d13:                      2
-//     c2e0d:                      2
-//     c2e32:                      2
-//     c2e9f:                      2
-//     c2ea5:                      2
-//     c2eb7:                      2
-//     c2eeb:                      2
-//     c2f3e:                      2
-//     c30c7:                      2
-//     c31df:                      2
-//     sub_c3279:                  2
-//     c3289:                      2
-//     sub_c328a:                  2
-//     c3367:                      2
-//     sub_c33c5:                  2
-//     sub_c33d3:                  2
-//     sub_c33f5:                  2
-//     sub_c3432:                  2
-//     sub_c3445:                  2
-//     c34a9:                      2
-//     c34c6:                      2
-//     sub_c3516:                  2
-//     sub_c352e:                  2
-//     c35fd:                      2
-//     c3628:                      2
-//     c365a:                      2
-//     c36b7:                      2
-//     c37b3:                      2
-//     sub_c392c:                  2
-//     sub_c394c:                  2
-//     sub_c395a:                  2
-//     sub_c39f3:                  2
-//     sub_c3a0f:                  2
-//     sub_c3a50:                  2
-//     sub_c3a60:                  2
-//     sub_c3a63:                  2
-//     sub_c3a78:                  2
-//     sub_c3a82:                  2
-//     sub_c3aa3:                  2
-//     sub_c3ac8:                  2
-//     sub_c3ad8:                  2
-//     c3b6e:                      2
-//     sub_c3b79:                  2
-//     c3bc5:                      2
-//     sub_c3bf2:                  2
-//     sub_c3d1e:                  2
-//     c3dcd:                      2
-//     c3dd5:                      2
-//     sub_c3df4:                  2
-//     sub_c3e1e:                  2
-//     c3e41:                      2
-//     sub_c3e54:                  2
-//     sub_c3ef4:                  2
-//     sub_c3f14:                  2
-//     sub_c3f26:                  2
-//     c401d:                      2
-//     c4021:                      2
-//     c406c:                      2
-//     c40f5:                      2
-//     c410b:                      2
-//     sub_c4168:                  2
-//     c419f:                      2
-//     sub_c41c6:                  2
-//     l41d3:                      2
-//     c42f2:                      2
-//     sub_c4324:                  2
-//     c438b:                      2
-//     sub_c43ec:                  2
-//     c4411:                      2
-//     c4414:                      2
-//     sub_c451f:                  2
-//     c45ab:                      2
-//     sub_c45b2:                  2
-//     c4637:                      2
-//     c4845:                      2
-//     c486b:                      2
-//     c487a:                      2
-//     sub_c490d:                  2
-//     c497d:                      2
-//     c49ff:                      2
-//     c4a1c:                      2
-//     c4a51:                      2
-//     sub_c4a53:                  2
-//     sub_c4ac2:                  2
-//     sub_c4af1:                  2
-//     c4b1a:                      2
-//     c4b41:                      2
-//     c4b54:                      2
-//     c4bbc:                      2
-//     sub_c4c4e:                  2
-//     l4cdb:                      2
-//     c4d15:                      2
-//     c4dd7:                      2
-//     c4e11:                      2
-//     c4ed3:                      2
-//     c4ee8:                      2
-//     c4f37:                      2
-//     l4f75:                      2
-//     l4f77:                      2
-//     l4f78:                      2
-//     c4fad:                      2
-//     c4ffb:                      2
-//     c500a:                      2
-//     c5035:                      2
-//     sub_c5047:                  2
-//     c5280:                      2
-//     c5297:                      2
-//     c52a0:                      2
-//     c5300:                      2
-//     c5406:                      2
-//     c545e:                      2
-//     sub_c5598:                  2
-//     sub_c55ce:                  2
-//     sub_c55ee:                  2
-//     sub_c5607:                  2
-//     sub_c561e:                  2
-//     c5655:                      2
-//     sub_c565f:                  2
-//     sub_c56b1:                  2
-//     c5718:                      2
-//     c57ed:                      2
-//     l5872:                      2
-//     c58e4:                      2
-//     c59e8:                      2
-//     sub_c59f5:                  2
-//     c5a10:                      2
-//     c5af8:                      2
-//     c5afd:                      2
-//     c5b28:                      2
-//     c5b2a:                      2
-//     c5c13:                      2
-//     c5c3a:                      2
-//     sub_c5c68:                  2
-//     c5cb9:                      2
-//     c5db9:                      2
-//     sub_c5e83:                  2
-//     sub_c5e9d:                  2
-//     c5ec1:                      2
-//     sub_c5ec2:                  2
-//     c5edd:                      2
-//     sub_c5f82:                  2
-//     c5f8e:                      2
-//     tube_host_r4_status:        2
-//     gsinit:                     2
-//     gsread:                     2
-//     osgbpb:                     2
-//     osargs:                     2
-//     l0013:                      1
-//     l00f1:                      1
-//     l0103:                      1
-//     l0104:                      1
-//     l010c:                      1
-//     l010d:                      1
-//     l010e:                      1
-//     brkv:                       1
-//     brkv+1:                     1
-//     filev:                      1
-//     evntv:                      1
-//     evntv+1:                    1
-//     l028d:                      1
-//     l0cff:                      1
-//     l0e0e:                      1
-//     l0e10:                      1
-//     l0f00:                      1
-//     l0f09:                      1
-//     l0f10:                      1
-//     l1001:                      1
-//     l1002:                      1
-//     l1003:                      1
-//     l1004:                      1
-//     l1005:                      1
-//     l1006:                      1
-//     l1007:                      1
-//     l100e:                      1
-//     l1047:                      1
-//     l104d:                      1
-//     l104e:                      1
-//     l1050:                      1
-//     l1058:                      1
-//     l105f:                      1
-//     l1061:                      1
-//     l1063:                      1
-//     l1064:                      1
-//     l1072:                      1
-//     l1079:                      1
-//     l107a:                      1
-//     l1083:                      1
-//     l108f:                      1
-//     pydis_start:                1
-//     l2001:                      1
-//     l2002:                      1
-//     c2003:                      1
-//     l2004:                      1
-//     l2006:                      1
-//     l2007:                      1
-//     sub_c2020:                  1
-//     c2040:                      1
-//     c2064:                      1
-//     c2086:                      1
-//     c2093:                      1
-//     c2096:                      1
-//     sub_c209d:                  1
-//     sub_c20b8:                  1
-//     c20d0:                      1
-//     sub_c20d3:                  1
-//     sub_c20db:                  1
-//     sub_c20e6:                  1
-//     sub_c20f6:                  1
-//     c2111:                      1
-//     c2115:                      1
-//     c212e:                      1
-//     c213a:                      1
-//     c215b:                      1
-//     c215f:                      1
-//     c2161:                      1
-//     c216b:                      1
-//     c2184:                      1
-//     c218a:                      1
-//     c218c:                      1
-//     c21a2:                      1
-//     sub_c21b7:                  1
-//     c21bd:                      1
-//     sub_c21c0:                  1
-//     sub_c21c4:                  1
-//     sub_c21ca:                  1
-//     c220c:                      1
-//     c220d:                      1
-//     c221c:                      1
-//     sub_c2222:                  1
-//     c2243:                      1
-//     c226f:                      1
-//     c2286:                      1
-//     c228b:                      1
-//     c22be:                      1
-//     c22c7:                      1
-//     c22d1:                      1
-//     c22d9:                      1
-//     c22e7:                      1
-//     c22fb:                      1
-//     c2306:                      1
-//     c230d:                      1
-//     c2326:                      1
-//     c2332:                      1
-//     c2333:                      1
-//     c2370:                      1
-//     c2390:                      1
-//     c2397:                      1
-//     c23ab:                      1
-//     sub_c23bf:                  1
-//     c23cd:                      1
-//     sub_c23d1:                  1
-//     sub_c23d4:                  1
-//     c23e2:                      1
-//     sub_c23ee:                  1
-//     c23f0:                      1
-//     c23fa:                      1
-//     c2406:                      1
-//     c2425:                      1
-//     c242b:                      1
-//     sub_c242c:                  1
-//     c2436:                      1
-//     c2438:                      1
-//     c2453:                      1
-//     c2463:                      1
-//     c2477:                      1
-//     c2481:                      1
-//     c2482:                      1
-//     c2493:                      1
-//     c249d:                      1
-//     c24e7:                      1
-//     c2527:                      1
-//     c253e:                      1
-//     c2552:                      1
-//     c255f:                      1
-//     c2564:                      1
-//     c2573:                      1
-//     c257b:                      1
-//     c259b:                      1
-//     c25b5:                      1
-//     c25c5:                      1
-//     l25d3:                      1
-//     sub_c25e3:                  1
-//     sub_c2602:                  1
-//     l261d:                      1
-//     c2717:                      1
-//     c2725:                      1
-//     c2734:                      1
-//     c2759:                      1
-//     c2779:                      1
-//     c277c:                      1
-//     c27a0:                      1
-//     c27ab:                      1
-//     c27b8:                      1
-//     c27be:                      1
-//     c27c6:                      1
-//     c2815:                      1
-//     sub_c2826:                  1
-//     c2837:                      1
-//     c2864:                      1
-//     c2867:                      1
-//     c28bc:                      1
-//     c292d:                      1
-//     sub_c2932:                  1
-//     c2945:                      1
-//     c295f:                      1
-//     c2968:                      1
-//     c296b:                      1
-//     sub_c2979:                  1
-//     c2990:                      1
-//     c29ad:                      1
-//     c29c4:                      1
-//     c29ca:                      1
-//     c29e2:                      1
-//     c29f6:                      1
-//     c2a17:                      1
-//     c2a19:                      1
-//     c2a49:                      1
-//     c2a50:                      1
-//     c2a54:                      1
-//     c2a82:                      1
-//     c2ac8:                      1
-//     c2ad0:                      1
-//     c2ad8:                      1
-//     c2aeb:                      1
-//     c2af0:                      1
-//     c2afb:                      1
-//     c2b18:                      1
-//     sub_c2b25:                  1
-//     c2b60:                      1
-//     c2b77:                      1
-//     c2b80:                      1
-//     c2bea:                      1
-//     sub_c2bf6:                  1
-//     sub_c2bf9:                  1
-//     c2bfb:                      1
-//     c2c2e:                      1
-//     c2c3a:                      1
-//     c2c4e:                      1
-//     sub_c2c56:                  1
-//     c2c58:                      1
-//     c2c61:                      1
-//     sub_c2c65:                  1
-//     c2c71:                      1
-//     c2c87:                      1
-//     c2cae:                      1
-//     c2cc1:                      1
-//     c2cd6:                      1
-//     c2ce7:                      1
-//     c2cfc:                      1
-//     c2d03:                      1
-//     c2d14:                      1
-//     c2d17:                      1
-//     sub_c2d1a:                  1
-//     c2d5d:                      1
-//     c2d92:                      1
-//     c2dac:                      1
-//     c2dba:                      1
-//     sub_c2dc6:                  1
-//     c2dd2:                      1
-//     c2de2:                      1
-//     c2de9:                      1
-//     c2df0:                      1
-//     c2e03:                      1
-//     c2e14:                      1
-//     c2e4d:                      1
-//     c2e6f:                      1
-//     c2e72:                      1
-//     c2e85:                      1
-//     c2e9e:                      1
-//     c2eaf:                      1
-//     c2ecb:                      1
-//     c2edf:                      1
-//     sub_c2eec:                  1
-//     c2ef8:                      1
-//     sub_c2efa:                  1
-//     sub_c2eff:                  1
-//     c2f12:                      1
-//     c2f17:                      1
-//     c2f21:                      1
-//     sub_c2f33:                  1
-//     sub_c2f37:                  1
-//     sub_c2f4f:                  1
-//     sub_c2f5e:                  1
-//     c2f6c:                      1
-//     sub_c2f75:                  1
-//     c2f81:                      1
-//     sub_c2f82:                  1
-//     sub_c2f94:                  1
-//     c2f96:                      1
-//     c2fac:                      1
-//     c2fb5:                      1
-//     c2fc7:                      1
-//     sub_c303e:                  1
-//     c3047:                      1
-//     c3060:                      1
-//     c3066:                      1
-//     c30db:                      1
-//     c30e7:                      1
-//     sub_c3104:                  1
-//     c3108:                      1
-//     c3113:                      1
-//     c3115:                      1
-//     l311d:                      1
-//     l3121:                      1
-//     l312d:                      1
-//     l3139:                      1
-//     l313f:                      1
-//     l3145:                      1
-//     l3146:                      1
-//     l3191:                      1
-//     l31a0:                      1
-//     c31ba:                      1
-//     c31cc:                      1
-//     c31e7:                      1
-//     c31eb:                      1
-//     c31f3:                      1
-//     c31f9:                      1
-//     c3201:                      1
-//     c320d:                      1
-//     c321f:                      1
-//     c322b:                      1
-//     c3238:                      1
-//     c323b:                      1
-//     c323f:                      1
-//     c3249:                      1
-//     c325a:                      1
-//     c326a:                      1
-//     c3276:                      1
-//     c329c:                      1
-//     sub_c329d:                  1
-//     c32bd:                      1
-//     c32c4:                      1
-//     c32c7:                      1
-//     c32d6:                      1
-//     c32e3:                      1
-//     c32ef:                      1
-//     c3302:                      1
-//     c3355:                      1
-//     c3357:                      1
-//     c336b:                      1
-//     c336f:                      1
-//     c3379:                      1
-//     c3382:                      1
-//     c338d:                      1
-//     c3390:                      1
-//     c33a8:                      1
-//     c33b1:                      1
-//     sub_c33b4:                  1
-//     c33bd:                      1
-//     c33c4:                      1
-//     sub_c33d8:                  1
-//     c33da:                      1
-//     c33e2:                      1
-//     c33e5:                      1
-//     sub_c33f1:                  1
-//     sub_c33f9:                  1
-//     c33ff:                      1
-//     c3450:                      1
-//     c345c:                      1
-//     c348d:                      1
-//     c34c1:                      1
-//     c34c2:                      1
-//     c34d4:                      1
-//     c3504:                      1
-//     c3535:                      1
-//     sub_c3536:                  1
-//     c353a:                      1
-//     c3556:                      1
-//     c356d:                      1
-//     c356f:                      1
-//     c357d:                      1
-//     c3593:                      1
-//     c35b6:                      1
-//     c35d9:                      1
-//     c35e4:                      1
-//     c35e7:                      1
-//     c35ec:                      1
-//     c3618:                      1
-//     c3649:                      1
-//     c364a:                      1
-//     c3658:                      1
-//     sub_c365d:                  1
-//     c367a:                      1
-//     c3682:                      1
-//     c3683:                      1
-//     c369e:                      1
-//     c36c1:                      1
-//     c36c2:                      1
-//     c36c3:                      1
-//     c36e4:                      1
-//     c36e9:                      1
-//     c36ec:                      1
-//     c36f2:                      1
-//     c36f5:                      1
-//     c3700:                      1
-//     c3714:                      1
-//     c3736:                      1
-//     c373c:                      1
-//     c373d:                      1
-//     c375b:                      1
-//     c376c:                      1
-//     c379d:                      1
-//     c37c8:                      1
-//     c37e6:                      1
-//     sub_c37e8:                  1
-//     c3803:                      1
-//     c381f:                      1
-//     c382e:                      1
-//     sub_c3832:                  1
-//     c3835:                      1
-//     c3837:                      1
-//     c384c:                      1
-//     c3851:                      1
-//     c3859:                      1
-//     c385e:                      1
-//     c386b:                      1
-//     c3873:                      1
-//     c3881:                      1
-//     c38a0:                      1
-//     c38b1:                      1
-//     c38ba:                      1
-//     c38c1:                      1
-//     c38cd:                      1
-//     c38e4:                      1
-//     c38ed:                      1
-//     c38f0:                      1
-//     c3942:                      1
-//     c394b:                      1
-//     c394e:                      1
-//     c3964:                      1
-//     c3978:                      1
-//     sub_c3988:                  1
-//     c3993:                      1
-//     c39a8:                      1
-//     c39ea:                      1
-//     c3a2a:                      1
-//     sub_c3a32:                  1
-//     c3a3f:                      1
-//     sub_c3a4b:                  1
-//     c3a55:                      1
-//     c3a73:                      1
-//     c3a77:                      1
-//     sub_c3ad3:                  1
-//     c3ad4:                      1
-//     l3aec:                      1
-//     l3b0f:                      1
-//     l3b18:                      1
-//     l3b21:                      1
-//     l3b29:                      1
-//     l3b31:                      1
-//     l3b3a:                      1
-//     l3b43:                      1
-//     c3b50:                      1
-//     sub_c3b51:                  1
-//     c3b5e:                      1
-//     sub_c3b61:                  1
-//     c3b63:                      1
-//     c3bc2:                      1
-//     sub_c3bca:                  1
-//     sub_c3bcd:                  1
-//     c3bcf:                      1
-//     c3be4:                      1
-//     c3c00:                      1
-//     c3c16:                      1
-//     c3c33:                      1
-//     c3c38:                      1
-//     c3c51:                      1
-//     c3c58:                      1
-//     c3c5d:                      1
-//     c3c6b:                      1
-//     c3c8b:                      1
-//     c3c90:                      1
-//     c3ca8:                      1
-//     c3cee:                      1
-//     c3d03:                      1
-//     c3d12:                      1
-//     sub_c3d19:                  1
-//     c3d2b:                      1
-//     c3d43:                      1
-//     c3d57:                      1
-//     c3d67:                      1
-//     c3d71:                      1
-//     c3d72:                      1
-//     sub_c3d75:                  1
-//     c3d86:                      1
-//     c3d89:                      1
-//     c3db4:                      1
-//     c3dce:                      1
-//     c3e07:                      1
-//     c3e13:                      1
-//     c3e16:                      1
-//     c3e28:                      1
-//     c3e2a:                      1
-//     c3e4d:                      1
-//     c3e5c:                      1
-//     c3e6f:                      1
-//     c3e71:                      1
-//     c3e74:                      1
-//     c3e8c:                      1
-//     sub_c3e94:                  1
-//     c3eb3:                      1
-//     c3ec2:                      1
-//     c3ef1:                      1
-//     c3f0d:                      1
-//     c3f19:                      1
-//     c3f5e:                      1
-//     c3f64:                      1
-//     c3f6a:                      1
-//     c3f6b:                      1
-//     c3f6e:                      1
-//     sub_c3f7c:                  1
-//     sub_c3f82:                  1
-//     c3f88:                      1
-//     c3fd9:                      1
-//     c3ff4:                      1
-//     c4005:                      1
-//     c4054:                      1
-//     c4061:                      1
-//     c4075:                      1
-//     c40a9:                      1
-//     sub_c40b8:                  1
-//     sub_c40f6:                  1
-//     c411d:                      1
-//     c4132:                      1
-//     c4143:                      1
-//     c416e:                      1
-//     c417a:                      1
-//     c4183:                      1
-//     sub_c4190:                  1
-//     c41aa:                      1
-//     c41c1:                      1
-//     c41cc:                      1
-//     c41d2:                      1
-//     c427a:                      1
-//     c42ab:                      1
-//     c430d:                      1
-//     c4321:                      1
-//     c434a:                      1
-//     c4378:                      1
-//     c438c:                      1
-//     c438e:                      1
-//     c43ae:                      1
-//     c43bd:                      1
-//     sub_c43e4:                  1
-//     c43fb:                      1
-//     c440c:                      1
-//     c445d:                      1
-//     c447b:                      1
-//     c4487:                      1
-//     sub_c44e1:                  1
-//     c44fa:                      1
-//     c4521:                      1
-//     c4538:                      1
-//     c4547:                      1
-//     c4574:                      1
-//     c4595:                      1
-//     c45a0:                      1
-//     c45c4:                      1
-//     c45e2:                      1
-//     c45fb:                      1
-//     c4605:                      1
-//     c463a:                      1
-//     c4647:                      1
-//     c4652:                      1
-//     c465d:                      1
-//     sub_c4663:                  1
-//     c4675:                      1
-//     c468a:                      1
-//     c46b3:                      1
-//     c46b6:                      1
-//     c46bb:                      1
-//     c46ce:                      1
-//     c46e2:                      1
-//     c470a:                      1
-//     c4712:                      1
-//     c4721:                      1
-//     c4728:                      1
-//     c473a:                      1
-//     sub_c473d:                  1
-//     sub_c476c:                  1
-//     c476f:                      1
-//     sub_c4779:                  1
-//     c4787:                      1
-//     sub_c4788:                  1
-//     c47a4:                      1
-//     c47a7:                      1
-//     sub_c47c4:                  1
-//     sub_c47c5:                  1
-//     c47c6:                      1
-//     sub_c47ce:                  1
-//     c47e0:                      1
-//     c47e1:                      1
-//     c47f2:                      1
-//     c47f7:                      1
-//     c4818:                      1
-//     c482f:                      1
-//     c4856:                      1
-//     c48bd:                      1
-//     sub_c48be:                  1
-//     sub_c48e2:                  1
-//     c48fa:                      1
-//     c4902:                      1
-//     c490c:                      1
-//     c4941:                      1
-//     c4947:                      1
-//     c4953:                      1
-//     c495d:                      1
-//     c496c:                      1
-//     c4970:                      1
-//     c4982:                      1
-//     c498d:                      1
-//     c49ab:                      1
-//     c49b8:                      1
-//     sub_c49bf:                  1
-//     c49e7:                      1
-//     c4a01:                      1
-//     c4a0a:                      1
-//     c4a0d:                      1
-//     sub_c4a12:                  1
-//     c4a78:                      1
-//     c4a7a:                      1
-//     c4a86:                      1
-//     sub_c4a9a:                  1
-//     c4ab7:                      1
-//     c4ab8:                      1
-//     c4abe:                      1
-//     c4ace:                      1
-//     sub_c4add:                  1
-//     sub_c4aea:                  1
-//     c4b09:                      1
-//     c4b17:                      1
-//     c4b2e:                      1
-//     c4b35:                      1
-//     c4b3d:                      1
-//     c4b6b:                      1
-//     c4b7d:                      1
-//     c4b80:                      1
-//     c4b93:                      1
-//     c4ba4:                      1
-//     sub_c4ba9:                  1
-//     c4bad:                      1
-//     c4bcf:                      1
-//     c4bf4:                      1
-//     c4bfb:                      1
-//     c4c28:                      1
-//     c4c45:                      1
-//     c4c46:                      1
-//     sub_c4c47:                  1
-//     sub_c4c6a:                  1
-//     sub_c4c72:                  1
-//     c4cc7:                      1
-//     l4cf3:                      1
-//     c4d2d:                      1
-//     c4d3f:                      1
-//     c4d52:                      1
-//     c4d61:                      1
-//     c4d6e:                      1
-//     c4d81:                      1
-//     c4d86:                      1
-//     c4da2:                      1
-//     c4dae:                      1
-//     c4dc1:                      1
-//     l4ddb:                      1
-//     c4ddf:                      1
-//     c4df8:                      1
-//     c4e06:                      1
-//     c4e20:                      1
-//     c4e27:                      1
-//     c4e32:                      1
-//     c4e35:                      1
-//     c4e40:                      1
-//     c4e45:                      1
-//     c4e5b:                      1
-//     c4e62:                      1
-//     c4e82:                      1
-//     sub_c4ea9:                  1
-//     c4ed7:                      1
-//     c4ef8:                      1
-//     c4f13:                      1
-//     c4f2d:                      1
-//     c4f35:                      1
-//     c4f38:                      1
-//     c4f4b:                      1
-//     c4f54:                      1
-//     c4f5d:                      1
-//     c4f63:                      1
-//     l4f73:                      1
-//     c4f79:                      1
-//     sub_c4f8d:                  1
-//     sub_c4f9a:                  1
-//     c4fa1:                      1
-//     c4fab:                      1
-//     c4fae:                      1
-//     c4fbf:                      1
-//     c4fdc:                      1
-//     c4fdf:                      1
-//     c4fea:                      1
-//     c4ff3:                      1
-//     c4ffd:                      1
-//     c5005:                      1
-//     c5014:                      1
-//     c501f:                      1
-//     sub_c5040:                  1
-//     c505a:                      1
-//     c5070:                      1
-//     l5075:                      1
-//     l5175:                      1
-//     c51b1:                      1
-//     c51dd:                      1
-//     c51e3:                      1
-//     c51ed:                      1
-//     c51fc:                      1
-//     c520f:                      1
-//     c5221:                      1
-//     sub_c5234:                  1
-//     c523d:                      1
-//     c5249:                      1
-//     c5260:                      1
-//     c5268:                      1
-//     c5275:                      1
-//     l5283:                      1
-//     c52b2:                      1
-//     c52b4:                      1
-//     c52bd:                      1
-//     sub_c52c8:                  1
-//     c52d1:                      1
-//     c52e1:                      1
-//     c52e7:                      1
-//     c5305:                      1
-//     c5314:                      1
-//     c5337:                      1
-//     c534f:                      1
-//     c5352:                      1
-//     c5375:                      1
-//     c537f:                      1
-//     c5382:                      1
-//     c5397:                      1
-//     c53ba:                      1
-//     c53de:                      1
-//     c540e:                      1
-//     c544b:                      1
-//     c544d:                      1
-//     c545a:                      1
-//     c5470:                      1
-//     c54a8:                      1
-//     c54af:                      1
-//     c54b4:                      1
-//     c54d8:                      1
-//     c54df:                      1
-//     c54e9:                      1
-//     c54ee:                      1
-//     c5502:                      1
-//     c5534:                      1
-//     c555e:                      1
-//     c5578:                      1
-//     c5597:                      1
-//     c55c6:                      1
-//     c55d0:                      1
-//     c55e6:                      1
-//     c55ed:                      1
-//     c565e:                      1
-//     c56a6:                      1
-//     c56b3:                      1
-//     c56c2:                      1
-//     l56c6:                      1
-//     l56ce:                      1
-//     c56d2:                      1
-//     sub_c56e6:                  1
-//     c56eb:                      1
-//     c56f5:                      1
-//     c5725:                      1
-//     c5736:                      1
-//     c575a:                      1
-//     sub_c5771:                  1
-//     l5774:                      1
-//     c57ae:                      1
-//     c57b2:                      1
-//     sub_c57b6:                  1
-//     c57be:                      1
-//     c57d7:                      1
-//     c57dd:                      1
-//     c57e8:                      1
-//     c57ec:                      1
-//     sub_c586f:                  1
-//     l587e:                      1
-//     sub_c5882:                  1
-//     c5898:                      1
-//     c58e6:                      1
-//     c58f5:                      1
-//     c5910:                      1
-//     l5924:                      1
-//     l5979:                      1
-//     l597a:                      1
-//     l5980:                      1
-//     c5999:                      1
-//     c59ae:                      1
-//     c59bd:                      1
-//     c59cc:                      1
-//     c59d1:                      1
-//     c59d2:                      1
-//     c59d9:                      1
-//     c59ee:                      1
-//     c59f7:                      1
-//     c59f9:                      1
-//     c5a15:                      1
-//     c5a19:                      1
-//     c5a1a:                      1
-//     c5a27:                      1
-//     c5a28:                      1
-//     c5a2e:                      1
-//     c5a2f:                      1
-//     l5a31:                      1
-//     c5a78:                      1
-//     c5a8c:                      1
-//     c5a94:                      1
-//     c5a9e:                      1
-//     c5ab0:                      1
-//     c5ab1:                      1
-//     c5ab8:                      1
-//     c5ad0:                      1
-//     sub_c5ad2:                  1
-//     c5aea:                      1
-//     c5b07:                      1
-//     c5b33:                      1
-//     c5b36:                      1
-//     l5b3a:                      1
-//     l5b3e:                      1
-//     l5b42:                      1
-//     c5b4c:                      1
-//     c5b6f:                      1
-//     c5b89:                      1
-//     c5b90:                      1
-//     c5ba1:                      1
-//     c5bbe:                      1
-//     c5bd9:                      1
-//     c5be4:                      1
-//     c5bf3:                      1
-//     c5bfe:                      1
-//     c5c2c:                      1
-//     c5c54:                      1
-//     c5c64:                      1
-//     c5c70:                      1
-//     c5c78:                      1
-//     c5c93:                      1
-//     c5cb2:                      1
-//     c5cd3:                      1
-//     c5cd6:                      1
-//     c5ce1:                      1
-//     c5cf9:                      1
-//     c5d08:                      1
-//     c5d0e:                      1
-//     c5d1b:                      1
-//     c5d2b:                      1
-//     c5d40:                      1
-//     c5d46:                      1
-//     c5d6c:                      1
-//     c5d7e:                      1
-//     c5d99:                      1
-//     c5da3:                      1
-//     c5dba:                      1
-//     c5dc0:                      1
-//     c5dd3:                      1
-//     c5ddd:                      1
-//     c5e0e:                      1
-//     c5e21:                      1
-//     c5e31:                      1
-//     c5e3c:                      1
-//     c5e52:                      1
-//     sub_c5e91:                  1
-//     c5eab:                      1
-//     c5ec8:                      1
-//     c5ee0:                      1
-//     c5eee:                      1
-//     c5f1c:                      1
-//     c5f33:                      1
-//     c5f46:                      1
-//     l5f4f:                      1
-//     c5f78:                      1
-//     sub_c5f84:                  1
-//     c5f8a:                      1
-//     c5fa3:                      1
-//     c5fb2:                      1
-//     nmi_handler_rom_start:      1
-//     nmi3_handler_rom_start-1:   1
-//     tube_host_code2:            1
-//     tube_host_code2+256:        1
-//     tube_host_code3:            1
-//     tube_host_code1:            1
-//     tube_host_r4_data:          1
+//     l00b8:                                125
+//     l00b0:                                105
+//     l00ba:                                 44
+//     l00bf:                                 42
+//     l00bc:                                 41
+//     l00b6:                                 35
+//     l00be:                                 31
+//     l00cd:                                 31
+//     print_inline_l809f_top_bit_clear:      31
+//     l00c2:                                 30
+//     l00b1:                                 29
+//     sub_c83e3:                             29
+//     l00b9:                                 28
+//     l00bb:                                 28
+//     l00b5:                                 26
+//     l00bd:                                 26
+//     l00b4:                                 25
+//     l00b3:                                 23
+//     l00c1:                                 23
+//     os_text_ptr:                           23
+//     osbyte:                                22
+//     l0f0e:                                 21
+//     read_tube_r2_data:                     21
+//     romsel_copy:                           21
+//     c809f:                                 20
+//     l00c4:                                 20
+//     l00b2:                                 19
+//     l10c2:                                 19
+//     l0001:                                 18
+//     l00a8:                                 18
+//     l00aa:                                 18
+//     l00c5:                                 18
+//     l00c9:                                 18
+//     l10de:                                 18
+//     l0000:                                 17
+//     l00b7:                                 17
+//     l0e0f:                                 17
+//     l0f06:                                 17
+//     l1000:                                 17
+//     ca3dc:                                 16
+//     cb82b:                                 16
+//     l00a2:                                 16
+//     l00ab:                                 16
+//     l00ae:                                 16
+//     l00c0:                                 15
+//     l00c3:                                 15
+//     l00c7:                                 15
+//     l0f05:                                 15
+//     l00cc:                                 14
+//     l1117:                                 14
+//     tube_entry:                            14
+//     write_tube_r2_data:                    14
+//     l00a1:                                 13
+//     l00a5:                                 13
+//     l00c8:                                 13
+//     l0d30:                                 13
+//     l0f07:                                 13
+//     sub_ca14a:                             13
+//     tube_host_r3_data:                     13
+//     clc_jmp_gsinit:                        12
+//     l00ac:                                 12
+//     osasci:                                12
+//     sub_cb841:                             12
+//     c996e:                                 11
+//     cac0f:                                 11
+//     generate_error_precheck:               11
+//     l00c6:                                 11
+//     l0e08:                                 11
+//     lfe84:                                 11
+//     osrdsc_ptr:                            11
+//     sub_c8149:                             11
+//     tube_host_r2_data:                     11
+//     c93e6:                                 10
+//     cb203:                                 10
+//     l00a9:                                 10
+//     l1111:                                 10
+//     l1112:                                 10
+//     lfe87:                                 10
+//     sub_c80c3:                             10
+//     tube_host_r2_status:                   10
+//     cbbd0:                                  9
+//     l00ca:                                  9
+//     l1074:                                  9
+//     l108a:                                  9
+//     l1097:                                  9
+//     l10c0:                                  9
+//     l1110:                                  9
+//     c8816:                                  8
+//     l00ce:                                  8
+//     l00ff:                                  8
+//     l0100:                                  8
+//     l0df0:                                  8
+//     l0f04:                                  8
+//     l1060:                                  8
+//     l1082:                                  8
+//     l108b:                                  8
+//     l1090:                                  8
+//     l1096:                                  8
+//     l10ca:                                  8
+//     l10cf:                                  8
+//     l10d1:                                  8
+//     osbyte_read:                            8
+//     osfind:                                 8
+//     sub_c81b0:                              8
+//     sub_c81bf:                              8
+//     sub_c8b7b:                              8
+//     sub_cb85d:                              8
+//     tube_host_r1_status:                    8
+//     write_tube_r4_data:                     8
+//     c8b8b:                                  7
+//     generate_error2:                        7
+//     l00a7:                                  7
+//     l00cf:                                  7
+//     l0f08:                                  7
+//     l1075:                                  7
+//     l10c9:                                  7
+//     l10d2:                                  7
+//     l1114:                                  7
+//     osrdsc:                                 7
+//     print_inline_osasci_top_bit_clear:      7
+//     sub_c8284:                              7
+//     sub_c8380:                              7
+//     sub_cb580:                              7
+//     sub_cbab9:                              7
+//     c0036:                                  6
+//     c940c:                                  6
+//     cb8fb:                                  6
+//     command_table:                          6
+//     generate_error_precheck_bad:            6
+//     l0015:                                  6
+//     l00f3:                                  6
+//     l00f7:                                  6
+//     l0f0f:                                  6
+//     l1100:                                  6
+//     lb726:                                  6
+//     oswrch:                                 6
+//     sub_c8280:                              6
+//     sub_c82fe:                              6
+//     sub_c87da:                              6
+//     sub_c99ac:                              6
+//     sub_c9e75:                              6
+//     sub_cb5f2:                              6
+//     zero_stacked_XXX:                       6
+//     c8125:                                  5
+//     c8ba2:                                  5
+//     c9257:                                  5
+//     c99a3:                                  5
+//     cb795:                                  5
+//     cbe7b:                                  5
+//     l00a6:                                  5
+//     l00af:                                  5
+//     l00f0:                                  5
+//     l1087:                                  5
+//     l1088:                                  5
+//     l1099:                                  5
+//     l10c7:                                  5
+//     l10dd:                                  5
+//     l110c:                                  5
+//     l1115:                                  5
+//     l1116:                                  5
+//     nmi_XXX23:                              5
+//     osnewl:                                 5
+//     sub_c80bb:                              5
+//     sub_c80ed:                              5
+//     sub_c80f3:                              5
+//     sub_c830a:                              5
+//     sub_c8335:                              5
+//     sub_c8386:                              5
+//     sub_c840c:                              5
+//     sub_c8f3f:                              5
+//     sub_c9a6e:                              5
+//     sub_c9ab8:                              5
+//     sub_ca0de:                              5
+//     sub_ca1b4:                              5
+//     sub_cb6fe:                              5
+//     sub_cb745:                              5
+//     sub_cb850:                              5
+//     sub_cba67:                              5
+//     write_tube_r1_data:                     5
+//     c059e:                                  4
+//     c81a7:                                  4
+//     c8225:                                  4
+//     c8d74:                                  4
+//     c8d91:                                  4
+//     c8e0e:                                  4
+//     c8e12:                                  4
+//     c8e64:                                  4
+//     c940e:                                  4
+//     c9436:                                  4
+//     c993b:                                  4
+//     c9adf:                                  4
+//     c9ae9:                                  4
+//     ca5e5:                                  4
+//     cb446:                                  4
+//     cb68c:                                  4
+//     cbe7a:                                  4
+//     cbee8:                                  4
+//     generate_error:                         4
+//     generate_error_precheck_disc:           4
+//     inc16_ae:                               4
+//     l0002:                                  4
+//     l0e00:                                  4
+//     l0f0c:                                  4
+//     l0f0d:                                  4
+//     l1069:                                  4
+//     l1076:                                  4
+//     l1077:                                  4
+//     l1081:                                  4
+//     l1086:                                  4
+//     l1095:                                  4
+//     l10c4:                                  4
+//     l10cb:                                  4
+//     l10cc:                                  4
+//     l10ce:                                  4
+//     l10d9:                                  4
+//     l10da:                                  4
+//     l110d:                                  4
+//     l1113:                                  4
+//     l111a:                                  4
+//     l111d:                                  4
+//     lb57f:                                  4
+//     lbfff:                                  4
+//     lfe85:                                  4
+//     lfe86:                                  4
+//     nmi_beq+1:                              4
+//     osbget:                                 4
+//     osbput:                                 4
+//     osfile:                                 4
+//     osrdch:                                 4
+//     romsel:                                 4
+//     sub_c80c8:                              4
+//     sub_c8174:                              4
+//     sub_c821d:                              4
+//     sub_c82b2:                              4
+//     sub_c8327:                              4
+//     sub_c8f6b:                              4
+//     sub_c9965:                              4
+//     sub_c9a8d:                              4
+//     sub_ca379:                              4
+//     sub_ca9ca:                              4
+//     sub_caacf:                              4
+//     sub_cac18:                              4
+//     sub_cac62:                              4
+//     sub_cb616:                              4
+//     sub_cb68f:                              4
+//     sub_cb83f:                              4
+//     sub_cbac2:                              4
+//     sub_cbb00:                              4
+//     bytev:                                  3
+//     c059c:                                  3
+//     c8103:                                  3
+//     c8290:                                  3
+//     c82e6:                                  3
+//     c8454:                                  3
+//     c89d7:                                  3
+//     c8d41:                                  3
+//     c8e53:                                  3
+//     c8ecc:                                  3
+//     c8f2a:                                  3
+//     c91af:                                  3
+//     c9214:                                  3
+//     c9444:                                  3
+//     c94bc:                                  3
+//     c9738:                                  3
+//     c99ed:                                  3
+//     c9a8c:                                  3
+//     c9d5d:                                  3
+//     ca06b:                                  3
+//     ca14f:                                  3
+//     ca1c0:                                  3
+//     ca660:                                  3
+//     caa42:                                  3
+//     caa44:                                  3
+//     cacc4:                                  3
+//     cb1d5:                                  3
+//     cb371:                                  3
+//     cb684:                                  3
+//     cb6ca:                                  3
+//     cbab4:                                  3
+//     cbe47:                                  3
+//     cbe89:                                  3
+//     cbe8d:                                  3
+//     generate_error_precheck_open:           3
+//     l0054:                                  3
+//     l00ef:                                  3
+//     l0107:                                  3
+//     l0109:                                  3
+//     l0d3d:                                  3
+//     l0ef8:                                  3
+//     l1092:                                  3
+//     l1093:                                  3
+//     l1094:                                  3
+//     l1098:                                  3
+//     l109d:                                  3
+//     l109f:                                  3
+//     l10c3:                                  3
+//     l10c5:                                  3
+//     l10c6:                                  3
+//     l10d0:                                  3
+//     l10d3:                                  3
+//     l10d6:                                  3
+//     l10d7:                                  3
+//     l1119:                                  3
+//     l111c:                                  3
+//     lfe80:                                  3
+//     nmi_handler2_rom_end:                   3
+//     nmi_lda_immXXX3+1:                      3
+//     nmi_lda_zp:                             3
+//     nmi_sta_abs+1:                          3
+//     nmi_sta_abs2+1:                         3
+//     oscli:                                  3
+//     osword:                                 3
+//     sram_table:                             3
+//     sub_c0582:                              3
+//     sub_c81be:                              3
+//     sub_c833a:                              3
+//     sub_c836e:                              3
+//     sub_c8456:                              3
+//     sub_c8b86:                              3
+//     sub_c8f7a:                              3
+//     sub_c93fd:                              3
+//     sub_c9526:                              3
+//     sub_c9940:                              3
+//     sub_c9be5:                              3
+//     sub_c9e30:                              3
+//     sub_c9f0f:                              3
+//     sub_c9f16:                              3
+//     sub_c9f1e:                              3
+//     sub_ca315:                              3
+//     sub_ca384:                              3
+//     sub_ca530:                              3
+//     sub_ca9c2:                              3
+//     sub_cac0c:                              3
+//     sub_cb58b:                              3
+//     sub_cb84e:                              3
+//     sub_cb986:                              3
+//     sub_cbac4:                              3
+//     sub_cbf7c:                              3
+//     tube_host_r1_data:                      3
+//     c0434:                                  2
+//     c0482:                                  2
+//     c0491:                                  2
+//     c04bc:                                  2
+//     c053a:                                  2
+//     c05fc:                                  2
+//     c0636:                                  2
+//     c0d60:                                  2
+//     c815d:                                  2
+//     c822a:                                  2
+//     c825d:                                  2
+//     c82fd:                                  2
+//     c8543:                                  2
+//     c8560:                                  2
+//     c85bc:                                  2
+//     c8703:                                  2
+//     c8705:                                  2
+//     c873b:                                  2
+//     c8808:                                  2
+//     c883f:                                  2
+//     c88a6:                                  2
+//     c88f4:                                  2
+//     c898a:                                  2
+//     c89a5:                                  2
+//     c89b4:                                  2
+//     c8a00:                                  2
+//     c8a6e:                                  2
+//     c8be3:                                  2
+//     c8c12:                                  2
+//     c8cb2:                                  2
+//     c8d0d:                                  2
+//     c8d13:                                  2
+//     c8e0d:                                  2
+//     c8e32:                                  2
+//     c8e9f:                                  2
+//     c8ea5:                                  2
+//     c8eb7:                                  2
+//     c8eeb:                                  2
+//     c8f3e:                                  2
+//     c91df:                                  2
+//     c9289:                                  2
+//     c9367:                                  2
+//     c94a9:                                  2
+//     c94c6:                                  2
+//     c95fd:                                  2
+//     c9628:                                  2
+//     c965a:                                  2
+//     c96b7:                                  2
+//     c97b3:                                  2
+//     c9b6e:                                  2
+//     c9bc5:                                  2
+//     c9dcd:                                  2
+//     c9dd5:                                  2
+//     c9e41:                                  2
+//     ca01d:                                  2
+//     ca021:                                  2
+//     ca06c:                                  2
+//     ca0f5:                                  2
+//     ca10b:                                  2
+//     ca19f:                                  2
+//     ca2f2:                                  2
+//     ca38b:                                  2
+//     ca411:                                  2
+//     ca414:                                  2
+//     ca5ab:                                  2
+//     ca637:                                  2
+//     ca845:                                  2
+//     ca86b:                                  2
+//     ca87a:                                  2
+//     ca97d:                                  2
+//     ca9ff:                                  2
+//     caa1c:                                  2
+//     caa51:                                  2
+//     cab1a:                                  2
+//     cab41:                                  2
+//     cab54:                                  2
+//     cabbc:                                  2
+//     caed3:                                  2
+//     cb280:                                  2
+//     cb297:                                  2
+//     cb2a0:                                  2
+//     cb300:                                  2
+//     cb406:                                  2
+//     cb45e:                                  2
+//     cb655:                                  2
+//     cb718:                                  2
+//     cb7ed:                                  2
+//     cb8e4:                                  2
+//     cb9e8:                                  2
+//     cba10:                                  2
+//     cbaf8:                                  2
+//     cbafd:                                  2
+//     cbb28:                                  2
+//     cbb2a:                                  2
+//     cbc13:                                  2
+//     cbc3a:                                  2
+//     cbcb9:                                  2
+//     cbdb9:                                  2
+//     cbec1:                                  2
+//     cbf8e:                                  2
+//     fscv:                                   2
+//     general_service_handler_indirect:       2
+//     gsinit:                                 2
+//     gsread:                                 2
+//     invert_l1065:                           2
+//     just_rts:                               2
+//     l0003:                                  2
+//     l0012:                                  2
+//     l0014:                                  2
+//     l0053:                                  2
+//     l0055:                                  2
+//     l0056:                                  2
+//     l00a0:                                  2
+//     l00a3:                                  2
+//     l00a4:                                  2
+//     l00ad:                                  2
+//     l00fd:                                  2
+//     l0101:                                  2
+//     l0102:                                  2
+//     l0105:                                  2
+//     l010b:                                  2
+//     l0128:                                  2
+//     l0500:                                  2
+//     l0700:                                  2
+//     l0d26:                                  2
+//     l0e07:                                  2
+//     l0f0a:                                  2
+//     l0f0b:                                  2
+//     l1045:                                  2
+//     l1062:                                  2
+//     l1065:                                  2
+//     l1067:                                  2
+//     l1078:                                  2
+//     l107d:                                  2
+//     l107e:                                  2
+//     l107f:                                  2
+//     l1089:                                  2
+//     l108c:                                  2
+//     l1091:                                  2
+//     l109a:                                  2
+//     l109b:                                  2
+//     l109e:                                  2
+//     l10c1:                                  2
+//     l10cd:                                  2
+//     l10d8:                                  2
+//     l10db:                                  2
+//     l10dc:                                  2
+//     l10e2:                                  2
+//     l10e3:                                  2
+//     l10e4:                                  2
+//     l1109:                                  2
+//     l110b:                                  2
+//     l110e:                                  2
+//     l110f:                                  2
+//     l111b:                                  2
+//     la1d3:                                  2
+//     lb872:                                  2
+//     nmi_XXX7:                               2
+//     nmi_handler_ram:                        2
+//     nmi_lda_abs+1:                          2
+//     nmi_lda_abs+2:                          2
+//     nmi_lda_immXXX4+1:                      2
+//     nmi_lda_zp+1:                           2
+//     nmi_sta_abs+2:                          2
+//     nmi_sta_abs2+2:                         2
+//     osargs:                                 2
+//     osgbpb:                                 2
+//     sub_c04ce:                              2
+//     sub_c809a:                              2
+//     sub_c80e3:                              2
+//     sub_c81ae:                              2
+//     sub_c81c5:                              2
+//     sub_c8266:                              2
+//     sub_c826d:                              2
+//     sub_c82bb:                              2
+//     sub_c82e8:                              2
+//     sub_c841b:                              2
+//     sub_c8439:                              2
+//     sub_c8555:                              2
+//     sub_c8745:                              2
+//     sub_c87db:                              2
+//     sub_c87e3:                              2
+//     sub_c8855:                              2
+//     sub_c8862:                              2
+//     sub_c8951:                              2
+//     sub_c89da:                              2
+//     sub_c8a77:                              2
+//     sub_c8ab3:                              2
+//     sub_c8b4d:                              2
+//     sub_c8b64:                              2
+//     sub_c9279:                              2
+//     sub_c928a:                              2
+//     sub_c93c5:                              2
+//     sub_c93d3:                              2
+//     sub_c93f5:                              2
+//     sub_c9432:                              2
+//     sub_c9445:                              2
+//     sub_c9516:                              2
+//     sub_c952e:                              2
+//     sub_c992c:                              2
+//     sub_c995a:                              2
+//     sub_c99f3:                              2
+//     sub_c9a0f:                              2
+//     sub_c9a50:                              2
+//     sub_c9a60:                              2
+//     sub_c9a63:                              2
+//     sub_c9a78:                              2
+//     sub_c9a82:                              2
+//     sub_c9aa3:                              2
+//     sub_c9ac8:                              2
+//     sub_c9ad8:                              2
+//     sub_c9b79:                              2
+//     sub_c9bf2:                              2
+//     sub_c9d1e:                              2
+//     sub_c9df4:                              2
+//     sub_c9e1e:                              2
+//     sub_c9e54:                              2
+//     sub_c9ef4:                              2
+//     sub_c9f14:                              2
+//     sub_c9f26:                              2
+//     sub_ca168:                              2
+//     sub_ca1c6:                              2
+//     sub_ca324:                              2
+//     sub_ca3ec:                              2
+//     sub_ca51f:                              2
+//     sub_ca5b2:                              2
+//     sub_ca90d:                              2
+//     sub_caa53:                              2
+//     sub_caac2:                              2
+//     sub_caaf1:                              2
+//     sub_cac4e:                              2
+//     sub_cb598:                              2
+//     sub_cb5ce:                              2
+//     sub_cb5ee:                              2
+//     sub_cb607:                              2
+//     sub_cb61e:                              2
+//     sub_cb65f:                              2
+//     sub_cb6b1:                              2
+//     sub_cb9f5:                              2
+//     sub_cbc68:                              2
+//     sub_cbe83:                              2
+//     sub_cbe9d:                              2
+//     sub_cbec2:                              2
+//     sub_cbf82:                              2
+//     tube_banner_loop:                       2
+//     tube_host_r4_status:                    2
+//     brkv:                                   1
+//     c0032:                                  1
+//     c0041:                                  1
+//     c0400:                                  1
+//     c0432:                                  1
+//     c0463:                                  1
+//     c047a:                                  1
+//     c0484:                                  1
+//     c048c:                                  1
+//     c049b:                                  1
+//     c04f7:                                  1
+//     c0552:                                  1
+//     c0593:                                  1
+//     c05a6:                                  1
+//     c0645:                                  1
+//     c0665:                                  1
+//     c06a7:                                  1
+//     c0d74:                                  1
+//     c0d80:                                  1
+//     c8040:                                  1
+//     c8093:                                  1
+//     c8096:                                  1
+//     c80d0:                                  1
+//     c8111:                                  1
+//     c8115:                                  1
+//     c812e:                                  1
+//     c815b:                                  1
+//     c815f:                                  1
+//     c8184:                                  1
+//     c818a:                                  1
+//     c81a2:                                  1
+//     c81bd:                                  1
+//     c8243:                                  1
+//     c8286:                                  1
+//     c828b:                                  1
+//     c82be:                                  1
+//     c82d9:                                  1
+//     c82e7:                                  1
+//     c82fb:                                  1
+//     c8306:                                  1
+//     c8332:                                  1
+//     c8333:                                  1
+//     c83ab:                                  1
+//     c83cd:                                  1
+//     c83e2:                                  1
+//     c842b:                                  1
+//     c8436:                                  1
+//     c8438:                                  1
+//     c8453:                                  1
+//     c8477:                                  1
+//     c8481:                                  1
+//     c8482:                                  1
+//     c849d:                                  1
+//     c853e:                                  1
+//     c855f:                                  1
+//     c8573:                                  1
+//     c859b:                                  1
+//     c85c5:                                  1
+//     c8734:                                  1
+//     c8759:                                  1
+//     c8779:                                  1
+//     c877c:                                  1
+//     c87ab:                                  1
+//     c87b8:                                  1
+//     c87c6:                                  1
+//     c8815:                                  1
+//     c8837:                                  1
+//     c8864:                                  1
+//     c8867:                                  1
+//     c892d:                                  1
+//     c8945:                                  1
+//     c8968:                                  1
+//     c896b:                                  1
+//     c89ad:                                  1
+//     c89e2:                                  1
+//     c89f6:                                  1
+//     c8a19:                                  1
+//     c8a49:                                  1
+//     c8a50:                                  1
+//     c8a54:                                  1
+//     c8a82:                                  1
+//     c8ad0:                                  1
+//     c8aeb:                                  1
+//     c8b18:                                  1
+//     c8b60:                                  1
+//     c8b77:                                  1
+//     c8bfb:                                  1
+//     c8c2e:                                  1
+//     c8c3a:                                  1
+//     c8c4e:                                  1
+//     c8c61:                                  1
+//     c8c87:                                  1
+//     c8cae:                                  1
+//     c8cc1:                                  1
+//     c8cd6:                                  1
+//     c8ce7:                                  1
+//     c8cfc:                                  1
+//     c8d03:                                  1
+//     c8d5d:                                  1
+//     c8d92:                                  1
+//     c8dd2:                                  1
+//     c8de2:                                  1
+//     c8e03:                                  1
+//     c8e4d:                                  1
+//     c8e6f:                                  1
+//     c8e72:                                  1
+//     c8e9e:                                  1
+//     c8eaf:                                  1
+//     c8ecb:                                  1
+//     c8edf:                                  1
+//     c8ef8:                                  1
+//     c8f12:                                  1
+//     c8f21:                                  1
+//     c8f81:                                  1
+//     c8fb5:                                  1
+//     c8fc7:                                  1
+//     c9060:                                  1
+//     c9115:                                  1
+//     c91cc:                                  1
+//     c91eb:                                  1
+//     c91f3:                                  1
+//     c91f9:                                  1
+//     c9201:                                  1
+//     c920d:                                  1
+//     c921f:                                  1
+//     c922b:                                  1
+//     c9238:                                  1
+//     c923b:                                  1
+//     c923f:                                  1
+//     c9249:                                  1
+//     c925a:                                  1
+//     c926a:                                  1
+//     c9276:                                  1
+//     c929c:                                  1
+//     c92bd:                                  1
+//     c92c4:                                  1
+//     c92c7:                                  1
+//     c92d6:                                  1
+//     c92e3:                                  1
+//     c9302:                                  1
+//     c936b:                                  1
+//     c9379:                                  1
+//     c938d:                                  1
+//     c9390:                                  1
+//     c93a8:                                  1
+//     c93b1:                                  1
+//     c93c4:                                  1
+//     c93e2:                                  1
+//     c93e5:                                  1
+//     c93ff:                                  1
+//     c9450:                                  1
+//     c945c:                                  1
+//     c948d:                                  1
+//     c94c1:                                  1
+//     c94c2:                                  1
+//     c94d4:                                  1
+//     c9504:                                  1
+//     c9535:                                  1
+//     c9556:                                  1
+//     c956d:                                  1
+//     c956f:                                  1
+//     c95e4:                                  1
+//     c95e7:                                  1
+//     c9649:                                  1
+//     c964a:                                  1
+//     c9658:                                  1
+//     c967a:                                  1
+//     c9682:                                  1
+//     c9683:                                  1
+//     c969e:                                  1
+//     c96c3:                                  1
+//     c96e4:                                  1
+//     c96e9:                                  1
+//     c96ec:                                  1
+//     c96f5:                                  1
+//     c9700:                                  1
+//     c9714:                                  1
+//     c9736:                                  1
+//     c973c:                                  1
+//     c973d:                                  1
+//     c975b:                                  1
+//     c976c:                                  1
+//     c97e6:                                  1
+//     c981f:                                  1
+//     c982e:                                  1
+//     c9835:                                  1
+//     c984c:                                  1
+//     c9859:                                  1
+//     c986b:                                  1
+//     c9873:                                  1
+//     c98b1:                                  1
+//     c98ba:                                  1
+//     c98cd:                                  1
+//     c98ed:                                  1
+//     c98f0:                                  1
+//     c994b:                                  1
+//     c9978:                                  1
+//     c9993:                                  1
+//     c99ea:                                  1
+//     c9a2a:                                  1
+//     c9a3f:                                  1
+//     c9a73:                                  1
+//     c9a77:                                  1
+//     c9ad4:                                  1
+//     c9bc2:                                  1
+//     c9c16:                                  1
+//     c9c33:                                  1
+//     c9c51:                                  1
+//     c9c58:                                  1
+//     c9c6b:                                  1
+//     c9c8b:                                  1
+//     c9cee:                                  1
+//     c9d12:                                  1
+//     c9d2b:                                  1
+//     c9d57:                                  1
+//     c9d67:                                  1
+//     c9d71:                                  1
+//     c9d72:                                  1
+//     c9d86:                                  1
+//     c9d89:                                  1
+//     c9db4:                                  1
+//     c9dce:                                  1
+//     c9e13:                                  1
+//     c9e16:                                  1
+//     c9e28:                                  1
+//     c9e2a:                                  1
+//     c9e5c:                                  1
+//     c9e6f:                                  1
+//     c9e71:                                  1
+//     c9eb3:                                  1
+//     c9ec2:                                  1
+//     c9ef1:                                  1
+//     c9f0d:                                  1
+//     c9f19:                                  1
+//     c9f5e:                                  1
+//     c9f64:                                  1
+//     c9f6a:                                  1
+//     c9f6b:                                  1
+//     c9f88:                                  1
+//     c9fd9:                                  1
+//     c9ff4:                                  1
+//     ca005:                                  1
+//     ca054:                                  1
+//     ca075:                                  1
+//     ca0a9:                                  1
+//     ca17a:                                  1
+//     ca183:                                  1
+//     ca1c1:                                  1
+//     ca1d2:                                  1
+//     ca27a:                                  1
+//     ca2ab:                                  1
+//     ca30d:                                  1
+//     ca321:                                  1
+//     ca34a:                                  1
+//     ca378:                                  1
+//     ca38c:                                  1
+//     ca38e:                                  1
+//     ca3ae:                                  1
+//     ca3bd:                                  1
+//     ca3fb:                                  1
+//     ca40c:                                  1
+//     ca45d:                                  1
+//     ca47b:                                  1
+//     ca4fa:                                  1
+//     ca538:                                  1
+//     ca547:                                  1
+//     ca574:                                  1
+//     ca595:                                  1
+//     ca5a0:                                  1
+//     ca5c4:                                  1
+//     ca5e2:                                  1
+//     ca5fb:                                  1
+//     ca605:                                  1
+//     ca63a:                                  1
+//     ca647:                                  1
+//     ca652:                                  1
+//     ca65d:                                  1
+//     ca675:                                  1
+//     ca68a:                                  1
+//     ca6b3:                                  1
+//     ca6b6:                                  1
+//     ca6bb:                                  1
+//     ca6ce:                                  1
+//     ca6e2:                                  1
+//     ca70a:                                  1
+//     ca712:                                  1
+//     ca721:                                  1
+//     ca728:                                  1
+//     ca73a:                                  1
+//     ca787:                                  1
+//     ca7a4:                                  1
+//     ca7f2:                                  1
+//     ca7f7:                                  1
+//     ca818:                                  1
+//     ca82f:                                  1
+//     ca856:                                  1
+//     ca8bd:                                  1
+//     ca8fa:                                  1
+//     ca902:                                  1
+//     ca90c:                                  1
+//     ca95d:                                  1
+//     ca96c:                                  1
+//     ca970:                                  1
+//     ca982:                                  1
+//     ca98d:                                  1
+//     ca9b8:                                  1
+//     caa0a:                                  1
+//     caa0d:                                  1
+//     caa78:                                  1
+//     caa7a:                                  1
+//     caa86:                                  1
+//     caab7:                                  1
+//     caabe:                                  1
+//     caace:                                  1
+//     cab09:                                  1
+//     cab17:                                  1
+//     cab2e:                                  1
+//     cab35:                                  1
+//     cab3d:                                  1
+//     cab7d:                                  1
+//     cab93:                                  1
+//     caba4:                                  1
+//     cabcf:                                  1
+//     cabfb:                                  1
+//     cac28:                                  1
+//     cac45:                                  1
+//     cacc7:                                  1
+//     caed7:                                  1
+//     cb1dd:                                  1
+//     cb1fc:                                  1
+//     cb20f:                                  1
+//     cb221:                                  1
+//     cb23d:                                  1
+//     cb260:                                  1
+//     cb268:                                  1
+//     cb2b2:                                  1
+//     cb2e1:                                  1
+//     cb2e7:                                  1
+//     cb305:                                  1
+//     cb314:                                  1
+//     cb337:                                  1
+//     cb34f:                                  1
+//     cb352:                                  1
+//     cb375:                                  1
+//     cb37f:                                  1
+//     cb382:                                  1
+//     cb397:                                  1
+//     cb3ba:                                  1
+//     cb3de:                                  1
+//     cb40e:                                  1
+//     cb44b:                                  1
+//     cb45a:                                  1
+//     cb470:                                  1
+//     cb4af:                                  1
+//     cb4b4:                                  1
+//     cb4d8:                                  1
+//     cb4df:                                  1
+//     cb4e9:                                  1
+//     cb4ee:                                  1
+//     cb502:                                  1
+//     cb534:                                  1
+//     cb597:                                  1
+//     cb5d0:                                  1
+//     cb5e6:                                  1
+//     cb65e:                                  1
+//     cb6a6:                                  1
+//     cb6c2:                                  1
+//     cb6d2:                                  1
+//     cb6eb:                                  1
+//     cb6f5:                                  1
+//     cb725:                                  1
+//     cb736:                                  1
+//     cb7ae:                                  1
+//     cb7b2:                                  1
+//     cb7e8:                                  1
+//     cb7ec:                                  1
+//     cb898:                                  1
+//     cb8e6:                                  1
+//     cb8f5:                                  1
+//     cb9ae:                                  1
+//     cb9d2:                                  1
+//     cb9d9:                                  1
+//     cb9ee:                                  1
+//     cb9f7:                                  1
+//     cba15:                                  1
+//     cba19:                                  1
+//     cba27:                                  1
+//     cba28:                                  1
+//     cba2e:                                  1
+//     cba2f:                                  1
+//     cba78:                                  1
+//     cba8c:                                  1
+//     cba9e:                                  1
+//     cbab0:                                  1
+//     cbab1:                                  1
+//     cbad0:                                  1
+//     cbb07:                                  1
+//     cbb33:                                  1
+//     cbb36:                                  1
+//     cbb4c:                                  1
+//     cbb6f:                                  1
+//     cbb89:                                  1
+//     cbb90:                                  1
+//     cbba1:                                  1
+//     cbbbe:                                  1
+//     cbbd9:                                  1
+//     cbbf3:                                  1
+//     cbc2c:                                  1
+//     cbc54:                                  1
+//     cbc64:                                  1
+//     cbc78:                                  1
+//     cbc93:                                  1
+//     cbcb2:                                  1
+//     cbcd6:                                  1
+//     cbce1:                                  1
+//     cbcf9:                                  1
+//     cbd0e:                                  1
+//     cbd1b:                                  1
+//     cbd40:                                  1
+//     cbd46:                                  1
+//     cbd7e:                                  1
+//     cbda3:                                  1
+//     cbdba:                                  1
+//     cbdc0:                                  1
+//     cbdd3:                                  1
+//     cbddd:                                  1
+//     cbe21:                                  1
+//     cbe3c:                                  1
+//     cbe52:                                  1
+//     cbee0:                                  1
+//     cbeee:                                  1
+//     cbf33:                                  1
+//     cbf46:                                  1
+//     cbf8a:                                  1
+//     cbfa3:                                  1
+//     cbfb2:                                  1
+//     command_table+1:                        1
+//     copyright_offset:                       1
+//     evntv:                                  1
+//     filev:                                  1
+//     general_service_handler:                1
+//     generate_error_precheck_disc_changed:   1
+//     generate_error_precheck_locked:         1
+//     jump_address_low:                       1
+//     l0013:                                  1
+//     l00f1:                                  1
+//     l0103:                                  1
+//     l0104:                                  1
+//     l010c:                                  1
+//     l010d:                                  1
+//     l010e:                                  1
+//     l028d:                                  1
+//     l0600:                                  1
+//     l0cff:                                  1
+//     l0d0f:                                  1
+//     l0d12:                                  1
+//     l0d2a:                                  1
+//     l0d50:                                  1
+//     l0e0e:                                  1
+//     l0e10:                                  1
+//     l0f00:                                  1
+//     l0f09:                                  1
+//     l0f10:                                  1
+//     l1001:                                  1
+//     l1002:                                  1
+//     l1003:                                  1
+//     l1004:                                  1
+//     l1005:                                  1
+//     l1006:                                  1
+//     l1007:                                  1
+//     l100e:                                  1
+//     l1047:                                  1
+//     l104d:                                  1
+//     l104e:                                  1
+//     l1050:                                  1
+//     l1058:                                  1
+//     l105f:                                  1
+//     l1061:                                  1
+//     l1063:                                  1
+//     l1064:                                  1
+//     l1072:                                  1
+//     l1079:                                  1
+//     l107a:                                  1
+//     l1083:                                  1
+//     l108f:                                  1
+//     l8001:                                  1
+//     l8002:                                  1
+//     l8004:                                  1
+//     l911d:                                  1
+//     l9121:                                  1
+//     l9139:                                  1
+//     l913f:                                  1
+//     l9145:                                  1
+//     l9146:                                  1
+//     l9191:                                  1
+//     l91a0:                                  1
+//     l9aec:                                  1
+//     l9b0f:                                  1
+//     l9b18:                                  1
+//     l9b21:                                  1
+//     l9b29:                                  1
+//     l9b31:                                  1
+//     l9b3a:                                  1
+//     l9b43:                                  1
+//     language_entry:                         1
+//     lb075:                                  1
+//     lb175:                                  1
+//     lb283:                                  1
+//     lb6c6:                                  1
+//     lb6ce:                                  1
+//     lb774:                                  1
+//     lb87e:                                  1
+//     lb924:                                  1
+//     lb979:                                  1
+//     lb97a:                                  1
+//     lb980:                                  1
+//     lbb3a:                                  1
+//     lbb3e:                                  1
+//     lbb42:                                  1
+//     lbf4f:                                  1
+//     lda_0_rts:                              1
+//     loop_c0029:                             1
+//     loop_c003b:                             1
+//     loop_c0446:                             1
+//     loop_c0466:                             1
+//     loop_c0471:                             1
+//     loop_c04a6:                             1
+//     loop_c04e1:                             1
+//     loop_c0564:                             1
+//     loop_c0577:                             1
+//     loop_c0586:                             1
+//     loop_c05ab:                             1
+//     loop_c05c7:                             1
+//     loop_c05d3:                             1
+//     loop_c05e6:                             1
+//     loop_c0604:                             1
+//     loop_c061d:                             1
+//     loop_c062b:                             1
+//     loop_c064c:                             1
+//     loop_c0657:                             1
+//     loop_c065a:                             1
+//     loop_c8064:                             1
+//     loop_c8086:                             1
+//     loop_c813a:                             1
+//     loop_c8161:                             1
+//     loop_c816b:                             1
+//     loop_c818c:                             1
+//     loop_c820c:                             1
+//     loop_c820d:                             1
+//     loop_c821c:                             1
+//     loop_c826f:                             1
+//     loop_c82c7:                             1
+//     loop_c82d1:                             1
+//     loop_c830d:                             1
+//     loop_c8326:                             1
+//     loop_c8370:                             1
+//     loop_c8390:                             1
+//     loop_c8397:                             1
+//     loop_c83f0:                             1
+//     loop_c83fa:                             1
+//     loop_c8406:                             1
+//     loop_c8425:                             1
+//     loop_c8463:                             1
+//     loop_c8493:                             1
+//     loop_c84e7:                             1
+//     loop_c8527:                             1
+//     loop_c8552:                             1
+//     loop_c8564:                             1
+//     loop_c857b:                             1
+//     loop_c85b5:                             1
+//     loop_c8717:                             1
+//     loop_c8725:                             1
+//     loop_c87a0:                             1
+//     loop_c87be:                             1
+//     loop_c88bc:                             1
+//     loop_c895f:                             1
+//     loop_c8990:                             1
+//     loop_c89c4:                             1
+//     loop_c89ca:                             1
+//     loop_c8a17:                             1
+//     loop_c8ac8:                             1
+//     loop_c8ad8:                             1
+//     loop_c8af0:                             1
+//     loop_c8afb:                             1
+//     loop_c8b80:                             1
+//     loop_c8bea:                             1
+//     loop_c8c58:                             1
+//     loop_c8c71:                             1
+//     loop_c8d14:                             1
+//     loop_c8d17:                             1
+//     loop_c8dac:                             1
+//     loop_c8dba:                             1
+//     loop_c8de9:                             1
+//     loop_c8df0:                             1
+//     loop_c8e14:                             1
+//     loop_c8e85:                             1
+//     loop_c8f17:                             1
+//     loop_c8f6c:                             1
+//     loop_c8f96:                             1
+//     loop_c8fac:                             1
+//     loop_c9047:                             1
+//     loop_c9108:                             1
+//     loop_c9113:                             1
+//     loop_c91ba:                             1
+//     loop_c91e7:                             1
+//     loop_c92ef:                             1
+//     loop_c9355:                             1
+//     loop_c9357:                             1
+//     loop_c936f:                             1
+//     loop_c9382:                             1
+//     loop_c93bd:                             1
+//     loop_c93da:                             1
+//     loop_c953a:                             1
+//     loop_c957d:                             1
+//     loop_c9593:                             1
+//     loop_c95b6:                             1
+//     loop_c95d9:                             1
+//     loop_c95ec:                             1
+//     loop_c9618:                             1
+//     loop_c96c2:                             1
+//     loop_c96f2:                             1
+//     loop_c979d:                             1
+//     loop_c97c8:                             1
+//     loop_c9803:                             1
+//     loop_c9837:                             1
+//     loop_c9851:                             1
+//     loop_c985e:                             1
+//     loop_c9881:                             1
+//     loop_c98a0:                             1
+//     loop_c98c1:                             1
+//     loop_c98e4:                             1
+//     loop_c9942:                             1
+//     loop_c994e:                             1
+//     loop_c9964:                             1
+//     loop_c99a8:                             1
+//     loop_c9b50:                             1
+//     loop_c9b5e:                             1
+//     loop_c9b63:                             1
+//     loop_c9bcf:                             1
+//     loop_c9be4:                             1
+//     loop_c9c38:                             1
+//     loop_c9c5d:                             1
+//     loop_c9c90:                             1
+//     loop_c9ca8:                             1
+//     loop_c9d03:                             1
+//     loop_c9d43:                             1
+//     loop_c9e07:                             1
+//     loop_c9e74:                             1
+//     loop_c9e8c:                             1
+//     loop_c9f6e:                             1
+//     loop_ca061:                             1
+//     loop_ca11d:                             1
+//     loop_ca132:                             1
+//     loop_ca143:                             1
+//     loop_ca16e:                             1
+//     loop_ca1aa:                             1
+//     loop_ca1cc:                             1
+//     loop_ca487:                             1
+//     loop_ca521:                             1
+//     loop_ca76f:                             1
+//     loop_ca7a7:                             1
+//     loop_ca7c6:                             1
+//     loop_ca7e0:                             1
+//     loop_ca7e1:                             1
+//     loop_ca941:                             1
+//     loop_ca947:                             1
+//     loop_ca953:                             1
+//     loop_ca9ab:                             1
+//     loop_ca9e7:                             1
+//     loop_caa01:                             1
+//     loop_caab8:                             1
+//     loop_cab6b:                             1
+//     loop_cab80:                             1
+//     loop_cabad:                             1
+//     loop_cabf4:                             1
+//     loop_cac46:                             1
+//     loop_caf13:                             1
+//     loop_caf2d:                             1
+//     loop_cb1e3:                             1
+//     loop_cb1ed:                             1
+//     loop_cb249:                             1
+//     loop_cb275:                             1
+//     loop_cb2b4:                             1
+//     loop_cb2bd:                             1
+//     loop_cb2d1:                             1
+//     loop_cb44d:                             1
+//     loop_cb4a8:                             1
+//     loop_cb55e:                             1
+//     loop_cb578:                             1
+//     loop_cb5c6:                             1
+//     loop_cb5ed:                             1
+//     loop_cb6b3:                             1
+//     loop_cb75a:                             1
+//     loop_cb7be:                             1
+//     loop_cb7d7:                             1
+//     loop_cb7dd:                             1
+//     loop_cb910:                             1
+//     loop_cb999:                             1
+//     loop_cb9bd:                             1
+//     loop_cb9cc:                             1
+//     loop_cb9d1:                             1
+//     loop_cb9f9:                             1
+//     loop_cba1a:                             1
+//     loop_cba94:                             1
+//     loop_cbab8:                             1
+//     loop_cbaea:                             1
+//     loop_cbbe4:                             1
+//     loop_cbbfe:                             1
+//     loop_cbc70:                             1
+//     loop_cbcd3:                             1
+//     loop_cbd08:                             1
+//     loop_cbd2b:                             1
+//     loop_cbd6c:                             1
+//     loop_cbd99:                             1
+//     loop_cbe0e:                             1
+//     loop_cbe31:                             1
+//     loop_cbeab:                             1
+//     loop_cbf1c:                             1
+//     loop_cbf78:                             1
+//     nmi3_handler_rom_end:                   1
+//     nmi3_handler_rom_start-1:               1
+//     nmi_XXX18:                              1
+//     nmi_XXX2:                               1
+//     nmi_XXX21:                              1
+//     nmi_XXX5:                               1
+//     nmi_XXX6:                               1
+//     nmi_XXX6+1:                             1
+//     nmi_and_imm+1:                          1
+//     nmi_and_table:                          1
+//     nmi_bcs+1:                              1
+//     nmi_cmp_imm_or_bcs:                     1
+//     nmi_cmp_imm_or_bcs+1:                   1
+//     nmi_handler2_rom_start-1:               1
+//     nmi_handler_rom_start:                  1
+//     nmi_lda_abs:                            1
+//     opt4_table:                             1
+//     osbyte_write_0:                         1
+//     pla_rts:                                1
+//     rom_header:                             1
+//     rom_type:                               1
+//     service_entry:                          1
+//     service_handler:                        1
+//     service_handler_help_and_tube:          1
+//     service_handler_tube_main_init:         1
+//     set_c_iff_have_fdc:                     1
+//     sram_table+1:                           1
+//     sub_c0414:                              1
+//     sub_c0421:                              1
+//     sub_c04c7:                              1
+//     sub_c8020:                              1
+//     sub_c809d:                              1
+//     sub_c80b8:                              1
+//     sub_c80d3:                              1
+//     sub_c80db:                              1
+//     sub_c80e6:                              1
+//     sub_c80f6:                              1
+//     sub_c81b7:                              1
+//     sub_c81c0:                              1
+//     sub_c81c4:                              1
+//     sub_c81ca:                              1
+//     sub_c8222:                              1
+//     sub_c83bf:                              1
+//     sub_c83d1:                              1
+//     sub_c83d4:                              1
+//     sub_c83ee:                              1
+//     sub_c842c:                              1
+//     sub_c85e3:                              1
+//     sub_c8602:                              1
+//     sub_c8826:                              1
+//     sub_c8932:                              1
+//     sub_c8979:                              1
+//     sub_c8b25:                              1
+//     sub_c8bf6:                              1
+//     sub_c8bf9:                              1
+//     sub_c8c56:                              1
+//     sub_c8c65:                              1
+//     sub_c8d1a:                              1
+//     sub_c8dc6:                              1
+//     sub_c8eec:                              1
+//     sub_c8efa:                              1
+//     sub_c8eff:                              1
+//     sub_c8f33:                              1
+//     sub_c8f37:                              1
+//     sub_c8f4f:                              1
+//     sub_c8f5e:                              1
+//     sub_c8f75:                              1
+//     sub_c8f82:                              1
+//     sub_c8f94:                              1
+//     sub_c929d:                              1
+//     sub_c93b4:                              1
+//     sub_c93d8:                              1
+//     sub_c93f1:                              1
+//     sub_c93f9:                              1
+//     sub_c9536:                              1
+//     sub_c965d:                              1
+//     sub_c97e8:                              1
+//     sub_c9832:                              1
+//     sub_c9988:                              1
+//     sub_c9a32:                              1
+//     sub_c9a4b:                              1
+//     sub_c9ad3:                              1
+//     sub_c9b51:                              1
+//     sub_c9b61:                              1
+//     sub_c9bca:                              1
+//     sub_c9bcd:                              1
+//     sub_c9d19:                              1
+//     sub_c9d75:                              1
+//     sub_c9e94:                              1
+//     sub_c9f7c:                              1
+//     sub_c9f82:                              1
+//     sub_ca0b8:                              1
+//     sub_ca0f6:                              1
+//     sub_ca190:                              1
+//     sub_ca3e4:                              1
+//     sub_ca4e1:                              1
+//     sub_ca663:                              1
+//     sub_ca73d:                              1
+//     sub_ca76c:                              1
+//     sub_ca779:                              1
+//     sub_ca788:                              1
+//     sub_ca7c4:                              1
+//     sub_ca7c5:                              1
+//     sub_ca7ce:                              1
+//     sub_ca8be:                              1
+//     sub_ca8e2:                              1
+//     sub_ca9bf:                              1
+//     sub_caa12:                              1
+//     sub_caa9a:                              1
+//     sub_caadd:                              1
+//     sub_caaea:                              1
+//     sub_caba9:                              1
+//     sub_cac47:                              1
+//     sub_cac6a:                              1
+//     sub_cac72:                              1
+//     sub_cb234:                              1
+//     sub_cb2c8:                              1
+//     sub_cb6e6:                              1
+//     sub_cb771:                              1
+//     sub_cb7b6:                              1
+//     sub_cb86f:                              1
+//     sub_cb882:                              1
+//     sub_cbad2:                              1
+//     sub_cbe91:                              1
+//     sub_cbf84:                              1
+//     tube_brkv_handler:                      1
+//     tube_entry_claim_tube:                  1
+//     tube_entry_flags:                       1
+//     tube_entry_small_a:                     1
+//     tube_host_code1:                        1
+//     tube_host_code2:                        1
+//     tube_host_code2+256:                    1
+//     tube_host_code3:                        1
+//     tube_host_osword_0_loop:                1
+//     tube_host_osword_0_no_escape:           1
+//     tube_host_osword_0_no_escape_loop:      1
+//     tube_host_r4_data:                      1
 
 // Automatically generated labels:
 //     c0032
@@ -12110,836 +12168,6 @@ pydis_end
 //     c0d60
 //     c0d74
 //     c0d80
-//     c2003
-//     c2040
-//     c204f
-//     c2064
-//     c2086
-//     c2093
-//     c2096
-//     c209f
-//     c20d0
-//     c2103
-//     c2111
-//     c2115
-//     c2125
-//     c212e
-//     c213a
-//     c215b
-//     c215d
-//     c215f
-//     c2161
-//     c216b
-//     c2184
-//     c218a
-//     c218c
-//     c21a2
-//     c21a7
-//     c21bd
-//     c220c
-//     c220d
-//     c221c
-//     c2225
-//     c222a
-//     c2243
-//     c225d
-//     c226f
-//     c2286
-//     c228b
-//     c2290
-//     c22be
-//     c22c7
-//     c22d1
-//     c22d9
-//     c22e6
-//     c22e7
-//     c22fb
-//     c22fd
-//     c2306
-//     c230d
-//     c2326
-//     c2332
-//     c2333
-//     c2370
-//     c2390
-//     c2397
-//     c23ab
-//     c23cd
-//     c23e2
-//     c23f0
-//     c23fa
-//     c2406
-//     c2425
-//     c242b
-//     c2436
-//     c2438
-//     c2453
-//     c2454
-//     c2463
-//     c2477
-//     c2481
-//     c2482
-//     c2493
-//     c249d
-//     c24e7
-//     c2527
-//     c253e
-//     c2543
-//     c2552
-//     c255f
-//     c2560
-//     c2564
-//     c2573
-//     c257b
-//     c259b
-//     c25b5
-//     c25bc
-//     c25c5
-//     c2703
-//     c2705
-//     c2717
-//     c2725
-//     c2734
-//     c273b
-//     c2759
-//     c2779
-//     c277c
-//     c27a0
-//     c27ab
-//     c27b8
-//     c27be
-//     c27c6
-//     c2808
-//     c2815
-//     c2816
-//     c2837
-//     c283f
-//     c2864
-//     c2867
-//     c28a6
-//     c28bc
-//     c28f4
-//     c292d
-//     c2945
-//     c295f
-//     c2968
-//     c296b
-//     c298a
-//     c2990
-//     c29a5
-//     c29ad
-//     c29b4
-//     c29c4
-//     c29ca
-//     c29d7
-//     c29e2
-//     c29f6
-//     c2a00
-//     c2a17
-//     c2a19
-//     c2a49
-//     c2a50
-//     c2a54
-//     c2a6e
-//     c2a82
-//     c2ac8
-//     c2ad0
-//     c2ad8
-//     c2aeb
-//     c2af0
-//     c2afb
-//     c2b18
-//     c2b60
-//     c2b77
-//     c2b80
-//     c2b8b
-//     c2ba2
-//     c2be3
-//     c2bea
-//     c2bfb
-//     c2c12
-//     c2c2e
-//     c2c3a
-//     c2c4e
-//     c2c58
-//     c2c61
-//     c2c71
-//     c2c87
-//     c2cae
-//     c2cb2
-//     c2cc1
-//     c2cd6
-//     c2ce7
-//     c2cfc
-//     c2d03
-//     c2d0d
-//     c2d13
-//     c2d14
-//     c2d17
-//     c2d41
-//     c2d5d
-//     c2d74
-//     c2d91
-//     c2d92
-//     c2dac
-//     c2dba
-//     c2dd2
-//     c2de2
-//     c2de9
-//     c2df0
-//     c2e03
-//     c2e0d
-//     c2e0e
-//     c2e12
-//     c2e14
-//     c2e32
-//     c2e4d
-//     c2e53
-//     c2e64
-//     c2e6f
-//     c2e72
-//     c2e85
-//     c2e9e
-//     c2e9f
-//     c2ea5
-//     c2eaf
-//     c2eb7
-//     c2ecb
-//     c2ecc
-//     c2edf
-//     c2eeb
-//     c2ef8
-//     c2f12
-//     c2f17
-//     c2f21
-//     c2f2a
-//     c2f3e
-//     c2f6c
-//     c2f81
-//     c2f96
-//     c2fac
-//     c2fb5
-//     c2fc7
-//     c3047
-//     c3060
-//     c3066
-//     c30c7
-//     c30db
-//     c30e7
-//     c30fb
-//     c3108
-//     c3113
-//     c3115
-//     c31af
-//     c31ba
-//     c31cc
-//     c31df
-//     c31e7
-//     c31eb
-//     c31f3
-//     c31f9
-//     c3201
-//     c320d
-//     c3214
-//     c321f
-//     c322b
-//     c3238
-//     c323b
-//     c323f
-//     c3249
-//     c3257
-//     c325a
-//     c326a
-//     c3276
-//     c3289
-//     c329c
-//     c32bd
-//     c32c4
-//     c32c7
-//     c32d6
-//     c32e3
-//     c32ef
-//     c3302
-//     c3355
-//     c3357
-//     c3367
-//     c336b
-//     c336f
-//     c3379
-//     c3382
-//     c338d
-//     c3390
-//     c33a8
-//     c33b1
-//     c33bd
-//     c33c4
-//     c33da
-//     c33e2
-//     c33e5
-//     c33e6
-//     c33ff
-//     c340c
-//     c340e
-//     c3436
-//     c3444
-//     c3450
-//     c345c
-//     c348d
-//     c34a9
-//     c34bc
-//     c34c1
-//     c34c2
-//     c34c6
-//     c34d4
-//     c3504
-//     c3535
-//     c353a
-//     c3556
-//     c356d
-//     c356f
-//     c357d
-//     c3593
-//     c35b6
-//     c35d9
-//     c35e4
-//     c35e7
-//     c35ec
-//     c35fd
-//     c3618
-//     c3628
-//     c3649
-//     c364a
-//     c3658
-//     c365a
-//     c367a
-//     c3682
-//     c3683
-//     c369e
-//     c36b7
-//     c36c1
-//     c36c2
-//     c36c3
-//     c36e4
-//     c36e9
-//     c36ec
-//     c36f2
-//     c36f5
-//     c3700
-//     c3714
-//     c3736
-//     c3738
-//     c373c
-//     c373d
-//     c375b
-//     c376c
-//     c379d
-//     c37b3
-//     c37c8
-//     c37e6
-//     c3803
-//     c381f
-//     c382e
-//     c3835
-//     c3837
-//     c384c
-//     c3851
-//     c3859
-//     c385e
-//     c386b
-//     c3873
-//     c3881
-//     c38a0
-//     c38b1
-//     c38ba
-//     c38c1
-//     c38cd
-//     c38e4
-//     c38ed
-//     c38f0
-//     c393b
-//     c3942
-//     c394b
-//     c394e
-//     c3964
-//     c396e
-//     c3978
-//     c3993
-//     c39a3
-//     c39a8
-//     c39ea
-//     c39ed
-//     c3a2a
-//     c3a3f
-//     c3a55
-//     c3a73
-//     c3a77
-//     c3a8c
-//     c3ad4
-//     c3adf
-//     c3ae9
-//     c3b50
-//     c3b5e
-//     c3b63
-//     c3b6e
-//     c3bc2
-//     c3bc5
-//     c3bcf
-//     c3be4
-//     c3c00
-//     c3c16
-//     c3c33
-//     c3c38
-//     c3c51
-//     c3c58
-//     c3c5d
-//     c3c6b
-//     c3c82
-//     c3c8b
-//     c3c90
-//     c3ca8
-//     c3cee
-//     c3d03
-//     c3d12
-//     c3d2b
-//     c3d43
-//     c3d57
-//     c3d5d
-//     c3d67
-//     c3d71
-//     c3d72
-//     c3d86
-//     c3d89
-//     c3db4
-//     c3dcd
-//     c3dce
-//     c3dd5
-//     c3e07
-//     c3e13
-//     c3e16
-//     c3e28
-//     c3e2a
-//     c3e41
-//     c3e4d
-//     c3e5c
-//     c3e6f
-//     c3e71
-//     c3e74
-//     c3e8c
-//     c3eb3
-//     c3ec2
-//     c3ef1
-//     c3f0d
-//     c3f19
-//     c3f5e
-//     c3f64
-//     c3f6a
-//     c3f6b
-//     c3f6e
-//     c3f88
-//     c3fd9
-//     c3ff4
-//     c4005
-//     c401d
-//     c4021
-//     c4054
-//     c4061
-//     c406b
-//     c406c
-//     c4075
-//     c40a9
-//     c40f5
-//     c410b
-//     c411d
-//     c4132
-//     c4143
-//     c414f
-//     c416e
-//     c417a
-//     c4183
-//     c419f
-//     c41aa
-//     c41c0
-//     c41c1
-//     c41cc
-//     c41d2
-//     c427a
-//     c42ab
-//     c42f2
-//     c430d
-//     c4321
-//     c434a
-//     c4378
-//     c438b
-//     c438c
-//     c438e
-//     c43ae
-//     c43bd
-//     c43dc
-//     c43fb
-//     c440c
-//     c4411
-//     c4414
-//     c445d
-//     c447b
-//     c4487
-//     c44fa
-//     c4521
-//     c4538
-//     c4547
-//     c4574
-//     c4595
-//     c45a0
-//     c45ab
-//     c45c4
-//     c45e2
-//     c45e5
-//     c45fb
-//     c4605
-//     c4637
-//     c463a
-//     c4647
-//     c4652
-//     c465d
-//     c4660
-//     c4675
-//     c468a
-//     c46b3
-//     c46b6
-//     c46bb
-//     c46ce
-//     c46e2
-//     c470a
-//     c4712
-//     c4721
-//     c4728
-//     c473a
-//     c476f
-//     c4787
-//     c47a4
-//     c47a7
-//     c47c6
-//     c47e0
-//     c47e1
-//     c47f2
-//     c47f7
-//     c4818
-//     c482f
-//     c4845
-//     c4856
-//     c486b
-//     c487a
-//     c48bd
-//     c48fa
-//     c4902
-//     c490c
-//     c4941
-//     c4947
-//     c4953
-//     c495d
-//     c496c
-//     c4970
-//     c497d
-//     c4982
-//     c498d
-//     c49ab
-//     c49b8
-//     c49e7
-//     c49ff
-//     c4a01
-//     c4a0a
-//     c4a0d
-//     c4a1c
-//     c4a42
-//     c4a44
-//     c4a51
-//     c4a78
-//     c4a7a
-//     c4a86
-//     c4ab7
-//     c4ab8
-//     c4abe
-//     c4ace
-//     c4b09
-//     c4b17
-//     c4b1a
-//     c4b2e
-//     c4b35
-//     c4b3d
-//     c4b41
-//     c4b54
-//     c4b6b
-//     c4b7d
-//     c4b80
-//     c4b93
-//     c4ba4
-//     c4bad
-//     c4bbc
-//     c4bcf
-//     c4bf4
-//     c4bfb
-//     c4c0f
-//     c4c28
-//     c4c45
-//     c4c46
-//     c4cc4
-//     c4cc7
-//     c4d15
-//     c4d2d
-//     c4d3f
-//     c4d52
-//     c4d61
-//     c4d6e
-//     c4d77
-//     c4d79
-//     c4d81
-//     c4d86
-//     c4da2
-//     c4dae
-//     c4dc1
-//     c4dd7
-//     c4ddf
-//     c4df8
-//     c4e06
-//     c4e11
-//     c4e20
-//     c4e27
-//     c4e32
-//     c4e35
-//     c4e40
-//     c4e45
-//     c4e5b
-//     c4e62
-//     c4e70
-//     c4e79
-//     c4e82
-//     c4e97
-//     c4ea0
-//     c4ed3
-//     c4ed7
-//     c4ee8
-//     c4ef8
-//     c4f13
-//     c4f2d
-//     c4f35
-//     c4f37
-//     c4f38
-//     c4f4b
-//     c4f54
-//     c4f58
-//     c4f5d
-//     c4f63
-//     c4f79
-//     c4f7f
-//     c4fa1
-//     c4fab
-//     c4fad
-//     c4fae
-//     c4fbf
-//     c4fdc
-//     c4fdf
-//     c4fea
-//     c4ff3
-//     c4ffb
-//     c4ffd
-//     c5005
-//     c500a
-//     c5014
-//     c501f
-//     c5035
-//     c505a
-//     c5070
-//     c51b1
-//     c51d5
-//     c51dd
-//     c51e3
-//     c51ed
-//     c51fc
-//     c5203
-//     c520f
-//     c5221
-//     c523d
-//     c5249
-//     c5260
-//     c5268
-//     c5275
-//     c5280
-//     c5297
-//     c52a0
-//     c52b2
-//     c52b4
-//     c52bd
-//     c52d1
-//     c52e1
-//     c52e7
-//     c5300
-//     c5305
-//     c5314
-//     c5337
-//     c534f
-//     c5352
-//     c5371
-//     c5375
-//     c537f
-//     c5382
-//     c5397
-//     c53ba
-//     c53de
-//     c5406
-//     c540e
-//     c5446
-//     c544b
-//     c544d
-//     c545a
-//     c545e
-//     c5470
-//     c54a8
-//     c54af
-//     c54b4
-//     c54d8
-//     c54df
-//     c54e9
-//     c54ee
-//     c5502
-//     c5534
-//     c555e
-//     c5578
-//     c5597
-//     c55c6
-//     c55d0
-//     c55e6
-//     c55ed
-//     c5655
-//     c565e
-//     c5684
-//     c568c
-//     c56a6
-//     c56b3
-//     c56c2
-//     c56ca
-//     c56d2
-//     c56eb
-//     c56f5
-//     c5718
-//     c5725
-//     c5736
-//     c575a
-//     c5795
-//     c57ae
-//     c57b2
-//     c57be
-//     c57d7
-//     c57dd
-//     c57e8
-//     c57ec
-//     c57ed
-//     c582b
-//     c5898
-//     c58e4
-//     c58e6
-//     c58f5
-//     c58fb
-//     c5910
-//     c5999
-//     c59ae
-//     c59bd
-//     c59cc
-//     c59d1
-//     c59d2
-//     c59d9
-//     c59e8
-//     c59ee
-//     c59f7
-//     c59f9
-//     c5a10
-//     c5a15
-//     c5a19
-//     c5a1a
-//     c5a27
-//     c5a28
-//     c5a2e
-//     c5a2f
-//     c5a78
-//     c5a8c
-//     c5a94
-//     c5a9e
-//     c5ab0
-//     c5ab1
-//     c5ab4
-//     c5ab8
-//     c5ad0
-//     c5aea
-//     c5af8
-//     c5afd
-//     c5b07
-//     c5b28
-//     c5b2a
-//     c5b33
-//     c5b36
-//     c5b4c
-//     c5b6f
-//     c5b89
-//     c5b90
-//     c5ba1
-//     c5bbe
-//     c5bd0
-//     c5bd9
-//     c5be4
-//     c5bf3
-//     c5bfe
-//     c5c13
-//     c5c2c
-//     c5c3a
-//     c5c54
-//     c5c64
-//     c5c70
-//     c5c78
-//     c5c93
-//     c5cb2
-//     c5cb9
-//     c5cd3
-//     c5cd6
-//     c5ce1
-//     c5cf9
-//     c5d08
-//     c5d0e
-//     c5d1b
-//     c5d2b
-//     c5d40
-//     c5d46
-//     c5d6c
-//     c5d7e
-//     c5d99
-//     c5da3
-//     c5db9
-//     c5dba
-//     c5dc0
-//     c5dd3
-//     c5ddd
-//     c5e0e
-//     c5e21
-//     c5e31
-//     c5e3c
-//     c5e47
-//     c5e52
-//     c5e7a
-//     c5e7b
-//     c5e89
-//     c5e8d
-//     c5eab
-//     c5ec1
-//     c5ec8
-//     c5edd
-//     c5ee0
-//     c5ee8
-//     c5eee
-//     c5f1c
-//     c5f33
-//     c5f46
-//     c5f78
-//     c5f8a
-//     c5f8e
-//     c5fa3
-//     c5fb2
 //     c8040
 //     c8093
 //     c8096
@@ -13742,61 +12970,6 @@ pydis_end
 //     l111b
 //     l111c
 //     l111d
-//     l2001
-//     l2002
-//     l2004
-//     l2006
-//     l2007
-//     l25d3
-//     l261c
-//     l261d
-//     l311d
-//     l3121
-//     l312d
-//     l3139
-//     l313f
-//     l3145
-//     l3146
-//     l3191
-//     l31a0
-//     l3aec
-//     l3b0f
-//     l3b18
-//     l3b21
-//     l3b29
-//     l3b31
-//     l3b3a
-//     l3b43
-//     l41d3
-//     l4cdb
-//     l4cf3
-//     l4ddb
-//     l4f73
-//     l4f75
-//     l4f76
-//     l4f77
-//     l4f78
-//     l5075
-//     l5175
-//     l5283
-//     l557f
-//     l56c6
-//     l56ce
-//     l5726
-//     l5774
-//     l5872
-//     l587e
-//     l5924
-//     l5979
-//     l597a
-//     l5980
-//     l5a30
-//     l5a31
-//     l5b3a
-//     l5b3e
-//     l5b42
-//     l5f4f
-//     l5fff
 //     l8001
 //     l8002
 //     l8004
@@ -14057,273 +13230,6 @@ pydis_end
 //     sub_c05ff
 //     sub_c0607
 //     sub_c0627
-//     sub_c2020
-//     sub_c2023
-//     sub_c202e
-//     sub_c2038
-//     sub_c2048
-//     sub_c2077
-//     sub_c209a
-//     sub_c209d
-//     sub_c20b8
-//     sub_c20bb
-//     sub_c20c3
-//     sub_c20c8
-//     sub_c20d3
-//     sub_c20db
-//     sub_c20e3
-//     sub_c20e6
-//     sub_c20ed
-//     sub_c20f3
-//     sub_c20f6
-//     sub_c2149
-//     sub_c2174
-//     sub_c21ae
-//     sub_c21b0
-//     sub_c21b7
-//     sub_c21be
-//     sub_c21bf
-//     sub_c21c0
-//     sub_c21c4
-//     sub_c21c5
-//     sub_c21ca
-//     sub_c221d
-//     sub_c2222
-//     sub_c2266
-//     sub_c226d
-//     sub_c2280
-//     sub_c2284
-//     sub_c22b2
-//     sub_c22bb
-//     sub_c22e8
-//     sub_c22fe
-//     sub_c230a
-//     sub_c2327
-//     sub_c2335
-//     sub_c233a
-//     sub_c236e
-//     sub_c2380
-//     sub_c2386
-//     sub_c23bf
-//     sub_c23d1
-//     sub_c23d4
-//     sub_c23dc
-//     sub_c23e3
-//     sub_c23ee
-//     sub_c240c
-//     sub_c241b
-//     sub_c242c
-//     sub_c2439
-//     sub_c2456
-//     sub_c2555
-//     sub_c25e3
-//     sub_c2602
-//     sub_c2745
-//     sub_c274c
-//     sub_c27da
-//     sub_c27db
-//     sub_c27e3
-//     sub_c2826
-//     sub_c2855
-//     sub_c2862
-//     sub_c2932
-//     sub_c2951
-//     sub_c2979
-//     sub_c29da
-//     sub_c2a77
-//     sub_c2ab3
-//     sub_c2b25
-//     sub_c2b4d
-//     sub_c2b64
-//     sub_c2b7b
-//     sub_c2b86
-//     sub_c2bf6
-//     sub_c2bf9
-//     sub_c2c56
-//     sub_c2c65
-//     sub_c2d1a
-//     sub_c2dc6
-//     sub_c2eec
-//     sub_c2efa
-//     sub_c2eff
-//     sub_c2f33
-//     sub_c2f37
-//     sub_c2f3f
-//     sub_c2f4f
-//     sub_c2f5e
-//     sub_c2f6b
-//     sub_c2f75
-//     sub_c2f7a
-//     sub_c2f82
-//     sub_c2f94
-//     sub_c303e
-//     sub_c3104
-//     sub_c3279
-//     sub_c328a
-//     sub_c329d
-//     sub_c33b4
-//     sub_c33c5
-//     sub_c33d3
-//     sub_c33d8
-//     sub_c33f1
-//     sub_c33f5
-//     sub_c33f9
-//     sub_c33fd
-//     sub_c3432
-//     sub_c3445
-//     sub_c3516
-//     sub_c3526
-//     sub_c352e
-//     sub_c3536
-//     sub_c365d
-//     sub_c37e8
-//     sub_c3832
-//     sub_c392c
-//     sub_c3940
-//     sub_c394c
-//     sub_c395a
-//     sub_c3965
-//     sub_c3988
-//     sub_c39ac
-//     sub_c39f3
-//     sub_c3a0f
-//     sub_c3a32
-//     sub_c3a4b
-//     sub_c3a50
-//     sub_c3a60
-//     sub_c3a63
-//     sub_c3a6e
-//     sub_c3a78
-//     sub_c3a82
-//     sub_c3a8d
-//     sub_c3aa3
-//     sub_c3ab8
-//     sub_c3ac8
-//     sub_c3ad3
-//     sub_c3ad8
-//     sub_c3ae5
-//     sub_c3b51
-//     sub_c3b61
-//     sub_c3b79
-//     sub_c3bca
-//     sub_c3bcd
-//     sub_c3be5
-//     sub_c3bf2
-//     sub_c3d19
-//     sub_c3d1e
-//     sub_c3d75
-//     sub_c3d8e
-//     sub_c3df4
-//     sub_c3e1e
-//     sub_c3e30
-//     sub_c3e54
-//     sub_c3e75
-//     sub_c3e94
-//     sub_c3ef4
-//     sub_c3f0f
-//     sub_c3f14
-//     sub_c3f16
-//     sub_c3f1e
-//     sub_c3f26
-//     sub_c3f7c
-//     sub_c3f82
-//     sub_c40b8
-//     sub_c40de
-//     sub_c40f6
-//     sub_c414a
-//     sub_c4168
-//     sub_c4190
-//     sub_c41b4
-//     sub_c41c6
-//     sub_c4315
-//     sub_c4324
-//     sub_c4379
-//     sub_c4384
-//     sub_c43e4
-//     sub_c43ec
-//     sub_c44e1
-//     sub_c451f
-//     sub_c4530
-//     sub_c45b2
-//     sub_c4663
-//     sub_c473d
-//     sub_c476c
-//     sub_c4779
-//     sub_c4788
-//     sub_c47c4
-//     sub_c47c5
-//     sub_c47ce
-//     sub_c48be
-//     sub_c48e2
-//     sub_c490d
-//     sub_c499c
-//     sub_c49bf
-//     sub_c49c2
-//     sub_c49ca
-//     sub_c4a12
-//     sub_c4a53
-//     sub_c4a9a
-//     sub_c4ac2
-//     sub_c4acf
-//     sub_c4add
-//     sub_c4aea
-//     sub_c4af1
-//     sub_c4ba9
-//     sub_c4c0c
-//     sub_c4c18
-//     sub_c4c47
-//     sub_c4c4e
-//     sub_c4c62
-//     sub_c4c6a
-//     sub_c4c72
-//     sub_c4d5d
-//     sub_c4ea9
-//     sub_c4f8d
-//     sub_c4f9a
-//     sub_c5040
-//     sub_c5047
-//     sub_c5234
-//     sub_c52c8
-//     sub_c5580
-//     sub_c558b
-//     sub_c5598
-//     sub_c55ce
-//     sub_c55ee
-//     sub_c55f2
-//     sub_c5607
-//     sub_c5616
-//     sub_c561e
-//     sub_c565f
-//     sub_c568f
-//     sub_c56b1
-//     sub_c56e6
-//     sub_c56fe
-//     sub_c5745
-//     sub_c5771
-//     sub_c57b6
-//     sub_c583f
-//     sub_c5841
-//     sub_c584e
-//     sub_c5850
-//     sub_c585d
-//     sub_c586f
-//     sub_c5882
-//     sub_c5986
-//     sub_c59f5
-//     sub_c5a67
-//     sub_c5ab9
-//     sub_c5ac2
-//     sub_c5ac4
-//     sub_c5ad2
-//     sub_c5b00
-//     sub_c5c68
-//     sub_c5e83
-//     sub_c5e91
-//     sub_c5e9d
-//     sub_c5ec2
-//     sub_c5f7c
-//     sub_c5f82
-//     sub_c5f84
 //     sub_c8020
 //     sub_c809a
 //     sub_c809d

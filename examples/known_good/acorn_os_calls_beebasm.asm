@@ -5857,15 +5857,15 @@ osbyte  = &fff4
 ;     osfind:         6
 ;     osrdch:         2
 ;     buffer_empty:   1
-;     oswrsc:         1
-;     osrdsc:         1
-;     oseven:         1
 ;     nvrdch:         1
-;     osbput:         1
 ;     osbget:         1
+;     osbput:         1
+;     oseven:         1
 ;     osnewl:         1
-;     oswrcr:         1
+;     osrdsc:         1
 ;     oswrch:         1
+;     oswrcr:         1
+;     oswrsc:         1
     assert (255 - inkey_key_shift) EOR 128 == &80
     assert 255 - inkey_key_ctrl == &01
     assert 255 - inkey_key_f0 == &20

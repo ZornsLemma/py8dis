@@ -77,23 +77,73 @@ def get_u8_runtime(runtime_addr):
     """Get 8 bit number given a runtime address"""
 
     import movemanager
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u8_binary(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return get_u8_binary(binary_loc.binary_addr)
 
 def get_u16_runtime(runtime_addr):
     """Get 16 bit number (little-endian) given a runtime address"""
 
     import movemanager
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u16_binary(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return get_u16_binary(binary_loc.binary_addr)
 
 def get_u16_be_runtime(runtime_addr):
     """Get 16 bit number (big-endian) given a runtime address"""
 
     import movemanager
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    return get_u16_be_binary(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return get_u16_be_binary(binary_loc.binary_addr)
 
+class RuntimeLocation:
+    """RuntimeLocation holds a runtime address and move id"""
+
+    def __init__(self, runtime_addr, move_id):
+        self.runtime_addr = runtime_addr
+        self.move_id = move_id
+
+    def __str__(self) -> str:
+        result = hex(self.runtime_addr)
+        if self.move_id != 0:
+            result += ":" + str(self.move_id)
+        return result
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, BinaryLocation):
+            return (self.binary_addr == other.binary_addr) and (self.move_id == other.move_id)
+        return NotImplemented
+
+    def __hash__(self):
+        """Overrides the default implementation"""
+        return hash(tuple(sorted(self.__dict__.items())))
+
+class BinaryLocation:
+    """BinaryLocation holds a binary address and move id"""
+
+    def __init__(self, binary_addr, move_id):
+        assert binary_addr != None
+        assert move_id != None
+        self.binary_addr = BinaryAddr(binary_addr)
+        self.move_id = move_id
+
+    def __str__(self) -> str:
+        result = hex(self.binary_addr)
+        if self.move_id != 0:
+            result += "[" + str(self.move_id) + "]"
+        return result
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, BinaryLocation):
+            return (self.binary_addr == other.binary_addr) and (self.move_id == other.move_id)
+        return NotImplemented
+
+    def __hash__(self):
+        """Overrides the default implementation"""
+        return hash(tuple(sorted(self.__dict__.items())))
 
 class MemoryRuntime(object):
     """Class for reading runtime memory with address validation"""
@@ -102,8 +152,8 @@ class MemoryRuntime(object):
         import movemanager
         assert is_valid_runtime_addr(runtime_addr)
         runtime_addr = RuntimeAddr(runtime_addr)
-        binary_address, _ = movemanager.r2b_checked(runtime_addr)
-        return memory_binary[binary_address]
+        binary_loc = movemanager.r2b_checked(runtime_addr)
+        return memory_binary[binary_loc.binary_addr]
 
 
 # We store 64K of memory. Some portion of this will hold the binary file(s) to

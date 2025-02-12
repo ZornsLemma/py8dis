@@ -64,46 +64,51 @@ def add_hex_dump(binary_addr, length, cycles_description, s):
     s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + cycles_description + dump_cpu_state + dump_move
     return s
 
-def add_inline_comment(binary_addr, length, cycles_description, annotations, s):
+def add_inline_comment(binary_loc, length, cycles_description, annotations, s):
     """Creates the entire inline comment for the line as a string.
 
     Creates a string including the hex dump and character equivalents,
     CPU state, move commentary, and any inline annotations.
     """
+    assert isinstance(binary_loc, movemanager.BinaryLocation)
 
-    assert isinstance(binary_addr, memorymanager.BinaryAddr)
+    binary_loc = movemanager.make_binloc(binary_loc)
+    first_binary_loc = binary_loc
+
+    assert isinstance(binary_loc.binary_addr, memorymanager.BinaryAddr)
     # Add spaces up to the comment column
     s = utils.tab_to(s, config.get_inline_comment_column())
 
     # Add any hex dump (fixed width)
-    s = add_hex_dump(binary_addr, length, cycles_description, s)
+    s = add_hex_dump(binary_loc.binary_addr, length, cycles_description, s)
 
     # Add any inline annotations
     if annotations:
         for i in range(0, length):
-            for annotation in utils.sorted_annotations(annotations[binary_addr + i]):
+            for annotation in utils.sorted_annotations(annotations[binary_loc]):
                 if annotation.inline:
-                    s += annotation.as_string(binary_addr)
+                    s += annotation.as_string(binary_loc.binary_addr)
+            binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + 1, binary_loc.move_id)
     return s.rstrip()
 
-def format_data_block(binary_addr, length, cols, element_size, annotations):
+def format_data_block(binary_loc, length, cols, element_size, annotations):
     """Format a block of data.
 
     Formats an array of bytes or words, returning one string for each
     line of output.
     """
 
-    assert isinstance(binary_addr, memorymanager.BinaryAddr)
-    assert memorymanager.is_valid_binary_addr(binary_addr)
+    assert isinstance(binary_loc.binary_addr, memorymanager.BinaryAddr)
+    assert memorymanager.is_valid_binary_addr(binary_loc.binary_addr)
     assert length >= 1
     assert element_size in (1, 2)
     assert length % element_size == 0
 
     if element_size == 1:
-        data = list(classification.get_constant8(binary_addr + i) for i in range(length))
+        data = list(classification.get_constant8(binary_loc.binary_addr + i) for i in range(length))
         data_prefix = config.get_assembler().byte_prefix()
     else:
-        data = list(classification.get_constant16(binary_addr + i) for i in range(0, length, 2))
+        data = list(classification.get_constant16(binary_loc.binary_addr + i) for i in range(0, length, 2))
         data_prefix = config.get_assembler().word_prefix()
 
     prefix = utils.make_indent(1) + data_prefix
@@ -130,7 +135,8 @@ def format_data_block(binary_addr, length, cols, element_size, annotations):
     for i in range(0, len(data), num_data_items_on_line):
         items_on_line = min(len(data) - i, num_data_items_on_line)
         core_str = prefix + separator.join("%*s" % (longest_item, x) for x in data[i:i+num_data_items_on_line])
-        core_str = add_inline_comment(binary_addr + i * element_size, items_on_line * element_size, "", annotations, core_str)
+        current_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + i * element_size, binary_loc.move_id)
+        core_str = add_inline_comment(current_binary_loc, items_on_line * element_size, "", annotations, core_str)
         result.append(core_str)
     return result
 

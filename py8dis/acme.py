@@ -78,12 +78,12 @@ class Acme(assembler.Assembler):
     def code_end(self):
         return []
 
-    def pseudopc_start(self, dest, source, length):
+    def pseudopc_start(self, dest, source, length, move_id):
         # When assembling code at a different address to where it will actually execute,
         # it is surrounded by '!pseudopc <execution-address> { <code> }'
         return ["", utils.force_case("!pseudopc %s {" % self.hex(dest))]
 
-    def pseudopc_end(self, dest, source, length):
+    def pseudopc_end(self, dest, source, length, move_id):
         return ["}", ""]
 
     def disassembly_end(self):

@@ -69,6 +69,7 @@ import collections
 import config
 import disassembly
 import movemanager
+import memorymanager
 import utils
 
 class Label(object):
@@ -78,10 +79,21 @@ class Label(object):
             self.text = name
             self.emitted = False
 
+        def __str__(self):
+            return self.text + " (Emitted: " + str(self.emitted) + ")"
+
+        def __repr__(self):
+            return self.__str__()
+
     def __init__(self, runtime_addr):
-        self.runtime_addr = int(runtime_addr)
-        self.move_id = movemanager.base_move_id
-        self.references = []         # Holds the binary addresses that reference this label
+        self.runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+
+        # Remember the relevant active_move_ids in operation at this point of label creation.
+        # These are used to later 'best guess' in which move the label should be output.
+        relevant_move_ids = movemanager.move_ids_for_runtime_addr(self.runtime_addr)
+        self.relevant_active_move_ids = [x for x in movemanager.active_move_ids[:] if x in relevant_move_ids]
+
+        self.references = []         # Holds the binary locations that reference this label
 
         # `local_labels` stores tuples (name, start_addr, end_addr)
         # indexed by move_id, as created by `add_local_label()`
@@ -97,8 +109,32 @@ class Label(object):
         # Set of move_id's that apply at this label's address
         self.emit_opportunities = set()
 
-    def add_reference(self, reference_binary_addr):
-        self.references.append(reference_binary_addr)
+    def add_reference(self, reference_binary_loc):
+        assert isinstance(reference_binary_loc, movemanager.BinaryLocation)
+        self.references.append(reference_binary_loc)
+
+    def all_names_by_move_id(self):
+        """Return all label names and expressions for this label for each move_id"""
+
+        result = collections.defaultdict(set)
+
+        # Add all local names
+        for move_id, name_data in self.local_labels.items():
+            if name_data:
+                result[move_id].add(name_data[0])
+
+        # TODO: For performance, we could maintain this set in
+        # add_explicit_name() and any other "add" functions rather
+        # than regenerating it every time, but for now I want
+        # guaranteed consistency over speed.
+        for move_id, name_list in self.explicit_names.items():
+            for name in name_list:
+                result[move_id].add(name.text)
+
+        # Add expressions
+        for move_id, expression_list in self.expressions.items():
+            result[move_id].update(expression_list)
+        return result
 
     def all_names(self):
         """Return all label names and expressions for this label"""
@@ -110,10 +146,6 @@ class Label(object):
             if name_data:
                 result.add(name_data[0])
 
-        # TODO: For performance, we could maintain this set in
-        # add_explicit_names() and any other "add" functions rather
-        # than regenerating it every time, but for now I want
-        # guaranteed consistency over speed.
         for name_list in self.explicit_names.values():
             for name in name_list:
                 result.add(name.text)
@@ -121,6 +153,28 @@ class Label(object):
         # Add expressions
         for expression_list in self.expressions.values():
             result.update(expression_list)
+        return result
+
+    def description(self):
+        """Return all label names and expressions for this label as a descriptive string"""
+
+        result = ""
+
+        # Add all local names
+        for name_data in self.local_labels.values():
+            if name_data:
+                result += name_data[0] + " (local), "
+
+        for name_list in self.explicit_names.values():
+            for name in name_list:
+                result += name.text + " (explicit), "
+
+        # Add expressions
+        for expression_list in self.expressions.values():
+            for expr in expression_list:
+                result += expr + " (expression), "
+        if result.endswith(", "):
+            result = result[0:-2]
         return result
 
     def add_explicit_name(self, name, move_id):
@@ -206,29 +260,48 @@ class Label(object):
     def notify_emit_opportunity(self, move_id):
         """Record that the move_id is used at this label's address'."""
 
+        assert movemanager.is_valid_move_id(move_id)
         if move_id not in self.emit_opportunities:
             self.emit_opportunities.add(move_id)
 
-    def definition_string_list(self, emit_addr, move_id):
+    def definition_string_list(self, emit_addr, binary_loc):
         """Get a list of the labels in a move_id as a list of strings."""
 
+        assert movemanager.is_valid_move_id(binary_loc.move_id)
+
         # Emit any definitions for this move_id.
-        result = self.definition_string_list_internal(emit_addr, move_id)
+        result = self.definition_string_list_internal(emit_addr, binary_loc)
 
         # Definitions for move IDs which will never get an opportunity
         # to be emitted inline in their preferred move ID are emitted
         # in the lowest-numbered move ID they can be emitted inline for.
-        if (len(self.emit_opportunities) > 0) and (move_id == min(self.emit_opportunities)):
+        if (len(self.emit_opportunities) > 0) and (binary_loc.move_id == min(self.emit_opportunities)):
             leftover_move_ids = set(self.explicit_names.keys()) - self.emit_opportunities
             for move_id in leftover_move_ids:
-                result.extend(self.definition_string_list_internal(emit_addr, move_id))
+                assert movemanager.is_valid_move_id(move_id)
+                result.extend(self.definition_string_list_internal(emit_addr, binary_loc))
         return result
 
-    def definition_string_list_internal(self, emit_addr, move_id):
+    def collate_explicit_names_for_move_id(self, emit_addr, offset, binary_loc):
+        assembler = config.get_assembler()
+        result = []
+
+        for name in self.explicit_names[binary_loc.move_id]:
+            if name.emitted:
+                continue
+            if offset == 0:
+                if disassembly.is_simple_name(name.text):
+                    result.append(assembler.inline_label(name.text))
+            else:
+                if disassembly.is_simple_name(name.text):
+                    result.append(assembler.explicit_label(name.text, disassembly.get_label(emit_addr, binary_loc.binary_addr, move_id=binary_loc.move_id), offset))
+            name.emitted = True
+        return result
+
+    def definition_string_list_internal(self, emit_addr, binary_loc):
         """Get a list of the explicit labels in a move_id as a list of strings."""
 
-        assert movemanager.is_valid_move_id(move_id)
-        assembler = config.get_assembler()
+        assert movemanager.is_valid_move_id(binary_loc.move_id)
         result = []
         assert emit_addr <= self.runtime_addr
         offset = self.runtime_addr - emit_addr
@@ -243,22 +316,15 @@ class Label(object):
         # would require making sure we emit (to temporary storage) all
         # the pseudo-pc regions first, so let's not worry about that
         # yet.
-        for name in self.explicit_names[move_id]:
-            # TODO: Our callers are probably expecting us to be calling
-            # get_label() if we don't have any explicit names, but I
-            # don't think this is actually a good way to work - but
-            # things are probably broken for the moment because of this
-            if name.emitted:
-                continue
-            if offset == 0:
-                if disassembly.is_simple_name(name.text):
-                    result.append(assembler.inline_label(name.text))
-            else:
-                if disassembly.is_simple_name(name.text):
-                    # TODO: I suspect get_label() call here will want tweaking eventually
-                    result.append(assembler.explicit_label(name.text, disassembly.get_label(emit_addr, self.runtime_addr, move_id=move_id), offset))
-            name.emitted = True
+        result.extend(self.collate_explicit_names_for_move_id(emit_addr, offset, binary_loc))
         return result
+
+    def __str__(self) -> str:
+        result = hex(self.runtime_addr) + str(self.relevant_active_move_ids) + ": " + str(self.description()) + " references:" + ', '.join(str(x) for x in self.references)
+        return result
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 labels = utils.keydefaultdict(Label)
 
@@ -305,5 +371,6 @@ def all_labels_as_comments():
     for addr, label in sorted(labels.items()):
         result.append("%s %s:" % (c, utils.plainhex4(addr)))
         for move_id, name_list in sorted(label.explicit_names.items()):
+            assert movemanager.is_valid_move_id(move_id)
             result.append("%s     %4s: %s" % (c, move_id, ", ".join(sorted(x.text for x in name_list))))
     return result
