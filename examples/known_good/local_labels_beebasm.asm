@@ -23,6 +23,7 @@ oswrch                  = &ffee
 ; 
 ; On Exit:
 ;     X: Holds the number of bits set.
+; ***************************************************************************************
 .test_for_local_labels
 .pydis_start
     lda #5                                                            ; 2000: a9 05       ..

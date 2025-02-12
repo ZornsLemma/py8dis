@@ -23,6 +23,7 @@ oswrch      = &ffee
 ; On Exit:
 ;     X: Length of the message just printed
 ;     Y: (preserved)
+; ***************************************************************************************
 .print_message
     ldx #0                                                            ; 2010: a2 00       ..
 .print_loop
@@ -42,6 +43,7 @@ oswrch      = &ffee
 ; 
 ; On Entry:
 ;     A: number to print
+; ***************************************************************************************
 .print_decimal_number
     ldy #2                                                            ; 2029: a0 02       ..
 .loop_next_decimal_digit
@@ -76,6 +78,7 @@ oswrch      = &ffee
 ;     A: (corrupted)
 ;     X: (preserved)
 ;     Y: (preserved)
+; ***************************************************************************************
 .print_hex_number
     pha                                                               ; 2045: 48          H
     lsr a                                                             ; 2046: 4a          J
