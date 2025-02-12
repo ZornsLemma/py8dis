@@ -291,7 +291,7 @@ def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
     The comment is word wrapped by default.
     """
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=word_wrap, indent=indent)
+    disassembly.comment(runtime_addr, text, inline, word_wrap=word_wrap, indent=indent, auto_generated=False)
 
 def formatted_comment(runtime_addr, text, inline=False, indent=0):
     """Add a comment without word wrapping."""
@@ -315,7 +315,7 @@ def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, w
             if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
                 if show_blank:
                     blank(runtime_addr)
-                comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap)
+                disassembly.comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap, auto_generated=True)
 
 def annotate(runtime_addr, s, priority=None):
     """Add a raw string directly to the assembly code output at the

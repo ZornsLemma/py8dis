@@ -436,7 +436,7 @@ class Cpu6502(cpu.Cpu):
             reg_addr = state.get_previous_adjust(reg)
             if reg_addr is not None:
                 if reg in subroutine.on_entry:
-                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], inline=True, word_wrap=False)
+                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], inline=True, word_wrap=False, auto_generated=True)
 
         # Add subroutine title comment
         if subroutine.title and subroutine.runtime_addr != runtime_addr:

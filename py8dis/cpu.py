@@ -218,7 +218,7 @@ class Cpu(object):
             # labels for the same address) - for the moment I am always
             # including 'addr' in the comment which helps a bit but
             # isn't ideal
-            disassembly.comment_binary(binary_loc, comment, inline=False, word_wrap=False)
+            disassembly.comment_binary(binary_loc, comment, inline=False, word_wrap=False, auto_generated=True)
 
     def add_reference_histogram(self):
         """Output a histogram of label references."""
