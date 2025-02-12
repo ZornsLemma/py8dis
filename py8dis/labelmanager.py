@@ -305,17 +305,9 @@ class Label(object):
         result = []
         assert emit_addr <= self.runtime_addr
         offset = self.runtime_addr - emit_addr
-        # TODO: It's probably OK, but note that we only emit for
-        # "matching" move_id; we leave it for
+        # We only emit for "matching" move_id; we leave it for
         # explicit_definition_string_list() to return any things which
-        # we never would emit otherwise. Arguably if we have *any*
-        # point at which we could define a label inline (particularly
-        # if it's for the default move_id None) we should emit *all*
-        # labels for all move IDs at that address which haven't
-        # specifically been emitted elsewhere. Doing this properly
-        # would require making sure we emit (to temporary storage) all
-        # the pseudo-pc regions first, so let's not worry about that
-        # yet.
+        # we never would emit otherwise.
         result.extend(self.collate_explicit_names_for_move_id(emit_addr, offset, binary_loc))
         return result
 

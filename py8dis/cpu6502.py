@@ -109,7 +109,9 @@ class Cpu6502(cpu.Cpu):
         self.code_analysis_fns.append(self.substitute_constants)
         self.code_analysis_fns.append(self.find_subroutine_calls)
 
-        # TODO: indent_level is a bit of a hack (after all, arguably
+        # indent_level_dict has binary addresses as the keys, and indent values as the values.
+
+        # TODO: indent_level_dict is a bit of a hack (after all, arguably
         # byte/word directives etc should have it too) and should
         # probably be handled at a higher level by the code controlling
         # emission of text disassembly output
@@ -705,10 +707,11 @@ class Cpu6502(cpu.Cpu):
             # happen when the disassembly is imperfect and data is interpreted as
             # code. If we don't cope with them, bytes get lost and the disassembly
             # can't be correctly reassembled into a binary matching the input.
-            # TODO: If we could evaluate expressions, *and* (unlikely) we don't
-            # fail at disassembly time when we spot the mismatch, we should force
-            # absolute addressing if the expression is a zero page value and the
-            # value in the input is not.
+
+            # TODO (Enhancement): If we could evaluate expressions, *and*
+            # (unlikely) we don't fail at disassembly time when we spot the
+            # mismatch, we should force absolute addressing if the expression is a
+            # zero page value and the value in the input is not.
             result1 = utils.force_case(self.mnemonic)
             result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             if not self.has_zp_version() or memorymanager.get_u16_binary(binary_addr + 1) >= 0x100:
@@ -744,7 +747,6 @@ class Cpu6502(cpu.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeJmpAbs, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
         def update_references(self, binary_loc):
             trace.cpu.labels[self.target(binary_loc.binary_addr)].add_reference(binary_loc)
 
@@ -813,11 +815,6 @@ class Cpu6502(cpu.Cpu):
                 assert isinstance(target_runtime_addr, memorymanager.RuntimeAddr)
                 assert isinstance(caller_runtime_addr, memorymanager.RuntimeAddr)
 
-                # TODO: It might be possible the following assertion fails if the moves
-                # in effect are sufficiently tricky, but I'll leave it for now as it
-                # may catch bugs - once the code is more trusted it can be removed
-                # if it's technically incorrect.
-                assert movemanager.r2b_checked(caller_runtime_addr).binary_addr == binary_loc.binary_addr
                 return caller_runtime_addr + 3
 
             subroutine_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_subroutine_hook)
@@ -968,13 +965,6 @@ class Cpu6502(cpu.Cpu):
             state[flag] = b
         return update_flag
 
-    # TODO: make_decrement() and make_increment() are probably not that useful -
-    # it's all very well knowing the value of a register, but without an address to
-    # use with expr() it doesn't help that much. If they *are* useful, we should
-    # probably make adc # and sbc # update the value where possible.
-    #
-    # Also, when they are a loop counter being decremented, we can't keep track of
-    # the value each time around the loop, so the value is not helpful.
     def make_decrement(self, reg):
         def decrement(addr, state):
             v = state[reg].value

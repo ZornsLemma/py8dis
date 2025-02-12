@@ -125,12 +125,10 @@ def natural_sort(l):
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(l, key=alphanum_key)
 
-# TODO: Not a problem but just a note so I can come back to it and
-# check my thinking later and maybe put some comments in elsewhere: we
-# only "need" LazyString to defer labelling decisions until we've
-# decided if an address is code or data, since otherwise we have all
-# the information we need straight away. This means that we *don't*
-# need to use LazyString anywhere "outside" the tracing code.
+# Note: We only "need" LazyString to defer labelling decisions until
+# we've decided if an address is code or data, since otherwise we
+# have all the information we need straight away. This means that we
+# *don't* need to use LazyString anywhere "outside" the tracing code.
 class LazyString(object):
     """Defers string formatting until needed"""
 

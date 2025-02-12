@@ -121,9 +121,11 @@ def format_data_block(binary_loc, length, cols, element_size, annotations):
         # attempt to align columns but not spilling past data_width
         # unless a single item forces it", a pseudo "word wrapping"
         # style
+
         # TODO: We might want to use a different value instead of
         # config.get_inline_comment_column(), e.g. absolute_max_width
         # (80/100/whatever) - "hex dump max width or 0 if no hex dump".
+
         data_width = config.get_inline_comment_column() - len(prefix)
         if config.get_hex_dump():
             data_width -= 1 # leave a space before the hex dump comment prefix

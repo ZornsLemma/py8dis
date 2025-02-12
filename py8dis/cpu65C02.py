@@ -132,8 +132,10 @@ class Cpu65C02(Cpu6502):
 
     def is_branch_to(self, binary_addr, target_runtime_addr):
         c = disassembly.classifications[binary_addr]
-        # TODO: hacky use of isinstance()
+
+        # Special case for 65C02's unconditional branch instruction...
         if isinstance(c, Cpu65C02.OpcodeUnconditionalBranch):
             return c.target(binary_addr) == target_runtime_addr
 
+        # ...otherwise everything is the same as 6502
         return Cpu6502.is_branch_to(self, binary_addr, target_runtime_addr)

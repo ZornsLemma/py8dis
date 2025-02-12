@@ -14,7 +14,6 @@ class Cpu(object):
     """Abstract base class representing a CPU"""
 
     def __init__(self):
-        self.memory_binary = memorymanager.memory_binary
         self.labels = labelmanager.labels
 
         self.subroutine_hooks = {}
@@ -30,10 +29,8 @@ class Cpu(object):
         # immediate mode constant before a subroutine call so that we can give
         # that constant a proper symbol name.
 
-        # TODO: This is called "optimistic" because it's based on straight line
-        # code "this is *a* possible execution path". We may want to add a
-        # "pessimistic" variant which does its best to *guess* at the "common to
-        # all possible executions" behaviour.
+        # This is called "optimistic" because it's based on straight line
+        # code "this is *a* possible execution path".
         self.cpu_state_optimistic = [None] * 64*1024
 
 
@@ -50,7 +47,7 @@ class Cpu(object):
         """
 
         assert isinstance(binary_addr, memorymanager.BinaryAddr)
-        opcode_value = self.memory_binary[binary_addr]
+        opcode_value = memorymanager.memory_binary[binary_addr]
         if opcode_value not in self.opcodes:
             return [None]
         opcode = self.opcodes[opcode_value]
@@ -62,8 +59,8 @@ class Cpu(object):
             # re-classify it but that doesn't mean we can't continue to
             # trace until something breaks the control flow.
             if disassembly.is_classified(binary_addr, 1 + opcode.operand_length):
-                # TODO: The machinations required to format the comment
-                # here are a bit annoying.
+                # Format the comment using a LazyString and a late_formatter,
+                # to be resolved later.
                 s = opcode.as_string(binary_addr)
 
                 def late_formatter():
@@ -204,20 +201,6 @@ class Cpu(object):
             address_list = ", ".join(sorted(self.format_runtime_location(movemanager.b2r(ref_binary_loc.binary_addr), ref_binary_loc.move_id) for ref_binary_loc in ref_binary_locs))
             comment = "{0} referenced {1} by {2}".format(self.format_binary_location(binary_loc), count, address_list)
 
-            # TODO: Where the comment has to be emitted slightly out of
-            # place due to a classification, this becomes a bit
-            # confusing - we should probably be smarter, peek the
-            # classifications and generate a variant comment in that
-            # case at the "can actually be emitted" address - and/or
-            # maybe we shouldn't be generating reference comments for
-            # non-simple labels? (probably not the only way the first
-            # problem can occur though) - or maybe we should be
-            # forcibly breaking classifications for these? or maybe we
-            # should be attaching the comment inline to the relevant
-            # label (but that might be confusing if there are multiple
-            # labels for the same address) - for the moment I am always
-            # including 'addr' in the comment which helps a bit but
-            # isn't ideal
             disassembly.comment_binary(binary_loc, comment, inline=False, word_wrap=False, auto_generated=True)
 
     def add_reference_histogram(self):

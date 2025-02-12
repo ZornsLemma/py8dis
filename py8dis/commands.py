@@ -59,7 +59,7 @@ go()                    Classifies code and data and emits assembly.
 import argparse
 import memorymanager
 
-# These functions/objects are directly exposed to the user.
+# These functions are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary
@@ -124,7 +124,7 @@ def load(binary_load_addr, filename, cpu_name, md5sum=None):
     # Clear the no-automatic comments, for lack of a better place to clear them
     trace.no_auto_comment_set = set()
 
-def move(dest, src, length):
+def move(dest_runtime_addr, src_binary_addr, length):
     """Indicates that a block of memory is copied at runtime.
 
     Often a block of code or data is moved (relocated) after loading
@@ -142,12 +142,12 @@ def move(dest, src, length):
     load().
     """
 
-    dest = memorymanager.RuntimeAddr(dest)
-    src = memorymanager.BinaryAddr(src)
+    dest_runtime_addr = memorymanager.RuntimeAddr(dest_runtime_addr)
+    src_binary_addr = memorymanager.BinaryAddr(src_binary_addr)
 
     # You can't move from a region that hasn't been populated with data.
-    assert all(memory_binary[i] is not None for i in range(src, src+length))
-    return movemanager.add_move(dest, src, length)
+    assert all(memory_binary[i] is not None for i in range(src_binary_addr, src_binary_addr+length))
+    return movemanager.add_move(dest_runtime_addr, src_binary_addr, length)
 
 def constant(value, name):
     """Give a name to a constant value for use in the assembly.
@@ -164,12 +164,7 @@ def label(runtime_addr, name, move_id=None):
     if move_id is None:
         # Look up the associated binary address, just to get the best move_id
         _, move_id = movemanager.r2b(runtime_addr)
-    #if name == "nmi_handler_rom_start":
-    #    print("XAP", move_id)
-    #if name == "nmi_handler_rom_start":
-    #    print("PXX", move_id)
-    #    print("PXY", movemanager.move_ids_for_runtime_addr(runtime_addr))
-    #    print("PXZ", movemanager.active_move_ids)
+
     disassembly.add_label(runtime_addr, name, move_id)
 
 def expr_label(runtime_addr, s):
@@ -730,17 +725,19 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
 
     # Trace where code lives
     trace.cpu.trace()
+
+    # Generate all the references
     trace.cpu.generate_references()
 
-    # Fix up label names
+    # Fix up the final label names (evaluating LazyStrings into actual strings)
     disassembly.fix_label_names()
+
+    # Output all the references
     if config.get_label_references():
         trace.cpu.add_references_comments()
 
     # Scan the binary for strings (or allow a user function to do it)
-    # autostring() really needs to be invoked after trace() has done
-    # its classification, so we wrap it up in here by default rather
-    # than expecting the user to call it.
+    # We do this after tracing so we have the classifications.
     if post_trace_steps is None:
         def post_trace_steps():
             classification.autostring(autostring_min_length)
@@ -749,7 +746,7 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     # Mark everything remaining as bytes
     classification.classify_leftovers()
 
-    # Get the assembly
+    # Get the final assembly as a string
     result = disassembly.emit()
 
     # Output assembly code if wanted

@@ -165,7 +165,9 @@ class Xa(assembler.Assembler):
         result = []
 
         # At the end of the assembly, we output assertions.
-        if False: # TODO! config.get_include_assertions():
+
+        # Note: XA doesn't support assertions, so disabled
+        if False: # config.get_include_assertions():
             spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
             for expr, value in spa:
                 result.append("%s %s <> %s" % (utils.force_case("#if"), expr, value))

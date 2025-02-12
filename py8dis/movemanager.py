@@ -61,34 +61,34 @@ class MoveId(int):
 # Create array of 65536 instances of one initial MoveId object
 move_id_for_binary_addr = [MoveId(BASE_MOVE_ID)] * 0x10000
 
-def add_move(dest, source, length):
+def add_move(dest_runtime_addr, src_binary_addr, length):
     """Register the existence of a 'move' at runtime that relocates memory
-    from `source` to `dest` for `length` bytes.
+    from `src_binary_addr` to `dest_runtime_addr` for `length` bytes.
 
     The move is recorded, and a move_id is allocated and returned to
     identify the move.
     """
 
-    assert isinstance(dest, RuntimeAddr)
-    assert isinstance(source, BinaryAddr)
-    assert memorymanager.is_valid_runtime_addr(dest)
-    assert memorymanager.is_valid_binary_addr(source)
-    assert memorymanager.is_valid_runtime_addr(dest + length)
-    assert memorymanager.is_valid_binary_addr(source + length)
-    assert dest != source # not fundamentally necessary, but seems sensible
+    assert isinstance(dest_runtime_addr, RuntimeAddr)
+    assert isinstance(src_binary_addr, BinaryAddr)
+    assert memorymanager.is_valid_runtime_addr(dest_runtime_addr)
+    assert memorymanager.is_valid_binary_addr(src_binary_addr)
+    assert memorymanager.is_valid_runtime_addr(dest_runtime_addr + length)
+    assert memorymanager.is_valid_binary_addr(src_binary_addr + length)
+    assert dest_runtime_addr != src_binary_addr # not fundamentally necessary, but seems sensible
     assert length > 0
 
     # Create a new move
-    move_definitions.append(MoveDefinition(dest, source, length))
+    move_definitions.append(MoveDefinition(dest_runtime_addr, src_binary_addr, length))
 
     # Create a new move id
     move_id = MoveId(len(move_definitions) - 1)
 
     # Mark all source memory locations with the move id
     for i in range(length):
-        move_id_for_binary_addr[source + i] = move_id
+        move_id_for_binary_addr[src_binary_addr + i] = move_id
 
-    #utils.debug("Move {0} added. Dest = {1}, Src = {2}, Len = {3}".format(move_id, hex(dest), hex(source), length))
+    #utils.debug("Move {0} added. Dest = {1}, Src = {2}, Len = {3}".format(move_id, hex(dest_runtime_addr), hex(source), length))
     return move_id
 
 def is_valid_runtime_addr_for_move_id(runtime_addr, move_id):

@@ -209,7 +209,6 @@ def get_label(runtime_addr, binary_addr, move_id=None):
     return utils.LazyString("%s", lambda: get_final_label(runtime_addr, binary_addr, move_id))
 
 # TODO: May want to expose this to user as it may be useful in a user label maker hook
-# TODO: This might need tweaking so we don't classify "move source" as code - move.py currently shows this
 def is_code(binary_addr):
     """Is the given `binary_addr` classified as an instruction opcode?"""
 
@@ -297,7 +296,8 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
 
     # If the runtime address has a label name, choose the first one.
     # Check the local labels, then explicit names then expressions in
-    # our chosen move ID. If that fails try the base move ID.
+    # our chosen move ID.
+    # If that fails try the base move ID.
 
     # TODO: We might want to move this logic into the Label object, and
     # it could potentially pick one of its own explicit names out based
@@ -313,16 +313,22 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
         if start_addr <= binary_addr < end_addr:
             return ((name, move_id), False)
 
+    # return with the first explicit name if there is one
     for name in label.explicit_names[move_id]:
         return ((name.text, move_id), False)
+
+    # return with the first expression name, if there is one
     for expression in label.expressions[move_id]:
         return ((expression, move_id), False)
 
+    # Now do the same again, but with the BASE_MOVE_ID
     for (name, start_addr, end_addr) in label.local_labels[movemanager.BASE_MOVE_ID]:
         if start_addr <= binary_addr < end_addr:
             return ((name, move_id), False)
+
     for name in label.explicit_names[movemanager.BASE_MOVE_ID]:
         return ((name.text, None), False)
+
     for expression in label.expressions[movemanager.BASE_MOVE_ID]:
         return ((expression, move_id), False)
 

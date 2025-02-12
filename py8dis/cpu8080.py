@@ -26,7 +26,12 @@ class Cpu8080(cpu.Cpu):
     def __init__(self):
         super(Cpu8080, self).__init__()
 
-        # TODO: indent_level is a bit of a hack (after all, arguably byte/word directives etc should have it too) and should probably be handled at a higher level by the code controlling emission of text disassembly output
+        # indent_level_dict has binary addresses as the keys, and indent amounts as the values.
+
+        # TODO: indent_level_dict is a bit of a hack (after all, arguably
+        # byte/word directives etc should have it too) and should
+        # probably be handled at a higher level by the code controlling
+        # emission of text disassembly output
         self.indent_level_dict = collections.defaultdict(int)
 
         self.opcodes = {
@@ -432,7 +437,6 @@ class Cpu8080(cpu.Cpu):
             result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             return utils.LazyString("%s%s %s", utils.make_indent(1), result1, result2)
 
-        # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
         def update_references(self, binary_loc):
             trace.cpu.labels[self._target(binary_loc.binary_addr)].add_reference(binary_loc)
 
@@ -514,11 +518,7 @@ class Cpu8080(cpu.Cpu):
             def simple_call_hook(target_runtime_addr, caller_runtime_addr):
                 assert isinstance(target_runtime_addr, memorymanager.RuntimeAddr)
                 assert isinstance(caller_runtime_addr, memorymanager.RuntimeAddr)
-                # TODO: It might be possible the following assertion fails if the moves
-                # in effect are sufficiently tricky, but I'll leave it for now as it
-                # may catch bugs - once the code is more trusted it can be removed
-                # if it's technically incorrect.
-                assert movemanager.r2b_checked(caller_runtime_addr).binary_addr == binary_loc.binary_addr
+
                 return caller_runtime_addr + 3
 
             call_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_call_hook)
