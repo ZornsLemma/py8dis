@@ -7,12 +7,13 @@ import disassembly
 import mainformatter
 import memorymanager
 import movemanager
+import cpu
 import trace
 import utils
 
 memory_binary = memorymanager.memory_binary
 
-class Cpu8080(trace.Cpu):
+class Cpu8080(cpu.Cpu):
     """Singleton class representing an 8080 CPU"""
 
     def __new__(cls):

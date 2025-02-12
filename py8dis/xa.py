@@ -36,6 +36,27 @@ class Xa(assembler.Assembler):
         else:
             return self.hex4(n)
 
+    def translate_binary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'OR': '|',
+                  '|': '|',
+                'AND': '&',
+                  '&': '&',
+                'EOR': '^',
+                'XOR': '^',
+                  '^': '^',
+                'DIV': '/',
+                  '/': '/',
+                'MOD': None,
+                  '%': None,
+                 '!=': '<>',
+        }
+    def translate_unary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'NOT': '!',
+                   '!': '!',
+        }
+
     def inline_label(self, name):
         return "%s" % name
 

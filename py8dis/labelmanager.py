@@ -181,7 +181,7 @@ class Label(object):
         """Add a simple named label"""
 
         if move_id is None:
-            move_id = movemanager.base_move_id
+            move_id = movemanager.BASE_MOVE_ID
 
         assert disassembly.is_simple_name(name)
         assert movemanager.is_valid_move_id(move_id)
@@ -205,7 +205,7 @@ class Label(object):
         """Add a local label"""
 
         if move_id is None:
-            move_id = movemanager.base_move_id
+            move_id = movemanager.BASE_MOVE_ID
 
         assert disassembly.is_simple_name(name)
         assert movemanager.is_valid_move_id(move_id)

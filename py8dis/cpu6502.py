@@ -7,6 +7,7 @@ import mainformatter
 import memorymanager
 import movemanager
 import re
+import cpu
 import trace
 import utils
 import sys
@@ -196,7 +197,7 @@ class SubConst(object):
             result = result[1:]
         return int(result, 16)
 
-class Cpu6502(trace.Cpu):
+class Cpu6502(cpu.Cpu):
     """Singleton class representing a 6502 CPU"""
 
     # Addressing modes

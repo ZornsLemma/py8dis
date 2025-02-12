@@ -18,11 +18,11 @@ low_a
     ldx #$46 ; 'F'                                                    ; 2010: a2 46       .F  :0900[1]
     jmp l0909                                                         ; 2012: 4c 09 09    L.. :0902[1]
 
-; $2015 referenced 1 time by $090a
+; $2015 referenced 1 time by $090a[1]
 l0905
     txa                                                               ; 2015: 8a          .   :0905[1]
     jsr lffee                                                         ; 2016: 20 ee ff     .. :0906[1]
-; $2019 referenced 1 time by $0902
+; $2019 referenced 1 time by $0902[1]
 l0909
     dex                                                               ; 2019: ca          .   :0909[1]
     bne l0905                                                         ; 201a: d0 f9       ..  :090a[1]
@@ -44,25 +44,25 @@ sub_c2022
 ; $2029 referenced 2 times by $2039, $203c
 low_b
     ldx #6                                                            ; 2029: a2 06       ..  :0901[2]
-; $202b referenced 2 times by $0907, $090f
+; $202b referenced 2 times by $0907[2], $090f[2]
 l0903
     lda l090a,x                                                       ; 202b: bd 0a 09    ... :0903[2]
     dex                                                               ; 202e: ca          .   :0906[2]
     bne l0903                                                         ; 202f: d0 fa       ..  :0907[2]
     rts                                                               ; 2031: 60          `   :0909[2]
 
-; $2032 referenced 1 time by $0903
+; $2032 referenced 1 time by $0903[2]
 l090a
     !text "foo"                                                       ; 2032: 66 6f 6f    foo :090a[2]
 
-; $2035 referenced 1 time by $090f
+; $2035 referenced 1 time by $090f[1]
 low_b_baz
     ldx #2                                                            ; 2035: a2 02       ..  :090d[2]
     bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]
 }
 
 sub_c2039
-; $2039 referenced 1 time by $090c
+; $2039 referenced 1 time by $090c[1]
     lda low_b,x                                                       ; 2039: bd 01 09    ...
     sta low_b,x                                                       ; 203c: 9d 01 09    ...
     rts                                                               ; 203f: 60          `

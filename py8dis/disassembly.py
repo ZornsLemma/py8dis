@@ -232,7 +232,7 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
     # (a) if we can assign a move ID based on a matching of binary_addr and
     #     runtime_addr move IDs then do that
     # (b) else *if* there is any existing label at the address we will use
-    #     it's move_id rather than forcing a new label in base_move_id to
+    #     it's move_id rather than forcing a new label in BASE_MOVE_ID to
     #     be created.
     #
     # The actual rules are:
@@ -287,7 +287,7 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
             move_id = min(move_ids2)
         else:
             # Rule 5
-            move_id = movemanager.base_move_id
+            move_id = movemanager.BASE_MOVE_ID
 
     label = labelmanager.labels.get(runtime_addr)
     #print("YYY %04x" % runtime_addr)
@@ -306,7 +306,7 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
     # have no basis to choose anything else.
 
     # We look for a local label, explicit label or expression in the
-    # current move_id, or failing that in the base_move_id.
+    # current move_id, or failing that in the BASE_MOVE_ID.
     for (name, start_addr, end_addr) in label.local_labels[move_id]:
         if start_addr <= binary_addr < end_addr:
             return ((name, move_id), False)
@@ -316,12 +316,12 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
     for expression in label.expressions[move_id]:
         return ((expression, move_id), False)
 
-    for (name, start_addr, end_addr) in label.local_labels[movemanager.base_move_id]:
+    for (name, start_addr, end_addr) in label.local_labels[movemanager.BASE_MOVE_ID]:
         if start_addr <= binary_addr < end_addr:
             return ((name, move_id), False)
-    for name in label.explicit_names[movemanager.base_move_id]:
+    for name in label.explicit_names[movemanager.BASE_MOVE_ID]:
         return ((name.text, None), False)
-    for expression in label.expressions[movemanager.base_move_id]:
+    for expression in label.expressions[movemanager.BASE_MOVE_ID]:
         return ((expression, move_id), False)
 
     # If no explicit label or expression is suitable, try the optional
@@ -562,25 +562,20 @@ def emit(print_output=True):
     # do this so we can emit label definitions in the "best" move
     # region and then emit any leftover labels as explicit definitions
     # below.
-    #
-    # TODO: This is *not* emitting labels "after" the last address in
-    # some cases - e.g. move.py -a currently doesn't emit pydis_end
-    # inline. (To be fair, this is a bit of an edge case, but ideally
-    # it would work.)
 
     # d is the main disassembly output.
     d = []
 
     def record_emit_point(binary_addr, move_id):
         md = movemanager.move_definitions[move_id]
-        runtime_addr = md[0] + (binary_addr - md[1]) # TODO: OK!?
+        runtime_addr = md.convert_binary_to_runtime_addr(binary_addr)
         labelmanager.labels[runtime_addr].notify_emit_opportunity(move_id)
 
     # Calculate the move_ids that will emit output?
     for start_addr, end_addr in move_ranges:
         move_id = movemanager.move_id_for_binary_addr[start_addr]
-        if move_id != movemanager.base_move_id:
-            record_emit_point(start_addr, movemanager.base_move_id)
+        if move_id != movemanager.BASE_MOVE_ID:
+            record_emit_point(start_addr, movemanager.BASE_MOVE_ID)
 
         addr = start_addr
         while addr < end_addr:
@@ -589,8 +584,8 @@ def emit(print_output=True):
             addr += classifications[addr].length()
         assert addr == end_addr
         record_emit_point(end_addr, move_id)
-        if move_id != movemanager.base_move_id:
-            record_emit_point(end_addr, movemanager.base_move_id)
+        if move_id != movemanager.BASE_MOVE_ID:
+            record_emit_point(end_addr, movemanager.BASE_MOVE_ID)
 
     # Output disassembly for each range in turn
     old_end_addr = None
@@ -603,9 +598,9 @@ def emit(print_output=True):
         move_id = movemanager.move_id_for_binary_addr[start_addr]
 
         # Handle start of a new !pseudopc block
-        if move_id != movemanager.base_move_id:
+        if move_id != movemanager.BASE_MOVE_ID:
             # Output any base move labels just before starting a new !pseudopc block
-            d.extend(emit_labels(BinaryLocation(start_addr, movemanager.base_move_id), False))
+            d.extend(emit_labels(BinaryLocation(start_addr, movemanager.BASE_MOVE_ID), False))
 
             # Output start of !pseudopc block
             pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr, move_id)
@@ -636,13 +631,13 @@ def emit(print_output=True):
         d.extend(emit_labels(BinaryLocation(end_addr, move_id), True))
 
         # Handle the end of the !pseudopc block
-        if move_id != movemanager.base_move_id:
+        if move_id != movemanager.BASE_MOVE_ID:
             # Output the end of the !pseudopc block
             pseudopc_args = (movemanager.b2r(start_addr), start_addr, end_addr - start_addr, move_id)
             d.extend(formatter.pseudopc_end(*pseudopc_args))
 
             # Output any base move labels after the !pseudopc block is done
-            d.extend(emit_labels(BinaryLocation(end_addr, movemanager.base_move_id), False))
+            d.extend(emit_labels(BinaryLocation(end_addr, movemanager.BASE_MOVE_ID), False))
         old_end_addr = end_addr
 
 
@@ -715,7 +710,7 @@ def emit_labels(binary_loc, output_annotations=True):
 
     result = []
     md = movemanager.move_definitions[binary_loc.move_id]
-    runtime_addr = movemanager.RuntimeAddr(md[0] + (binary_loc.binary_addr - md[1])) # TODO: OK!?
+    runtime_addr = md.convert_binary_to_runtime_addr(binary_loc.binary_addr)
 
     if output_annotations:
         for annotation in utils.sorted_annotations(annotations[binary_loc]):

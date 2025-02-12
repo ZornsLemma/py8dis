@@ -101,7 +101,7 @@ def load(binary_load_addr, filename, cpu_name, md5sum=None):
     if cpu_name is None:
         utils.die("No CPU type selected in call to load().")
 
-    if isinstance(cpu_name, trace.Cpu):
+    if isinstance(cpu_name, cpu.Cpu):
         # Set the CPU
         trace.cpu = cpu_name
     else:
@@ -623,32 +623,9 @@ def is_assembler(s):
         return True
     return False
 
-def get_assembler_index():
-    assembler_index = 0
-    for a in ["acme", "beebasm", "xa", "z88dk_8080"]:
-        if is_assembler(a):
-            return assembler_index
-        assembler_index += 1
-    return None
-
 #
 # Assembler specific expression strings can be built using these functions:
 #
-
-#          generic name: ( acme,  beebasm,   xa,   z88dk )
-_trans = {          'OR': ( '|',     'OR',    '|',  None  ),
-                     '|': ( '|',     'OR',    '|',  None  ),
-                   'AND': ( '&',     'AND',   '&',  None  ),
-                     '&': ( '&',     'AND',   '&',  None  ),
-                   'EOR': ( 'XOR',   'EOR',   '^',  None  ),
-                   'XOR': ( 'XOR',   'EOR',   '^',  None  ),
-                     '^': ( 'XOR',   'EOR',   '^',  None  ),
-                   'DIV': ( 'DIV',   'DIV',   '/',  None  ),
-                     '/': ( 'DIV',   'DIV',   '/',  None  ),
-                   'MOD': ( '%',     'MOD',   None, None  ),
-                     '%': ( '%',     'MOD',   None, None  ),
-                    '!=': ( '!=',    '!=',    '<>', None  ),
-}
 
 def is_simple_name(s):
     return disassembly.is_simple_name(s)
@@ -666,10 +643,9 @@ def bracket(expr):
 def assembler_op_name(s):
     """Translate an operator name into one that is assembler specific"""
 
-    global _assembler_index
-
-    if s in _trans:
-        result = _trans[s][_assembler_index]
+    trans = config.get_assembler().translate_binary_operator_names()
+    if s in trans:
+        result = trans[s]
         if result == None:
             utils.error("Assembler can't handle operator " + s)
         return result
@@ -682,12 +658,12 @@ def make_op1(op, expr):
     if (op == None) or (expr == None):
         return None
 
-    if op == 'NOT':
-        op = '!'
-    if is_assembler('beebasm') and (op == '!'):
-        if isinstance(expr, utils.LazyString):
-            return utils.LazyString("NOT(%s)", expr)
-        return 'NOT(' + expr + ')'
+    trans = config.get_assembler().translate_unary_operator_names()
+    if op in trans:
+        op = trans[op]
+        if result == None:
+            utils.error("Assembler can't handle operator " + op)
+
     if isinstance(expr, utils.LazyString):
         return utils.LazyString("%s%s", op, bracket(expr))
     return op + bracket(expr)
@@ -754,8 +730,8 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     pydis_start, pydis_end = memorymanager.get_entire_load_range()
 
     # Create start and end labels
-    label(int(pydis_start), "pydis_start", move_id=movemanager.base_move_id)
-    label(int(pydis_end), "pydis_end", move_id=movemanager.base_move_id)
+    label(int(pydis_start), "pydis_start", move_id=movemanager.BASE_MOVE_ID)
+    label(int(pydis_end), "pydis_end", move_id=movemanager.BASE_MOVE_ID)
 
     # Trace where code lives
     trace.cpu.trace()
@@ -813,7 +789,6 @@ elif args.z88dk_8080:
 else:
     import beebasm
 
-_assembler_index = get_assembler_index()
 set_output_filename = config.get_assembler().set_output_filename
 
 if args.upper:

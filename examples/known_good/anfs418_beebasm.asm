@@ -8120,7 +8120,7 @@ lb487 = sub_cb485+2
     ora #&40 ; '@'                                                    ; bf12: 09 40       .@  :040e[1]
     cmp l0015                                                         ; bf14: c5 15       ..  :0410[1]
     bne c0434                                                         ; bf16: d0 20       .   :0412[1]
-; &bf18 referenced 1 time by &0471
+; &bf18 referenced 1 time by &0471[1]
 .sub_c0414
     php                                                               ; bf18: 08          .   :0414[1]
     sei                                                               ; bf19: 78          x   :0415[1]
@@ -8136,7 +8136,7 @@ lb487 = sub_cb485+2
     sta l0014                                                         ; bf29: 85 14       ..  :0425[1]
     rts                                                               ; bf2b: 60          `   :0427[1]
 
-; &bf2c referenced 1 time by &040c
+; &bf2c referenced 1 time by &040c[1]
 .c0428
     asl l0014                                                         ; bf2c: 06 14       ..  :0428[1]
     bcs c0432                                                         ; bf2e: b0 06       ..  :042a[1]
@@ -8145,14 +8145,14 @@ lb487 = sub_cb485+2
     clc                                                               ; bf34: 18          .   :0430[1]
     rts                                                               ; bf35: 60          `   :0431[1]
 
-; &bf36 referenced 1 time by &042a
+; &bf36 referenced 1 time by &042a[1]
 .c0432
     sta l0015                                                         ; bf36: 85 15       ..  :0432[1]
-; &bf38 referenced 2 times by &0412, &042e
+; &bf38 referenced 2 times by &0412[1], &042e[1]
 .c0434
     rts                                                               ; bf38: 60          `   :0434[1]
 
-; &bf39 referenced 1 time by &0408
+; &bf39 referenced 1 time by &0408[1]
 .c0435
     php                                                               ; bf39: 08          .   :0435[1]
     sei                                                               ; bf3a: 78          x   :0436[1]
@@ -8163,7 +8163,7 @@ lb487 = sub_cb485+2
     ldy #3                                                            ; bf43: a0 03       ..  :043f[1]
     lda l0015                                                         ; bf45: a5 15       ..  :0441[1]
     jsr l069e                                                         ; bf47: 20 9e 06     .. :0443[1]
-; &bf4a referenced 1 time by &044c
+; &bf4a referenced 1 time by &044c[1]
 .loop_c0446
     lda (l0012),y                                                     ; bf4a: b1 12       ..  :0446[1]
     jsr l069e                                                         ; bf4c: 20 9e 06     .. :0448[1]
@@ -8178,10 +8178,10 @@ lb487 = sub_cb485+2
     bcc c0463                                                         ; bf5f: 90 06       ..  :045b[1]
     bit tube_host_r3_data                                             ; bf61: 2c e5 fe    ,.. :045d[1]
     bit tube_host_r3_data                                             ; bf64: 2c e5 fe    ,.. :0460[1]
-; &bf67 referenced 1 time by &045b
+; &bf67 referenced 1 time by &045b[1]
 .c0463
     jsr l069e                                                         ; bf67: 20 9e 06     .. :0463[1]
-; &bf6a referenced 1 time by &0469
+; &bf6a referenced 1 time by &0469[1]
 .loop_c0466
     bit tube_host_r4_status                                           ; bf6a: 2c e6 fe    ,.. :0466[1]
     bvc loop_c0466                                                    ; bf6d: 50 fb       P.  :0469[1]
@@ -8192,13 +8192,13 @@ lb487 = sub_cb485+2
     jsr l0695                                                         ; bf78: 20 95 06     .. :0474[1]
     jmp l0032                                                         ; bf7b: 4c 32 00    L2. :0477[1]
 
-; &bf7e referenced 1 time by &046b
+; &bf7e referenced 1 time by &046b[1]
 .c047a
     lsr a                                                             ; bf7e: 4a          J   :047a[1]
     bcc c0482                                                         ; bf7f: 90 05       ..  :047b[1]
     ldy #&88                                                          ; bf81: a0 88       ..  :047d[1]
     sty tube_host_r1_status                                           ; bf83: 8c e0 fe    ... :047f[1]
-; &bf86 referenced 2 times by &046f, &047b
+; &bf86 referenced 2 times by &046f[1], &047b[1]
 .c0482
     plp                                                               ; bf86: 28          (   :0482[1]
     rts                                                               ; bf87: 60          `   :0483[1]

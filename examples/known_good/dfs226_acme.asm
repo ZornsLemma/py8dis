@@ -286,26 +286,26 @@ oscli               = $fff7
     * = $8000
 
 ; Sideways ROM header
-; $8000 referenced 1 time by $04e2
+; $8000 referenced 1 time by $04e2[1]
 rom_header
 language_entry
 pydis_start
 l8001 = rom_header+1
 l8002 = rom_header+2
     !byte 0, 0, 0                                                     ; 8000: 00 00 00    ...
-; $8001 referenced 1 time by $04e7
-; $8002 referenced 1 time by $04ec
+; $8001 referenced 1 time by $04e7[1]
+; $8002 referenced 1 time by $04ec[1]
 
-; $8003 referenced 1 time by $04f1
+; $8003 referenced 1 time by $04f1[1]
 service_entry
 l8004 = service_entry+1
     jmp service_handler                                               ; 8003: 4c c8 be    L..
 
-; $8004 referenced 1 time by $04f4
-; $8006 referenced 1 time by $04d6
+; $8004 referenced 1 time by $04f4[1]
+; $8006 referenced 1 time by $04d6[1]
 rom_type
     !byte $82                                                         ; 8006: 82          .
-; $8007 referenced 1 time by $04de
+; $8007 referenced 1 time by $04de[1]
 copyright_offset
     !byte copyright - rom_header                                      ; 8007: 11          .
 binary_version
@@ -3028,22 +3028,22 @@ nmi_and_imm
 ; The operand of this "beq" is modified at runtime.
 nmi_beq
     beq nmi_XXX2                                                      ; 8fda: f0 2f       ./  :0d08[4]
-; $8fdb referenced 4 times by $0d4d, $8e4a, $8eb4, $8ebb
+; $8fdb referenced 4 times by $0d4d[4], $8e4a, $8eb4, $8ebb
     and #$fc                                                          ; 8fdc: 29 fc       ).  :0d0a[4]
     bne l0d12                                                         ; 8fde: d0 04       ..  :0d0c[4]
     dec l00a5                                                         ; 8fe0: c6 a5       ..  :0d0e[4]
     bne nmi_lda_zp                                                    ; 8fe2: d0 04       ..  :0d10[4]
-; $8fe4 referenced 1 time by $0d0c
+; $8fe4 referenced 1 time by $0d0c[4]
 l0d12
     sta l00a2                                                         ; 8fe4: 85 a2       ..  :0d12[4]
     pla                                                               ; 8fe6: 68          h   :0d14[4]
     rti                                                               ; 8fe7: 40          @   :0d15[4]
 
 ; The operand of this lda is modified at runtime.
-; $8fe8 referenced 3 times by $0d10, $0d18, $9060
+; $8fe8 referenced 3 times by $0d10[4], $0d18[6], $9060
 nmi_lda_zp
     lda l00a5                                                         ; 8fe8: a5 a5       ..  :0d16[4]
-; $8fe9 referenced 2 times by $0d1d, $9063
+; $8fe9 referenced 2 times by $0d1d[6], $9063
 ; This instruction is patched at runtime to toggle between cmp #/bcs.
 ; $8fea referenced 1 time by $9057
 nmi_cmp_imm_or_bcs
@@ -3058,17 +3058,17 @@ nmi_XXX5 = l0d1f+1
 ; One patched variant of the code transfers control to nmi_XXX5, which is the
 ; second byte of the following bcc instruction. That is always &05, which is
 ; ORA #. XXX: correct?
-; $8ff2 referenced 1 time by $0d1b
+; $8ff2 referenced 1 time by $0d1b[6]
 ; The operand of this lda is modified at runtime.
 nmi_lda_immXXX4
     lda #nmi_XXX1-(nmi_beq+2)                                         ; 8ff3: a9 48       .H  :0d21[4]
 ; $8ff4 referenced 2 times by $8d6e, $8fa7
     sta nmi_lda_immXXX3+1                                             ; 8ff5: 8d 4c 0d    .L. :0d23[4]
-; $8ff8 referenced 2 times by $0d1a, $0d1f
+; $8ff8 referenced 2 times by $0d1a[4], $0d1f[4]
 l0d26
     inc l00cf                                                         ; 8ff8: e6 cf       ..  :0d26[4]
     lda l00cf                                                         ; 8ffa: a5 cf       ..  :0d28[4]
-; $8ffc referenced 1 time by $0d30
+; $8ffc referenced 1 time by $0d30[4]
 l0d2a
     sta lfe86                                                         ; 8ffc: 8d 86 fe    ... :0d2a[4]
     cmp lfe86                                                         ; 8fff: cd 86 fe    ... :0d2d[4]
@@ -3078,14 +3078,14 @@ l0d2a
     pla                                                               ; 9009: 68          h   :0d37[4]
     rti                                                               ; 900a: 40          @   :0d38[4]
 
-; $900b referenced 1 time by $0d08
+; $900b referenced 1 time by $0d08[4]
 nmi_XXX2
     lda lfe87                                                         ; 900b: ad 87 fe    ... :0d39[4]
 ; The operand of this sta is modified at runtime.
 nmi_sta_abs
     sta tube_host_r3_data                                             ; 900e: 8d e5 fe    ... :0d3c[4]
-; $900f referenced 3 times by $0d37, $0d3f, $903e
-; $9010 referenced 2 times by $0d44, $9041
+; $900f referenced 3 times by $0d37[6], $0d3f[4], $903e
+; $9010 referenced 2 times by $0d44[4], $9041
 ; The first two bytes of the following instruction may be patched at runtime.
 ; $9011 referenced 1 time by $8fc9
 nmi_XXX6
@@ -3093,16 +3093,16 @@ nmi_XXX6
 ; $9012 referenced 1 time by $8fce
     bne nmi_XXX7                                                      ; 9014: d0 03       ..  :0d42[4]
     inc nmi_sta_abs+2                                                 ; 9016: ee 3e 0d    .>. :0d44[4]
-; $9019 referenced 2 times by $0d42, $0d42
+; $9019 referenced 2 times by $0d42[4], $0d42[5]
 nmi_XXX7
     dec l00a6                                                         ; 9019: c6 a6       ..  :0d47[4]
     bne l0d50                                                         ; 901b: d0 05       ..  :0d49[4]
 ; The operand of this lda is modified at runtime.
 nmi_lda_immXXX3
     lda #nmi_XXX2-(nmi_beq+2)                                         ; 901d: a9 2f       ./  :0d4b[4]
-; $901e referenced 3 times by $0d23, $8d71, $8eb1
+; $901e referenced 3 times by $0d23[4], $8d71, $8eb1
     sta nmi_beq+1                                                     ; 901f: 8d 09 0d    ... :0d4d[4]
-; $9022 referenced 1 time by $0d49
+; $9022 referenced 1 time by $0d49[4]
 l0d50
     pla                                                               ; 9022: 68          h   :0d50[4]
     rti                                                               ; 9023: 40          @   :0d51[4]
@@ -3127,8 +3127,8 @@ nmi3_handler_rom_start
 ; The operand of this lda is modified at runtime.
 nmi_lda_abs
     lda tube_host_r3_data                                             ; 9030: ad e5 fe    ... :0d39[5]
-; $9031 referenced 2 times by $0d3f, $8fbd
-; $9032 referenced 2 times by $0d44, $8fc3
+; $9031 referenced 2 times by $0d3f[5], $8fbd
+; $9032 referenced 2 times by $0d44[5], $8fc3
     sta lfe87                                                         ; 9033: 8d 87 fe    ... :0d3c[5]
     inc nmi_lda_abs+1                                                 ; 9036: ee 3a 0d    .:. :0d3f[5]
     bne nmi_XXX7                                                      ; 9039: d0 03       ..  :0d42[5]
@@ -3175,8 +3175,8 @@ nmi_handler2_rom_start
 ; The operand of this bcs is modified at runtime
 nmi_bcs
     bcs nmi_XXX21                                                     ; 9074: b0 26       .&  :0d0d[6]
-; $9075 referenced 1 time by $0d30
-; $9076 referenced 1 time by $0d08
+; $9075 referenced 1 time by $0d30[6]
+; $9076 referenced 1 time by $0d08[6]
 l0d0f
     and #$fc                                                          ; 9076: 29 fc       ).  :0d0f[6]
     sta l00a2                                                         ; 9078: 85 a2       ..  :0d11[6]
@@ -3199,15 +3199,15 @@ nmi_XXX18
     dec l00a5                                                         ; 9091: c6 a5       ..  :0d2a[6]
     bne l0d30                                                         ; 9093: d0 02       ..  :0d2c[6]
     lda #nmi_XXX23-(nmi_bcs+2)                                        ; 9095: a9 24       .$  :0d2e[6]
-; $9097 referenced 13 times by $0d2c, $0d3f, $0d48, $0d4c, $0d56, $0d5a, $0d62, $0d6a, $0d7e, $0d84, $0d88, $0d8c, $0d92
+; $9097 referenced 13 times by $0d2c[6], $0d3f[6], $0d48[6], $0d4c[6], $0d56[6], $0d5a[6], $0d62[6], $0d6a[6], $0d7e[6], $0d84[6], $0d88[6], $0d8c[6], $0d92[6]
 l0d30
     sta nmi_bcs+1                                                     ; 9097: 8d 0e 0d    ... :0d30[6]
-; $909a referenced 5 times by $0d22, $0d26, $0d3b, $0d72, $0d8e
+; $909a referenced 5 times by $0d22[6], $0d26[6], $0d3b[6], $0d72[6], $0d8e[6]
 nmi_XXX23
     pla                                                               ; 909a: 68          h   :0d33[6]
     rti                                                               ; 909b: 40          @   :0d34[6]
 
-; $909c referenced 1 time by $0d0d
+; $909c referenced 1 time by $0d0d[6]
 nmi_XXX21
     cmp #$fe                                                          ; 909c: c9 fe       ..  :0d35[6]
     beq l0d3d                                                         ; 909e: f0 04       ..  :0d37[6]
@@ -3250,7 +3250,7 @@ nmi_XXX16
     beq c0d74                                                         ; 90d5: f0 04       ..  :0d6e[6]
     cmp #$f8                                                          ; 90d7: c9 f8       ..  :0d70[6]
     bne nmi_XXX23                                                     ; 90d9: d0 bf       ..  :0d72[6]
-; $90db referenced 1 time by $0d6e
+; $90db referenced 1 time by $0d6e[6]
 c0d74
     sta l00b6                                                         ; 90db: 85 b6       ..  :0d74[6]
     lda l00b5                                                         ; 90dd: a5 b5       ..  :0d76[6]
@@ -3258,7 +3258,7 @@ c0d74
     inc l00cf                                                         ; 90e1: e6 cf       ..  :0d7a[6]
     lda #nmi_XXX17-(nmi_bcs+2)                                        ; 90e3: a9 06       ..  :0d7c[6]
     bne l0d30                                                         ; 90e5: d0 b0       ..  :0d7e[6]
-; $90e7 referenced 1 time by $0d78
+; $90e7 referenced 1 time by $0d78[6]
 c0d80
     inc l00a5                                                         ; 90e7: e6 a5       ..  :0d80[6]
     lda #nmi_XXX18-(nmi_bcs+2)                                        ; 90e9: a9 11       ..  :0d82[6]
@@ -7632,7 +7632,7 @@ cacc7
 tube_host_code2
 
 !pseudopc $0500 {
-; $acdb referenced 2 times by $50, $af1c
+; $acdb referenced 2 times by $50[3], $af1c
 l0500
     !word          sub_c0537,          sub_c0596,          sub_c05f2  ; acdb: 37 05 96... 7.. :0500[2]
     !word          sub_c0607,          sub_c0627, tube_host_osword_0  ; ace1: 07 06 27... ..' :0506[2]
@@ -7640,7 +7640,7 @@ l0500
     !word          sub_c0542,          sub_c05a9,          sub_c05d1  ; aced: 42 05 a9... B.. :0512[2]
 ; Table of flags used by tube_entry_small_a to set up registers 1/4 for the
 ; selected operation.
-; $acf3 referenced 1 time by $0453
+; $acf3 referenced 1 time by $0453[1]
 tube_entry_flags
     !byte $86, $88, $96, $98, $18, $18, $82, $18                      ; acf3: 86 88 96... ... :0518[2]
 
@@ -7659,7 +7659,7 @@ sub_c052d
 
 sub_c0537
     jsr osrdch                                                        ; ad12: 20 e0 ff     .. :0537[2]   ; Read a character from the current input stream
-; $ad15 referenced 2 times by $0534, $05ef
+; $ad15 referenced 2 times by $0534[2], $05ef[2]
 c053a
     ror                                                               ; ad15: 6a          j   :053a[2]
     jsr write_tube_r2_data                                            ; ad16: 20 95 06     .. :053b[2]
@@ -7675,7 +7675,7 @@ sub_c0542
     jsr osfind                                                        ; ad27: 20 ce ff     .. :054c[2]   ; Open or close file(s)
     jmp c059e                                                         ; ad2a: 4c 9e 05    L.. :054f[2]
 
-; $ad2d referenced 1 time by $0545
+; $ad2d referenced 1 time by $0545[2]
 c0552
     jsr read_tube_r2_data                                             ; ad2d: 20 c5 06     .. :0552[2]
     tay                                                               ; ad30: a8          .   :0555[2]
@@ -7687,7 +7687,7 @@ sub_c055e
     jsr read_tube_r2_data                                             ; ad39: 20 c5 06     .. :055e[2]
     tay                                                               ; ad3c: a8          .   :0561[2]
     ldx #4                                                            ; ad3d: a2 04       ..  :0562[2]
-; $ad3f referenced 1 time by $056a
+; $ad3f referenced 1 time by $056a[2]
 loop_c0564
     jsr read_tube_r2_data                                             ; ad3f: 20 c5 06     .. :0564[2]
     sta l00ff,x                                                       ; ad42: 95 ff       ..  :0567[2]
@@ -7697,7 +7697,7 @@ loop_c0564
     jsr osargs                                                        ; ad4a: 20 da ff     .. :056f[2]   ; Read or write a file's attributes
     jsr write_tube_r2_data                                            ; ad4d: 20 95 06     .. :0572[2]
     ldx #3                                                            ; ad50: a2 03       ..  :0575[2]
-; $ad52 referenced 1 time by $057d
+; $ad52 referenced 1 time by $057d[2]
 loop_c0577
     lda l0000,x                                                       ; ad52: b5 00       ..  :0577[2]
     jsr write_tube_r2_data                                            ; ad54: 20 95 06     .. :0579[2]
@@ -7705,11 +7705,11 @@ loop_c0577
     bpl loop_c0577                                                    ; ad58: 10 f8       ..  :057d[2]
     jmp c0036                                                         ; ad5a: 4c 36 00    L6. :057f[2]
 
-; $ad5d referenced 3 times by $0548, $0596, $05b3
+; $ad5d referenced 3 times by $0548[2], $0596[2], $05b3[2]
 sub_c0582
     ldx #0                                                            ; ad5d: a2 00       ..  :0582[2]
     ldy #0                                                            ; ad5f: a0 00       ..  :0584[2]
-; $ad61 referenced 1 time by $0591
+; $ad61 referenced 1 time by $0591[2]
 loop_c0586
     jsr read_tube_r2_data                                             ; ad61: 20 c5 06     .. :0586[2]
     sta l0700,y                                                       ; ad64: 99 00 07    ... :0589[2]
@@ -7717,7 +7717,7 @@ loop_c0586
     beq c0593                                                         ; ad68: f0 04       ..  :058d[2]
     cmp #$0d                                                          ; ad6a: c9 0d       ..  :058f[2]
     bne loop_c0586                                                    ; ad6c: d0 f3       ..  :0591[2]
-; $ad6e referenced 1 time by $058d
+; $ad6e referenced 1 time by $058d[2]
 c0593
     ldy #7                                                            ; ad6e: a0 07       ..  :0593[2]
     rts                                                               ; ad70: 60          `   :0595[2]
@@ -7725,21 +7725,21 @@ c0593
 sub_c0596
     jsr sub_c0582                                                     ; ad71: 20 82 05     .. :0596[2]
     jsr oscli                                                         ; ad74: 20 f7 ff     .. :0599[2]
-; $ad77 referenced 3 times by $0489, $052a, $055b
+; $ad77 referenced 3 times by $0489[1], $052a[2], $055b[2]
 c059c
     lda #$7f                                                          ; ad77: a9 7f       ..  :059c[2]
-; $ad79 referenced 4 times by $053f, $054f, $05a1, $067d
+; $ad79 referenced 4 times by $053f[2], $054f[2], $05a1[2], $067d[2]
 c059e
     bit tube_host_r2_status                                           ; ad79: 2c e2 fe    ,.. :059e[2]
     bvc c059e                                                         ; ad7c: 50 fb       P.  :05a1[2]
     sta tube_host_r2_data                                             ; ad7e: 8d e3 fe    ... :05a3[2]
-; $ad81 referenced 1 time by $05cf
+; $ad81 referenced 1 time by $05cf[2]
 c05a6
     jmp c0036                                                         ; ad81: 4c 36 00    L6. :05a6[2]
 
 sub_c05a9
     ldx #$10                                                          ; ad84: a2 10       ..  :05a9[2]
-; $ad86 referenced 1 time by $05b1
+; $ad86 referenced 1 time by $05b1[2]
 loop_c05ab
     jsr read_tube_r2_data                                             ; ad86: 20 c5 06     .. :05ab[2]
     sta l0001,x                                                       ; ad89: 95 01       ..  :05ae[2]
@@ -7753,7 +7753,7 @@ loop_c05ab
     jsr osfile                                                        ; ad9a: 20 dd ff     .. :05bf[2]
     jsr write_tube_r2_data                                            ; ad9d: 20 95 06     .. :05c2[2]
     ldx #$10                                                          ; ada0: a2 10       ..  :05c5[2]
-; $ada2 referenced 1 time by $05cd
+; $ada2 referenced 1 time by $05cd[2]
 loop_c05c7
     lda l0001,x                                                       ; ada2: b5 01       ..  :05c7[2]
     jsr write_tube_r2_data                                            ; ada4: 20 95 06     .. :05c9[2]
@@ -7762,7 +7762,7 @@ loop_c05c7
     beq c05a6                                                         ; adaa: f0 d5       ..  :05cf[2]
 sub_c05d1
     ldx #$0d                                                          ; adac: a2 0d       ..  :05d1[2]
-; $adae referenced 1 time by $05d9
+; $adae referenced 1 time by $05d9[2]
 loop_c05d3
     jsr read_tube_r2_data                                             ; adae: 20 c5 06     .. :05d3[2]
     sta l00ff,x                                                       ; adb1: 95 ff       ..  :05d6[2]
@@ -7773,7 +7773,7 @@ loop_c05d3
     jsr osgbpb                                                        ; adbb: 20 d1 ff     .. :05e0[2]   ; Read or write multiple bytes to an open file
     pha                                                               ; adbe: 48          H   :05e3[2]
     ldx #$0c                                                          ; adbf: a2 0c       ..  :05e4[2]
-; $adc1 referenced 1 time by $05ec
+; $adc1 referenced 1 time by $05ec[2]
 loop_c05e6
     lda l0000,x                                                       ; adc1: b5 00       ..  :05e6[2]
     jsr write_tube_r2_data                                            ; adc3: 20 95 06     .. :05e8[2]
@@ -7787,7 +7787,7 @@ sub_c05f2
     tax                                                               ; add0: aa          .   :05f5[2]
     jsr read_tube_r2_data                                             ; add1: 20 c5 06     .. :05f6[2]
     jsr osbyte                                                        ; add4: 20 f4 ff     .. :05f9[2]
-; $add7 referenced 2 times by $05ff, $0625
+; $add7 referenced 2 times by $05ff[2], $0625[2]
 c05fc
     bit tube_host_r2_status                                           ; add7: 2c e2 fe    ,.. :05fc[2]
 sub_c05ff
@@ -7795,7 +7795,7 @@ l0600 = sub_c05ff+1
     bvc c05fc                                                         ; adda: 50 fb       P.  :05ff[2]
 ; $addb referenced 1 time by $af22
     stx tube_host_r2_data                                             ; addc: 8e e3 fe    ... :0601[2]
-; $addf referenced 1 time by $0617
+; $addf referenced 1 time by $0617[2]
 loop_c0604
     jmp c0036                                                         ; addf: 4c 36 00    L6. :0604[2]
 
@@ -7810,7 +7810,7 @@ sub_c0607
     beq loop_c0604                                                    ; adf2: f0 eb       ..  :0617[2]
     ror                                                               ; adf4: 6a          j   :0619[2]
     jsr write_tube_r2_data                                            ; adf5: 20 95 06     .. :061a[2]
-; $adf8 referenced 1 time by $0620
+; $adf8 referenced 1 time by $0620[2]
 loop_c061d
     bit tube_host_r2_status                                           ; adf8: 2c e2 fe    ,.. :061d[2]
     bvc loop_c061d                                                    ; adfb: 50 fb       P.  :0620[2]
@@ -7819,14 +7819,14 @@ loop_c061d
 sub_c0627
     jsr read_tube_r2_data                                             ; ae02: 20 c5 06     .. :0627[2]
     tay                                                               ; ae05: a8          .   :062a[2]
-; $ae06 referenced 1 time by $062e
+; $ae06 referenced 1 time by $062e[2]
 loop_c062b
     bit tube_host_r2_status                                           ; ae06: 2c e2 fe    ,.. :062b[2]
     bpl loop_c062b                                                    ; ae09: 10 fb       ..  :062e[2]
     ldx tube_host_r2_data                                             ; ae0b: ae e3 fe    ... :0630[2]
     dex                                                               ; ae0e: ca          .   :0633[2]
     bmi c0645                                                         ; ae0f: 30 0f       0.  :0634[2]
-; $ae11 referenced 2 times by $0639, $0642
+; $ae11 referenced 2 times by $0639[2], $0642[2]
 c0636
     bit tube_host_r2_status                                           ; ae11: 2c e2 fe    ,.. :0636[2]
     bpl c0636                                                         ; ae14: 10 fb       ..  :0639[2]
@@ -7835,35 +7835,35 @@ c0636
     dex                                                               ; ae1c: ca          .   :0641[2]
     bpl c0636                                                         ; ae1d: 10 f2       ..  :0642[2]
     tya                                                               ; ae1f: 98          .   :0644[2]
-; $ae20 referenced 1 time by $0634
+; $ae20 referenced 1 time by $0634[2]
 c0645
     ldx #<(l0128)                                                     ; ae20: a2 28       .(  :0645[2]
     ldy #>(l0128)                                                     ; ae22: a0 01       ..  :0647[2]
     jsr osword                                                        ; ae24: 20 f1 ff     .. :0649[2]
-; $ae27 referenced 1 time by $064f
+; $ae27 referenced 1 time by $064f[2]
 loop_c064c
     bit tube_host_r2_status                                           ; ae27: 2c e2 fe    ,.. :064c[2]
     bpl loop_c064c                                                    ; ae2a: 10 fb       ..  :064f[2]
     ldx tube_host_r2_data                                             ; ae2c: ae e3 fe    ... :0651[2]
     dex                                                               ; ae2f: ca          .   :0654[2]
     bmi c0665                                                         ; ae30: 30 0e       0.  :0655[2]
-; $ae32 referenced 1 time by $0663
+; $ae32 referenced 1 time by $0663[2]
 loop_c0657
     ldy l0128,x                                                       ; ae32: bc 28 01    .(. :0657[2]
-; $ae35 referenced 1 time by $065d
+; $ae35 referenced 1 time by $065d[2]
 loop_c065a
     bit tube_host_r2_status                                           ; ae35: 2c e2 fe    ,.. :065a[2]
     bvc loop_c065a                                                    ; ae38: 50 fb       P.  :065d[2]
     sty tube_host_r2_data                                             ; ae3a: 8c e3 fe    ... :065f[2]
     dex                                                               ; ae3d: ca          .   :0662[2]
     bpl loop_c0657                                                    ; ae3e: 10 f2       ..  :0663[2]
-; $ae40 referenced 1 time by $0655
+; $ae40 referenced 1 time by $0655[2]
 c0665
     jmp c0036                                                         ; ae40: 4c 36 00    L6. :0665[2]
 
 tube_host_osword_0
     ldx #4                                                            ; ae43: a2 04       ..  :0668[2]
-; $ae45 referenced 1 time by $0670
+; $ae45 referenced 1 time by $0670[2]
 tube_host_osword_0_loop
     jsr read_tube_r2_data                                             ; ae45: 20 c5 06     .. :066a[2]
     sta l0000,x                                                       ; ae48: 95 00       ..  :066d[2]
@@ -7877,12 +7877,12 @@ tube_host_osword_0_loop
     lda #$ff                                                          ; ae56: a9 ff       ..  :067b[2]
     jmp c059e                                                         ; ae58: 4c 9e 05    L.. :067d[2]
 
-; $ae5b referenced 1 time by $0679
+; $ae5b referenced 1 time by $0679[2]
 tube_host_osword_0_no_escape
     ldx #0                                                            ; ae5b: a2 00       ..  :0680[2]
     lda #$7f                                                          ; ae5d: a9 7f       ..  :0682[2]
     jsr write_tube_r2_data                                            ; ae5f: 20 95 06     .. :0684[2]
-; $ae62 referenced 1 time by $0690
+; $ae62 referenced 1 time by $0690[2]
 tube_host_osword_0_no_escape_loop
     lda l0700,x                                                       ; ae62: bd 00 07    ... :0687[2]
     jsr write_tube_r2_data                                            ; ae65: 20 95 06     .. :068a[2]
@@ -7892,7 +7892,7 @@ tube_host_osword_0_no_escape_loop
     jmp c0036                                                         ; ae6d: 4c 36 00    L6. :0692[2]
 
 ; Wait for register 2 to have space and write A to it.
-; $ae70 referenced 14 times by $0474, $053b, $0572, $0579, $05c2, $05c9, $05e8, $061a, $0684, $068a, $0698, $20, $26, $2c
+; $ae70 referenced 14 times by $0474[1], $053b[2], $0572[2], $0579[2], $05c2[2], $05c9[2], $05e8[2], $061a[2], $0684[2], $068a[2], $0698[2], $20[3], $26[3], $2c[3]
 write_tube_r2_data
     bit tube_host_r2_status                                           ; ae70: 2c e2 fe    ,.. :0695[2]
     bvc write_tube_r2_data                                            ; ae73: 50 fb       P.  :0698[2]
@@ -7900,14 +7900,14 @@ write_tube_r2_data
     rts                                                               ; ae78: 60          `   :069d[2]
 
 ; Wait for register 4 to have space and write A to it.
-; $ae79 referenced 8 times by $0418, $041d, $043b, $0443, $0448, $0463, $06a1, $18
+; $ae79 referenced 8 times by $0418[1], $041d[1], $043b[1], $0443[1], $0448[1], $0463[1], $06a1[2], $18[3]
 write_tube_r4_data
     bit tube_host_r4_status                                           ; ae79: 2c e6 fe    ,.. :069e[2]
     bvc write_tube_r4_data                                            ; ae7c: 50 fb       P.  :06a1[2]
     sta tube_host_r4_data                                             ; ae7e: 8d e7 fe    ... :06a3[2]
     rts                                                               ; ae81: 60          `   :06a6[2]
 
-; $ae82 referenced 1 time by $0403
+; $ae82 referenced 1 time by $0403[1]
 c06a7
     lda l00ff                                                         ; ae82: a5 ff       ..  :06a7[2]
     sec                                                               ; ae84: 38          8   :06a9[2]
@@ -7923,7 +7923,7 @@ tube_evntv_handler
     jsr write_tube_r1_data                                            ; ae93: 20 bc 06     .. :06b8[2]
     pla                                                               ; ae96: 68          h   :06bb[2]
 ; Wait for register 1 to have space and write A to it.
-; $ae97 referenced 5 times by $06ab, $06b0, $06b4, $06b8, $06bf
+; $ae97 referenced 5 times by $06ab[2], $06b0[2], $06b4[2], $06b8[2], $06bf[2]
 write_tube_r1_data
     bit tube_host_r1_status                                           ; ae97: 2c e0 fe    ,.. :06bc[2]
     bvc write_tube_r1_data                                            ; ae9a: 50 fb       P.  :06bf[2]
@@ -7931,7 +7931,7 @@ write_tube_r1_data
     rts                                                               ; ae9f: 60          `   :06c4[2]
 
 ; Wait for register 2 to have data and read A from it.
-; $aea0 referenced 21 times by $0520, $0524, $052d, $0542, $0552, $055e, $0564, $056c, $0586, $05ab, $05bc, $05d3, $05db, $05f2, $05f6, $0607, $060b, $060f, $0627, $066a, $06c8
+; $aea0 referenced 21 times by $0520[2], $0524[2], $052d[2], $0542[2], $0552[2], $055e[2], $0564[2], $056c[2], $0586[2], $05ab[2], $05bc[2], $05d3[2], $05db[2], $05f2[2], $05f6[2], $0607[2], $060b[2], $060f[2], $0627[2], $066a[2], $06c8[2]
 read_tube_r2_data
     bit tube_host_r2_status                                           ; aea0: 2c e2 fe    ,.. :06c5[2]
     bpl read_tube_r2_data                                             ; aea3: 10 fb       ..  :06c8[2]
@@ -8034,27 +8034,27 @@ tube_brkv_handler
     tay                                                               ; af45: a8          .   :0023[3]
     lda (l00fd),y                                                     ; af46: b1 fd       ..  :0024[3]
     jsr write_tube_r2_data                                            ; af48: 20 95 06     .. :0026[3]
-; $af4b referenced 1 time by $30
+; $af4b referenced 1 time by $30[3]
 loop_c0029
     iny                                                               ; af4b: c8          .   :0029[3]
     lda (l00fd),y                                                     ; af4c: b1 fd       ..  :002a[3]
     jsr write_tube_r2_data                                            ; af4e: 20 95 06     .. :002c[3]
     tax                                                               ; af51: aa          .   :002f[3]
     bne loop_c0029                                                    ; af52: d0 f7       ..  :0030[3]
-; $af54 referenced 1 time by $0477
+; $af54 referenced 1 time by $0477[1]
 c0032
     ldx #$ff                                                          ; af54: a2 ff       ..  :0032[3]
     txs                                                               ; af56: 9a          .   :0034[3]
     cli                                                               ; af57: 58          X   :0035[3]
-; $af58 referenced 6 times by $057f, $05a6, $0604, $0665, $0692, $44
+; $af58 referenced 6 times by $057f[2], $05a6[2], $0604[2], $0665[2], $0692[2], $44[3]
 c0036
     bit tube_host_r1_status                                           ; af58: 2c e0 fe    ,.. :0036[3]
     bpl c0041                                                         ; af5b: 10 06       ..  :0039[3]
-; $af5d referenced 1 time by $49
+; $af5d referenced 1 time by $49[3]
 loop_c003b
     lda tube_host_r1_data                                             ; af5d: ad e1 fe    ... :003b[3]
     jsr oswrch                                                        ; af60: 20 ee ff     .. :003e[3]   ; Write character
-; $af63 referenced 1 time by $39
+; $af63 referenced 1 time by $39[3]
 c0041
     bit tube_host_r2_status                                           ; af63: 2c e2 fe    ,.. :0041[3]
     bpl c0036                                                         ; af66: 10 f0       ..  :0044[3]
@@ -8070,17 +8070,17 @@ sub_c0050
 jump_address_low = sub_c0050+1
     jmp (l0500)                                                       ; af72: 6c 00 05    l.. :0050[3]
 
-; $af73 referenced 1 time by $4e
-; $af75 referenced 2 times by $04da, $04ea
+; $af73 referenced 1 time by $4e[3]
+; $af75 referenced 2 times by $04da[1], $04ea[1]
 l0053
     !byte 0                                                           ; af75: 00          .   :0053[3]
-; $af76 referenced 3 times by $04b2, $04d0, $04ef
+; $af76 referenced 3 times by $04b2[1], $04d0[1], $04ef[1]
 l0054
     !byte $80                                                         ; af76: 80          .   :0054[3]
-; $af77 referenced 2 times by $04b6, $04f9
+; $af77 referenced 2 times by $04b6[1], $04f9[1]
 l0055
     !byte 0                                                           ; af77: 00          .   :0055[3]
-; $af78 referenced 2 times by $04ba, $04f7
+; $af78 referenced 2 times by $04ba[1], $04f7[1]
 l0056
     !byte 0                                                           ; af78: 00          .   :0056[3]
 }
@@ -8094,7 +8094,7 @@ c0400
 
     jmp c06a7                                                         ; af7c: 4c a7 06    L.. :0403[1]
 
-; $af7f referenced 14 times by $0493, $04cb, $892a, $8cae, $8f6e, $8f7d, $9346, $982b, $bd64, $bd91, $be09, $be2c, $be7d, $be85
+; $af7f referenced 14 times by $0493[1], $04cb[1], $892a, $8cae, $8f6e, $8f7d, $9346, $982b, $bd64, $bd91, $be09, $be2c, $be7d, $be85
 tube_entry
     cmp #$80                                                          ; af7f: c9 80       ..  :0406[1]
     bcc tube_entry_small_a                                            ; af81: 90 2b       .+  :0408[1]
@@ -8104,7 +8104,7 @@ tube_entry
     ora #$40 ; '@'                                                    ; af87: 09 40       .@  :040e[1]
     cmp l0015                                                         ; af89: c5 15       ..  :0410[1]
     bne c0434                                                         ; af8b: d0 20       .   :0412[1]
-; $af8d referenced 1 time by $0471
+; $af8d referenced 1 time by $0471[1]
 sub_c0414
     php                                                               ; af8d: 08          .   :0414[1]
     sei                                                               ; af8e: 78          x   :0415[1]
@@ -8120,7 +8120,7 @@ sub_c0421
     sta l0014                                                         ; af9e: 85 14       ..  :0425[1]
     rts                                                               ; afa0: 60          `   :0427[1]
 
-; $afa1 referenced 1 time by $040c
+; $afa1 referenced 1 time by $040c[1]
 tube_entry_claim_tube
     asl l0014                                                         ; afa1: 06 14       ..  :0428[1]
     bcs c0432                                                         ; afa3: b0 06       ..  :042a[1]
@@ -8129,14 +8129,14 @@ tube_entry_claim_tube
     clc                                                               ; afa9: 18          .   :0430[1]
     rts                                                               ; afaa: 60          `   :0431[1]
 
-; $afab referenced 1 time by $042a
+; $afab referenced 1 time by $042a[1]
 c0432
     sta l0015                                                         ; afab: 85 15       ..  :0432[1]
-; $afad referenced 2 times by $0412, $042e
+; $afad referenced 2 times by $0412[1], $042e[1]
 c0434
     rts                                                               ; afad: 60          `   :0434[1]
 
-; $afae referenced 1 time by $0408
+; $afae referenced 1 time by $0408[1]
 tube_entry_small_a
     php                                                               ; afae: 08          .   :0435[1]
     sei                                                               ; afaf: 78          x   :0436[1]
@@ -8147,7 +8147,7 @@ tube_entry_small_a
     ldy #3                                                            ; afb8: a0 03       ..  :043f[1]
     lda l0015                                                         ; afba: a5 15       ..  :0441[1]
     jsr write_tube_r4_data                                            ; afbc: 20 9e 06     .. :0443[1]
-; $afbf referenced 1 time by $044c
+; $afbf referenced 1 time by $044c[1]
 loop_c0446
     lda (l0012),y                                                     ; afbf: b1 12       ..  :0446[1]
     jsr write_tube_r4_data                                            ; afc1: 20 9e 06     .. :0448[1]
@@ -8162,51 +8162,51 @@ loop_c0446
     bcc c0463                                                         ; afd4: 90 06       ..  :045b[1]
     bit tube_host_r3_data                                             ; afd6: 2c e5 fe    ,.. :045d[1]
     bit tube_host_r3_data                                             ; afd9: 2c e5 fe    ,.. :0460[1]
-; $afdc referenced 1 time by $045b
+; $afdc referenced 1 time by $045b[1]
 c0463
     jsr write_tube_r4_data                                            ; afdc: 20 9e 06     .. :0463[1]
-; $afdf referenced 1 time by $0469
+; $afdf referenced 1 time by $0469[1]
 loop_c0466
     bit tube_host_r4_status                                           ; afdf: 2c e6 fe    ,.. :0466[1]
     bvc loop_c0466                                                    ; afe2: 50 fb       P.  :0469[1]
     bcs c047a                                                         ; afe4: b0 0d       ..  :046b[1]
     cpx #4                                                            ; afe6: e0 04       ..  :046d[1]
     bne c0482                                                         ; afe8: d0 11       ..  :046f[1]
-; $afea referenced 1 time by $048f
+; $afea referenced 1 time by $048f[1]
 loop_c0471
     jsr sub_c0414                                                     ; afea: 20 14 04     .. :0471[1]
     jsr write_tube_r2_data                                            ; afed: 20 95 06     .. :0474[1]
     jmp c0032                                                         ; aff0: 4c 32 00    L2. :0477[1]
 
-; $aff3 referenced 1 time by $046b
+; $aff3 referenced 1 time by $046b[1]
 c047a
     lsr                                                               ; aff3: 4a          J   :047a[1]
     bcc c0482                                                         ; aff4: 90 05       ..  :047b[1]
     ldy #$88                                                          ; aff6: a0 88       ..  :047d[1]
     sty tube_host_r1_status                                           ; aff8: 8c e0 fe    ... :047f[1]
-; $affb referenced 2 times by $046f, $047b
+; $affb referenced 2 times by $046f[1], $047b[1]
 c0482
     plp                                                               ; affb: 28          (   :0482[1]
     rts                                                               ; affc: 60          `   :0483[1]
 
-; $affd referenced 1 time by $0400
+; $affd referenced 1 time by $0400[1]
 c0484
     cli                                                               ; affd: 58          X   :0484[1]
     bcs c0491                                                         ; affe: b0 0a       ..  :0485[1]
     bne c048c                                                         ; b000: d0 03       ..  :0487[1]
     jmp c059c                                                         ; b002: 4c 9c 05    L.. :0489[1]
 
-; $b005 referenced 1 time by $0487
+; $b005 referenced 1 time by $0487[1]
 c048c
     ldx l028d                                                         ; b005: ae 8d 02    ... :048c[1]
     beq loop_c0471                                                    ; b008: f0 e0       ..  :048f[1]
-; $b00a referenced 2 times by $0485, $0496
+; $b00a referenced 2 times by $0485[1], $0496[1]
 c0491
     lda #$ff                                                          ; b00a: a9 ff       ..  :0491[1]
     jsr tube_entry                                                    ; b00c: 20 06 04     .. :0493[1]
     bcc c0491                                                         ; b00f: 90 f9       ..  :0496[1]
     jsr sub_c04ce                                                     ; b011: 20 ce 04     .. :0498[1]
-; $b014 referenced 1 time by $04c0
+; $b014 referenced 1 time by $04c0[1]
 c049b
     php                                                               ; b014: 08          .   :049b[1]
     sei                                                               ; b015: 78          x   :049c[1]
@@ -8214,7 +8214,7 @@ c049b
     jsr sub_c04c7                                                     ; b018: 20 c7 04     .. :049f[1]
     ldy #0                                                            ; b01b: a0 00       ..  :04a2[1]
     sty l0000                                                         ; b01d: 84 00       ..  :04a4[1]
-; $b01f referenced 1 time by $04af
+; $b01f referenced 1 time by $04af[1]
 loop_c04a6
     lda (l0000),y                                                     ; b01f: b1 00       ..  :04a6[1]
     sta tube_host_r3_data                                             ; b021: 8d e5 fe    ... :04a8[1]
@@ -8229,20 +8229,20 @@ loop_c04a6
     inc l0055                                                         ; b02f: e6 55       .U  :04b6[1]
     bne c04bc                                                         ; b031: d0 02       ..  :04b8[1]
     inc l0056                                                         ; b033: e6 56       .V  :04ba[1]
-; $b035 referenced 2 times by $04b4, $04b8
+; $b035 referenced 2 times by $04b4[1], $04b8[1]
 c04bc
     inc l0001                                                         ; b035: e6 01       ..  :04bc[1]
     bit l0001                                                         ; b037: 24 01       $.  :04be[1]
     bvc c049b                                                         ; b039: 50 d9       P.  :04c0[1]
     jsr sub_c04ce                                                     ; b03b: 20 ce 04     .. :04c2[1]
     lda #4                                                            ; b03e: a9 04       ..  :04c5[1]
-; $b040 referenced 1 time by $049f
+; $b040 referenced 1 time by $049f[1]
 sub_c04c7
     ldy #0                                                            ; b040: a0 00       ..  :04c7[1]
     ldx #$53 ; 'S'                                                    ; b042: a2 53       .S  :04c9[1]
     jmp tube_entry                                                    ; b044: 4c 06 04    L.. :04cb[1]
 
-; $b047 referenced 2 times by $0498, $04c2
+; $b047 referenced 2 times by $0498[1], $04c2[1]
 sub_c04ce
     lda #$80                                                          ; b047: a9 80       ..  :04ce[1]
     sta l0054                                                         ; b049: 85 54       .T  :04d0[1]
@@ -8253,7 +8253,7 @@ sub_c04ce
     sty l0053                                                         ; b053: 84 53       .S  :04da[1]
     beq c04f7                                                         ; b055: f0 19       ..  :04dc[1]
     ldx copyright_offset                                              ; b057: ae 07 80    ... :04de[1]
-; $b05a referenced 1 time by $04e5
+; $b05a referenced 1 time by $04e5[1]
 loop_c04e1
     inx                                                               ; b05a: e8          .   :04e1[1]
     lda rom_header,x                                                  ; b05b: bd 00 80    ... :04e2[1]
@@ -8264,7 +8264,7 @@ loop_c04e1
     sta l0054                                                         ; b068: 85 54       .T  :04ef[1]
     ldy service_entry,x                                               ; b06a: bc 03 80    ... :04f1[1]
     lda l8004,x                                                       ; b06d: bd 04 80    ... :04f4[1]
-; $b070 referenced 1 time by $04dc
+; $b070 referenced 1 time by $04dc[1]
 c04f7
     sta l0056                                                         ; b070: 85 56       .V  :04f7[1]
     sty l0055                                                         ; b072: 84 55       .U  :04f9[1]

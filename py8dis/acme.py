@@ -44,6 +44,28 @@ class Acme(assembler.Assembler):
         # we only use four digits when necessary.
         return self.hex(n)
 
+    def translate_binary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'OR': '|'  ,
+                  '|': '|'  ,
+                'AND': '&'  ,
+                  '&': '&'  ,
+                'EOR': 'XOR',
+                'XOR': 'XOR',
+                  '^': 'XOR',
+                'DIV': 'DIV',
+                  '/': 'DIV',
+                'MOD': '%'  ,
+                  '%': '%'  ,
+                 '!=': '!=' ,
+        }
+
+    def translate_unary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'NOT': '!',
+                   '!': '!',
+        }
+
     def inline_label(self, name):
         # text for defining a label in the first column.
         return "%s" % name

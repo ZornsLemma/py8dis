@@ -33,6 +33,27 @@ class Z88DK(assembler.Assembler):
     def hex4(self, n):
         return self.hex(n)
 
+    def translate_binary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'OR': None,
+                  '|': None,
+                'AND': None,
+                  '&': None,
+                'EOR': None,
+                'XOR': None,
+                  '^': None,
+                'DIV': None,
+                  '/': None,
+                'MOD': None,
+                  '%': None,
+                 '!=': None,
+        }
+    def translate_unary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'NOT': '!',
+                   '!': '!',
+        }
+
     def inline_label(self, name):
         return "%s:" % name
 

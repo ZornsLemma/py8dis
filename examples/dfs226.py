@@ -58,7 +58,6 @@ comment(0x6c5, "Wait for register 2 to have data and read A from it.")
 entry(0x6c5, "read_tube_r2_data")
 comment(0x518, "Table of flags used by tube_entry_small_a to set up registers 1/4 for the\nselected operation.")
 label(0x518, "tube_entry_flags")
-# TODO: Not sure if it's a bug or just a quirk, but we get duplicate "referenced by" lines at e.g. tube_host_code2 and l0500
 entry(0x668, "tube_host_osword_0")
 entry(0x66a, "tube_host_osword_0_loop")
 entry(0x680, "tube_host_osword_0_no_escape")

@@ -35,7 +35,7 @@ lffe3   = &ffe3
     sta l0070                                                         ; 2023: 85 70       .p  :0905[1]
     rts                                                               ; 2025: 60          `   :0907[1]
 
-; &2026 referenced 1 time by &0902
+; &2026 referenced 1 time by &0902[1]
 .sub_c0908
     jsr lffe3                                                         ; 2026: 20 e3 ff     .. :0908[1]
     clc                                                               ; 2029: 18          .   :090b[1]

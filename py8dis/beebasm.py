@@ -39,6 +39,28 @@ class Beebasm(assembler.Assembler):
         else:
             return self.hex4(n)
 
+    def translate_binary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'OR': 'OR',
+                  '|': 'OR',
+                'AND': 'AND',
+                  '&': 'AND',
+                'EOR': 'EOR',
+                'XOR': 'EOR',
+                  '^': 'EOR',
+                'DIV': 'DIV',
+                  '/': 'DIV',
+                'MOD': 'MOD',
+                  '%': 'MOD',
+                 '!=': '!=',
+        }
+
+    def translate_unary_operator_names(self):
+        # 'generic name: assembler specific name'
+        return { 'NOT': 'NOT',
+                   '!': 'NOT',
+        }
+
     def inline_label(self, name):
         return ".%s" % name
 
