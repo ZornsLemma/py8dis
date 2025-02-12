@@ -3015,6 +3015,7 @@ c8fc7
 ; $8fd2 referenced 1 time by $8f96
 nmi_handler_rom_start
 
+; Move 4: $8fd2 to $0d00 for length 94
 !pseudopc $0d00 {
 ; $8fd2 referenced 2 times by $8e8f, $8f99
 nmi_handler_ram
@@ -3123,6 +3124,7 @@ nmi_XXX8
 nmi_handler_rom_end
 nmi3_handler_rom_start
 
+; Move 5: $9030 to $0d39 for length 14
 !pseudopc $0d39 {
 ; The operand of this lda is modified at runtime.
 nmi_lda_abs
@@ -3165,6 +3167,7 @@ c9060
 
 nmi_handler2_rom_start
 
+; Move 6: $9067 to $0d00 for length 148
 !pseudopc $0d00 {
     pha                                                               ; 9067: 48          H   :0d00[6]
     lda lfe84                                                         ; 9068: ad 84 fe    ... :0d01[6]
@@ -7631,6 +7634,7 @@ cacc7
 ; $acdb referenced 1 time by $af19
 tube_host_code2
 
+; Move 2: $acdb to $0500 for length 462
 !pseudopc $0500 {
 ; $acdb referenced 2 times by $50[3], $af1c
 l0500
@@ -8023,6 +8027,7 @@ just_rts
 ; $af38 referenced 1 time by $af2d
 tube_host_code3
 
+; Move 3: $af38 to $16 for length 65
 !pseudopc $16 {
 ; $af38 referenced 1 time by $af30
 tube_brkv_handler
@@ -8087,6 +8092,7 @@ l0056
 
 tube_host_code1
 
+; Move 1: $af79 to $0400 for length 252
 !pseudopc $0400 {
 ; $af79 referenced 1 time by $af16
 c0400

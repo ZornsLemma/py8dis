@@ -8105,6 +8105,8 @@ lbec3
     .byt   5,   0, $80,   0,   0                                      // beff: 05 00 80... ...
 // $bf04 referenced 1 time by $be9e
 lbf04
+
+// Move 1: $bf04 to $0400 for length 145
 * = $0400
 // $bf04 referenced 1 time by $bea1
 l0400

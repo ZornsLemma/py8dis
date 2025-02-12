@@ -8106,6 +8106,7 @@ lb487 = sub_cb485+2
 ; &bf04 referenced 1 time by &be9e
 .lbf04
 
+; Move 1: &bf04 to &0400 for length 145
     org &0400
 ; &bf04 referenced 1 time by &bea1
 .l0400

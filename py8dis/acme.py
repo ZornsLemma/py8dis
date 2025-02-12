@@ -33,7 +33,7 @@ class Acme(assembler.Assembler):
             return "$%s" % utils.plainhex4(n)
 
     def hex4(self, n):
-        # Normally this should output four digits of hex, but...
+        # WARNING: Normally this should output four digits of hex, but...
         # Older versions of acme don't like things like:
         #
         #     L00A4 = $00A4
@@ -103,7 +103,7 @@ class Acme(assembler.Assembler):
     def pseudopc_start(self, dest, source, length, move_id):
         # When assembling code at a different address to where it will actually execute,
         # it is surrounded by '!pseudopc <execution-address> { <code> }'
-        return ["", utils.force_case("!pseudopc %s {" % self.hex(dest))]
+        return [utils.force_case("!pseudopc %s {" % self.hex(dest))]
 
     def pseudopc_end(self, dest, source, length, move_id):
         return ["}", ""]

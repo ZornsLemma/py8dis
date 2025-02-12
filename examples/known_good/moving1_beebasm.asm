@@ -7,6 +7,7 @@ l3002   = &3002
 .pydis_start
     equb 0, 1                                                         ; 3000: 00 01       ..
 
+; Move 1: &3002 to &3001 for length 255
     ; 1. We want to move to a lower memory address to assemble the next block of code
     ; at it's runtime address. First we temporarily copy the existing code/data that
     ; overlaps out of the way while we do so.

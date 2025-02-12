@@ -293,6 +293,7 @@ oscli                   = $fff7
 
 pydis_start
 
+; Move 1: $2000 to $8000 for length 4050
 !pseudopc $8000 {
 ; Sideways ROM header
 ; $2000 referenced 1 time by $04e2[2]
@@ -3025,6 +3026,7 @@ nmi_handler_rom_start
 }
 
 
+; Move 5: $2fd2 to $0d00 for length 94
 !pseudopc $0d00 {
 ; $2fd2 referenced 2 times by $8e8f[1], $8f99[1]
 nmi_handler_ram
@@ -3131,6 +3133,7 @@ nmi_XXX8
 }
 
 
+; Move 6: $3030 to $0d39 for length 14
 !pseudopc $0d39 {
 ; The operand of this lda is modified at runtime.
 nmi_lda_abs
@@ -3144,6 +3147,7 @@ nmi_lda_abs
 }
 
 
+; Move 1: $303e to $903e for length 41
 !pseudopc $903e {
 ; $303e referenced 1 time by $8de2[1]
 nmi3_handler_rom_end
@@ -3176,6 +3180,7 @@ c9060
 }
 
 
+; Move 7: $3067 to $0d00 for length 148
 !pseudopc $0d00 {
     pha                                                               ; 3067: 48          H   :0d00[7]
     lda lfe84                                                         ; 3068: ad 84 fe    ... :0d01[7]
@@ -3287,6 +3292,7 @@ nmi_XXX20
 }
 
 
+; Move 1: $30fb to $90fb for length 7136
 !pseudopc $90fb {
 ; $30fb referenced 3 times by $8d41[1], $8d92[1], $9101[1]
 nmi_handler2_rom_end
@@ -7636,6 +7642,7 @@ cacc7
 }
 
 
+; Move 3: $4cdb to $0500 for length 462
 !pseudopc $0500 {
 ; $4cdb referenced 2 times by $50[4], $af1c[1]
 l0500
@@ -7946,6 +7953,7 @@ read_tube_r2_data
 }
 
 
+; Move 1: $4ea9 to $aea9 for length 143
 !pseudopc $aea9 {
 ; $4ea9 referenced 1 time by $965d[1]
 service_handler_help_and_tube
@@ -8030,6 +8038,7 @@ just_rts
 }
 
 
+; Move 4: $4f38 to $16 for length 65
 !pseudopc $16 {
 ; $4f38 referenced 1 time by $af30[1]
 tube_brkv_handler
@@ -8090,6 +8099,7 @@ l0056
 }
 
 
+; Move 2: $4f79 to $0400 for length 252
 !pseudopc $0400 {
 ; $4f79 referenced 1 time by $af16[1]
 c0400
@@ -8276,6 +8286,7 @@ c04f7
 }
 
 
+; Move 1: $5075 to $b075 for length 3979
 !pseudopc $b075 {
 ; $5075 referenced 1 time by $b2b4[1]
 lb075

@@ -233,4 +233,7 @@ def format_comment(text, indent):
 
     prefix = config.get_indent_string() * indent + config.get_assembler().comment_prefix() + " "
     text_width = config.get_word_wrap_comment_column() - len(prefix)
-    return "\n".join(textwrap.fill(paragraph, text_width) for paragraph in text.split("\n"))
+    result = ""
+    for paragraph in text.split("\n"):
+        result += "\n".join([prefix + line for line in textwrap.fill(paragraph, text_width).split("\n")]) + "\n"
+    return result[:-1]

@@ -14,6 +14,7 @@ lffee       = &ffee
     jmp lffee                                                         ; 200d: 4c ee ff    L..
 
 
+; Move 1: &2010 to &0900 for length 18
     org &0900
 ; &2010 referenced 3 times by &2008, &2022, &2025
 .low_a
@@ -53,6 +54,7 @@ l090d = l090c+1
     rts                                                               ; 2028: 60          `
 
 
+; Move 2: &2029 to &0901 for length 16
     org &0901
 ; &2029 referenced 2 times by &2039, &203c
 .low_b

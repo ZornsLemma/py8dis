@@ -27,6 +27,7 @@ loop_c2013
 ; $201e referenced 1 time by $2002
 c201e
 
+; Move 1: $201e to $0900 for length 15
 !pseudopc $0900 {
 ; $201e referenced 2 times by $2005, $2013
 print_and_inc_zp

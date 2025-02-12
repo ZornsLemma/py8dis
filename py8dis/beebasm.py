@@ -92,8 +92,7 @@ class Beebasm(assembler.Assembler):
         return []
 
     def format_comment(self, s, indent=1):
-        text = mainformatter.format_comment(s, indent)
-        return "\n".join("%s%s %s" % (config.get_indent_string() * indent, config.get_assembler().comment_prefix(), line) for line in text.split("\n"))
+        return mainformatter.format_comment(s, indent)
 
     def find_temporary_area(self, dest, source, length):
         pydis_start, pydis_end = memorymanager.get_entire_load_range()
@@ -126,12 +125,13 @@ class Beebasm(assembler.Assembler):
         # Used when assembling code at a different address to where it will
         # actually execute.
 
-        result = [""]
+        result = []
 
         # Find a temporary memory range we can use to move existing code out of the way (if needed)
         temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end = self.find_temporary_area(dest, source, length)
         if overlap_length > 0:
-            result.append(self.format_comment("1. We want to move to a lower memory address to assemble the next block of code at it's runtime address. First we temporarily copy the existing code/data that overlaps out of the way while we do so.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
+            result.append(self.format_comment("1. We want to move to a lower memory address to assemble the next block of code at it's runtime address. First we temporarily copy the existing code/data that overlaps out of the way while we do so."))
+            result.append(self.format_comment("(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
             result.append(utils.make_indent(1) + utils.force_case("copyblock %s, %s, %s" % (self.hex(overlap_start), self.hex(overlap_start + overlap_length), self.hex(temp_start))))
 
             result.append("")
@@ -174,7 +174,8 @@ class Beebasm(assembler.Assembler):
             comment_prefix = "4. "
         else:
             comment_prefix = ""
-        result.append(self.format_comment(comment_prefix + "Copy the newly assembled block of code back to it's proper place in the binary file.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
+        result.append(self.format_comment(comment_prefix + "Copy the newly assembled block of code back to it's proper place in the binary file."))
+        result.append(self.format_comment("(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
 
         # Output COPYBLOCK command
         result.append("%s%s %s, *, %s" % (utils.make_indent(1),
@@ -193,7 +194,8 @@ class Beebasm(assembler.Assembler):
         if overlap_length > 0:
             # Output COPYBLOCK command
             result.append("")
-            result.append(self.format_comment("5. Copy the previous existing code back to it's proper place in the binary file.\n(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
+            result.append(self.format_comment("5. Copy the previous existing code back to it's proper place in the binary file."))
+            result.append(self.format_comment("(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
             result.append("%s%s %s, %s, %s" % (utils.make_indent(1),
                 utils.force_case("copyblock"),
                 self.hex(temp_start),

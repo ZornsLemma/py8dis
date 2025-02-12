@@ -4957,6 +4957,8 @@ envelope3
 codemain_end
 relocated_code
 relocated_code_end
+
+// Move 1: $3000 to $0900 for length 2048
 * = $0900
 // ----------------------------------------------------------------------------------
 // Show the currently defined keys on screen
