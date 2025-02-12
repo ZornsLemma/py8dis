@@ -2608,9 +2608,9 @@ def mos_labels():
     subroutine(0xffdd, "osfile", None, None, hook=osfile_hook, is_entry_point=False)
     subroutine(0xfff7, "oscli",  None, None, hook=oscli_hook,  is_entry_point=False)
 
-    trace.substitute_constant_list.append(SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
-    trace.substitute_constant_list.append(SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
-    trace.substitute_constant_list.append(SubConst("sty crtc_address_register", 'y', crtc_registers_enum, True))
+    trace.substitute_constant_list.append(cpu6502.SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
+    trace.substitute_constant_list.append(cpu6502.SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
+    trace.substitute_constant_list.append(cpu6502.SubConst("sty crtc_address_register", 'y', crtc_registers_enum, True))
 
 def is_sideways_rom():
     auto_comment(0x8000, "Sideways ROM header")

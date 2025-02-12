@@ -14,138 +14,6 @@ import sys
 
 memory_binary = memorymanager.memory_binary
 
-def parse_instruction(instruction):
-    instruction = instruction.strip()
-    r = re.match(Cpu6502.implied_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = ""
-        operand_length  = 0
-        prefix          = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_implied]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.immediate_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1
-        prefix          = "#"
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_immediate]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.accumulator_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = ""
-        operand_length  = 0
-        if config.get_assembler().explicit_a:
-            prefix = "A"
-        else:
-            prefix = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_accumulator]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.offset_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1
-        prefix          = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_offset]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.indexed_indirect_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        prefix          = "("
-        suffix          = ",X)"
-
-        if mnemonic == "JMP":
-            operand_length = 2
-            addr_mode      = [Cpu6502.mode_indexed_abs]
-        else:
-            operand_length  = 1
-            addr_mode       = [Cpu6502.mode_indexed_indirect]
-
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.indirect_indexed_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1
-        prefix          = "("
-        suffix          = "),Y"
-        addr_mode       = [Cpu6502.mode_indirect_indexed]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.abs_or_zp_indexed_x_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = [1, 2]
-        prefix          = ""
-        suffix          = ",X"
-        addr_mode       = [Cpu6502.mode_zp_indexed_x, Cpu6502.mode_abs_indexed_x]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.abs_or_zp_indexed_y_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1 # Could be two, updated later
-        prefix          = ""
-        suffix          = ",Y"
-        addr_mode       = [Cpu6502.mode_zp_indexed_y, Cpu6502.mode_abs_indexed_y]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.indirect_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1 # Could be two, updated later
-        prefix          = "("
-        suffix          = ")"
-        addr_mode       = [Cpu6502.mode_indirect_zp, Cpu6502.mode_indirect_addr]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.zp_or_addr_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1 # Could be two, updated later
-        prefix          = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_zp, Cpu6502.mode_addr]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    utils.die("Could not understand instruction: %s" % (instruction))
-    return None
-
-def parse_instruction_template(instruction):
-    mnemonic, operand, operand_length, prefix, suffix, addr_mode = parse_instruction(instruction)
-
-    if len(addr_mode) == 1:
-        addr_mode = addr_mode[0]
-    elif len(addr_mode) > 1:
-        # Resolve zp vs addr addressing modes
-        if operand == "zp":
-            operand_length = 1
-            addr_mode = addr_mode[0]
-        elif operand == "addr":
-            operand_length = 2
-            addr_mode = addr_mode[1]
-        else:
-            utils.warn("%s, %s, %s, %s, %s, %s" % (mnemonic, operand, operand_length, prefix, suffix, addr_mode))
-            utils.die("Could not understand instruction template %s" % (instruction))
-
-    return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
 
 class SubConst(object):
     """Data about a constant substitution.
@@ -153,7 +21,7 @@ class SubConst(object):
     These are stored in substitute_constant_list"""
 
     def __init__(self, instruction, reg, constants_dict, define_constant):
-        mnemonic, operand, operand_length, prefix, suffix, addr_modes = parse_instruction(instruction)
+        mnemonic, operand, operand_length, prefix, suffix, addr_modes = Cpu6502.parse_instruction(instruction)
         self.mnemonic       = mnemonic
         self.addr_modes     = addr_modes        # There can be two possible addressing modes, a zp and addr version
         self.operand        = operand           # This is a label
@@ -420,6 +288,139 @@ class Cpu6502(cpu.Cpu):
                 return []
         return [binary_addr]
 
+    def parse_instruction(instruction):
+        instruction = instruction.strip()
+        r = re.match(Cpu6502.implied_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = ""
+            operand_length  = 0
+            prefix          = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_implied]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.immediate_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1
+            prefix          = "#"
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_immediate]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.accumulator_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = ""
+            operand_length  = 0
+            if config.get_assembler().explicit_a:
+                prefix = "A"
+            else:
+                prefix = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_accumulator]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.offset_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1
+            prefix          = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_offset]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.indexed_indirect_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            prefix          = "("
+            suffix          = ",X)"
+
+            if mnemonic == "JMP":
+                operand_length = 2
+                addr_mode      = [Cpu6502.mode_indexed_abs]
+            else:
+                operand_length  = 1
+                addr_mode       = [Cpu6502.mode_indexed_indirect]
+
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.indirect_indexed_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1
+            prefix          = "("
+            suffix          = "),Y"
+            addr_mode       = [Cpu6502.mode_indirect_indexed]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.abs_or_zp_indexed_x_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = [1, 2]
+            prefix          = ""
+            suffix          = ",X"
+            addr_mode       = [Cpu6502.mode_zp_indexed_x, Cpu6502.mode_abs_indexed_x]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.abs_or_zp_indexed_y_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1 # Could be two, updated later
+            prefix          = ""
+            suffix          = ",Y"
+            addr_mode       = [Cpu6502.mode_zp_indexed_y, Cpu6502.mode_abs_indexed_y]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.indirect_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1 # Could be two, updated later
+            prefix          = "("
+            suffix          = ")"
+            addr_mode       = [Cpu6502.mode_indirect_zp, Cpu6502.mode_indirect_addr]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.zp_or_addr_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1 # Could be two, updated later
+            prefix          = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_zp, Cpu6502.mode_addr]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        utils.die("Could not understand instruction: %s" % (instruction))
+        return None
+
+    def parse_instruction_template(instruction):
+        mnemonic, operand, operand_length, prefix, suffix, addr_mode = Cpu6502.parse_instruction(instruction)
+
+        if len(addr_mode) == 1:
+            addr_mode = addr_mode[0]
+        elif len(addr_mode) > 1:
+            # Resolve zp vs addr addressing modes
+            if operand == "zp":
+                operand_length = 1
+                addr_mode = addr_mode[0]
+            elif operand == "addr":
+                operand_length = 2
+                addr_mode = addr_mode[1]
+            else:
+                utils.warn("%s, %s, %s, %s, %s, %s" % (mnemonic, operand, operand_length, prefix, suffix, addr_mode))
+                utils.die("Could not understand instruction template %s" % (instruction))
+
+        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
     def hook_subroutine(self, runtime_addr, name, hook, warn=True):
         runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
         binary_loc = movemanager.r2b_checked(runtime_addr)
@@ -463,7 +464,7 @@ class Cpu6502(cpu.Cpu):
 
             self.instruction_template = instruction_template
 
-            mnemonic, operand, operand_length, prefix, suffix, addr_mode = parse_instruction_template(instruction_template)
+            mnemonic, operand, operand_length, prefix, suffix, addr_mode = Cpu6502.parse_instruction_template(instruction_template)
 
             self.mnemonic       = mnemonic
             self.operand        = operand

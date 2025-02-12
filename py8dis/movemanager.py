@@ -191,7 +191,7 @@ def r2b(runtime_addr, specific_move_id=None, debug=False):
             # Only one relevant move id, use that
             specific_move_id = min(relevant_move_ids)
         else:
-            # Check for a relevant move id that is active
+            # Check for a relevant move id that is most recently active
             for move_id in active_move_ids[::-1]:
                 if move_id in relevant_move_ids:
                     specific_move_id = move_id
