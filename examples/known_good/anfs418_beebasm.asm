@@ -10628,25 +10628,6 @@ lb487 = sub_cb485+2
     assert c8dbc-1 == &8dbb
     assert c8e15-1 == &8e14
     assert copyright - rom_header == &19
-    assert osbyte_acknowledge_escape == &7e
-    assert osbyte_close_spool_exec == &77
-    assert osbyte_explode_chars == &14
-    assert osbyte_flush_buffer_class == &0f
-    assert osbyte_insert_input_buffer == &99
-    assert osbyte_issue_service_request == &8f
-    assert osbyte_read_os_version == &00
-    assert osbyte_read_write_econet_keyboard_disable == &c9
-    assert osbyte_read_write_econet_os_call_interception == &ce
-    assert osbyte_scan_keyboard == &79
-    assert osbyte_scan_keyboard_from_16 == &7a
-    assert osbyte_vsync == &13
-    assert osbyte_write_keys_pressed == &78
-    assert osfile_read_catalogue_info == &05
-    assert osfind_close == &00
-    assert osfind_open_input == &40
-    assert osword_read_palette == &0b
-    assert service_claim_absolute_workspace == &01
-    assert service_vectors_changed == &0f
     assert sub_c8ad4-1 == &8ad3
     assert sub_c8b1a-1 == &8b19
     assert sub_c8b92-1 == &8b91

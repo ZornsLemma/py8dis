@@ -10787,63 +10787,6 @@ pydis_end
 !if (copyright - rom_header) != $19 {
     !error "Assertion failed: copyright - rom_header == $19"
 }
-!if (osbyte_acknowledge_escape) != $7e {
-    !error "Assertion failed: osbyte_acknowledge_escape == $7e"
-}
-!if (osbyte_close_spool_exec) != $77 {
-    !error "Assertion failed: osbyte_close_spool_exec == $77"
-}
-!if (osbyte_explode_chars) != $14 {
-    !error "Assertion failed: osbyte_explode_chars == $14"
-}
-!if (osbyte_flush_buffer_class) != $0f {
-    !error "Assertion failed: osbyte_flush_buffer_class == $0f"
-}
-!if (osbyte_insert_input_buffer) != $99 {
-    !error "Assertion failed: osbyte_insert_input_buffer == $99"
-}
-!if (osbyte_issue_service_request) != $8f {
-    !error "Assertion failed: osbyte_issue_service_request == $8f"
-}
-!if (osbyte_read_os_version) != $00 {
-    !error "Assertion failed: osbyte_read_os_version == $00"
-}
-!if (osbyte_read_write_econet_keyboard_disable) != $c9 {
-    !error "Assertion failed: osbyte_read_write_econet_keyboard_disable == $c9"
-}
-!if (osbyte_read_write_econet_os_call_interception) != $ce {
-    !error "Assertion failed: osbyte_read_write_econet_os_call_interception == $ce"
-}
-!if (osbyte_scan_keyboard) != $79 {
-    !error "Assertion failed: osbyte_scan_keyboard == $79"
-}
-!if (osbyte_scan_keyboard_from_16) != $7a {
-    !error "Assertion failed: osbyte_scan_keyboard_from_16 == $7a"
-}
-!if (osbyte_vsync) != $13 {
-    !error "Assertion failed: osbyte_vsync == $13"
-}
-!if (osbyte_write_keys_pressed) != $78 {
-    !error "Assertion failed: osbyte_write_keys_pressed == $78"
-}
-!if (osfile_read_catalogue_info) != $05 {
-    !error "Assertion failed: osfile_read_catalogue_info == $05"
-}
-!if (osfind_close) != $00 {
-    !error "Assertion failed: osfind_close == $00"
-}
-!if (osfind_open_input) != $40 {
-    !error "Assertion failed: osfind_open_input == $40"
-}
-!if (osword_read_palette) != $0b {
-    !error "Assertion failed: osword_read_palette == $0b"
-}
-!if (service_claim_absolute_workspace) != $01 {
-    !error "Assertion failed: service_claim_absolute_workspace == $01"
-}
-!if (service_vectors_changed) != $0f {
-    !error "Assertion failed: service_vectors_changed == $0f"
-}
 !if (sub_c8ad4-1) != $8ad3 {
     !error "Assertion failed: sub_c8ad4-1 == $8ad3"
 }

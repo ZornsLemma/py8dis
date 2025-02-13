@@ -750,7 +750,13 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     result = disassembly.emit()
 
     # Output assembly code if wanted
-    if print_output:
+    global args
+
+    # Write to a file if specified
+    if args.output:
+        with open(args.output, 'w') as file:
+            file.write(result)
+    elif print_output:
         print(result)
 
     # Return assembly code as a string
@@ -764,6 +770,7 @@ parser.add_argument("-x", "--xa", action="store_true", help="generate xa-style o
 parser.add_argument("-8", "--z88dk-8080", action="store_true", help="generate z88dk style output for the 8080 processor")
 parser.add_argument("-l", "--lower", action="store_true", help="generate lower-case output (default)")
 parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output")
+parser.add_argument("-o", "--output", help="output asm file")
 args = parser.parse_args()
 
 assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa, args.z88dk_8080) if x)

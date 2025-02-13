@@ -6271,65 +6271,12 @@ osbyte                  = &fff4
     assert >string_up == &0a
     assert >string_uparrow == &0b
     assert >string_vdu19 == &2b
-    assert BigBirdColour == &20
-    assert BirdColour == &80
-    assert CageColour == &20
-    assert DigitsColour == &08
-    assert EggColour == &02
-    assert LadderColour == &08
-    assert LiftColour == &02
-    assert LivesColour == &20
-    assert LogoColour == &02
-    assert MapId_Egg == &04
-    assert MapId_Ladder == &02
-    assert MapId_Platform == &01
-    assert MapId_Seed == &08
-    assert PlatformColour == &0a
-    assert PlayerColour == &20
-    assert SeedColour == &08
-    assert SpriteId_BigBirdRight1 == &0f
-    assert SpriteId_BigC == &30
-    assert SpriteId_BigE == &35
-    assert SpriteId_BigG == &36
-    assert SpriteId_BigH == &31
-    assert SpriteId_BigI == &34
-    assert SpriteId_BigK == &33
-    assert SpriteId_BigU == &32
-    assert SpriteId_BirdEatLeft1 == &1d
     assert SpriteId_BirdEatRight1 - SpriteId_BirdRight1 == &06
     assert SpriteId_BirdLeft1 - SpriteId_BirdRight1 == &02
-    assert SpriteId_BirdRight1 == &15
     assert SpriteId_BirdRight1 - SpriteId_BirdRight1 == &00
     assert SpriteId_BirdUpDown1 - SpriteId_BirdRight1 == &04
-    assert SpriteId_Blank == &00
-    assert SpriteId_Bonus == &2d
-    assert SpriteId_CageWithHole == &13
-    assert SpriteId_Digit0 == &1f
-    assert SpriteId_Egg == &03
-    assert SpriteId_HighlightBox == &2a
-    assert SpriteId_Ladder == &02
-    assert SpriteId_Level == &2c
-    assert SpriteId_Life == &2f
-    assert SpriteId_Lift == &05
-    assert SpriteId_ManLeft1 == &09
-    assert SpriteId_ManRight1 == &06
-    assert SpriteId_ManUpDown1 == &0c
-    assert SpriteId_Platform == &01
-    assert SpriteId_Player == &2b
-    assert SpriteId_Score == &29
-    assert SpriteId_Seed == &04
-    assert SpriteId_Time == &2e
-    assert StatusColour == &08
     assert hiscorenamebuffer == &29a2
     assert hiscorenamebuffer_end - hiscorenamebuffer - 1 == &08
-    assert inkey_key_1 == &cf
-    assert inkey_key_2 == &ce
-    assert inkey_key_3 == &ee
-    assert inkey_key_4 == &ed
-    assert inkey_key_escape == &8f
-    assert inkey_key_h == &ab
-    assert inkey_key_k == &b9
-    assert inkey_key_s == &ae
     assert map0data == &0cd0
     assert map1data == &0d3e
     assert map2data == &0db2
@@ -6338,21 +6285,6 @@ osbyte                  = &fff4
     assert map5data == &0f6c
     assert map6data == &0fe8
     assert map7data == &1072
-    assert osbyte_clear_escape == &7c
-    assert osbyte_flush_buffer_class == &0f
-    assert osbyte_inkey == &81
-    assert osbyte_read_key_table_low == &ac
-    assert osbyte_read_write_bell_duration == &d6
-    assert osbyte_read_write_escape_status == &e5
-    assert osbyte_scan_keyboard == &79
-    assert osbyte_scan_keyboard_from_16 == &7a
-    assert osbyte_set_cursor_editing == &04
-    assert osbyte_tape == &8c
-    assert osword_envelope == &08
-    assert osword_read_interval_timer == &03
-    assert osword_read_line == &00
-    assert osword_sound == &07
-    assert osword_write_interval_timer == &04
     assert sprite_bigbirdleft1 == &131c
     assert sprite_bigbirdleft2 == &134c
     assert sprite_bigbirdright1 == &12bc

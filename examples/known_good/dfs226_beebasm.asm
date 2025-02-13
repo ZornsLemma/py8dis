@@ -13710,37 +13710,6 @@ lb6ce = sub_cb6cd+1
     assert nmi_XXX8-(nmi_beq+2) == &4d
     assert nmi_handler2_rom_end-nmi_handler2_rom_start == &94
     assert nmi_handler_rom_end-nmi_handler_rom_start-1 == &5d
-    assert opcode_bcs == &b0
-    assert opcode_rti == &40
-    assert osbyte_close_spool_exec == &77
-    assert osbyte_explode_chars == &14
-    assert osbyte_issue_service_request == &8f
-    assert osbyte_read_himem == &84
-    assert osbyte_read_oshwm == &83
-    assert osbyte_read_rom_info_table_low == &aa
-    assert osbyte_read_tube_presence == &ea
-    assert osbyte_read_write_spool_file_handle == &c7
-    assert osbyte_read_write_startup_options == &ff
-    assert osbyte_rw_exec_handle == &c6
-    assert osbyte_scan_keyboard_from_16 == &7a
-    assert osbyte_write_keys_pressed == &78
-    assert osbyte_write_shadow_memory_use == &72
-    assert osfile_load == &ff
-    assert osfile_read_catalogue_info == &05
-    assert osfile_save == &00
-    assert osfind_close == &00
-    assert osfind_open_input == &40
-    assert osfind_open_output == &80
-    assert service_absolute_workspace_claimed == &0a
-    assert service_boot == &03
-    assert service_check_swr_presence == &2b
-    assert service_claim_absolute_workspace == &01
-    assert service_claim_private_workspace == &02
-    assert service_help == &09
-    assert service_select_filing_system == &12
-    assert service_tube_post_init == &fe
-    assert service_unrecognised_command == &04
-    assert service_unrecognised_osword == &08
     assert sub_c0520 == &0520
     assert sub_c052d == &052d
     assert sub_c0537 == &0537
@@ -13759,7 +13728,6 @@ lb6ce = sub_cb6cd+1
     assert sub_c9d9b == &9d9b
     assert sub_c9e94 == &9e94
     assert sub_c9f82 == &9f82
-    assert tube_brkv_handler_fwd == &16
     assert tube_host_osword_0 == &0668
 
 save pydis_start, pydis_end

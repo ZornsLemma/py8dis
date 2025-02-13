@@ -86,9 +86,6 @@ class Acme(assembler.Assembler):
         # Preamble to be output at the start of the disassembly.
         result = []
 
-        if self.output_filename:
-            result.extend(["!to \"%s\", plain" % (self.output_filename)])
-
         if config.get_cmos():
             result.extend(["!cpu 65c02", ""])
         return result
@@ -110,6 +107,10 @@ class Acme(assembler.Assembler):
 
     def disassembly_end(self):
         result = []
+
+        # Write the output file if specified
+        if self.output_filename:
+            result.extend(["!to \"%s\", plain" % (self.output_filename)])
 
         # At the end of the assembly, we output assertions.
         if config.get_include_assertions():

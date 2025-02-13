@@ -13909,23 +13909,6 @@ lbefe = sub_cbefd+1
     assert cb522 == &b522
     assert cb9ad == &b9ad
     assert copyright - rom_header == &13
-    assert osbyte_check_eof == &7f
-    assert osbyte_enter_language == &8e
-    assert osbyte_inkey == &81
-    assert osbyte_read_adc_or_get_buffer_status == &80
-    assert osbyte_read_high_order_address == &82
-    assert osbyte_read_himem == &84
-    assert osbyte_read_himem_for_mode == &85
-    assert osbyte_read_text_cursor_pos == &86
-    assert osbyte_read_tube_presence == &ea
-    assert osbyte_read_write_basic_rom_bank == &bb
-    assert osfile_load == &ff
-    assert osfile_save == &00
-    assert osfind_close == &00
-    assert osword_read_clock == &01
-    assert osword_read_cmos_clock == &0e
-    assert osword_read_io_memory == &05
-    assert osword_read_pixel == &09
     assert sub_c834b == &834b
     assert sub_c8984 == &8984
     assert sub_c8fc0 == &8fc0

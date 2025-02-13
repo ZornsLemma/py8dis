@@ -59,6 +59,3 @@ crtc_substitution_test
     rts                                                               ; 202b: 60          `
 
 pydis_end
-!if (crtc_vert_total_adjust) != $05 {
-    !error "Assertion failed: crtc_vert_total_adjust == $05"
-}

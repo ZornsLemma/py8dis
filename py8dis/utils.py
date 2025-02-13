@@ -76,22 +76,6 @@ def isprint(c):
 
     return 32 <= c <= 126
 
-def check_expr(expr, value):
-    """Add an assert to the output based on an expression."""
-
-    # ENHANCE: It would be good to at least try to evaluate "expression" and generate
-    # an error if it doesn't match expected_value. In reality most expressions will
-    # be fairly simple combinations of labels and basic integer arithmetic, mixed with
-    # the < and > operators to get the low and high bytes of a 16-bit word.
-
-    # ENHANCE: It would be good if this could (probably optionally) evaluate
-    # 'expr' itself in the content of the current set of labels and constants.
-    # However, the "assert at assembly time" approach should be absolutely
-    # reliable (it's just not as early a detection as we'd like) so should
-    # probably be retained even if expression evaluation is supported directly
-    # in py8dis.
-    config.get_assembler().assert_expr(expr, value)
-
 def count_with_units(n, unit_name_singular, unit_name_plural):
     """Describes a count of a given unit e.g. "3 apples".
 

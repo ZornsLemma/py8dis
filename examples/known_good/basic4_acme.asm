@@ -13939,57 +13939,6 @@ pydis_end
 !if (copyright - rom_header) != $13 {
     !error "Assertion failed: copyright - rom_header == $13"
 }
-!if (osbyte_check_eof) != $7f {
-    !error "Assertion failed: osbyte_check_eof == $7f"
-}
-!if (osbyte_enter_language) != $8e {
-    !error "Assertion failed: osbyte_enter_language == $8e"
-}
-!if (osbyte_inkey) != $81 {
-    !error "Assertion failed: osbyte_inkey == $81"
-}
-!if (osbyte_read_adc_or_get_buffer_status) != $80 {
-    !error "Assertion failed: osbyte_read_adc_or_get_buffer_status == $80"
-}
-!if (osbyte_read_high_order_address) != $82 {
-    !error "Assertion failed: osbyte_read_high_order_address == $82"
-}
-!if (osbyte_read_himem) != $84 {
-    !error "Assertion failed: osbyte_read_himem == $84"
-}
-!if (osbyte_read_himem_for_mode) != $85 {
-    !error "Assertion failed: osbyte_read_himem_for_mode == $85"
-}
-!if (osbyte_read_text_cursor_pos) != $86 {
-    !error "Assertion failed: osbyte_read_text_cursor_pos == $86"
-}
-!if (osbyte_read_tube_presence) != $ea {
-    !error "Assertion failed: osbyte_read_tube_presence == $ea"
-}
-!if (osbyte_read_write_basic_rom_bank) != $bb {
-    !error "Assertion failed: osbyte_read_write_basic_rom_bank == $bb"
-}
-!if (osfile_load) != $ff {
-    !error "Assertion failed: osfile_load == $ff"
-}
-!if (osfile_save) != $00 {
-    !error "Assertion failed: osfile_save == $00"
-}
-!if (osfind_close) != $00 {
-    !error "Assertion failed: osfind_close == $00"
-}
-!if (osword_read_clock) != $01 {
-    !error "Assertion failed: osword_read_clock == $01"
-}
-!if (osword_read_cmos_clock) != $0e {
-    !error "Assertion failed: osword_read_cmos_clock == $0e"
-}
-!if (osword_read_io_memory) != $05 {
-    !error "Assertion failed: osword_read_io_memory == $05"
-}
-!if (osword_read_pixel) != $09 {
-    !error "Assertion failed: osword_read_pixel == $09"
-}
 !if (sub_c834b) != $834b {
     !error "Assertion failed: sub_c834b == $834b"
 }

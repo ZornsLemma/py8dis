@@ -13856,99 +13856,6 @@ pydis_end
 !if (nmi_handler_rom_end-nmi_handler_rom_start-1) != $5d {
     !error "Assertion failed: nmi_handler_rom_end-nmi_handler_rom_start-1 == $5d"
 }
-!if (opcode_bcs) != $b0 {
-    !error "Assertion failed: opcode_bcs == $b0"
-}
-!if (opcode_rti) != $40 {
-    !error "Assertion failed: opcode_rti == $40"
-}
-!if (osbyte_close_spool_exec) != $77 {
-    !error "Assertion failed: osbyte_close_spool_exec == $77"
-}
-!if (osbyte_explode_chars) != $14 {
-    !error "Assertion failed: osbyte_explode_chars == $14"
-}
-!if (osbyte_issue_service_request) != $8f {
-    !error "Assertion failed: osbyte_issue_service_request == $8f"
-}
-!if (osbyte_read_himem) != $84 {
-    !error "Assertion failed: osbyte_read_himem == $84"
-}
-!if (osbyte_read_oshwm) != $83 {
-    !error "Assertion failed: osbyte_read_oshwm == $83"
-}
-!if (osbyte_read_rom_info_table_low) != $aa {
-    !error "Assertion failed: osbyte_read_rom_info_table_low == $aa"
-}
-!if (osbyte_read_tube_presence) != $ea {
-    !error "Assertion failed: osbyte_read_tube_presence == $ea"
-}
-!if (osbyte_read_write_spool_file_handle) != $c7 {
-    !error "Assertion failed: osbyte_read_write_spool_file_handle == $c7"
-}
-!if (osbyte_read_write_startup_options) != $ff {
-    !error "Assertion failed: osbyte_read_write_startup_options == $ff"
-}
-!if (osbyte_rw_exec_handle) != $c6 {
-    !error "Assertion failed: osbyte_rw_exec_handle == $c6"
-}
-!if (osbyte_scan_keyboard_from_16) != $7a {
-    !error "Assertion failed: osbyte_scan_keyboard_from_16 == $7a"
-}
-!if (osbyte_write_keys_pressed) != $78 {
-    !error "Assertion failed: osbyte_write_keys_pressed == $78"
-}
-!if (osbyte_write_shadow_memory_use) != $72 {
-    !error "Assertion failed: osbyte_write_shadow_memory_use == $72"
-}
-!if (osfile_load) != $ff {
-    !error "Assertion failed: osfile_load == $ff"
-}
-!if (osfile_read_catalogue_info) != $05 {
-    !error "Assertion failed: osfile_read_catalogue_info == $05"
-}
-!if (osfile_save) != $00 {
-    !error "Assertion failed: osfile_save == $00"
-}
-!if (osfind_close) != $00 {
-    !error "Assertion failed: osfind_close == $00"
-}
-!if (osfind_open_input) != $40 {
-    !error "Assertion failed: osfind_open_input == $40"
-}
-!if (osfind_open_output) != $80 {
-    !error "Assertion failed: osfind_open_output == $80"
-}
-!if (service_absolute_workspace_claimed) != $0a {
-    !error "Assertion failed: service_absolute_workspace_claimed == $0a"
-}
-!if (service_boot) != $03 {
-    !error "Assertion failed: service_boot == $03"
-}
-!if (service_check_swr_presence) != $2b {
-    !error "Assertion failed: service_check_swr_presence == $2b"
-}
-!if (service_claim_absolute_workspace) != $01 {
-    !error "Assertion failed: service_claim_absolute_workspace == $01"
-}
-!if (service_claim_private_workspace) != $02 {
-    !error "Assertion failed: service_claim_private_workspace == $02"
-}
-!if (service_help) != $09 {
-    !error "Assertion failed: service_help == $09"
-}
-!if (service_select_filing_system) != $12 {
-    !error "Assertion failed: service_select_filing_system == $12"
-}
-!if (service_tube_post_init) != $fe {
-    !error "Assertion failed: service_tube_post_init == $fe"
-}
-!if (service_unrecognised_command) != $04 {
-    !error "Assertion failed: service_unrecognised_command == $04"
-}
-!if (service_unrecognised_osword) != $08 {
-    !error "Assertion failed: service_unrecognised_osword == $08"
-}
 !if (sub_c0520) != $0520 {
     !error "Assertion failed: sub_c0520 == $0520"
 }
@@ -14002,9 +13909,6 @@ pydis_end
 }
 !if (sub_c9f82) != $9f82 {
     !error "Assertion failed: sub_c9f82 == $9f82"
-}
-!if (tube_brkv_handler_fwd) != $16 {
-    !error "Assertion failed: tube_brkv_handler_fwd == $16"
 }
 !if (tube_host_osword_0) != $0668 {
     !error "Assertion failed: tube_host_osword_0 == $0668"

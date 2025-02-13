@@ -168,11 +168,35 @@ def add_expression(binary_addr, s):
     if binary_addr not in expressions:
         expressions[binary_addr] = s
 
+def check_expr(expr, value):
+    """Add an assert to the output based on an expression."""
+
+    # ENHANCE: It would be good to at least try to evaluate "expression" and generate
+    # an error if it doesn't match expected_value. In reality most expressions will
+    # be fairly simple combinations of labels and basic integer arithmetic, mixed with
+    # the < and > operators to get the low and high bytes of a 16-bit word.
+
+    # ENHANCE: It would be good if this could (probably optionally) evaluate
+    # 'expr' itself in the content of the current set of labels and constants.
+    # However, the "assert at assembly time" approach should be absolutely
+    # reliable (it's just not as early a detection as we'd like) so should
+    # probably be retained even if expression evaluation is supported directly
+    # in py8dis.
+
+    # Don't clutter the output with 'constant = value' as assertions
+    for constant in disassembly.constants:
+        if expr == constant[1]:
+            if constant[0] != value:
+                utils.warning("Constant '{0}' found to be {1} but expected to be {2}".format(expr, constant[0], value))
+            return
+
+    config.get_assembler().assert_expr(expr, value)
+
 def get_expression(binary_addr, expected_value):
     """Get the previously supplied expression for the given address."""
 
     expression = expressions[binary_addr]
-    utils.check_expr(expression, expected_value)
+    check_expr(expression, expected_value)
     return expression
 
 def get_constant8(binary_addr):

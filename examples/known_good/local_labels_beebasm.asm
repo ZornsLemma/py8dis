@@ -59,6 +59,5 @@ oswrch                  = &ffee
     rts                                                               ; 202b: 60          `
 
 .pydis_end
-    assert crtc_vert_total_adjust == &05
 
 save pydis_start, pydis_end

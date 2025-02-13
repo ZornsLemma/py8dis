@@ -6492,89 +6492,11 @@ pydis_end
 !if (>string_vdu19) != $2b {
     !error "Assertion failed: >string_vdu19 == $2b"
 }
-!if (BigBirdColour) != $20 {
-    !error "Assertion failed: BigBirdColour == $20"
-}
-!if (BirdColour) != $80 {
-    !error "Assertion failed: BirdColour == $80"
-}
-!if (CageColour) != $20 {
-    !error "Assertion failed: CageColour == $20"
-}
-!if (DigitsColour) != $08 {
-    !error "Assertion failed: DigitsColour == $08"
-}
-!if (EggColour) != $02 {
-    !error "Assertion failed: EggColour == $02"
-}
-!if (LadderColour) != $08 {
-    !error "Assertion failed: LadderColour == $08"
-}
-!if (LiftColour) != $02 {
-    !error "Assertion failed: LiftColour == $02"
-}
-!if (LivesColour) != $20 {
-    !error "Assertion failed: LivesColour == $20"
-}
-!if (LogoColour) != $02 {
-    !error "Assertion failed: LogoColour == $02"
-}
-!if (MapId_Egg) != $04 {
-    !error "Assertion failed: MapId_Egg == $04"
-}
-!if (MapId_Ladder) != $02 {
-    !error "Assertion failed: MapId_Ladder == $02"
-}
-!if (MapId_Platform) != $01 {
-    !error "Assertion failed: MapId_Platform == $01"
-}
-!if (MapId_Seed) != $08 {
-    !error "Assertion failed: MapId_Seed == $08"
-}
-!if (PlatformColour) != $0a {
-    !error "Assertion failed: PlatformColour == $0a"
-}
-!if (PlayerColour) != $20 {
-    !error "Assertion failed: PlayerColour == $20"
-}
-!if (SeedColour) != $08 {
-    !error "Assertion failed: SeedColour == $08"
-}
-!if (SpriteId_BigBirdRight1) != $0f {
-    !error "Assertion failed: SpriteId_BigBirdRight1 == $0f"
-}
-!if (SpriteId_BigC) != $30 {
-    !error "Assertion failed: SpriteId_BigC == $30"
-}
-!if (SpriteId_BigE) != $35 {
-    !error "Assertion failed: SpriteId_BigE == $35"
-}
-!if (SpriteId_BigG) != $36 {
-    !error "Assertion failed: SpriteId_BigG == $36"
-}
-!if (SpriteId_BigH) != $31 {
-    !error "Assertion failed: SpriteId_BigH == $31"
-}
-!if (SpriteId_BigI) != $34 {
-    !error "Assertion failed: SpriteId_BigI == $34"
-}
-!if (SpriteId_BigK) != $33 {
-    !error "Assertion failed: SpriteId_BigK == $33"
-}
-!if (SpriteId_BigU) != $32 {
-    !error "Assertion failed: SpriteId_BigU == $32"
-}
-!if (SpriteId_BirdEatLeft1) != $1d {
-    !error "Assertion failed: SpriteId_BirdEatLeft1 == $1d"
-}
 !if (SpriteId_BirdEatRight1 - SpriteId_BirdRight1) != $06 {
     !error "Assertion failed: SpriteId_BirdEatRight1 - SpriteId_BirdRight1 == $06"
 }
 !if (SpriteId_BirdLeft1 - SpriteId_BirdRight1) != $02 {
     !error "Assertion failed: SpriteId_BirdLeft1 - SpriteId_BirdRight1 == $02"
-}
-!if (SpriteId_BirdRight1) != $15 {
-    !error "Assertion failed: SpriteId_BirdRight1 == $15"
 }
 !if (SpriteId_BirdRight1 - SpriteId_BirdRight1) != $00 {
     !error "Assertion failed: SpriteId_BirdRight1 - SpriteId_BirdRight1 == $00"
@@ -6582,92 +6504,11 @@ pydis_end
 !if (SpriteId_BirdUpDown1 - SpriteId_BirdRight1) != $04 {
     !error "Assertion failed: SpriteId_BirdUpDown1 - SpriteId_BirdRight1 == $04"
 }
-!if (SpriteId_Blank) != $00 {
-    !error "Assertion failed: SpriteId_Blank == $00"
-}
-!if (SpriteId_Bonus) != $2d {
-    !error "Assertion failed: SpriteId_Bonus == $2d"
-}
-!if (SpriteId_CageWithHole) != $13 {
-    !error "Assertion failed: SpriteId_CageWithHole == $13"
-}
-!if (SpriteId_Digit0) != $1f {
-    !error "Assertion failed: SpriteId_Digit0 == $1f"
-}
-!if (SpriteId_Egg) != $03 {
-    !error "Assertion failed: SpriteId_Egg == $03"
-}
-!if (SpriteId_HighlightBox) != $2a {
-    !error "Assertion failed: SpriteId_HighlightBox == $2a"
-}
-!if (SpriteId_Ladder) != $02 {
-    !error "Assertion failed: SpriteId_Ladder == $02"
-}
-!if (SpriteId_Level) != $2c {
-    !error "Assertion failed: SpriteId_Level == $2c"
-}
-!if (SpriteId_Life) != $2f {
-    !error "Assertion failed: SpriteId_Life == $2f"
-}
-!if (SpriteId_Lift) != $05 {
-    !error "Assertion failed: SpriteId_Lift == $05"
-}
-!if (SpriteId_ManLeft1) != $09 {
-    !error "Assertion failed: SpriteId_ManLeft1 == $09"
-}
-!if (SpriteId_ManRight1) != $06 {
-    !error "Assertion failed: SpriteId_ManRight1 == $06"
-}
-!if (SpriteId_ManUpDown1) != $0c {
-    !error "Assertion failed: SpriteId_ManUpDown1 == $0c"
-}
-!if (SpriteId_Platform) != $01 {
-    !error "Assertion failed: SpriteId_Platform == $01"
-}
-!if (SpriteId_Player) != $2b {
-    !error "Assertion failed: SpriteId_Player == $2b"
-}
-!if (SpriteId_Score) != $29 {
-    !error "Assertion failed: SpriteId_Score == $29"
-}
-!if (SpriteId_Seed) != $04 {
-    !error "Assertion failed: SpriteId_Seed == $04"
-}
-!if (SpriteId_Time) != $2e {
-    !error "Assertion failed: SpriteId_Time == $2e"
-}
-!if (StatusColour) != $08 {
-    !error "Assertion failed: StatusColour == $08"
-}
 !if (hiscorenamebuffer) != $29a2 {
     !error "Assertion failed: hiscorenamebuffer == $29a2"
 }
 !if (hiscorenamebuffer_end - hiscorenamebuffer - 1) != $08 {
     !error "Assertion failed: hiscorenamebuffer_end - hiscorenamebuffer - 1 == $08"
-}
-!if (inkey_key_1) != $cf {
-    !error "Assertion failed: inkey_key_1 == $cf"
-}
-!if (inkey_key_2) != $ce {
-    !error "Assertion failed: inkey_key_2 == $ce"
-}
-!if (inkey_key_3) != $ee {
-    !error "Assertion failed: inkey_key_3 == $ee"
-}
-!if (inkey_key_4) != $ed {
-    !error "Assertion failed: inkey_key_4 == $ed"
-}
-!if (inkey_key_escape) != $8f {
-    !error "Assertion failed: inkey_key_escape == $8f"
-}
-!if (inkey_key_h) != $ab {
-    !error "Assertion failed: inkey_key_h == $ab"
-}
-!if (inkey_key_k) != $b9 {
-    !error "Assertion failed: inkey_key_k == $b9"
-}
-!if (inkey_key_s) != $ae {
-    !error "Assertion failed: inkey_key_s == $ae"
 }
 !if (map0data) != $0cd0 {
     !error "Assertion failed: map0data == $0cd0"
@@ -6692,51 +6533,6 @@ pydis_end
 }
 !if (map7data) != $1072 {
     !error "Assertion failed: map7data == $1072"
-}
-!if (osbyte_clear_escape) != $7c {
-    !error "Assertion failed: osbyte_clear_escape == $7c"
-}
-!if (osbyte_flush_buffer_class) != $0f {
-    !error "Assertion failed: osbyte_flush_buffer_class == $0f"
-}
-!if (osbyte_inkey) != $81 {
-    !error "Assertion failed: osbyte_inkey == $81"
-}
-!if (osbyte_read_key_table_low) != $ac {
-    !error "Assertion failed: osbyte_read_key_table_low == $ac"
-}
-!if (osbyte_read_write_bell_duration) != $d6 {
-    !error "Assertion failed: osbyte_read_write_bell_duration == $d6"
-}
-!if (osbyte_read_write_escape_status) != $e5 {
-    !error "Assertion failed: osbyte_read_write_escape_status == $e5"
-}
-!if (osbyte_scan_keyboard) != $79 {
-    !error "Assertion failed: osbyte_scan_keyboard == $79"
-}
-!if (osbyte_scan_keyboard_from_16) != $7a {
-    !error "Assertion failed: osbyte_scan_keyboard_from_16 == $7a"
-}
-!if (osbyte_set_cursor_editing) != $04 {
-    !error "Assertion failed: osbyte_set_cursor_editing == $04"
-}
-!if (osbyte_tape) != $8c {
-    !error "Assertion failed: osbyte_tape == $8c"
-}
-!if (osword_envelope) != $08 {
-    !error "Assertion failed: osword_envelope == $08"
-}
-!if (osword_read_interval_timer) != $03 {
-    !error "Assertion failed: osword_read_interval_timer == $03"
-}
-!if (osword_read_line) != $00 {
-    !error "Assertion failed: osword_read_line == $00"
-}
-!if (osword_sound) != $07 {
-    !error "Assertion failed: osword_sound == $07"
-}
-!if (osword_write_interval_timer) != $04 {
-    !error "Assertion failed: osword_write_interval_timer == $04"
 }
 !if (sprite_bigbirdleft1) != $131c {
     !error "Assertion failed: sprite_bigbirdleft1 == $131c"
