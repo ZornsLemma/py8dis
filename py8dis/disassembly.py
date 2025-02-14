@@ -76,7 +76,7 @@ def set_user_label_maker_hook(hook):
     assert user_label_maker_hook is None
     user_label_maker_hook = hook
 
-def comment(runtime_addr, text, inline=False, word_wrap=True, indent=0, auto_generated=False):
+def comment(runtime_addr, text, *, inline=False, word_wrap=True, indent=0, auto_generated=False):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
@@ -106,7 +106,7 @@ def comment_binary(binary_loc, text, inline, word_wrap, indent=0, auto_generated
 
     annotations[binary_loc].append(new_comment)
 
-def add_raw_annotation(binary_loc, text, inline=False, priority=None):
+def add_raw_annotation(binary_loc, text, *, inline=False, priority=None):
     """Add a raw string to the output."""
 
     binary_loc = movemanager.make_binloc(binary_loc)
@@ -152,14 +152,14 @@ def add_label(runtime_addr, s, move_id):
         else:
             label.add_expression(s, move_id)
 
-    # Make sure the move_id specified is in the list of relevant and active move ids, since it can
-    # be used to annotate the reference
+    # Make sure the move_id specified is added in the list of relevant and active move ids,
+    # since it can be used to annotate the reference
     if move_id and move_id not in label.relevant_active_move_ids:
         label.relevant_active_move_ids.append(move_id)
 
     return label
 
-def add_optional_label(runtime_addr, s, base_addr=None):
+def add_optional_label(runtime_addr, s, *, base_addr=None):
     """Add a label at the given runtime address, but only output if used.
 
     When two consecutive bytes share a base label name (e.g. `userv`

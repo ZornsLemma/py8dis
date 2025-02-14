@@ -196,7 +196,7 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if base_runtime_addr is not None:
         base_runtime_addr = memorymanager.RuntimeAddr(base_runtime_addr)
-    disassembly.add_optional_label(runtime_addr, name, base_runtime_addr)
+    disassembly.add_optional_label(runtime_addr, name, base_addr=base_runtime_addr)
 
 def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
@@ -281,12 +281,12 @@ def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
     The comment is word wrapped by default.
     """
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=word_wrap, indent=indent, auto_generated=False)
+    disassembly.comment(runtime_addr, text, inline=inline, word_wrap=word_wrap, indent=indent, auto_generated=False)
 
 def formatted_comment(runtime_addr, text, inline=False, indent=0):
     """Add a comment without word wrapping."""
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=False, indent=indent)
+    disassembly.comment(runtime_addr, text, inline=inline, word_wrap=False, indent=indent)
 
 def no_automatic_comment(runtime_addr):
     trace.no_auto_comment_set.add(runtime_addr)
@@ -313,7 +313,7 @@ def annotate(runtime_addr, s, priority=None):
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
-    disassembly.add_raw_annotation(binary_loc, s, priority)
+    disassembly.add_raw_annotation(binary_loc, s, priority=priority)
 
 def blank(runtime_addr, priority=None):
     annotate(runtime_addr, "", priority)
