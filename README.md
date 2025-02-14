@@ -244,7 +244,7 @@ There are convenience functions for common uses of the above:
 | :pencil:`make_xor(expr1, expr2)`          | bitwise xor                                                   |
 | :pencil:`make_modulo(expr1, expr2)`       | remainder after division                                      |
 
-Calls can be strung together: `make_lo(make_add('level_data', 1))` 
+Calls can be strung together: `make_lo(make_add('level_data', 1))`
 
 
 ### Marking data
@@ -282,7 +282,7 @@ Specifies that there is code at the given address `addr`. When `go()` is called,
 
 Marks a sequence of `n` words as being (16-bit little endian) addresses of subroutines. This categorises the data as being words and also adds the addresses as entry points for tracing code.
 
-:pencil:`code_ptr(addr, addr_high=None, offset=0)`
+:pencil:`code_ptr(addr, addr_high=None, offset=0, label=None)`
 
 Marks two bytes of data as being the address of a subroutine. The low and high bytes do not need to be stored adjacently since their addresses can be specified separately as `addr` and `addr_high`. If `addr_high` is None, then `addr_high` is assumed to be the byte after `addr`. This function can be used to handle jump tables where the low and high bytes are stored in separate tables.
 
@@ -359,9 +359,9 @@ Define a subroutine. All parameters except the address are optional. These are u
 
 The `on_entry` and `on_exit` optional parameters are dictionaries that specify a comment for each register as required. e.g. `on_entry={ 'a': "number to print" }`. If a parameter description is in brackets, it is not used when decorating calls to this routine. This allows for `{ 'x': '(preserved)' }` style descriptions.
 
-The `is_entry_point` parameter adds the address as an entry point for code. 
+The `is_entry_point` parameter adds the address as an entry point for code.
 
-The `hook` parameter is a callback to allow for the decoration of the calling code. 
+The `hook` parameter is a callback to allow for the decoration of the calling code.
 
 :pencil:`no_automatic_comment(addr)`
 

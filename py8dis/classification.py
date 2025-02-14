@@ -186,8 +186,8 @@ def check_expr(expr, value):
 
     # Don't clutter the output with 'constant = value' as assertions
     for constant in disassembly.constants:
-        if expr == constant[1]:
-            if constant[0] != value:
+        if expr == constant.name:
+            if constant.value != value:
                 utils.warning("Constant '{0}' found to be {1} but expected to be {2}".format(expr, constant[0], value))
             return
 

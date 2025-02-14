@@ -240,3 +240,15 @@ def format_comment(text, indent):
     for paragraph in text.split("\n"):
         result += "\n".join([prefix + line for line in textwrap.fill(paragraph, text_width).split("\n")]) + "\n"
     return result[:-1]
+
+def explicit_label_with_inline_comment(name, value, offset=None, align_value_column=0, inline_comment=None, align_comment_column=0):
+    """Format an explicit 'label=value' line, including an optional inline comment"""
+
+    result = config.get_assembler().explicit_label(name, value, offset=offset, align_column=align_value_column)
+    if inline_comment:
+        # Add spaces up to the alignment column
+        result = utils.tab_to(result, align_comment_column)
+
+        # Add inline comment itself
+        result += config.get_assembler().comment_prefix() + " " + inline_comment
+    return result

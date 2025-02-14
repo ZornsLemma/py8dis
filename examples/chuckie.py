@@ -985,8 +985,8 @@ constant(Colour14, "Colour14")
 constant(Colour15, "Colour15")
 
 
-constant(EggColour,      "EggColour")
-constant(LiftColour,     "LiftColour")
+constant(EggColour,      "EggColour", "For the collectable eggs")   # Just to test inline comments
+constant(LiftColour,     "LiftColour", "This is the colour of the lift:", Align.BEFORE)  # Just an example to test Align.BEFORE
 constant(LadderColour,   "LadderColour")
 constant(SeedColour,     "SeedColour")
 constant(PlatformColour, "PlatformColour")
@@ -997,7 +997,7 @@ constant(BirdColour,     "BirdColour")
 constant(LogoColour,     "LogoColour")
 constant(DigitsColour,   "DigitsColour")
 constant(StatusColour,   "StatusColour")
-constant(LivesColour,    "LivesColour")
+constant(LivesColour,    "LivesColour", "...for the lives displayed in the status area at the top of the screen above the play area below the score if I remember correctly", Align.AFTER)  # Just an example to test Align.AFTER
 
 constant(1, "MapId_Platform")
 constant(2, "MapId_Ladder")

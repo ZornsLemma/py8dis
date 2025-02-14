@@ -234,7 +234,7 @@ class Label(object):
                     max_name_length = max(max_name_length, name.text)
         return max_name_length
 
-    def explicit_definition_string_list(self, align_column):
+    def explicit_definition_string_list(self, align_value_column):
         """Return a list of the explicit `label = value` output strings."""
 
         # Note that we don't invoke the label hook or anything here -
@@ -254,7 +254,7 @@ class Label(object):
 
         result = []
         for name in gathered_names:
-            result.append(assembler.explicit_label(name, assembler.hex4(self.runtime_addr), offset=None, align=align_column))
+            result.append(assembler.explicit_label(name, assembler.hex4(self.runtime_addr), offset=None, align_column=align_value_column))
 
         return result
 

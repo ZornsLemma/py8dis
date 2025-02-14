@@ -63,6 +63,7 @@ import memorymanager
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary, get_u16_be_runtime
+from align import Align
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
@@ -73,6 +74,7 @@ import disassembly
 import labelmanager
 import movemanager
 import mainformatter
+import align
 import trace
 import utils
 
@@ -149,13 +151,13 @@ def move(dest_runtime_addr, src_binary_addr, length):
     assert all(memory_binary[i] is not None for i in range(src_binary_addr, src_binary_addr+length))
     return movemanager.add_move(dest_runtime_addr, src_binary_addr, length)
 
-def constant(value, name):
+def constant(value, name, comment=None, align=Align.INLINE):
     """Give a name to a constant value for use in the assembly.
 
     These names can then be used in subsequent calls to expr().
     """
 
-    disassembly.add_constant(value, name)
+    disassembly.add_constant(value, name, comment, align)
 
 def label(runtime_addr, name, move_id=None):
     """Define a label name for a runtime address."""
@@ -479,7 +481,7 @@ def stringz_hook(target, addr):
 def stringn_hook(target, addr):
     return stringn(addr + 3)
 
-def code_ptr(runtime_addr, runtime_addr_high=None, label_name=None, offset=0):
+def code_ptr(runtime_addr, runtime_addr_high=None, offset=0, label_name=None):
     """
     Marks two bytes of data as being the address of a subroutine.
 

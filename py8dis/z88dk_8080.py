@@ -57,8 +57,8 @@ class Z88DK(assembler.Assembler):
     def inline_label(self, name):
         return "%s:" % name
 
-    def explicit_label(self, name, value, offset=None, align=0):
-        return "%sEQU %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
+    def explicit_label(self, name, value, offset=None, align_column=0):
+        return "%sEQU %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
 
     def comment_prefix(self):
         return ";"

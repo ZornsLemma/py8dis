@@ -1,5 +1,5 @@
 ; Constants
-crtc_vert_total_adjust   = 5
+crtc_vert_total_adjust  = 5
 
 ; Memory locations
 bit_value               = &0070

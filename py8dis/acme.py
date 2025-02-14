@@ -70,14 +70,14 @@ class Acme(assembler.Assembler):
         # text for defining a label in the first column.
         return "%s" % name
 
-    def explicit_label(self, name, value, offset=None, align=0):
+    def explicit_label(self, name, value, offset=None, align_column=0):
         # Output when declaring a label with an explicit value:
         #
         #   i.e. 'label = value'
         #
         # with an optional offset added to the value, and optional column
         # alignment at the equals sign.
-        return "%s= %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
+        return "%s= %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
 
     def comment_prefix(self):
         return ";"

@@ -60,14 +60,14 @@ class Xa(assembler.Assembler):
     def inline_label(self, name):
         return "%s" % name
 
-    def explicit_label(self, name, value, offset=None, align=0):
+    def explicit_label(self, name, value, offset=None, align_column=0):
         # Output when declaring a label with an explicit value:
         #
         #   i.e. 'label = value'
         #
         # with an optional offset added to the value, and optional column
         # alignment at the equals sign.
-        return "%s= %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
+        return "%s= %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
 
     # xa supports ";" as a comment prefix, but by default colons terminate ";"
     # comments, so we use "//".

@@ -142,3 +142,27 @@ class keydefaultdict(collections.defaultdict):
 
 def sorted_annotations(annotations):
     return sorted(annotations, key=lambda x: x.priority)
+
+def round_up(n: int, multiple: int = 4) -> int:
+    """
+    Rounds up an integer to the next multiple of the specified number.
+
+    Args:
+        n (int): The input integer to round up
+        multiple (int): The multiple to round up to (default: 4)
+
+    Returns:
+        int: The next multiple of the specified number greater than or equal to the input
+
+    Examples:
+        >>> round_up_to_multiple(5)  # default multiple of 4
+        8
+        >>> round_up_to_multiple(5, multiple=3)
+        6
+        >>> round_up_to_multiple(7, multiple=5)
+        10
+        >>> round_up_to_multiple(10, multiple=2)
+        10
+    """
+    return ((n + (multiple - 1)) // multiple) * multiple
+

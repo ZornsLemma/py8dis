@@ -14,17 +14,20 @@ the target range, because we'll classify anything left over as data.
 from __future__ import print_function
 import classification
 import collections
-import copy
-
 import config
+import constant
+import copy
 import labelmanager
 import mainformatter
 import memorymanager
 import movemanager
+import re
 import trace
 import utils
+
 from movemanager import BinaryLocation
 from memorymanager import BinaryAddr, RuntimeAddr
+from align import Align
 
 # A user supplied function that creates a label name based on context
 user_label_maker_hook = None
@@ -45,7 +48,7 @@ format_hint = {}
 # runtime address, as created by `optional_label()`
 optional_labels = {}
 
-# `constants` is a list of (value, name) tuples.
+# `constants` is a list of class Constant.
 constants = []
 
 # Annotations are comments or other raw strings output to the assembly.
@@ -109,15 +112,18 @@ def add_raw_annotation(binary_loc, text, inline=False, priority=None):
     binary_loc = movemanager.make_binloc(binary_loc)
     annotations[binary_loc].append(Annotation(text, inline, priority))
 
-def add_constant(value, name):
+def add_constant(value, name, comment=None, align=Align.INLINE):
     """Create a named constant value."""
 
+    # Make sure we don't add the same constant twice. Assert if trying to
+    # redefine a constant with a different value.
     # TODO: inefficient linear search!
-    for v, n in constants:
-        if n == name:
-            assert v == value
+    for c in constants:
+        if c.name == name:
+            assert c.value == value
             return
-    constants.append((value, name))
+
+    constants.append(constant.Constant(value, name, comment, align))
 
 def is_simple_name(s):
     """Check the name is a simple valid label name.
@@ -520,6 +526,62 @@ def calculate_move_ranges():
 
     return move_ranges
 
+def value_to_string(value):
+    if config.get_constants_are_decimal():
+        return str(value)
+    else:
+        return formatter.hex(value)
+
+def emit_constants():
+    formatter = config.get_assembler()
+    output = []
+
+    if len(constants) == 0:
+        return output
+
+    # Length of indent string
+    indent_len = len(config.get_indent_string())
+
+    output.append("{0} Constants".format(formatter.comment_prefix()))
+
+    # We want to align the equals symbols in the list of constants, so
+    # we find the longest name. Add one to allow for a space after the name
+    max_name_len = max(len(c.name)+1 for c in constants)
+    max_name_len  = utils.round_up(max_name_len, indent_len)    # Round up to next indent level
+
+    # Similarly, get the longest value as a string so we can align the comments
+    # so that we can align the inline comments.
+    max_value_len = max(len(value_to_string(c.value)) for c in constants)
+
+    # Comment column is after 'name = value'
+    comment_column = max_name_len + 3 + max_value_len
+    comment_column = utils.round_up(comment_column, indent_len) # Round up to next indent level
+
+    # Natural sort the constants
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key.name)]
+    for c in sorted(constants, key=alphanum_key):
+        value = value_to_string(c.value)
+
+        # output a comment on the line before the definition
+        if c.align == Align.BEFORE:
+            output.append("{0}".format(mainformatter.format_comment(c.comment, indent=0)))
+
+        # output the definition with an optional inline comment
+        output.append(mainformatter.explicit_label_with_inline_comment(
+            c.name,
+            value,
+            None,
+            align_value_column=max_name_len,
+            inline_comment=c.comment if c.align == Align.INLINE else None,
+            align_comment_column=comment_column)
+            )
+
+        # output a comment on the line after the definition
+        if c.align == Align.AFTER:
+            output.append("{0}".format(mainformatter.format_comment(c.comment, indent=0)))
+    output.append("")
+    return output
 
 def emit(print_output=True):
     """Outputs the disassembly.
@@ -534,25 +596,8 @@ def emit(print_output=True):
     # Length of indent string
     indent_len = len(config.get_indent_string())
 
-    # Emit constants first in the order they were defined.
-    if len(constants) > 0:
-        output.append("{0} Constants".format(formatter.comment_prefix()))
-
-        # Get the longest name rounded up to the nearest indent amount
-        max_len = 0
-        for value, name in constants:
-            max_len = max(max_len, len(name))
-
-        max_len = indent_len * (max_len+indent_len-1)//indent_len
-
-        for value, name in sorted(constants, key=lambda x: x[1]):
-            if utils.is_integer_type(value):
-                if config.get_constants_are_decimal():
-                    value = str(value)
-                else:
-                    value = formatter.hex(value)
-            output.append(formatter.explicit_label(name, value, None, max_len))
-        output.append("")
+    # Emit constants first
+    output.extend(emit_constants())
 
     # For debugging py8dis output all labels, their addresses and move_ids
     if config.get_show_all_labels():
@@ -799,6 +844,3 @@ class Comment(Annotation):
             return "\n".join("{0}{1} {2}".format(config.get_indent_string() * indent, config.get_assembler().comment_prefix(), line) for line in strtext.split("\n"))
 
         Annotation.__init__(self, utils.LazyString("%s", late_formatter), inline, priority)
-
-# TODO: We seem to assert some simple constants have their own value -
-# this is not wrong per-se, but a bit weird.
