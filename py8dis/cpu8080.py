@@ -10,6 +10,7 @@ import movemanager
 import cpu
 import trace
 import utils
+from memorymanager import BinaryAddr, RuntimeAddr
 
 memory_binary = memorymanager.memory_binary
 
@@ -309,7 +310,7 @@ class Cpu8080(cpu.Cpu):
         }
 
     def hook_subroutine(self, runtime_addr, name, hook, warn=True):
-        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+        runtime_addr = RuntimeAddr(runtime_addr)
         binary_loc = movemanager.r2b_checked(runtime_addr)
         memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, 1, warn)
         self.add_entry(binary_loc.binary_addr, runtime_addr, binary_loc.move_id, name)
@@ -409,7 +410,7 @@ class Cpu8080(cpu.Cpu):
             super(Cpu8080.OpcodeAddr16, self).__init__(mnemonic, 2, update=update)
 
         def abs_operand(self, binary_addr):
-            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
+            return RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
         def as_string(self, binary_addr):
             result1 = utils.force_case(self.mnemonic)
@@ -427,7 +428,7 @@ class Cpu8080(cpu.Cpu):
             super(Cpu8080.OpcodeJmp, self).__init__(mnemonic, 2, update=update)
 
         def _target(self, binary_addr):
-            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
+            return RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
         def abs_operand(self, binary_addr):
             return self._target(binary_addr)
@@ -466,7 +467,7 @@ class Cpu8080(cpu.Cpu):
             super(Cpu8080.OpcodeConditionalBranch, self).__init__(mnemonic, 2, update=update)
 
         def _target(self, binary_addr):
-            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
+            return RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
         def abs_operand(self, binary_addr):
             return self._target(binary_addr)
@@ -493,7 +494,7 @@ class Cpu8080(cpu.Cpu):
             super(Cpu8080.OpcodeCall, self).__init__(mnemonic, 2, update=update)
 
         def _target(self, binary_addr):
-            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
+            return RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
         def abs_operand(self, binary_addr):
             return self._target(binary_addr)
@@ -502,7 +503,7 @@ class Cpu8080(cpu.Cpu):
             trace.cpu.labels[self._target(binary_loc.binary_addr)].add_reference(binary_loc)
 
         def disassemble(self, binary_loc):
-            assert isinstance(binary_loc.binary_addr, memorymanager.BinaryAddr)
+            assert isinstance(binary_loc.binary_addr, BinaryAddr)
 
             # Get the destination location of the CALL
             target_runtime_addr = self._target(binary_loc.binary_addr)
@@ -516,8 +517,8 @@ class Cpu8080(cpu.Cpu):
             # and call entry() itself for the labelled entry points.
 
             def simple_call_hook(target_runtime_addr, caller_runtime_addr):
-                assert isinstance(target_runtime_addr, memorymanager.RuntimeAddr)
-                assert isinstance(caller_runtime_addr, memorymanager.RuntimeAddr)
+                assert isinstance(target_runtime_addr, RuntimeAddr)
+                assert isinstance(caller_runtime_addr, RuntimeAddr)
 
                 return caller_runtime_addr + 3
 
@@ -527,7 +528,7 @@ class Cpu8080(cpu.Cpu):
                 return_runtime_addr = call_hook(target_runtime_addr, caller_runtime_addr)
 
             if return_runtime_addr is not None:
-                return_runtime_addr = memorymanager.RuntimeAddr(return_runtime_addr)
+                return_runtime_addr = RuntimeAddr(return_runtime_addr)
                 result = trace.cpu.get_target_binary_addr_preferring_given_move_id(return_runtime_addr, binary_loc.move_id)
                 if len(result) == 0:
                     # The return runtime address could not be unambiguously converted into a binary

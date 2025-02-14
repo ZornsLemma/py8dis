@@ -185,6 +185,11 @@ class Xa(assembler.Assembler):
         # probably doesn't need it.
         return utils.LazyString("%s%s %s!%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
+    def force_zp_instruction(self, instruction, prefix, operand, suffix):
+        # Ensure the instruction uses a zp address rather than an absolute
+        # address. e.g. 'lda `addr'
+        return utils.LazyString("%s%s ``%s%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
+
     def force_zp_label_prefix(self):
         # Prefix to take the low byte of a label
         return "`"

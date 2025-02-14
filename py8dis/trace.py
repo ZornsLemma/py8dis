@@ -3,8 +3,8 @@ Trace
 
 Follows ('traces') instructions from known entry points in order to discover
 which bytes of the binary are actually code and which are data. This class
-just holds information about the tracing process, including the cpu object
-which actually does the work.
+just holds information about the tracing process, including the 'cpu' object
+which actually does the work, see cpu.py and derived classes.
 """
 
 import collections

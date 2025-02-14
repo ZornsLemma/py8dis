@@ -12,6 +12,7 @@ import textwrap
 import trace
 import utils
 import memorymanager
+from memorymanager import BinaryAddr, RuntimeAddr
 
 def add_hex_dump(binary_addr, length, cycles_description, s):
     """Creates the majority of the inline comment for a line of output.
@@ -21,7 +22,7 @@ def add_hex_dump(binary_addr, length, cycles_description, s):
     fixed width.
     """
 
-    assert isinstance(binary_addr, memorymanager.BinaryAddr)
+    assert isinstance(binary_addr, BinaryAddr)
     if not config.get_hex_dump():
         return s
     s += config.get_assembler().comment_prefix() + " "
@@ -75,7 +76,7 @@ def add_inline_comment(binary_loc, length, cycles_description, annotations, s):
     binary_loc = movemanager.make_binloc(binary_loc)
     first_binary_loc = binary_loc
 
-    assert isinstance(binary_loc.binary_addr, memorymanager.BinaryAddr)
+    assert isinstance(binary_loc.binary_addr, BinaryAddr)
     # Add spaces up to the comment column
     s = utils.tab_to(s, config.get_inline_comment_column())
 
@@ -98,7 +99,7 @@ def format_data_block(binary_loc, length, cols, element_size, annotations):
     line of output.
     """
 
-    assert isinstance(binary_loc.binary_addr, memorymanager.BinaryAddr)
+    assert isinstance(binary_loc.binary_addr, BinaryAddr)
     assert memorymanager.is_valid_binary_addr(binary_loc.binary_addr)
     assert length >= 1
     assert element_size in (1, 2)

@@ -44,7 +44,7 @@ with move(0x8000, 0x2000, 0x4000):
     entry(0x06ad, "tube_evntv_handler")
     expr(0xaef9, make_lo("tube_evntv_handler"))
     expr(0xaefe, make_hi("tube_evntv_handler"))
-    # ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. I'm not sure we can handle this automatically, but perhaps we could.
+    # ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (acme too, I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. Beebasm can't handle this (https://www.stardot.org.uk/forums/viewtopic.php?p=448155#p448155). acme has syntax e.g. 'LDA+1 addr,Y' where the +1 means 'addr' should be treated as zero page address.
     constant(0x0016, "tube_brkv_handler_fwd")
     expr(0xaf31, "tube_brkv_handler_fwd")
     entry(0x0016, "tube_brkv_handler") # TODO: This is breaking beebasm because it gets emitted "inline" too late for other code to realise on the first pass it is a zero page label (and we can't declare it *also* as a constant, as we then get a redefinition error)
@@ -191,7 +191,7 @@ with move(0x8000, 0x2000, 0x4000):
         # which doesn't correspond to a valid address. (We could obviously cope with
         # this in other ways, such as disassembling the first part of the table
         # separately.)
-        code_at = memorymanager.get_u16_be_runtime(pc) + 1
+        code_at = get_u16_be_runtime(pc) + 1
         if code_at <= 0xffff:
             rts_code_ptr(pc + 1, pc)
         pc += 2

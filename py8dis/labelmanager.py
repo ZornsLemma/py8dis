@@ -71,6 +71,7 @@ import disassembly
 import movemanager
 import memorymanager
 import utils
+from memorymanager import BinaryAddr, RuntimeAddr
 
 class Label(object):
     class Name(object):
@@ -86,7 +87,7 @@ class Label(object):
             return self.__str__()
 
     def __init__(self, runtime_addr):
-        self.runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+        self.runtime_addr = RuntimeAddr(runtime_addr)
 
         # Remember the relevant active_move_ids in operation at this point of label creation.
         # These are used to later 'best guess' in which move the label should be output.

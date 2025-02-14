@@ -251,6 +251,11 @@ class Beebasm(assembler.Assembler):
         # Sadly beebasm doesn't currently have a way to do this.
         return None
 
+    def force_zp_instruction(self, instruction, prefix, operand, suffix):
+        # Ensure the instruction uses a zp address rather than an absolute
+        # address. e.g. 'lda LO(addr)'
+        return utils.LazyString("%s%s %sLO(%s)%s", utils.make_indent(1), instruction, prefix, operand, suffix)
+
     def force_zp_label_prefix(self):
         # Prefix to take the low byte of a label
         return ""

@@ -7,14 +7,15 @@ import config
 import trace
 import utils
 import classification
+from memorymanager import BinaryAddr, RuntimeAddr
 
 def xy_addr(x_addr, y_addr):
     """Given two binary addresses holding the low byte and high byte of an address,
     output expressions for each and return the address."""
 
     if x_addr is not None and y_addr is not None:
-        assert isinstance(x_addr, memorymanager.BinaryAddr)
-        assert isinstance(y_addr, memorymanager.BinaryAddr)
+        assert isinstance(x_addr, BinaryAddr)
+        assert isinstance(y_addr, BinaryAddr)
         if (memory_binary[x_addr] is None) or (memory_binary[y_addr] is None):
             return None
         label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
@@ -31,7 +32,7 @@ def xy_addr(x_addr, y_addr):
             if isinstance(disassembly.get_classification(y_addr), classification.Byte) or (disassembly.get_classification(y_addr) == disassembly.inside_a_classification):
                 auto_expr(y_runtime_addr, make_hi(label))
 
-        return memorymanager.RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
+        return RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
     return None
 
 # Acorn specific dictionaries
@@ -1173,13 +1174,13 @@ def osgbpb_hook(runtime_addr, state, subroutine):
     if block_addr is not None:
         if action == 8:
             auto_comment(block_addr, "osgbpb block: disc cycle number", inline=True)
-            auto_comment(memorymanager.RuntimeAddr(block_addr + 1), "address for returned data (4 bytes)", inline=True)
-            auto_comment(memorymanager.RuntimeAddr(block_addr + 5), "number of filenames (4 bytes)", inline=True)
+            auto_comment(RuntimeAddr(block_addr + 1), "address for returned data (4 bytes)", inline=True)
+            auto_comment(RuntimeAddr(block_addr + 5), "number of filenames (4 bytes)", inline=True)
         else:
             auto_comment(block_addr, "osgbpb block: file handle", inline=True)
-            auto_comment(memorymanager.RuntimeAddr(block_addr + 1), "start address of data (4 bytes)", inline=True)
-            auto_comment(memorymanager.RuntimeAddr(block_addr + 5), "number of bytes to transfer (4 bytes)", inline=True)
-        auto_comment(memorymanager.RuntimeAddr(block_addr + 9), "sequential pointer value to be used (4 bytes)", inline=True)
+            auto_comment(RuntimeAddr(block_addr + 1), "start address of data (4 bytes)", inline=True)
+            auto_comment(RuntimeAddr(block_addr + 5), "number of bytes to transfer (4 bytes)", inline=True)
+        auto_comment(RuntimeAddr(block_addr + 9), "sequential pointer value to be used (4 bytes)", inline=True)
 
 
     if action in osgbpb_desc:
@@ -1335,7 +1336,7 @@ def osword_hook(runtime_addr, state, subroutine):
                 xy_addr(input_buffer_addr, input_buffer_addr+1)
 
             for i in desc_dict:
-                auto_comment(memorymanager.RuntimeAddr(block_addr + i), desc_dict[i], inline=True)
+                auto_comment(RuntimeAddr(block_addr + i), desc_dict[i], inline=True)
 
     # Post-exit
     if action == 0:
@@ -2616,7 +2617,7 @@ def is_sideways_rom():
     auto_comment(0x8000, "Sideways ROM header")
     label(0x8000, "rom_header")
     def check_entry(runtime_addr, entry_type):
-        runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+        runtime_addr = RuntimeAddr(runtime_addr)
         jmp_abs_opcode = 0x4c
         label(runtime_addr, entry_type + "_entry")
         if memory[runtime_addr] == jmp_abs_opcode:

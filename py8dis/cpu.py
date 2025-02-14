@@ -139,10 +139,6 @@ class Cpu(object):
                     runtime_addr = movemanager.b2r(new_entry_point)
                     self.add_entry(new_entry_point, runtime_addr, move_id=move_id, name=None)
 
-        # Debugging
-        #for addr, label in sorted(self.labels.items(), key=lambda x: x[0]):
-        #    print("XXX %04x %s" % (label.runtime_addr, " ".join("%04x" % x[0] for x in label.references)))
-
         # Calculate the CPU states and analyse the code
         self.analyse_code()
 

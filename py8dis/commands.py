@@ -62,7 +62,7 @@ import memorymanager
 # These functions are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
-from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary
+from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary, get_u16_be_runtime
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
@@ -479,7 +479,7 @@ def stringz_hook(target, addr):
 def stringn_hook(target, addr):
     return stringn(addr + 3)
 
-def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
+def code_ptr(runtime_addr, runtime_addr_high=None, label_name=None, offset=0):
     """
     Marks two bytes of data as being the address of a subroutine.
 
@@ -502,7 +502,7 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     assert memorymanager.is_data_loaded_at_binary_addr(binary_addr_high)
     code_at_runtime_addr = ((memory_binary[binary_addr_high] << 8) | memory_binary[binary_addr]) + offset
     # Label and trace the code at code_at
-    label = entry(code_at_runtime_addr, warn=False) # ENHANCE: allow optional user-specified label?
+    label = entry(code_at_runtime_addr, label=label_name, warn=False)
     # Reference that label at addr/addr_high.
     offset_string = "" if offset == 0 else ("%+d" % -offset)
     if binary_addr_high == binary_addr + 1:

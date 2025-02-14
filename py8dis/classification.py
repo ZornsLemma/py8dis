@@ -45,6 +45,7 @@ import mainformatter
 import trace
 import utils
 import memorymanager
+from memorymanager import BinaryAddr, RuntimeAddr
 
 expressions   = {}
 memory_binary = memorymanager.memory_binary
@@ -259,7 +260,7 @@ def stringterm(runtime_addr, terminator, exclude_terminator=False):
 
     Returns the next available memory address after the string."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
     initial_addr = binary_loc.binary_addr
     while memory_binary[binary_loc.binary_addr] != terminator:
@@ -276,7 +277,7 @@ def stringcr(runtime_addr, exclude_terminator=False):
 
     Returns the next available memory address after the string."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     return stringterm(runtime_addr, 13, exclude_terminator)
 
 def stringz(runtime_addr, exclude_terminator=False):
@@ -284,7 +285,7 @@ def stringz(runtime_addr, exclude_terminator=False):
 
     Returns the next available memory address after the string."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     return stringterm(runtime_addr, 0, exclude_terminator)
 
 # TODO: I've made this work with runtime_addr without paying any attention to the needs of hook fns etc
@@ -294,7 +295,7 @@ def string(runtime_addr, n=None):
 
     Returns the next available memory address after the string."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
     if n is None:
         assert not disassembly.is_classified(binary_loc.binary_addr), "Address " + hex(binary_loc.binary_addr) + " already classified"
@@ -313,7 +314,7 @@ def stringhi(runtime_addr, include_terminator_fn=None):
 
     Returns the next available memory address after the string."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
     assert not disassembly.is_classified(binary_loc.binary_addr, 1)
     initial_addr = binary_loc.binary_addr
@@ -338,7 +339,7 @@ def stringhi(runtime_addr, include_terminator_fn=None):
 def stringhiz(runtime_addr, include_terminator_fn=None):
     """Classifies a part of the binary as a string up to the next bit 7 set character or zero character."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
     assert not disassembly.is_classified(binary_loc.binary_addr, 1)
     initial_addr = binary_loc.binary_addr
@@ -360,7 +361,7 @@ def stringn(runtime_addr):
 
     Returns the next available memory address after the string."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    runtime_addr = RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
     disassembly.add_classification(binary_loc.binary_addr, Byte(1))
     length = memory_binary[binary_loc.binary_addr]
@@ -371,7 +372,7 @@ def autostring(min_length=3):
     """Attempt to automatically find and classify strings through the entire binary."""
 
     assert min_length >= 2
-    addr = memorymanager.BinaryAddr(0)
+    addr = BinaryAddr(0)
     while addr < len(memory_binary):
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory_binary[addr + i]):
@@ -388,7 +389,7 @@ def autostring(min_length=3):
 def classify_leftovers():
     """Classify everything not already classified, as bytes."""
 
-    addr = memorymanager.BinaryAddr(0)
+    addr = BinaryAddr(0)
     while addr < len(memory_binary):
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
