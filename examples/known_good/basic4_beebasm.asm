@@ -205,7 +205,7 @@ oscli       = &fff7
 .copyright
     equb 0                                                            ; 8013: 00          .
     equs "(C)1988 Acorn", &0a, &0d, 0                                 ; 8014: 28 43 29... (C)
-    equb   0, &b8, &28, &80,   0, &c0, &82,   0                       ; 8024: 00 b8 28... ..(
+    equb 0, &b8, &28, &80, 0, &c0, &82, 0                             ; 8024: 00 b8 28... ..(
 
 ; &802c referenced 1 time by &8003
 .service_handler
@@ -333,10 +333,10 @@ oscli       = &fff7
 
 ; &80dd referenced 1 time by &a0fd
 .l80dd
-    equb   0,   0,   0,   3, &27                                      ; 80dd: 00 00 00... ...
+    equb 0, 0, 0, 3, &27                                              ; 80dd: 00 00 00... ...
 ; &80e2 referenced 1 time by &a0f7
 .l80e2
-    equb   1, &0a, &64, &e8, &10                                      ; 80e2: 01 0a 64... ..d
+    equb 1, &0a, &64, &e8, &10                                        ; 80e2: 01 0a 64... ..d
 
 ; &80e7 referenced 1 time by &8000
 .language_handler
@@ -1087,252 +1087,252 @@ oscli       = &fff7
     jmp c8304                                                         ; 8510: 4c 04 83    L..
 
     equs "AND"                                                        ; 8513: 41 4e 44    AND
-    equb &80,   0                                                     ; 8516: 80 00       ..
+    equb &80, 0                                                       ; 8516: 80 00       ..
     equs "ABS"                                                        ; 8518: 41 42 53    ABS
-    equb &94,   0                                                     ; 851b: 94 00       ..
+    equb &94, 0                                                       ; 851b: 94 00       ..
     equs "ACS"                                                        ; 851d: 41 43 53    ACS
-    equb &95,   0                                                     ; 8520: 95 00       ..
+    equb &95, 0                                                       ; 8520: 95 00       ..
     equs "ADVAL"                                                      ; 8522: 41 44 56... ADV
-    equb &96,   0                                                     ; 8527: 96 00       ..
+    equb &96, 0                                                       ; 8527: 96 00       ..
     equs "ASC"                                                        ; 8529: 41 53 43    ASC
-    equb &97,   0                                                     ; 852c: 97 00       ..
+    equb &97, 0                                                       ; 852c: 97 00       ..
     equs "ASN"                                                        ; 852e: 41 53 4e    ASN
-    equb &98,   0                                                     ; 8531: 98 00       ..
+    equb &98, 0                                                       ; 8531: 98 00       ..
     equs "ATN"                                                        ; 8533: 41 54 4e    ATN
-    equb &99,   0                                                     ; 8536: 99 00       ..
+    equb &99, 0                                                       ; 8536: 99 00       ..
     equs "AUTO"                                                       ; 8538: 41 55 54... AUT
     equb &c6, &10                                                     ; 853c: c6 10       ..
     equs "BGET"                                                       ; 853e: 42 47 45... BGE
-    equb &9a,   1                                                     ; 8542: 9a 01       ..
+    equb &9a, 1                                                       ; 8542: 9a 01       ..
     equs "BPUT"                                                       ; 8544: 42 50 55... BPU
-    equb &d5,   3                                                     ; 8548: d5 03       ..
+    equb &d5, 3                                                       ; 8548: d5 03       ..
     equs "COLOUR"                                                     ; 854a: 43 4f 4c... COL
-    equb &fb,   2                                                     ; 8550: fb 02       ..
+    equb &fb, 2                                                       ; 8550: fb 02       ..
     equs "CALL"                                                       ; 8552: 43 41 4c... CAL
-    equb &d6,   2                                                     ; 8556: d6 02       ..
+    equb &d6, 2                                                       ; 8556: d6 02       ..
     equs "CHAIN"                                                      ; 8558: 43 48 41... CHA
-    equb &d7,   2                                                     ; 855d: d7 02       ..
+    equb &d7, 2                                                       ; 855d: d7 02       ..
     equs "CHR$"                                                       ; 855f: 43 48 52... CHR
-    equb &bd,   0                                                     ; 8563: bd 00       ..
+    equb &bd, 0                                                       ; 8563: bd 00       ..
     equs "CLEAR"                                                      ; 8565: 43 4c 45... CLE
-    equb &d8,   1                                                     ; 856a: d8 01       ..
+    equb &d8, 1                                                       ; 856a: d8 01       ..
     equs "CLOSE"                                                      ; 856c: 43 4c 4f... CLO
-    equb &d9,   3                                                     ; 8571: d9 03       ..
+    equb &d9, 3                                                       ; 8571: d9 03       ..
     equs "CLG"                                                        ; 8573: 43 4c 47    CLG
-    equb &da,   1                                                     ; 8576: da 01       ..
+    equb &da, 1                                                       ; 8576: da 01       ..
     equs "CLS"                                                        ; 8578: 43 4c 53    CLS
-    equb &db,   1                                                     ; 857b: db 01       ..
+    equb &db, 1                                                       ; 857b: db 01       ..
     equs "COS"                                                        ; 857d: 43 4f 53    COS
-    equb &9b,   0                                                     ; 8580: 9b 00       ..
+    equb &9b, 0                                                       ; 8580: 9b 00       ..
     equs "COUNT"                                                      ; 8582: 43 4f 55... COU
-    equb &9c,   1                                                     ; 8587: 9c 01       ..
+    equb &9c, 1                                                       ; 8587: 9c 01       ..
     equs "COLOR"                                                      ; 8589: 43 4f 4c... COL
-    equb &fb,   2                                                     ; 858e: fb 02       ..
+    equb &fb, 2                                                       ; 858e: fb 02       ..
     equs "DATA"                                                       ; 8590: 44 41 54... DAT
     equb &dc                                                          ; 8594: dc          .
     equs " DEG"                                                       ; 8595: 20 44 45...  DE
-    equb &9d,   0                                                     ; 8599: 9d 00       ..
+    equb &9d, 0                                                       ; 8599: 9d 00       ..
     equs "DEF"                                                        ; 859b: 44 45 46    DEF
-    equb &dd,   0                                                     ; 859e: dd 00       ..
+    equb &dd, 0                                                       ; 859e: dd 00       ..
     equs "DELETE"                                                     ; 85a0: 44 45 4c... DEL
     equb &c7, &10                                                     ; 85a6: c7 10       ..
     equs "DIV"                                                        ; 85a8: 44 49 56    DIV
-    equb &81,   0                                                     ; 85ab: 81 00       ..
+    equb &81, 0                                                       ; 85ab: 81 00       ..
     equs "DIM"                                                        ; 85ad: 44 49 4d    DIM
-    equb &de,   2                                                     ; 85b0: de 02       ..
+    equb &de, 2                                                       ; 85b0: de 02       ..
     equs "DRAW"                                                       ; 85b2: 44 52 41... DRA
-    equb &df,   2                                                     ; 85b6: df 02       ..
+    equb &df, 2                                                       ; 85b6: df 02       ..
     equs "ENDPROC"                                                    ; 85b8: 45 4e 44... END
-    equb &e1,   1                                                     ; 85bf: e1 01       ..
+    equb &e1, 1                                                       ; 85bf: e1 01       ..
     equs "END"                                                        ; 85c1: 45 4e 44    END
-    equb &e0,   1                                                     ; 85c4: e0 01       ..
+    equb &e0, 1                                                       ; 85c4: e0 01       ..
     equs "ENVELOPE"                                                   ; 85c6: 45 4e 56... ENV
-    equb &e2,   2                                                     ; 85ce: e2 02       ..
+    equb &e2, 2                                                       ; 85ce: e2 02       ..
     equs "ELSE"                                                       ; 85d0: 45 4c 53... ELS
     equb &8b, &14                                                     ; 85d4: 8b 14       ..
     equs "EVAL"                                                       ; 85d6: 45 56 41... EVA
-    equb &a0,   0                                                     ; 85da: a0 00       ..
+    equb &a0, 0                                                       ; 85da: a0 00       ..
     equs "ERL"                                                        ; 85dc: 45 52 4c    ERL
-    equb &9e,   1                                                     ; 85df: 9e 01       ..
+    equb &9e, 1                                                       ; 85df: 9e 01       ..
     equs "ERROR"                                                      ; 85e1: 45 52 52... ERR
-    equb &85,   4                                                     ; 85e6: 85 04       ..
+    equb &85, 4                                                       ; 85e6: 85 04       ..
     equs "EOF"                                                        ; 85e8: 45 4f 46    EOF
-    equb &c5,   1                                                     ; 85eb: c5 01       ..
+    equb &c5, 1                                                       ; 85eb: c5 01       ..
     equs "EOR"                                                        ; 85ed: 45 4f 52    EOR
-    equb &82,   0                                                     ; 85f0: 82 00       ..
+    equb &82, 0                                                       ; 85f0: 82 00       ..
     equs "ERR"                                                        ; 85f2: 45 52 52    ERR
-    equb &9f,   1                                                     ; 85f5: 9f 01       ..
+    equb &9f, 1                                                       ; 85f5: 9f 01       ..
     equs "EXP"                                                        ; 85f7: 45 58 50    EXP
-    equb &a1,   0                                                     ; 85fa: a1 00       ..
+    equb &a1, 0                                                       ; 85fa: a1 00       ..
     equs "EXT"                                                        ; 85fc: 45 58 54    EXT
-    equb &a2,   1                                                     ; 85ff: a2 01       ..
+    equb &a2, 1                                                       ; 85ff: a2 01       ..
     equs "EDIT"                                                       ; 8601: 45 44 49... EDI
     equb &ce, &10                                                     ; 8605: ce 10       ..
     equs "FOR"                                                        ; 8607: 46 4f 52    FOR
-    equb &e3,   2                                                     ; 860a: e3 02       ..
+    equb &e3, 2                                                       ; 860a: e3 02       ..
     equs "FALSE"                                                      ; 860c: 46 41 4c... FAL
-    equb &a3,   1, &46, &4e, &a4,   8                                 ; 8611: a3 01 46... ..F
+    equb &a3, 1, &46, &4e, &a4, 8                                     ; 8611: a3 01 46... ..F
     equs "GOTO"                                                       ; 8617: 47 4f 54... GOT
     equb &e5, &12                                                     ; 861b: e5 12       ..
     equs "GET$"                                                       ; 861d: 47 45 54... GET
-    equb &be,   0                                                     ; 8621: be 00       ..
+    equb &be, 0                                                       ; 8621: be 00       ..
     equs "GET"                                                        ; 8623: 47 45 54    GET
-    equb &a5,   0                                                     ; 8626: a5 00       ..
+    equb &a5, 0                                                       ; 8626: a5 00       ..
     equs "GOSUB"                                                      ; 8628: 47 4f 53... GOS
     equb &e4, &12                                                     ; 862d: e4 12       ..
     equs "GCOL"                                                       ; 862f: 47 43 4f... GCO
-    equb &e6,   2                                                     ; 8633: e6 02       ..
+    equb &e6, 2                                                       ; 8633: e6 02       ..
     equs "HIMEM"                                                      ; 8635: 48 49 4d... HIM
     equb &93                                                          ; 863a: 93          .
     equs "CINPUT"                                                     ; 863b: 43 49 4e... CIN
-    equb &e8,   2, &49, &46, &e7,   2                                 ; 8641: e8 02 49... ..I
+    equb &e8, 2, &49, &46, &e7, 2                                     ; 8641: e8 02 49... ..I
     equs "INKEY$"                                                     ; 8647: 49 4e 4b... INK
-    equb &bf,   0                                                     ; 864d: bf 00       ..
+    equb &bf, 0                                                       ; 864d: bf 00       ..
     equs "INKEY"                                                      ; 864f: 49 4e 4b... INK
-    equb &a6,   0                                                     ; 8654: a6 00       ..
+    equb &a6, 0                                                       ; 8654: a6 00       ..
     equs "INT"                                                        ; 8656: 49 4e 54    INT
-    equb &a8,   0                                                     ; 8659: a8 00       ..
+    equb &a8, 0                                                       ; 8659: a8 00       ..
     equs "INSTR("                                                     ; 865b: 49 4e 53... INS
-    equb &a7,   0                                                     ; 8661: a7 00       ..
+    equb &a7, 0                                                       ; 8661: a7 00       ..
     equs "LIST"                                                       ; 8663: 4c 49 53... LIS
     equb &c9, &10                                                     ; 8667: c9 10       ..
     equs "LINE"                                                       ; 8669: 4c 49 4e... LIN
-    equb &86,   0                                                     ; 866d: 86 00       ..
+    equb &86, 0                                                       ; 866d: 86 00       ..
     equs "LOAD"                                                       ; 866f: 4c 4f 41... LOA
-    equb &c8,   2                                                     ; 8673: c8 02       ..
+    equb &c8, 2                                                       ; 8673: c8 02       ..
     equs "LOMEM"                                                      ; 8675: 4c 4f 4d... LOM
     equb &92                                                          ; 867a: 92          .
     equs "CLOCAL"                                                     ; 867b: 43 4c 4f... CLO
-    equb &ea,   2                                                     ; 8681: ea 02       ..
+    equb &ea, 2                                                       ; 8681: ea 02       ..
     equs "LEFT$("                                                     ; 8683: 4c 45 46... LEF
-    equb &c0,   0                                                     ; 8689: c0 00       ..
+    equb &c0, 0                                                       ; 8689: c0 00       ..
     equs "LEN"                                                        ; 868b: 4c 45 4e    LEN
-    equb &a9,   0                                                     ; 868e: a9 00       ..
+    equb &a9, 0                                                       ; 868e: a9 00       ..
     equs "LET"                                                        ; 8690: 4c 45 54    LET
-    equb &e9,   4                                                     ; 8693: e9 04       ..
+    equb &e9, 4                                                       ; 8693: e9 04       ..
     equs "LOG"                                                        ; 8695: 4c 4f 47    LOG
-    equb &ab,   0, &4c, &4e, &aa,   0                                 ; 8698: ab 00 4c... ..L
+    equb &ab, 0, &4c, &4e, &aa, 0                                     ; 8698: ab 00 4c... ..L
     equs "MID$("                                                      ; 869e: 4d 49 44... MID
-    equb &c1,   0                                                     ; 86a3: c1 00       ..
+    equb &c1, 0                                                       ; 86a3: c1 00       ..
     equs "MODE"                                                       ; 86a5: 4d 4f 44... MOD
-    equb &eb,   2                                                     ; 86a9: eb 02       ..
+    equb &eb, 2                                                       ; 86a9: eb 02       ..
     equs "MOD"                                                        ; 86ab: 4d 4f 44    MOD
-    equb &83,   0                                                     ; 86ae: 83 00       ..
+    equb &83, 0                                                       ; 86ae: 83 00       ..
     equs "MOVE"                                                       ; 86b0: 4d 4f 56... MOV
-    equb &ec,   2                                                     ; 86b4: ec 02       ..
+    equb &ec, 2                                                       ; 86b4: ec 02       ..
     equs "NEXT"                                                       ; 86b6: 4e 45 58... NEX
-    equb &ed,   2                                                     ; 86ba: ed 02       ..
+    equb &ed, 2                                                       ; 86ba: ed 02       ..
     equs "NEW"                                                        ; 86bc: 4e 45 57    NEW
-    equb &ca,   1                                                     ; 86bf: ca 01       ..
+    equb &ca, 1                                                       ; 86bf: ca 01       ..
     equs "NOT"                                                        ; 86c1: 4e 4f 54    NOT
-    equb &ac,   0                                                     ; 86c4: ac 00       ..
+    equb &ac, 0                                                       ; 86c4: ac 00       ..
     equs "OLD"                                                        ; 86c6: 4f 4c 44    OLD
-    equb &cb,   1, &4f, &4e, &ee,   2                                 ; 86c9: cb 01 4f... ..O
+    equb &cb, 1, &4f, &4e, &ee, 2                                     ; 86c9: cb 01 4f... ..O
     equs "OFF"                                                        ; 86cf: 4f 46 46    OFF
-    equb &87,   0, &4f, &52, &84,   0                                 ; 86d2: 87 00 4f... ..O
+    equb &87, 0, &4f, &52, &84, 0                                     ; 86d2: 87 00 4f... ..O
     equs "OPENIN"                                                     ; 86d8: 4f 50 45... OPE
-    equb &8e,   0                                                     ; 86de: 8e 00       ..
+    equb &8e, 0                                                       ; 86de: 8e 00       ..
     equs "OPENOUT"                                                    ; 86e0: 4f 50 45... OPE
-    equb &ae,   0                                                     ; 86e7: ae 00       ..
+    equb &ae, 0                                                       ; 86e7: ae 00       ..
     equs "OPENUP"                                                     ; 86e9: 4f 50 45... OPE
-    equb &ad,   0                                                     ; 86ef: ad 00       ..
+    equb &ad, 0                                                       ; 86ef: ad 00       ..
     equs "OSCLI"                                                      ; 86f1: 4f 53 43... OSC
-    equb &ff,   2                                                     ; 86f6: ff 02       ..
+    equb &ff, 2                                                       ; 86f6: ff 02       ..
     equs "PRINT"                                                      ; 86f8: 50 52 49... PRI
-    equb &f1,   2                                                     ; 86fd: f1 02       ..
+    equb &f1, 2                                                       ; 86fd: f1 02       ..
     equs "PAGE"                                                       ; 86ff: 50 41 47... PAG
     equb &90                                                          ; 8703: 90          .
     equs "CPTR"                                                       ; 8704: 43 50 54... CPT
     equb &8f                                                          ; 8708: 8f          .
     equs "CPI"                                                        ; 8709: 43 50 49    CPI
-    equb &af,   1                                                     ; 870c: af 01       ..
+    equb &af, 1                                                       ; 870c: af 01       ..
     equs "PLOT"                                                       ; 870e: 50 4c 4f... PLO
-    equb &f0,   2                                                     ; 8712: f0 02       ..
+    equb &f0, 2                                                       ; 8712: f0 02       ..
     equs "POINT("                                                     ; 8714: 50 4f 49... POI
-    equb &b0,   0                                                     ; 871a: b0 00       ..
+    equb &b0, 0                                                       ; 871a: b0 00       ..
     equs "PROC"                                                       ; 871c: 50 52 4f... PRO
     equb &f2, &0a                                                     ; 8720: f2 0a       ..
     equs "POS"                                                        ; 8722: 50 4f 53    POS
-    equb &b1,   1                                                     ; 8725: b1 01       ..
+    equb &b1, 1                                                       ; 8725: b1 01       ..
     equs "RETURN"                                                     ; 8727: 52 45 54... RET
-    equb &f8,   1                                                     ; 872d: f8 01       ..
+    equb &f8, 1                                                       ; 872d: f8 01       ..
     equs "REPEAT"                                                     ; 872f: 52 45 50... REP
-    equb &f5,   0                                                     ; 8735: f5 00       ..
+    equb &f5, 0                                                       ; 8735: f5 00       ..
     equs "REPORT"                                                     ; 8737: 52 45 50... REP
-    equb &f6,   1                                                     ; 873d: f6 01       ..
+    equb &f6, 1                                                       ; 873d: f6 01       ..
     equs "READ"                                                       ; 873f: 52 45 41... REA
-    equb &f3,   2                                                     ; 8743: f3 02       ..
+    equb &f3, 2                                                       ; 8743: f3 02       ..
     equs "REM"                                                        ; 8745: 52 45 4d    REM
     equb &f4                                                          ; 8748: f4          .
     equs " RUN"                                                       ; 8749: 20 52 55...  RU
-    equb &f9,   1                                                     ; 874d: f9 01       ..
+    equb &f9, 1                                                       ; 874d: f9 01       ..
     equs "RAD"                                                        ; 874f: 52 41 44    RAD
-    equb &b2,   0                                                     ; 8752: b2 00       ..
+    equb &b2, 0                                                       ; 8752: b2 00       ..
     equs "RESTORE"                                                    ; 8754: 52 45 53... RES
     equb &f7, &12                                                     ; 875b: f7 12       ..
     equs "RIGHT$("                                                    ; 875d: 52 49 47... RIG
-    equb &c2,   0                                                     ; 8764: c2 00       ..
+    equb &c2, 0                                                       ; 8764: c2 00       ..
     equs "RND"                                                        ; 8766: 52 4e 44    RND
-    equb &b3,   1                                                     ; 8769: b3 01       ..
+    equb &b3, 1                                                       ; 8769: b3 01       ..
     equs "RENUMBER"                                                   ; 876b: 52 45 4e... REN
     equb &cc, &10                                                     ; 8773: cc 10       ..
     equs "STEP"                                                       ; 8775: 53 54 45... STE
-    equb &88,   0                                                     ; 8779: 88 00       ..
+    equb &88, 0                                                       ; 8779: 88 00       ..
     equs "SAVE"                                                       ; 877b: 53 41 56... SAV
-    equb &cd,   2                                                     ; 877f: cd 02       ..
+    equb &cd, 2                                                       ; 877f: cd 02       ..
     equs "SGN"                                                        ; 8781: 53 47 4e    SGN
-    equb &b4,   0                                                     ; 8784: b4 00       ..
+    equb &b4, 0                                                       ; 8784: b4 00       ..
     equs "SIN"                                                        ; 8786: 53 49 4e    SIN
-    equb &b5,   0                                                     ; 8789: b5 00       ..
+    equb &b5, 0                                                       ; 8789: b5 00       ..
     equs "SQR"                                                        ; 878b: 53 51 52    SQR
-    equb &b6,   0                                                     ; 878e: b6 00       ..
+    equb &b6, 0                                                       ; 878e: b6 00       ..
     equs "SPC"                                                        ; 8790: 53 50 43    SPC
-    equb &89,   0                                                     ; 8793: 89 00       ..
+    equb &89, 0                                                       ; 8793: 89 00       ..
     equs "STR$"                                                       ; 8795: 53 54 52... STR
-    equb &c3,   0                                                     ; 8799: c3 00       ..
+    equb &c3, 0                                                       ; 8799: c3 00       ..
     equs "STRING$("                                                   ; 879b: 53 54 52... STR
-    equb &c4,   0                                                     ; 87a3: c4 00       ..
+    equb &c4, 0                                                       ; 87a3: c4 00       ..
     equs "SOUND"                                                      ; 87a5: 53 4f 55... SOU
-    equb &d4,   2                                                     ; 87aa: d4 02       ..
+    equb &d4, 2                                                       ; 87aa: d4 02       ..
     equs "STOP"                                                       ; 87ac: 53 54 4f... STO
-    equb &fa,   1                                                     ; 87b0: fa 01       ..
+    equb &fa, 1                                                       ; 87b0: fa 01       ..
     equs "TAN"                                                        ; 87b2: 54 41 4e    TAN
-    equb &b7,   0                                                     ; 87b5: b7 00       ..
+    equb &b7, 0                                                       ; 87b5: b7 00       ..
     equs "THEN"                                                       ; 87b7: 54 48 45... THE
-    equb &8c, &14, &54, &4f, &b8,   0                                 ; 87bb: 8c 14 54... ..T
+    equb &8c, &14, &54, &4f, &b8, 0                                   ; 87bb: 8c 14 54... ..T
     equs "TAB("                                                       ; 87c1: 54 41 42... TAB
-    equb &8a,   0                                                     ; 87c5: 8a 00       ..
+    equb &8a, 0                                                       ; 87c5: 8a 00       ..
     equs "TRACE"                                                      ; 87c7: 54 52 41... TRA
     equb &fc, &12                                                     ; 87cc: fc 12       ..
     equs "TIME"                                                       ; 87ce: 54 49 4d... TIM
     equb &91                                                          ; 87d2: 91          .
     equs "CTRUE"                                                      ; 87d3: 43 54 52... CTR
-    equb &b9,   1                                                     ; 87d8: b9 01       ..
+    equb &b9, 1                                                       ; 87d8: b9 01       ..
     equs "UNTIL"                                                      ; 87da: 55 4e 54... UNT
-    equb &fd,   2                                                     ; 87df: fd 02       ..
+    equb &fd, 2                                                       ; 87df: fd 02       ..
     equs "USR"                                                        ; 87e1: 55 53 52    USR
-    equb &ba,   0                                                     ; 87e4: ba 00       ..
+    equb &ba, 0                                                       ; 87e4: ba 00       ..
     equs "VDU"                                                        ; 87e6: 56 44 55    VDU
-    equb &ef,   2                                                     ; 87e9: ef 02       ..
+    equb &ef, 2                                                       ; 87e9: ef 02       ..
     equs "VAL"                                                        ; 87eb: 56 41 4c    VAL
-    equb &bb,   0                                                     ; 87ee: bb 00       ..
+    equb &bb, 0                                                       ; 87ee: bb 00       ..
     equs "VPOS"                                                       ; 87f0: 56 50 4f... VPO
-    equb &bc,   1                                                     ; 87f4: bc 01       ..
+    equb &bc, 1                                                       ; 87f4: bc 01       ..
     equs "WIDTH"                                                      ; 87f6: 57 49 44... WID
-    equb &fe,   2                                                     ; 87fb: fe 02       ..
+    equb &fe, 2                                                       ; 87fb: fe 02       ..
     equs "PAGE"                                                       ; 87fd: 50 41 47... PAG
-    equb &d0,   0                                                     ; 8801: d0 00       ..
+    equb &d0, 0                                                       ; 8801: d0 00       ..
     equs "PTR"                                                        ; 8803: 50 54 52    PTR
-    equb &cf,   0, &54, &49                                           ; 8806: cf 00 54... ..T
+    equb &cf, 0, &54, &49                                             ; 8806: cf 00 54... ..T
 ; &880a referenced 1 time by &90e0
 .l880a
-    equb &4d, &45, &d1,   0                                           ; 880a: 4d 45 d1... ME.
+    equb &4d, &45, &d1, 0                                             ; 880a: 4d 45 d1... ME.
     equs "LOMEM"                                                      ; 880e: 4c 4f 4d... LOM
-    equb &d2,   0                                                     ; 8813: d2 00       ..
+    equb &d2, 0                                                       ; 8813: d2 00       ..
     equs "HIMEM"                                                      ; 8815: 48 49 4d... HIM
-    equb &d3,   0                                                     ; 881a: d3 00       ..
+    equb &d3, 0                                                       ; 881a: d3 00       ..
     equs "Missing "                                                   ; 881c: 4d 69 73... Mis
-    equb &8d,   0                                                     ; 8824: 8d 00       ..
+    equb &8d, 0                                                       ; 8824: 8d 00       ..
 .l8826
 l8909 = l8826+227
     equw sub_cab37, sub_cab21, sub_cae50, sub_cae8c, sub_cae71        ; 8826: 37 ab 21... 7.!
@@ -1360,7 +1360,7 @@ l8909 = l8826+227
     equw sub_c970b, sub_cba47, sub_cb351, sub_cbec7, sub_c834b        ; 8902: 0b 97 47... ..G
     equw sub_c8984, sub_cb896                                         ; 890c: 84 89 96... ...
 ; &8909 referenced 1 time by &8ae3
-    equb &b9, &d8, &d9, &f0,   1, &10, &81, &90, &89, &93, &a3, &a4   ; 8910: b9 d8 d9... ...
+    equb &b9, &d8, &d9, &f0, 1, &10, &81, &90, &89, &93, &a3, &a4     ; 8910: b9 d8 d9... ...
     equb &a9                                                          ; 891c: a9          .
     equs "89x"                                                        ; 891d: 38 39 78    89x
     equb   1, &13, &21, &a1, &c1, &19, &18, &99, &98, &63, &73, &b1   ; 8920: 01 13 21... ..!
@@ -1375,8 +1375,8 @@ l8909 = l8826+227
     equs "%%9AAAAJJLLLPPRSSS"                                         ; 8956: 25 25 39... %%9
     equb &10                                                          ; 8968: 10          .
     equs "%AAAA"                                                      ; 8969: 25 41 41... %AA
-    equb   8,   8,   8,   9,   9, &0a, &0a, &0a, &0a,   5, &15, &3e   ; 896e: 08 08 08... ...
-    equb   4, &0d, &30, &4c,   6                                      ; 897a: 04 0d 30... ..0
+    equb   8,   8, 8, 9, 9, &0a, &0a, &0a, &0a, 5, &15, &3e, 4, &0d   ; 896e: 08 08 08... ...
+    equb &30, &4c, 6                                                  ; 897c: 30 4c 06    0L.
     equs "2II"                                                        ; 897f: 32 49 49    2II
     equb &10, &25                                                     ; 8982: 10 25       .%
 
@@ -2508,7 +2508,7 @@ l8993 = sub_c8992+1
 .c8fbb
     brk                                                               ; 8fbb: 00          .
 
-    equb   5, &8d, &2c,   0                                           ; 8fbc: 05 8d 2c... ..,
+    equb 5, &8d, &2c, 0                                               ; 8fbc: 05 8d 2c... ..,
 
 .sub_c8fc0
     jsr sub_cbe17                                                     ; 8fc0: 20 17 be     ..
@@ -2773,7 +2773,7 @@ l8993 = sub_c8992+1
     jsr c9c6a                                                         ; 9149: 20 6a 9c     j.
     brk                                                               ; 914c: 00          .
 
-    equb   0, &fa                                                     ; 914d: 00 fa       ..
+    equb 0, &fa                                                       ; 914d: 00 fa       ..
 
 ; &914f referenced 2 times by &9126, &912d
 .c914f
@@ -3145,7 +3145,7 @@ l8993 = sub_c8992+1
 .c9357
     brk                                                               ; 9357: 00          .
 
-    equb   9, &8d, &22,   0                                           ; 9358: 09 8d 22... .."
+    equb 9, &8d, &22, 0                                               ; 9358: 09 8d 22... .."
 
 ; &935c referenced 2 times by &b8fa, &b8ff
 .sub_c935c
@@ -3316,7 +3316,7 @@ l8993 = sub_c8992+1
 .c9476
     brk                                                               ; 9476: 00          .
 
-    equb   0, &cc                                                     ; 9477: 00 cc       ..
+    equb 0, &cc                                                       ; 9477: 00 cc       ..
     equs " space"                                                     ; 9479: 20 73 70...  sp
 
 ; &947f referenced 2 times by &942a, &942e
@@ -3565,7 +3565,7 @@ l8993 = sub_c8992+1
 
     equb &0a                                                          ; 95f2: 0a          .
     equs "Bad "                                                       ; 95f3: 42 61 64... Bad
-    equb &de,   0                                                     ; 95f7: de 00       ..
+    equb &de, 0                                                       ; 95f7: de 00       ..
 
 ; &95f9 referenced 1 time by &95c1
 .c95f9
@@ -3926,7 +3926,7 @@ l8993 = sub_c8992+1
 
     equb &19                                                          ; 9809: 19          .
     equs "Bad "                                                       ; 980a: 42 61 64... Bad
-    equb &eb,   0                                                     ; 980e: eb 00       ..
+    equb &eb, 0                                                       ; 980e: eb 00       ..
 
 .sub_c9810
     jsr sub_c9332                                                     ; 9810: 20 32 93     2.
@@ -6857,7 +6857,7 @@ l8993 = sub_c8992+1
     equs "-ve roo"                                                    ; a7c2: 2d 76 65... -ve
 ; &a7c9 referenced 1 time by &a985
 .la7c9
-    equb &74,   0, &86, &8e                                           ; a7c9: 74 00 86... t..
+    equb &74, 0, &86, &8e                                             ; a7c9: 74 00 86... t..
 
 ; &a7cd referenced 1 time by &a7b3
 .ca7cd
@@ -8287,7 +8287,7 @@ l8993 = sub_c8992+1
 
     equb &1d                                                          ; afc8: 1d          .
     equs "No such "                                                   ; afc9: 4e 6f 20... No
-    equb &a4, &2f, &f2,   0                                           ; afd1: a4 2f f2... ./.
+    equb &a4, &2f, &f2, 0                                             ; afd1: a4 2f f2... ./.
 
 ; &afd5 referenced 1 time by &b0a3
 .cafd5
@@ -8741,8 +8741,8 @@ l8993 = sub_c8992+1
     lda l002a                                                         ; b26c: a5 2a       .*
     jmp caeb4                                                         ; b26e: 4c b4 ae    L..
 
-    equb &a4, &0a, &f0,   1, &88, &20, &80, &9c, &64,   8, &64,   9   ; b271: a4 0a f0... ...
-    equb &a6, &18, &86                                                ; b27d: a6 18 86    ...
+    equb &a4, &0a, &f0, 1, &88, &20, &80, &9c, &64, 8, &64, 9, &a6    ; b271: a4 0a f0... ...
+    equb &18, &86                                                     ; b27e: 18 86       ..
     equs "8d7"                                                        ; b280: 38 64 37    8d7
     equb &a4, &0c, &c0,   7, &f0, &28, &a6, &0b, &20, &5d, &8e, &c9   ; b283: a4 0c c0... ...
     equb &0d, &d0, &18, &e4, &37, &98, &e5, &38, &90, &18, &20, &5d   ; b28f: 0d d0 18... ...
@@ -9177,7 +9177,7 @@ l8993 = sub_c8992+1
     brk                                                               ; b563: 00          .
 
     equs " No "                                                       ; b564: 20 4e 6f...  No
-    equb &e3,   0                                                     ; b568: e3 00       ..
+    equb &e3, 0                                                       ; b568: e3 00       ..
 
 ; &b56a referenced 2 times by &b52b, &b549
 .cb56a
@@ -9304,7 +9304,7 @@ l8993 = sub_c8992+1
     brk                                                               ; b642: 00          .
 
     equs "$No "                                                       ; b643: 24 4e 6f... $No
-    equb &b8,   0                                                     ; b647: b8 00       ..
+    equb &b8, 0                                                       ; b647: b8 00       ..
 
 .sub_cb649
     jsr sub_c997d                                                     ; b649: 20 7d 99     }.
@@ -9424,7 +9424,7 @@ l8993 = sub_c8992+1
     brk                                                               ; b730: 00          .
 
     equs "&No "                                                       ; b731: 26 4e 6f... &No
-    equb &e4,   0                                                     ; b735: e4 00       ..
+    equb &e4, 0                                                       ; b735: e4 00       ..
 
 .sub_cb737
     jsr c9c6a                                                         ; b737: 20 6a 9c     j.
@@ -9940,7 +9940,7 @@ l8993 = sub_c8992+1
     brk                                                               ; ba35: 00          .
 
     equs ",Too many "                                                 ; ba36: 2c 54 6f... ,To
-    equb &f5, &73,   0                                                ; ba40: f5 73 00    .s.
+    equb &f5, &73, 0                                                  ; ba40: f5 73 00    .s.
 
 ; &ba43 referenced 1 time by &ba13
 .cba43
@@ -10173,7 +10173,7 @@ l8993 = sub_c8992+1
     jsr sub_cbbdc                                                     ; bb8e: 20 dc bb     ..
     brk                                                               ; bb91: 00          .
 
-    equb   0, &86                                                     ; bb92: 00 86       ..
+    equb 0, &86                                                       ; bb92: 00 86       ..
     equs " space"                                                     ; bb94: 20 73 70...  sp
     equb 0                                                            ; bb9a: 00          .
 
@@ -10936,10 +10936,10 @@ lbefe = sub_cbefd+1
     equb &82, &7f, &b9, &ff, &78, &7b, &0e, &fa, &35, &12, &86, &65   ; bfc5: 82 7f b9... ...
     equb &2e, &e0, &d3, &7e, &88, &88, &88, &89, &7b, &8c             ; bfd1: 2e e0 d3... ...
     equs "o-Y"                                                        ; bfdb: 6f 2d 59    o-Y
-    equb &81, &99, &99, &99, &9a, &f3, &9e, &7b, &77, &81, &c0,   0   ; bfde: 81 99 99... ...
-    equb   0,   0, &80, &93, &e6, &90,   0, &81, &c4                  ; bfea: 00 00 80... ...
+    equb &81, &99, &99, &99, &9a, &f3, &9e, &7b, &77, &81, &c0, 0, 0  ; bfde: 81 99 99... ...
+    equb   0, &80, &93, &e6, &90,   0, &81, &c4                       ; bfeb: 00 80 93... ...
     equs "DDD"                                                        ; bff3: 44 44 44    DDD
-    equb &80, &9d, &fd, &13,   4, &81, &e6                            ; bff6: 80 9d fd... ...
+    equb &80, &9d, &fd, &13, 4, &81, &e6                              ; bff6: 80 9d fd... ...
     equs "fff"                                                        ; bffd: 66 66 66    fff
 .pydis_end
 

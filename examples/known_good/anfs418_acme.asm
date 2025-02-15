@@ -282,7 +282,7 @@ language_entry
 pydis_start
 l8001 = rom_header+1
 l8002 = rom_header+2
-    !byte   0, $42, $43                                               ; 8000: 00 42 43    .BC
+    !byte 0, $42, $43                                                 ; 8000: 00 42 43    .BC
 ; $8001 referenced 1 time by $bfeb
 ; $8002 referenced 1 time by $bff0
 
@@ -557,7 +557,7 @@ l84bb
     !byte $4c, $85, $85, $a9,   4, $2c, $61, $0d, $d0, $18, $0d, $61  ; 8563: 4c 85 85... L..
     !byte $0d, $8d, $61, $0d, $a9,   4                                ; 856f: 0d 8d 61... ..a
     !text "X,a"                                                       ; 8575: 58 2c 61    X,a
-    !byte $0d, $d0, $fb, $f0,   8, $ad, $61, $0d, $29, $fb, $8d, $61  ; 8578: 0d d0 fb... ...
+    !byte $0d, $d0, $fb, $f0, 8, $ad, $61, $0d, $29, $fb, $8d, $61    ; 8578: 0d d0 fb... ...
     !byte $0d                                                         ; 8584: 0d          .
 
 ; $8585 referenced 1 time by $8057
@@ -834,7 +834,7 @@ c86e3
     !byte $d0,   8, $e6                                               ; 885e: d0 08 e6    ...
 ; $8861 referenced 1 time by $8673
 l8861
-    !byte $a4, $d0,   4, $e6, $a5, $f0, $b5, $2c                      ; 8861: a4 d0 04... ...
+    !byte $a4, $d0, 4, $e6, $a5, $f0, $b5, $2c                        ; 8861: a4 d0 04... ...
 ; $8869 referenced 1 time by $866d
 l8869
     !byte $a0, $fe, $30, $cd, $4c, $14, $0d, $ad, $3e, $0d, $10, $5f  ; 8869: a0 fe 30... ..0
@@ -1001,7 +1001,7 @@ l89a6 = c89a4+2
     bit video_ula_control                                             ; 89c3: 2c 20 fe    , .
     rti                                                               ; 89c6: 40          @
 
-    !byte   1,   0, $18                                               ; 89c7: 01 00 18    ...
+    !byte 1, 0, $18                                                   ; 89c7: 01 00 18    ...
 ; $89ca referenced 1 time by $8e52
 jump_table_low
     !byte 4                                                           ; 89ca: 04          .
@@ -1670,7 +1670,7 @@ l8d61
     !text "B Robertson"                                               ; 8d64: 42 20 52... B R
     !byte $0d                                                         ; 8d6f: 0d          .
     !text "J Wills"                                                   ; 8d70: 4a 20 57... J W
-    !byte $0d,   0                                                    ; 8d77: 0d 00       ..
+    !byte $0d, 0                                                      ; 8d77: 0d 00       ..
 
 sub_c8d79
     tya                                                               ; 8d79: 98          .
@@ -2128,7 +2128,7 @@ l9022
     !byte 0                                                           ; 9121: 00          .
 ; $9122 referenced 1 time by $8bdc
 l9122
-    !byte   6, $ff,   7                                               ; 9122: 06 ff 07    ...
+    !byte 6, $ff, 7                                                   ; 9122: 06 ff 07    ...
     !text "4=`fw"                                                     ; 9125: 34 3d 60... 4=`
     !byte $9a, $b1, $cd, $e7, $f4                                     ; 912a: 9a b1 cd... ...
 
@@ -2373,7 +2373,7 @@ c9283
 
 ; $9286 referenced 1 time by $9280
 l9286
-    !byte $50, $20,   5,   2, $88,   4,   8, $80, $10,   1,   2       ; 9286: 50 20 05... P .
+    !byte $50, $20, 5, 2, $88, 4, 8, $80, $10, 1, 2                   ; 9286: 50 20 05... P .
 
 ; $9291 referenced 1 time by $a114
 sub_c9291
@@ -2687,7 +2687,7 @@ c9486
 
 ; $948b referenced 1 time by $9476
 l948b
-    !byte $80, $99,   0,   0,   0, $0f                                ; 948b: 80 99 00... ...
+    !byte $80, $99, 0, 0, 0, $0f                                      ; 948b: 80 99 00... ...
 ; $9491 referenced 19 times by $8c73, $964e, $977d, $9b41, $a09e, $a19d, $a316, $a341, $a378, $af7f, $af85, $b025, $b1a5, $b205, $b246, $b2ce, $b55a, $b598, $b99d
 l9491
     !byte $ff, $ff, $ff, $0f, $ff, $ff                                ; 9491: ff ff ff... ...
@@ -3246,23 +3246,23 @@ c97ac
 
 ; $97ad referenced 5 times by $961c, $965a, $9688, $969b, $9730
 l97ad
-    !byte   0, $0d, $18                                               ; 97ad: 00 0d 18    ...
+    !byte 0, $0d, $18                                                 ; 97ad: 00 0d 18    ...
     !text "!+++3?Veq"                                                 ; 97b0: 21 2b 2b... !++
 ; $97b9 referenced 8 times by $9624, $962a, $965d, $9668, $968c, $96a3, $96a9, $9734
 l97b9
     !byte $a0                                                         ; 97b9: a0          .
     !text "Line jammed"                                               ; 97ba: 4c 69 6e... Lin
-    !byte   0, $a1                                                    ; 97c5: 00 a1       ..
+    !byte 0, $a1                                                      ; 97c5: 00 a1       ..
     !text "Net error"                                                 ; 97c7: 4e 65 74... Net
-    !byte   0, $a2                                                    ; 97d0: 00 a2       ..
+    !byte 0, $a2                                                      ; 97d0: 00 a2       ..
     !text "Station"                                                   ; 97d2: 53 74 61... Sta
-    !byte   0, $a3                                                    ; 97d9: 00 a3       ..
+    !byte 0, $a3                                                      ; 97d9: 00 a3       ..
     !text "No clock"                                                  ; 97db: 4e 6f 20... No
-    !byte   0, $11                                                    ; 97e3: 00 11       ..
+    !byte 0, $11                                                      ; 97e3: 00 11       ..
     !text "Escape"                                                    ; 97e5: 45 73 63... Esc
-    !byte   0, $cb                                                    ; 97eb: 00 cb       ..
+    !byte 0, $cb                                                      ; 97eb: 00 cb       ..
     !text "Bad option"                                                ; 97ed: 42 61 64... Bad
-    !byte   0, $a5                                                    ; 97f7: 00 a5       ..
+    !byte 0, $a5                                                      ; 97f7: 00 a5       ..
     !text "No reply from station"                                     ; 97f9: 4e 6f 20... No
     !byte 0                                                           ; 980e: 00          .
     !text " not listening"                                            ; 980f: 20 6e 6f...  no
@@ -3342,7 +3342,7 @@ c9882
 
 ; $9888 referenced 2 times by $989e, $98f8
 l9888
-    !byte $88,   0, $fd, $fd, $3a, $0d, $ff, $ff, $3e, $0d, $ff, $ff  ; 9888: 88 00 fd... ...
+    !byte $88, 0, $fd, $fd, $3a, $0d, $ff, $ff, $3e, $0d, $ff, $ff    ; 9888: 88 00 fd... ...
 
 ; $9894 referenced 1 time by $8dff
 sub_c9894
@@ -3441,7 +3441,7 @@ c9902
     bne loop_c98f8                                                    ; 9905: d0 f1       ..
     rts                                                               ; 9907: 60          `
 
-    !byte $a0,   1, $b1, $bb, $99, $f2,   0, $88, $10, $f8, $c8       ; 9908: a0 01 b1... ...
+    !byte $a0, 1, $b1, $bb, $99, $f2, 0, $88, $10, $f8, $c8           ; 9908: a0 01 b1... ...
 
 ; $9913 referenced 1 time by $ae94
 sub_c9913
@@ -3545,7 +3545,7 @@ loop_c99b7
 c99c2
     rts                                                               ; 99c2: 60          `
 
-    !byte $f0,   3, $4c, $ef, $9a                                     ; 99c3: f0 03 4c... ..L
+    !byte $f0, 3, $4c, $ef, $9a                                       ; 99c3: f0 03 4c... ..L
 
 ; $99c8 referenced 1 time by $9af8
 c99c8
@@ -3965,7 +3965,7 @@ c9cc9
 c9dbb
     jmp c9cc7                                                         ; 9dbb: 4c c7 9c    L..
 
-    !byte $a9,   0, $99, $10, $10, $99, $40, $10, $f0, $f3            ; 9dbe: a9 00 99... ...
+    !byte $a9, 0, $99, $10, $10, $99, $40, $10, $f0, $f3              ; 9dbe: a9 00 99... ...
 
 sub_c9dc8
     beq c9dd5                                                         ; 9dc8: f0 0b       ..
@@ -4897,13 +4897,13 @@ la477
     !text "Halt"                                                      ; a4c3: 48 61 6c... Hal
     !byte $fc, $20, $df                                               ; a4c7: fc 20 df    . .
     !text "JSR"                                                       ; a4ca: 4a 53 52    JSR
-    !byte $fc,   4, $fb                                               ; a4cd: fc 04 fb    ...
+    !byte $fc, 4, $fb                                                 ; a4cd: fc 04 fb    ...
     !text "Peek"                                                      ; a4d0: 50 65 65... Pee
-    !byte $fc,   1, $fe                                               ; a4d4: fc 01 fe    ...
+    !byte $fc, 1, $fe                                                 ; a4d4: fc 01 fe    ...
     !text "Poke"                                                      ; a4d7: 50 6f 6b... Pok
-    !byte $fc,   2, $fd                                               ; a4db: fc 02 fd    ...
+    !byte $fc, 2, $fd                                                 ; a4db: fc 02 fd    ...
     !text "Proc"                                                      ; a4de: 50 72 6f... Pro
-    !byte $fc,   8, $f7                                               ; a4e2: fc 08 f7    ...
+    !byte $fc, 8, $f7                                                 ; a4e2: fc 08 f7    ...
     !text "Utils"                                                     ; a4e5: 55 74 69... Uti
     !byte $a9, $10, $ef, $80                                          ; a4ea: a9 10 ef... ...
 
@@ -4959,7 +4959,7 @@ la52a
     !byte $ad,   6, $0f, $48, $ad,   5, $0f, $20, $95, $a5, $8d,   7  ; a566: ad 06 0f... ...
     !byte $0f                                                         ; a572: 0f          .
     !text "hH)"                                                       ; a573: 68 48 29    hH)
-    !byte $0f, $20, $95, $a5, $8d,   6, $0f                           ; a576: 0f 20 95... . .
+    !byte $0f, $20, $95, $a5, $8d, 6, $0f                             ; a576: 0f 20 95... . .
     !text "hJJJJiQ "                                                  ; a57d: 68 4a 4a... hJJ
     !byte $95, $a5, $8d,   5, $0f, $a0,   6, $b9,   5, $0f, $91, $ac  ; a585: 95 a5 8d... ...
     !byte $88, $10, $f8, $60,   8, $aa, $f0,   9, $f8, $a9,   0, $18  ; a591: 88 10 f8... ...
@@ -4979,7 +4979,7 @@ la52a
     !byte $dd, $ac, $aa, $c9, $13, $b0,   8, $bd, $4e, $a6, $48, $bd  ; a62c: dd ac aa... ...
     !byte $3c, $a6                                                    ; a638: 3c a6       <.
     !text "H`_r"                                                      ; a63a: 48 60 5f... H`_
-    !byte   6, $12                                                    ; a63e: 06 12       ..
+    !byte 6, $12                                                      ; a63e: 06 12       ..
     !text "'-3C"                                                      ; a640: 27 2d 33... '-3
     !byte $e3, $ec, $fa,   1, $e7, $ea,   6, $0e, $19, $24, $a6, $a6  ; a644: e3 ec fa... ...
     !byte $a7, $a7, $a7, $a7, $a7, $a7, $a7, $a7, $a7, $a8, $a6, $a6  ; a650: a7 a7 a7... ...
@@ -5030,13 +5030,13 @@ la52a
     !byte   7, $4d                                                    ; a83f: 07 4d       .M
 ; $a841 referenced 1 time by $a875
 la841
-    !byte $71, $0d, $d0,   7, $f0,   3, $ad,   1, $0e, $91, $ac, $60  ; a841: 71 0d d0... q..
+    !byte $71, $0d, $d0, 7, $f0, 3, $ad, 1, $0e, $91, $ac, $60        ; a841: 71 0d d0... q..
 ; $a84d referenced 1 time by $a87a
 la84d
     !byte $82, $9c, $ff, $ff                                          ; a84d: 82 9c ff... ...
     !text "BRIDGE"                                                    ; a851: 42 52 49... BRI
-    !byte $9c,   0, $7f, $9c,   0,   0, $71, $0d, $ff, $ff, $73, $0d  ; a857: 9c 00 7f... ...
-    !byte $ff, $ff                                                    ; a863: ff ff       ..
+    !byte $9c, 0, $7f, $9c, 0, 0, $71, $0d, $ff, $ff, $73, $0d, $ff   ; a857: 9c 00 7f... ...
+    !byte $ff                                                         ; a864: ff          .
 
 ; $a865 referenced 2 times by $8e09, $a0b4
 sub_ca865
@@ -5100,7 +5100,7 @@ ca8b5
 ca8c4
     rts                                                               ; a8c4: 60          `
 
-    !byte $c9,   1, $b0                                               ; a8c5: c9 01 b0    ...
+    !byte $c9, 1, $b0                                                 ; a8c5: c9 01 b0    ...
     !text "l,l"                                                       ; a8c8: 6c 2c 6c    l,l
     !byte $0d, $10, $f6, $a0                                          ; a8cb: 0d 10 f6... ...
     !text "# 2"                                                       ; a8cf: 23 20 32    # 2
@@ -5120,10 +5120,10 @@ ca8c4
     !byte $aa, $38, $66, $98, $20, $76, $a9, $ca, $d0, $fd, $68, $49  ; a95b: aa 38 66... .8f
     !byte $0d, $d0, $e2                                               ; a967: 0d d0 e2    ...
     !text "` |"                                                       ; a96a: 60 20 7c    ` |
-    !byte $aa, $a0, $7b, $b1, $9c, $69,   3, $91, $9c                 ; a96d: aa a0 7b... ..{
+    !byte $aa, $a0, $7b, $b1, $9c, $69, 3, $91, $9c                   ; a96d: aa a0 7b... ..{
     !text "XL?"                                                       ; a976: 58 4c 3f    XL?
-    !byte $98,   8, $48, $8a, $48, $98, $48, $ba, $bd,   3,   1, $c9  ; a979: 98 08 48... ..H
-    !byte   9, $b0,   4, $aa, $20, $93, $a9, $68, $a8, $68, $aa       ; a985: 09 b0 04... ...
+    !byte $98, 8, $48, $8a, $48, $98, $48, $ba, $bd,   3, 1, $c9, 9   ; a979: 98 08 48... ..H
+    !byte $b0, 4, $aa, $20, $93, $a9, $68, $a8, $68, $aa              ; a986: b0 04 aa... ...
     !text "h(`"                                                       ; a990: 68 28 60    h(`
     !byte $bd, $a7, $a9, $48, $bd, $9e, $a9, $48, $a5, $ef, $60, $57  ; a993: bd a7 a9... ...
     !byte $ec, $ec, $ec, $af, $d7, $57, $e1, $50, $8e, $aa, $aa, $aa  ; a99f: ec ec ec... ...
@@ -5462,7 +5462,7 @@ loop_cac6f
 
 ; $ac80 referenced 1 time by $ab89
 lac80
-    !byte $80, $9f,   0,   0, $59, $8e, $ff, $ff, $61, $8e, $ff, $ff  ; ac80: 80 9f 00... ...
+    !byte $80, $9f, 0, 0, $59, $8e, $ff, $ff, $61, $8e, $ff, $ff      ; ac80: 80 9f 00... ...
 ; $ac8c referenced 1 time by $aba8
 lac8c
     !byte $7f, $9e, $fd, $fd, $2d, $fc, $ff, $ff, $30, $fc, $ff, $ff  ; ac8c: 7f 9e fd... ...
@@ -5578,7 +5578,7 @@ lad43 = sub_cad41+2
     jmp c94ad                                                         ; ad41: 4c ad 94    L..
 
 ; $ad43 referenced 1 time by $ad2a
-    !byte   0, $0a, $14, $1d                                          ; ad44: 00 0a 14... ...
+    !byte 0, $0a, $14, $1d                                            ; ad44: 00 0a 14... ...
     !text "'1;EOXblv"                                                 ; ad48: 27 31 3b... '1;
     !byte $80, $8a, $94, $9d, $a7, $b1, $bb, $c5, $cf, $d8, $e2, $ec  ; ad51: 80 8a 94... ...
     !byte $f6, $ff                                                    ; ad5d: f6 ff       ..
@@ -6343,7 +6343,7 @@ cb1b1
     plp                                                               ; b1b3: 28          (
     jmp caf88                                                         ; b1b4: 4c 88 af    L..
 
-    !byte $80, $9f,   0,   0, $10,   0, $ff, $ff, $18,   0, $ff, $ff  ; b1b7: 80 9f 00... ...
+    !byte $80, $9f, 0, 0, $10, 0, $ff, $ff, $18, 0, $ff, $ff          ; b1b7: 80 9f 00... ...
 
 sub_cb1c3
     sty l00ac                                                         ; b1c3: 84 ac       ..
@@ -6797,7 +6797,7 @@ cb477
     tax                                                               ; b478: aa          .
     rts                                                               ; b479: 60          `
 
-    !byte $c9, $20, $90,   4, $c9, $30, $90, $2b, $48                 ; b47a: c9 20 90... . .
+    !byte $c9, $20, $90, 4, $c9, $30, $90, $2b, $48                   ; b47a: c9 20 90... . .
 
 ; $b483 referenced 1 time by $b4b5
 cb483
@@ -6851,10 +6851,10 @@ loop_cb4df
     bne loop_cb4df                                                    ; b4e7: d0 f6       ..
     jmp l0100                                                         ; b4e9: 4c 00 01    L..
 
-    !byte $ad, $c9, $10, $20, $8f, $b9, $20, $7a, $b4, $29,   2, $f0  ; b4ec: ad c9 10... ...
+    !byte $ad, $c9, $10, $20, $8f, $b9, $20, $7a, $b4, $29, 2, $f0    ; b4ec: ad c9 10... ...
     !byte $0f, $a9, $a8, $20, $d1, $96                                ; b4f8: 0f a9 a8... ...
     !text "Is a dir."                                                 ; b4fe: 49 73 20... Is
-    !byte   0, $60                                                    ; b507: 00 60       .`
+    !byte 0, $60                                                      ; b507: 00 60       .`
 
 ; $b509 referenced 5 times by $a280, $a31f, $a34a, $a381, $b540
 sub_cb509
@@ -7243,8 +7243,8 @@ cb788
     and #$20 ; ' '                                                    ; b788: 29 20       )
     rts                                                               ; b78a: 60          `
 
-    !byte $fe,   0, $10, $d0,   8, $fe, $10, $10, $d0,   3, $fe, $20  ; b78b: fe 00 10... ...
-    !byte $10, $60                                                    ; b797: 10 60       .`
+    !byte $fe, 0, $10, $d0, 8, $fe, $10, $10, $d0, 3, $fe, $20, $10   ; b78b: fe 00 10... ...
+    !byte $60                                                         ; b798: 60          `
 
 ; $b799 referenced 3 times by $8d87, $8fa0, $94a0
 sub_cb799
@@ -7306,7 +7306,7 @@ loop_cb7c3
     !byte $d7, $10, $20, $ec, $b4, $bd, $60, $10, $30, $19, $a9, $c1  ; b857: d7 10 20... ..
     !byte $20, $d1, $96                                               ; b863: 20 d1 96     ..
     !text "Not open for update"                                       ; b866: 4e 6f 74... Not
-    !byte   0, $29, $20, $f0, $0a, $bc, $30, $10                      ; b879: 00 29 20... .)
+    !byte 0, $29, $20, $f0, $0a, $bc, $30, $10                        ; b879: 00 29 20... .)
     !text "h +"                                                       ; b881: 68 20 2b    h +
     !byte $b9, $4c, $cb, $b8, $2c, $91, $94, $20, $30, $b7, $b9,   0  ; b884: b9 4c cb... .L.
     !byte $10, $c9, $ff, $d0,   3, $20, $e4, $b8, $dd, $98, $10, $90  ; b890: 10 c9 ff... ...
@@ -8014,8 +8014,8 @@ lbc94
     !byte $ca, $d0, $f8, $20, $c5,   6, $a0,   0, $20, $d1, $ff, $48  ; bd6c: ca d0 f8... ...
     !byte $a2, $0c, $b5,   0, $20, $95,   6, $ca, $10, $f8            ; bd78: a2 0c b5... ...
     !text "hL:"                                                       ; bd82: 68 4c 3a    hL:
-    !byte   5, $20, $c5,   6, $aa, $20, $c5,   6, $20, $f4, $ff, $2c  ; bd85: 05 20 c5... . .
-    !byte $e2, $fe, $50                                               ; bd91: e2 fe 50    ..P
+    !byte   5, $20, $c5, 6, $aa, $20, $c5, 6, $20, $f4, $ff, $2c, $e2 ; bd85: 05 20 c5... . .
+    !byte $fe, $50                                                    ; bd92: fe 50       .P
 ; $bd94 referenced 1 time by $beaa
 lbd94
     !byte $fb, $8e, $e3, $fe, $4c, $36,   0, $20, $c5,   6, $aa, $20  ; bd94: fb 8e e3... ...
@@ -8110,7 +8110,7 @@ lbf04
 !pseudopc $0400 {
 ; $bf04 referenced 1 time by $bea1
 l0400
-    !byte $4c, $84,   4, $4c, $a7,   6                                ; bf04: 4c 84 04... L.. :0400[1]
+    !byte $4c, $84, 4, $4c, $a7, 6                                    ; bf04: 4c 84 04... L.. :0400[1]
 
 ; $bf0a referenced 7 times by $844f, $8933, $893b, $a075, $a2ec, $bf97, $bfcf
 c0406
@@ -8204,8 +8204,7 @@ c0482
     plp                                                               ; bf86: 28          (   :0482[1]
     rts                                                               ; bf87: 60          `   :0483[1]
 
-    !byte $58, $b0, $0a, $d0,   3, $4c, $9c,   5, $ae, $8d,   2, $f0  ; bf88: 58 b0 0a... X.. :0484[1]
-    !byte $e0                                                         ; bf94: e0          .   :0490[1]
+    !byte $58, $b0, $0a, $d0, 3, $4c, $9c, 5, $ae, $8d, 2, $f0, $e0   ; bf88: 58 b0 0a... X.. :0484[1]
 }
 
 loop_cbf95

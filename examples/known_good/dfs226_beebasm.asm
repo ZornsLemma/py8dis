@@ -1526,7 +1526,7 @@ l8004 = service_entry+1
     equs "DISK"                                                       ; 86e5: 44 49 53... DIS
     equb >(c956d-1)                                                   ; 86e9: 95          .
     equb <(c956d-1)                                                   ; 86ea: 6c          l
-    equb   0, &86, &1a                                                ; 86eb: 00 86 1a    ...
+    equb 0, &86, &1a                                                  ; 86eb: 00 86 1a    ...
     equs "DFS"                                                        ; 86ee: 44 46 53    DFS
     equb >(sub_ca106-1)                                               ; 86f1: a1          .
     equb <(sub_ca106-1)                                               ; 86f2: 05          .
@@ -1534,7 +1534,7 @@ l8004 = service_entry+1
     equs "UTILS"                                                      ; 86f4: 55 54 49... UTI
     equb >(sub_ca137-1)                                               ; 86f9: a1          .
     equb <(sub_ca137-1)                                               ; 86fa: 36          6
-    equb   0, &a1                                                     ; 86fb: 00 a1       ..
+    equb 0, &a1                                                       ; 86fb: 00 a1       ..
     equs "= E"                                                        ; 86fd: 3d 20 45    = E
     equb &87, &a2, &fd                                                ; 8700: 87 a2 fd    ...
 
@@ -3347,16 +3347,16 @@ nmi_XXX5 = l0d1f+1
     equs ")*-."                                                       ; 911d: 29 2a 2d... )*-
 ; &9121 referenced 1 time by &8e15
 .l9121
-    equb   0, &10, &40, &50, &80, &81, &83, &a0, &a1, &c0, &e0, &f0   ; 9121: 00 10 40... ..@
+    equb 0, &10, &40, &50, &80, &81, &83, &a0, &a1, &c0, &e0, &f0     ; 9121: 00 10 40... ..@
 ; &912d referenced 1 time by &8e1b
 .nmi_and_table
     equb &18, &18, &18, &18, &3f, &1f, &1f, &5f, &5f, &17, &1b, &5f   ; 912d: 18 18 18... ...
 ; &9139 referenced 1 time by &8c58
 .l9139
-    equb   8, &10, &18, &20, &40,   0                                 ; 9139: 08 10 18... ...
+    equb 8, &10, &18, &20, &40, 0                                     ; 9139: 08 10 18... ...
 ; &913f referenced 1 time by &8c61
 .l913f
-    equb &0e, &18, &0c, &20, &12,   0                                 ; 913f: 0e 18 0c... ...
+    equb &0e, &18, &0c, &20, &12, 0                                   ; 913f: 0e 18 0c... ...
 ; &9145 referenced 1 time by &92e3
 .l9145
     equb &6d                                                          ; 9145: 6d          m
@@ -3976,7 +3976,7 @@ nmi_XXX5 = l0d1f+1
     lda l00cf                                                         ; 950c: a5 cf       ..
     jsr sub_c9526                                                     ; 950e: 20 26 95     &.
     jsr generate_error2                                               ; 9511: 20 4f 80     O.
-    equb &c7,   0                                                     ; 9514: c7 00       ..
+    equb &c7, 0                                                       ; 9514: c7 00       ..
 
 ; &9516 referenced 2 times by &9445, &94b9
 .sub_c9516
@@ -4976,14 +4976,13 @@ nmi_XXX5 = l0d1f+1
     equb &88, &88, &99, &99, &99, &99, &99, &99                       ; 9b29: 88 88 99... ...
 ; &9b31 referenced 1 time by &97e8
 .l9b31
-    equb &1b, &80, &80, &69, &69, &d7,   6, &19, &8b                  ; 9b31: 1b 80 80... ...
+    equb &1b, &80, &80, &69, &69, &d7, 6, &19, &8b                    ; 9b31: 1b 80 80... ...
 ; &9b3a referenced 1 time by &97ee
 .l9b3a
     equb &86, &99, &99, &99, &99, &98, &99, &99, &98                  ; 9b3a: 86 99 99... ...
 ; &9b43 referenced 1 time by &97f4
 .l9b43
-    equb   4,   2,   3,   6,   7,   4,   4,   4,   4, &a2, &11, &a0   ; 9b43: 04 02 03... ...
-    equb &15                                                          ; 9b4f: 15          .
+    equb 4, 2, 3, 6, 7, 4, 4, 4, 4, &a2, &11, &a0, &15                ; 9b43: 04 02 03... ...
 
 ; &9b50 referenced 1 time by &9b66
 .loop_c9b50
@@ -7672,10 +7671,9 @@ nmi_XXX5 = l0d1f+1
     org &0500
 ; &acdb referenced 2 times by &0050[3], &af1c
 .l0500
-    equw          sub_c0537,          sub_c0596,          sub_c05f2   ; acdb: 37 05 96... 7.. :0500[2]
-    equw          sub_c0607,          sub_c0627, tube_host_osword_0   ; ace1: 07 06 27... ..' :0506[2]
-    equw          sub_c055e,          sub_c052d,          sub_c0520   ; ace7: 5e 05 2d... ^.- :050c[2]
-    equw          sub_c0542,          sub_c05a9,          sub_c05d1   ; aced: 42 05 a9... B.. :0512[2]
+    equw sub_c0537,          sub_c0596, sub_c05f2, sub_c0607          ; acdb: 37 05 96... 7.. :0500[2]
+    equw sub_c0627, tube_host_osword_0, sub_c055e, sub_c052d          ; ace3: 27 06 68... '.h :0508[2]
+    equw sub_c0520,          sub_c0542, sub_c05a9, sub_c05d1          ; aceb: 20 05 42...  .B :0510[2]
 ; Table of flags used by tube_entry_small_a to set up registers 1/4 for the
 ; selected operation.
 ; &acf3 referenced 1 time by &0453[1]
@@ -8366,7 +8364,7 @@ jump_address_low = sub_c0050+1
     equs "tart> (<id.>)"                                              ; b175: 74 61 72... tar
     equb &0d, &0a                                                     ; b182: 0d 0a       ..
     equs "End addresses may be replaced by +<length>"                 ; b184: 45 6e 64... End
-    equb &0d, &0a,   0                                                ; b1ae: 0d 0a 00    ...
+    equb &0d, &0a, 0                                                  ; b1ae: 0d 0a 00    ...
 
 ; &b1b1 referenced 1 time by &bedd
 .general_service_handler
@@ -9261,7 +9259,7 @@ lb6ce = sub_cb6cd+1
 
     equb &f0, &e0, &d0, &c0, &3f, &7f, &bf, &ff, &10                  ; b6d6: f0 e0 d0... ...
     equs " 0@"                                                        ; b6df: 20 30 40     0@
-    equb &80, &40,   0, &c0                                           ; b6e2: 80 40 00... .@.
+    equb &80, &40, 0, &c0                                             ; b6e2: 80 40 00... .@.
 
 ; &b6e6 referenced 1 time by &b6fe
 .sub_cb6e6
@@ -9321,8 +9319,7 @@ lb6ce = sub_cb6cd+1
 
 ; &b726 referenced 6 times by &b703, &b898, &b8c8, &b8db, &bc56, &bca1
 .lb726
-    equb   4,   8,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   ; b726: 04 08 00... ...
-    equb   1,   2, &10, &20                                           ; b732: 01 02 10... ...
+    equb 4, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, &10, &20           ; b726: 04 08 00... ...
 
 ; &b736 referenced 1 time by &b75a
 .cb736
@@ -9548,7 +9545,7 @@ lb6ce = sub_cb6cd+1
 
 ; &b872 referenced 2 times by &b9c7, &bc70
 .lb872
-    equb &60,   0,   0, &60,   0,   0,   2, &0c, &ff                  ; b872: 60 00 00... `..
+    equb &60, 0, 0, &60, 0, 0, 2, &0c, &ff                            ; b872: 60 00 00... `..
     equs "RAM"                                                        ; b87b: 52 41 4d    RAM
 ; &b87e referenced 1 time by &b9a3
 .lb87e
@@ -10709,8 +10706,7 @@ lb6ce = sub_cb6cd+1
 ; &bf4f referenced 1 time by &bf7c
 .lbf4f
     equs "Acorn OS "                                                  ; bf4f: 41 63 6f... Aco
-    equb   0, &4b,   7,   0, &36, &34,   0,   0, &38, &30,   0,   0   ; bf58: 00 4b 07... .K.
-    equb &39, &36,   0,   0                                           ; bf64: 39 36 00... 96.
+    equb 0, &4b, 7, 0, &36, &34, 0, 0, &38, &30, 0, 0, &39, &36, 0, 0 ; bf58: 00 4b 07... .K.
     equs "112"                                                        ; bf68: 31 31 32    112
     equb 0                                                            ; bf6b: 00          .
     equs "128"                                                        ; bf6c: 31 32 38    128

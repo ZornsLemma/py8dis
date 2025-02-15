@@ -235,7 +235,7 @@ osbyte                  = $fff4
 // ----------------------------------------------------------------------------------
 spritetable
 pydis_start
-    .byt 150,  24                                                     // 1100: 96 18       ..
+    .byt 150, 24                                                      // 1100: 96 18       ..
     .word $3600                                                       // 1102: 00 36       .6
     .byt 8, 8                                                         // 1104: 08 08       ..
     .word sprite_platform                                             // 1106: 00 12       ..
@@ -245,25 +245,25 @@ pydis_start
     .word sprite_egg                                                  // 110e: 10 12       ..
     .byt 8, 8                                                         // 1110: 08 08       ..
     .word sprite_seed                                                 // 1112: 18 12       ..
-    .byt 16,  4                                                       // 1114: 10 04       ..
+    .byt 16, 4                                                        // 1114: 10 04       ..
     .word sprite_lift                                                 // 1116: 20 12        .
-    .byt  8, 16                                                       // 1118: 08 10       ..
+    .byt 8, 16                                                        // 1118: 08 10       ..
     .word sprite_manright1                                            // 111a: 28 12       (.
-    .byt  8, 16                                                       // 111c: 08 10       ..
+    .byt 8, 16                                                        // 111c: 08 10       ..
     .word sprite_manright2                                            // 111e: 38 12       8.
-    .byt  8, 16                                                       // 1120: 08 10       ..
+    .byt 8, 16                                                        // 1120: 08 10       ..
     .word sprite_manright3                                            // 1122: 48 12       H.
-    .byt  8, 16                                                       // 1124: 08 10       ..
+    .byt 8, 16                                                        // 1124: 08 10       ..
     .word sprite_manleft1                                             // 1126: 58 12       X.
-    .byt  8, 16                                                       // 1128: 08 10       ..
+    .byt 8, 16                                                        // 1128: 08 10       ..
     .word sprite_manleft2                                             // 112a: 68 12       h.
-    .byt  8, 16                                                       // 112c: 08 10       ..
+    .byt 8, 16                                                        // 112c: 08 10       ..
     .word sprite_manleft3                                             // 112e: 78 12       x.
-    .byt  8, 16                                                       // 1130: 08 10       ..
+    .byt 8, 16                                                        // 1130: 08 10       ..
     .word sprite_manupdown1                                           // 1132: 88 12       ..
-    .byt  8, 18                                                       // 1134: 08 12       ..
+    .byt 8, 18                                                        // 1134: 08 12       ..
     .word sprite_manupdown2                                           // 1136: 98 12       ..
-    .byt  8, 18                                                       // 1138: 08 12       ..
+    .byt 8, 18                                                        // 1138: 08 12       ..
     .word sprite_manupdown3                                           // 113a: aa 12       ..
     .byt 16, 24                                                       // 113c: 10 18       ..
     .word sprite_bigbirdright1                                        // 113e: bc 12       ..
@@ -277,17 +277,17 @@ pydis_start
     .word sprite_cagewithhole                                         // 114e: 7c 13       |.
     .byt 24, 48                                                       // 1150: 18 30       .0
     .word sprite_cage                                                 // 1152: 0c 14       ..
-    .byt  8, 20                                                       // 1154: 08 14       ..
+    .byt 8, 20                                                        // 1154: 08 14       ..
     .word sprite_birdright1                                           // 1156: 9c 14       ..
-    .byt  8, 20                                                       // 1158: 08 14       ..
+    .byt 8, 20                                                        // 1158: 08 14       ..
     .word sprite_birdright2                                           // 115a: b0 14       ..
-    .byt  8, 20                                                       // 115c: 08 14       ..
+    .byt 8, 20                                                        // 115c: 08 14       ..
     .word sprite_birdleft1                                            // 115e: c4 14       ..
-    .byt  8, 20                                                       // 1160: 08 14       ..
+    .byt 8, 20                                                        // 1160: 08 14       ..
     .word sprite_birdleft2                                            // 1162: d8 14       ..
-    .byt  8, 20                                                       // 1164: 08 14       ..
+    .byt 8, 20                                                        // 1164: 08 14       ..
     .word sprite_birdupdown1                                          // 1166: ec 14       ..
-    .byt  8, 22                                                       // 1168: 08 16       ..
+    .byt 8, 22                                                        // 1168: 08 16       ..
     .word sprite_birdupdown2                                          // 116a: 00 15       ..
     .byt 16, 20                                                       // 116c: 10 14       ..
     .word sprite_birdeatright1                                        // 116e: 16 15       ..
@@ -317,17 +317,17 @@ pydis_start
     .word sprite_digit8                                               // 119e: ee 15       ..
     .byt 8, 7                                                         // 11a0: 08 07       ..
     .word sprite_digit9                                               // 11a2: f5 15       ..
-    .byt 24,  9                                                       // 11a4: 18 09       ..
+    .byt 24, 9                                                        // 11a4: 18 09       ..
     .word sprite_score                                                // 11a6: fc 15       ..
-    .byt 32,  9                                                       // 11a8: 20 09        .
+    .byt 32, 9                                                        // 11a8: 20 09        .
     .word sprite_highlightbox                                         // 11aa: 17 16       ..
-    .byt 32,  9                                                       // 11ac: 20 09        .
+    .byt 32, 9                                                        // 11ac: 20 09        .
     .word sprite_player                                               // 11ae: 3b 16       ;.
-    .byt 40,  9                                                       // 11b0: 28 09       (.
+    .byt 40, 9                                                        // 11b0: 28 09       (.
     .word sprite_level                                                // 11b2: 5f 16       _.
-    .byt 48,  9                                                       // 11b4: 30 09       0.
+    .byt 48, 9                                                        // 11b4: 30 09       0.
     .word sprite_bonus                                                // 11b6: 8c 16       ..
-    .byt 40,  9                                                       // 11b8: 28 09       (.
+    .byt 40, 9                                                        // 11b8: 28 09       (.
     .word sprite_time                                                 // 11ba: c2 16       ..
     .byt 8, 3                                                         // 11bc: 08 03       ..
     .word sprite_life                                                 // 11be: ef 16       ..
@@ -1321,15 +1321,12 @@ sprite_bigg
     .byt %00001111, %11111000                                         // 1892: 0f f8       ..
     .byt %00000011, %11110000                                         // 1894: 03 f0       ..
 unused4
-    .byt  32,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 1896: 20 00 00...  ..
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18a2: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18ae: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18ba: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18c6: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18d2: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18de: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0   // 18ea: 00 00 00... ...
-    .byt   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  13, 255   // 18f6: 00 00 00... ...
+    .byt 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0  // 1896: 20 00 00...  ..
+    .byt  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0  // 18a9: 00 00 00... ...
+    .byt  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0  // 18bc: 00 00 00... ...
+    .byt  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0  // 18cf: 00 00 00... ...
+    .byt  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0  // 18e2: 00 00 00... ...
+    .byt  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 255                    // 18f5: 00 00 00... ...
 
 // ----------------------------------------------------------------------------------
 // Plot sprite
@@ -3995,14 +3992,14 @@ exitgethiscorename
 string_highscores
     .byt string_highscores_end - string_highscores_start              // 293f: 17          .
 string_highscores_start
-    .byt 18,  0,  1, 25,  4, 32,  1, 32,  3                           // 2940: 12 00 01... ...
+    .byt 18, 0, 1, 25, 4, 32, 1, 32, 3                                // 2940: 12 00 01... ...
     .asc "HIGH SCORES"                                                // 2949: 48 49 47... HIG
-    .byt 18,  0,  3                                                   // 2954: 12 00 03    ...
+    .byt 18, 0, 3                                                     // 2954: 12 00 03    ...
 string_highscores_end
 string_hiscorepos
     .byt string_hiscorepos_end - string_hiscorepos_start              // 2957: 06          .
 string_hiscorepos_start
-    .byt 25,  4, 32,  0                                               // 2958: 19 04 20... ..
+    .byt 25, 4, 32, 0                                                 // 2958: 19 04 20... ..
 hiscoreypos
     .byt 0                                                            // 295c: 00          .
     .byt 0                                                            // 295d: 00          .
@@ -4010,18 +4007,18 @@ string_hiscorepos_end
 string_hiscoreprompt
     .byt string_hiscoreprompt_end - string_hiscoreprompt_start        // 295e: 0a          .
 string_hiscoreprompt_start
-    .byt  18,   0,   1,  25,   4, 160,   2                            // 295f: 12 00 01... ...
+    .byt 18, 0, 1, 25, 4, 160, 2                                      // 295f: 12 00 01... ...
 promptypos
     .byt 0                                                            // 2966: 00          .
-    .byt  0, 62                                                       // 2967: 00 3e       .>
+    .byt 0, 62                                                        // 2967: 00 3e       .>
 string_hiscoreprompt_end
 string_enteryourname
     .byt string_enteryourname_end - string_enteryourname_start        // 2969: 33          3
 string_enteryourname_start
-    .byt  24,   0,   0,   0,   0, 255,   4, 124,   3,  16,  26,  18   // 296a: 18 00 00... ...
-    .byt   0,   1,  25,   4, 160,   0, 160,   0                       // 2976: 00 01 19... ...
+    .byt  24, 0,   0, 0, 0, 255, 4, 124, 3, 16, 26, 18, 0, 1, 25, 4   // 296a: 18 00 00... ...
+    .byt 160, 0, 160, 0                                               // 297a: a0 00 a0... ...
     .asc "ENTER YOUR NAME"                                            // 297e: 45 4e 54... ENT
-    .byt  25,   4, 128,   1, 100,   0,  18,   0,   2                  // 298d: 19 04 80... ...
+    .byt 25, 4, 128, 1, 100, 0, 18, 0, 2                              // 298d: 19 04 80... ...
     .asc "Play"                                                       // 2996: 50 6c 61... Pla
     .asc "er "                                                        // 299a: 65 72 20    er
 string_enteryourname_end
@@ -4183,21 +4180,21 @@ allplayersdead
 string_gameover
     .byt $1d                                                          // 2a94: 1d          .
 string_gameover_start
-    .byt $18,   0,   1, $50,   1,   0,   4, $14,   2, $10, $1a, $19   // 2a95: 18 00 01... ...
-    .byt   4, $60,   1, $f4,   1, $12,   0,   8                       // 2aa1: 04 60 01... .`.
+    .byt $18, 0,   1, $50, 1, 0, 4, $14, 2, $10, $1a, $19, 4, $60, 1  // 2a95: 18 00 01... ...
+    .byt $f4, 1, $12,   0, 8                                          // 2aa4: f4 01 12... ...
     .asc "GAME OVER"                                                  // 2aa9: 47 41 4d... GAM
 string_gameover_end
 string_getready
     .byt $16                                                          // 2ab2: 16          .
 string_getready_start
-    .byt $10, $19,   4, $60,   1, $f4,   1, $12,   0,   4             // 2ab3: 10 19 04... ...
+    .byt $10, $19, 4, $60, 1, $f4, 1, $12, 0, 4                       // 2ab3: 10 19 04... ...
     .asc "Get Ready"                                                  // 2abd: 47 65 74... Get
-    .byt $12,   0,   8                                                // 2ac6: 12 00 08    ...
+    .byt $12, 0, 8                                                    // 2ac6: 12 00 08    ...
 string_getready_end
 string_playerN
     .byt $0d                                                          // 2ac9: 0d          .
 string_playerN_start
-    .byt $19,   4, $80,   1, $90,   1                                 // 2aca: 19 04 80... ...
+    .byt $19, 4, $80, 1, $90, 1                                       // 2aca: 19 04 80... ...
     .asc "Player "                                                    // 2ad0: 50 6c 61... Pla
 
 // ----------------------------------------------------------------------------------
@@ -4406,7 +4403,7 @@ resetperplayerloop
 string_howmanyplayers
     .byt 25                                                           // 2c44: 19          .
 string_howmanyplayers_start
-    .byt  16,  25,   4,  32,   0, 244,   1                            // 2c45: 10 19 04... ...
+    .byt 16, 25, 4, 32, 0, 244, 1                                     // 2c45: 10 19 04... ...
     .asc "How many players? "                                         // 2c4c: 48 6f 77... How
 
 // ----------------------------------------------------------------------------------
@@ -4557,12 +4554,11 @@ showkeyhelp
 string_keyhelp
     .byt string_keyhelp_end - string_keyhelp_start                    // 2d4c: 3b          ;
 string_keyhelp_start
-    .byt  25,   4, 128,   0, 100,   0,  18,   0,   4                  // 2d4d: 19 04 80... ...
+    .byt 25, 4, 128, 0, 100, 0, 18, 0, 4                              // 2d4d: 19 04 80... ...
     .asc "Press "                                                     // 2d56: 50 72 65... Pre
-    .byt 18,  0,  8, 83, 32, 18,  0,  4                               // 2d5c: 12 00 08... ...
+    .byt 18, 0, 8, 83, 32, 18, 0, 4                                   // 2d5c: 12 00 08... ...
     .asc "to start"                                                   // 2d64: 74 6f 20... to
-    .byt  25,   4, 128,   0,  50,   0,  18,   0,   8,  75,  32,  18   // 2d6c: 19 04 80... ...
-    .byt   0,   4                                                     // 2d78: 00 04       ..
+    .byt 25, 4, 128, 0, 50, 0, 18, 0, 8, 75, 32, 18, 0, 4             // 2d6c: 19 04 80... ...
     .asc "to change keys"                                             // 2d7a: 74 6f 20... to
 
 // ----------------------------------------------------------------------------------
@@ -4935,11 +4931,11 @@ deathtune_start
     .byt 33,  4                                                       // 2fb5: 21 04       !.
     .byt 25,  2                                                       // 2fb7: 19 02       ..
     .byt 21,  4                                                       // 2fb9: 15 04       ..
-    .byt 5, 2                                                         // 2fbb: 05 02       ..
+    .byt  5,  2                                                       // 2fbb: 05 02       ..
     .byt 13,  4                                                       // 2fbd: 0d 04       ..
-    .byt 1, 2                                                         // 2fbf: 01 02       ..
+    .byt  1,  2                                                       // 2fbf: 01 02       ..
     .byt  5, 12                                                       // 2fc1: 05 0c       ..
-    .byt 5, 1                                                         // 2fc3: 05 01       ..
+    .byt  5,  1                                                       // 2fc3: 05 01       ..
     .byt 13,  1                                                       // 2fc5: 0d 01       ..
     .byt 21,  1                                                       // 2fc7: 15 01       ..
     .byt 25,  1                                                       // 2fc9: 19 01       ..
@@ -5231,40 +5227,40 @@ returninkey
 string_keyselection
     .byt string_keyselection_end - string_keyselection_start          // 31b2: 29          )   :0ab2[1]
 string_keyselection_start
-    .byt  16,  18,   0,   4,  25,   4, 224,   1, 182,   3             // 31b3: 10 12 00... ... :0ab3[1]
+    .byt 16, 18, 0, 4, 25, 4, 224, 1, 182, 3                          // 31b3: 10 12 00... ... :0ab3[1]
     .asc "K E Y"                                                      // 31bd: 4b 20 45... K E :0abd[1]
-    .byt 25,  4, 96,  0, 82,  3                                       // 31c2: 19 04 60... ..` :0ac2[1]
+    .byt 25, 4, 96, 0, 82, 3                                          // 31c2: 19 04 60... ..` :0ac2[1]
     .asc "S E L E C T I O N"                                          // 31c8: 53 20 45... S E :0ac8[1]
-    .byt 18,  0,  2                                                   // 31d9: 12 00 02    ... :0ad9[1]
+    .byt 18, 0, 2                                                     // 31d9: 12 00 02    ... :0ad9[1]
 string_keyselection_end
 string_up
     .byt string_up_end - string_up_start                              // 31dc: 0c          .   :0adc[1]
 string_up_start
-    .byt  25,   4, 196,   0, 188,   2                                 // 31dd: 19 04 c4... ... :0add[1]
+    .byt 25, 4, 196, 0, 188, 2                                        // 31dd: 19 04 c4... ... :0add[1]
     .asc "Up .. "                                                     // 31e3: 55 70 20... Up  :0ae3[1]
 string_up_end
 string_down
     .byt string_down_end - string_down_start                          // 31e9: 0e          .   :0ae9[1]
 string_down_start
-    .byt  25,   4,  64,   0, 108,   2                                 // 31ea: 19 04 40... ..@ :0aea[1]
+    .byt 25, 4, 64, 0, 108, 2                                         // 31ea: 19 04 40... ..@ :0aea[1]
     .asc "Down .. "                                                   // 31f0: 44 6f 77... Dow :0af0[1]
 string_down_end
 string_left
     .byt string_left_end - string_left_start                          // 31f8: 0e          .   :0af8[1]
 string_left_start
-    .byt 25,  4, 64,  0, 28,  2, 76                                   // 31f9: 19 04 40... ..@ :0af9[1]
+    .byt 25, 4, 64, 0, 28, 2, 76                                      // 31f9: 19 04 40... ..@ :0af9[1]
     .asc "eft .. "                                                    // 3200: 65 66 74... eft :0b00[1]
 string_left_end
 string_right
     .byt string_right_end - string_right_start                        // 3207: 0f          .   :0b07[1]
 string_right_start
-    .byt  25,   4,   0,   0, 204,   1                                 // 3208: 19 04 00... ... :0b08[1]
+    .byt 25, 4, 0, 0, 204, 1                                          // 3208: 19 04 00... ... :0b08[1]
     .asc "Right .. "                                                  // 320e: 52 69 67... Rig :0b0e[1]
 string_right_end
 string_jump
     .byt string_jump_end - string_jump_start                          // 3217: 0e          .   :0b17[1]
 string_jump_start
-    .byt  25,   4,  64,   0, 124,   1                                 // 3218: 19 04 40... ..@ :0b18[1]
+    .byt 25, 4, 64, 0, 124, 1                                         // 3218: 19 04 40... ..@ :0b18[1]
     .asc "Jump .. "                                                   // 321e: 4a 75 6d... Jum :0b1e[1]
 string_jump_end
 string_tab
@@ -5396,17 +5392,17 @@ printkeyname
 string_keys
     .byt string_keys_end - string_keys_start                          // 32f8: 10          .   :0bf8[1]
 string_keys_start
-    .byt 25,  4,  0,  2, 32,  3, 18                                   // 32f9: 19 04 00... ... :0bf9[1]
+    .byt 25, 4, 0, 2, 32, 3, 18                                       // 32f9: 19 04 00... ... :0bf9[1]
     .byt 0, 4                                                         // 3300: 00 04       ..  :0c00[1]
     .asc "KEYS"                                                       // 3302: 4b 45 59... KEY :0c02[1]
-    .byt 18,  0,  8                                                   // 3306: 12 00 08    ... :0c06[1]
+    .byt 18, 0, 8                                                     // 3306: 12 00 08    ... :0c06[1]
 string_keys_end
 string_holdabort
     .byt string_holdabort_end - string_holdabort_start                // 3309: 2e          .   :0c09[1]
 string_holdabort_start
-    .byt 18,  0,  2, 25,  4, 64,  0, 24,  1                           // 330a: 12 00 02... ... :0c0a[1]
+    .byt 18, 0, 2, 25, 4, 64, 0, 24, 1                                // 330a: 12 00 02... ... :0c0a[1]
     .asc "Hold .. 'H'"                                                // 3313: 48 6f 6c... Hol :0c13[1]
-    .byt  25,   4,   0,   0, 200,   0                                 // 331e: 19 04 00... ... :0c1e[1]
+    .byt 25, 4, 0, 0, 200, 0                                          // 331e: 19 04 00... ... :0c1e[1]
     .asc "Abort .. Escape +'H'"                                       // 3324: 41 62 6f... Abo :0c24[1]
 
 // ----------------------------------------------------------------------------------
@@ -5558,15 +5554,15 @@ map0platform_start
 // Ladder data (X, bottom Y, top Y)
 map0platform_end
 map0ladder_start
-    .byt  3,  7, 13                                                   // 33fc: 03 07 0d    ... :0cfc[1]
-    .byt  7,  2, 23                                                   // 33ff: 07 02 17    ... :0cff[1]
-    .byt 11,  2,  8                                                   // 3402: 0b 02 08    ... :0d02[1]
-    .byt 16,  2,  8                                                   // 3405: 10 02 08    ... :0d05[1]
+    .byt  3, 7, 13                                                    // 33fc: 03 07 0d    ... :0cfc[1]
+    .byt  7, 2, 23                                                    // 33ff: 07 02 17    ... :0cff[1]
+    .byt 11, 2,  8                                                    // 3402: 0b 02 08    ... :0d02[1]
+    .byt 16, 2,  8                                                    // 3405: 10 02 08    ... :0d05[1]
 // Data for 12 eggs (X, Y)
 map0ladder_end
 map0eggs_start
-    .byt 4, 2                                                         // 3408: 04 02       ..  :0d08[1]
-    .byt 1, 7                                                         // 340a: 01 07       ..  :0d0a[1]
+    .byt  4,  2                                                       // 3408: 04 02       ..  :0d08[1]
+    .byt  1,  7                                                       // 340a: 01 07       ..  :0d0a[1]
     .byt 13,  7                                                       // 340c: 0d 07       ..  :0d0c[1]
     .byt 18,  7                                                       // 340e: 12 07       ..  :0d0e[1]
     .byt  2, 12                                                       // 3410: 02 0c       ..  :0d10[1]
@@ -5580,9 +5576,9 @@ map0eggs_start
 // Seed data (X, Y)
 map0eggs_end
 map0seed_start
-    .byt 2, 2                                                         // 3420: 02 02       ..  :0d20[1]
+    .byt  2,  2                                                       // 3420: 02 02       ..  :0d20[1]
     .byt 13,  2                                                       // 3422: 0d 02       ..  :0d22[1]
-    .byt 5, 7                                                         // 3424: 05 07       ..  :0d24[1]
+    .byt  5,  7                                                       // 3424: 05 07       ..  :0d24[1]
     .byt 14,  7                                                       // 3426: 0e 07       ..  :0d26[1]
     .byt  5, 12                                                       // 3428: 05 0c       ..  :0d28[1]
     .byt 15, 12                                                       // 342a: 0f 0c       ..  :0d2a[1]
@@ -5596,7 +5592,7 @@ map0bird_data
     .byt  5, 17                                                       // 3434: 05 11       ..  :0d34[1]
     .byt  8, 22                                                       // 3436: 08 16       ..  :0d36[1]
     .byt  4, 12                                                       // 3438: 04 0c       ..  :0d38[1]
-    .byt 6, 7                                                         // 343a: 06 07       ..  :0d3a[1]
+    .byt  6,  7                                                       // 343a: 06 07       ..  :0d3a[1]
     .byt 12,  2                                                       // 343c: 0c 02       ..  :0d3c[1]
 // 
 // ----------------------------------------------------------------------------------
@@ -5610,9 +5606,9 @@ map1data
     .byt                                             3                // 3442: 03          .   :0d42[1]
 // Platform data (Y, startX, endX)
 map1platform_start
-    .byt 1, 0, 3                                                      // 3443: 01 00 03    ... :0d43[1]
+    .byt  1,  0,  3                                                   // 3443: 01 00 03    ... :0d43[1]
     .byt  1,  5, 19                                                   // 3446: 01 05 13    ... :0d46[1]
-    .byt 6, 0, 6                                                      // 3449: 06 00 06    ... :0d49[1]
+    .byt  6,  0,  6                                                   // 3449: 06 00 06    ... :0d49[1]
     .byt  6,  8, 10                                                   // 344c: 06 08 0a    ... :0d4c[1]
     .byt  6, 12, 14                                                   // 344f: 06 0c 0e    ... :0d4f[1]
     .byt  6, 16, 19                                                   // 3452: 06 10 13    ... :0d52[1]
@@ -5629,7 +5625,7 @@ map1ladder_start
     .byt  2,  2, 18                                                   // 346a: 02 02 12    ... :0d6a[1]
     .byt  4, 17, 23                                                   // 346d: 04 11 17    ... :0d6d[1]
     .byt  6,  7, 18                                                   // 3470: 06 07 12    ... :0d70[1]
-    .byt 9, 2, 8                                                      // 3473: 09 02 08    ... :0d73[1]
+    .byt  9,  2,  8                                                   // 3473: 09 02 08    ... :0d73[1]
     .byt  9, 12, 23                                                   // 3476: 09 0c 17    ... :0d76[1]
     .byt 13, 12, 18                                                   // 3479: 0d 0c 12    ... :0d79[1]
     .byt 17,  2, 13                                                   // 347c: 11 02 0d    ... :0d7c[1]
@@ -5637,10 +5633,10 @@ map1ladder_start
 // Data for 12 eggs (X, Y)
 map1ladder_end
 map1eggs_start
-    .byt 5, 2                                                         // 3482: 05 02       ..  :0d82[1]
+    .byt  5,  2                                                       // 3482: 05 02       ..  :0d82[1]
     .byt 12,  2                                                       // 3484: 0c 02       ..  :0d84[1]
-    .byt 0, 7                                                         // 3486: 00 07       ..  :0d86[1]
-    .byt 4, 7                                                         // 3488: 04 07       ..  :0d88[1]
+    .byt  0,  7                                                       // 3486: 00 07       ..  :0d86[1]
+    .byt  4,  7                                                       // 3488: 04 07       ..  :0d88[1]
     .byt 13,  7                                                       // 348a: 0d 07       ..  :0d8a[1]
     .byt  0, 12                                                       // 348c: 00 0c       ..  :0d8c[1]
     .byt  7, 12                                                       // 348e: 07 0c       ..  :0d8e[1]
@@ -5652,8 +5648,8 @@ map1eggs_start
 // Seed data (X, Y)
 map1eggs_end
 map1seed_start
-    .byt 0, 2                                                         // 349a: 00 02       ..  :0d9a[1]
-    .byt 3, 2                                                         // 349c: 03 02       ..  :0d9c[1]
+    .byt  0,  2                                                       // 349a: 00 02       ..  :0d9a[1]
+    .byt  3,  2                                                       // 349c: 03 02       ..  :0d9c[1]
     .byt 15,  2                                                       // 349e: 0f 02       ..  :0d9e[1]
     .byt 16,  7                                                       // 34a0: 10 07       ..  :0da0[1]
     .byt  0, 17                                                       // 34a2: 00 11       ..  :0da2[1]
@@ -5663,7 +5659,7 @@ map1seed_start
 map1seed_end
 map1bird_data
     .byt  6, 22                                                       // 34a8: 06 16       ..  :0da8[1]
-    .byt 1, 2                                                         // 34aa: 01 02       ..  :0daa[1]
+    .byt  1,  2                                                       // 34aa: 01 02       ..  :0daa[1]
     .byt 18, 12                                                       // 34ac: 12 0c       ..  :0dac[1]
     .byt 11, 12                                                       // 34ae: 0b 0c       ..  :0dae[1]
     .byt 13, 22                                                       // 34b0: 0d 16       ..  :0db0[1]
@@ -5679,9 +5675,9 @@ map2data
     .byt                                             3                // 34b6: 03          .   :0db6[1]
 // Platform data (Y, startX, endX)
 map2platform_start
-    .byt 1, 0, 2                                                      // 34b7: 01 00 02    ... :0db7[1]
-    .byt 2, 3, 4                                                      // 34ba: 02 03 04    ... :0dba[1]
-    .byt 1, 7, 9                                                      // 34bd: 01 07 09    ... :0dbd[1]
+    .byt  1,  0,  2                                                   // 34b7: 01 00 02    ... :0db7[1]
+    .byt  2,  3,  4                                                   // 34ba: 02 03 04    ... :0dba[1]
+    .byt  1,  7,  9                                                   // 34bd: 01 07 09    ... :0dbd[1]
     .byt  1, 11, 19                                                   // 34c0: 01 0b 13    ... :0dc0[1]
     .byt  5, 15, 18                                                   // 34c3: 05 0f 12    ... :0dc3[1]
     .byt 10,  0,  4                                                   // 34c6: 0a 00 04    ... :0dc6[1]
@@ -5718,12 +5714,12 @@ map2ladder_end
     .byt 5                                                            // 3514: 05          .   :0e14[1]
 // Data for 12 eggs (X, Y)
 map2eggs_start
-    .byt 4, 3                                                         // 3515: 04 03       ..  :0e15[1]
+    .byt  4,  3                                                       // 3515: 04 03       ..  :0e15[1]
     .byt 15,  2                                                       // 3517: 0f 02       ..  :0e17[1]
     .byt 16,  6                                                       // 3519: 10 06       ..  :0e19[1]
     .byt  4, 11                                                       // 351b: 04 0b       ..  :0e1b[1]
     .byt  4, 20                                                       // 351d: 04 14       ..  :0e1d[1]
-    .byt 9, 7                                                         // 351f: 09 07       ..  :0e1f[1]
+    .byt  9,  7                                                       // 351f: 09 07       ..  :0e1f[1]
     .byt 15,  9                                                       // 3521: 0f 09       ..  :0e21[1]
     .byt 15, 13                                                       // 3523: 0f 0d       ..  :0e23[1]
     .byt  1, 16                                                       // 3525: 01 10       ..  :0e25[1]
@@ -5733,9 +5729,9 @@ map2eggs_start
 // Seed data (X, Y)
 map2eggs_end
 map2seed_start
-    .byt 2, 2                                                         // 352d: 02 02       ..  :0e2d[1]
+    .byt  2,  2                                                       // 352d: 02 02       ..  :0e2d[1]
     .byt  2, 11                                                       // 352f: 02 0b       ..  :0e2f[1]
-    .byt 7, 7                                                         // 3531: 07 07       ..  :0e31[1]
+    .byt  7,  7                                                       // 3531: 07 07       ..  :0e31[1]
     .byt  7, 20                                                       // 3533: 07 14       ..  :0e33[1]
     .byt  0, 16                                                       // 3535: 00 10       ..  :0e35[1]
     .byt 13,  2                                                       // 3537: 0d 02       ..  :0e37[1]
@@ -5749,8 +5745,8 @@ map2bird_data
     .byt  2, 16                                                       // 3541: 02 10       ..  :0e41[1]
     .byt  9, 20                                                       // 3543: 09 14       ..  :0e43[1]
     .byt 17,  6                                                       // 3545: 11 06       ..  :0e45[1]
-    .byt 0, 2                                                         // 3547: 00 02       ..  :0e47[1]
-    .byt 8, 7                                                         // 3549: 08 07       ..  :0e49[1]
+    .byt  0,  2                                                       // 3547: 00 02       ..  :0e47[1]
+    .byt  8,  7                                                       // 3549: 08 07       ..  :0e49[1]
 // 
 // ----------------------------------------------------------------------------------
 // Map 3 Data
@@ -5763,10 +5759,10 @@ map3data
     .byt                                             4                // 354f: 04          .   :0e4f[1]
 // Platform data (Y, startX, endX)
 map3platform_start
-    .byt 1, 0, 4                                                      // 3550: 01 00 04    ... :0e50[1]
+    .byt  1,  0,  4                                                   // 3550: 01 00 04    ... :0e50[1]
     .byt  1,  6, 10                                                   // 3553: 01 06 0a    ... :0e53[1]
     .byt  1, 13, 19                                                   // 3556: 01 0d 13    ... :0e56[1]
-    .byt 6, 0, 4                                                      // 3559: 06 00 04    ... :0e59[1]
+    .byt  6,  0,  4                                                   // 3559: 06 00 04    ... :0e59[1]
     .byt  6,  7, 10                                                   // 355c: 06 07 0a    ... :0e5c[1]
     .byt  6, 13, 17                                                   // 355f: 06 0d 11    ... :0e5f[1]
     .byt  5, 19, 19                                                   // 3562: 05 13 13    ... :0e62[1]
@@ -5792,7 +5788,7 @@ map3platform_start
 // Ladder data (X, bottom Y, top Y)
 map3platform_end
 map3ladder_start
-    .byt 3, 2, 8                                                      // 359e: 03 02 08    ... :0e9e[1]
+    .byt  3,  2,  8                                                   // 359e: 03 02 08    ... :0e9e[1]
     .byt  8,  2, 23                                                   // 35a1: 08 02 17    ... :0ea1[1]
     .byt 14, 12, 23                                                   // 35a4: 0e 0c 17    ... :0ea4[1]
     .byt 15,  2,  8                                                   // 35a7: 0f 02 08    ... :0ea7[1]
@@ -5802,10 +5798,10 @@ map3ladder_end
     .byt $0b                                                          // 35ad: 0b          .   :0ead[1]
 // Data for 12 eggs (X, Y)
 map3eggs_start
-    .byt 0, 2                                                         // 35ae: 00 02       ..  :0eae[1]
+    .byt  0,  2                                                       // 35ae: 00 02       ..  :0eae[1]
     .byt  0, 13                                                       // 35b0: 00 0d       ..  :0eb0[1]
     .byt  0, 18                                                       // 35b2: 00 12       ..  :0eb2[1]
-    .byt 7, 7                                                         // 35b4: 07 07       ..  :0eb4[1]
+    .byt  7,  7                                                       // 35b4: 07 07       ..  :0eb4[1]
     .byt  9, 17                                                       // 35b6: 09 11       ..  :0eb6[1]
     .byt 13,  2                                                       // 35b8: 0d 02       ..  :0eb8[1]
     .byt 16,  7                                                       // 35ba: 10 07       ..  :0eba[1]
@@ -5817,7 +5813,7 @@ map3eggs_start
 // Seed data (X, Y)
 map3eggs_end
 map3seed_start
-    .byt 0, 7                                                         // 35c6: 00 07       ..  :0ec6[1]
+    .byt  0,  7                                                       // 35c6: 00 07       ..  :0ec6[1]
     .byt 10,  2                                                       // 35c8: 0a 02       ..  :0ec8[1]
     .byt 18,  2                                                       // 35ca: 12 02       ..  :0eca[1]
     .byt  5, 15                                                       // 35cc: 05 0f       ..  :0ecc[1]
@@ -5829,7 +5825,7 @@ map3bird_data
     .byt 10, 22                                                       // 35d2: 0a 16       ..  :0ed2[1]
     .byt 17, 22                                                       // 35d4: 11 16       ..  :0ed4[1]
     .byt 17,  2                                                       // 35d6: 11 02       ..  :0ed6[1]
-    .byt 4, 2                                                         // 35d8: 04 02       ..  :0ed8[1]
+    .byt  4,  2                                                       // 35d8: 04 02       ..  :0ed8[1]
     .byt 10,  7                                                       // 35da: 0a 07       ..  :0eda[1]
 // 
 // ----------------------------------------------------------------------------------
@@ -5843,11 +5839,11 @@ map4data
     .byt                                             4                // 35e0: 04          .   :0ee0[1]
 // Platform data (Y, startX, endX)
 map4platform_start
-    .byt 1, 0, 1                                                      // 35e1: 01 00 01    ... :0ee1[1]
+    .byt  1,  0,  1                                                   // 35e1: 01 00 01    ... :0ee1[1]
     .byt  1,  3, 11                                                   // 35e4: 01 03 0b    ... :0ee4[1]
     .byt  1, 13, 15                                                   // 35e7: 01 0d 0f    ... :0ee7[1]
     .byt  1, 18, 19                                                   // 35ea: 01 12 13    ... :0eea[1]
-    .byt 6, 0, 5                                                      // 35ed: 06 00 05    ... :0eed[1]
+    .byt  6,  0,  5                                                   // 35ed: 06 00 05    ... :0eed[1]
     .byt  6,  9, 12                                                   // 35f0: 06 09 0c    ... :0ef0[1]
     .byt  6, 14, 15                                                   // 35f3: 06 0e 0f    ... :0ef3[1]
     .byt 11,  0,  5                                                   // 35f6: 0b 00 05    ... :0ef6[1]
@@ -5863,10 +5859,10 @@ map4platform_start
 // Ladder data (X, bottom Y, top Y)
 map4platform_end
 map4ladder_start
-    .byt 3, 2, 8                                                      // 3614: 03 02 08    ... :0f14[1]
+    .byt  3,  2,  8                                                   // 3614: 03 02 08    ... :0f14[1]
     .byt  2, 12, 18                                                   // 3617: 02 0c 12    ... :0f17[1]
     .byt  4, 12, 23                                                   // 361a: 04 0c 17    ... :0f1a[1]
-    .byt 7, 2, 7                                                      // 361d: 07 02 07    ... :0f1d[1]
+    .byt  7,  2,  7                                                   // 361d: 07 02 07    ... :0f1d[1]
     .byt  7, 10, 17                                                   // 3620: 07 0a 11    ... :0f20[1]
     .byt 10,  2,  8                                                   // 3623: 0a 02 08    ... :0f23[1]
     .byt 12,  7, 13                                                   // 3626: 0c 07 0d    ... :0f26[1]
@@ -5877,11 +5873,11 @@ map4ladder_end
     .byt $10                                                          // 362f: 10          .   :0f2f[1]
 // Data for 12 eggs (X, Y)
 map4eggs_start
-    .byt 0, 2                                                         // 3630: 00 02       ..  :0f30[1]
-    .byt 0, 7                                                         // 3632: 00 07       ..  :0f32[1]
+    .byt  0,  2                                                       // 3630: 00 02       ..  :0f30[1]
+    .byt  0,  7                                                       // 3632: 00 07       ..  :0f32[1]
     .byt  0, 12                                                       // 3634: 00 0c       ..  :0f34[1]
     .byt  0, 17                                                       // 3636: 00 11       ..  :0f36[1]
-    .byt 5, 7                                                         // 3638: 05 07       ..  :0f38[1]
+    .byt  5,  7                                                       // 3638: 05 07       ..  :0f38[1]
     .byt  5, 22                                                       // 363a: 05 16       ..  :0f3a[1]
     .byt  9, 11                                                       // 363c: 09 0b       ..  :0f3c[1]
     .byt 13,  6                                                       // 363e: 0d 06       ..  :0f3e[1]
@@ -5892,9 +5888,9 @@ map4eggs_start
 // Seed data (X, Y)
 map4eggs_end
 map4seed_start
-    .byt 4, 2                                                         // 3648: 04 02       ..  :0f48[1]
-    .byt 5, 2                                                         // 364a: 05 02       ..  :0f4a[1]
-    .byt 6, 2                                                         // 364c: 06 02       ..  :0f4c[1]
+    .byt  4,  2                                                       // 3648: 04 02       ..  :0f48[1]
+    .byt  5,  2                                                       // 364a: 05 02       ..  :0f4a[1]
+    .byt  6,  2                                                       // 364c: 06 02       ..  :0f4c[1]
     .byt 13,  2                                                       // 364e: 0d 02       ..  :0f4e[1]
     .byt 15,  2                                                       // 3650: 0f 02       ..  :0f50[1]
     .byt 18,  2                                                       // 3652: 12 02       ..  :0f52[1]
@@ -5908,7 +5904,7 @@ map4seed_start
 // Bird data (X, Y)
 map4seed_end
 map4bird_data
-    .byt 1, 7                                                         // 3662: 01 07       ..  :0f62[1]
+    .byt  1,  7                                                       // 3662: 01 07       ..  :0f62[1]
     .byt  3, 12                                                       // 3664: 03 0c       ..  :0f64[1]
     .byt  1, 17                                                       // 3666: 01 11       ..  :0f66[1]
     .byt 14, 12                                                       // 3668: 0e 0c       ..  :0f68[1]
@@ -5925,11 +5921,11 @@ map5data
     .byt                                             4                // 3670: 04          .   :0f70[1]
 // Platform data (Y, startX, endX)
 map5platform_start
-    .byt 1, 0, 2                                                      // 3671: 01 00 02    ... :0f71[1]
-    .byt 1, 6, 8                                                      // 3674: 01 06 08    ... :0f74[1]
+    .byt  1,  0,  2                                                   // 3671: 01 00 02    ... :0f71[1]
+    .byt  1,  6,  8                                                   // 3674: 01 06 08    ... :0f74[1]
     .byt  1, 11, 14                                                   // 3677: 01 0b 0e    ... :0f77[1]
-    .byt 6, 0, 1                                                      // 367a: 06 00 01    ... :0f7a[1]
-    .byt 6, 3, 5                                                      // 367d: 06 03 05    ... :0f7d[1]
+    .byt  6,  0,  1                                                   // 367a: 06 00 01    ... :0f7a[1]
+    .byt  6,  3,  5                                                   // 367d: 06 03 05    ... :0f7d[1]
     .byt  6, 12, 14                                                   // 3680: 06 0c 0e    ... :0f80[1]
     .byt 11,  2,  7                                                   // 3683: 0b 02 07    ... :0f83[1]
     .byt 11, 12, 17                                                   // 3686: 0b 0c 11    ... :0f86[1]
@@ -5944,7 +5940,7 @@ map5platform_start
 // Ladder data (X, bottom Y, top Y)
 map5platform_end
 map5ladder_start
-    .byt 0, 2, 8                                                      // 36a1: 00 02 08    ... :0fa1[1]
+    .byt  0,  2,  8                                                   // 36a1: 00 02 08    ... :0fa1[1]
     .byt  4,  4, 18                                                   // 36a4: 04 04 12    ... :0fa4[1]
     .byt 14,  7, 13                                                   // 36a7: 0e 07 0d    ... :0fa7[1]
     .byt 14, 19, 23                                                   // 36aa: 0e 13 17    ... :0faa[1]
@@ -5955,9 +5951,9 @@ map5ladder_end
     .byt 9                                                            // 36b3: 09          .   :0fb3[1]
 // Data for 12 eggs (X, Y)
 map5eggs_start
-    .byt 2, 2                                                         // 36b4: 02 02       ..  :0fb4[1]
+    .byt  2,  2                                                       // 36b4: 02 02       ..  :0fb4[1]
     .byt 16,  2                                                       // 36b6: 10 02       ..  :0fb6[1]
-    .byt 5, 7                                                         // 36b8: 05 07       ..  :0fb8[1]
+    .byt  5,  7                                                       // 36b8: 05 07       ..  :0fb8[1]
     .byt 12,  7                                                       // 36ba: 0c 07       ..  :0fba[1]
     .byt 12, 12                                                       // 36bc: 0c 0c       ..  :0fbc[1]
     .byt 16, 12                                                       // 36be: 10 0c       ..  :0fbe[1]
@@ -5983,7 +5979,7 @@ map5seed_start
 map5seed_end
 map5bird_data
     .byt  1, 17                                                       // 36de: 01 11       ..  :0fde[1]
-    .byt 1, 2                                                         // 36e0: 01 02       ..  :0fe0[1]
+    .byt  1,  2                                                       // 36e0: 01 02       ..  :0fe0[1]
     .byt 18, 17                                                       // 36e2: 12 11       ..  :0fe2[1]
     .byt 13,  7                                                       // 36e4: 0d 07       ..  :0fe4[1]
     .byt 18, 11                                                       // 36e6: 12 0b       ..  :0fe6[1]
@@ -6003,16 +5999,16 @@ map6platform_start
     .byt 16,  0,  4                                                   // 36f0: 10 00 04    ... :0ff0[1]
     .byt 16,  6,  7                                                   // 36f3: 10 06 07    ... :0ff3[1]
     .byt 11,  0,  2                                                   // 36f6: 0b 00 02    ... :0ff6[1]
-    .byt 6, 1, 3                                                      // 36f9: 06 01 03    ... :0ff9[1]
-    .byt 4, 0, 1                                                      // 36fc: 04 00 01    ... :0ffc[1]
-    .byt 1, 3, 4                                                      // 36ff: 01 03 04    ... :0fff[1]
-    .byt 2, 5, 6                                                      // 3702: 02 05 06    ... :1002[1]
-    .byt 1, 7, 8                                                      // 3705: 01 07 08    ... :1005[1]
-    .byt 2, 9, 9                                                      // 3708: 02 09 09    ... :1008[1]
-    .byt 3, 9, 9                                                      // 370b: 03 09 09    ... :100b[1]
+    .byt  6,  1,  3                                                   // 36f9: 06 01 03    ... :0ff9[1]
+    .byt  4,  0,  1                                                   // 36fc: 04 00 01    ... :0ffc[1]
+    .byt  1,  3,  4                                                   // 36ff: 01 03 04    ... :0fff[1]
+    .byt  2,  5,  6                                                   // 3702: 02 05 06    ... :1002[1]
+    .byt  1,  7,  8                                                   // 3705: 01 07 08    ... :1005[1]
+    .byt  2,  9,  9                                                   // 3708: 02 09 09    ... :1008[1]
+    .byt  3,  9,  9                                                   // 370b: 03 09 09    ... :100b[1]
     .byt  3, 12, 12                                                   // 370e: 03 0c 0c    ... :100e[1]
-    .byt 8, 5, 8                                                      // 3711: 08 05 08    ... :1011[1]
-    .byt 9, 5, 5                                                      // 3714: 09 05 05    ... :1014[1]
+    .byt  8,  5,  8                                                   // 3711: 08 05 08    ... :1011[1]
+    .byt  9,  5,  5                                                   // 3714: 09 05 05    ... :1014[1]
     .byt 10,  5,  5                                                   // 3717: 0a 05 05    ... :1017[1]
     .byt 11,  5,  5                                                   // 371a: 0b 05 05    ... :101a[1]
     .byt 12,  5,  5                                                   // 371d: 0c 05 05    ... :101d[1]
@@ -6026,7 +6022,7 @@ map6platform_start
 map6platform_end
 map6ladder_start
     .byt  1,  2, 18                                                   // 3732: 01 02 12    ... :1032[1]
-    .byt 3, 2, 8                                                      // 3735: 03 02 08    ... :1035[1]
+    .byt  3,  2,  8                                                   // 3735: 03 02 08    ... :1035[1]
     .byt  5, 20, 24                                                   // 3738: 05 14 18    ... :1038[1]
     .byt  7, 20, 24                                                   // 373b: 07 14 18    ... :103b[1]
     .byt  9, 20, 24                                                   // 373e: 09 14 18    ... :103e[1]
@@ -6042,8 +6038,8 @@ map6eggs_start
     .byt 10, 23                                                       // 374c: 0a 17       ..  :104c[1]
     .byt 15, 22                                                       // 374e: 0f 16       ..  :104e[1]
     .byt  7, 17                                                       // 3750: 07 11       ..  :1050[1]
-    .byt 2, 3                                                         // 3752: 02 03       ..  :1052[1]
-    .byt 7, 9                                                         // 3754: 07 09       ..  :1054[1]
+    .byt  2,  3                                                       // 3752: 02 03       ..  :1052[1]
+    .byt  7,  9                                                       // 3754: 07 09       ..  :1054[1]
     .byt 11, 12                                                       // 3756: 0b 0c       ..  :1056[1]
     .byt 16, 15                                                       // 3758: 10 0f       ..  :1058[1]
     .byt 16, 10                                                       // 375a: 10 0a       ..  :105a[1]
@@ -6052,9 +6048,9 @@ map6eggs_start
 // Seed data (X, Y)
 map6eggs_end
 map6seed_start
-    .byt 2, 7                                                         // 3760: 02 07       ..  :1060[1]
+    .byt  2,  7                                                       // 3760: 02 07       ..  :1060[1]
     .byt  3, 17                                                       // 3762: 03 11       ..  :1062[1]
-    .byt 8, 9                                                         // 3764: 08 09       ..  :1064[1]
+    .byt  8,  9                                                       // 3764: 08 09       ..  :1064[1]
     .byt 12, 22                                                       // 3766: 0c 16       ..  :1066[1]
 // Bird data (X, Y)
 map6seed_end
@@ -6062,7 +6058,7 @@ map6bird_data
     .byt 13, 22                                                       // 3768: 0d 16       ..  :1068[1]
     .byt  1, 17                                                       // 376a: 01 11       ..  :106a[1]
     .byt 14, 10                                                       // 376c: 0e 0a       ..  :106c[1]
-    .byt 0, 5                                                         // 376e: 00 05       ..  :106e[1]
+    .byt  0,  5                                                       // 376e: 00 05       ..  :106e[1]
     .byt  2, 12                                                       // 3770: 02 0c       ..  :1070[1]
 // 
 // ----------------------------------------------------------------------------------
@@ -6077,7 +6073,7 @@ map7data
 // Platform data (Y, startX, endX)
 map7platform_start
     .byt  1,  0, 19                                                   // 3777: 01 00 13    ... :1077[1]
-    .byt 6, 2, 4                                                      // 377a: 06 02 04    ... :107a[1]
+    .byt  6,  2,  4                                                   // 377a: 06 02 04    ... :107a[1]
     .byt  6,  7, 13                                                   // 377d: 06 07 0d    ... :107d[1]
     .byt  6, 16, 18                                                   // 3780: 06 10 12    ... :1080[1]
     .byt 11,  2,  5                                                   // 3783: 0b 02 05    ... :1083[1]
@@ -6094,7 +6090,7 @@ map7platform_start
 // Ladder data (X, bottom Y, top Y)
 map7platform_end
 map7ladder_start
-    .byt 3, 2, 8                                                      // 37a4: 03 02 08    ... :10a4[1]
+    .byt  3,  2,  8                                                   // 37a4: 03 02 08    ... :10a4[1]
     .byt 17,  2,  8                                                   // 37a7: 11 02 08    ... :10a7[1]
     .byt 10,  7, 13                                                   // 37aa: 0a 07 0d    ... :10aa[1]
     .byt  4, 12, 18                                                   // 37ad: 04 0c 12    ... :10ad[1]
@@ -6103,7 +6099,7 @@ map7ladder_start
 // Data for 12 eggs (X, Y)
 map7ladder_end
 map7eggs_start
-    .byt 5, 6                                                         // 37b6: 05 06       ..  :10b6[1]
+    .byt  5,  6                                                       // 37b6: 05 06       ..  :10b6[1]
     .byt 15,  6                                                       // 37b8: 0f 06       ..  :10b8[1]
     .byt  6, 11                                                       // 37ba: 06 0b       ..  :10ba[1]
     .byt 14, 11                                                       // 37bc: 0e 0b       ..  :10bc[1]
@@ -6118,22 +6114,22 @@ map7eggs_start
 // Seed data (X, Y)
 map7eggs_end
 map7seed_start
-    .byt 1, 2                                                         // 37ce: 01 02       ..  :10ce[1]
-    .byt 2, 2                                                         // 37d0: 02 02       ..  :10d0[1]
-    .byt 4, 2                                                         // 37d2: 04 02       ..  :10d2[1]
-    .byt 5, 2                                                         // 37d4: 05 02       ..  :10d4[1]
-    .byt 6, 2                                                         // 37d6: 06 02       ..  :10d6[1]
-    .byt 8, 2                                                         // 37d8: 08 02       ..  :10d8[1]
-    .byt 9, 2                                                         // 37da: 09 02       ..  :10da[1]
-    .byt 10,  2                                                       // 37dc: 0a 02       ..  :10dc[1]
-    .byt 11,  2                                                       // 37de: 0b 02       ..  :10de[1]
-    .byt 12,  2                                                       // 37e0: 0c 02       ..  :10e0[1]
-    .byt 13,  2                                                       // 37e2: 0d 02       ..  :10e2[1]
-    .byt 14,  2                                                       // 37e4: 0e 02       ..  :10e4[1]
-    .byt 15,  2                                                       // 37e6: 0f 02       ..  :10e6[1]
-    .byt 16,  2                                                       // 37e8: 10 02       ..  :10e8[1]
-    .byt 18,  2                                                       // 37ea: 12 02       ..  :10ea[1]
-    .byt 19,  2                                                       // 37ec: 13 02       ..  :10ec[1]
+    .byt  1, 2                                                        // 37ce: 01 02       ..  :10ce[1]
+    .byt  2, 2                                                        // 37d0: 02 02       ..  :10d0[1]
+    .byt  4, 2                                                        // 37d2: 04 02       ..  :10d2[1]
+    .byt  5, 2                                                        // 37d4: 05 02       ..  :10d4[1]
+    .byt  6, 2                                                        // 37d6: 06 02       ..  :10d6[1]
+    .byt  8, 2                                                        // 37d8: 08 02       ..  :10d8[1]
+    .byt  9, 2                                                        // 37da: 09 02       ..  :10da[1]
+    .byt 10, 2                                                        // 37dc: 0a 02       ..  :10dc[1]
+    .byt 11, 2                                                        // 37de: 0b 02       ..  :10de[1]
+    .byt 12, 2                                                        // 37e0: 0c 02       ..  :10e0[1]
+    .byt 13, 2                                                        // 37e2: 0d 02       ..  :10e2[1]
+    .byt 14, 2                                                        // 37e4: 0e 02       ..  :10e4[1]
+    .byt 15, 2                                                        // 37e6: 0f 02       ..  :10e6[1]
+    .byt 16, 2                                                        // 37e8: 10 02       ..  :10e8[1]
+    .byt 18, 2                                                        // 37ea: 12 02       ..  :10ea[1]
+    .byt 19, 2                                                        // 37ec: 13 02       ..  :10ec[1]
 // Bird data (X, Y)
 map7seed_end
 map7bird_data

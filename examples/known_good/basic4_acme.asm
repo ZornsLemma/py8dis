@@ -205,7 +205,7 @@ version
 copyright
     !byte 0                                                           ; 8013: 00          .
     !text "(C)1988 Acorn", $0a, $0d, 0                                ; 8014: 28 43 29... (C)
-    !byte   0, $b8, $28, $80,   0, $c0, $82,   0                      ; 8024: 00 b8 28... ..(
+    !byte 0, $b8, $28, $80, 0, $c0, $82, 0                            ; 8024: 00 b8 28... ..(
 
 ; $802c referenced 1 time by $8003
 service_handler
@@ -333,10 +333,10 @@ sub_c80d8
 
 ; $80dd referenced 1 time by $a0fd
 l80dd
-    !byte   0,   0,   0,   3, $27                                     ; 80dd: 00 00 00... ...
+    !byte 0, 0, 0, 3, $27                                             ; 80dd: 00 00 00... ...
 ; $80e2 referenced 1 time by $a0f7
 l80e2
-    !byte   1, $0a, $64, $e8, $10                                     ; 80e2: 01 0a 64... ..d
+    !byte 1, $0a, $64, $e8, $10                                       ; 80e2: 01 0a 64... ..d
 
 ; $80e7 referenced 1 time by $8000
 language_handler
@@ -1087,252 +1087,252 @@ c84f4
     jmp c8304                                                         ; 8510: 4c 04 83    L..
 
     !text "AND"                                                       ; 8513: 41 4e 44    AND
-    !byte $80,   0                                                    ; 8516: 80 00       ..
+    !byte $80, 0                                                      ; 8516: 80 00       ..
     !text "ABS"                                                       ; 8518: 41 42 53    ABS
-    !byte $94,   0                                                    ; 851b: 94 00       ..
+    !byte $94, 0                                                      ; 851b: 94 00       ..
     !text "ACS"                                                       ; 851d: 41 43 53    ACS
-    !byte $95,   0                                                    ; 8520: 95 00       ..
+    !byte $95, 0                                                      ; 8520: 95 00       ..
     !text "ADVAL"                                                     ; 8522: 41 44 56... ADV
-    !byte $96,   0                                                    ; 8527: 96 00       ..
+    !byte $96, 0                                                      ; 8527: 96 00       ..
     !text "ASC"                                                       ; 8529: 41 53 43    ASC
-    !byte $97,   0                                                    ; 852c: 97 00       ..
+    !byte $97, 0                                                      ; 852c: 97 00       ..
     !text "ASN"                                                       ; 852e: 41 53 4e    ASN
-    !byte $98,   0                                                    ; 8531: 98 00       ..
+    !byte $98, 0                                                      ; 8531: 98 00       ..
     !text "ATN"                                                       ; 8533: 41 54 4e    ATN
-    !byte $99,   0                                                    ; 8536: 99 00       ..
+    !byte $99, 0                                                      ; 8536: 99 00       ..
     !text "AUTO"                                                      ; 8538: 41 55 54... AUT
     !byte $c6, $10                                                    ; 853c: c6 10       ..
     !text "BGET"                                                      ; 853e: 42 47 45... BGE
-    !byte $9a,   1                                                    ; 8542: 9a 01       ..
+    !byte $9a, 1                                                      ; 8542: 9a 01       ..
     !text "BPUT"                                                      ; 8544: 42 50 55... BPU
-    !byte $d5,   3                                                    ; 8548: d5 03       ..
+    !byte $d5, 3                                                      ; 8548: d5 03       ..
     !text "COLOUR"                                                    ; 854a: 43 4f 4c... COL
-    !byte $fb,   2                                                    ; 8550: fb 02       ..
+    !byte $fb, 2                                                      ; 8550: fb 02       ..
     !text "CALL"                                                      ; 8552: 43 41 4c... CAL
-    !byte $d6,   2                                                    ; 8556: d6 02       ..
+    !byte $d6, 2                                                      ; 8556: d6 02       ..
     !text "CHAIN"                                                     ; 8558: 43 48 41... CHA
-    !byte $d7,   2                                                    ; 855d: d7 02       ..
+    !byte $d7, 2                                                      ; 855d: d7 02       ..
     !text "CHR$"                                                      ; 855f: 43 48 52... CHR
-    !byte $bd,   0                                                    ; 8563: bd 00       ..
+    !byte $bd, 0                                                      ; 8563: bd 00       ..
     !text "CLEAR"                                                     ; 8565: 43 4c 45... CLE
-    !byte $d8,   1                                                    ; 856a: d8 01       ..
+    !byte $d8, 1                                                      ; 856a: d8 01       ..
     !text "CLOSE"                                                     ; 856c: 43 4c 4f... CLO
-    !byte $d9,   3                                                    ; 8571: d9 03       ..
+    !byte $d9, 3                                                      ; 8571: d9 03       ..
     !text "CLG"                                                       ; 8573: 43 4c 47    CLG
-    !byte $da,   1                                                    ; 8576: da 01       ..
+    !byte $da, 1                                                      ; 8576: da 01       ..
     !text "CLS"                                                       ; 8578: 43 4c 53    CLS
-    !byte $db,   1                                                    ; 857b: db 01       ..
+    !byte $db, 1                                                      ; 857b: db 01       ..
     !text "COS"                                                       ; 857d: 43 4f 53    COS
-    !byte $9b,   0                                                    ; 8580: 9b 00       ..
+    !byte $9b, 0                                                      ; 8580: 9b 00       ..
     !text "COUNT"                                                     ; 8582: 43 4f 55... COU
-    !byte $9c,   1                                                    ; 8587: 9c 01       ..
+    !byte $9c, 1                                                      ; 8587: 9c 01       ..
     !text "COLOR"                                                     ; 8589: 43 4f 4c... COL
-    !byte $fb,   2                                                    ; 858e: fb 02       ..
+    !byte $fb, 2                                                      ; 858e: fb 02       ..
     !text "DATA"                                                      ; 8590: 44 41 54... DAT
     !byte $dc                                                         ; 8594: dc          .
     !text " DEG"                                                      ; 8595: 20 44 45...  DE
-    !byte $9d,   0                                                    ; 8599: 9d 00       ..
+    !byte $9d, 0                                                      ; 8599: 9d 00       ..
     !text "DEF"                                                       ; 859b: 44 45 46    DEF
-    !byte $dd,   0                                                    ; 859e: dd 00       ..
+    !byte $dd, 0                                                      ; 859e: dd 00       ..
     !text "DELETE"                                                    ; 85a0: 44 45 4c... DEL
     !byte $c7, $10                                                    ; 85a6: c7 10       ..
     !text "DIV"                                                       ; 85a8: 44 49 56    DIV
-    !byte $81,   0                                                    ; 85ab: 81 00       ..
+    !byte $81, 0                                                      ; 85ab: 81 00       ..
     !text "DIM"                                                       ; 85ad: 44 49 4d    DIM
-    !byte $de,   2                                                    ; 85b0: de 02       ..
+    !byte $de, 2                                                      ; 85b0: de 02       ..
     !text "DRAW"                                                      ; 85b2: 44 52 41... DRA
-    !byte $df,   2                                                    ; 85b6: df 02       ..
+    !byte $df, 2                                                      ; 85b6: df 02       ..
     !text "ENDPROC"                                                   ; 85b8: 45 4e 44... END
-    !byte $e1,   1                                                    ; 85bf: e1 01       ..
+    !byte $e1, 1                                                      ; 85bf: e1 01       ..
     !text "END"                                                       ; 85c1: 45 4e 44    END
-    !byte $e0,   1                                                    ; 85c4: e0 01       ..
+    !byte $e0, 1                                                      ; 85c4: e0 01       ..
     !text "ENVELOPE"                                                  ; 85c6: 45 4e 56... ENV
-    !byte $e2,   2                                                    ; 85ce: e2 02       ..
+    !byte $e2, 2                                                      ; 85ce: e2 02       ..
     !text "ELSE"                                                      ; 85d0: 45 4c 53... ELS
     !byte $8b, $14                                                    ; 85d4: 8b 14       ..
     !text "EVAL"                                                      ; 85d6: 45 56 41... EVA
-    !byte $a0,   0                                                    ; 85da: a0 00       ..
+    !byte $a0, 0                                                      ; 85da: a0 00       ..
     !text "ERL"                                                       ; 85dc: 45 52 4c    ERL
-    !byte $9e,   1                                                    ; 85df: 9e 01       ..
+    !byte $9e, 1                                                      ; 85df: 9e 01       ..
     !text "ERROR"                                                     ; 85e1: 45 52 52... ERR
-    !byte $85,   4                                                    ; 85e6: 85 04       ..
+    !byte $85, 4                                                      ; 85e6: 85 04       ..
     !text "EOF"                                                       ; 85e8: 45 4f 46    EOF
-    !byte $c5,   1                                                    ; 85eb: c5 01       ..
+    !byte $c5, 1                                                      ; 85eb: c5 01       ..
     !text "EOR"                                                       ; 85ed: 45 4f 52    EOR
-    !byte $82,   0                                                    ; 85f0: 82 00       ..
+    !byte $82, 0                                                      ; 85f0: 82 00       ..
     !text "ERR"                                                       ; 85f2: 45 52 52    ERR
-    !byte $9f,   1                                                    ; 85f5: 9f 01       ..
+    !byte $9f, 1                                                      ; 85f5: 9f 01       ..
     !text "EXP"                                                       ; 85f7: 45 58 50    EXP
-    !byte $a1,   0                                                    ; 85fa: a1 00       ..
+    !byte $a1, 0                                                      ; 85fa: a1 00       ..
     !text "EXT"                                                       ; 85fc: 45 58 54    EXT
-    !byte $a2,   1                                                    ; 85ff: a2 01       ..
+    !byte $a2, 1                                                      ; 85ff: a2 01       ..
     !text "EDIT"                                                      ; 8601: 45 44 49... EDI
     !byte $ce, $10                                                    ; 8605: ce 10       ..
     !text "FOR"                                                       ; 8607: 46 4f 52    FOR
-    !byte $e3,   2                                                    ; 860a: e3 02       ..
+    !byte $e3, 2                                                      ; 860a: e3 02       ..
     !text "FALSE"                                                     ; 860c: 46 41 4c... FAL
-    !byte $a3,   1, $46, $4e, $a4,   8                                ; 8611: a3 01 46... ..F
+    !byte $a3, 1, $46, $4e, $a4, 8                                    ; 8611: a3 01 46... ..F
     !text "GOTO"                                                      ; 8617: 47 4f 54... GOT
     !byte $e5, $12                                                    ; 861b: e5 12       ..
     !text "GET$"                                                      ; 861d: 47 45 54... GET
-    !byte $be,   0                                                    ; 8621: be 00       ..
+    !byte $be, 0                                                      ; 8621: be 00       ..
     !text "GET"                                                       ; 8623: 47 45 54    GET
-    !byte $a5,   0                                                    ; 8626: a5 00       ..
+    !byte $a5, 0                                                      ; 8626: a5 00       ..
     !text "GOSUB"                                                     ; 8628: 47 4f 53... GOS
     !byte $e4, $12                                                    ; 862d: e4 12       ..
     !text "GCOL"                                                      ; 862f: 47 43 4f... GCO
-    !byte $e6,   2                                                    ; 8633: e6 02       ..
+    !byte $e6, 2                                                      ; 8633: e6 02       ..
     !text "HIMEM"                                                     ; 8635: 48 49 4d... HIM
     !byte $93                                                         ; 863a: 93          .
     !text "CINPUT"                                                    ; 863b: 43 49 4e... CIN
-    !byte $e8,   2, $49, $46, $e7,   2                                ; 8641: e8 02 49... ..I
+    !byte $e8, 2, $49, $46, $e7, 2                                    ; 8641: e8 02 49... ..I
     !text "INKEY$"                                                    ; 8647: 49 4e 4b... INK
-    !byte $bf,   0                                                    ; 864d: bf 00       ..
+    !byte $bf, 0                                                      ; 864d: bf 00       ..
     !text "INKEY"                                                     ; 864f: 49 4e 4b... INK
-    !byte $a6,   0                                                    ; 8654: a6 00       ..
+    !byte $a6, 0                                                      ; 8654: a6 00       ..
     !text "INT"                                                       ; 8656: 49 4e 54    INT
-    !byte $a8,   0                                                    ; 8659: a8 00       ..
+    !byte $a8, 0                                                      ; 8659: a8 00       ..
     !text "INSTR("                                                    ; 865b: 49 4e 53... INS
-    !byte $a7,   0                                                    ; 8661: a7 00       ..
+    !byte $a7, 0                                                      ; 8661: a7 00       ..
     !text "LIST"                                                      ; 8663: 4c 49 53... LIS
     !byte $c9, $10                                                    ; 8667: c9 10       ..
     !text "LINE"                                                      ; 8669: 4c 49 4e... LIN
-    !byte $86,   0                                                    ; 866d: 86 00       ..
+    !byte $86, 0                                                      ; 866d: 86 00       ..
     !text "LOAD"                                                      ; 866f: 4c 4f 41... LOA
-    !byte $c8,   2                                                    ; 8673: c8 02       ..
+    !byte $c8, 2                                                      ; 8673: c8 02       ..
     !text "LOMEM"                                                     ; 8675: 4c 4f 4d... LOM
     !byte $92                                                         ; 867a: 92          .
     !text "CLOCAL"                                                    ; 867b: 43 4c 4f... CLO
-    !byte $ea,   2                                                    ; 8681: ea 02       ..
+    !byte $ea, 2                                                      ; 8681: ea 02       ..
     !text "LEFT$("                                                    ; 8683: 4c 45 46... LEF
-    !byte $c0,   0                                                    ; 8689: c0 00       ..
+    !byte $c0, 0                                                      ; 8689: c0 00       ..
     !text "LEN"                                                       ; 868b: 4c 45 4e    LEN
-    !byte $a9,   0                                                    ; 868e: a9 00       ..
+    !byte $a9, 0                                                      ; 868e: a9 00       ..
     !text "LET"                                                       ; 8690: 4c 45 54    LET
-    !byte $e9,   4                                                    ; 8693: e9 04       ..
+    !byte $e9, 4                                                      ; 8693: e9 04       ..
     !text "LOG"                                                       ; 8695: 4c 4f 47    LOG
-    !byte $ab,   0, $4c, $4e, $aa,   0                                ; 8698: ab 00 4c... ..L
+    !byte $ab, 0, $4c, $4e, $aa, 0                                    ; 8698: ab 00 4c... ..L
     !text "MID$("                                                     ; 869e: 4d 49 44... MID
-    !byte $c1,   0                                                    ; 86a3: c1 00       ..
+    !byte $c1, 0                                                      ; 86a3: c1 00       ..
     !text "MODE"                                                      ; 86a5: 4d 4f 44... MOD
-    !byte $eb,   2                                                    ; 86a9: eb 02       ..
+    !byte $eb, 2                                                      ; 86a9: eb 02       ..
     !text "MOD"                                                       ; 86ab: 4d 4f 44    MOD
-    !byte $83,   0                                                    ; 86ae: 83 00       ..
+    !byte $83, 0                                                      ; 86ae: 83 00       ..
     !text "MOVE"                                                      ; 86b0: 4d 4f 56... MOV
-    !byte $ec,   2                                                    ; 86b4: ec 02       ..
+    !byte $ec, 2                                                      ; 86b4: ec 02       ..
     !text "NEXT"                                                      ; 86b6: 4e 45 58... NEX
-    !byte $ed,   2                                                    ; 86ba: ed 02       ..
+    !byte $ed, 2                                                      ; 86ba: ed 02       ..
     !text "NEW"                                                       ; 86bc: 4e 45 57    NEW
-    !byte $ca,   1                                                    ; 86bf: ca 01       ..
+    !byte $ca, 1                                                      ; 86bf: ca 01       ..
     !text "NOT"                                                       ; 86c1: 4e 4f 54    NOT
-    !byte $ac,   0                                                    ; 86c4: ac 00       ..
+    !byte $ac, 0                                                      ; 86c4: ac 00       ..
     !text "OLD"                                                       ; 86c6: 4f 4c 44    OLD
-    !byte $cb,   1, $4f, $4e, $ee,   2                                ; 86c9: cb 01 4f... ..O
+    !byte $cb, 1, $4f, $4e, $ee, 2                                    ; 86c9: cb 01 4f... ..O
     !text "OFF"                                                       ; 86cf: 4f 46 46    OFF
-    !byte $87,   0, $4f, $52, $84,   0                                ; 86d2: 87 00 4f... ..O
+    !byte $87, 0, $4f, $52, $84, 0                                    ; 86d2: 87 00 4f... ..O
     !text "OPENIN"                                                    ; 86d8: 4f 50 45... OPE
-    !byte $8e,   0                                                    ; 86de: 8e 00       ..
+    !byte $8e, 0                                                      ; 86de: 8e 00       ..
     !text "OPENOUT"                                                   ; 86e0: 4f 50 45... OPE
-    !byte $ae,   0                                                    ; 86e7: ae 00       ..
+    !byte $ae, 0                                                      ; 86e7: ae 00       ..
     !text "OPENUP"                                                    ; 86e9: 4f 50 45... OPE
-    !byte $ad,   0                                                    ; 86ef: ad 00       ..
+    !byte $ad, 0                                                      ; 86ef: ad 00       ..
     !text "OSCLI"                                                     ; 86f1: 4f 53 43... OSC
-    !byte $ff,   2                                                    ; 86f6: ff 02       ..
+    !byte $ff, 2                                                      ; 86f6: ff 02       ..
     !text "PRINT"                                                     ; 86f8: 50 52 49... PRI
-    !byte $f1,   2                                                    ; 86fd: f1 02       ..
+    !byte $f1, 2                                                      ; 86fd: f1 02       ..
     !text "PAGE"                                                      ; 86ff: 50 41 47... PAG
     !byte $90                                                         ; 8703: 90          .
     !text "CPTR"                                                      ; 8704: 43 50 54... CPT
     !byte $8f                                                         ; 8708: 8f          .
     !text "CPI"                                                       ; 8709: 43 50 49    CPI
-    !byte $af,   1                                                    ; 870c: af 01       ..
+    !byte $af, 1                                                      ; 870c: af 01       ..
     !text "PLOT"                                                      ; 870e: 50 4c 4f... PLO
-    !byte $f0,   2                                                    ; 8712: f0 02       ..
+    !byte $f0, 2                                                      ; 8712: f0 02       ..
     !text "POINT("                                                    ; 8714: 50 4f 49... POI
-    !byte $b0,   0                                                    ; 871a: b0 00       ..
+    !byte $b0, 0                                                      ; 871a: b0 00       ..
     !text "PROC"                                                      ; 871c: 50 52 4f... PRO
     !byte $f2, $0a                                                    ; 8720: f2 0a       ..
     !text "POS"                                                       ; 8722: 50 4f 53    POS
-    !byte $b1,   1                                                    ; 8725: b1 01       ..
+    !byte $b1, 1                                                      ; 8725: b1 01       ..
     !text "RETURN"                                                    ; 8727: 52 45 54... RET
-    !byte $f8,   1                                                    ; 872d: f8 01       ..
+    !byte $f8, 1                                                      ; 872d: f8 01       ..
     !text "REPEAT"                                                    ; 872f: 52 45 50... REP
-    !byte $f5,   0                                                    ; 8735: f5 00       ..
+    !byte $f5, 0                                                      ; 8735: f5 00       ..
     !text "REPORT"                                                    ; 8737: 52 45 50... REP
-    !byte $f6,   1                                                    ; 873d: f6 01       ..
+    !byte $f6, 1                                                      ; 873d: f6 01       ..
     !text "READ"                                                      ; 873f: 52 45 41... REA
-    !byte $f3,   2                                                    ; 8743: f3 02       ..
+    !byte $f3, 2                                                      ; 8743: f3 02       ..
     !text "REM"                                                       ; 8745: 52 45 4d    REM
     !byte $f4                                                         ; 8748: f4          .
     !text " RUN"                                                      ; 8749: 20 52 55...  RU
-    !byte $f9,   1                                                    ; 874d: f9 01       ..
+    !byte $f9, 1                                                      ; 874d: f9 01       ..
     !text "RAD"                                                       ; 874f: 52 41 44    RAD
-    !byte $b2,   0                                                    ; 8752: b2 00       ..
+    !byte $b2, 0                                                      ; 8752: b2 00       ..
     !text "RESTORE"                                                   ; 8754: 52 45 53... RES
     !byte $f7, $12                                                    ; 875b: f7 12       ..
     !text "RIGHT$("                                                   ; 875d: 52 49 47... RIG
-    !byte $c2,   0                                                    ; 8764: c2 00       ..
+    !byte $c2, 0                                                      ; 8764: c2 00       ..
     !text "RND"                                                       ; 8766: 52 4e 44    RND
-    !byte $b3,   1                                                    ; 8769: b3 01       ..
+    !byte $b3, 1                                                      ; 8769: b3 01       ..
     !text "RENUMBER"                                                  ; 876b: 52 45 4e... REN
     !byte $cc, $10                                                    ; 8773: cc 10       ..
     !text "STEP"                                                      ; 8775: 53 54 45... STE
-    !byte $88,   0                                                    ; 8779: 88 00       ..
+    !byte $88, 0                                                      ; 8779: 88 00       ..
     !text "SAVE"                                                      ; 877b: 53 41 56... SAV
-    !byte $cd,   2                                                    ; 877f: cd 02       ..
+    !byte $cd, 2                                                      ; 877f: cd 02       ..
     !text "SGN"                                                       ; 8781: 53 47 4e    SGN
-    !byte $b4,   0                                                    ; 8784: b4 00       ..
+    !byte $b4, 0                                                      ; 8784: b4 00       ..
     !text "SIN"                                                       ; 8786: 53 49 4e    SIN
-    !byte $b5,   0                                                    ; 8789: b5 00       ..
+    !byte $b5, 0                                                      ; 8789: b5 00       ..
     !text "SQR"                                                       ; 878b: 53 51 52    SQR
-    !byte $b6,   0                                                    ; 878e: b6 00       ..
+    !byte $b6, 0                                                      ; 878e: b6 00       ..
     !text "SPC"                                                       ; 8790: 53 50 43    SPC
-    !byte $89,   0                                                    ; 8793: 89 00       ..
+    !byte $89, 0                                                      ; 8793: 89 00       ..
     !text "STR$"                                                      ; 8795: 53 54 52... STR
-    !byte $c3,   0                                                    ; 8799: c3 00       ..
+    !byte $c3, 0                                                      ; 8799: c3 00       ..
     !text "STRING$("                                                  ; 879b: 53 54 52... STR
-    !byte $c4,   0                                                    ; 87a3: c4 00       ..
+    !byte $c4, 0                                                      ; 87a3: c4 00       ..
     !text "SOUND"                                                     ; 87a5: 53 4f 55... SOU
-    !byte $d4,   2                                                    ; 87aa: d4 02       ..
+    !byte $d4, 2                                                      ; 87aa: d4 02       ..
     !text "STOP"                                                      ; 87ac: 53 54 4f... STO
-    !byte $fa,   1                                                    ; 87b0: fa 01       ..
+    !byte $fa, 1                                                      ; 87b0: fa 01       ..
     !text "TAN"                                                       ; 87b2: 54 41 4e    TAN
-    !byte $b7,   0                                                    ; 87b5: b7 00       ..
+    !byte $b7, 0                                                      ; 87b5: b7 00       ..
     !text "THEN"                                                      ; 87b7: 54 48 45... THE
-    !byte $8c, $14, $54, $4f, $b8,   0                                ; 87bb: 8c 14 54... ..T
+    !byte $8c, $14, $54, $4f, $b8, 0                                  ; 87bb: 8c 14 54... ..T
     !text "TAB("                                                      ; 87c1: 54 41 42... TAB
-    !byte $8a,   0                                                    ; 87c5: 8a 00       ..
+    !byte $8a, 0                                                      ; 87c5: 8a 00       ..
     !text "TRACE"                                                     ; 87c7: 54 52 41... TRA
     !byte $fc, $12                                                    ; 87cc: fc 12       ..
     !text "TIME"                                                      ; 87ce: 54 49 4d... TIM
     !byte $91                                                         ; 87d2: 91          .
     !text "CTRUE"                                                     ; 87d3: 43 54 52... CTR
-    !byte $b9,   1                                                    ; 87d8: b9 01       ..
+    !byte $b9, 1                                                      ; 87d8: b9 01       ..
     !text "UNTIL"                                                     ; 87da: 55 4e 54... UNT
-    !byte $fd,   2                                                    ; 87df: fd 02       ..
+    !byte $fd, 2                                                      ; 87df: fd 02       ..
     !text "USR"                                                       ; 87e1: 55 53 52    USR
-    !byte $ba,   0                                                    ; 87e4: ba 00       ..
+    !byte $ba, 0                                                      ; 87e4: ba 00       ..
     !text "VDU"                                                       ; 87e6: 56 44 55    VDU
-    !byte $ef,   2                                                    ; 87e9: ef 02       ..
+    !byte $ef, 2                                                      ; 87e9: ef 02       ..
     !text "VAL"                                                       ; 87eb: 56 41 4c    VAL
-    !byte $bb,   0                                                    ; 87ee: bb 00       ..
+    !byte $bb, 0                                                      ; 87ee: bb 00       ..
     !text "VPOS"                                                      ; 87f0: 56 50 4f... VPO
-    !byte $bc,   1                                                    ; 87f4: bc 01       ..
+    !byte $bc, 1                                                      ; 87f4: bc 01       ..
     !text "WIDTH"                                                     ; 87f6: 57 49 44... WID
-    !byte $fe,   2                                                    ; 87fb: fe 02       ..
+    !byte $fe, 2                                                      ; 87fb: fe 02       ..
     !text "PAGE"                                                      ; 87fd: 50 41 47... PAG
-    !byte $d0,   0                                                    ; 8801: d0 00       ..
+    !byte $d0, 0                                                      ; 8801: d0 00       ..
     !text "PTR"                                                       ; 8803: 50 54 52    PTR
-    !byte $cf,   0, $54, $49                                          ; 8806: cf 00 54... ..T
+    !byte $cf, 0, $54, $49                                            ; 8806: cf 00 54... ..T
 ; $880a referenced 1 time by $90e0
 l880a
-    !byte $4d, $45, $d1,   0                                          ; 880a: 4d 45 d1... ME.
+    !byte $4d, $45, $d1, 0                                            ; 880a: 4d 45 d1... ME.
     !text "LOMEM"                                                     ; 880e: 4c 4f 4d... LOM
-    !byte $d2,   0                                                    ; 8813: d2 00       ..
+    !byte $d2, 0                                                      ; 8813: d2 00       ..
     !text "HIMEM"                                                     ; 8815: 48 49 4d... HIM
-    !byte $d3,   0                                                    ; 881a: d3 00       ..
+    !byte $d3, 0                                                      ; 881a: d3 00       ..
     !text "Missing "                                                  ; 881c: 4d 69 73... Mis
-    !byte $8d,   0                                                    ; 8824: 8d 00       ..
+    !byte $8d, 0                                                      ; 8824: 8d 00       ..
 l8826
 l8909 = l8826+227
     !word sub_cab37, sub_cab21, sub_cae50, sub_cae8c, sub_cae71       ; 8826: 37 ab 21... 7.!
@@ -1360,7 +1360,7 @@ l8909 = l8826+227
     !word sub_c970b, sub_cba47, sub_cb351, sub_cbec7, sub_c834b       ; 8902: 0b 97 47... ..G
     !word sub_c8984, sub_cb896                                        ; 890c: 84 89 96... ...
 ; $8909 referenced 1 time by $8ae3
-    !byte $b9, $d8, $d9, $f0,   1, $10, $81, $90, $89, $93, $a3, $a4  ; 8910: b9 d8 d9... ...
+    !byte $b9, $d8, $d9, $f0, 1, $10, $81, $90, $89, $93, $a3, $a4    ; 8910: b9 d8 d9... ...
     !byte $a9                                                         ; 891c: a9          .
     !text "89x"                                                       ; 891d: 38 39 78    89x
     !byte   1, $13, $21, $a1, $c1, $19, $18, $99, $98, $63, $73, $b1  ; 8920: 01 13 21... ..!
@@ -1375,8 +1375,8 @@ l894e
     !text "%%9AAAAJJLLLPPRSSS"                                        ; 8956: 25 25 39... %%9
     !byte $10                                                         ; 8968: 10          .
     !text "%AAAA"                                                     ; 8969: 25 41 41... %AA
-    !byte   8,   8,   8,   9,   9, $0a, $0a, $0a, $0a,   5, $15, $3e  ; 896e: 08 08 08... ...
-    !byte   4, $0d, $30, $4c,   6                                     ; 897a: 04 0d 30... ..0
+    !byte   8,   8, 8, 9, 9, $0a, $0a, $0a, $0a, 5, $15, $3e, 4, $0d  ; 896e: 08 08 08... ...
+    !byte $30, $4c, 6                                                 ; 897c: 30 4c 06    0L.
     !text "2II"                                                       ; 897f: 32 49 49    2II
     !byte $10, $25                                                    ; 8982: 10 25       .%
 
@@ -2508,7 +2508,7 @@ sub_c8fb4
 c8fbb
     brk                                                               ; 8fbb: 00          .
 
-    !byte   5, $8d, $2c,   0                                          ; 8fbc: 05 8d 2c... ..,
+    !byte 5, $8d, $2c, 0                                              ; 8fbc: 05 8d 2c... ..,
 
 sub_c8fc0
     jsr sub_cbe17                                                     ; 8fc0: 20 17 be     ..
@@ -2773,7 +2773,7 @@ sub_c9149
     jsr c9c6a                                                         ; 9149: 20 6a 9c     j.
     brk                                                               ; 914c: 00          .
 
-    !byte   0, $fa                                                    ; 914d: 00 fa       ..
+    !byte 0, $fa                                                      ; 914d: 00 fa       ..
 
 ; $914f referenced 2 times by $9126, $912d
 c914f
@@ -3145,7 +3145,7 @@ loop_c9356
 c9357
     brk                                                               ; 9357: 00          .
 
-    !byte   9, $8d, $22,   0                                          ; 9358: 09 8d 22... .."
+    !byte 9, $8d, $22, 0                                              ; 9358: 09 8d 22... .."
 
 ; $935c referenced 2 times by $b8fa, $b8ff
 sub_c935c
@@ -3316,7 +3316,7 @@ c9469
 c9476
     brk                                                               ; 9476: 00          .
 
-    !byte   0, $cc                                                    ; 9477: 00 cc       ..
+    !byte 0, $cc                                                      ; 9477: 00 cc       ..
     !text " space"                                                    ; 9479: 20 73 70...  sp
 
 ; $947f referenced 2 times by $942a, $942e
@@ -3565,7 +3565,7 @@ c95f1
 
     !byte $0a                                                         ; 95f2: 0a          .
     !text "Bad "                                                      ; 95f3: 42 61 64... Bad
-    !byte $de,   0                                                    ; 95f7: de 00       ..
+    !byte $de, 0                                                      ; 95f7: de 00       ..
 
 ; $95f9 referenced 1 time by $95c1
 c95f9
@@ -3926,7 +3926,7 @@ c9808
 
     !byte $19                                                         ; 9809: 19          .
     !text "Bad "                                                      ; 980a: 42 61 64... Bad
-    !byte $eb,   0                                                    ; 980e: eb 00       ..
+    !byte $eb, 0                                                      ; 980e: eb 00       ..
 
 sub_c9810
     jsr sub_c9332                                                     ; 9810: 20 32 93     2.
@@ -6857,7 +6857,7 @@ ca7c0
     !text "-ve roo"                                                   ; a7c2: 2d 76 65... -ve
 ; $a7c9 referenced 1 time by $a985
 la7c9
-    !byte $74,   0, $86, $8e                                          ; a7c9: 74 00 86... t..
+    !byte $74, 0, $86, $8e                                            ; a7c9: 74 00 86... t..
 
 ; $a7cd referenced 1 time by $a7b3
 ca7cd
@@ -8287,7 +8287,7 @@ loop_cafc1
 
     !byte $1d                                                         ; afc8: 1d          .
     !text "No such "                                                  ; afc9: 4e 6f 20... No
-    !byte $a4, $2f, $f2,   0                                          ; afd1: a4 2f f2... ./.
+    !byte $a4, $2f, $f2, 0                                            ; afd1: a4 2f f2... ./.
 
 ; $afd5 referenced 1 time by $b0a3
 cafd5
@@ -8741,8 +8741,8 @@ sub_cb269
     lda l002a                                                         ; b26c: a5 2a       .*
     jmp caeb4                                                         ; b26e: 4c b4 ae    L..
 
-    !byte $a4, $0a, $f0,   1, $88, $20, $80, $9c, $64,   8, $64,   9  ; b271: a4 0a f0... ...
-    !byte $a6, $18, $86                                               ; b27d: a6 18 86    ...
+    !byte $a4, $0a, $f0, 1, $88, $20, $80, $9c, $64, 8, $64, 9, $a6   ; b271: a4 0a f0... ...
+    !byte $18, $86                                                    ; b27e: 18 86       ..
     !text "8d7"                                                       ; b280: 38 64 37    8d7
     !byte $a4, $0c, $c0,   7, $f0, $28, $a6, $0b, $20, $5d, $8e, $c9  ; b283: a4 0c c0... ...
     !byte $0d, $d0, $18, $e4, $37, $98, $e5, $38, $90, $18, $20, $5d  ; b28f: 0d d0 18... ...
@@ -9177,7 +9177,7 @@ cb563
     brk                                                               ; b563: 00          .
 
     !text " No "                                                      ; b564: 20 4e 6f...  No
-    !byte $e3,   0                                                    ; b568: e3 00       ..
+    !byte $e3, 0                                                      ; b568: e3 00       ..
 
 ; $b56a referenced 2 times by $b52b, $b549
 cb56a
@@ -9304,7 +9304,7 @@ loop_cb642
     brk                                                               ; b642: 00          .
 
     !text "$No "                                                      ; b643: 24 4e 6f... $No
-    !byte $b8,   0                                                    ; b647: b8 00       ..
+    !byte $b8, 0                                                      ; b647: b8 00       ..
 
 sub_cb649
     jsr sub_c997d                                                     ; b649: 20 7d 99     }.
@@ -9424,7 +9424,7 @@ loop_cb730
     brk                                                               ; b730: 00          .
 
     !text "&No "                                                      ; b731: 26 4e 6f... &No
-    !byte $e4,   0                                                    ; b735: e4 00       ..
+    !byte $e4, 0                                                      ; b735: e4 00       ..
 
 sub_cb737
     jsr c9c6a                                                         ; b737: 20 6a 9c     j.
@@ -9940,7 +9940,7 @@ cba35
     brk                                                               ; ba35: 00          .
 
     !text ",Too many "                                                ; ba36: 2c 54 6f... ,To
-    !byte $f5, $73,   0                                               ; ba40: f5 73 00    .s.
+    !byte $f5, $73, 0                                                 ; ba40: f5 73 00    .s.
 
 ; $ba43 referenced 1 time by $ba13
 cba43
@@ -10173,7 +10173,7 @@ cbb64
     jsr sub_cbbdc                                                     ; bb8e: 20 dc bb     ..
     brk                                                               ; bb91: 00          .
 
-    !byte   0, $86                                                    ; bb92: 00 86       ..
+    !byte 0, $86                                                      ; bb92: 00 86       ..
     !text " space"                                                    ; bb94: 20 73 70...  sp
     !byte 0                                                           ; bb9a: 00          .
 
@@ -10936,10 +10936,10 @@ lbf71
     !byte $82, $7f, $b9, $ff, $78, $7b, $0e, $fa, $35, $12, $86, $65  ; bfc5: 82 7f b9... ...
     !byte $2e, $e0, $d3, $7e, $88, $88, $88, $89, $7b, $8c            ; bfd1: 2e e0 d3... ...
     !text "o-Y"                                                       ; bfdb: 6f 2d 59    o-Y
-    !byte $81, $99, $99, $99, $9a, $f3, $9e, $7b, $77, $81, $c0,   0  ; bfde: 81 99 99... ...
-    !byte   0,   0, $80, $93, $e6, $90,   0, $81, $c4                 ; bfea: 00 00 80... ...
+    !byte $81, $99, $99, $99, $9a, $f3, $9e, $7b, $77, $81, $c0, 0, 0 ; bfde: 81 99 99... ...
+    !byte   0, $80, $93, $e6, $90,   0, $81, $c4                      ; bfeb: 00 80 93... ...
     !text "DDD"                                                       ; bff3: 44 44 44    DDD
-    !byte $80, $9d, $fd, $13,   4, $81, $e6                           ; bff6: 80 9d fd... ...
+    !byte $80, $9d, $fd, $13, 4, $81, $e6                             ; bff6: 80 9d fd... ...
     !text "fff"                                                       ; bffd: 66 66 66    fff
 pydis_end
 

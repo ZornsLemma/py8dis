@@ -36,7 +36,7 @@ oswrch      = &ffee
 
 .welcome_message
     equs "Welcome!"                                                   ; 201e: 57 65 6c... Wel
-    equb &0a, &0d,   0                                                ; 2026: 0a 0d 00    ...
+    equb &0a, &0d, 0                                                  ; 2026: 0a 0d 00    ...
 
 ; ***************************************************************************************
 ; Print a byte as a decimal number 000-255
@@ -64,7 +64,7 @@ oswrch      = &ffee
     rts                                                               ; 2041: 60          `
 
 .decimal_digits
-    equb   1,  10, 100                                                ; 2042: 01 0a 64    ..d
+    equb 1, 10, 100                                                   ; 2042: 01 0a 64    ..d
 
 ; ***************************************************************************************
 ; Print a byte as hexadecimal

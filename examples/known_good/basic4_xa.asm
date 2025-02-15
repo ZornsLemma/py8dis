@@ -203,7 +203,7 @@ version
 copyright
     .byt 0                                                            // 8013: 00          .
     .asc "(C)1988 Acorn", $0a, $0d, 0                                 // 8014: 28 43 29... (C)
-    .byt   0, $b8, $28, $80,   0, $c0, $82,   0                       // 8024: 00 b8 28... ..(
+    .byt 0, $b8, $28, $80, 0, $c0, $82, 0                             // 8024: 00 b8 28... ..(
 
 // $802c referenced 1 time by $8003
 service_handler
@@ -331,10 +331,10 @@ sub_c80d8
 
 // $80dd referenced 1 time by $a0fd
 l80dd
-    .byt   0,   0,   0,   3, $27                                      // 80dd: 00 00 00... ...
+    .byt 0, 0, 0, 3, $27                                              // 80dd: 00 00 00... ...
 // $80e2 referenced 1 time by $a0f7
 l80e2
-    .byt   1, $0a, $64, $e8, $10                                      // 80e2: 01 0a 64... ..d
+    .byt 1, $0a, $64, $e8, $10                                        // 80e2: 01 0a 64... ..d
 
 // $80e7 referenced 1 time by $8000
 language_handler
@@ -1085,252 +1085,252 @@ c84f4
     jmp c8304                                                         // 8510: 4c 04 83    L..
 
     .asc "AND"                                                        // 8513: 41 4e 44    AND
-    .byt $80,   0                                                     // 8516: 80 00       ..
+    .byt $80, 0                                                       // 8516: 80 00       ..
     .asc "ABS"                                                        // 8518: 41 42 53    ABS
-    .byt $94,   0                                                     // 851b: 94 00       ..
+    .byt $94, 0                                                       // 851b: 94 00       ..
     .asc "ACS"                                                        // 851d: 41 43 53    ACS
-    .byt $95,   0                                                     // 8520: 95 00       ..
+    .byt $95, 0                                                       // 8520: 95 00       ..
     .asc "ADVAL"                                                      // 8522: 41 44 56... ADV
-    .byt $96,   0                                                     // 8527: 96 00       ..
+    .byt $96, 0                                                       // 8527: 96 00       ..
     .asc "ASC"                                                        // 8529: 41 53 43    ASC
-    .byt $97,   0                                                     // 852c: 97 00       ..
+    .byt $97, 0                                                       // 852c: 97 00       ..
     .asc "ASN"                                                        // 852e: 41 53 4e    ASN
-    .byt $98,   0                                                     // 8531: 98 00       ..
+    .byt $98, 0                                                       // 8531: 98 00       ..
     .asc "ATN"                                                        // 8533: 41 54 4e    ATN
-    .byt $99,   0                                                     // 8536: 99 00       ..
+    .byt $99, 0                                                       // 8536: 99 00       ..
     .asc "AUTO"                                                       // 8538: 41 55 54... AUT
     .byt $c6, $10                                                     // 853c: c6 10       ..
     .asc "BGET"                                                       // 853e: 42 47 45... BGE
-    .byt $9a,   1                                                     // 8542: 9a 01       ..
+    .byt $9a, 1                                                       // 8542: 9a 01       ..
     .asc "BPUT"                                                       // 8544: 42 50 55... BPU
-    .byt $d5,   3                                                     // 8548: d5 03       ..
+    .byt $d5, 3                                                       // 8548: d5 03       ..
     .asc "COLOUR"                                                     // 854a: 43 4f 4c... COL
-    .byt $fb,   2                                                     // 8550: fb 02       ..
+    .byt $fb, 2                                                       // 8550: fb 02       ..
     .asc "CALL"                                                       // 8552: 43 41 4c... CAL
-    .byt $d6,   2                                                     // 8556: d6 02       ..
+    .byt $d6, 2                                                       // 8556: d6 02       ..
     .asc "CHAIN"                                                      // 8558: 43 48 41... CHA
-    .byt $d7,   2                                                     // 855d: d7 02       ..
+    .byt $d7, 2                                                       // 855d: d7 02       ..
     .asc "CHR$"                                                       // 855f: 43 48 52... CHR
-    .byt $bd,   0                                                     // 8563: bd 00       ..
+    .byt $bd, 0                                                       // 8563: bd 00       ..
     .asc "CLEAR"                                                      // 8565: 43 4c 45... CLE
-    .byt $d8,   1                                                     // 856a: d8 01       ..
+    .byt $d8, 1                                                       // 856a: d8 01       ..
     .asc "CLOSE"                                                      // 856c: 43 4c 4f... CLO
-    .byt $d9,   3                                                     // 8571: d9 03       ..
+    .byt $d9, 3                                                       // 8571: d9 03       ..
     .asc "CLG"                                                        // 8573: 43 4c 47    CLG
-    .byt $da,   1                                                     // 8576: da 01       ..
+    .byt $da, 1                                                       // 8576: da 01       ..
     .asc "CLS"                                                        // 8578: 43 4c 53    CLS
-    .byt $db,   1                                                     // 857b: db 01       ..
+    .byt $db, 1                                                       // 857b: db 01       ..
     .asc "COS"                                                        // 857d: 43 4f 53    COS
-    .byt $9b,   0                                                     // 8580: 9b 00       ..
+    .byt $9b, 0                                                       // 8580: 9b 00       ..
     .asc "COUNT"                                                      // 8582: 43 4f 55... COU
-    .byt $9c,   1                                                     // 8587: 9c 01       ..
+    .byt $9c, 1                                                       // 8587: 9c 01       ..
     .asc "COLOR"                                                      // 8589: 43 4f 4c... COL
-    .byt $fb,   2                                                     // 858e: fb 02       ..
+    .byt $fb, 2                                                       // 858e: fb 02       ..
     .asc "DATA"                                                       // 8590: 44 41 54... DAT
     .byt $dc                                                          // 8594: dc          .
     .asc " DEG"                                                       // 8595: 20 44 45...  DE
-    .byt $9d,   0                                                     // 8599: 9d 00       ..
+    .byt $9d, 0                                                       // 8599: 9d 00       ..
     .asc "DEF"                                                        // 859b: 44 45 46    DEF
-    .byt $dd,   0                                                     // 859e: dd 00       ..
+    .byt $dd, 0                                                       // 859e: dd 00       ..
     .asc "DELETE"                                                     // 85a0: 44 45 4c... DEL
     .byt $c7, $10                                                     // 85a6: c7 10       ..
     .asc "DIV"                                                        // 85a8: 44 49 56    DIV
-    .byt $81,   0                                                     // 85ab: 81 00       ..
+    .byt $81, 0                                                       // 85ab: 81 00       ..
     .asc "DIM"                                                        // 85ad: 44 49 4d    DIM
-    .byt $de,   2                                                     // 85b0: de 02       ..
+    .byt $de, 2                                                       // 85b0: de 02       ..
     .asc "DRAW"                                                       // 85b2: 44 52 41... DRA
-    .byt $df,   2                                                     // 85b6: df 02       ..
+    .byt $df, 2                                                       // 85b6: df 02       ..
     .asc "ENDPROC"                                                    // 85b8: 45 4e 44... END
-    .byt $e1,   1                                                     // 85bf: e1 01       ..
+    .byt $e1, 1                                                       // 85bf: e1 01       ..
     .asc "END"                                                        // 85c1: 45 4e 44    END
-    .byt $e0,   1                                                     // 85c4: e0 01       ..
+    .byt $e0, 1                                                       // 85c4: e0 01       ..
     .asc "ENVELOPE"                                                   // 85c6: 45 4e 56... ENV
-    .byt $e2,   2                                                     // 85ce: e2 02       ..
+    .byt $e2, 2                                                       // 85ce: e2 02       ..
     .asc "ELSE"                                                       // 85d0: 45 4c 53... ELS
     .byt $8b, $14                                                     // 85d4: 8b 14       ..
     .asc "EVAL"                                                       // 85d6: 45 56 41... EVA
-    .byt $a0,   0                                                     // 85da: a0 00       ..
+    .byt $a0, 0                                                       // 85da: a0 00       ..
     .asc "ERL"                                                        // 85dc: 45 52 4c    ERL
-    .byt $9e,   1                                                     // 85df: 9e 01       ..
+    .byt $9e, 1                                                       // 85df: 9e 01       ..
     .asc "ERROR"                                                      // 85e1: 45 52 52... ERR
-    .byt $85,   4                                                     // 85e6: 85 04       ..
+    .byt $85, 4                                                       // 85e6: 85 04       ..
     .asc "EOF"                                                        // 85e8: 45 4f 46    EOF
-    .byt $c5,   1                                                     // 85eb: c5 01       ..
+    .byt $c5, 1                                                       // 85eb: c5 01       ..
     .asc "EOR"                                                        // 85ed: 45 4f 52    EOR
-    .byt $82,   0                                                     // 85f0: 82 00       ..
+    .byt $82, 0                                                       // 85f0: 82 00       ..
     .asc "ERR"                                                        // 85f2: 45 52 52    ERR
-    .byt $9f,   1                                                     // 85f5: 9f 01       ..
+    .byt $9f, 1                                                       // 85f5: 9f 01       ..
     .asc "EXP"                                                        // 85f7: 45 58 50    EXP
-    .byt $a1,   0                                                     // 85fa: a1 00       ..
+    .byt $a1, 0                                                       // 85fa: a1 00       ..
     .asc "EXT"                                                        // 85fc: 45 58 54    EXT
-    .byt $a2,   1                                                     // 85ff: a2 01       ..
+    .byt $a2, 1                                                       // 85ff: a2 01       ..
     .asc "EDIT"                                                       // 8601: 45 44 49... EDI
     .byt $ce, $10                                                     // 8605: ce 10       ..
     .asc "FOR"                                                        // 8607: 46 4f 52    FOR
-    .byt $e3,   2                                                     // 860a: e3 02       ..
+    .byt $e3, 2                                                       // 860a: e3 02       ..
     .asc "FALSE"                                                      // 860c: 46 41 4c... FAL
-    .byt $a3,   1, $46, $4e, $a4,   8                                 // 8611: a3 01 46... ..F
+    .byt $a3, 1, $46, $4e, $a4, 8                                     // 8611: a3 01 46... ..F
     .asc "GOTO"                                                       // 8617: 47 4f 54... GOT
     .byt $e5, $12                                                     // 861b: e5 12       ..
     .asc "GET$"                                                       // 861d: 47 45 54... GET
-    .byt $be,   0                                                     // 8621: be 00       ..
+    .byt $be, 0                                                       // 8621: be 00       ..
     .asc "GET"                                                        // 8623: 47 45 54    GET
-    .byt $a5,   0                                                     // 8626: a5 00       ..
+    .byt $a5, 0                                                       // 8626: a5 00       ..
     .asc "GOSUB"                                                      // 8628: 47 4f 53... GOS
     .byt $e4, $12                                                     // 862d: e4 12       ..
     .asc "GCOL"                                                       // 862f: 47 43 4f... GCO
-    .byt $e6,   2                                                     // 8633: e6 02       ..
+    .byt $e6, 2                                                       // 8633: e6 02       ..
     .asc "HIMEM"                                                      // 8635: 48 49 4d... HIM
     .byt $93                                                          // 863a: 93          .
     .asc "CINPUT"                                                     // 863b: 43 49 4e... CIN
-    .byt $e8,   2, $49, $46, $e7,   2                                 // 8641: e8 02 49... ..I
+    .byt $e8, 2, $49, $46, $e7, 2                                     // 8641: e8 02 49... ..I
     .asc "INKEY$"                                                     // 8647: 49 4e 4b... INK
-    .byt $bf,   0                                                     // 864d: bf 00       ..
+    .byt $bf, 0                                                       // 864d: bf 00       ..
     .asc "INKEY"                                                      // 864f: 49 4e 4b... INK
-    .byt $a6,   0                                                     // 8654: a6 00       ..
+    .byt $a6, 0                                                       // 8654: a6 00       ..
     .asc "INT"                                                        // 8656: 49 4e 54    INT
-    .byt $a8,   0                                                     // 8659: a8 00       ..
+    .byt $a8, 0                                                       // 8659: a8 00       ..
     .asc "INSTR("                                                     // 865b: 49 4e 53... INS
-    .byt $a7,   0                                                     // 8661: a7 00       ..
+    .byt $a7, 0                                                       // 8661: a7 00       ..
     .asc "LIST"                                                       // 8663: 4c 49 53... LIS
     .byt $c9, $10                                                     // 8667: c9 10       ..
     .asc "LINE"                                                       // 8669: 4c 49 4e... LIN
-    .byt $86,   0                                                     // 866d: 86 00       ..
+    .byt $86, 0                                                       // 866d: 86 00       ..
     .asc "LOAD"                                                       // 866f: 4c 4f 41... LOA
-    .byt $c8,   2                                                     // 8673: c8 02       ..
+    .byt $c8, 2                                                       // 8673: c8 02       ..
     .asc "LOMEM"                                                      // 8675: 4c 4f 4d... LOM
     .byt $92                                                          // 867a: 92          .
     .asc "CLOCAL"                                                     // 867b: 43 4c 4f... CLO
-    .byt $ea,   2                                                     // 8681: ea 02       ..
+    .byt $ea, 2                                                       // 8681: ea 02       ..
     .asc "LEFT$("                                                     // 8683: 4c 45 46... LEF
-    .byt $c0,   0                                                     // 8689: c0 00       ..
+    .byt $c0, 0                                                       // 8689: c0 00       ..
     .asc "LEN"                                                        // 868b: 4c 45 4e    LEN
-    .byt $a9,   0                                                     // 868e: a9 00       ..
+    .byt $a9, 0                                                       // 868e: a9 00       ..
     .asc "LET"                                                        // 8690: 4c 45 54    LET
-    .byt $e9,   4                                                     // 8693: e9 04       ..
+    .byt $e9, 4                                                       // 8693: e9 04       ..
     .asc "LOG"                                                        // 8695: 4c 4f 47    LOG
-    .byt $ab,   0, $4c, $4e, $aa,   0                                 // 8698: ab 00 4c... ..L
+    .byt $ab, 0, $4c, $4e, $aa, 0                                     // 8698: ab 00 4c... ..L
     .asc "MID$("                                                      // 869e: 4d 49 44... MID
-    .byt $c1,   0                                                     // 86a3: c1 00       ..
+    .byt $c1, 0                                                       // 86a3: c1 00       ..
     .asc "MODE"                                                       // 86a5: 4d 4f 44... MOD
-    .byt $eb,   2                                                     // 86a9: eb 02       ..
+    .byt $eb, 2                                                       // 86a9: eb 02       ..
     .asc "MOD"                                                        // 86ab: 4d 4f 44    MOD
-    .byt $83,   0                                                     // 86ae: 83 00       ..
+    .byt $83, 0                                                       // 86ae: 83 00       ..
     .asc "MOVE"                                                       // 86b0: 4d 4f 56... MOV
-    .byt $ec,   2                                                     // 86b4: ec 02       ..
+    .byt $ec, 2                                                       // 86b4: ec 02       ..
     .asc "NEXT"                                                       // 86b6: 4e 45 58... NEX
-    .byt $ed,   2                                                     // 86ba: ed 02       ..
+    .byt $ed, 2                                                       // 86ba: ed 02       ..
     .asc "NEW"                                                        // 86bc: 4e 45 57    NEW
-    .byt $ca,   1                                                     // 86bf: ca 01       ..
+    .byt $ca, 1                                                       // 86bf: ca 01       ..
     .asc "NOT"                                                        // 86c1: 4e 4f 54    NOT
-    .byt $ac,   0                                                     // 86c4: ac 00       ..
+    .byt $ac, 0                                                       // 86c4: ac 00       ..
     .asc "OLD"                                                        // 86c6: 4f 4c 44    OLD
-    .byt $cb,   1, $4f, $4e, $ee,   2                                 // 86c9: cb 01 4f... ..O
+    .byt $cb, 1, $4f, $4e, $ee, 2                                     // 86c9: cb 01 4f... ..O
     .asc "OFF"                                                        // 86cf: 4f 46 46    OFF
-    .byt $87,   0, $4f, $52, $84,   0                                 // 86d2: 87 00 4f... ..O
+    .byt $87, 0, $4f, $52, $84, 0                                     // 86d2: 87 00 4f... ..O
     .asc "OPENIN"                                                     // 86d8: 4f 50 45... OPE
-    .byt $8e,   0                                                     // 86de: 8e 00       ..
+    .byt $8e, 0                                                       // 86de: 8e 00       ..
     .asc "OPENOUT"                                                    // 86e0: 4f 50 45... OPE
-    .byt $ae,   0                                                     // 86e7: ae 00       ..
+    .byt $ae, 0                                                       // 86e7: ae 00       ..
     .asc "OPENUP"                                                     // 86e9: 4f 50 45... OPE
-    .byt $ad,   0                                                     // 86ef: ad 00       ..
+    .byt $ad, 0                                                       // 86ef: ad 00       ..
     .asc "OSCLI"                                                      // 86f1: 4f 53 43... OSC
-    .byt $ff,   2                                                     // 86f6: ff 02       ..
+    .byt $ff, 2                                                       // 86f6: ff 02       ..
     .asc "PRINT"                                                      // 86f8: 50 52 49... PRI
-    .byt $f1,   2                                                     // 86fd: f1 02       ..
+    .byt $f1, 2                                                       // 86fd: f1 02       ..
     .asc "PAGE"                                                       // 86ff: 50 41 47... PAG
     .byt $90                                                          // 8703: 90          .
     .asc "CPTR"                                                       // 8704: 43 50 54... CPT
     .byt $8f                                                          // 8708: 8f          .
     .asc "CPI"                                                        // 8709: 43 50 49    CPI
-    .byt $af,   1                                                     // 870c: af 01       ..
+    .byt $af, 1                                                       // 870c: af 01       ..
     .asc "PLOT"                                                       // 870e: 50 4c 4f... PLO
-    .byt $f0,   2                                                     // 8712: f0 02       ..
+    .byt $f0, 2                                                       // 8712: f0 02       ..
     .asc "POINT("                                                     // 8714: 50 4f 49... POI
-    .byt $b0,   0                                                     // 871a: b0 00       ..
+    .byt $b0, 0                                                       // 871a: b0 00       ..
     .asc "PROC"                                                       // 871c: 50 52 4f... PRO
     .byt $f2, $0a                                                     // 8720: f2 0a       ..
     .asc "POS"                                                        // 8722: 50 4f 53    POS
-    .byt $b1,   1                                                     // 8725: b1 01       ..
+    .byt $b1, 1                                                       // 8725: b1 01       ..
     .asc "RETURN"                                                     // 8727: 52 45 54... RET
-    .byt $f8,   1                                                     // 872d: f8 01       ..
+    .byt $f8, 1                                                       // 872d: f8 01       ..
     .asc "REPEAT"                                                     // 872f: 52 45 50... REP
-    .byt $f5,   0                                                     // 8735: f5 00       ..
+    .byt $f5, 0                                                       // 8735: f5 00       ..
     .asc "REPORT"                                                     // 8737: 52 45 50... REP
-    .byt $f6,   1                                                     // 873d: f6 01       ..
+    .byt $f6, 1                                                       // 873d: f6 01       ..
     .asc "READ"                                                       // 873f: 52 45 41... REA
-    .byt $f3,   2                                                     // 8743: f3 02       ..
+    .byt $f3, 2                                                       // 8743: f3 02       ..
     .asc "REM"                                                        // 8745: 52 45 4d    REM
     .byt $f4                                                          // 8748: f4          .
     .asc " RUN"                                                       // 8749: 20 52 55...  RU
-    .byt $f9,   1                                                     // 874d: f9 01       ..
+    .byt $f9, 1                                                       // 874d: f9 01       ..
     .asc "RAD"                                                        // 874f: 52 41 44    RAD
-    .byt $b2,   0                                                     // 8752: b2 00       ..
+    .byt $b2, 0                                                       // 8752: b2 00       ..
     .asc "RESTORE"                                                    // 8754: 52 45 53... RES
     .byt $f7, $12                                                     // 875b: f7 12       ..
     .asc "RIGHT$("                                                    // 875d: 52 49 47... RIG
-    .byt $c2,   0                                                     // 8764: c2 00       ..
+    .byt $c2, 0                                                       // 8764: c2 00       ..
     .asc "RND"                                                        // 8766: 52 4e 44    RND
-    .byt $b3,   1                                                     // 8769: b3 01       ..
+    .byt $b3, 1                                                       // 8769: b3 01       ..
     .asc "RENUMBER"                                                   // 876b: 52 45 4e... REN
     .byt $cc, $10                                                     // 8773: cc 10       ..
     .asc "STEP"                                                       // 8775: 53 54 45... STE
-    .byt $88,   0                                                     // 8779: 88 00       ..
+    .byt $88, 0                                                       // 8779: 88 00       ..
     .asc "SAVE"                                                       // 877b: 53 41 56... SAV
-    .byt $cd,   2                                                     // 877f: cd 02       ..
+    .byt $cd, 2                                                       // 877f: cd 02       ..
     .asc "SGN"                                                        // 8781: 53 47 4e    SGN
-    .byt $b4,   0                                                     // 8784: b4 00       ..
+    .byt $b4, 0                                                       // 8784: b4 00       ..
     .asc "SIN"                                                        // 8786: 53 49 4e    SIN
-    .byt $b5,   0                                                     // 8789: b5 00       ..
+    .byt $b5, 0                                                       // 8789: b5 00       ..
     .asc "SQR"                                                        // 878b: 53 51 52    SQR
-    .byt $b6,   0                                                     // 878e: b6 00       ..
+    .byt $b6, 0                                                       // 878e: b6 00       ..
     .asc "SPC"                                                        // 8790: 53 50 43    SPC
-    .byt $89,   0                                                     // 8793: 89 00       ..
+    .byt $89, 0                                                       // 8793: 89 00       ..
     .asc "STR$"                                                       // 8795: 53 54 52... STR
-    .byt $c3,   0                                                     // 8799: c3 00       ..
+    .byt $c3, 0                                                       // 8799: c3 00       ..
     .asc "STRING$("                                                   // 879b: 53 54 52... STR
-    .byt $c4,   0                                                     // 87a3: c4 00       ..
+    .byt $c4, 0                                                       // 87a3: c4 00       ..
     .asc "SOUND"                                                      // 87a5: 53 4f 55... SOU
-    .byt $d4,   2                                                     // 87aa: d4 02       ..
+    .byt $d4, 2                                                       // 87aa: d4 02       ..
     .asc "STOP"                                                       // 87ac: 53 54 4f... STO
-    .byt $fa,   1                                                     // 87b0: fa 01       ..
+    .byt $fa, 1                                                       // 87b0: fa 01       ..
     .asc "TAN"                                                        // 87b2: 54 41 4e    TAN
-    .byt $b7,   0                                                     // 87b5: b7 00       ..
+    .byt $b7, 0                                                       // 87b5: b7 00       ..
     .asc "THEN"                                                       // 87b7: 54 48 45... THE
-    .byt $8c, $14, $54, $4f, $b8,   0                                 // 87bb: 8c 14 54... ..T
+    .byt $8c, $14, $54, $4f, $b8, 0                                   // 87bb: 8c 14 54... ..T
     .asc "TAB("                                                       // 87c1: 54 41 42... TAB
-    .byt $8a,   0                                                     // 87c5: 8a 00       ..
+    .byt $8a, 0                                                       // 87c5: 8a 00       ..
     .asc "TRACE"                                                      // 87c7: 54 52 41... TRA
     .byt $fc, $12                                                     // 87cc: fc 12       ..
     .asc "TIME"                                                       // 87ce: 54 49 4d... TIM
     .byt $91                                                          // 87d2: 91          .
     .asc "CTRUE"                                                      // 87d3: 43 54 52... CTR
-    .byt $b9,   1                                                     // 87d8: b9 01       ..
+    .byt $b9, 1                                                       // 87d8: b9 01       ..
     .asc "UNTIL"                                                      // 87da: 55 4e 54... UNT
-    .byt $fd,   2                                                     // 87df: fd 02       ..
+    .byt $fd, 2                                                       // 87df: fd 02       ..
     .asc "USR"                                                        // 87e1: 55 53 52    USR
-    .byt $ba,   0                                                     // 87e4: ba 00       ..
+    .byt $ba, 0                                                       // 87e4: ba 00       ..
     .asc "VDU"                                                        // 87e6: 56 44 55    VDU
-    .byt $ef,   2                                                     // 87e9: ef 02       ..
+    .byt $ef, 2                                                       // 87e9: ef 02       ..
     .asc "VAL"                                                        // 87eb: 56 41 4c    VAL
-    .byt $bb,   0                                                     // 87ee: bb 00       ..
+    .byt $bb, 0                                                       // 87ee: bb 00       ..
     .asc "VPOS"                                                       // 87f0: 56 50 4f... VPO
-    .byt $bc,   1                                                     // 87f4: bc 01       ..
+    .byt $bc, 1                                                       // 87f4: bc 01       ..
     .asc "WIDTH"                                                      // 87f6: 57 49 44... WID
-    .byt $fe,   2                                                     // 87fb: fe 02       ..
+    .byt $fe, 2                                                       // 87fb: fe 02       ..
     .asc "PAGE"                                                       // 87fd: 50 41 47... PAG
-    .byt $d0,   0                                                     // 8801: d0 00       ..
+    .byt $d0, 0                                                       // 8801: d0 00       ..
     .asc "PTR"                                                        // 8803: 50 54 52    PTR
-    .byt $cf,   0, $54, $49                                           // 8806: cf 00 54... ..T
+    .byt $cf, 0, $54, $49                                             // 8806: cf 00 54... ..T
 // $880a referenced 1 time by $90e0
 l880a
-    .byt $4d, $45, $d1,   0                                           // 880a: 4d 45 d1... ME.
+    .byt $4d, $45, $d1, 0                                             // 880a: 4d 45 d1... ME.
     .asc "LOMEM"                                                      // 880e: 4c 4f 4d... LOM
-    .byt $d2,   0                                                     // 8813: d2 00       ..
+    .byt $d2, 0                                                       // 8813: d2 00       ..
     .asc "HIMEM"                                                      // 8815: 48 49 4d... HIM
-    .byt $d3,   0                                                     // 881a: d3 00       ..
+    .byt $d3, 0                                                       // 881a: d3 00       ..
     .asc "Missing "                                                   // 881c: 4d 69 73... Mis
-    .byt $8d,   0                                                     // 8824: 8d 00       ..
+    .byt $8d, 0                                                       // 8824: 8d 00       ..
 l8826
 l8909 = l8826+227
     .word sub_cab37, sub_cab21, sub_cae50, sub_cae8c, sub_cae71       // 8826: 37 ab 21... 7.!
@@ -1358,7 +1358,7 @@ l8909 = l8826+227
     .word sub_c970b, sub_cba47, sub_cb351, sub_cbec7, sub_c834b       // 8902: 0b 97 47... ..G
     .word sub_c8984, sub_cb896                                        // 890c: 84 89 96... ...
 // $8909 referenced 1 time by $8ae3
-    .byt $b9, $d8, $d9, $f0,   1, $10, $81, $90, $89, $93, $a3, $a4   // 8910: b9 d8 d9... ...
+    .byt $b9, $d8, $d9, $f0, 1, $10, $81, $90, $89, $93, $a3, $a4     // 8910: b9 d8 d9... ...
     .byt $a9                                                          // 891c: a9          .
     .asc "89x"                                                        // 891d: 38 39 78    89x
     .byt   1, $13, $21, $a1, $c1, $19, $18, $99, $98, $63, $73, $b1   // 8920: 01 13 21... ..!
@@ -1373,8 +1373,8 @@ l894e
     .asc "%%9AAAAJJLLLPPRSSS"                                         // 8956: 25 25 39... %%9
     .byt $10                                                          // 8968: 10          .
     .asc "%AAAA"                                                      // 8969: 25 41 41... %AA
-    .byt   8,   8,   8,   9,   9, $0a, $0a, $0a, $0a,   5, $15, $3e   // 896e: 08 08 08... ...
-    .byt   4, $0d, $30, $4c,   6                                      // 897a: 04 0d 30... ..0
+    .byt   8,   8, 8, 9, 9, $0a, $0a, $0a, $0a, 5, $15, $3e, 4, $0d   // 896e: 08 08 08... ...
+    .byt $30, $4c, 6                                                  // 897c: 30 4c 06    0L.
     .asc "2II"                                                        // 897f: 32 49 49    2II
     .byt $10, $25                                                     // 8982: 10 25       .%
 
@@ -2506,7 +2506,7 @@ sub_c8fb4
 c8fbb
     brk                                                               // 8fbb: 00          .
 
-    .byt   5, $8d, $2c,   0                                           // 8fbc: 05 8d 2c... ..,
+    .byt 5, $8d, $2c, 0                                               // 8fbc: 05 8d 2c... ..,
 
 sub_c8fc0
     jsr sub_cbe17                                                     // 8fc0: 20 17 be     ..
@@ -2771,7 +2771,7 @@ sub_c9149
     jsr c9c6a                                                         // 9149: 20 6a 9c     j.
     brk                                                               // 914c: 00          .
 
-    .byt   0, $fa                                                     // 914d: 00 fa       ..
+    .byt 0, $fa                                                       // 914d: 00 fa       ..
 
 // $914f referenced 2 times by $9126, $912d
 c914f
@@ -3143,7 +3143,7 @@ loop_c9356
 c9357
     brk                                                               // 9357: 00          .
 
-    .byt   9, $8d, $22,   0                                           // 9358: 09 8d 22... .."
+    .byt 9, $8d, $22, 0                                               // 9358: 09 8d 22... .."
 
 // $935c referenced 2 times by $b8fa, $b8ff
 sub_c935c
@@ -3314,7 +3314,7 @@ c9469
 c9476
     brk                                                               // 9476: 00          .
 
-    .byt   0, $cc                                                     // 9477: 00 cc       ..
+    .byt 0, $cc                                                       // 9477: 00 cc       ..
     .asc " space"                                                     // 9479: 20 73 70...  sp
 
 // $947f referenced 2 times by $942a, $942e
@@ -3563,7 +3563,7 @@ c95f1
 
     .byt $0a                                                          // 95f2: 0a          .
     .asc "Bad "                                                       // 95f3: 42 61 64... Bad
-    .byt $de,   0                                                     // 95f7: de 00       ..
+    .byt $de, 0                                                       // 95f7: de 00       ..
 
 // $95f9 referenced 1 time by $95c1
 c95f9
@@ -3924,7 +3924,7 @@ c9808
 
     .byt $19                                                          // 9809: 19          .
     .asc "Bad "                                                       // 980a: 42 61 64... Bad
-    .byt $eb,   0                                                     // 980e: eb 00       ..
+    .byt $eb, 0                                                       // 980e: eb 00       ..
 
 sub_c9810
     jsr sub_c9332                                                     // 9810: 20 32 93     2.
@@ -6855,7 +6855,7 @@ ca7c0
     .asc "-ve roo"                                                    // a7c2: 2d 76 65... -ve
 // $a7c9 referenced 1 time by $a985
 la7c9
-    .byt $74,   0, $86, $8e                                           // a7c9: 74 00 86... t..
+    .byt $74, 0, $86, $8e                                             // a7c9: 74 00 86... t..
 
 // $a7cd referenced 1 time by $a7b3
 ca7cd
@@ -8285,7 +8285,7 @@ loop_cafc1
 
     .byt $1d                                                          // afc8: 1d          .
     .asc "No such "                                                   // afc9: 4e 6f 20... No
-    .byt $a4, $2f, $f2,   0                                           // afd1: a4 2f f2... ./.
+    .byt $a4, $2f, $f2, 0                                             // afd1: a4 2f f2... ./.
 
 // $afd5 referenced 1 time by $b0a3
 cafd5
@@ -8739,8 +8739,8 @@ sub_cb269
     lda l002a                                                         // b26c: a5 2a       .*
     jmp caeb4                                                         // b26e: 4c b4 ae    L..
 
-    .byt $a4, $0a, $f0,   1, $88, $20, $80, $9c, $64,   8, $64,   9   // b271: a4 0a f0... ...
-    .byt $a6, $18, $86                                                // b27d: a6 18 86    ...
+    .byt $a4, $0a, $f0, 1, $88, $20, $80, $9c, $64, 8, $64, 9, $a6    // b271: a4 0a f0... ...
+    .byt $18, $86                                                     // b27e: 18 86       ..
     .asc "8d7"                                                        // b280: 38 64 37    8d7
     .byt $a4, $0c, $c0,   7, $f0, $28, $a6, $0b, $20, $5d, $8e, $c9   // b283: a4 0c c0... ...
     .byt $0d, $d0, $18, $e4, $37, $98, $e5, $38, $90, $18, $20, $5d   // b28f: 0d d0 18... ...
@@ -9175,7 +9175,7 @@ cb563
     brk                                                               // b563: 00          .
 
     .asc " No "                                                       // b564: 20 4e 6f...  No
-    .byt $e3,   0                                                     // b568: e3 00       ..
+    .byt $e3, 0                                                       // b568: e3 00       ..
 
 // $b56a referenced 2 times by $b52b, $b549
 cb56a
@@ -9302,7 +9302,7 @@ loop_cb642
     brk                                                               // b642: 00          .
 
     .asc "$No "                                                       // b643: 24 4e 6f... $No
-    .byt $b8,   0                                                     // b647: b8 00       ..
+    .byt $b8, 0                                                       // b647: b8 00       ..
 
 sub_cb649
     jsr sub_c997d                                                     // b649: 20 7d 99     }.
@@ -9422,7 +9422,7 @@ loop_cb730
     brk                                                               // b730: 00          .
 
     .asc "&No "                                                       // b731: 26 4e 6f... &No
-    .byt $e4,   0                                                     // b735: e4 00       ..
+    .byt $e4, 0                                                       // b735: e4 00       ..
 
 sub_cb737
     jsr c9c6a                                                         // b737: 20 6a 9c     j.
@@ -9938,7 +9938,7 @@ cba35
     brk                                                               // ba35: 00          .
 
     .asc ",Too many "                                                 // ba36: 2c 54 6f... ,To
-    .byt $f5, $73,   0                                                // ba40: f5 73 00    .s.
+    .byt $f5, $73, 0                                                  // ba40: f5 73 00    .s.
 
 // $ba43 referenced 1 time by $ba13
 cba43
@@ -10171,7 +10171,7 @@ cbb64
     jsr sub_cbbdc                                                     // bb8e: 20 dc bb     ..
     brk                                                               // bb91: 00          .
 
-    .byt   0, $86                                                     // bb92: 00 86       ..
+    .byt 0, $86                                                       // bb92: 00 86       ..
     .asc " space"                                                     // bb94: 20 73 70...  sp
     .byt 0                                                            // bb9a: 00          .
 
@@ -10934,10 +10934,10 @@ lbf71
     .byt $82, $7f, $b9, $ff, $78, $7b, $0e, $fa, $35, $12, $86, $65   // bfc5: 82 7f b9... ...
     .byt $2e, $e0, $d3, $7e, $88, $88, $88, $89, $7b, $8c             // bfd1: 2e e0 d3... ...
     .asc "o-Y"                                                        // bfdb: 6f 2d 59    o-Y
-    .byt $81, $99, $99, $99, $9a, $f3, $9e, $7b, $77, $81, $c0,   0   // bfde: 81 99 99... ...
-    .byt   0,   0, $80, $93, $e6, $90,   0, $81, $c4                  // bfea: 00 00 80... ...
+    .byt $81, $99, $99, $99, $9a, $f3, $9e, $7b, $77, $81, $c0, 0, 0  // bfde: 81 99 99... ...
+    .byt   0, $80, $93, $e6, $90,   0, $81, $c4                       // bfeb: 00 80 93... ...
     .asc "DDD"                                                        // bff3: 44 44 44    DDD
-    .byt $80, $9d, $fd, $13,   4, $81, $e6                            // bff6: 80 9d fd... ...
+    .byt $80, $9d, $fd, $13, 4, $81, $e6                              // bff6: 80 9d fd... ...
     .asc "fff"                                                        // bffd: 66 66 66    fff
 pydis_end
 
