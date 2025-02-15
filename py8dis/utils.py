@@ -166,3 +166,68 @@ def round_up(n: int, multiple: int = 4) -> int:
     """
     return ((n + (multiple - 1)) // multiple) * multiple
 
+def format_strings_in_a_table(strings, max_width, items_per_line_already_known, formatter_for_line, right_align=True):
+    """
+    Format a list of strings into lines with equal number of items per line.
+    Entries are comma separated. Entries are aligned vertically by padding
+    with spaces.
+
+    Just before each line is added to the result, a formatter is called:
+        formatter_for_line(line, start_index, end_index)
+    to get the final text for the line.
+
+    Args:
+        strings (list): List of strings to format
+        max_width (int): Maximum width of each line
+
+    Returns:
+        list: List of formatted lines
+    """
+    if not strings:
+        return []
+
+    def get_column_widths(strings, items_per_line):
+        """Calculate the maximum width for each column."""
+        widths = [0] * items_per_line
+        for i in range(0, len(strings), items_per_line):
+            line = strings[i:i + items_per_line]
+            for j, item in enumerate(line):
+                widths[j] = max(widths[j], len(item))
+        return widths
+
+    # loop through the possible values for items_per_line
+    if items_per_line_already_known:
+        # Loop once only at the specified number of items
+        items_per_line_range = range(items_per_line_already_known, items_per_line_already_known-1, -1)
+    else:
+        # Loop through all possible items per line
+        items_per_line_range = range(len(strings), 0, -1)
+
+    # Try different numbers of items per line
+    for items_per_line in items_per_line_range:
+        line_count = len(strings) // items_per_line
+
+        # Check if this arrangement fits within max_width
+        # Calculate column widths for this arrangement
+        column_widths = get_column_widths(strings, items_per_line)
+
+        # Calculate total line width including commas and spaces
+        total_width = sum(column_widths) + (items_per_line - 1) * 2  # 2 chars for ", "
+
+        # If it now fits, or it's the last possible value for items_per_line, then accept it.
+        if (total_width <= max_width) or (items_per_line == (items_per_line_range.stop+1)):
+            result = []
+            for i in range(0, len(strings), items_per_line):
+                line = strings[i:i + items_per_line]
+                # Format each item to its column width
+                formatted_items = []
+                for item, width in zip(line, column_widths):
+                    if right_align:
+                        formatted_items.append(f"{str(item):>{width}}")
+                    else:
+                        formatted_items.append(f"{str(item):<{width}}")
+                result.append(formatter_for_line(", ".join(formatted_items), i, min(i+items_per_line, len(strings))))
+            return result
+
+    # If no arrangement works, format one item per line. Should never happen.
+    return formatter_for_line(strings[0], 0, 1)

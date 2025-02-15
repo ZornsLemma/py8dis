@@ -124,18 +124,16 @@ def level_data(addr, index):
     addr += 5
     comment(addr, "Platform data (Y, startX, endX)")
     mylabel(addr, lab + "platform_start")
-    for i in range(0, platform_count):
-        byte(addr, 3)
-        decimal(addr, 3)
-        addr += 3
+    byte(addr, platform_count * 3, 3)
+    decimal(addr, platform_count * 3)
+    addr += platform_count * 3
     mylabel(addr, lab + "platform_end")
 
     comment(addr, "Ladder data (X, bottom Y, top Y)")
     mylabel(addr, lab + "ladder_start")
-    for i in range(0, ladder_count):
-        byte(addr, 3)
-        decimal(addr, 3)
-        addr += 3
+    byte(addr, ladder_count*3, 3)
+    decimal(addr, ladder_count*3)
+    addr += ladder_count*3
     mylabel(addr, lab + "ladder_end")
 
     if (has_lifts):
@@ -145,26 +143,23 @@ def level_data(addr, index):
 
     mylabel(addr, lab + "eggs_start")
     comment(addr, "Data for 12 eggs (X, Y)")
-    for i in range(0, 12):
-        byte(addr, 2)
-        decimal(addr, 2)
-        addr += 2
+    byte(addr, 24, 2)
+    decimal(addr, 24)
+    addr += 24
     mylabel(addr, lab + "eggs_end")
 
     comment(addr, "Seed data (X, Y)")
     mylabel(addr, lab + "seed_start")
-    for i in range(0, seed_count):
-        byte(addr, 2)
-        decimal(addr, 2)
-        addr += 2
+    byte(addr, seed_count*2, 2)
+    decimal(addr, seed_count*2)
+    addr += seed_count*2
     mylabel(addr, lab + "seed_end")
 
     mylabel(addr, lab + "bird_data")
     comment(addr, "Bird data (X, Y)")
-    for i in range(0, 5):
-        byte(addr, 2)
-        decimal(addr, 2)
-        addr += 2
+    byte(addr, 5*2, 2)
+    decimal(addr, 5*2)
+    addr += 5*2
     return addr
 
 def declare_stringn(addr, lab):
@@ -868,8 +863,9 @@ mylabel(0x2F86, "playdeathtune")
 mylabel(0x2F92, "playdeathtuneloop")
 label_with_comment(0x2FB0, "deathtunedata", "Death tune data")
 mylabel(0x2FB1, "deathtune_start")
-for x in range(0x2FB1, 0x2FD1, 2):
-    byte(x, 2, 2)
+byte(0x2FB1, 0x2FD1-0x2FB1, 2)
+#for x in range(0x2FB1, 0x2FD1, 2):
+#    byte(x, 2, 2)
 decimal(0x2FB1, 0x2FD1 - 0x2FB1)
 mylabel(0x2FD1, "deathtune_end")
 label_with_comment(0x2FD1, "envelope1", "Envelope data")
