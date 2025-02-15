@@ -21,8 +21,8 @@ class Assembler(object):
     # pairs.
     pending_assertions = {}
 
-    # 'output_filename': Some assemblers (e.g. beebasm) can save the resulting
-    # binary to a specific filepath if specified.
+    # 'output_filename': Some assemblers (e.g. beebasm and acme) can save the
+    # resulting binary to a specific filepath if specified.
     output_filename = None
 
     def set_output_filename(self, filename):

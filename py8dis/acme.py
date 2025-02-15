@@ -23,7 +23,8 @@ class Acme(assembler.Assembler):
         return ["6502", "65c02"]
 
     def hex2(self, n):
-        return "$%s" % utils.plainhex2(n)
+        """format a two digit hex number"""
+        return "${0}".format(utils.plainhex2(n))
 
     def hex(self, n):
         # Use two digits for addresses in zero page, otherwise four digits.
@@ -33,6 +34,7 @@ class Acme(assembler.Assembler):
             return "$%s" % utils.plainhex4(n)
 
     def hex4(self, n):
+        """format a four digit hex number"""
         # WARNING: Normally this should output four digits of hex, but...
         # Older versions of acme don't like things like:
         #
@@ -45,6 +47,8 @@ class Acme(assembler.Assembler):
         return self.hex(n)
 
     def translate_binary_operator_names(self):
+        """Returns a dictionary that translates generic binary operator names
+        into the assembler specific versions"""
         # 'generic name: assembler specific name'
         return { 'OR': '|'  ,
                   '|': '|'  ,
@@ -61,29 +65,31 @@ class Acme(assembler.Assembler):
         }
 
     def translate_unary_operator_names(self):
+        """Returns a dictionary that translates generic unary operator names
+        into the assembler specific versions"""
         # 'generic name: assembler specific name'
         return { 'NOT': '!',
                    '!': '!',
         }
 
     def inline_label(self, name):
-        # text for defining a label in the first column.
+        """Returns the string for defining a label in the first column."""
         return "%s" % name
 
     def explicit_label(self, name, value, offset=None, align_column=0):
-        # Output when declaring a label with an explicit value:
-        #
-        #   i.e. 'label = value'
-        #
-        # with an optional offset added to the value, and optional column
-        # alignment at the equals sign.
+        """Output when declaring a label with an explicit value:
+
+           i.e. 'label = value'
+
+        with an optional offset (e.g. '+1') added to the value, with optional
+        column alignment at the equals sign."""
         return "%s= %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
 
     def comment_prefix(self):
         return ";"
 
     def disassembly_start(self):
-        # Preamble to be output at the start of the disassembly.
+        """Preamble to be output at the start of the disassembly."""
         result = []
 
         if config.get_cmos():
@@ -91,21 +97,24 @@ class Acme(assembler.Assembler):
         return result
 
     def code_start(self, start_addr, end_addr, first):
-        # At the start of the code we provide the address at which to assemble.
+        """At the start of the code we provide the address at which to
+        assemble."""
         return ["", "%s* = %s" % (utils.make_indent(1), self.hex4(start_addr)), ""]
 
     def code_end(self):
         return []
 
     def pseudopc_start(self, dest, source, length, move_id):
-        # When assembling code at a different address to where it will actually execute,
-        # it is surrounded by '!pseudopc <execution-address> { <code> }'
+        """Used when assembling code at a different address to where it will
+        actually execute."""
+        # It is surrounded by '!pseudopc <execution-address> { <code> }'
         return [utils.force_case("!pseudopc %s {" % self.hex(dest))]
 
     def pseudopc_end(self, dest, source, length, move_id):
         return ["}", ""]
 
     def disassembly_end(self):
+        """Output assertions at the end of the disassembly"""
         result = []
 
         # Write the output file if specified

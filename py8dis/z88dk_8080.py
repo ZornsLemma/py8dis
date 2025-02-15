@@ -22,18 +22,30 @@ class Z88DK(assembler.Assembler):
         return ["8080"]
 
     def hex2(self, n):
+        """format a two digit hex number"""
         return "$%s" % utils.plainhex2(n)
 
     def hex(self, n):
+        """format a hex number"""
         if n <= 0xff:
             return self.hex2(n)
         else:
             return "$%s" % utils.plainhex4(n)
 
     def hex4(self, n):
+        """format a four digit hex number"""
+        # WARNING: Normally this should output four digits of hex, but...
+        # z88dk doesn't like things like:
+        #
+        #     LDA $00A4,Y
+        #
+        # z88dk makes the assumption that the address is not zero page.
+        # To avoid the issue we only use four digits when necessary.
         return self.hex(n)
 
     def translate_binary_operator_names(self):
+        """Returns a dictionary that translates generic binary operator names
+        into the assembler specific versions"""
         # 'generic name: assembler specific name'
         return { 'OR': None,
                   '|': None,
@@ -49,34 +61,44 @@ class Z88DK(assembler.Assembler):
                  '!=': None,
         }
     def translate_unary_operator_names(self):
+        """Returns a dictionary that translates generic unary operator names
+        into the assembler specific versions"""
         # 'generic name: assembler specific name'
         return { 'NOT': '!',
                    '!': '!',
         }
 
     def inline_label(self, name):
-        return "%s:" % name
+        """Returns the string for defining a label in the first column."""
+        return "{0}:".format(name)
 
     def explicit_label(self, name, value, offset=None, align_column=0):
+        """Output when declaring a label with an explicit value:
+
+           i.e. 'label = value'
+
+        with an optional offset (e.g. '+1') added to the value, with optional
+        column alignment at the equals sign."""
         return "%sEQU %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
 
     def comment_prefix(self):
         return ";"
 
     def disassembly_start(self):
-        # Preamble to be output at the start of the disassembly.
+        """Preamble to be output at the start of the disassembly."""
         return []
 
     def code_start(self, start_addr, end_addr, first):
-        # At the start of the code we provide the address at which to assemble.
+        """At the start of the code we provide the address at which to
+        assemble."""
         return ["", "%sORG %s" % (utils.make_indent(1), self.hex4(start_addr)), ""]
 
     def code_end(self):
         return []
 
     def pseudopc_start(self, dest, source, length, move_id):
-        # Note: Used when assembling code at a different address to where
-        # it will actually execute. Sadly, z88dk does not support this.
+        """Used when assembling code at a different address to where it will
+        actually execute. Sadly, z88dk does not support this."""
         return [utils.force_case("; TODO: !pseudopc %s {" % self.hex(dest))]
 
     def pseudopc_end(self, dest, source, length, move_id):
@@ -84,9 +106,9 @@ class Z88DK(assembler.Assembler):
         return ["; TODO: }", ""]
 
     def disassembly_end(self):
+        """Output assertions at the end of the disassembly"""
         result = []
 
-        # At the end of the assembly, we output assertions.
         if config.get_include_assertions():
             spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
             for expr, value in spa:

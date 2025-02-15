@@ -28,18 +28,23 @@ class Beebasm(assembler.Assembler):
         return ["6502", "65c02"]
 
     def hex2(self, n):
-        return "&%s" % utils.plainhex2(n)
+        """format a two digit hex number"""
+        return "&{0}".format(utils.plainhex2(n))
 
     def hex4(self, n):
-        return "&%s" % utils.plainhex4(n)
+        """format a four digit hex number"""
+        return "&{0}".format(utils.plainhex4(n))
 
     def hex(self, n):
+        """format a hex number"""
         if n <= 0xff:
             return self.hex2(n)
         else:
             return self.hex4(n)
 
     def translate_binary_operator_names(self):
+        """Returns a dictionary that translates generic binary operator names
+        into the assembler specific versions"""
         # 'generic name: assembler specific name'
         return { 'OR': 'OR',
                   '|': 'OR',
@@ -56,34 +61,38 @@ class Beebasm(assembler.Assembler):
         }
 
     def translate_unary_operator_names(self):
+        """Returns a dictionary that translates generic unary operator names
+        into the assembler specific versions"""
         # 'generic name: assembler specific name'
         return { 'NOT': 'NOT',
                    '!': 'NOT',
         }
 
     def inline_label(self, name):
-        return ".%s" % name
+        """Returns the string for defining a label in the first column."""
+        return ".{0}".format(name)
 
     def explicit_label(self, name, value, offset=None, align_column=0):
-        # Output when declaring a label with an explicit value:
-        #
-        #   i.e. 'label = value'
-        #
-        # with an optional offset added to the value, and optional column
-        # alignment at the equals sign.
+        """Output when declaring a label with an explicit value:
+
+           i.e. 'label = value'
+
+        with an optional offset (e.g. '+1') added to the value, with optional
+        column alignment at the equals sign."""
         return "%s= %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
 
     def comment_prefix(self):
         return ";"
 
     def disassembly_start(self):
-        # Preamble to be output at the start of the disassembly.
+        """Preamble to be output at the start of the disassembly."""
         if config.get_cmos():
             return [utils.make_indent(1) + utils.force_case("cpu 1"), ""]
         return []
 
     def code_start(self, start_addr, end_addr, first):
-        # At the start of the code we provide the address at which to assemble.
+        """At the start of the code we provide the address at which to
+        assemble."""
         result = ["", utils.make_indent(1) + utils.force_case("org %s" % self.hex4(start_addr))]
         result.append("")
         return result
@@ -122,8 +131,8 @@ class Beebasm(assembler.Assembler):
         return temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end
 
     def pseudopc_start(self, dest, source, length, move_id):
-        # Used when assembling code at a different address to where it will
-        # actually execute.
+        """Used when assembling code at a different address to where it will
+        actually execute."""
 
         result = []
 
@@ -224,9 +233,9 @@ class Beebasm(assembler.Assembler):
         return result
 
     def disassembly_end(self):
+        """Output assertions at the end of the disassembly"""
         result = []
 
-        # At the end of the assembly, we output assertions.
         if config.get_include_assertions():
             spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
 

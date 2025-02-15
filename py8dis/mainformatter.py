@@ -96,7 +96,6 @@ def add_inline_comment(binary_loc, length, cycles_description, annotations, s):
 def format_data_block_line(binary_loc, text, start_index, end_index, element_size, annotations, data_prefix):
     result = data_prefix + text
 
-    # TODO: Add *all* comments/annotations to line, not just those for the one address
     current_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + start_index*element_size, binary_loc.move_id)
     result = add_inline_comment(current_binary_loc, (end_index - start_index)*element_size, "", annotations, result)
     return result
@@ -104,9 +103,13 @@ def format_data_block_line(binary_loc, text, start_index, end_index, element_siz
 def format_data_block(binary_loc, length, cols, element_size, annotations):
     """Format a block of data.
 
-    Formats an array of bytes or words, returning one string for each
+    Formats an array of bytes or words, returning a string for each
     line of output.
     """
+    # TODO: We should also support "just emit with no padding or
+    # attempt to align columns but not spilling past data_width
+    # unless a single item forces it", a pseudo "word wrapping"
+    # style
 
     assert isinstance(binary_loc.binary_addr, BinaryAddr)
     assert memorymanager.is_valid_binary_addr(binary_loc.binary_addr)
@@ -128,41 +131,6 @@ def format_data_block(binary_loc, length, cols, element_size, annotations):
     result = utils.format_strings_in_a_table(data, data_width, cols, lambda text, start_index, end_index:
         format_data_block_line(binary_loc, text, start_index, end_index, element_size, annotations, prefix))
     return result
-
-
-    #separator = ", "
-    #
-    ## Calculate the number of data items we can fit on a line
-    #longest_item = max(len(x) for x in data)
-    #if cols is not None:
-    #    num_data_items_on_line = cols
-    #else:
-    #    # TODO: We should also support "just emit with no padding or
-    #    # attempt to align columns but not spilling past data_width
-    #    # unless a single item forces it", a pseudo "word wrapping"
-    #    # style
-    #
-    #    # TODO: We might want to use a different value instead of
-    #    # config.get_inline_comment_column(), e.g. absolute_max_width
-    #    # (80/100/whatever) - "hex dump max width or 0 if no hex dump".
-    #
-    #    data_width = config.get_inline_comment_column() - len(prefix)
-    #    if config.get_hex_dump():
-    #        data_width -= 1 # leave a space before the hex dump comment prefix
-    #    # We add len(separator) to data_width because if there are n
-    #    # items on a line we only need n-1 separators, but the divisor
-    #    # assumes every item includes a separator.
-    #    num_data_items_on_line = max(1, (data_width + len(separator)) // (longest_item + len(separator)))
-    #
-    ## Add each line to the result
-    #result = []
-    #for i in range(0, len(data), num_data_items_on_line):
-    #    items_on_line = min(len(data) - i, num_data_items_on_line)
-    #    core_str = prefix + separator.join("%*s" % (longest_item, x) for x in data[i:i+num_data_items_on_line])
-    #    current_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + i * element_size, binary_loc.move_id)
-    #    core_str = add_inline_comment(current_binary_loc, items_on_line * element_size, "", annotations, core_str)
-    #    result.append(core_str)
-    #return result
 
 def uint_formatter(n, bits, pad=False):
     """Format an 8 or 16 bit number as hex or single digit decimal.
