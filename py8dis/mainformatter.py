@@ -192,9 +192,6 @@ def decimal_formatter(n, bits):
 def hexadecimal_formatter(n, bits):
     """Format an 8 or 16 bit hex number"""
 
-    # TODO: It's possible we want to offer some additional control over leading
-    # zero padding and number of hex digits emitted, but let's just go with this
-    # for now.
     return config.get_assembler().hex(n)
 
 def constant(binary_addr, n, bits):

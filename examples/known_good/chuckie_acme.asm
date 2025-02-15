@@ -12,24 +12,25 @@
 BigBirdColour                   = 32
 BirdColour                      = 128
 CageColour                      = 32
-Colour0                         = 0
-Colour1                         = 2
-Colour2                         = 8
-Colour3                         = 10
-Colour4                         = 32
-Colour5                         = 34
-Colour6                         = 40
-Colour7                         = 42
-Colour8                         = 128
-Colour9                         = 130
-Colour10                        = 136
-Colour11                        = 138
-Colour12                        = 160
-Colour13                        = 162
-Colour14                        = 168
-Colour15                        = 170
+char_ampersand                  = '&'
+Colour0                         = $00
+Colour1                         = $02
+Colour2                         = $08
+Colour3                         = $0a
+Colour4                         = $20
+Colour5                         = $22
+Colour6                         = $28
+Colour7                         = $2a
+Colour8                         = $80
+Colour9                         = $82
+Colour10                        = $88
+Colour11                        = $8a
+Colour12                        = $a0
+Colour13                        = $a2
+Colour14                        = $a8
+Colour15                        = $aa
 DigitsColour                    = 8
-EggColour                       = 2     ; For the collectable eggs
+EggColour                       = 2         ; For the collectable eggs
 inkey_key_1                     = 207
 inkey_key_2                     = 206
 inkey_key_3                     = 238
@@ -47,10 +48,10 @@ LivesColour                     = 32
 ; ...for the lives displayed in the status area at the top of the screen above the play
 ; area below the score if I remember correctly
 LogoColour                      = 2
-MapId_Egg                       = 4
-MapId_Ladder                    = 2
-MapId_Platform                  = 1
-MapId_Seed                      = 8
+MapId_Egg                       = %00000100
+MapId_Ladder                    = %00000010
+MapId_Platform                  = %00000001
+MapId_Seed                      = %00001000
 osbyte_clear_escape             = 124
 osbyte_flush_buffer_class       = 15
 osbyte_inkey                    = 129
@@ -3744,7 +3745,7 @@ clearhiscorenameloop
     lda #'F'                                                          ; 27aa: a9 46       .F
     sta (read),y                                                      ; 27ac: 91 76       .v
     dey                                                               ; 27ae: 88          .
-    lda #'&'                                                          ; 27af: a9 26       .&
+    lda #char_ampersand                                               ; 27af: a9 26       .&
     sta (read),y                                                      ; 27b1: 91 76       .v
     dey                                                               ; 27b3: 88          .
     lda #'A'                                                          ; 27b4: a9 41       .A

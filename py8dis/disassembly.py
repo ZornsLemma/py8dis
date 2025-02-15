@@ -28,6 +28,7 @@ import utils
 from movemanager import BinaryLocation
 from memorymanager import BinaryAddr, RuntimeAddr
 from align import Align
+from format import Format
 
 # A user supplied function that creates a label name based on context
 user_label_maker_hook = None
@@ -112,7 +113,7 @@ def add_raw_annotation(binary_loc, text, *, inline=False, priority=None):
     binary_loc = movemanager.make_binloc(binary_loc)
     annotations[binary_loc].append(Annotation(text, inline, priority))
 
-def add_constant(value, name, comment=None, align=Align.INLINE):
+def add_constant(value, name, comment=None, align=Align.INLINE, format=Format.DEFAULT):
     """Create a named constant value."""
 
     # Make sure we don't add the same constant twice. Assert if trying to
@@ -123,7 +124,7 @@ def add_constant(value, name, comment=None, align=Align.INLINE):
             assert c.value == value
             return
 
-    constants.append(constant.Constant(value, name, comment, align))
+    constants.append(constant.Constant(value, name, comment, align, format))
 
 def is_simple_name(s):
     """Check the name is a simple valid label name.
@@ -526,11 +527,19 @@ def calculate_move_ranges():
 
     return move_ranges
 
-def value_to_string(value):
-    if config.get_constants_are_decimal():
+def constant_value_to_string(value, format):
+    """Convert the given value of a constant, return the string value used to define the constant as specified by the format parameter"""
+
+    if (format == Format.DECIMAL) or ((format == Format.DEFAULT) and config.get_constants_are_decimal()):
         return str(value)
-    else:
+    elif (format == Format.HEX) or ((format == Format.DEFAULT) and not config.get_constants_are_decimal()):
+        formatter = config.get_assembler()
         return formatter.hex(value)
+    elif format == Format.BINARY:
+        formatter = config.get_assembler()
+        return mainformatter.binary_formatter(value, 8 if ((value >= 0) and (value < 256)) else 16)
+    assert(format == Format.CHAR)
+    return str("'" + value + "'")
 
 def emit_constants():
     formatter = config.get_assembler()
@@ -551,7 +560,7 @@ def emit_constants():
 
     # Similarly, get the longest value as a string so we can align the comments
     # so that we can align the inline comments.
-    max_value_len = max(len(value_to_string(c.value)) for c in constants)
+    max_value_len = max(len(constant_value_to_string(c.value, c.format)) for c in constants)
 
     # Comment column is after 'name = value'
     comment_column = max_name_len + 3 + max_value_len
@@ -561,7 +570,7 @@ def emit_constants():
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key.name)]
     for c in sorted(constants, key=alphanum_key):
-        value = value_to_string(c.value)
+        value = constant_value_to_string(c.value, c.format)
 
         # output a comment on the line before the definition
         if c.align == Align.BEFORE:

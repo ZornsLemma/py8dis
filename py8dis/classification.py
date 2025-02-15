@@ -46,6 +46,7 @@ import trace
 import utils
 import memorymanager
 from memorymanager import BinaryAddr, RuntimeAddr
+from format import Format
 
 expressions   = {}
 memory_binary = memorymanager.memory_binary
@@ -187,8 +188,8 @@ def check_expr(expr, value):
     # Don't clutter the output with 'constant = value' as assertions
     for constant in disassembly.constants:
         if expr == constant.name:
-            if constant.value != value:
-                utils.warning("Constant '{0}' found to be {1} but expected to be {2}".format(expr, constant[0], value))
+            if (constant.value != value) and (constant.format != Format.CHAR):
+                utils.warn("Constant '{0}' found to be {1} but expected to be {2}".format(expr, constant.value, value))
             return
 
     config.get_assembler().assert_expr(expr, value)
