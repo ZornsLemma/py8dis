@@ -9,6 +9,7 @@ import movemanager
 import trace
 import utils
 from memorymanager import BinaryLocation
+from align import Align
 
 class Cpu(object):
     """Abstract base class representing a CPU"""
@@ -197,7 +198,7 @@ class Cpu(object):
             address_list = ", ".join(sorted(self.format_runtime_location(movemanager.b2r(ref_binary_loc.binary_addr), ref_binary_loc.move_id) for ref_binary_loc in ref_binary_locs))
             comment = "{0} referenced {1} by {2}".format(self.format_binary_location(binary_loc), count, address_list)
 
-            disassembly.comment_binary(binary_loc, comment, inline=False, word_wrap=False, auto_generated=True)
+            disassembly.comment_binary(binary_loc, comment, word_wrap=False, align=Align.BEFORE_LABEL, auto_generated=True)
 
     def add_reference_histogram(self):
         """Output a histogram of label references."""

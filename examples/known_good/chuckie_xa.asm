@@ -1572,6 +1572,7 @@ printstringloop
 // Handle keyboard input
 // ----------------------------------------------------------------------------------
 handlekeyboard
+    // Check the H key pressed (pause)
     ldx #inkey_key_h                                                  // 1a3b: a2 ab       ..             // X=inkey key value
     ldy #$ff                                                          // 1a3d: a0 ff       ..
     lda #osbyte_inkey                                                 // 1a3f: a9 81       ..
@@ -1579,6 +1580,7 @@ handlekeyboard
     cpy #0                                                            // 1a44: c0 00       ..             // X and Y contain $ff if the key is pressed
     beq checkkeys                                                     // 1a46: f0 26       .&
 paused
+    // Check the H key still pressed (pause)
     ldx #inkey_key_h                                                  // 1a48: a2 ab       ..             // X=inkey key value
     ldy #$ff                                                          // 1a4a: a0 ff       ..
     lda #osbyte_inkey                                                 // 1a4c: a9 81       ..

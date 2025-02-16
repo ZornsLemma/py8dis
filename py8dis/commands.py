@@ -273,7 +273,18 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
                 auto_comment(runtime_addr, config.get_subroutine_footer(), word_wrap=False)
     trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
-def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
+def convert_inline_to_align_internal(inline, align):
+    # If no 'align' value is specified, convert the old True/False 'inline' values into the modern 'Align' type
+    if align == None:
+        if inline:
+            align = Align.INLINE
+        else:
+            align = Align.BEFORE_LABEL
+
+    assert isinstance(align, Align)
+    return align
+
+def comment(runtime_addr, text, inline=False, align=None, indent=0, word_wrap=True):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
@@ -282,21 +293,30 @@ def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
     The comment is word wrapped by default.
     """
 
-    disassembly.comment(runtime_addr, text, inline=inline, word_wrap=word_wrap, indent=indent, auto_generated=False)
+    # Convert the old True/False values into the modern 'Align' type as needed
+    align = convert_inline_to_align_internal(inline, align)
 
-def formatted_comment(runtime_addr, text, inline=False, indent=0):
+    disassembly.comment(runtime_addr, text, word_wrap=word_wrap, indent=indent, align=align, auto_generated=False)
+
+def formatted_comment(runtime_addr, text, inline=False, align=None, indent=0):
     """Add a comment without word wrapping."""
 
-    disassembly.comment(runtime_addr, text, inline=inline, word_wrap=False, indent=indent)
+    # Convert the old True/False values into the modern 'Align' type as needed
+    align = convert_inline_to_align_internal(inline, align)
+
+    disassembly.comment(runtime_addr, text, word_wrap=False, indent=indent, align=align)
 
 def no_automatic_comment(runtime_addr):
     trace.no_auto_comment_set.add(runtime_addr)
 
-def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, word_wrap=True):
+def auto_comment(runtime_addr, text, inline=False, align=None, indent=0, show_blank=False, word_wrap=True):
     """For internal use only. Generates a comment if not inhibited."""
 
     if runtime_addr == None:
         return
+
+    # Convert the old True/False values into the modern 'Align' type as needed
+    align = convert_inline_to_align_internal(inline, align)
 
     if not (runtime_addr in trace.no_auto_comment_set):
         # Make sure we are within the binary
@@ -306,18 +326,18 @@ def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, w
             if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
                 if show_blank:
                     blank(runtime_addr)
-                disassembly.comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap, auto_generated=True)
+                disassembly.comment(runtime_addr, text, word_wrap=word_wrap, indent=indent, align=align, auto_generated=True)
 
-def annotate(runtime_addr, s, priority=None):
+def annotate(runtime_addr, s, *, align=Align.BEFORE_LABEL, priority=None):
     """Add a raw string directly to the assembly code output at the
     given address."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
-    disassembly.add_raw_annotation(binary_loc, s, priority=priority)
+    disassembly.add_raw_annotation(binary_loc, s, align=align, priority=priority)
 
-def blank(runtime_addr, priority=None):
-    annotate(runtime_addr, "", priority)
+def blank(runtime_addr, *, align=Align.BEFORE_LABEL, priority=None):
+    annotate(runtime_addr, "", align=align, priority=priority)
 
 def expr(runtime_addr, s):
     """Define a string expression for an address.

@@ -484,6 +484,8 @@ label_with_comment(0x1A26, "printstring", "Print string at address YYXX" +
     "\n	?YYXX = string length")
 mylabel(0x1A30, "printstringloop")
 label_with_comment(0x1A3B, "handlekeyboard", "Handle keyboard input")
+comment(0x1a3b, "Check the H key pressed (pause)", align=Align.BEFORE_LINE, indent=1)
+comment(0x1a48, "Check the H key still pressed (pause)", align=Align.BEFORE_LINE, indent=1)
 mylabel(0x1A48, "paused")
 mylabel(0x1A67, "stillpaused")
 mylabel(0x1A6E, "checkkeys")
@@ -982,7 +984,7 @@ constant(Colour15, "Colour15", format=Format.HEX)
 constant('&', "char_ampersand", format=Format.CHAR)
 
 constant(EggColour,      "EggColour", "For the collectable eggs")   # Just to test inline comments
-constant(LiftColour,     "LiftColour", "This is the colour of the lift:", Align.BEFORE)  # Just an example to test Align.BEFORE
+constant(LiftColour,     "LiftColour", "This is the colour of the lift:", Align.BEFORE_LINE)  # Just an example to test Align.BEFORE_LINE
 constant(LadderColour,   "LadderColour")
 constant(SeedColour,     "SeedColour")
 constant(PlatformColour, "PlatformColour")
@@ -993,7 +995,7 @@ constant(BirdColour,     "BirdColour")
 constant(LogoColour,     "LogoColour")
 constant(DigitsColour,   "DigitsColour")
 constant(StatusColour,   "StatusColour")
-constant(LivesColour,    "LivesColour", "...for the lives displayed in the status area at the top of the screen above the play area below the score if I remember correctly", Align.AFTER)  # Just an example to test Align.AFTER
+constant(LivesColour,    "LivesColour", "...for the lives displayed in the status area at the top of the screen above the play area below the score if I remember correctly", Align.AFTER_LINE)  # Just an example to test Align.AFTER_LINE
 
 constant(1, "MapId_Platform", format=Format.BINARY)
 constant(2, "MapId_Ladder", format=Format.BINARY)

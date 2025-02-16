@@ -13,6 +13,7 @@ import trace
 import utils
 import memorymanager
 from memorymanager import BinaryAddr, RuntimeAddr
+from align import Align
 
 def add_hex_dump(binary_addr, length, cycles_description, s):
     """Creates the majority of the inline comment for a line of output.
@@ -88,7 +89,7 @@ def add_inline_comment(binary_loc, length, cycles_description, annotations, s):
     if annotations:
         for i in range(0, length):
             for annotation in utils.sorted_annotations(annotations[binary_loc]):
-                if annotation.inline:
+                if annotation.align == Align.INLINE:
                     s += annotation.as_string(binary_loc.binary_addr)
             binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + 1, binary_loc.move_id)
     return s.rstrip()

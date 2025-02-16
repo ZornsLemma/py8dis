@@ -11,6 +11,7 @@ import cpu
 import trace
 import utils
 import sys
+from align import Align
 
 memory_binary = memorymanager.memory_binary
 
@@ -439,11 +440,11 @@ class Cpu6502(cpu.Cpu):
             reg_addr = state.get_previous_adjust(reg)
             if reg_addr is not None:
                 if reg in subroutine.on_entry:
-                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], inline=True, word_wrap=False, auto_generated=True)
+                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], align=Align.INLINE, word_wrap=False, auto_generated=True)
 
         # Add subroutine title comment
         if subroutine.title and subroutine.runtime_addr != runtime_addr:
-            disassembly.comment(runtime_addr, subroutine.title, inline=True, word_wrap=False)
+            disassembly.comment(runtime_addr, subroutine.title, align=Align.INLINE, word_wrap=False)
 
         # After the subroutine, check for results in registers being used
         if subroutine.on_exit:
@@ -457,7 +458,7 @@ class Cpu6502(cpu.Cpu):
                             if com:
                                 is_private_comment = com.startswith("()") and com.endswith(")")
                                 if not is_private_comment:
-                                    disassembly.comment(reg_runtime_addr, reg.upper() + "=" + subroutine.on_exit[reg], inline=True)
+                                    disassembly.comment(reg_runtime_addr, reg.upper() + "=" + subroutine.on_exit[reg], align=Align.INLINE)
 
 
 

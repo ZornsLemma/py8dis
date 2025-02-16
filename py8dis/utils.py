@@ -141,7 +141,7 @@ class keydefaultdict(collections.defaultdict):
             return ret
 
 def sorted_annotations(annotations):
-    return sorted(annotations, key=lambda x: x.priority)
+    return sorted(annotations, key=lambda x: (x.align, x.priority))
 
 def round_up(n: int, multiple: int = 4) -> int:
     """
