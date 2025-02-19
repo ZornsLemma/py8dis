@@ -24,17 +24,19 @@ loop_c2013
     lda #$0d                                                          ; 2019: a9 0d       ..
     jmp lffe3                                                         ; 201b: 4c e3 ff    L..
 
+; $201e referenced 1 time by $2002
 c201e
 
+; Move 1: $201e to $0900 for length 15
 !pseudopc $0900 {
-; $201e referenced 3 times by $2002, $2005, $2013
+; $201e referenced 2 times by $2005, $2013
 print_and_inc_zp
     lda l0070                                                         ; 201e: a5 70       .p  :0900[1]
     jsr sub_c0908                                                     ; 2020: 20 08 09     .. :0902[1]
     sta l0070                                                         ; 2023: 85 70       .p  :0905[1]
     rts                                                               ; 2025: 60          `   :0907[1]
 
-; $2026 referenced 1 time by $0902
+; $2026 referenced 1 time by $0902[1]
 sub_c0908
     jsr lffe3                                                         ; 2026: 20 e3 ff     .. :0908[1]
     clc                                                               ; 2029: 18          .   :090b[1]
@@ -46,12 +48,13 @@ sub_c0908
 pydis_end
 
 ; Label references by decreasing frequency:
-;     l0070:        3
-;     c201e:        3
-;     lffe3:        2
-;     loop_c2002:   1
-;     loop_c2013:   1
-;     sub_c2026:    1
+;     l0070:              3
+;     lffe3:              2
+;     print_and_inc_zp:   2
+;     c201e:              1
+;     loop_c2002:         1
+;     loop_c2013:         1
+;     sub_c0908:          1
 
 ; Automatically generated labels:
 ;     c201e
@@ -60,4 +63,3 @@ pydis_end
 ;     loop_c2002
 ;     loop_c2013
 ;     sub_c0908
-;     sub_c2026

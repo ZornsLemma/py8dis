@@ -25,40 +25,70 @@ class Xa(assembler.Assembler):
         return ["6502", "65c02"]
 
     def hex2(self, n):
-        return "$%s" % utils.plainhex2(n)
+        """format a two digit hex number"""
+        return "${0}".format(utils.plainhex2(n))
 
     def hex4(self, n):
-        return "$%s" % utils.plainhex4(n)
+        """format a four digit hex number"""
+        return "${0}".format(utils.plainhex4(n))
 
     def hex(self, n):
+        """format a hex number"""
         if n <= 0xff:
             return self.hex2(n)
         else:
             return self.hex4(n)
 
+    def translate_binary_operator_names(self):
+        """Returns a dictionary that translates generic binary operator names
+        into the assembler specific versions"""
+        # 'generic name: assembler specific name'
+        return { 'OR': '|',
+                  '|': '|',
+                'AND': '&',
+                  '&': '&',
+                'EOR': '^',
+                'XOR': '^',
+                  '^': '^',
+                'DIV': '/',
+                  '/': '/',
+                'MOD': None,
+                  '%': None,
+                 '!=': '<>',
+        }
+    def translate_unary_operator_names(self):
+        """Returns a dictionary that translates generic unary operator names
+        into the assembler specific versions"""
+        # 'generic name: assembler specific name'
+        return { 'NOT': '!',
+                   '!': '!',
+        }
+
     def inline_label(self, name):
-        return "%s" % name
+        """Returns the string for defining a label in the first column."""
+        return name
 
-    def explicit_label(self, name, value, offset=None, align=0):
-        # Output when declaring a label with an explicit value:
-        #
-        #   i.e. 'label = value'
-        #
-        # with an optional offset added to the value, and optional column
-        # alignment at the equals sign.
-        return "%s= %s%s" % (utils.tab_to(name + " ", align), value, "" if offset is None else "+%d" % offset)
+    def explicit_label(self, name, value, offset=None, align_column=0):
+        """Output when declaring a label with an explicit value:
 
-    # xa supports ";" as a comment prefix, but by default colons terminate ";"
-    # comments, so we use "//".
+           i.e. 'label = value'
+
+        with an optional offset (e.g. '+1') added to the value, with optional
+        column alignment at the equals sign."""
+        return "%s= %s%s" % (utils.tab_to(name + " ", align_column), value, "" if offset is None else "+%d" % offset)
+
     def comment_prefix(self):
+        # NOTE: xa supports ";" as a comment prefix, but by default colons
+        # terminate ";" comments, so we use "//".
         return "//"
 
     def disassembly_start(self):
-        # Preamble to be output at the start of the disassembly.
+        """Preamble to be output at the start of the disassembly."""
         return []
 
     def code_start(self, start_addr, end_addr, first):
-        # At the start of the code we provide the address at which to assemble.
+        """At the start of the code we provide the address at which to
+        assemble."""
         global _code_index
 
         # The first code block is just a "* = $xxxx" style line
@@ -126,28 +156,27 @@ class Xa(assembler.Assembler):
     # "unacceptable" label for pseudopc_end(), so although this may
     # indicate a sub-optimal choice of label in general, I will just
     # hard-code the use of these labels. OK, that *still* doesn't work...
-    def pseudopc_start(self, dest, source, length):
-        # Used when assembling code at a different address to where it will actually execute.
-        move_id = movemanager.move_id_for_binary_addr[source]
+    def pseudopc_start(self, dest, source, length, move_id):
+        """Used when assembling code at a different address to where it will
+        actually execute."""
 
         #disassembly.add_label(dest, "pseudopc_start_%d" % self.pseudopc_index, move_id)
         #disassembly.add_label(dest + length, "pseudopc_end_%d" % self.pseudopc_index, move_id)
         self.pseudopc_index += 1
         return ["* = %s" % self.hex(dest)]
 
-    def pseudopc_end(self, dest, source, length):
-        move_id = movemanager.move_id_for_binary_addr[source]
-
+    def pseudopc_end(self, dest, source, length, move_id):
         # TODO: Hard-coding a literal address here is very
         # unsatisfactory but (as noted in TODO just above
         # pseudopc_start()) I am struggling to make anything else work.
         return [utils.LazyString("* = %s", self.hex(source + length))]
 
     def disassembly_end(self):
+        """Output assertions at the end of the disassembly"""
         result = []
 
-        # At the end of the assembly, we output assertions.
-        if False: # TODO! config.get_include_assertions():
+        # Note: XA doesn't support assertions, so disabled
+        if False: # config.get_include_assertions():
             spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
             for expr, value in spa:
                 result.append("%s %s <> %s" % (utils.force_case("#if"), expr, value))
@@ -164,6 +193,11 @@ class Xa(assembler.Assembler):
         # expression, but the "!" prefix operator doesn't seem to like this and
         # probably doesn't need it.
         return utils.LazyString("%s%s %s!%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
+
+    def force_zp_instruction(self, instruction, prefix, operand, suffix):
+        # Ensure the instruction uses a zp address rather than an absolute
+        # address. e.g. 'lda `addr'
+        return utils.LazyString("%s%s ``%s%s%s", utils.make_indent(1), instruction, prefix, operand, suffix)
 
     def force_zp_label_prefix(self):
         # Prefix to take the low byte of a label

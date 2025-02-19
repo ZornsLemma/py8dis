@@ -1,240 +1,240 @@
 ; Constants
-baud_rate_1200                                     = 4
-baud_rate_150                                      = 2
-baud_rate_19200                                    = 8
-baud_rate_2400                                     = 5
-baud_rate_300                                      = 3
-baud_rate_4800                                     = 6
-baud_rate_75                                       = 1
-baud_rate_9600                                     = 7
-baud_rate_default_9600                             = 0
-buffer_keyboard                                    = 0
-buffer_printer                                     = 3
-buffer_rs423_input                                 = 1
-buffer_rs423_output                                = 2
-buffer_sound_channel_0                             = 4
-buffer_sound_channel_1                             = 5
-buffer_sound_channel_2                             = 6
-buffer_sound_channel_3                             = 7
-buffer_speech                                      = 8
-event_adc_conversion_complete                      = 3
-event_character_entering_input_buffer              = 2
-event_escape_condition_detected                    = 6
-event_input_buffer_full                            = 1
-event_interval_timer_crossing_zero                 = 5
-event_network_error                                = 8
-event_output_buffer_empty                          = 0
-event_rs423_error                                  = 7
-event_start_of_vertical_sync                       = 4
-event_user                                         = 9
-inkey_key_ctrl                                     = 254
-inkey_key_f0                                       = 223
-inkey_key_shift                                    = 255
-osbyte_acknowledge_escape                          = 126
-osbyte_check_eof                                   = 127
-osbyte_check_for_6502_code                         = 164
-osbyte_clear_escape                                = 124
-osbyte_close_spool_exec                            = 119
-osbyte_code                                        = 136
-osbyte_decrement_polling_semaphore                 = 23
-osbyte_disable_event                               = 13
-osbyte_electron_external_sound                     = 24
-osbyte_enable_event                                = 14
-osbyte_enter_language                              = 142
-osbyte_examine_buffer                              = 152
-osbyte_explode_chars                               = 20
-osbyte_fast_tube_bput                              = 157
-osbyte_flush_buffer                                = 21
-osbyte_flush_buffer_class                          = 15
-osbyte_force_adc_conversion                        = 17
-osbyte_get_sideways_ram_allocation                 = 69
-osbyte_increment_polling_semaphore                 = 22
-osbyte_inkey                                       = 129
-osbyte_insert_buffer                               = 138
-osbyte_insert_input_buffer                         = 153
-osbyte_issue_service_request                       = 143
-osbyte_motor                                       = 137
-osbyte_opt                                         = 139
-osbyte_printer_driver_going_dormant                = 123
-osbyte_read_adc_or_get_buffer_status               = 128
-osbyte_read_buffer                                 = 145
-osbyte_read_char_at_cursor                         = 135
-osbyte_read_char_explode_state                     = 182
-osbyte_read_cmos_ram                               = 161
-osbyte_read_current_adc_channel                    = 188
-osbyte_read_fred                                   = 146
-osbyte_read_high_order_address                     = 130
-osbyte_read_himem                                  = 132
-osbyte_read_himem_for_mode                         = 133
-osbyte_read_jim                                    = 148
-osbyte_read_key_table_high                         = 173
-osbyte_read_key_table_low                          = 172
-osbyte_read_os_variables_high                      = 167
-osbyte_read_os_variables_low                       = 166
-osbyte_read_os_version                             = 0
-osbyte_read_oshwm                                  = 131
-osbyte_read_output_cursor_position                 = 165
-osbyte_read_rom_info_table_high                    = 171
-osbyte_read_rom_info_table_low                     = 170
-osbyte_read_rom_ptr_table_high                     = 169
-osbyte_read_rom_ptr_table_low                      = 168
-osbyte_read_serial_control_register_copy           = 192
-osbyte_read_serial_ula                             = 242
-osbyte_read_sheila                                 = 150
-osbyte_read_speech                                 = 158
-osbyte_read_speech_processor_presence              = 235
-osbyte_read_text_cursor_pos                        = 134
-osbyte_read_tube_presence                          = 234
-osbyte_read_vdu_status                             = 117
-osbyte_read_vdu_variable                           = 160
-osbyte_read_vdu_variables_high                     = 175
-osbyte_read_vdu_variables_low                      = 174
-osbyte_read_video_ula_control                      = 184
-osbyte_read_video_ula_palette                      = 185
-osbyte_read_write_27e                              = 238
-osbyte_read_write_27f                              = 239
-osbyte_read_write_280                              = 240
-osbyte_read_write_281                              = 241
-osbyte_read_write_28a                              = 250
-osbyte_read_write_28b                              = 251
-osbyte_read_write_6850_control                     = 156
-osbyte_read_write_6850_irq_mark                    = 232
-osbyte_read_write_adc_conversion_type              = 190
-osbyte_read_write_available_ram                    = 254
-osbyte_read_write_basic_rom_bank                   = 187
-osbyte_read_write_bell_channel                     = 211
-osbyte_read_write_bell_duration                    = 214
-osbyte_read_write_bell_envelope                    = 212
-osbyte_read_write_bell_frequency                   = 213
-osbyte_read_write_cassette_serial_selection        = 205
-osbyte_read_write_cfs_rfs_switch                   = 183
-osbyte_read_write_cfs_timeout                      = 176
-osbyte_read_write_char_destination_status          = 236
-osbyte_read_write_characters_c0_cf_status          = 221
-osbyte_read_write_characters_d0_df_status          = 222
-osbyte_read_write_characters_e0_ef_status          = 223
-osbyte_read_write_characters_f0_ff_status          = 224
-osbyte_read_write_ctrl_function_key_status         = 227
-osbyte_read_write_ctrl_shift_function_key_status   = 228
-osbyte_read_write_current_language_rom_bank        = 252
-osbyte_read_write_current_oshwm                    = 180
-osbyte_read_write_cursor_editing_status            = 237
-osbyte_read_write_econet_keyboard_disable          = 201
-osbyte_read_write_econet_os_call_interception      = 206
-osbyte_read_write_econet_osrdch_interception       = 207
-osbyte_read_write_econet_oswrch_interception       = 208
-osbyte_read_write_escape_break_effect              = 200
-osbyte_read_write_escape_char                      = 220
-osbyte_read_write_escape_effects                   = 230
-osbyte_read_write_escape_status                    = 229
-osbyte_read_write_exec_file_handle                 = 198
-osbyte_read_write_first_byte_break_intercept       = 247
-osbyte_read_write_flash_counter                    = 193
-osbyte_read_write_function_key_status              = 225
-osbyte_read_write_input_source                     = 177
-osbyte_read_write_keyboard_repeat_delay            = 196
-osbyte_read_write_keyboard_repeat_rate             = 197
-osbyte_read_write_keyboard_semaphore               = 178
-osbyte_read_write_keyboard_status                  = 202
-osbyte_read_write_last_break_type                  = 253
-osbyte_read_write_lines_since_last_page            = 217
-osbyte_read_write_mark_count                       = 194
-osbyte_read_write_max_adc_channel                  = 189
-osbyte_read_write_primary_oshwm                    = 179
-osbyte_read_write_printer_destination              = 245
-osbyte_read_write_printer_ignore_char              = 246
-osbyte_read_write_rom_bank_at_last_brk             = 186
-osbyte_read_write_second_byte_break_intercept      = 248
-osbyte_read_write_serial_handshake_extent          = 203
-osbyte_read_write_serial_input_suppression         = 204
-osbyte_read_write_serial_mode                      = 181
-osbyte_read_write_serial_user_flag                 = 191
-osbyte_read_write_shift_function_key_status        = 226
-osbyte_read_write_soft_key_consistency_flag        = 244
-osbyte_read_write_soft_key_length                  = 216
-osbyte_read_write_sound_suppression                = 210
-osbyte_read_write_space_count                      = 195
-osbyte_read_write_speech_suppression               = 209
-osbyte_read_write_spool_file_handle                = 199
-osbyte_read_write_startup_boot_options             = 215
-osbyte_read_write_startup_options                  = 255
-osbyte_read_write_system_via_irq_mask              = 233
-osbyte_read_write_tab_char                         = 219
-osbyte_read_write_third_byte_break_intercept       = 249
-osbyte_read_write_timer_switch_state               = 243
-osbyte_read_write_user_via_irq_mask                = 231
-osbyte_read_write_vdu_queue_size                   = 218
-osbyte_reflect_keyboard_status_in_leds             = 118
-osbyte_reserved_for_application_software           = 163
-osbyte_reset_soft_keys                             = 18
-osbyte_restore_group_of_font_definitions           = 25
-osbyte_rom                                         = 141
-osbyte_scan_keyboard                               = 121
-osbyte_scan_keyboard_from_16                       = 122
-osbyte_select_adc_channels                         = 16
-osbyte_select_input_stream                         = 2
-osbyte_select_output_stream                        = 3
-osbyte_select_printer                              = 5
-osbyte_selects_internal_or_external_bus            = 107
-osbyte_set_cursor_editing                          = 4
-osbyte_set_escape                                  = 125
-osbyte_set_flashing_mark                           = 9
-osbyte_set_flashing_space                          = 10
-osbyte_set_keyboard_repeat_delay                   = 11
-osbyte_set_keyboard_repeat_rate                    = 12
-osbyte_set_printer_ignore                          = 6
-osbyte_set_serial_receive_rate                     = 7
-osbyte_set_serial_transmit_rate                    = 8
-osbyte_set_user_flag                               = 1
-osbyte_tape                                        = 140
-osbyte_test_for_sideways_ram                       = 68
-osbyte_tv                                          = 144
-osbyte_vsync                                       = 19
-osbyte_write_cmos_ram                              = 162
-osbyte_write_fred                                  = 147
-osbyte_write_jim                                   = 149
-osbyte_write_keys_pressed                          = 120
-osbyte_write_sheila                                = 151
-osbyte_write_speech                                = 159
-osbyte_write_video_ula_control                     = 154
-osbyte_write_video_ula_palette                     = 155
-osfile_create                                      = 7
-osfile_delete                                      = 6
-osfile_load                                        = 255
-osfile_read_catalogue_info                         = 5
-osfile_save                                        = 0
-osfile_write_attributes                            = 4
-osfile_write_catalogue_info                        = 1
-osfile_write_exec_addr                             = 3
-osfile_write_load_addr                             = 2
-osfind_close                                       = 0
-osfind_open_input                                  = 64
-osfind_open_output                                 = 128
-osfind_open_random_access                          = 192
-osgbpb_append_bytes                                = 2
-osgbpb_read_bytes_from_current_position            = 4
-osgbpb_read_bytes_from_position                    = 3
-osgbpb_read_current_directory                      = 6
-osgbpb_read_current_library                        = 7
-osgbpb_read_file_names                             = 8
-osgbpb_read_title_option_and_drive                 = 5
-osgbpb_write_bytes                                 = 1
-osword_envelope                                    = 8
-osword_read_char                                   = 10
-osword_read_clock                                  = 1
-osword_read_cmos_clock                             = 14
-osword_read_graphics_cursor_position               = 13
-osword_read_interval_timer                         = 3
-osword_read_io_memory                              = 5
-osword_read_line                                   = 0
-osword_read_palette                                = 11
-osword_read_pixel                                  = 9
-osword_sound                                       = 7
-osword_write_clock                                 = 2
-osword_write_cmos_clock                            = 15
-osword_write_interval_timer                        = 4
-osword_write_io_memory                             = 6
-osword_write_palette                               = 12
+baud_rate_75                                        = 1
+baud_rate_150                                       = 2
+baud_rate_300                                       = 3
+baud_rate_1200                                      = 4
+baud_rate_2400                                      = 5
+baud_rate_4800                                      = 6
+baud_rate_9600                                      = 7
+baud_rate_19200                                     = 8
+baud_rate_default_9600                              = 0
+buffer_keyboard                                     = 0
+buffer_printer                                      = 3
+buffer_rs423_input                                  = 1
+buffer_rs423_output                                 = 2
+buffer_sound_channel_0                              = 4
+buffer_sound_channel_1                              = 5
+buffer_sound_channel_2                              = 6
+buffer_sound_channel_3                              = 7
+buffer_speech                                       = 8
+event_adc_conversion_complete                       = 3
+event_character_entering_input_buffer               = 2
+event_escape_condition_detected                     = 6
+event_input_buffer_full                             = 1
+event_interval_timer_crossing_zero                  = 5
+event_network_error                                 = 8
+event_output_buffer_empty                           = 0
+event_rs423_error                                   = 7
+event_start_of_vertical_sync                        = 4
+event_user                                          = 9
+inkey_key_ctrl                                      = 254
+inkey_key_f0                                        = 223
+inkey_key_shift                                     = 255
+osbyte_acknowledge_escape                           = 126
+osbyte_check_eof                                    = 127
+osbyte_check_for_6502_code                          = 164
+osbyte_clear_escape                                 = 124
+osbyte_close_spool_exec                             = 119
+osbyte_code                                         = 136
+osbyte_decrement_polling_semaphore                  = 23
+osbyte_disable_event                                = 13
+osbyte_electron_external_sound                      = 24
+osbyte_enable_event                                 = 14
+osbyte_enter_language                               = 142
+osbyte_examine_buffer                               = 152
+osbyte_explode_chars                                = 20
+osbyte_fast_tube_bput                               = 157
+osbyte_flush_buffer                                 = 21
+osbyte_flush_buffer_class                           = 15
+osbyte_force_adc_conversion                         = 17
+osbyte_get_sideways_ram_allocation                  = 69
+osbyte_increment_polling_semaphore                  = 22
+osbyte_inkey                                        = 129
+osbyte_insert_buffer                                = 138
+osbyte_insert_input_buffer                          = 153
+osbyte_issue_service_request                        = 143
+osbyte_motor                                        = 137
+osbyte_opt                                          = 139
+osbyte_printer_driver_going_dormant                 = 123
+osbyte_read_adc_or_get_buffer_status                = 128
+osbyte_read_buffer                                  = 145
+osbyte_read_char_at_cursor                          = 135
+osbyte_read_char_explode_state                      = 182
+osbyte_read_cmos_ram                                = 161
+osbyte_read_current_adc_channel                     = 188
+osbyte_read_fred                                    = 146
+osbyte_read_high_order_address                      = 130
+osbyte_read_himem                                   = 132
+osbyte_read_himem_for_mode                          = 133
+osbyte_read_jim                                     = 148
+osbyte_read_key_table_high                          = 173
+osbyte_read_key_table_low                           = 172
+osbyte_read_os_variables_high                       = 167
+osbyte_read_os_variables_low                        = 166
+osbyte_read_os_version                              = 0
+osbyte_read_oshwm                                   = 131
+osbyte_read_output_cursor_position                  = 165
+osbyte_read_rom_info_table_high                     = 171
+osbyte_read_rom_info_table_low                      = 170
+osbyte_read_rom_ptr_table_high                      = 169
+osbyte_read_rom_ptr_table_low                       = 168
+osbyte_read_serial_control_register_copy            = 192
+osbyte_read_serial_ula                              = 242
+osbyte_read_sheila                                  = 150
+osbyte_read_speech                                  = 158
+osbyte_read_speech_processor_presence               = 235
+osbyte_read_text_cursor_pos                         = 134
+osbyte_read_tube_presence                           = 234
+osbyte_read_vdu_status                              = 117
+osbyte_read_vdu_variable                            = 160
+osbyte_read_vdu_variables_high                      = 175
+osbyte_read_vdu_variables_low                       = 174
+osbyte_read_video_ula_control                       = 184
+osbyte_read_video_ula_palette                       = 185
+osbyte_read_write_27e                               = 238
+osbyte_read_write_27f                               = 239
+osbyte_read_write_28a                               = 250
+osbyte_read_write_28b                               = 251
+osbyte_read_write_280                               = 240
+osbyte_read_write_281                               = 241
+osbyte_read_write_6850_control                      = 156
+osbyte_read_write_6850_irq_mark                     = 232
+osbyte_read_write_adc_conversion_type               = 190
+osbyte_read_write_available_ram                     = 254
+osbyte_read_write_basic_rom_bank                    = 187
+osbyte_read_write_bell_channel                      = 211
+osbyte_read_write_bell_duration                     = 214
+osbyte_read_write_bell_envelope                     = 212
+osbyte_read_write_bell_frequency                    = 213
+osbyte_read_write_cassette_serial_selection         = 205
+osbyte_read_write_cfs_rfs_switch                    = 183
+osbyte_read_write_cfs_timeout                       = 176
+osbyte_read_write_char_destination_status           = 236
+osbyte_read_write_characters_c0_cf_status           = 221
+osbyte_read_write_characters_d0_df_status           = 222
+osbyte_read_write_characters_e0_ef_status           = 223
+osbyte_read_write_characters_f0_ff_status           = 224
+osbyte_read_write_ctrl_function_key_status          = 227
+osbyte_read_write_ctrl_shift_function_key_status    = 228
+osbyte_read_write_current_language_rom_bank         = 252
+osbyte_read_write_current_oshwm                     = 180
+osbyte_read_write_cursor_editing_status             = 237
+osbyte_read_write_econet_keyboard_disable           = 201
+osbyte_read_write_econet_os_call_interception       = 206
+osbyte_read_write_econet_osrdch_interception        = 207
+osbyte_read_write_econet_oswrch_interception        = 208
+osbyte_read_write_escape_break_effect               = 200
+osbyte_read_write_escape_char                       = 220
+osbyte_read_write_escape_effects                    = 230
+osbyte_read_write_escape_status                     = 229
+osbyte_read_write_exec_file_handle                  = 198
+osbyte_read_write_first_byte_break_intercept        = 247
+osbyte_read_write_flash_counter                     = 193
+osbyte_read_write_function_key_status               = 225
+osbyte_read_write_input_source                      = 177
+osbyte_read_write_keyboard_repeat_delay             = 196
+osbyte_read_write_keyboard_repeat_rate              = 197
+osbyte_read_write_keyboard_semaphore                = 178
+osbyte_read_write_keyboard_status                   = 202
+osbyte_read_write_last_break_type                   = 253
+osbyte_read_write_lines_since_last_page             = 217
+osbyte_read_write_mark_count                        = 194
+osbyte_read_write_max_adc_channel                   = 189
+osbyte_read_write_primary_oshwm                     = 179
+osbyte_read_write_printer_destination               = 245
+osbyte_read_write_printer_ignore_char               = 246
+osbyte_read_write_rom_bank_at_last_brk              = 186
+osbyte_read_write_second_byte_break_intercept       = 248
+osbyte_read_write_serial_handshake_extent           = 203
+osbyte_read_write_serial_input_suppression          = 204
+osbyte_read_write_serial_mode                       = 181
+osbyte_read_write_serial_user_flag                  = 191
+osbyte_read_write_shift_function_key_status         = 226
+osbyte_read_write_soft_key_consistency_flag         = 244
+osbyte_read_write_soft_key_length                   = 216
+osbyte_read_write_sound_suppression                 = 210
+osbyte_read_write_space_count                       = 195
+osbyte_read_write_speech_suppression                = 209
+osbyte_read_write_spool_file_handle                 = 199
+osbyte_read_write_startup_boot_options              = 215
+osbyte_read_write_startup_options                   = 255
+osbyte_read_write_system_via_irq_mask               = 233
+osbyte_read_write_tab_char                          = 219
+osbyte_read_write_third_byte_break_intercept        = 249
+osbyte_read_write_timer_switch_state                = 243
+osbyte_read_write_user_via_irq_mask                 = 231
+osbyte_read_write_vdu_queue_size                    = 218
+osbyte_reflect_keyboard_status_in_leds              = 118
+osbyte_reserved_for_application_software            = 163
+osbyte_reset_soft_keys                              = 18
+osbyte_restore_group_of_font_definitions            = 25
+osbyte_rom                                          = 141
+osbyte_scan_keyboard                                = 121
+osbyte_scan_keyboard_from_16                        = 122
+osbyte_select_adc_channels                          = 16
+osbyte_select_input_stream                          = 2
+osbyte_select_output_stream                         = 3
+osbyte_select_printer                               = 5
+osbyte_selects_internal_or_external_bus             = 107
+osbyte_set_cursor_editing                           = 4
+osbyte_set_escape                                   = 125
+osbyte_set_flashing_mark                            = 9
+osbyte_set_flashing_space                           = 10
+osbyte_set_keyboard_repeat_delay                    = 11
+osbyte_set_keyboard_repeat_rate                     = 12
+osbyte_set_printer_ignore                           = 6
+osbyte_set_serial_receive_rate                      = 7
+osbyte_set_serial_transmit_rate                     = 8
+osbyte_set_user_flag                                = 1
+osbyte_tape                                         = 140
+osbyte_test_for_sideways_ram                        = 68
+osbyte_tv                                           = 144
+osbyte_vsync                                        = 19
+osbyte_write_cmos_ram                               = 162
+osbyte_write_fred                                   = 147
+osbyte_write_jim                                    = 149
+osbyte_write_keys_pressed                           = 120
+osbyte_write_sheila                                 = 151
+osbyte_write_speech                                 = 159
+osbyte_write_video_ula_control                      = 154
+osbyte_write_video_ula_palette                      = 155
+osfile_create                                       = 7
+osfile_delete                                       = 6
+osfile_load                                         = 255
+osfile_read_catalogue_info                          = 5
+osfile_save                                         = 0
+osfile_write_attributes                             = 4
+osfile_write_catalogue_info                         = 1
+osfile_write_exec_addr                              = 3
+osfile_write_load_addr                              = 2
+osfind_close                                        = 0
+osfind_open_input                                   = 64
+osfind_open_output                                  = 128
+osfind_open_random_access                           = 192
+osgbpb_append_bytes                                 = 2
+osgbpb_read_bytes_from_current_position             = 4
+osgbpb_read_bytes_from_position                     = 3
+osgbpb_read_current_directory                       = 6
+osgbpb_read_current_library                         = 7
+osgbpb_read_file_names                              = 8
+osgbpb_read_title_option_and_drive                  = 5
+osgbpb_write_bytes                                  = 1
+osword_envelope                                     = 8
+osword_read_char                                    = 10
+osword_read_clock                                   = 1
+osword_read_cmos_clock                              = 14
+osword_read_graphics_cursor_position                = 13
+osword_read_interval_timer                          = 3
+osword_read_io_memory                               = 5
+osword_read_line                                    = 0
+osword_read_palette                                 = 11
+osword_read_pixel                                   = 9
+osword_sound                                        = 7
+osword_write_clock                                  = 2
+osword_write_cmos_clock                             = 15
+osword_write_interval_timer                         = 4
+osword_write_io_memory                              = 6
+osword_write_palette                                = 12
 
 ; Memory locations
 mem     = &0070
@@ -5857,15 +5857,15 @@ osbyte  = &fff4
 ;     osfind:         6
 ;     osrdch:         2
 ;     buffer_empty:   1
-;     oswrsc:         1
-;     osrdsc:         1
-;     oseven:         1
 ;     nvrdch:         1
-;     osbput:         1
 ;     osbget:         1
+;     osbput:         1
+;     oseven:         1
 ;     osnewl:         1
-;     oswrcr:         1
+;     osrdsc:         1
 ;     oswrch:         1
+;     oswrcr:         1
+;     oswrsc:         1
     assert (255 - inkey_key_shift) EOR 128 == &80
     assert 255 - inkey_key_ctrl == &01
     assert 255 - inkey_key_f0 == &20
@@ -5914,239 +5914,5 @@ osbyte  = &fff4
     assert >(osword7block) == &40
     assert >(osword8block) == &40
     assert >(osword9block) == &40
-    assert baud_rate_1200 == &04
-    assert baud_rate_150 == &02
-    assert baud_rate_19200 == &08
-    assert baud_rate_2400 == &05
-    assert baud_rate_300 == &03
-    assert baud_rate_4800 == &06
-    assert baud_rate_75 == &01
-    assert baud_rate_9600 == &07
-    assert baud_rate_default_9600 == &00
-    assert buffer_keyboard == &00
-    assert buffer_printer == &03
-    assert buffer_rs423_input == &01
-    assert buffer_rs423_output == &02
-    assert buffer_sound_channel_0 == &04
-    assert buffer_sound_channel_1 == &05
-    assert buffer_sound_channel_2 == &06
-    assert buffer_sound_channel_3 == &07
-    assert buffer_speech == &08
-    assert event_adc_conversion_complete == &03
-    assert event_character_entering_input_buffer == &02
-    assert event_escape_condition_detected == &06
-    assert event_input_buffer_full == &01
-    assert event_interval_timer_crossing_zero == &05
-    assert event_network_error == &08
-    assert event_output_buffer_empty == &00
-    assert event_rs423_error == &07
-    assert event_start_of_vertical_sync == &04
-    assert event_user == &09
-    assert inkey_key_shift == &ff
-    assert osbyte_acknowledge_escape == &7e
-    assert osbyte_check_eof == &7f
-    assert osbyte_check_for_6502_code == &a4
-    assert osbyte_clear_escape == &7c
-    assert osbyte_close_spool_exec == &77
-    assert osbyte_code == &88
-    assert osbyte_decrement_polling_semaphore == &17
-    assert osbyte_disable_event == &0d
-    assert osbyte_electron_external_sound == &18
-    assert osbyte_enable_event == &0e
-    assert osbyte_enter_language == &8e
-    assert osbyte_examine_buffer == &98
-    assert osbyte_explode_chars == &14
-    assert osbyte_fast_tube_bput == &9d
-    assert osbyte_flush_buffer == &15
-    assert osbyte_flush_buffer_class == &0f
-    assert osbyte_force_adc_conversion == &11
-    assert osbyte_get_sideways_ram_allocation == &45
-    assert osbyte_increment_polling_semaphore == &16
-    assert osbyte_inkey == &81
-    assert osbyte_insert_buffer == &8a
-    assert osbyte_insert_input_buffer == &99
-    assert osbyte_issue_service_request == &8f
-    assert osbyte_motor == &89
-    assert osbyte_opt == &8b
-    assert osbyte_printer_driver_going_dormant == &7b
-    assert osbyte_read_adc_or_get_buffer_status == &80
-    assert osbyte_read_buffer == &91
-    assert osbyte_read_char_at_cursor == &87
-    assert osbyte_read_char_explode_state == &b6
-    assert osbyte_read_cmos_ram == &a1
-    assert osbyte_read_current_adc_channel == &bc
-    assert osbyte_read_fred == &92
-    assert osbyte_read_high_order_address == &82
-    assert osbyte_read_himem == &84
-    assert osbyte_read_himem_for_mode == &85
-    assert osbyte_read_jim == &94
-    assert osbyte_read_key_table_high == &ad
-    assert osbyte_read_key_table_low == &ac
-    assert osbyte_read_os_variables_high == &a7
-    assert osbyte_read_os_variables_low == &a6
-    assert osbyte_read_os_version == &00
-    assert osbyte_read_oshwm == &83
-    assert osbyte_read_output_cursor_position == &a5
-    assert osbyte_read_rom_info_table_high == &ab
-    assert osbyte_read_rom_info_table_low == &aa
-    assert osbyte_read_rom_ptr_table_high == &a9
-    assert osbyte_read_rom_ptr_table_low == &a8
-    assert osbyte_read_serial_control_register_copy == &c0
-    assert osbyte_read_serial_ula == &f2
-    assert osbyte_read_sheila == &96
-    assert osbyte_read_speech == &9e
-    assert osbyte_read_speech_processor_presence == &eb
-    assert osbyte_read_text_cursor_pos == &86
-    assert osbyte_read_tube_presence == &ea
-    assert osbyte_read_vdu_status == &75
-    assert osbyte_read_vdu_variable == &a0
-    assert osbyte_read_vdu_variables_high == &af
-    assert osbyte_read_vdu_variables_low == &ae
-    assert osbyte_read_video_ula_control == &b8
-    assert osbyte_read_video_ula_palette == &b9
-    assert osbyte_read_write_27e == &ee
-    assert osbyte_read_write_27f == &ef
-    assert osbyte_read_write_280 == &f0
-    assert osbyte_read_write_281 == &f1
-    assert osbyte_read_write_28a == &fa
-    assert osbyte_read_write_28b == &fb
-    assert osbyte_read_write_6850_control == &9c
-    assert osbyte_read_write_6850_irq_mark == &e8
-    assert osbyte_read_write_adc_conversion_type == &be
-    assert osbyte_read_write_available_ram == &fe
-    assert osbyte_read_write_basic_rom_bank == &bb
-    assert osbyte_read_write_bell_channel == &d3
-    assert osbyte_read_write_bell_duration == &d6
-    assert osbyte_read_write_bell_envelope == &d4
-    assert osbyte_read_write_bell_frequency == &d5
-    assert osbyte_read_write_cassette_serial_selection == &cd
-    assert osbyte_read_write_cfs_rfs_switch == &b7
-    assert osbyte_read_write_cfs_timeout == &b0
-    assert osbyte_read_write_char_destination_status == &ec
-    assert osbyte_read_write_characters_c0_cf_status == &dd
-    assert osbyte_read_write_characters_d0_df_status == &de
-    assert osbyte_read_write_characters_e0_ef_status == &df
-    assert osbyte_read_write_characters_f0_ff_status == &e0
-    assert osbyte_read_write_ctrl_function_key_status == &e3
-    assert osbyte_read_write_ctrl_shift_function_key_status == &e4
-    assert osbyte_read_write_current_language_rom_bank == &fc
-    assert osbyte_read_write_current_oshwm == &b4
-    assert osbyte_read_write_cursor_editing_status == &ed
-    assert osbyte_read_write_econet_keyboard_disable == &c9
-    assert osbyte_read_write_econet_os_call_interception == &ce
-    assert osbyte_read_write_econet_osrdch_interception == &cf
-    assert osbyte_read_write_econet_oswrch_interception == &d0
-    assert osbyte_read_write_escape_break_effect == &c8
-    assert osbyte_read_write_escape_char == &dc
-    assert osbyte_read_write_escape_effects == &e6
-    assert osbyte_read_write_escape_status == &e5
-    assert osbyte_read_write_exec_file_handle == &c6
-    assert osbyte_read_write_first_byte_break_intercept == &f7
-    assert osbyte_read_write_flash_counter == &c1
-    assert osbyte_read_write_function_key_status == &e1
-    assert osbyte_read_write_input_source == &b1
-    assert osbyte_read_write_keyboard_repeat_delay == &c4
-    assert osbyte_read_write_keyboard_repeat_rate == &c5
-    assert osbyte_read_write_keyboard_semaphore == &b2
-    assert osbyte_read_write_keyboard_status == &ca
-    assert osbyte_read_write_last_break_type == &fd
-    assert osbyte_read_write_lines_since_last_page == &d9
-    assert osbyte_read_write_mark_count == &c2
-    assert osbyte_read_write_max_adc_channel == &bd
-    assert osbyte_read_write_primary_oshwm == &b3
-    assert osbyte_read_write_printer_destination == &f5
-    assert osbyte_read_write_printer_ignore_char == &f6
-    assert osbyte_read_write_rom_bank_at_last_brk == &ba
-    assert osbyte_read_write_second_byte_break_intercept == &f8
-    assert osbyte_read_write_serial_handshake_extent == &cb
-    assert osbyte_read_write_serial_input_suppression == &cc
-    assert osbyte_read_write_serial_mode == &b5
-    assert osbyte_read_write_serial_user_flag == &bf
-    assert osbyte_read_write_shift_function_key_status == &e2
-    assert osbyte_read_write_soft_key_consistency_flag == &f4
-    assert osbyte_read_write_soft_key_length == &d8
-    assert osbyte_read_write_sound_suppression == &d2
-    assert osbyte_read_write_space_count == &c3
-    assert osbyte_read_write_speech_suppression == &d1
-    assert osbyte_read_write_spool_file_handle == &c7
-    assert osbyte_read_write_startup_boot_options == &d7
-    assert osbyte_read_write_startup_options == &ff
-    assert osbyte_read_write_system_via_irq_mask == &e9
-    assert osbyte_read_write_tab_char == &db
-    assert osbyte_read_write_third_byte_break_intercept == &f9
-    assert osbyte_read_write_timer_switch_state == &f3
-    assert osbyte_read_write_user_via_irq_mask == &e7
-    assert osbyte_read_write_vdu_queue_size == &da
-    assert osbyte_reflect_keyboard_status_in_leds == &76
-    assert osbyte_reserved_for_application_software == &a3
-    assert osbyte_reset_soft_keys == &12
-    assert osbyte_restore_group_of_font_definitions == &19
-    assert osbyte_rom == &8d
-    assert osbyte_scan_keyboard == &79
-    assert osbyte_scan_keyboard_from_16 == &7a
-    assert osbyte_select_adc_channels == &10
-    assert osbyte_select_input_stream == &02
-    assert osbyte_select_output_stream == &03
-    assert osbyte_select_printer == &05
-    assert osbyte_selects_internal_or_external_bus == &6b
-    assert osbyte_set_cursor_editing == &04
-    assert osbyte_set_escape == &7d
-    assert osbyte_set_flashing_mark == &09
-    assert osbyte_set_flashing_space == &0a
-    assert osbyte_set_keyboard_repeat_delay == &0b
-    assert osbyte_set_keyboard_repeat_rate == &0c
-    assert osbyte_set_printer_ignore == &06
-    assert osbyte_set_serial_receive_rate == &07
-    assert osbyte_set_serial_transmit_rate == &08
-    assert osbyte_set_user_flag == &01
-    assert osbyte_tape == &8c
-    assert osbyte_test_for_sideways_ram == &44
-    assert osbyte_tv == &90
-    assert osbyte_vsync == &13
-    assert osbyte_write_cmos_ram == &a2
-    assert osbyte_write_fred == &93
-    assert osbyte_write_jim == &95
-    assert osbyte_write_keys_pressed == &78
-    assert osbyte_write_sheila == &97
-    assert osbyte_write_speech == &9f
-    assert osbyte_write_video_ula_control == &9a
-    assert osbyte_write_video_ula_palette == &9b
-    assert osfile_create == &07
-    assert osfile_delete == &06
-    assert osfile_load == &ff
-    assert osfile_read_catalogue_info == &05
-    assert osfile_save == &00
-    assert osfile_write_attributes == &04
-    assert osfile_write_catalogue_info == &01
-    assert osfile_write_exec_addr == &03
-    assert osfile_write_load_addr == &02
-    assert osfind_close == &00
-    assert osfind_open_input == &40
-    assert osfind_open_output == &80
-    assert osfind_open_random_access == &c0
-    assert osgbpb_append_bytes == &02
-    assert osgbpb_read_bytes_from_current_position == &04
-    assert osgbpb_read_bytes_from_position == &03
-    assert osgbpb_read_current_directory == &06
-    assert osgbpb_read_current_library == &07
-    assert osgbpb_read_file_names == &08
-    assert osgbpb_read_title_option_and_drive == &05
-    assert osgbpb_write_bytes == &01
-    assert osword_envelope == &08
-    assert osword_read_char == &0a
-    assert osword_read_clock == &01
-    assert osword_read_cmos_clock == &0e
-    assert osword_read_graphics_cursor_position == &0d
-    assert osword_read_interval_timer == &03
-    assert osword_read_io_memory == &05
-    assert osword_read_line == &00
-    assert osword_read_palette == &0b
-    assert osword_read_pixel == &09
-    assert osword_sound == &07
-    assert osword_write_clock == &02
-    assert osword_write_cmos_clock == &0f
-    assert osword_write_interval_timer == &04
-    assert osword_write_io_memory == &06
-    assert osword_write_palette == &0c
 
 save pydis_start, pydis_end

@@ -13,17 +13,15 @@ def patched_branch(base_label, offset_addr, target_label, label_only=False):
 load(0x2000, "dfs226.orig", "6502", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
 
-# TODO: Every occurrence of -0x6000 or the like *might* indicate a bug in py8dis; it may also be "fair enough" because this disassembly is asking too much with a double move
+acorn.bbc()
 
-# This disassembly is a bit of a hack to see how the output differs if we have an "overall move()" relocating everything. move() always works with binary addresses so I need to use this to compensate; if you were just writing the right addresses in the first place.
+# This disassembly is a contrived example to see how the output differs if we have an "overall move()" relocating everything. move() always works with binary addresses so I need to use this to compensate; if you were just writing the right addresses in the first place.
 def mymove(dest, source, length):
     return move(dest, source - (0x8000-0x2000), length)
 
 # TODO: Try this later with source and dest overlapping
 with move(0x8000, 0x2000, 0x4000):
-    acorn.bbc()
     acorn.is_sideways_rom()
-
     # TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.
     tube_host_move_id1 = mymove(0x400, 0xaf79, 0xb075 - 0xaf79)
     tube_host_move_id2 = mymove(0x500, 0xacdb, 0xaea9 - 0xacdb)
@@ -46,20 +44,20 @@ with move(0x8000, 0x2000, 0x4000):
     entry(0x06ad, "tube_evntv_handler")
     expr(0xaef9, make_lo("tube_evntv_handler"))
     expr(0xaefe, make_hi("tube_evntv_handler"))
-    # ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. I'm not sure we can handle this automatically, but perhaps we could.
+    # ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (acme too, I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. Beebasm can't handle this (https://www.stardot.org.uk/forums/viewtopic.php?p=448155#p448155). acme has syntax e.g. 'LDA+1 addr,Y' where the +1 means 'addr' should be treated as zero page address.
     constant(0x0016, "tube_brkv_handler_fwd")
     expr(0xaf31, "tube_brkv_handler_fwd")
     entry(0x0016, "tube_brkv_handler") # TODO: This is breaking beebasm because it gets emitted "inline" too late for other code to realise on the first pass it is a zero page label (and we can't declare it *also* as a constant, as we then get a redefinition error)
     expr(0xaf03, make_lo("tube_brkv_handler"))
     expr(0xaf08, make_hi("tube_brkv_handler"))
-    comment(0xaf70-0x6000, "Patch the following JMP so we effectively do JMP (&500,X)") # TODO: Offset hack but it may be fair enough because this is within a sub-move
+    comment(0x004e, "Patch the following JMP so we effectively do JMP (&500,X)")
 
     label(0x51, "jump_address_low")
     expr(0x4f, config.get_assembler().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
 
     entry(0x435, "tube_entry_small_a")
     entry(0x428, "tube_entry_claim_tube")
-    comment(0xaf87-0x6000, "This is a call to release the tube.")
+    comment(0x040e, "This is a call to release the tube.")
     comment(0x695, "Wait for register 2 to have space and write A to it.")
     entry(0x695, "write_tube_r2_data")
     comment(0x69e, "Wait for register 4 to have space and write A to it.")
@@ -70,7 +68,6 @@ with move(0x8000, 0x2000, 0x4000):
     entry(0x6c5, "read_tube_r2_data")
     comment(0x518, "Table of flags used by tube_entry_small_a to set up registers 1/4 for the\nselected operation.")
     label(0x518, "tube_entry_flags")
-    # TODO: Not sure if it's a bug or just a quirk, but we get duplicate "referenced by" lines at e.g. tube_host_code2 and l0500
     entry(0x668, "tube_host_osword_0")
     entry(0x66a, "tube_host_osword_0_loop")
     entry(0x680, "tube_host_osword_0_no_escape")
@@ -194,45 +191,46 @@ with move(0x8000, 0x2000, 0x4000):
         # which doesn't correspond to a valid address. (We could obviously cope with
         # this in other ways, such as disassembling the first part of the table
         # separately.)
-        code_at = memorymanager.get_u16_be_runtime(pc) + 1
+        code_at = get_u16_be_runtime(pc) + 1
         if code_at <= 0xffff:
             rts_code_ptr(pc + 1, pc)
         pc += 2
 
-    nmi_move_id = mymove(0xd00, 0x8fd2, 0x5e)
     label(0x8fd2, "nmi_handler_rom_start")
     label(0x8fd2 + 0x5d + 1, "nmi_handler_rom_end")
     expr(0x8f95, "nmi_handler_rom_end-nmi_handler_rom_start-1")
-    entry(0xd00, "nmi_handler_ram")
-    comment(0xd3c, "The operand of this sta is modified at runtime.")
-    label(0xd3c, "nmi_sta_abs")
-    expr_label(0xd3d, "nmi_sta_abs+1")
-    expr_label(0xd3e, "nmi_sta_abs+2")
-    comment(0xd4b, 'The operand of this lda is modified at runtime.')
-    label(0xd4b, "nmi_lda_immXXX3")
-    expr_label(0xd4c, "nmi_lda_immXXX3+1")
-    comment(0xd21, "The operand of this lda is modified at runtime.")
-    label(0xd21, "nmi_lda_immXXX4")
-    expr_label(0xd22, "nmi_lda_immXXX4+1")
-    comment(0xd08, 'The operand of this "beq" is modified at runtime.')
-    label(0xd08, "nmi_beq")
-    expr_label(0xd09, "nmi_beq+1")
-    patched_branch("nmi_beq", 0x8e49, "nmi_XXX1")
-    patched_branch("nmi_beq", 0x8eb0, "nmi_XXX1")
-    patched_branch("nmi_beq", 0x8ff4-0x6000, "nmi_XXX1")
-    patched_branch("nmi_beq", 0x901e-0x6000, "nmi_XXX2")
-    constant(0x40, "opcode_rti")
-    expr(0x8e8e, "opcode_rti")
-    comment(0xd04, "The operand of this and is modified at runtime.")
-    entry(0xd04, "nmi_and_imm")
-    expr_label(0xd05, "nmi_and_imm+1")
-    label(0x912d, "nmi_and_table")
-    comment(0xd16, "The operand of this lda is modified at runtime.")
-    entry(0xd16, "nmi_lda_zp")
-    expr_label(0xd17, "nmi_lda_zp+1")
-    comment(0xd18, "This instruction is patched at runtime to toggle between cmp #/bcs.")
-    entry(0xd18, "nmi_cmp_imm_or_bcs")
-    expr_label(0xd19, "nmi_cmp_imm_or_bcs+1")
+    nmi_move_id = mymove(0xd00, 0x8fd2, 0x5e)
+    with nmi_move_id:
+        entry(0xd00, "nmi_handler_ram")
+        comment(0xd3c, "The operand of this sta is modified at runtime.")
+        label(0xd3c, "nmi_sta_abs")
+        expr_label(0xd3d, "nmi_sta_abs+1")
+        expr_label(0xd3e, "nmi_sta_abs+2")
+        comment(0xd4b, 'The operand of this lda is modified at runtime.')
+        label(0xd4b, "nmi_lda_immXXX3")
+        expr_label(0xd4c, "nmi_lda_immXXX3+1")
+        comment(0xd21, "The operand of this lda is modified at runtime.")
+        label(0xd21, "nmi_lda_immXXX4")
+        expr_label(0xd22, "nmi_lda_immXXX4+1")
+        comment(0xd08, 'The operand of this "beq" is modified at runtime.')
+        label(0xd08, "nmi_beq")
+        expr_label(0xd09, "nmi_beq+1")
+        patched_branch("nmi_beq", 0x8e49-0x6000, "nmi_XXX1")
+        patched_branch("nmi_beq", 0x8eb0-0x6000, "nmi_XXX1")
+        patched_branch("nmi_beq", 0x8ff4-0x6000, "nmi_XXX1")
+        patched_branch("nmi_beq", 0x901e-0x6000, "nmi_XXX2")
+        constant(0x40, "opcode_rti")
+        expr(0x8e8e, "opcode_rti")
+        comment(0xd04, "The operand of this and is modified at runtime.")
+        entry(0xd04, "nmi_and_imm")
+        expr_label(0xd05, "nmi_and_imm+1")
+        label(0x912d, "nmi_and_table")
+        comment(0xd16, "The operand of this lda is modified at runtime.")
+        entry(0xd16, "nmi_lda_zp")
+        expr_label(0xd17, "nmi_lda_zp+1")
+        comment(0xd18, "This instruction is patched at runtime to toggle between cmp #/bcs.")
+        entry(0xd18, "nmi_cmp_imm_or_bcs")
+        expr_label(0xd19, "nmi_cmp_imm_or_bcs+1")
     constant(0xb0, "opcode_bcs")
     expr(0x9056, "opcode_bcs")
     comment(0xd18+2+6,

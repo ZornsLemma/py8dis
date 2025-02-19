@@ -1,21 +1,21 @@
 // Constants
-osbyte_check_eof                       = 127
-osbyte_enter_language                  = 142
-osbyte_inkey                           = 129
-osbyte_read_adc_or_get_buffer_status   = 128
-osbyte_read_high_order_address         = 130
-osbyte_read_himem                      = 132
-osbyte_read_himem_for_mode             = 133
-osbyte_read_text_cursor_pos            = 134
-osbyte_read_tube_presence              = 234
-osbyte_read_write_basic_rom_bank       = 187
-osfile_load                            = 255
-osfile_save                            = 0
-osfind_close                           = 0
-osword_read_clock                      = 1
-osword_read_cmos_clock                 = 14
-osword_read_io_memory                  = 5
-osword_read_pixel                      = 9
+osbyte_check_eof                        = 127
+osbyte_enter_language                   = 142
+osbyte_inkey                            = 129
+osbyte_read_adc_or_get_buffer_status    = 128
+osbyte_read_high_order_address          = 130
+osbyte_read_himem                       = 132
+osbyte_read_himem_for_mode              = 133
+osbyte_read_text_cursor_pos             = 134
+osbyte_read_tube_presence               = 234
+osbyte_read_write_basic_rom_bank        = 187
+osfile_load                             = 255
+osfile_save                             = 0
+osfind_close                            = 0
+osword_read_clock                       = 1
+osword_read_cmos_clock                  = 14
+osword_read_io_memory                   = 5
+osword_read_pixel                       = 9
 
 // Memory locations
 l0000       = $0000
@@ -203,7 +203,7 @@ version
 copyright
     .byt 0                                                            // 8013: 00          .
     .asc "(C)1988 Acorn", $0a, $0d, 0                                 // 8014: 28 43 29... (C)
-    .byt   0, $b8, $28, $80,   0, $c0, $82,   0                       // 8024: 00 b8 28... ..(
+    .byt 0, $b8, $28, $80, 0, $c0, $82, 0                             // 8024: 00 b8 28... ..(
 
 // $802c referenced 1 time by $8003
 service_handler
@@ -331,10 +331,10 @@ sub_c80d8
 
 // $80dd referenced 1 time by $a0fd
 l80dd
-    .byt   0,   0,   0,   3, $27                                      // 80dd: 00 00 00... ...
+    .byt 0, 0, 0, 3, $27                                              // 80dd: 00 00 00... ...
 // $80e2 referenced 1 time by $a0f7
 l80e2
-    .byt   1, $0a, $64, $e8, $10                                      // 80e2: 01 0a 64... ..d
+    .byt 1, $0a, $64, $e8, $10                                        // 80e2: 01 0a 64... ..d
 
 // $80e7 referenced 1 time by $8000
 language_handler
@@ -1085,252 +1085,252 @@ c84f4
     jmp c8304                                                         // 8510: 4c 04 83    L..
 
     .asc "AND"                                                        // 8513: 41 4e 44    AND
-    .byt $80,   0                                                     // 8516: 80 00       ..
+    .byt $80, 0                                                       // 8516: 80 00       ..
     .asc "ABS"                                                        // 8518: 41 42 53    ABS
-    .byt $94,   0                                                     // 851b: 94 00       ..
+    .byt $94, 0                                                       // 851b: 94 00       ..
     .asc "ACS"                                                        // 851d: 41 43 53    ACS
-    .byt $95,   0                                                     // 8520: 95 00       ..
+    .byt $95, 0                                                       // 8520: 95 00       ..
     .asc "ADVAL"                                                      // 8522: 41 44 56... ADV
-    .byt $96,   0                                                     // 8527: 96 00       ..
+    .byt $96, 0                                                       // 8527: 96 00       ..
     .asc "ASC"                                                        // 8529: 41 53 43    ASC
-    .byt $97,   0                                                     // 852c: 97 00       ..
+    .byt $97, 0                                                       // 852c: 97 00       ..
     .asc "ASN"                                                        // 852e: 41 53 4e    ASN
-    .byt $98,   0                                                     // 8531: 98 00       ..
+    .byt $98, 0                                                       // 8531: 98 00       ..
     .asc "ATN"                                                        // 8533: 41 54 4e    ATN
-    .byt $99,   0                                                     // 8536: 99 00       ..
+    .byt $99, 0                                                       // 8536: 99 00       ..
     .asc "AUTO"                                                       // 8538: 41 55 54... AUT
     .byt $c6, $10                                                     // 853c: c6 10       ..
     .asc "BGET"                                                       // 853e: 42 47 45... BGE
-    .byt $9a,   1                                                     // 8542: 9a 01       ..
+    .byt $9a, 1                                                       // 8542: 9a 01       ..
     .asc "BPUT"                                                       // 8544: 42 50 55... BPU
-    .byt $d5,   3                                                     // 8548: d5 03       ..
+    .byt $d5, 3                                                       // 8548: d5 03       ..
     .asc "COLOUR"                                                     // 854a: 43 4f 4c... COL
-    .byt $fb,   2                                                     // 8550: fb 02       ..
+    .byt $fb, 2                                                       // 8550: fb 02       ..
     .asc "CALL"                                                       // 8552: 43 41 4c... CAL
-    .byt $d6,   2                                                     // 8556: d6 02       ..
+    .byt $d6, 2                                                       // 8556: d6 02       ..
     .asc "CHAIN"                                                      // 8558: 43 48 41... CHA
-    .byt $d7,   2                                                     // 855d: d7 02       ..
+    .byt $d7, 2                                                       // 855d: d7 02       ..
     .asc "CHR$"                                                       // 855f: 43 48 52... CHR
-    .byt $bd,   0                                                     // 8563: bd 00       ..
+    .byt $bd, 0                                                       // 8563: bd 00       ..
     .asc "CLEAR"                                                      // 8565: 43 4c 45... CLE
-    .byt $d8,   1                                                     // 856a: d8 01       ..
+    .byt $d8, 1                                                       // 856a: d8 01       ..
     .asc "CLOSE"                                                      // 856c: 43 4c 4f... CLO
-    .byt $d9,   3                                                     // 8571: d9 03       ..
+    .byt $d9, 3                                                       // 8571: d9 03       ..
     .asc "CLG"                                                        // 8573: 43 4c 47    CLG
-    .byt $da,   1                                                     // 8576: da 01       ..
+    .byt $da, 1                                                       // 8576: da 01       ..
     .asc "CLS"                                                        // 8578: 43 4c 53    CLS
-    .byt $db,   1                                                     // 857b: db 01       ..
+    .byt $db, 1                                                       // 857b: db 01       ..
     .asc "COS"                                                        // 857d: 43 4f 53    COS
-    .byt $9b,   0                                                     // 8580: 9b 00       ..
+    .byt $9b, 0                                                       // 8580: 9b 00       ..
     .asc "COUNT"                                                      // 8582: 43 4f 55... COU
-    .byt $9c,   1                                                     // 8587: 9c 01       ..
+    .byt $9c, 1                                                       // 8587: 9c 01       ..
     .asc "COLOR"                                                      // 8589: 43 4f 4c... COL
-    .byt $fb,   2                                                     // 858e: fb 02       ..
+    .byt $fb, 2                                                       // 858e: fb 02       ..
     .asc "DATA"                                                       // 8590: 44 41 54... DAT
     .byt $dc                                                          // 8594: dc          .
     .asc " DEG"                                                       // 8595: 20 44 45...  DE
-    .byt $9d,   0                                                     // 8599: 9d 00       ..
+    .byt $9d, 0                                                       // 8599: 9d 00       ..
     .asc "DEF"                                                        // 859b: 44 45 46    DEF
-    .byt $dd,   0                                                     // 859e: dd 00       ..
+    .byt $dd, 0                                                       // 859e: dd 00       ..
     .asc "DELETE"                                                     // 85a0: 44 45 4c... DEL
     .byt $c7, $10                                                     // 85a6: c7 10       ..
     .asc "DIV"                                                        // 85a8: 44 49 56    DIV
-    .byt $81,   0                                                     // 85ab: 81 00       ..
+    .byt $81, 0                                                       // 85ab: 81 00       ..
     .asc "DIM"                                                        // 85ad: 44 49 4d    DIM
-    .byt $de,   2                                                     // 85b0: de 02       ..
+    .byt $de, 2                                                       // 85b0: de 02       ..
     .asc "DRAW"                                                       // 85b2: 44 52 41... DRA
-    .byt $df,   2                                                     // 85b6: df 02       ..
+    .byt $df, 2                                                       // 85b6: df 02       ..
     .asc "ENDPROC"                                                    // 85b8: 45 4e 44... END
-    .byt $e1,   1                                                     // 85bf: e1 01       ..
+    .byt $e1, 1                                                       // 85bf: e1 01       ..
     .asc "END"                                                        // 85c1: 45 4e 44    END
-    .byt $e0,   1                                                     // 85c4: e0 01       ..
+    .byt $e0, 1                                                       // 85c4: e0 01       ..
     .asc "ENVELOPE"                                                   // 85c6: 45 4e 56... ENV
-    .byt $e2,   2                                                     // 85ce: e2 02       ..
+    .byt $e2, 2                                                       // 85ce: e2 02       ..
     .asc "ELSE"                                                       // 85d0: 45 4c 53... ELS
     .byt $8b, $14                                                     // 85d4: 8b 14       ..
     .asc "EVAL"                                                       // 85d6: 45 56 41... EVA
-    .byt $a0,   0                                                     // 85da: a0 00       ..
+    .byt $a0, 0                                                       // 85da: a0 00       ..
     .asc "ERL"                                                        // 85dc: 45 52 4c    ERL
-    .byt $9e,   1                                                     // 85df: 9e 01       ..
+    .byt $9e, 1                                                       // 85df: 9e 01       ..
     .asc "ERROR"                                                      // 85e1: 45 52 52... ERR
-    .byt $85,   4                                                     // 85e6: 85 04       ..
+    .byt $85, 4                                                       // 85e6: 85 04       ..
     .asc "EOF"                                                        // 85e8: 45 4f 46    EOF
-    .byt $c5,   1                                                     // 85eb: c5 01       ..
+    .byt $c5, 1                                                       // 85eb: c5 01       ..
     .asc "EOR"                                                        // 85ed: 45 4f 52    EOR
-    .byt $82,   0                                                     // 85f0: 82 00       ..
+    .byt $82, 0                                                       // 85f0: 82 00       ..
     .asc "ERR"                                                        // 85f2: 45 52 52    ERR
-    .byt $9f,   1                                                     // 85f5: 9f 01       ..
+    .byt $9f, 1                                                       // 85f5: 9f 01       ..
     .asc "EXP"                                                        // 85f7: 45 58 50    EXP
-    .byt $a1,   0                                                     // 85fa: a1 00       ..
+    .byt $a1, 0                                                       // 85fa: a1 00       ..
     .asc "EXT"                                                        // 85fc: 45 58 54    EXT
-    .byt $a2,   1                                                     // 85ff: a2 01       ..
+    .byt $a2, 1                                                       // 85ff: a2 01       ..
     .asc "EDIT"                                                       // 8601: 45 44 49... EDI
     .byt $ce, $10                                                     // 8605: ce 10       ..
     .asc "FOR"                                                        // 8607: 46 4f 52    FOR
-    .byt $e3,   2                                                     // 860a: e3 02       ..
+    .byt $e3, 2                                                       // 860a: e3 02       ..
     .asc "FALSE"                                                      // 860c: 46 41 4c... FAL
-    .byt $a3,   1, $46, $4e, $a4,   8                                 // 8611: a3 01 46... ..F
+    .byt $a3, 1, $46, $4e, $a4, 8                                     // 8611: a3 01 46... ..F
     .asc "GOTO"                                                       // 8617: 47 4f 54... GOT
     .byt $e5, $12                                                     // 861b: e5 12       ..
     .asc "GET$"                                                       // 861d: 47 45 54... GET
-    .byt $be,   0                                                     // 8621: be 00       ..
+    .byt $be, 0                                                       // 8621: be 00       ..
     .asc "GET"                                                        // 8623: 47 45 54    GET
-    .byt $a5,   0                                                     // 8626: a5 00       ..
+    .byt $a5, 0                                                       // 8626: a5 00       ..
     .asc "GOSUB"                                                      // 8628: 47 4f 53... GOS
     .byt $e4, $12                                                     // 862d: e4 12       ..
     .asc "GCOL"                                                       // 862f: 47 43 4f... GCO
-    .byt $e6,   2                                                     // 8633: e6 02       ..
+    .byt $e6, 2                                                       // 8633: e6 02       ..
     .asc "HIMEM"                                                      // 8635: 48 49 4d... HIM
     .byt $93                                                          // 863a: 93          .
     .asc "CINPUT"                                                     // 863b: 43 49 4e... CIN
-    .byt $e8,   2, $49, $46, $e7,   2                                 // 8641: e8 02 49... ..I
+    .byt $e8, 2, $49, $46, $e7, 2                                     // 8641: e8 02 49... ..I
     .asc "INKEY$"                                                     // 8647: 49 4e 4b... INK
-    .byt $bf,   0                                                     // 864d: bf 00       ..
+    .byt $bf, 0                                                       // 864d: bf 00       ..
     .asc "INKEY"                                                      // 864f: 49 4e 4b... INK
-    .byt $a6,   0                                                     // 8654: a6 00       ..
+    .byt $a6, 0                                                       // 8654: a6 00       ..
     .asc "INT"                                                        // 8656: 49 4e 54    INT
-    .byt $a8,   0                                                     // 8659: a8 00       ..
+    .byt $a8, 0                                                       // 8659: a8 00       ..
     .asc "INSTR("                                                     // 865b: 49 4e 53... INS
-    .byt $a7,   0                                                     // 8661: a7 00       ..
+    .byt $a7, 0                                                       // 8661: a7 00       ..
     .asc "LIST"                                                       // 8663: 4c 49 53... LIS
     .byt $c9, $10                                                     // 8667: c9 10       ..
     .asc "LINE"                                                       // 8669: 4c 49 4e... LIN
-    .byt $86,   0                                                     // 866d: 86 00       ..
+    .byt $86, 0                                                       // 866d: 86 00       ..
     .asc "LOAD"                                                       // 866f: 4c 4f 41... LOA
-    .byt $c8,   2                                                     // 8673: c8 02       ..
+    .byt $c8, 2                                                       // 8673: c8 02       ..
     .asc "LOMEM"                                                      // 8675: 4c 4f 4d... LOM
     .byt $92                                                          // 867a: 92          .
     .asc "CLOCAL"                                                     // 867b: 43 4c 4f... CLO
-    .byt $ea,   2                                                     // 8681: ea 02       ..
+    .byt $ea, 2                                                       // 8681: ea 02       ..
     .asc "LEFT$("                                                     // 8683: 4c 45 46... LEF
-    .byt $c0,   0                                                     // 8689: c0 00       ..
+    .byt $c0, 0                                                       // 8689: c0 00       ..
     .asc "LEN"                                                        // 868b: 4c 45 4e    LEN
-    .byt $a9,   0                                                     // 868e: a9 00       ..
+    .byt $a9, 0                                                       // 868e: a9 00       ..
     .asc "LET"                                                        // 8690: 4c 45 54    LET
-    .byt $e9,   4                                                     // 8693: e9 04       ..
+    .byt $e9, 4                                                       // 8693: e9 04       ..
     .asc "LOG"                                                        // 8695: 4c 4f 47    LOG
-    .byt $ab,   0, $4c, $4e, $aa,   0                                 // 8698: ab 00 4c... ..L
+    .byt $ab, 0, $4c, $4e, $aa, 0                                     // 8698: ab 00 4c... ..L
     .asc "MID$("                                                      // 869e: 4d 49 44... MID
-    .byt $c1,   0                                                     // 86a3: c1 00       ..
+    .byt $c1, 0                                                       // 86a3: c1 00       ..
     .asc "MODE"                                                       // 86a5: 4d 4f 44... MOD
-    .byt $eb,   2                                                     // 86a9: eb 02       ..
+    .byt $eb, 2                                                       // 86a9: eb 02       ..
     .asc "MOD"                                                        // 86ab: 4d 4f 44    MOD
-    .byt $83,   0                                                     // 86ae: 83 00       ..
+    .byt $83, 0                                                       // 86ae: 83 00       ..
     .asc "MOVE"                                                       // 86b0: 4d 4f 56... MOV
-    .byt $ec,   2                                                     // 86b4: ec 02       ..
+    .byt $ec, 2                                                       // 86b4: ec 02       ..
     .asc "NEXT"                                                       // 86b6: 4e 45 58... NEX
-    .byt $ed,   2                                                     // 86ba: ed 02       ..
+    .byt $ed, 2                                                       // 86ba: ed 02       ..
     .asc "NEW"                                                        // 86bc: 4e 45 57    NEW
-    .byt $ca,   1                                                     // 86bf: ca 01       ..
+    .byt $ca, 1                                                       // 86bf: ca 01       ..
     .asc "NOT"                                                        // 86c1: 4e 4f 54    NOT
-    .byt $ac,   0                                                     // 86c4: ac 00       ..
+    .byt $ac, 0                                                       // 86c4: ac 00       ..
     .asc "OLD"                                                        // 86c6: 4f 4c 44    OLD
-    .byt $cb,   1, $4f, $4e, $ee,   2                                 // 86c9: cb 01 4f... ..O
+    .byt $cb, 1, $4f, $4e, $ee, 2                                     // 86c9: cb 01 4f... ..O
     .asc "OFF"                                                        // 86cf: 4f 46 46    OFF
-    .byt $87,   0, $4f, $52, $84,   0                                 // 86d2: 87 00 4f... ..O
+    .byt $87, 0, $4f, $52, $84, 0                                     // 86d2: 87 00 4f... ..O
     .asc "OPENIN"                                                     // 86d8: 4f 50 45... OPE
-    .byt $8e,   0                                                     // 86de: 8e 00       ..
+    .byt $8e, 0                                                       // 86de: 8e 00       ..
     .asc "OPENOUT"                                                    // 86e0: 4f 50 45... OPE
-    .byt $ae,   0                                                     // 86e7: ae 00       ..
+    .byt $ae, 0                                                       // 86e7: ae 00       ..
     .asc "OPENUP"                                                     // 86e9: 4f 50 45... OPE
-    .byt $ad,   0                                                     // 86ef: ad 00       ..
+    .byt $ad, 0                                                       // 86ef: ad 00       ..
     .asc "OSCLI"                                                      // 86f1: 4f 53 43... OSC
-    .byt $ff,   2                                                     // 86f6: ff 02       ..
+    .byt $ff, 2                                                       // 86f6: ff 02       ..
     .asc "PRINT"                                                      // 86f8: 50 52 49... PRI
-    .byt $f1,   2                                                     // 86fd: f1 02       ..
+    .byt $f1, 2                                                       // 86fd: f1 02       ..
     .asc "PAGE"                                                       // 86ff: 50 41 47... PAG
     .byt $90                                                          // 8703: 90          .
     .asc "CPTR"                                                       // 8704: 43 50 54... CPT
     .byt $8f                                                          // 8708: 8f          .
     .asc "CPI"                                                        // 8709: 43 50 49    CPI
-    .byt $af,   1                                                     // 870c: af 01       ..
+    .byt $af, 1                                                       // 870c: af 01       ..
     .asc "PLOT"                                                       // 870e: 50 4c 4f... PLO
-    .byt $f0,   2                                                     // 8712: f0 02       ..
+    .byt $f0, 2                                                       // 8712: f0 02       ..
     .asc "POINT("                                                     // 8714: 50 4f 49... POI
-    .byt $b0,   0                                                     // 871a: b0 00       ..
+    .byt $b0, 0                                                       // 871a: b0 00       ..
     .asc "PROC"                                                       // 871c: 50 52 4f... PRO
     .byt $f2, $0a                                                     // 8720: f2 0a       ..
     .asc "POS"                                                        // 8722: 50 4f 53    POS
-    .byt $b1,   1                                                     // 8725: b1 01       ..
+    .byt $b1, 1                                                       // 8725: b1 01       ..
     .asc "RETURN"                                                     // 8727: 52 45 54... RET
-    .byt $f8,   1                                                     // 872d: f8 01       ..
+    .byt $f8, 1                                                       // 872d: f8 01       ..
     .asc "REPEAT"                                                     // 872f: 52 45 50... REP
-    .byt $f5,   0                                                     // 8735: f5 00       ..
+    .byt $f5, 0                                                       // 8735: f5 00       ..
     .asc "REPORT"                                                     // 8737: 52 45 50... REP
-    .byt $f6,   1                                                     // 873d: f6 01       ..
+    .byt $f6, 1                                                       // 873d: f6 01       ..
     .asc "READ"                                                       // 873f: 52 45 41... REA
-    .byt $f3,   2                                                     // 8743: f3 02       ..
+    .byt $f3, 2                                                       // 8743: f3 02       ..
     .asc "REM"                                                        // 8745: 52 45 4d    REM
     .byt $f4                                                          // 8748: f4          .
     .asc " RUN"                                                       // 8749: 20 52 55...  RU
-    .byt $f9,   1                                                     // 874d: f9 01       ..
+    .byt $f9, 1                                                       // 874d: f9 01       ..
     .asc "RAD"                                                        // 874f: 52 41 44    RAD
-    .byt $b2,   0                                                     // 8752: b2 00       ..
+    .byt $b2, 0                                                       // 8752: b2 00       ..
     .asc "RESTORE"                                                    // 8754: 52 45 53... RES
     .byt $f7, $12                                                     // 875b: f7 12       ..
     .asc "RIGHT$("                                                    // 875d: 52 49 47... RIG
-    .byt $c2,   0                                                     // 8764: c2 00       ..
+    .byt $c2, 0                                                       // 8764: c2 00       ..
     .asc "RND"                                                        // 8766: 52 4e 44    RND
-    .byt $b3,   1                                                     // 8769: b3 01       ..
+    .byt $b3, 1                                                       // 8769: b3 01       ..
     .asc "RENUMBER"                                                   // 876b: 52 45 4e... REN
     .byt $cc, $10                                                     // 8773: cc 10       ..
     .asc "STEP"                                                       // 8775: 53 54 45... STE
-    .byt $88,   0                                                     // 8779: 88 00       ..
+    .byt $88, 0                                                       // 8779: 88 00       ..
     .asc "SAVE"                                                       // 877b: 53 41 56... SAV
-    .byt $cd,   2                                                     // 877f: cd 02       ..
+    .byt $cd, 2                                                       // 877f: cd 02       ..
     .asc "SGN"                                                        // 8781: 53 47 4e    SGN
-    .byt $b4,   0                                                     // 8784: b4 00       ..
+    .byt $b4, 0                                                       // 8784: b4 00       ..
     .asc "SIN"                                                        // 8786: 53 49 4e    SIN
-    .byt $b5,   0                                                     // 8789: b5 00       ..
+    .byt $b5, 0                                                       // 8789: b5 00       ..
     .asc "SQR"                                                        // 878b: 53 51 52    SQR
-    .byt $b6,   0                                                     // 878e: b6 00       ..
+    .byt $b6, 0                                                       // 878e: b6 00       ..
     .asc "SPC"                                                        // 8790: 53 50 43    SPC
-    .byt $89,   0                                                     // 8793: 89 00       ..
+    .byt $89, 0                                                       // 8793: 89 00       ..
     .asc "STR$"                                                       // 8795: 53 54 52... STR
-    .byt $c3,   0                                                     // 8799: c3 00       ..
+    .byt $c3, 0                                                       // 8799: c3 00       ..
     .asc "STRING$("                                                   // 879b: 53 54 52... STR
-    .byt $c4,   0                                                     // 87a3: c4 00       ..
+    .byt $c4, 0                                                       // 87a3: c4 00       ..
     .asc "SOUND"                                                      // 87a5: 53 4f 55... SOU
-    .byt $d4,   2                                                     // 87aa: d4 02       ..
+    .byt $d4, 2                                                       // 87aa: d4 02       ..
     .asc "STOP"                                                       // 87ac: 53 54 4f... STO
-    .byt $fa,   1                                                     // 87b0: fa 01       ..
+    .byt $fa, 1                                                       // 87b0: fa 01       ..
     .asc "TAN"                                                        // 87b2: 54 41 4e    TAN
-    .byt $b7,   0                                                     // 87b5: b7 00       ..
+    .byt $b7, 0                                                       // 87b5: b7 00       ..
     .asc "THEN"                                                       // 87b7: 54 48 45... THE
-    .byt $8c, $14, $54, $4f, $b8,   0                                 // 87bb: 8c 14 54... ..T
+    .byt $8c, $14, $54, $4f, $b8, 0                                   // 87bb: 8c 14 54... ..T
     .asc "TAB("                                                       // 87c1: 54 41 42... TAB
-    .byt $8a,   0                                                     // 87c5: 8a 00       ..
+    .byt $8a, 0                                                       // 87c5: 8a 00       ..
     .asc "TRACE"                                                      // 87c7: 54 52 41... TRA
     .byt $fc, $12                                                     // 87cc: fc 12       ..
     .asc "TIME"                                                       // 87ce: 54 49 4d... TIM
     .byt $91                                                          // 87d2: 91          .
     .asc "CTRUE"                                                      // 87d3: 43 54 52... CTR
-    .byt $b9,   1                                                     // 87d8: b9 01       ..
+    .byt $b9, 1                                                       // 87d8: b9 01       ..
     .asc "UNTIL"                                                      // 87da: 55 4e 54... UNT
-    .byt $fd,   2                                                     // 87df: fd 02       ..
+    .byt $fd, 2                                                       // 87df: fd 02       ..
     .asc "USR"                                                        // 87e1: 55 53 52    USR
-    .byt $ba,   0                                                     // 87e4: ba 00       ..
+    .byt $ba, 0                                                       // 87e4: ba 00       ..
     .asc "VDU"                                                        // 87e6: 56 44 55    VDU
-    .byt $ef,   2                                                     // 87e9: ef 02       ..
+    .byt $ef, 2                                                       // 87e9: ef 02       ..
     .asc "VAL"                                                        // 87eb: 56 41 4c    VAL
-    .byt $bb,   0                                                     // 87ee: bb 00       ..
+    .byt $bb, 0                                                       // 87ee: bb 00       ..
     .asc "VPOS"                                                       // 87f0: 56 50 4f... VPO
-    .byt $bc,   1                                                     // 87f4: bc 01       ..
+    .byt $bc, 1                                                       // 87f4: bc 01       ..
     .asc "WIDTH"                                                      // 87f6: 57 49 44... WID
-    .byt $fe,   2                                                     // 87fb: fe 02       ..
+    .byt $fe, 2                                                       // 87fb: fe 02       ..
     .asc "PAGE"                                                       // 87fd: 50 41 47... PAG
-    .byt $d0,   0                                                     // 8801: d0 00       ..
+    .byt $d0, 0                                                       // 8801: d0 00       ..
     .asc "PTR"                                                        // 8803: 50 54 52    PTR
-    .byt $cf,   0, $54, $49                                           // 8806: cf 00 54... ..T
+    .byt $cf, 0, $54, $49                                             // 8806: cf 00 54... ..T
 // $880a referenced 1 time by $90e0
 l880a
-    .byt $4d, $45, $d1,   0                                           // 880a: 4d 45 d1... ME.
+    .byt $4d, $45, $d1, 0                                             // 880a: 4d 45 d1... ME.
     .asc "LOMEM"                                                      // 880e: 4c 4f 4d... LOM
-    .byt $d2,   0                                                     // 8813: d2 00       ..
+    .byt $d2, 0                                                       // 8813: d2 00       ..
     .asc "HIMEM"                                                      // 8815: 48 49 4d... HIM
-    .byt $d3,   0                                                     // 881a: d3 00       ..
+    .byt $d3, 0                                                       // 881a: d3 00       ..
     .asc "Missing "                                                   // 881c: 4d 69 73... Mis
-    .byt $8d,   0                                                     // 8824: 8d 00       ..
+    .byt $8d, 0                                                       // 8824: 8d 00       ..
 l8826
 l8909 = l8826+227
     .word sub_cab37, sub_cab21, sub_cae50, sub_cae8c, sub_cae71       // 8826: 37 ab 21... 7.!
@@ -1358,7 +1358,7 @@ l8909 = l8826+227
     .word sub_c970b, sub_cba47, sub_cb351, sub_cbec7, sub_c834b       // 8902: 0b 97 47... ..G
     .word sub_c8984, sub_cb896                                        // 890c: 84 89 96... ...
 // $8909 referenced 1 time by $8ae3
-    .byt $b9, $d8, $d9, $f0,   1, $10, $81, $90, $89, $93, $a3, $a4   // 8910: b9 d8 d9... ...
+    .byt $b9, $d8, $d9, $f0, 1, $10, $81, $90, $89, $93, $a3, $a4     // 8910: b9 d8 d9... ...
     .byt $a9                                                          // 891c: a9          .
     .asc "89x"                                                        // 891d: 38 39 78    89x
     .byt   1, $13, $21, $a1, $c1, $19, $18, $99, $98, $63, $73, $b1   // 8920: 01 13 21... ..!
@@ -1373,8 +1373,8 @@ l894e
     .asc "%%9AAAAJJLLLPPRSSS"                                         // 8956: 25 25 39... %%9
     .byt $10                                                          // 8968: 10          .
     .asc "%AAAA"                                                      // 8969: 25 41 41... %AA
-    .byt   8,   8,   8,   9,   9, $0a, $0a, $0a, $0a,   5, $15, $3e   // 896e: 08 08 08... ...
-    .byt   4, $0d, $30, $4c,   6                                      // 897a: 04 0d 30... ..0
+    .byt   8,   8, 8, 9, 9, $0a, $0a, $0a, $0a, 5, $15, $3e, 4, $0d   // 896e: 08 08 08... ...
+    .byt $30, $4c, 6                                                  // 897c: 30 4c 06    0L.
     .asc "2II"                                                        // 897f: 32 49 49    2II
     .byt $10, $25                                                     // 8982: 10 25       .%
 
@@ -2506,7 +2506,7 @@ sub_c8fb4
 c8fbb
     brk                                                               // 8fbb: 00          .
 
-    .byt   5, $8d, $2c,   0                                           // 8fbc: 05 8d 2c... ..,
+    .byt 5, $8d, $2c, 0                                               // 8fbc: 05 8d 2c... ..,
 
 sub_c8fc0
     jsr sub_cbe17                                                     // 8fc0: 20 17 be     ..
@@ -2771,7 +2771,7 @@ sub_c9149
     jsr c9c6a                                                         // 9149: 20 6a 9c     j.
     brk                                                               // 914c: 00          .
 
-    .byt   0, $fa                                                     // 914d: 00 fa       ..
+    .byt 0, $fa                                                       // 914d: 00 fa       ..
 
 // $914f referenced 2 times by $9126, $912d
 c914f
@@ -3143,7 +3143,7 @@ loop_c9356
 c9357
     brk                                                               // 9357: 00          .
 
-    .byt   9, $8d, $22,   0                                           // 9358: 09 8d 22... .."
+    .byt 9, $8d, $22, 0                                               // 9358: 09 8d 22... .."
 
 // $935c referenced 2 times by $b8fa, $b8ff
 sub_c935c
@@ -3314,7 +3314,7 @@ c9469
 c9476
     brk                                                               // 9476: 00          .
 
-    .byt   0, $cc                                                     // 9477: 00 cc       ..
+    .byt 0, $cc                                                       // 9477: 00 cc       ..
     .asc " space"                                                     // 9479: 20 73 70...  sp
 
 // $947f referenced 2 times by $942a, $942e
@@ -3563,7 +3563,7 @@ c95f1
 
     .byt $0a                                                          // 95f2: 0a          .
     .asc "Bad "                                                       // 95f3: 42 61 64... Bad
-    .byt $de,   0                                                     // 95f7: de 00       ..
+    .byt $de, 0                                                       // 95f7: de 00       ..
 
 // $95f9 referenced 1 time by $95c1
 c95f9
@@ -3924,7 +3924,7 @@ c9808
 
     .byt $19                                                          // 9809: 19          .
     .asc "Bad "                                                       // 980a: 42 61 64... Bad
-    .byt $eb,   0                                                     // 980e: eb 00       ..
+    .byt $eb, 0                                                       // 980e: eb 00       ..
 
 sub_c9810
     jsr sub_c9332                                                     // 9810: 20 32 93     2.
@@ -6855,7 +6855,7 @@ ca7c0
     .asc "-ve roo"                                                    // a7c2: 2d 76 65... -ve
 // $a7c9 referenced 1 time by $a985
 la7c9
-    .byt $74,   0, $86, $8e                                           // a7c9: 74 00 86... t..
+    .byt $74, 0, $86, $8e                                             // a7c9: 74 00 86... t..
 
 // $a7cd referenced 1 time by $a7b3
 ca7cd
@@ -8285,7 +8285,7 @@ loop_cafc1
 
     .byt $1d                                                          // afc8: 1d          .
     .asc "No such "                                                   // afc9: 4e 6f 20... No
-    .byt $a4, $2f, $f2,   0                                           // afd1: a4 2f f2... ./.
+    .byt $a4, $2f, $f2, 0                                             // afd1: a4 2f f2... ./.
 
 // $afd5 referenced 1 time by $b0a3
 cafd5
@@ -8739,8 +8739,8 @@ sub_cb269
     lda l002a                                                         // b26c: a5 2a       .*
     jmp caeb4                                                         // b26e: 4c b4 ae    L..
 
-    .byt $a4, $0a, $f0,   1, $88, $20, $80, $9c, $64,   8, $64,   9   // b271: a4 0a f0... ...
-    .byt $a6, $18, $86                                                // b27d: a6 18 86    ...
+    .byt $a4, $0a, $f0, 1, $88, $20, $80, $9c, $64, 8, $64, 9, $a6    // b271: a4 0a f0... ...
+    .byt $18, $86                                                     // b27e: 18 86       ..
     .asc "8d7"                                                        // b280: 38 64 37    8d7
     .byt $a4, $0c, $c0,   7, $f0, $28, $a6, $0b, $20, $5d, $8e, $c9   // b283: a4 0c c0... ...
     .byt $0d, $d0, $18, $e4, $37, $98, $e5, $38, $90, $18, $20, $5d   // b28f: 0d d0 18... ...
@@ -9175,7 +9175,7 @@ cb563
     brk                                                               // b563: 00          .
 
     .asc " No "                                                       // b564: 20 4e 6f...  No
-    .byt $e3,   0                                                     // b568: e3 00       ..
+    .byt $e3, 0                                                       // b568: e3 00       ..
 
 // $b56a referenced 2 times by $b52b, $b549
 cb56a
@@ -9302,7 +9302,7 @@ loop_cb642
     brk                                                               // b642: 00          .
 
     .asc "$No "                                                       // b643: 24 4e 6f... $No
-    .byt $b8,   0                                                     // b647: b8 00       ..
+    .byt $b8, 0                                                       // b647: b8 00       ..
 
 sub_cb649
     jsr sub_c997d                                                     // b649: 20 7d 99     }.
@@ -9422,7 +9422,7 @@ loop_cb730
     brk                                                               // b730: 00          .
 
     .asc "&No "                                                       // b731: 26 4e 6f... &No
-    .byt $e4,   0                                                     // b735: e4 00       ..
+    .byt $e4, 0                                                       // b735: e4 00       ..
 
 sub_cb737
     jsr c9c6a                                                         // b737: 20 6a 9c     j.
@@ -9938,7 +9938,7 @@ cba35
     brk                                                               // ba35: 00          .
 
     .asc ",Too many "                                                 // ba36: 2c 54 6f... ,To
-    .byt $f5, $73,   0                                                // ba40: f5 73 00    .s.
+    .byt $f5, $73, 0                                                  // ba40: f5 73 00    .s.
 
 // $ba43 referenced 1 time by $ba13
 cba43
@@ -10171,7 +10171,7 @@ cbb64
     jsr sub_cbbdc                                                     // bb8e: 20 dc bb     ..
     brk                                                               // bb91: 00          .
 
-    .byt   0, $86                                                     // bb92: 00 86       ..
+    .byt 0, $86                                                       // bb92: 00 86       ..
     .asc " space"                                                     // bb94: 20 73 70...  sp
     .byt 0                                                            // bb9a: 00          .
 
@@ -10934,10 +10934,10 @@ lbf71
     .byt $82, $7f, $b9, $ff, $78, $7b, $0e, $fa, $35, $12, $86, $65   // bfc5: 82 7f b9... ...
     .byt $2e, $e0, $d3, $7e, $88, $88, $88, $89, $7b, $8c             // bfd1: 2e e0 d3... ...
     .asc "o-Y"                                                        // bfdb: 6f 2d 59    o-Y
-    .byt $81, $99, $99, $99, $9a, $f3, $9e, $7b, $77, $81, $c0,   0   // bfde: 81 99 99... ...
-    .byt   0,   0, $80, $93, $e6, $90,   0, $81, $c4                  // bfea: 00 00 80... ...
+    .byt $81, $99, $99, $99, $9a, $f3, $9e, $7b, $77, $81, $c0, 0, 0  // bfde: 81 99 99... ...
+    .byt   0, $80, $93, $e6, $90,   0, $81, $c4                       // bfeb: 00 80 93... ...
     .asc "DDD"                                                        // bff3: 44 44 44    DDD
-    .byt $80, $9d, $fd, $13,   4, $81, $e6                            // bff6: 80 9d fd... ...
+    .byt $80, $9d, $fd, $13, 4, $81, $e6                              // bff6: 80 9d fd... ...
     .asc "fff"                                                        // bffd: 66 66 66    fff
 pydis_end
 
@@ -10970,10 +10970,10 @@ pydis_end
 //     l003c:               36
 //     l0040:               34
 //     l004c:               31
+//     c8f9d:               29
 //     l0002:               29
 //     l003a:               29
 //     l0600:               29
-//     c8f9d:               29
 //     l0027:               28
 //     l004a:               25
 //     c9c6a:               24
@@ -10987,15 +10987,15 @@ pydis_end
 //     sub_c8da2:           18
 //     l0005:               17
 //     l002f:               17
-//     l004d:               16
 //     c8f92:               16
+//     l004d:               16
 //     l0013:               15
 //     l0018:               15
 //     l0049:               15
 //     oswrch:              15
 //     c9155:               14
-//     sub_c9dff:           14
 //     cad78:               14
+//     sub_c9dff:           14
 //     l0026:               13
 //     sub_cbd26:           13
 //     l0029:               12
@@ -11003,85 +11003,76 @@ pydis_end
 //     ca2cc:               11
 //     cae60:               11
 //     osbyte:              11
+//     c9c80:               10
 //     l0007:               10
 //     l000d:               10
 //     l0028:               10
 //     l0042:               10
 //     sub_c9779:           10
 //     sub_c9be2:           10
-//     c9c80:               10
 //     l000f:                9
 //     l001f:                9
 //     l05ff:                9
 //     sub_c8e5f:            9
 //     sub_c997d:            9
 //     sub_c9c5a:            9
+//     c828d:                8
+//     c90d0:                8
+//     c9338:                8
+//     c95f1:                8
+//     cae62:                8
 //     l0000:                8
 //     l0001:                8
 //     l0006:                8
 //     l001e:                8
 //     l0047:                8
 //     l004b:                8
-//     c828d:                8
 //     sub_c8d86:            8
-//     c90d0:                8
-//     c9338:                8
-//     c95f1:                8
 //     sub_c979f:            8
 //     sub_c9df3:            8
 //     sub_ca545:            8
-//     cae62:                8
 //     sub_cbac2:            8
-//     l0014:                7
-//     sub_c8fa8:            7
 //     c9048:                7
-//     sub_c9774:            7
-//     sub_c9783:            7
 //     c9c2d:                7
 //     ca72b:                7
-//     sub_cbbdc:            7
 //     cbc91:                7
-//     l000e:                6
-//     l0015:                6
-//     l0020:                6
-//     romsel_copy:          6
+//     l0014:                7
+//     sub_c8fa8:            7
+//     sub_c9774:            7
+//     sub_c9783:            7
+//     sub_cbbdc:            7
 //     c8b1b:                6
 //     c8bf9:                6
-//     sub_c8d9c:            6
-//     sub_c8e41:            6
 //     c8e6c:                6
 //     c904b:                6
 //     c90c5:                6
-//     sub_c976c:            6
-//     sub_c9771:            6
 //     c9e85:                6
 //     cac2b:                6
 //     cad10:                6
 //     cadce:                6
 //     cb169:                6
-//     sub_cbc83:            6
 //     cbdff:                6
+//     l000e:                6
+//     l0015:                6
+//     l0020:                6
+//     osbget:               6
+//     osbput:               6
+//     osword:               6
+//     romsel_copy:          6
+//     sub_c8d9c:            6
+//     sub_c8e41:            6
+//     sub_c976c:            6
+//     sub_c9771:            6
+//     sub_cbc83:            6
 //     sub_cbe06:            6
 //     sub_cbe25:            6
-//     osbput:               6
-//     osbget:               6
-//     osword:               6
-//     l0010:                5
-//     l0024:                5
-//     l0025:                5
-//     os_text_ptr:          5
-//     l0400:                5
 //     c84ce:                5
-//     sub_c8d94:            5
 //     c932d:                5
 //     c9784:                5
-//     sub_c9788:            5
-//     sub_c97a2:            5
 //     c9a46:                5
 //     c9e83:                5
 //     c9f4c:                5
 //     ca261:                5
-//     sub_ca514:            5
 //     ca634:                5
 //     ca70a:                5
 //     ca712:                5
@@ -11089,23 +11080,24 @@ pydis_end
 //     cac38:                5
 //     cad20:                5
 //     cafb8:                5
-//     sub_cb365:            5
 //     cb5cf:                5
 //     cb805:                5
-//     sub_cb85a:            5
 //     cbc3a:                5
-//     sub_cbd12:            5
 //     cbd21:                5
-//     sub_cbd48:            5
 //     cbdd4:                5
-//     l0011:                4
-//     l001c:                4
-//     l001d:                4
-//     l0046:                4
-//     l0100:                4
-//     l0440:                4
-//     l0441:                4
-//     sub_c8149:            4
+//     l0010:                5
+//     l0024:                5
+//     l0025:                5
+//     l0400:                5
+//     os_text_ptr:          5
+//     sub_c8d94:            5
+//     sub_c9788:            5
+//     sub_c97a2:            5
+//     sub_ca514:            5
+//     sub_cb365:            5
+//     sub_cb85a:            5
+//     sub_cbd12:            5
+//     sub_cbd48:            5
 //     c815d:                4
 //     c820f:                4
 //     c84a3:                4
@@ -11118,16 +11110,11 @@ pydis_end
 //     c90c7:                4
 //     c9207:                4
 //     c9700:                4
-//     sub_c977e:            4
-//     sub_c9781:            4
 //     c9808:                4
-//     sub_c9952:            4
 //     c9c16:                4
 //     c9c8a:                4
 //     c9d75:                4
-//     sub_c9f07:            4
 //     c9f0a:                4
-//     sub_ca06c:            4
 //     ca0d1:                4
 //     ca2fb:                4
 //     ca426:                4
@@ -11135,27 +11122,30 @@ pydis_end
 //     caae8:                4
 //     cb5df:                4
 //     cb7b3:                4
+//     cbdd2:                4
+//     cbe05:                4
+//     cbeeb:                4
+//     l0011:                4
+//     l001c:                4
+//     l001d:                4
+//     l0046:                4
+//     l0100:                4
+//     l0440:                4
+//     l0441:                4
+//     sub_c8149:            4
+//     sub_c977e:            4
+//     sub_c9781:            4
+//     sub_c9952:            4
+//     sub_c9f07:            4
+//     sub_ca06c:            4
 //     sub_cbc24:            4
 //     sub_cbd5e:            4
 //     sub_cbd77:            4
-//     cbdd2:                4
 //     sub_cbdd8:            4
-//     cbe05:                4
-//     cbeeb:                4
 //     sub_cbf22:            4
 //     sub_cbf2f:            4
-//     l0016:                3
-//     l0023:                3
-//     l00fd:                3
-//     l0401:                3
-//     l046c:                3
-//     l051d:                3
-//     l051f:                3
-//     l0524:                3
 //     c806a:                3
-//     sub_c80d8:            3
 //     c8190:                3
-//     sub_c8191:            3
 //     c827c:                3
 //     c82dd:                3
 //     c8304:                3
@@ -11166,60 +11156,39 @@ pydis_end
 //     c8c1e:                3
 //     c8cbb:                3
 //     c8d64:                3
-//     sub_c8d89:            3
-//     sub_c8d8c:            3
 //     c8e3f:                3
-//     sub_c8e66:            3
 //     c8e6f:                3
 //     c8e9c:                3
 //     c8ed0:                3
 //     c8edc:                3
 //     c8fbb:                3
 //     c9164:                3
-//     sub_c916e:            3
 //     c926e:                3
 //     c9276:                3
 //     c9288:                3
 //     c92da:                3
-//     sub_c9330:            3
 //     c93d7:                3
-//     sub_c953d:            3
 //     c96b8:                3
 //     c96ca:                3
 //     c979c:                3
 //     c98bd:                3
 //     c990c:                3
-//     sub_c990f:            3
-//     sub_c9923:            3
 //     c9a14:                3
 //     c9a28:                3
-//     sub_c9b97:            3
 //     c9bda:                3
 //     c9c55:                3
 //     c9c74:                3
-//     sub_c9d0f:            3
-//     sub_c9d7f:            3
-//     sub_ca0e8:            3
 //     ca126:                3
 //     ca174:                3
-//     sub_ca2dd:            3
 //     ca385:                3
-//     sub_ca3ed:            3
-//     sub_ca46b:            3
 //     ca4a9:                3
 //     ca4b9:                3
-//     sub_ca5ad:            3
-//     sub_ca5b4:            3
 //     ca622:                3
-//     sub_ca62f:            3
 //     ca674:                3
 //     ca6e4:                3
 //     ca6ed:                3
-//     sub_ca6ff:            3
 //     ca725:                3
-//     sub_ca73e:            3
 //     ca9c1:                3
-//     sub_ca9d1:            3
 //     cab9d:                3
 //     cadee:                3
 //     caed7:                3
@@ -11227,27 +11196,209 @@ pydis_end
 //     caf07:                3
 //     caf88:                3
 //     cb1de:                3
-//     sub_cb2e0:            3
 //     cb753:                3
 //     cb8fa:                3
 //     cb997:                3
 //     cb9ff:                3
 //     cba46:                3
-//     sub_cba6e:            3
-//     sub_cba7a:            3
 //     cbb1a:                3
 //     cbd3a:                3
-//     sub_cbd46:            3
 //     cbf3d:                3
-//     osnewl:               3
+//     l0016:                3
+//     l0023:                3
+//     l00fd:                3
+//     l0401:                3
+//     l046c:                3
+//     l051d:                3
+//     l051f:                3
+//     l0524:                3
 //     oscli:                3
+//     osnewl:               3
+//     sub_c80d8:            3
+//     sub_c8191:            3
+//     sub_c8d89:            3
+//     sub_c8d8c:            3
+//     sub_c8e66:            3
+//     sub_c916e:            3
+//     sub_c9330:            3
+//     sub_c953d:            3
+//     sub_c990f:            3
+//     sub_c9923:            3
+//     sub_c9b97:            3
+//     sub_c9d0f:            3
+//     sub_c9d7f:            3
+//     sub_ca0e8:            3
+//     sub_ca2dd:            3
+//     sub_ca3ed:            3
+//     sub_ca46b:            3
+//     sub_ca5ad:            3
+//     sub_ca5b4:            3
+//     sub_ca62f:            3
+//     sub_ca6ff:            3
+//     sub_ca73e:            3
+//     sub_ca9d1:            3
+//     sub_cb2e0:            3
+//     sub_cba6e:            3
+//     sub_cba7a:            3
+//     sub_cbd46:            3
+//     c8067:                2
+//     c808f:                2
+//     c80a8:                2
+//     c80cc:                2
+//     c8151:                2
+//     c8197:                2
+//     c81b9:                2
+//     c82ae:                2
+//     c82f4:                2
+//     c82fb:                2
+//     c8306:                2
+//     c840a:                2
+//     c89dd:                2
+//     c8b40:                2
+//     c8b5f:                2
+//     c8b62:                2
+//     c8b83:                2
+//     c8c31:                2
+//     c8c99:                2
+//     c8ca4:                2
+//     c8cbd:                2
+//     c8d34:                2
+//     c8d6e:                2
+//     c8dc9:                2
+//     c8e57:                2
+//     c8e7d:                2
+//     c8eb6:                2
+//     c8f1a:                2
+//     c8f26:                2
+//     c8f41:                2
+//     c8f5d:                2
+//     c9073:                2
+//     c90de:                2
+//     c914f:                2
+//     c9193:                2
+//     c91ad:                2
+//     c91d1:                2
+//     c9285:                2
+//     c9357:                2
+//     c947f:                2
+//     c94ba:                2
+//     c94e4:                2
+//     c950d:                2
+//     c9555:                2
+//     c9635:                2
+//     c979b:                2
+//     c97ee:                2
+//     c9866:                2
+//     c986a:                2
+//     c98c0:                2
+//     c98dc:                2
+//     c9928:                2
+//     c9977:                2
+//     c997a:                2
+//     c999f:                2
+//     c99fa:                2
+//     c9a3a:                2
+//     c9a75:                2
+//     c9ac1:                2
+//     c9bae:                2
+//     c9bbc:                2
+//     c9bce:                2
+//     c9c3b:                2
+//     c9c41:                2
+//     c9c6c:                2
+//     c9cc6:                2
+//     c9ced:                2
+//     c9d7c:                2
+//     c9dc1:                2
+//     c9ecb:                2
+//     c9f55:                2
+//     c9f9a:                2
+//     c9fa7:                2
+//     ca029:                2
+//     ca05b:                2
+//     ca06f:                2
+//     ca081:                2
+//     ca09c:                2
+//     ca0c5:                2
+//     ca158:                2
+//     ca19b:                2
+//     ca19d:                2
+//     ca1d4:                2
+//     ca220:                2
+//     ca2b7:                2
+//     ca2d6:                2
+//     ca303:                2
+//     ca357:                2
+//     ca3a1:                2
+//     ca3a7:                2
+//     ca3e5:                2
+//     ca3e9:                2
+//     ca446:                2
+//     ca452:                2
+//     ca47a:                2
+//     ca4f5:                2
+//     ca547:                2
+//     ca57e:                2
+//     ca6ce:                2
+//     ca6f2:                2
+//     ca704:                2
+//     ca73b:                2
+//     ca79b:                2
+//     ca7db:                2
+//     ca805:                2
+//     ca857:                2
+//     ca878:                2
+//     caa2c:                2
+//     caa7a:                2
+//     cab1a:                2
+//     cab41:                2
+//     cabdd:                2
+//     cac2d:                2
+//     cacd2:                2
+//     cace8:                2
+//     cacfd:                2
+//     cad5b:                2
+//     cae56:                2
+//     caeb4:                2
+//     caedb:                2
+//     caf03:                2
+//     cafdb:                2
+//     cafee:                2
+//     cb109:                2
+//     cb17e:                2
+//     cb1db:                2
+//     cb205:                2
+//     cb341:                2
+//     cb39e:                2
+//     cb3fb:                2
+//     cb451:                2
+//     cb485:                2
+//     cb4a7:                2
+//     cb4e2:                2
+//     cb54b:                2
+//     cb563:                2
+//     cb56a:                2
+//     cb629:                2
+//     cb7a4:                2
+//     cb81a:                2
+//     cb866:                2
+//     cb86c:                2
+//     cb87f:                2
+//     cb9a5:                2
+//     cbac5:                2
+//     cbae8:                2
+//     cbb9b:                2
+//     cbd0e:                2
+//     cbd3d:                2
+//     cbd74:                2
+//     cbd86:                2
+//     cbe51:                2
 //     l0017:                2
 //     l0021:                2
 //     l0022:                2
 //     l0044:                2
 //     l004e:                2
 //     l01ff:                2
-//     wrchv:                2
 //     l0402:                2
 //     l0403:                2
 //     l043c:                2
@@ -11263,233 +11414,648 @@ pydis_end
 //     l0526:                2
 //     l0527:                2
 //     l0700:                2
-//     c8067:                2
-//     c808f:                2
-//     c80a8:                2
-//     c80cc:                2
-//     c8151:                2
-//     c8197:                2
-//     c81b9:                2
+//     osargs:               2
+//     osasci:               2
+//     osfile:               2
+//     osfind:               2
+//     osrdch:               2
 //     sub_c81bd:            2
 //     sub_c8287:            2
 //     sub_c828a:            2
-//     c82ae:                2
-//     c82f4:                2
-//     c82fb:                2
-//     c8306:                2
 //     sub_c83d3:            2
-//     c840a:                2
 //     sub_c8429:            2
-//     c89dd:                2
-//     c8b40:                2
-//     c8b5f:                2
-//     c8b62:                2
-//     c8b83:                2
-//     c8c31:                2
-//     c8c99:                2
-//     c8ca4:                2
-//     c8cbd:                2
-//     c8d34:                2
-//     c8d6e:                2
 //     sub_c8da8:            2
-//     c8dc9:                2
-//     c8e57:                2
-//     c8e7d:                2
-//     c8eb6:                2
-//     c8f1a:                2
-//     c8f26:                2
-//     c8f41:                2
-//     c8f5d:                2
 //     sub_c8fae:            2
-//     c9073:                2
-//     c90de:                2
-//     c914f:                2
 //     sub_c9171:            2
-//     c9193:                2
-//     c91ad:                2
-//     c91d1:                2
-//     c9285:                2
 //     sub_c933d:            2
-//     c9357:                2
 //     sub_c935c:            2
 //     sub_c93c7:            2
 //     sub_c9410:            2
 //     sub_c9436:            2
-//     c947f:                2
-//     c94ba:                2
-//     c94e4:                2
-//     c950d:                2
-//     c9555:                2
 //     sub_c95cb:            2
-//     c9635:                2
 //     sub_c9769:            2
-//     c979b:                2
-//     c97ee:                2
-//     c9866:                2
-//     c986a:                2
-//     c98c0:                2
-//     c98dc:                2
-//     c9928:                2
-//     c9977:                2
-//     c997a:                2
-//     c999f:                2
 //     sub_c99c4:            2
-//     c99fa:                2
-//     c9a3a:                2
-//     c9a75:                2
-//     c9ac1:                2
 //     sub_c9ac9:            2
-//     c9bae:                2
-//     c9bbc:                2
-//     c9bce:                2
 //     sub_c9bee:            2
 //     sub_c9c0a:            2
-//     c9c3b:                2
-//     c9c41:                2
 //     sub_c9c4a:            2
-//     c9c6c:                2
-//     c9cc6:                2
-//     c9ced:                2
-//     c9d7c:                2
 //     sub_c9d81:            2
-//     c9dc1:                2
 //     sub_c9e3f:            2
 //     sub_c9e6d:            2
-//     c9ecb:                2
-//     c9f55:                2
-//     c9f9a:                2
-//     c9fa7:                2
 //     sub_ca023:            2
 //     sub_ca026:            2
-//     ca029:                2
-//     ca05b:                2
 //     sub_ca069:            2
-//     ca06f:                2
-//     ca081:                2
-//     ca09c:                2
-//     ca0c5:                2
 //     sub_ca0ec:            2
-//     ca158:                2
 //     sub_ca181:            2
-//     ca19b:                2
-//     ca19d:                2
-//     ca1d4:                2
-//     ca220:                2
-//     ca2b7:                2
 //     sub_ca2ca:            2
-//     ca2d6:                2
-//     ca303:                2
-//     ca357:                2
-//     ca3a1:                2
-//     ca3a7:                2
-//     ca3e5:                2
-//     ca3e9:                2
-//     ca446:                2
-//     ca452:                2
-//     ca47a:                2
 //     sub_ca4ba:            2
-//     ca4f5:                2
-//     ca547:                2
 //     sub_ca54d:            2
 //     sub_ca56d:            2
-//     ca57e:                2
 //     sub_ca5bb:            2
 //     sub_ca5cc:            2
 //     sub_ca5cf:            2
 //     sub_ca5e3:            2
 //     sub_ca5f4:            2
 //     sub_ca6cb:            2
-//     ca6ce:                2
-//     ca6f2:                2
-//     ca704:                2
-//     ca73b:                2
-//     ca79b:                2
-//     ca7db:                2
-//     ca805:                2
-//     ca857:                2
-//     ca878:                2
 //     sub_ca8b3:            2
 //     sub_ca8b9:            2
 //     sub_ca97b:            2
-//     caa2c:                2
 //     sub_caa50:            2
 //     sub_caa55:            2
 //     sub_caa6e:            2
-//     caa7a:                2
 //     sub_caad8:            2
-//     cab1a:                2
-//     cab41:                2
-//     cabdd:                2
-//     cac2d:                2
-//     cacd2:                2
-//     cace8:                2
-//     cacfd:                2
 //     sub_cad3a:            2
-//     cad5b:                2
-//     cae56:                2
-//     caeb4:                2
-//     caedb:                2
-//     caf03:                2
-//     cafdb:                2
-//     cafee:                2
 //     sub_cb057:            2
-//     cb109:                2
-//     cb17e:                2
 //     sub_cb1bf:            2
-//     cb1db:                2
-//     cb205:                2
-//     cb341:                2
 //     sub_cb362:            2
 //     sub_cb372:            2
-//     cb39e:                2
-//     cb3fb:                2
-//     cb451:                2
-//     cb485:                2
-//     cb4a7:                2
-//     cb4e2:                2
-//     cb54b:                2
-//     cb563:                2
-//     cb56a:                2
-//     cb629:                2
-//     cb7a4:                2
-//     cb81a:                2
 //     sub_cb84d:            2
-//     cb866:                2
-//     cb86c:                2
-//     cb87f:                2
-//     cb9a5:                2
 //     sub_cb9dc:            2
 //     sub_cba6c:            2
 //     sub_cbaa4:            2
-//     cbac5:                2
 //     sub_cbac8:            2
-//     cbae8:                2
 //     sub_cbb0f:            2
 //     sub_cbb1b:            2
-//     cbb9b:                2
 //     sub_cbbff:            2
 //     sub_cbc18:            2
 //     sub_cbc36:            2
 //     sub_cbc62:            2
-//     cbd0e:                2
-//     cbd3d:                2
-//     cbd74:                2
-//     cbd86:                2
 //     sub_cbdac:            2
 //     sub_cbdcf:            2
 //     sub_cbdf3:            2
 //     sub_cbe17:            2
-//     cbe51:                2
 //     sub_cbe6b:            2
 //     sub_cbe76:            2
 //     sub_cbe81:            2
 //     sub_cbf0f:            2
 //     sub_cbf3e:            2
-//     osfind:               2
-//     osargs:               2
-//     osfile:               2
-//     osrdch:               2
-//     osasci:               2
+//     wrchv:                2
+//     brkv:                 1
+//     c8040:                1
+//     c804c:                1
+//     c805e:                1
+//     c8070:                1
+//     c80ff:                1
+//     c8168:                1
+//     c817a:                1
+//     c8187:                1
+//     c81ad:                1
+//     c81c8:                1
+//     c81ea:                1
+//     c81fd:                1
+//     c8210:                1
+//     c8230:                1
+//     c823f:                1
+//     c8242:                1
+//     c8246:                1
+//     c825b:                1
+//     c829a:                1
+//     c82be:                1
+//     c82c8:                1
+//     c82d8:                1
+//     c832f:                1
+//     c833b:                1
+//     c8345:                1
+//     c8346:                1
+//     c8353:                1
+//     c835e:                1
+//     c8362:                1
+//     c8371:                1
+//     c8372:                1
+//     c8392:                1
+//     c83a6:                1
+//     c83c1:                1
+//     c83d5:                1
+//     c8456:                1
+//     c846a:                1
+//     c8491:                1
+//     c84ad:                1
+//     c84f4:                1
+//     c89bf:                1
+//     c89f4:                1
+//     c8a0b:                1
+//     c8a1e:                1
+//     c8a28:                1
+//     c8a34:                1
+//     c8a44:                1
+//     c8a4b:                1
+//     c8a64:                1
+//     c8a68:                1
+//     c8a6b:                1
+//     c8a79:                1
+//     c8a8b:                1
+//     c8a8e:                1
+//     c8a91:                1
+//     c8adf:                1
+//     c8aef:                1
+//     c8af5:                1
+//     c8b33:                1
+//     c8b4b:                1
+//     c8b55:                1
+//     c8b63:                1
+//     c8b98:                1
+//     c8b9b:                1
+//     c8b9c:                1
+//     c8ba3:                1
+//     c8baf:                1
+//     c8bb4:                1
+//     c8bb6:                1
+//     c8bbd:                1
+//     c8bc4:                1
+//     c8bde:                1
+//     c8be9:                1
+//     c8c01:                1
+//     c8c24:                1
+//     c8c41:                1
+//     c8c43:                1
+//     c8c55:                1
+//     c8c57:                1
+//     c8c5e:                1
+//     c8c74:                1
+//     c8c84:                1
+//     c8c87:                1
+//     c8c96:                1
+//     c8ca7:                1
+//     c8cb8:                1
+//     c8cc0:                1
+//     c8ce6:                1
+//     c8cfd:                1
+//     c8d16:                1
+//     c8d37:                1
+//     c8d44:                1
+//     c8d74:                1
+//     c8dff:                1
+//     c8e8d:                1
+//     c8e9d:                1
+//     c8ea6:                1
+//     c8eaa:                1
+//     c8ebe:                1
+//     c8ef3:                1
+//     c8f03:                1
+//     c8f25:                1
+//     c8f32:                1
+//     c8f3d:                1
+//     c8f52:                1
+//     c8f6d:                1
+//     c8f74:                1
+//     c8f86:                1
+//     c8f87:                1
+//     c8f8c:                1
+//     c8f9c:                1
+//     c8fda:                1
+//     c8ff2:                1
+//     c901c:                1
+//     c9033:                1
+//     c905c:                1
+//     c9069:                1
+//     c907d:                1
+//     c9082:                1
+//     c9086:                1
+//     c90a0:                1
+//     c90b0:                1
+//     c90d2:                1
+//     c90e3:                1
+//     c90ea:                1
+//     c9108:                1
+//     c9112:                1
+//     c9123:                1
+//     c9135:                1
+//     c9146:                1
+//     c91ee:                1
+//     c91ef:                1
+//     c9201:                1
+//     c9204:                1
+//     c922a:                1
+//     c9237:                1
+//     c924a:                1
+//     c9259:                1
+//     c9274:                1
+//     c929e:                1
+//     c92ed:                1
+//     c9304:                1
+//     c931e:                1
+//     c9321:                1
+//     c9325:                1
+//     c932a:                1
+//     c937c:                1
+//     c938f:                1
+//     c93b4:                1
+//     c93c4:                1
+//     c9433:                1
+//     c9469:                1
+//     c9476:                1
+//     c9487:                1
+//     c94aa:                1
+//     c94b0:                1
+//     c94c8:                1
+//     c94d1:                1
+//     c94d5:                1
+//     c94de:                1
+//     c9509:                1
+//     c951d:                1
+//     c951f:                1
+//     c954b:                1
+//     c9579:                1
+//     c957c:                1
+//     c957f:                1
+//     c95be:                1
+//     c95e0:                1
+//     c95f9:                1
+//     c9606:                1
+//     c9628:                1
+//     c9632:                1
+//     c963b:                1
+//     c964e:                1
+//     c968d:                1
+//     c96bf:                1
+//     c971b:                1
+//     c972c:                1
+//     c9735:                1
+//     c9753:                1
+//     c97d2:                1
+//     c97fe:                1
+//     c9801:                1
+//     c9877:                1
+//     c9889:                1
+//     c98d7:                1
+//     c9937:                1
+//     c9962:                1
+//     c996e:                1
+//     c9979:                1
+//     c9990:                1
+//     c99a0:                1
+//     c99a2:                1
+//     c99ab:                1
+//     c99ba:                1
+//     c9a0e:                1
+//     c9a58:                1
+//     c9a63:                1
+//     c9a67:                1
+//     c9a76:                1
+//     c9a79:                1
+//     c9a7b:                1
+//     c9a99:                1
+//     c9aa0:                1
+//     c9aa5:                1
+//     c9abc:                1
+//     c9ae6:                1
+//     c9b4c:                1
+//     c9b5a:                1
+//     c9b78:                1
+//     c9b80:                1
+//     c9b8a:                1
+//     c9bd2:                1
+//     c9bdb:                1
+//     c9c08:                1
+//     c9c24:                1
+//     c9c52:                1
+//     c9cb6:                1
+//     c9cc1:                1
+//     c9cc5:                1
+//     c9cd6:                1
+//     c9ceb:                1
+//     c9cfb:                1
+//     c9d0c:                1
+//     c9d29:                1
+//     c9d43:                1
+//     c9d57:                1
+//     c9d79:                1
+//     c9d7b:                1
+//     c9db4:                1
+//     c9dba:                1
+//     c9dbe:                1
+//     c9dbf:                1
+//     c9dc0:                1
+//     c9dc4:                1
+//     c9dd5:                1
+//     c9de5:                1
+//     c9de9:                1
+//     c9e02:                1
+//     c9e10:                1
+//     c9e2a:                1
+//     c9e48:                1
+//     c9e4d:                1
+//     c9e78:                1
+//     c9e79:                1
+//     c9e90:                1
+//     c9ea6:                1
+//     c9ead:                1
+//     c9eb2:                1
+//     c9ec2:                1
+//     c9edd:                1
+//     c9f13:                1
+//     c9f3b:                1
+//     c9f4f:                1
+//     c9f64:                1
+//     c9f70:                1
+//     c9f9d:                1
+//     c9fb6:                1
+//     c9fb8:                1
+//     c9fe6:                1
+//     c9ff4:                1
+//     ca00f:                1
+//     ca03b:                1
+//     ca03c:                1
+//     ca04a:                1
+//     ca04d:                1
+//     ca05f:                1
+//     ca09f:                1
+//     ca0c7:                1
+//     ca0ee:                1
+//     ca10a:                1
+//     ca116:                1
+//     ca131:                1
+//     ca137:                1
+//     ca160:                1
+//     ca169:                1
+//     ca18a:                1
+//     ca197:                1
+//     ca1af:                1
+//     ca1bc:                1
+//     ca1c1:                1
+//     ca1cd:                1
+//     ca1d0:                1
+//     ca1ed:                1
+//     ca1ef:                1
+//     ca204:                1
+//     ca212:                1
+//     ca21c:                1
+//     ca22a:                1
+//     ca23e:                1
+//     ca24a:                1
+//     ca25f:                1
+//     ca26f:                1
+//     ca28a:                1
+//     ca28c:                1
+//     ca290:                1
+//     ca2a3:                1
+//     ca2b3:                1
+//     ca2c9:                1
+//     ca2fd:                1
+//     ca325:                1
+//     ca333:                1
+//     ca33e:                1
+//     ca342:                1
+//     ca348:                1
+//     ca34c:                1
+//     ca36b:                1
+//     ca37e:                1
+//     ca393:                1
+//     ca3aa:                1
+//     ca3c3:                1
+//     ca42c:                1
+//     ca489:                1
+//     ca4a3:                1
+//     ca4c4:                1
+//     ca4ce:                1
+//     ca4e8:                1
+//     ca53b:                1
+//     ca53e:                1
+//     ca57a:                1
+//     ca5a7:                1
+//     ca5aa:                1
+//     ca5ba:                1
+//     ca608:                1
+//     ca612:                1
+//     ca61d:                1
+//     ca640:                1
+//     ca653:                1
+//     ca65c:                1
+//     ca65e:                1
+//     ca676:                1
+//     ca68d:                1
+//     ca6a2:                1
+//     ca6ae:                1
+//     ca6c4:                1
+//     ca70f:                1
+//     ca71e:                1
+//     ca72f:                1
+//     ca739:                1
+//     ca73d:                1
+//     ca74d:                1
+//     ca76b:                1
+//     ca776:                1
+//     ca797:                1
+//     ca7c0:                1
+//     ca7cd:                1
+//     ca7ed:                1
+//     ca7ef:                1
+//     ca829:                1
+//     ca838:                1
+//     ca83f:                1
+//     ca841:                1
+//     ca875:                1
+//     ca88a:                1
+//     ca899:                1
+//     ca8b0:                1
+//     ca8bb:                1
+//     ca8ee:                1
+//     ca91f:                1
+//     ca92d:                1
+//     ca932:                1
+//     ca93b:                1
+//     ca946:                1
+//     ca948:                1
+//     ca94b:                1
+//     ca959:                1
+//     ca962:                1
+//     ca965:                1
+//     ca978:                1
+//     ca9e0:                1
+//     ca9ef:                1
+//     ca9f2:                1
+//     ca9f8:                1
+//     caa07:                1
+//     caa33:                1
+//     caa3e:                1
+//     caa44:                1
+//     caa66:                1
+//     caa6b:                1
+//     caa7d:                1
+//     caa9a:                1
+//     caab0:                1
+//     caac1:                1
+//     cab23:                1
+//     cab82:                1
+//     cab91:                1
+//     cabc9:                1
+//     cabd0:                1
+//     cabfa:                1
+//     cabfd:                1
+//     cac02:                1
+//     cac0f:                1
+//     cac35:                1
+//     cac59:                1
+//     cac5b:                1
+//     caca0:                1
+//     caca3:                1
+//     caca9:                1
+//     cacaf:                1
+//     cace3:                1
+//     cacef:                1
+//     cad0d:                1
+//     cad14:                1
+//     cad19:                1
+//     cad37:                1
+//     cad52:                1
+//     cad53:                1
+//     cad75:                1
+//     cad91:                1
+//     cad9c:                1
+//     cadac:                1
+//     cadb6:                1
+//     cadbc:                1
+//     cade4:                1
+//     cadf9:                1
+//     cae00:                1
+//     cae0d:                1
+//     cae11:                1
+//     cae31:                1
+//     cae3f:                1
+//     cae9f:                1
+//     caedc:                1
+//     caf2f:                1
+//     caf3d:                1
+//     caf4d:                1
+//     caf6d:                1
+//     caf83:                1
+//     cafbb:                1
+//     cafbe:                1
+//     cafd5:                1
+//     caffd:                1
+//     cb00e:                1
+//     cb04a:                1
+//     cb08a:                1
+//     cb0a6:                1
+//     cb0b0:                1
+//     cb0be:                1
+//     cb0e2:                1
+//     cb106:                1
+//     cb1a3:                1
+//     cb1a6:                1
+//     cb1ab:                1
+//     cb1b5:                1
+//     cb1ca:                1
+//     cb200:                1
+//     cb22d:                1
+//     cb230:                1
+//     cb235:                1
+//     cb256:                1
+//     cb257:                1
+//     cb266:                1
+//     cb34c:                1
+//     cb35c:                1
+//     cb380:                1
+//     cb398:                1
+//     cb399:                1
+//     cb3cf:                1
+//     cb3f4:                1
+//     cb3fe:                1
+//     cb425:                1
+//     cb428:                1
+//     cb42b:                1
+//     cb445:                1
+//     cb454:                1
+//     cb45d:                1
+//     cb46f:                1
+//     cb47f:                1
+//     cb495:                1
+//     cb497:                1
+//     cb4a1:                1
+//     cb4b8:                1
+//     cb4ba:                1
+//     cb4bc:                1
+//     cb4c2:                1
+//     cb4e0:                1
+//     cb4f8:                1
+//     cb50a:                1
+//     cb510:                1
+//     cb516:                1
+//     cb51c:                1
+//     cb522:                1
+//     cb530:                1
+//     cb5cd:                1
+//     cb5f1:                1
+//     cb622:                1
+//     cb626:                1
+//     cb635:                1
+//     cb6a7:                1
+//     cb6bf:                1
+//     cb6d1:                1
+//     cb6f7:                1
+//     cb70c:                1
+//     cb723:                1
+//     cb74a:                1
+//     cb75a:                1
+//     cb762:                1
+//     cb7ca:                1
+//     cb7d4:                1
+//     cb7da:                1
+//     cb7e6:                1
+//     cb7fa:                1
+//     cb824:                1
+//     cb833:                1
+//     cb847:                1
+//     cb857:                1
+//     cb874:                1
+//     cb877:                1
+//     cb8b5:                1
+//     cb8ba:                1
+//     cb8cc:                1
+//     cb8da:                1
+//     cb8e2:                1
+//     cb8f2:                1
+//     cb909:                1
+//     cb938:                1
+//     cb941:                1
+//     cb94f:                1
+//     cb965:                1
+//     cb968:                1
+//     cb976:                1
+//     cb9ad:                1
+//     cb9bf:                1
+//     cb9cd:                1
+//     cba21:                1
+//     cba2b:                1
+//     cba31:                1
+//     cba35:                1
+//     cba43:                1
+//     cba63:                1
+//     cbaa6:                1
+//     cbae6:                1
+//     cbaf7:                1
+//     cbb03:                1
+//     cbb0c:                1
+//     cbb16:                1
+//     cbb45:                1
+//     cbb64:                1
+//     cbba6:                1
+//     cbbaf:                1
+//     cbbd0:                1
+//     cbca5:                1
+//     cbccd:                1
+//     cbcd5:                1
+//     cbce6:                1
+//     cbcea:                1
+//     cbd23:                1
+//     cbd45:                1
+//     cbd64:                1
+//     cbd70:                1
+//     cbd71:                1
+//     cbd9e:                1
+//     cbdaa:                1
+//     cbdbd:                1
+//     cbdc9:                1
+//     cbde2:                1
+//     cbe43:                1
+//     cbe45:                1
+//     cbe4e:                1
+//     cbed3:                1
+//     cbed9:                1
+//     cbf00:                1
+//     cbf1a:                1
+//     cbf54:                1
+//     copy_to_stack_loop:   1
 //     l0008:                1
 //     l0009:                1
 //     l0043:                1
@@ -11503,8 +12069,6 @@ pydis_end
 //     l00fe:                1
 //     l00ff:                1
 //     l0106:                1
-//     brkv:                 1
-//     brkv+1:               1
 //     l0404:                1
 //     l040c:                1
 //     l0460:                1
@@ -11531,848 +12095,283 @@ pydis_end
 //     l7461:                1
 //     l7f0e:                1
 //     l7f13:                1
-//     service_handler:      1
-//     c8040:                1
-//     c804c:                1
-//     loop_c8057:           1
-//     c805e:                1
-//     c8070:                1
-//     loop_c8091:           1
-//     copy_to_stack_loop:   1
 //     l80c2:                1
 //     l80dd:                1
 //     l80e2:                1
-//     language_handler:     1
-//     c80ff:                1
-//     sub_c8139:            1
-//     c8168:                1
-//     loop_c8176:           1
-//     c817a:                1
-//     c8187:                1
-//     loop_c819f:           1
-//     c81ad:                1
-//     c81c8:                1
-//     loop_c81e1:           1
-//     c81ea:                1
-//     c81fd:                1
-//     loop_c8206:           1
-//     c8210:                1
-//     c8230:                1
-//     loop_c8235:           1
-//     c823f:                1
-//     c8242:                1
-//     c8246:                1
-//     loop_c8252:           1
-//     c825b:                1
-//     c829a:                1
-//     loop_c82b2:           1
-//     c82be:                1
-//     c82c8:                1
-//     c82d8:                1
-//     sub_c82e6:            1
-//     loop_c82f7:           1
-//     loop_c8314:           1
-//     c832f:                1
-//     loop_c8331:           1
-//     c833b:                1
-//     c8345:                1
-//     c8346:                1
-//     sub_c8349:            1
-//     sub_c834f:            1
-//     c8353:                1
-//     c835e:                1
-//     c8362:                1
-//     loop_c8365:           1
-//     c8371:                1
-//     c8372:                1
-//     c8392:                1
-//     loop_c839e:           1
-//     c83a6:                1
-//     sub_c83aa:            1
-//     c83c1:                1
-//     sub_c83c2:            1
-//     c83d5:                1
-//     loop_c8428:           1
-//     loop_c8440:           1
-//     c8456:                1
-//     loop_c845b:           1
-//     c846a:                1
-//     loop_c847b:           1
-//     c8491:                1
-//     loop_c8496:           1
-//     c84ad:                1
-//     c84f4:                1
 //     l880a:                1
 //     l8909:                1
 //     l894e:                1
 //     l8993:                1
-//     c89bf:                1
+//     la7c9:                1
+//     language_handler:     1
+//     lb3be:                1
+//     lbecd:                1
+//     lbefe:                1
+//     lbf71:                1
+//     le09c:                1
+//     loop_c8057:           1
+//     loop_c8091:           1
+//     loop_c8176:           1
+//     loop_c819f:           1
+//     loop_c81e1:           1
+//     loop_c8206:           1
+//     loop_c8235:           1
+//     loop_c8252:           1
+//     loop_c82b2:           1
+//     loop_c82f7:           1
+//     loop_c8314:           1
+//     loop_c8331:           1
+//     loop_c8365:           1
+//     loop_c839e:           1
+//     loop_c8428:           1
+//     loop_c8440:           1
+//     loop_c845b:           1
+//     loop_c847b:           1
+//     loop_c8496:           1
 //     loop_c89d7:           1
-//     c89f4:                1
-//     c8a0b:                1
 //     loop_c8a11:           1
-//     c8a1e:                1
-//     c8a28:                1
 //     loop_c8a2a:           1
-//     c8a34:                1
 //     loop_c8a3c:           1
-//     c8a44:                1
-//     c8a4b:                1
 //     loop_c8a4f:           1
 //     loop_c8a54:           1
 //     loop_c8a5e:           1
-//     c8a64:                1
-//     c8a68:                1
-//     c8a6b:                1
 //     loop_c8a6e:           1
-//     c8a79:                1
-//     c8a8b:                1
-//     c8a8e:                1
-//     c8a91:                1
-//     sub_c8aa8:            1
 //     loop_c8ac3:           1
 //     loop_c8ad4:           1
-//     c8adf:                1
 //     loop_c8ae3:           1
-//     c8aef:                1
-//     c8af5:                1
-//     c8b33:                1
-//     c8b4b:                1
-//     c8b55:                1
-//     c8b63:                1
-//     c8b98:                1
-//     c8b9b:                1
-//     c8b9c:                1
 //     loop_c8b9e:           1
-//     c8ba3:                1
-//     c8baf:                1
-//     c8bb4:                1
-//     c8bb6:                1
-//     c8bbd:                1
-//     c8bc4:                1
-//     c8bde:                1
-//     c8be9:                1
-//     c8c01:                1
 //     loop_c8c15:           1
-//     c8c24:                1
-//     c8c41:                1
-//     c8c43:                1
-//     c8c55:                1
-//     c8c57:                1
-//     c8c5e:                1
-//     c8c74:                1
-//     c8c84:                1
-//     c8c87:                1
-//     c8c96:                1
 //     loop_c8c9b:           1
-//     c8ca7:                1
-//     c8cb8:                1
-//     c8cc0:                1
-//     c8ce6:                1
-//     c8cfd:                1
-//     c8d16:                1
-//     c8d37:                1
-//     c8d44:                1
 //     loop_c8d71:           1
-//     c8d74:                1
 //     loop_c8db7:           1
-//     sub_c8dc1:            1
-//     c8dff:                1
 //     loop_c8e16:           1
-//     sub_c8e1f:            1
-//     sub_c8e58:            1
-//     c8e8d:                1
 //     loop_c8e91:           1
-//     c8e9d:                1
-//     sub_c8ea4:            1
-//     c8ea6:                1
-//     c8eaa:                1
-//     c8ebe:                1
 //     loop_c8ee2:           1
-//     c8ef3:                1
-//     c8f03:                1
 //     loop_c8f0b:           1
-//     c8f25:                1
-//     c8f32:                1
-//     c8f3d:                1
-//     c8f52:                1
-//     c8f6d:                1
-//     c8f74:                1
 //     loop_c8f7a:           1
-//     c8f86:                1
-//     c8f87:                1
-//     c8f8c:                1
-//     c8f9c:                1
 //     loop_c8fa7:           1
-//     sub_c8fb4:            1
-//     c8fda:                1
-//     c8ff2:                1
 //     loop_c9004:           1
-//     c901c:                1
 //     loop_c9024:           1
-//     c9033:                1
-//     c905c:                1
-//     c9069:                1
 //     loop_c9078:           1
-//     c907d:                1
-//     c9082:                1
-//     c9086:                1
-//     c90a0:                1
 //     loop_c90a6:           1
 //     loop_c90ad:           1
-//     c90b0:                1
-//     c90d2:                1
-//     c90e3:                1
-//     c90ea:                1
-//     c9108:                1
-//     c9112:                1
-//     c9123:                1
-//     c9135:                1
-//     c9146:                1
 //     loop_c91e4:           1
-//     c91ee:                1
-//     c91ef:                1
 //     loop_c91f6:           1
-//     c9201:                1
-//     c9204:                1
 //     loop_c9220:           1
-//     c922a:                1
 //     loop_c922c:           1
-//     c9237:                1
 //     loop_c923f:           1
-//     c924a:                1
-//     c9259:                1
 //     loop_c9260:           1
 //     loop_c9268:           1
-//     c9274:                1
 //     loop_c928b:           1
-//     c929e:                1
 //     loop_c92d4:           1
 //     loop_c92e0:           1
-//     c92ed:                1
 //     loop_c92f0:           1
-//     c9304:                1
-//     c931e:                1
-//     c9321:                1
-//     c9325:                1
-//     c932a:                1
 //     loop_c9355:           1
 //     loop_c9356:           1
 //     loop_c9368:           1
-//     c937c:                1
-//     c938f:                1
-//     c93b4:                1
-//     c93c4:                1
 //     loop_c93fa:           1
-//     c9433:                1
-//     sub_c943e:            1
 //     loop_c9455:           1
-//     c9469:                1
-//     c9476:                1
-//     c9487:                1
 //     loop_c948a:           1
-//     c94aa:                1
-//     c94b0:                1
-//     c94c8:                1
-//     c94d1:                1
-//     c94d5:                1
-//     c94de:                1
-//     c9509:                1
-//     c951d:                1
-//     c951f:                1
-//     c954b:                1
-//     c9579:                1
-//     c957c:                1
-//     c957f:                1
-//     c95be:                1
-//     sub_c95c6:            1
 //     loop_c95cf:           1
-//     c95e0:                1
-//     c95f9:                1
-//     c9606:                1
-//     c9628:                1
-//     c9632:                1
-//     c963b:                1
-//     c964e:                1
-//     c968d:                1
-//     c96bf:                1
-//     c971b:                1
 //     loop_c9724:           1
 //     loop_c9728:           1
-//     c972c:                1
-//     c9735:                1
 //     loop_c9750:           1
-//     c9753:                1
-//     sub_c978b:            1
 //     loop_c97c0:           1
 //     loop_c97c6:           1
-//     c97d2:                1
-//     c97fe:                1
-//     c9801:                1
-//     c9877:                1
-//     c9889:                1
 //     loop_c98cb:           1
-//     c98d7:                1
 //     loop_c98df:           1
 //     loop_c9904:           1
-//     sub_c9914:            1
 //     loop_c992a:           1
-//     c9937:                1
 //     loop_c9948:           1
 //     loop_c9954:           1
-//     sub_c995a:            1
-//     c9962:                1
-//     c996e:                1
-//     c9979:                1
-//     c9990:                1
-//     c99a0:                1
-//     c99a2:                1
-//     c99ab:                1
-//     c99ba:                1
 //     loop_c99cf:           1
+//     loop_c9ab6:           1
+//     loop_c9be0:           1
+//     loop_c9c6d:           1
+//     loop_c9c92:           1
+//     loop_c9cc9:           1
+//     loop_c9ce8:           1
+//     loop_c9cfd:           1
+//     loop_c9dd7:           1
+//     loop_c9e18:           1
+//     loop_c9e23:           1
+//     loop_c9e32:           1
+//     loop_c9e5b:           1
+//     loop_c9ef2:           1
+//     loop_c9f59:           1
+//     loop_c9f61:           1
+//     loop_c9faa:           1
+//     loop_c9fbb:           1
+//     loop_ca052:           1
+//     loop_ca070:           1
+//     loop_ca0b8:           1
+//     loop_ca0f2:           1
+//     loop_ca0f5:           1
+//     loop_ca10f:           1
+//     loop_ca13b:           1
+//     loop_ca151:           1
+//     loop_ca207:           1
+//     loop_ca256:           1
+//     loop_ca263:           1
+//     loop_ca27d:           1
+//     loop_ca2bb:           1
+//     loop_ca399:           1
+//     loop_ca3ae:           1
+//     loop_ca5b6:           1
+//     loop_ca607:           1
+//     loop_ca617:           1
+//     loop_ca62c:           1
+//     loop_ca6a8:           1
+//     loop_ca758:           1
+//     loop_ca88f:           1
+//     loop_ca8cd:           1
+//     loop_ca8e0:           1
+//     loop_ca969:           1
+//     loop_ca982:           1
+//     loop_ca9f5:           1
+//     loop_caa59:           1
+//     loop_caaf0:           1
+//     loop_cac3c:           1
+//     loop_cacd8:           1
+//     loop_cace5:           1
+//     loop_caceb:           1
+//     loop_cad43:           1
+//     loop_cad5d:           1
+//     loop_cad5e:           1
+//     loop_cade0:           1
+//     loop_cadfe:           1
+//     loop_cae1e:           1
+//     loop_caeed:           1
+//     loop_caf51:           1
+//     loop_cafa2:           1
+//     loop_cafa4:           1
+//     loop_cafc1:           1
+//     loop_cafe3:           1
+//     loop_cb019:           1
+//     loop_cb066:           1
+//     loop_cb0d8:           1
+//     loop_cb0f2:           1
+//     loop_cb146:           1
+//     loop_cb24d:           1
+//     loop_cb259:           1
+//     loop_cb307:           1
+//     loop_cb32b:           1
+//     loop_cb35f:           1
+//     loop_cb4a9:           1
+//     loop_cb4f2:           1
+//     loop_cb52d:           1
+//     loop_cb536:           1
+//     loop_cb642:           1
+//     loop_cb730:           1
+//     loop_cb769:           1
+//     loop_cb771:           1
+//     loop_cb806:           1
+//     loop_cb84c:           1
+//     loop_cb86f:           1
+//     loop_cb872:           1
+//     loop_cb8ac:           1
+//     loop_cb8c2:           1
+//     loop_cb8ce:           1
+//     loop_cb8ff:           1
+//     loop_cb95a:           1
+//     loop_cb974:           1
+//     loop_cb9f6:           1
+//     loop_cba0a:           1
+//     loop_cbb3c:           1
+//     loop_cbb56:           1
+//     loop_cbb5d:           1
+//     loop_cbbd2:           1
+//     loop_cbbed:           1
+//     loop_cbbf8:           1
+//     loop_cbc9d:           1
+//     loop_cbcc5:           1
+//     loop_cbcd1:           1
+//     loop_cbcdc:           1
+//     loop_cbd19:           1
+//     loop_cbd88:           1
+//     loop_cbda0:           1
+//     loop_cbdbf:           1
+//     loop_cbe2d:           1
+//     loop_cbe73:           1
+//     loop_cbf17:           1
+//     loop_cbf56:           1
+//     service_handler:      1
+//     sub_c8139:            1
+//     sub_c82e6:            1
+//     sub_c8349:            1
+//     sub_c834f:            1
+//     sub_c83aa:            1
+//     sub_c83c2:            1
+//     sub_c8aa8:            1
+//     sub_c8dc1:            1
+//     sub_c8e1f:            1
+//     sub_c8e58:            1
+//     sub_c8ea4:            1
+//     sub_c8fb4:            1
+//     sub_c943e:            1
+//     sub_c95c6:            1
+//     sub_c978b:            1
+//     sub_c9914:            1
+//     sub_c995a:            1
 //     sub_c99d0:            1
 //     sub_c99d6:            1
 //     sub_c99d8:            1
-//     c9a0e:                1
-//     c9a58:                1
-//     c9a63:                1
-//     c9a67:                1
-//     c9a76:                1
-//     c9a79:                1
-//     c9a7b:                1
-//     c9a99:                1
-//     c9aa0:                1
-//     c9aa5:                1
-//     loop_c9ab6:           1
-//     c9abc:                1
-//     c9ae6:                1
-//     c9b4c:                1
-//     c9b5a:                1
-//     c9b78:                1
-//     c9b80:                1
-//     c9b8a:                1
 //     sub_c9bba:            1
-//     c9bd2:                1
-//     c9bdb:                1
-//     loop_c9be0:           1
-//     c9c08:                1
-//     c9c24:                1
-//     c9c52:                1
-//     loop_c9c6d:           1
 //     sub_c9c8e:            1
-//     loop_c9c92:           1
 //     sub_c9c93:            1
 //     sub_c9ca2:            1
-//     c9cb6:                1
 //     sub_c9cb8:            1
-//     c9cc1:                1
-//     c9cc5:                1
-//     loop_c9cc9:           1
-//     c9cd6:                1
-//     loop_c9ce8:           1
-//     c9ceb:                1
-//     c9cfb:                1
-//     loop_c9cfd:           1
-//     c9d0c:                1
-//     c9d29:                1
 //     sub_c9d36:            1
-//     c9d43:                1
-//     c9d57:                1
-//     c9d79:                1
-//     c9d7b:                1
 //     sub_c9d82:            1
-//     c9db4:                1
-//     c9dba:                1
-//     c9dbe:                1
-//     c9dbf:                1
-//     c9dc0:                1
-//     c9dc4:                1
-//     c9dd5:                1
-//     loop_c9dd7:           1
-//     c9de5:                1
-//     c9de9:                1
-//     c9e02:                1
-//     c9e10:                1
-//     loop_c9e18:           1
-//     loop_c9e23:           1
-//     c9e2a:                1
-//     loop_c9e32:           1
 //     sub_c9e45:            1
-//     c9e48:                1
-//     c9e4d:                1
-//     loop_c9e5b:           1
-//     c9e78:                1
-//     c9e79:                1
-//     c9e90:                1
-//     c9ea6:                1
-//     c9ead:                1
-//     c9eb2:                1
-//     c9ec2:                1
-//     c9edd:                1
-//     loop_c9ef2:           1
-//     c9f13:                1
-//     c9f3b:                1
-//     c9f4f:                1
-//     loop_c9f59:           1
-//     loop_c9f61:           1
-//     c9f64:                1
-//     c9f70:                1
-//     c9f9d:                1
-//     loop_c9faa:           1
-//     c9fb6:                1
-//     c9fb8:                1
-//     loop_c9fbb:           1
-//     c9fe6:                1
-//     c9ff4:                1
-//     ca00f:                1
-//     ca03b:                1
-//     ca03c:                1
-//     ca04a:                1
-//     ca04d:                1
-//     loop_ca052:           1
-//     ca05f:                1
-//     loop_ca070:           1
-//     ca09f:                1
-//     loop_ca0b8:           1
-//     ca0c7:                1
-//     ca0ee:                1
-//     loop_ca0f2:           1
-//     loop_ca0f5:           1
-//     ca10a:                1
-//     loop_ca10f:           1
-//     ca116:                1
-//     ca131:                1
-//     ca137:                1
-//     loop_ca13b:           1
-//     loop_ca151:           1
-//     ca160:                1
-//     ca169:                1
-//     ca18a:                1
-//     ca197:                1
-//     ca1af:                1
-//     ca1bc:                1
-//     ca1c1:                1
-//     ca1cd:                1
-//     ca1d0:                1
-//     ca1ed:                1
-//     ca1ef:                1
-//     ca204:                1
-//     loop_ca207:           1
-//     ca212:                1
-//     ca21c:                1
-//     ca22a:                1
-//     ca23e:                1
-//     ca24a:                1
-//     loop_ca256:           1
-//     ca25f:                1
-//     loop_ca263:           1
-//     ca26f:                1
-//     loop_ca27d:           1
-//     ca28a:                1
-//     ca28c:                1
-//     ca290:                1
-//     ca2a3:                1
-//     ca2b3:                1
 //     sub_ca2b8:            1
-//     loop_ca2bb:           1
-//     ca2c9:                1
-//     ca2fd:                1
-//     ca325:                1
-//     ca333:                1
-//     ca33e:                1
-//     ca342:                1
-//     ca348:                1
-//     ca34c:                1
-//     ca36b:                1
-//     ca37e:                1
-//     ca393:                1
-//     loop_ca399:           1
-//     ca3aa:                1
-//     loop_ca3ae:           1
 //     sub_ca3b5:            1
 //     sub_ca3c0:            1
-//     ca3c3:                1
 //     sub_ca40a:            1
 //     sub_ca419:            1
-//     ca42c:                1
-//     ca489:                1
-//     ca4a3:                1
-//     ca4c4:                1
-//     ca4ce:                1
-//     ca4e8:                1
 //     sub_ca503:            1
 //     sub_ca507:            1
 //     sub_ca50b:            1
-//     ca53b:                1
-//     ca53e:                1
 //     sub_ca541:            1
 //     sub_ca572:            1
 //     sub_ca576:            1
-//     ca57a:                1
-//     ca5a7:                1
-//     ca5aa:                1
 //     sub_ca5b2:            1
-//     loop_ca5b6:           1
-//     ca5ba:                1
 //     sub_ca5bd:            1
 //     sub_ca5c1:            1
 //     sub_ca5c4:            1
 //     sub_ca5d1:            1
 //     sub_ca5f2:            1
 //     sub_ca5f9:            1
-//     loop_ca607:           1
-//     ca608:                1
-//     ca612:                1
-//     loop_ca617:           1
-//     ca61d:                1
-//     loop_ca62c:           1
 //     sub_ca631:            1
-//     ca640:                1
-//     ca653:                1
-//     ca65c:                1
-//     ca65e:                1
-//     ca676:                1
-//     ca68d:                1
-//     ca6a2:                1
-//     loop_ca6a8:           1
-//     ca6ae:                1
-//     ca6c4:                1
 //     sub_ca6eb:            1
 //     sub_ca70d:            1
-//     ca70f:                1
-//     ca71e:                1
-//     ca72f:                1
 //     sub_ca731:            1
-//     ca739:                1
-//     ca73d:                1
-//     ca74d:                1
-//     loop_ca758:           1
-//     ca76b:                1
-//     ca776:                1
-//     ca797:                1
 //     sub_ca7ac:            1
 //     sub_ca7af:            1
-//     ca7c0:                1
-//     la7c9:                1
-//     ca7cd:                1
-//     ca7ed:                1
-//     ca7ef:                1
 //     sub_ca80b:            1
-//     ca829:                1
-//     ca838:                1
-//     ca83f:                1
-//     ca841:                1
-//     ca875:                1
-//     ca88a:                1
-//     loop_ca88f:           1
-//     ca899:                1
-//     ca8b0:                1
-//     ca8bb:                1
-//     loop_ca8cd:           1
-//     loop_ca8e0:           1
-//     ca8ee:                1
 //     sub_ca901:            1
-//     ca91f:                1
-//     ca92d:                1
-//     ca932:                1
-//     ca93b:                1
-//     ca946:                1
-//     ca948:                1
-//     ca94b:                1
-//     ca959:                1
-//     ca962:                1
-//     ca965:                1
-//     loop_ca969:           1
-//     ca978:                1
-//     loop_ca982:           1
 //     sub_ca9a3:            1
 //     sub_ca9c3:            1
-//     ca9e0:                1
-//     ca9ef:                1
-//     ca9f2:                1
-//     loop_ca9f5:           1
-//     ca9f8:                1
-//     caa07:                1
 //     sub_caa1a:            1
-//     caa33:                1
-//     caa3e:                1
-//     caa44:                1
-//     loop_caa59:           1
-//     caa66:                1
-//     caa6b:                1
-//     caa7d:                1
-//     caa9a:                1
-//     caab0:                1
-//     caac1:                1
-//     loop_caaf0:           1
 //     sub_cab14:            1
-//     cab23:                1
-//     cab82:                1
-//     cab91:                1
 //     sub_caba5:            1
-//     cabc9:                1
-//     cabd0:                1
-//     cabfa:                1
-//     cabfd:                1
-//     cac02:                1
-//     cac0f:                1
-//     cac35:                1
-//     loop_cac3c:           1
-//     cac59:                1
-//     cac5b:                1
-//     caca0:                1
-//     caca3:                1
-//     caca9:                1
-//     cacaf:                1
-//     loop_cacd8:           1
-//     cace3:                1
-//     loop_cace5:           1
-//     loop_caceb:           1
-//     cacef:                1
 //     sub_cad07:            1
-//     cad0d:                1
-//     cad14:                1
-//     cad19:                1
 //     sub_cad1c:            1
-//     cad37:                1
-//     loop_cad43:           1
-//     cad52:                1
-//     cad53:                1
-//     loop_cad5d:           1
-//     loop_cad5e:           1
-//     cad75:                1
 //     sub_cad8e:            1
-//     cad91:                1
-//     cad9c:                1
-//     cadac:                1
-//     cadb6:                1
-//     cadbc:                1
 //     sub_cadc6:            1
-//     loop_cade0:           1
-//     cade4:                1
-//     cadf9:                1
-//     loop_cadfe:           1
-//     cae00:                1
-//     cae0d:                1
-//     cae11:                1
-//     loop_cae1e:           1
-//     cae31:                1
-//     cae3f:                1
-//     cae9f:                1
-//     caedc:                1
-//     loop_caeed:           1
-//     caf2f:                1
-//     caf3d:                1
-//     caf4d:                1
-//     loop_caf51:           1
-//     caf6d:                1
-//     caf83:                1
-//     loop_cafa2:           1
-//     loop_cafa4:           1
-//     cafbb:                1
-//     cafbe:                1
-//     loop_cafc1:           1
-//     cafd5:                1
-//     loop_cafe3:           1
-//     caffd:                1
-//     cb00e:                1
-//     loop_cb019:           1
-//     cb04a:                1
-//     loop_cb066:           1
-//     cb08a:                1
-//     cb0a6:                1
-//     cb0b0:                1
-//     cb0be:                1
-//     loop_cb0d8:           1
-//     cb0e2:                1
-//     loop_cb0f2:           1
-//     cb106:                1
-//     loop_cb146:           1
-//     cb1a3:                1
-//     cb1a6:                1
-//     cb1ab:                1
-//     cb1b5:                1
-//     cb1ca:                1
-//     cb200:                1
-//     cb22d:                1
-//     cb230:                1
-//     cb235:                1
-//     loop_cb24d:           1
-//     cb256:                1
-//     cb257:                1
-//     loop_cb259:           1
-//     cb266:                1
-//     loop_cb307:           1
-//     loop_cb32b:           1
-//     cb34c:                1
-//     cb35c:                1
-//     loop_cb35f:           1
-//     cb380:                1
-//     cb398:                1
-//     cb399:                1
-//     lb3be:                1
-//     cb3cf:                1
-//     cb3f4:                1
-//     cb3fe:                1
-//     cb425:                1
-//     cb428:                1
-//     cb42b:                1
-//     cb445:                1
-//     cb454:                1
-//     cb45d:                1
-//     cb46f:                1
-//     cb47f:                1
-//     cb495:                1
-//     cb497:                1
-//     cb4a1:                1
-//     loop_cb4a9:           1
-//     cb4b8:                1
-//     cb4ba:                1
-//     cb4bc:                1
-//     cb4c2:                1
-//     cb4e0:                1
-//     loop_cb4f2:           1
-//     cb4f8:                1
-//     cb50a:                1
-//     cb510:                1
-//     cb516:                1
-//     cb51c:                1
-//     cb522:                1
-//     loop_cb52d:           1
-//     cb530:                1
-//     loop_cb536:           1
-//     cb5cd:                1
-//     cb5f1:                1
-//     cb622:                1
-//     cb626:                1
-//     cb635:                1
-//     loop_cb642:           1
-//     cb6a7:                1
-//     cb6bf:                1
-//     cb6d1:                1
-//     cb6f7:                1
-//     cb70c:                1
-//     cb723:                1
-//     loop_cb730:           1
-//     cb74a:                1
-//     cb75a:                1
-//     cb762:                1
-//     loop_cb769:           1
-//     loop_cb771:           1
-//     cb7ca:                1
-//     cb7d4:                1
-//     cb7da:                1
-//     cb7e6:                1
-//     cb7fa:                1
-//     loop_cb806:           1
-//     cb824:                1
-//     cb833:                1
-//     cb847:                1
-//     loop_cb84c:           1
-//     cb857:                1
-//     loop_cb86f:           1
-//     loop_cb872:           1
-//     cb874:                1
-//     cb877:                1
-//     loop_cb8ac:           1
-//     cb8b5:                1
-//     cb8ba:                1
-//     loop_cb8c2:           1
-//     cb8cc:                1
-//     loop_cb8ce:           1
-//     cb8da:                1
-//     cb8e2:                1
-//     cb8f2:                1
-//     loop_cb8ff:           1
-//     cb909:                1
-//     cb938:                1
-//     cb941:                1
-//     cb94f:                1
-//     loop_cb95a:           1
-//     cb965:                1
-//     cb968:                1
-//     loop_cb974:           1
-//     cb976:                1
-//     cb9ad:                1
-//     cb9bf:                1
-//     cb9cd:                1
-//     loop_cb9f6:           1
-//     loop_cba0a:           1
-//     cba21:                1
-//     cba2b:                1
-//     cba31:                1
-//     cba35:                1
-//     cba43:                1
-//     cba63:                1
 //     sub_cbaa0:            1
-//     cbaa6:                1
-//     cbae6:                1
-//     cbaf7:                1
-//     cbb03:                1
-//     cbb0c:                1
-//     cbb16:                1
 //     sub_cbb38:            1
-//     loop_cbb3c:           1
-//     cbb45:                1
-//     loop_cbb56:           1
-//     loop_cbb5d:           1
-//     cbb64:                1
-//     cbba6:                1
-//     cbbaf:                1
-//     cbbd0:                1
-//     loop_cbbd2:           1
 //     sub_cbbeb:            1
-//     loop_cbbed:           1
-//     loop_cbbf8:           1
 //     sub_cbc1e:            1
 //     sub_cbc20:            1
-//     loop_cbc9d:           1
-//     cbca5:                1
 //     sub_cbcaa:            1
-//     loop_cbcc5:           1
-//     cbccd:                1
-//     loop_cbcd1:           1
-//     cbcd5:                1
-//     loop_cbcdc:           1
-//     cbce6:                1
-//     cbcea:                1
-//     loop_cbd19:           1
-//     cbd23:                1
-//     cbd45:                1
-//     cbd64:                1
-//     cbd70:                1
-//     cbd71:                1
-//     loop_cbd88:           1
-//     cbd9e:                1
-//     loop_cbda0:           1
-//     cbdaa:                1
 //     sub_cbdb7:            1
-//     cbdbd:                1
-//     loop_cbdbf:           1
-//     cbdc9:                1
-//     cbde2:                1
 //     sub_cbdf4:            1
-//     loop_cbe2d:           1
-//     cbe43:                1
 //     sub_cbe44:            1
-//     cbe45:                1
 //     sub_cbe46:            1
-//     cbe4e:                1
 //     sub_cbe65:            1
-//     loop_cbe73:           1
 //     sub_cbe8b:            1
-//     lbecd:                1
-//     cbed3:                1
-//     cbed9:                1
-//     lbefe:                1
-//     cbf00:                1
-//     loop_cbf17:           1
-//     cbf1a:                1
-//     cbf54:                1
-//     loop_cbf56:           1
 //     sub_cbf66:            1
-//     lbf71:                1
-//     le09c:                1
 
 // Automatically generated labels:
 //     c8040

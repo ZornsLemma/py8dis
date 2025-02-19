@@ -1,240 +1,240 @@
 ; Constants
-baud_rate_1200                                     = 4
-baud_rate_150                                      = 2
-baud_rate_19200                                    = 8
-baud_rate_2400                                     = 5
-baud_rate_300                                      = 3
-baud_rate_4800                                     = 6
-baud_rate_75                                       = 1
-baud_rate_9600                                     = 7
-baud_rate_default_9600                             = 0
-buffer_keyboard                                    = 0
-buffer_printer                                     = 3
-buffer_rs423_input                                 = 1
-buffer_rs423_output                                = 2
-buffer_sound_channel_0                             = 4
-buffer_sound_channel_1                             = 5
-buffer_sound_channel_2                             = 6
-buffer_sound_channel_3                             = 7
-buffer_speech                                      = 8
-event_adc_conversion_complete                      = 3
-event_character_entering_input_buffer              = 2
-event_escape_condition_detected                    = 6
-event_input_buffer_full                            = 1
-event_interval_timer_crossing_zero                 = 5
-event_network_error                                = 8
-event_output_buffer_empty                          = 0
-event_rs423_error                                  = 7
-event_start_of_vertical_sync                       = 4
-event_user                                         = 9
-inkey_key_ctrl                                     = 254
-inkey_key_f0                                       = 223
-inkey_key_shift                                    = 255
-osbyte_acknowledge_escape                          = 126
-osbyte_check_eof                                   = 127
-osbyte_check_for_6502_code                         = 164
-osbyte_clear_escape                                = 124
-osbyte_close_spool_exec                            = 119
-osbyte_code                                        = 136
-osbyte_decrement_polling_semaphore                 = 23
-osbyte_disable_event                               = 13
-osbyte_electron_external_sound                     = 24
-osbyte_enable_event                                = 14
-osbyte_enter_language                              = 142
-osbyte_examine_buffer                              = 152
-osbyte_explode_chars                               = 20
-osbyte_fast_tube_bput                              = 157
-osbyte_flush_buffer                                = 21
-osbyte_flush_buffer_class                          = 15
-osbyte_force_adc_conversion                        = 17
-osbyte_get_sideways_ram_allocation                 = 69
-osbyte_increment_polling_semaphore                 = 22
-osbyte_inkey                                       = 129
-osbyte_insert_buffer                               = 138
-osbyte_insert_input_buffer                         = 153
-osbyte_issue_service_request                       = 143
-osbyte_motor                                       = 137
-osbyte_opt                                         = 139
-osbyte_printer_driver_going_dormant                = 123
-osbyte_read_adc_or_get_buffer_status               = 128
-osbyte_read_buffer                                 = 145
-osbyte_read_char_at_cursor                         = 135
-osbyte_read_char_explode_state                     = 182
-osbyte_read_cmos_ram                               = 161
-osbyte_read_current_adc_channel                    = 188
-osbyte_read_fred                                   = 146
-osbyte_read_high_order_address                     = 130
-osbyte_read_himem                                  = 132
-osbyte_read_himem_for_mode                         = 133
-osbyte_read_jim                                    = 148
-osbyte_read_key_table_high                         = 173
-osbyte_read_key_table_low                          = 172
-osbyte_read_os_variables_high                      = 167
-osbyte_read_os_variables_low                       = 166
-osbyte_read_os_version                             = 0
-osbyte_read_oshwm                                  = 131
-osbyte_read_output_cursor_position                 = 165
-osbyte_read_rom_info_table_high                    = 171
-osbyte_read_rom_info_table_low                     = 170
-osbyte_read_rom_ptr_table_high                     = 169
-osbyte_read_rom_ptr_table_low                      = 168
-osbyte_read_serial_control_register_copy           = 192
-osbyte_read_serial_ula                             = 242
-osbyte_read_sheila                                 = 150
-osbyte_read_speech                                 = 158
-osbyte_read_speech_processor_presence              = 235
-osbyte_read_text_cursor_pos                        = 134
-osbyte_read_tube_presence                          = 234
-osbyte_read_vdu_status                             = 117
-osbyte_read_vdu_variable                           = 160
-osbyte_read_vdu_variables_high                     = 175
-osbyte_read_vdu_variables_low                      = 174
-osbyte_read_video_ula_control                      = 184
-osbyte_read_video_ula_palette                      = 185
-osbyte_read_write_27e                              = 238
-osbyte_read_write_27f                              = 239
-osbyte_read_write_280                              = 240
-osbyte_read_write_281                              = 241
-osbyte_read_write_28a                              = 250
-osbyte_read_write_28b                              = 251
-osbyte_read_write_6850_control                     = 156
-osbyte_read_write_6850_irq_mark                    = 232
-osbyte_read_write_adc_conversion_type              = 190
-osbyte_read_write_available_ram                    = 254
-osbyte_read_write_basic_rom_bank                   = 187
-osbyte_read_write_bell_channel                     = 211
-osbyte_read_write_bell_duration                    = 214
-osbyte_read_write_bell_envelope                    = 212
-osbyte_read_write_bell_frequency                   = 213
-osbyte_read_write_cassette_serial_selection        = 205
-osbyte_read_write_cfs_rfs_switch                   = 183
-osbyte_read_write_cfs_timeout                      = 176
-osbyte_read_write_char_destination_status          = 236
-osbyte_read_write_characters_c0_cf_status          = 221
-osbyte_read_write_characters_d0_df_status          = 222
-osbyte_read_write_characters_e0_ef_status          = 223
-osbyte_read_write_characters_f0_ff_status          = 224
-osbyte_read_write_ctrl_function_key_status         = 227
-osbyte_read_write_ctrl_shift_function_key_status   = 228
-osbyte_read_write_current_language_rom_bank        = 252
-osbyte_read_write_current_oshwm                    = 180
-osbyte_read_write_cursor_editing_status            = 237
-osbyte_read_write_econet_keyboard_disable          = 201
-osbyte_read_write_econet_os_call_interception      = 206
-osbyte_read_write_econet_osrdch_interception       = 207
-osbyte_read_write_econet_oswrch_interception       = 208
-osbyte_read_write_escape_break_effect              = 200
-osbyte_read_write_escape_char                      = 220
-osbyte_read_write_escape_effects                   = 230
-osbyte_read_write_escape_status                    = 229
-osbyte_read_write_exec_file_handle                 = 198
-osbyte_read_write_first_byte_break_intercept       = 247
-osbyte_read_write_flash_counter                    = 193
-osbyte_read_write_function_key_status              = 225
-osbyte_read_write_input_source                     = 177
-osbyte_read_write_keyboard_repeat_delay            = 196
-osbyte_read_write_keyboard_repeat_rate             = 197
-osbyte_read_write_keyboard_semaphore               = 178
-osbyte_read_write_keyboard_status                  = 202
-osbyte_read_write_last_break_type                  = 253
-osbyte_read_write_lines_since_last_page            = 217
-osbyte_read_write_mark_count                       = 194
-osbyte_read_write_max_adc_channel                  = 189
-osbyte_read_write_primary_oshwm                    = 179
-osbyte_read_write_printer_destination              = 245
-osbyte_read_write_printer_ignore_char              = 246
-osbyte_read_write_rom_bank_at_last_brk             = 186
-osbyte_read_write_second_byte_break_intercept      = 248
-osbyte_read_write_serial_handshake_extent          = 203
-osbyte_read_write_serial_input_suppression         = 204
-osbyte_read_write_serial_mode                      = 181
-osbyte_read_write_serial_user_flag                 = 191
-osbyte_read_write_shift_function_key_status        = 226
-osbyte_read_write_soft_key_consistency_flag        = 244
-osbyte_read_write_soft_key_length                  = 216
-osbyte_read_write_sound_suppression                = 210
-osbyte_read_write_space_count                      = 195
-osbyte_read_write_speech_suppression               = 209
-osbyte_read_write_spool_file_handle                = 199
-osbyte_read_write_startup_boot_options             = 215
-osbyte_read_write_startup_options                  = 255
-osbyte_read_write_system_via_irq_mask              = 233
-osbyte_read_write_tab_char                         = 219
-osbyte_read_write_third_byte_break_intercept       = 249
-osbyte_read_write_timer_switch_state               = 243
-osbyte_read_write_user_via_irq_mask                = 231
-osbyte_read_write_vdu_queue_size                   = 218
-osbyte_reflect_keyboard_status_in_leds             = 118
-osbyte_reserved_for_application_software           = 163
-osbyte_reset_soft_keys                             = 18
-osbyte_restore_group_of_font_definitions           = 25
-osbyte_rom                                         = 141
-osbyte_scan_keyboard                               = 121
-osbyte_scan_keyboard_from_16                       = 122
-osbyte_select_adc_channels                         = 16
-osbyte_select_input_stream                         = 2
-osbyte_select_output_stream                        = 3
-osbyte_select_printer                              = 5
-osbyte_selects_internal_or_external_bus            = 107
-osbyte_set_cursor_editing                          = 4
-osbyte_set_escape                                  = 125
-osbyte_set_flashing_mark                           = 9
-osbyte_set_flashing_space                          = 10
-osbyte_set_keyboard_repeat_delay                   = 11
-osbyte_set_keyboard_repeat_rate                    = 12
-osbyte_set_printer_ignore                          = 6
-osbyte_set_serial_receive_rate                     = 7
-osbyte_set_serial_transmit_rate                    = 8
-osbyte_set_user_flag                               = 1
-osbyte_tape                                        = 140
-osbyte_test_for_sideways_ram                       = 68
-osbyte_tv                                          = 144
-osbyte_vsync                                       = 19
-osbyte_write_cmos_ram                              = 162
-osbyte_write_fred                                  = 147
-osbyte_write_jim                                   = 149
-osbyte_write_keys_pressed                          = 120
-osbyte_write_sheila                                = 151
-osbyte_write_speech                                = 159
-osbyte_write_video_ula_control                     = 154
-osbyte_write_video_ula_palette                     = 155
-osfile_create                                      = 7
-osfile_delete                                      = 6
-osfile_load                                        = 255
-osfile_read_catalogue_info                         = 5
-osfile_save                                        = 0
-osfile_write_attributes                            = 4
-osfile_write_catalogue_info                        = 1
-osfile_write_exec_addr                             = 3
-osfile_write_load_addr                             = 2
-osfind_close                                       = 0
-osfind_open_input                                  = 64
-osfind_open_output                                 = 128
-osfind_open_random_access                          = 192
-osgbpb_append_bytes                                = 2
-osgbpb_read_bytes_from_current_position            = 4
-osgbpb_read_bytes_from_position                    = 3
-osgbpb_read_current_directory                      = 6
-osgbpb_read_current_library                        = 7
-osgbpb_read_file_names                             = 8
-osgbpb_read_title_option_and_drive                 = 5
-osgbpb_write_bytes                                 = 1
-osword_envelope                                    = 8
-osword_read_char                                   = 10
-osword_read_clock                                  = 1
-osword_read_cmos_clock                             = 14
-osword_read_graphics_cursor_position               = 13
-osword_read_interval_timer                         = 3
-osword_read_io_memory                              = 5
-osword_read_line                                   = 0
-osword_read_palette                                = 11
-osword_read_pixel                                  = 9
-osword_sound                                       = 7
-osword_write_clock                                 = 2
-osword_write_cmos_clock                            = 15
-osword_write_interval_timer                        = 4
-osword_write_io_memory                             = 6
-osword_write_palette                               = 12
+baud_rate_75                                        = 1
+baud_rate_150                                       = 2
+baud_rate_300                                       = 3
+baud_rate_1200                                      = 4
+baud_rate_2400                                      = 5
+baud_rate_4800                                      = 6
+baud_rate_9600                                      = 7
+baud_rate_19200                                     = 8
+baud_rate_default_9600                              = 0
+buffer_keyboard                                     = 0
+buffer_printer                                      = 3
+buffer_rs423_input                                  = 1
+buffer_rs423_output                                 = 2
+buffer_sound_channel_0                              = 4
+buffer_sound_channel_1                              = 5
+buffer_sound_channel_2                              = 6
+buffer_sound_channel_3                              = 7
+buffer_speech                                       = 8
+event_adc_conversion_complete                       = 3
+event_character_entering_input_buffer               = 2
+event_escape_condition_detected                     = 6
+event_input_buffer_full                             = 1
+event_interval_timer_crossing_zero                  = 5
+event_network_error                                 = 8
+event_output_buffer_empty                           = 0
+event_rs423_error                                   = 7
+event_start_of_vertical_sync                        = 4
+event_user                                          = 9
+inkey_key_ctrl                                      = 254
+inkey_key_f0                                        = 223
+inkey_key_shift                                     = 255
+osbyte_acknowledge_escape                           = 126
+osbyte_check_eof                                    = 127
+osbyte_check_for_6502_code                          = 164
+osbyte_clear_escape                                 = 124
+osbyte_close_spool_exec                             = 119
+osbyte_code                                         = 136
+osbyte_decrement_polling_semaphore                  = 23
+osbyte_disable_event                                = 13
+osbyte_electron_external_sound                      = 24
+osbyte_enable_event                                 = 14
+osbyte_enter_language                               = 142
+osbyte_examine_buffer                               = 152
+osbyte_explode_chars                                = 20
+osbyte_fast_tube_bput                               = 157
+osbyte_flush_buffer                                 = 21
+osbyte_flush_buffer_class                           = 15
+osbyte_force_adc_conversion                         = 17
+osbyte_get_sideways_ram_allocation                  = 69
+osbyte_increment_polling_semaphore                  = 22
+osbyte_inkey                                        = 129
+osbyte_insert_buffer                                = 138
+osbyte_insert_input_buffer                          = 153
+osbyte_issue_service_request                        = 143
+osbyte_motor                                        = 137
+osbyte_opt                                          = 139
+osbyte_printer_driver_going_dormant                 = 123
+osbyte_read_adc_or_get_buffer_status                = 128
+osbyte_read_buffer                                  = 145
+osbyte_read_char_at_cursor                          = 135
+osbyte_read_char_explode_state                      = 182
+osbyte_read_cmos_ram                                = 161
+osbyte_read_current_adc_channel                     = 188
+osbyte_read_fred                                    = 146
+osbyte_read_high_order_address                      = 130
+osbyte_read_himem                                   = 132
+osbyte_read_himem_for_mode                          = 133
+osbyte_read_jim                                     = 148
+osbyte_read_key_table_high                          = 173
+osbyte_read_key_table_low                           = 172
+osbyte_read_os_variables_high                       = 167
+osbyte_read_os_variables_low                        = 166
+osbyte_read_os_version                              = 0
+osbyte_read_oshwm                                   = 131
+osbyte_read_output_cursor_position                  = 165
+osbyte_read_rom_info_table_high                     = 171
+osbyte_read_rom_info_table_low                      = 170
+osbyte_read_rom_ptr_table_high                      = 169
+osbyte_read_rom_ptr_table_low                       = 168
+osbyte_read_serial_control_register_copy            = 192
+osbyte_read_serial_ula                              = 242
+osbyte_read_sheila                                  = 150
+osbyte_read_speech                                  = 158
+osbyte_read_speech_processor_presence               = 235
+osbyte_read_text_cursor_pos                         = 134
+osbyte_read_tube_presence                           = 234
+osbyte_read_vdu_status                              = 117
+osbyte_read_vdu_variable                            = 160
+osbyte_read_vdu_variables_high                      = 175
+osbyte_read_vdu_variables_low                       = 174
+osbyte_read_video_ula_control                       = 184
+osbyte_read_video_ula_palette                       = 185
+osbyte_read_write_27e                               = 238
+osbyte_read_write_27f                               = 239
+osbyte_read_write_28a                               = 250
+osbyte_read_write_28b                               = 251
+osbyte_read_write_280                               = 240
+osbyte_read_write_281                               = 241
+osbyte_read_write_6850_control                      = 156
+osbyte_read_write_6850_irq_mark                     = 232
+osbyte_read_write_adc_conversion_type               = 190
+osbyte_read_write_available_ram                     = 254
+osbyte_read_write_basic_rom_bank                    = 187
+osbyte_read_write_bell_channel                      = 211
+osbyte_read_write_bell_duration                     = 214
+osbyte_read_write_bell_envelope                     = 212
+osbyte_read_write_bell_frequency                    = 213
+osbyte_read_write_cassette_serial_selection         = 205
+osbyte_read_write_cfs_rfs_switch                    = 183
+osbyte_read_write_cfs_timeout                       = 176
+osbyte_read_write_char_destination_status           = 236
+osbyte_read_write_characters_c0_cf_status           = 221
+osbyte_read_write_characters_d0_df_status           = 222
+osbyte_read_write_characters_e0_ef_status           = 223
+osbyte_read_write_characters_f0_ff_status           = 224
+osbyte_read_write_ctrl_function_key_status          = 227
+osbyte_read_write_ctrl_shift_function_key_status    = 228
+osbyte_read_write_current_language_rom_bank         = 252
+osbyte_read_write_current_oshwm                     = 180
+osbyte_read_write_cursor_editing_status             = 237
+osbyte_read_write_econet_keyboard_disable           = 201
+osbyte_read_write_econet_os_call_interception       = 206
+osbyte_read_write_econet_osrdch_interception        = 207
+osbyte_read_write_econet_oswrch_interception        = 208
+osbyte_read_write_escape_break_effect               = 200
+osbyte_read_write_escape_char                       = 220
+osbyte_read_write_escape_effects                    = 230
+osbyte_read_write_escape_status                     = 229
+osbyte_read_write_exec_file_handle                  = 198
+osbyte_read_write_first_byte_break_intercept        = 247
+osbyte_read_write_flash_counter                     = 193
+osbyte_read_write_function_key_status               = 225
+osbyte_read_write_input_source                      = 177
+osbyte_read_write_keyboard_repeat_delay             = 196
+osbyte_read_write_keyboard_repeat_rate              = 197
+osbyte_read_write_keyboard_semaphore                = 178
+osbyte_read_write_keyboard_status                   = 202
+osbyte_read_write_last_break_type                   = 253
+osbyte_read_write_lines_since_last_page             = 217
+osbyte_read_write_mark_count                        = 194
+osbyte_read_write_max_adc_channel                   = 189
+osbyte_read_write_primary_oshwm                     = 179
+osbyte_read_write_printer_destination               = 245
+osbyte_read_write_printer_ignore_char               = 246
+osbyte_read_write_rom_bank_at_last_brk              = 186
+osbyte_read_write_second_byte_break_intercept       = 248
+osbyte_read_write_serial_handshake_extent           = 203
+osbyte_read_write_serial_input_suppression          = 204
+osbyte_read_write_serial_mode                       = 181
+osbyte_read_write_serial_user_flag                  = 191
+osbyte_read_write_shift_function_key_status         = 226
+osbyte_read_write_soft_key_consistency_flag         = 244
+osbyte_read_write_soft_key_length                   = 216
+osbyte_read_write_sound_suppression                 = 210
+osbyte_read_write_space_count                       = 195
+osbyte_read_write_speech_suppression                = 209
+osbyte_read_write_spool_file_handle                 = 199
+osbyte_read_write_startup_boot_options              = 215
+osbyte_read_write_startup_options                   = 255
+osbyte_read_write_system_via_irq_mask               = 233
+osbyte_read_write_tab_char                          = 219
+osbyte_read_write_third_byte_break_intercept        = 249
+osbyte_read_write_timer_switch_state                = 243
+osbyte_read_write_user_via_irq_mask                 = 231
+osbyte_read_write_vdu_queue_size                    = 218
+osbyte_reflect_keyboard_status_in_leds              = 118
+osbyte_reserved_for_application_software            = 163
+osbyte_reset_soft_keys                              = 18
+osbyte_restore_group_of_font_definitions            = 25
+osbyte_rom                                          = 141
+osbyte_scan_keyboard                                = 121
+osbyte_scan_keyboard_from_16                        = 122
+osbyte_select_adc_channels                          = 16
+osbyte_select_input_stream                          = 2
+osbyte_select_output_stream                         = 3
+osbyte_select_printer                               = 5
+osbyte_selects_internal_or_external_bus             = 107
+osbyte_set_cursor_editing                           = 4
+osbyte_set_escape                                   = 125
+osbyte_set_flashing_mark                            = 9
+osbyte_set_flashing_space                           = 10
+osbyte_set_keyboard_repeat_delay                    = 11
+osbyte_set_keyboard_repeat_rate                     = 12
+osbyte_set_printer_ignore                           = 6
+osbyte_set_serial_receive_rate                      = 7
+osbyte_set_serial_transmit_rate                     = 8
+osbyte_set_user_flag                                = 1
+osbyte_tape                                         = 140
+osbyte_test_for_sideways_ram                        = 68
+osbyte_tv                                           = 144
+osbyte_vsync                                        = 19
+osbyte_write_cmos_ram                               = 162
+osbyte_write_fred                                   = 147
+osbyte_write_jim                                    = 149
+osbyte_write_keys_pressed                           = 120
+osbyte_write_sheila                                 = 151
+osbyte_write_speech                                 = 159
+osbyte_write_video_ula_control                      = 154
+osbyte_write_video_ula_palette                      = 155
+osfile_create                                       = 7
+osfile_delete                                       = 6
+osfile_load                                         = 255
+osfile_read_catalogue_info                          = 5
+osfile_save                                         = 0
+osfile_write_attributes                             = 4
+osfile_write_catalogue_info                         = 1
+osfile_write_exec_addr                              = 3
+osfile_write_load_addr                              = 2
+osfind_close                                        = 0
+osfind_open_input                                   = 64
+osfind_open_output                                  = 128
+osfind_open_random_access                           = 192
+osgbpb_append_bytes                                 = 2
+osgbpb_read_bytes_from_current_position             = 4
+osgbpb_read_bytes_from_position                     = 3
+osgbpb_read_current_directory                       = 6
+osgbpb_read_current_library                         = 7
+osgbpb_read_file_names                              = 8
+osgbpb_read_title_option_and_drive                  = 5
+osgbpb_write_bytes                                  = 1
+osword_envelope                                     = 8
+osword_read_char                                    = 10
+osword_read_clock                                   = 1
+osword_read_cmos_clock                              = 14
+osword_read_graphics_cursor_position                = 13
+osword_read_interval_timer                          = 3
+osword_read_io_memory                               = 5
+osword_read_line                                    = 0
+osword_read_palette                                 = 11
+osword_read_pixel                                   = 9
+osword_sound                                        = 7
+osword_write_clock                                  = 2
+osword_write_cmos_clock                             = 15
+osword_write_interval_timer                         = 4
+osword_write_io_memory                              = 6
+osword_write_palette                                = 12
 
 ; Memory locations
 mem     = $70
@@ -5857,15 +5857,15 @@ pydis_end
 ;     osfind:         6
 ;     osrdch:         2
 ;     buffer_empty:   1
-;     oswrsc:         1
-;     osrdsc:         1
-;     oseven:         1
 ;     nvrdch:         1
-;     osbput:         1
 ;     osbget:         1
+;     osbput:         1
+;     oseven:         1
 ;     osnewl:         1
-;     oswrcr:         1
+;     osrdsc:         1
 ;     oswrch:         1
+;     oswrcr:         1
+;     oswrsc:         1
 !if ((255 - inkey_key_shift) XOR 128) != $80 {
     !error "Assertion failed: (255 - inkey_key_shift) XOR 128 == $80"
 }
@@ -6009,706 +6009,4 @@ pydis_end
 }
 !if (>(osword9block)) != $40 {
     !error "Assertion failed: >(osword9block) == $40"
-}
-!if (baud_rate_1200) != $04 {
-    !error "Assertion failed: baud_rate_1200 == $04"
-}
-!if (baud_rate_150) != $02 {
-    !error "Assertion failed: baud_rate_150 == $02"
-}
-!if (baud_rate_19200) != $08 {
-    !error "Assertion failed: baud_rate_19200 == $08"
-}
-!if (baud_rate_2400) != $05 {
-    !error "Assertion failed: baud_rate_2400 == $05"
-}
-!if (baud_rate_300) != $03 {
-    !error "Assertion failed: baud_rate_300 == $03"
-}
-!if (baud_rate_4800) != $06 {
-    !error "Assertion failed: baud_rate_4800 == $06"
-}
-!if (baud_rate_75) != $01 {
-    !error "Assertion failed: baud_rate_75 == $01"
-}
-!if (baud_rate_9600) != $07 {
-    !error "Assertion failed: baud_rate_9600 == $07"
-}
-!if (baud_rate_default_9600) != $00 {
-    !error "Assertion failed: baud_rate_default_9600 == $00"
-}
-!if (buffer_keyboard) != $00 {
-    !error "Assertion failed: buffer_keyboard == $00"
-}
-!if (buffer_printer) != $03 {
-    !error "Assertion failed: buffer_printer == $03"
-}
-!if (buffer_rs423_input) != $01 {
-    !error "Assertion failed: buffer_rs423_input == $01"
-}
-!if (buffer_rs423_output) != $02 {
-    !error "Assertion failed: buffer_rs423_output == $02"
-}
-!if (buffer_sound_channel_0) != $04 {
-    !error "Assertion failed: buffer_sound_channel_0 == $04"
-}
-!if (buffer_sound_channel_1) != $05 {
-    !error "Assertion failed: buffer_sound_channel_1 == $05"
-}
-!if (buffer_sound_channel_2) != $06 {
-    !error "Assertion failed: buffer_sound_channel_2 == $06"
-}
-!if (buffer_sound_channel_3) != $07 {
-    !error "Assertion failed: buffer_sound_channel_3 == $07"
-}
-!if (buffer_speech) != $08 {
-    !error "Assertion failed: buffer_speech == $08"
-}
-!if (event_adc_conversion_complete) != $03 {
-    !error "Assertion failed: event_adc_conversion_complete == $03"
-}
-!if (event_character_entering_input_buffer) != $02 {
-    !error "Assertion failed: event_character_entering_input_buffer == $02"
-}
-!if (event_escape_condition_detected) != $06 {
-    !error "Assertion failed: event_escape_condition_detected == $06"
-}
-!if (event_input_buffer_full) != $01 {
-    !error "Assertion failed: event_input_buffer_full == $01"
-}
-!if (event_interval_timer_crossing_zero) != $05 {
-    !error "Assertion failed: event_interval_timer_crossing_zero == $05"
-}
-!if (event_network_error) != $08 {
-    !error "Assertion failed: event_network_error == $08"
-}
-!if (event_output_buffer_empty) != $00 {
-    !error "Assertion failed: event_output_buffer_empty == $00"
-}
-!if (event_rs423_error) != $07 {
-    !error "Assertion failed: event_rs423_error == $07"
-}
-!if (event_start_of_vertical_sync) != $04 {
-    !error "Assertion failed: event_start_of_vertical_sync == $04"
-}
-!if (event_user) != $09 {
-    !error "Assertion failed: event_user == $09"
-}
-!if (inkey_key_shift) != $ff {
-    !error "Assertion failed: inkey_key_shift == $ff"
-}
-!if (osbyte_acknowledge_escape) != $7e {
-    !error "Assertion failed: osbyte_acknowledge_escape == $7e"
-}
-!if (osbyte_check_eof) != $7f {
-    !error "Assertion failed: osbyte_check_eof == $7f"
-}
-!if (osbyte_check_for_6502_code) != $a4 {
-    !error "Assertion failed: osbyte_check_for_6502_code == $a4"
-}
-!if (osbyte_clear_escape) != $7c {
-    !error "Assertion failed: osbyte_clear_escape == $7c"
-}
-!if (osbyte_close_spool_exec) != $77 {
-    !error "Assertion failed: osbyte_close_spool_exec == $77"
-}
-!if (osbyte_code) != $88 {
-    !error "Assertion failed: osbyte_code == $88"
-}
-!if (osbyte_decrement_polling_semaphore) != $17 {
-    !error "Assertion failed: osbyte_decrement_polling_semaphore == $17"
-}
-!if (osbyte_disable_event) != $0d {
-    !error "Assertion failed: osbyte_disable_event == $0d"
-}
-!if (osbyte_electron_external_sound) != $18 {
-    !error "Assertion failed: osbyte_electron_external_sound == $18"
-}
-!if (osbyte_enable_event) != $0e {
-    !error "Assertion failed: osbyte_enable_event == $0e"
-}
-!if (osbyte_enter_language) != $8e {
-    !error "Assertion failed: osbyte_enter_language == $8e"
-}
-!if (osbyte_examine_buffer) != $98 {
-    !error "Assertion failed: osbyte_examine_buffer == $98"
-}
-!if (osbyte_explode_chars) != $14 {
-    !error "Assertion failed: osbyte_explode_chars == $14"
-}
-!if (osbyte_fast_tube_bput) != $9d {
-    !error "Assertion failed: osbyte_fast_tube_bput == $9d"
-}
-!if (osbyte_flush_buffer) != $15 {
-    !error "Assertion failed: osbyte_flush_buffer == $15"
-}
-!if (osbyte_flush_buffer_class) != $0f {
-    !error "Assertion failed: osbyte_flush_buffer_class == $0f"
-}
-!if (osbyte_force_adc_conversion) != $11 {
-    !error "Assertion failed: osbyte_force_adc_conversion == $11"
-}
-!if (osbyte_get_sideways_ram_allocation) != $45 {
-    !error "Assertion failed: osbyte_get_sideways_ram_allocation == $45"
-}
-!if (osbyte_increment_polling_semaphore) != $16 {
-    !error "Assertion failed: osbyte_increment_polling_semaphore == $16"
-}
-!if (osbyte_inkey) != $81 {
-    !error "Assertion failed: osbyte_inkey == $81"
-}
-!if (osbyte_insert_buffer) != $8a {
-    !error "Assertion failed: osbyte_insert_buffer == $8a"
-}
-!if (osbyte_insert_input_buffer) != $99 {
-    !error "Assertion failed: osbyte_insert_input_buffer == $99"
-}
-!if (osbyte_issue_service_request) != $8f {
-    !error "Assertion failed: osbyte_issue_service_request == $8f"
-}
-!if (osbyte_motor) != $89 {
-    !error "Assertion failed: osbyte_motor == $89"
-}
-!if (osbyte_opt) != $8b {
-    !error "Assertion failed: osbyte_opt == $8b"
-}
-!if (osbyte_printer_driver_going_dormant) != $7b {
-    !error "Assertion failed: osbyte_printer_driver_going_dormant == $7b"
-}
-!if (osbyte_read_adc_or_get_buffer_status) != $80 {
-    !error "Assertion failed: osbyte_read_adc_or_get_buffer_status == $80"
-}
-!if (osbyte_read_buffer) != $91 {
-    !error "Assertion failed: osbyte_read_buffer == $91"
-}
-!if (osbyte_read_char_at_cursor) != $87 {
-    !error "Assertion failed: osbyte_read_char_at_cursor == $87"
-}
-!if (osbyte_read_char_explode_state) != $b6 {
-    !error "Assertion failed: osbyte_read_char_explode_state == $b6"
-}
-!if (osbyte_read_cmos_ram) != $a1 {
-    !error "Assertion failed: osbyte_read_cmos_ram == $a1"
-}
-!if (osbyte_read_current_adc_channel) != $bc {
-    !error "Assertion failed: osbyte_read_current_adc_channel == $bc"
-}
-!if (osbyte_read_fred) != $92 {
-    !error "Assertion failed: osbyte_read_fred == $92"
-}
-!if (osbyte_read_high_order_address) != $82 {
-    !error "Assertion failed: osbyte_read_high_order_address == $82"
-}
-!if (osbyte_read_himem) != $84 {
-    !error "Assertion failed: osbyte_read_himem == $84"
-}
-!if (osbyte_read_himem_for_mode) != $85 {
-    !error "Assertion failed: osbyte_read_himem_for_mode == $85"
-}
-!if (osbyte_read_jim) != $94 {
-    !error "Assertion failed: osbyte_read_jim == $94"
-}
-!if (osbyte_read_key_table_high) != $ad {
-    !error "Assertion failed: osbyte_read_key_table_high == $ad"
-}
-!if (osbyte_read_key_table_low) != $ac {
-    !error "Assertion failed: osbyte_read_key_table_low == $ac"
-}
-!if (osbyte_read_os_variables_high) != $a7 {
-    !error "Assertion failed: osbyte_read_os_variables_high == $a7"
-}
-!if (osbyte_read_os_variables_low) != $a6 {
-    !error "Assertion failed: osbyte_read_os_variables_low == $a6"
-}
-!if (osbyte_read_os_version) != $00 {
-    !error "Assertion failed: osbyte_read_os_version == $00"
-}
-!if (osbyte_read_oshwm) != $83 {
-    !error "Assertion failed: osbyte_read_oshwm == $83"
-}
-!if (osbyte_read_output_cursor_position) != $a5 {
-    !error "Assertion failed: osbyte_read_output_cursor_position == $a5"
-}
-!if (osbyte_read_rom_info_table_high) != $ab {
-    !error "Assertion failed: osbyte_read_rom_info_table_high == $ab"
-}
-!if (osbyte_read_rom_info_table_low) != $aa {
-    !error "Assertion failed: osbyte_read_rom_info_table_low == $aa"
-}
-!if (osbyte_read_rom_ptr_table_high) != $a9 {
-    !error "Assertion failed: osbyte_read_rom_ptr_table_high == $a9"
-}
-!if (osbyte_read_rom_ptr_table_low) != $a8 {
-    !error "Assertion failed: osbyte_read_rom_ptr_table_low == $a8"
-}
-!if (osbyte_read_serial_control_register_copy) != $c0 {
-    !error "Assertion failed: osbyte_read_serial_control_register_copy == $c0"
-}
-!if (osbyte_read_serial_ula) != $f2 {
-    !error "Assertion failed: osbyte_read_serial_ula == $f2"
-}
-!if (osbyte_read_sheila) != $96 {
-    !error "Assertion failed: osbyte_read_sheila == $96"
-}
-!if (osbyte_read_speech) != $9e {
-    !error "Assertion failed: osbyte_read_speech == $9e"
-}
-!if (osbyte_read_speech_processor_presence) != $eb {
-    !error "Assertion failed: osbyte_read_speech_processor_presence == $eb"
-}
-!if (osbyte_read_text_cursor_pos) != $86 {
-    !error "Assertion failed: osbyte_read_text_cursor_pos == $86"
-}
-!if (osbyte_read_tube_presence) != $ea {
-    !error "Assertion failed: osbyte_read_tube_presence == $ea"
-}
-!if (osbyte_read_vdu_status) != $75 {
-    !error "Assertion failed: osbyte_read_vdu_status == $75"
-}
-!if (osbyte_read_vdu_variable) != $a0 {
-    !error "Assertion failed: osbyte_read_vdu_variable == $a0"
-}
-!if (osbyte_read_vdu_variables_high) != $af {
-    !error "Assertion failed: osbyte_read_vdu_variables_high == $af"
-}
-!if (osbyte_read_vdu_variables_low) != $ae {
-    !error "Assertion failed: osbyte_read_vdu_variables_low == $ae"
-}
-!if (osbyte_read_video_ula_control) != $b8 {
-    !error "Assertion failed: osbyte_read_video_ula_control == $b8"
-}
-!if (osbyte_read_video_ula_palette) != $b9 {
-    !error "Assertion failed: osbyte_read_video_ula_palette == $b9"
-}
-!if (osbyte_read_write_27e) != $ee {
-    !error "Assertion failed: osbyte_read_write_27e == $ee"
-}
-!if (osbyte_read_write_27f) != $ef {
-    !error "Assertion failed: osbyte_read_write_27f == $ef"
-}
-!if (osbyte_read_write_280) != $f0 {
-    !error "Assertion failed: osbyte_read_write_280 == $f0"
-}
-!if (osbyte_read_write_281) != $f1 {
-    !error "Assertion failed: osbyte_read_write_281 == $f1"
-}
-!if (osbyte_read_write_28a) != $fa {
-    !error "Assertion failed: osbyte_read_write_28a == $fa"
-}
-!if (osbyte_read_write_28b) != $fb {
-    !error "Assertion failed: osbyte_read_write_28b == $fb"
-}
-!if (osbyte_read_write_6850_control) != $9c {
-    !error "Assertion failed: osbyte_read_write_6850_control == $9c"
-}
-!if (osbyte_read_write_6850_irq_mark) != $e8 {
-    !error "Assertion failed: osbyte_read_write_6850_irq_mark == $e8"
-}
-!if (osbyte_read_write_adc_conversion_type) != $be {
-    !error "Assertion failed: osbyte_read_write_adc_conversion_type == $be"
-}
-!if (osbyte_read_write_available_ram) != $fe {
-    !error "Assertion failed: osbyte_read_write_available_ram == $fe"
-}
-!if (osbyte_read_write_basic_rom_bank) != $bb {
-    !error "Assertion failed: osbyte_read_write_basic_rom_bank == $bb"
-}
-!if (osbyte_read_write_bell_channel) != $d3 {
-    !error "Assertion failed: osbyte_read_write_bell_channel == $d3"
-}
-!if (osbyte_read_write_bell_duration) != $d6 {
-    !error "Assertion failed: osbyte_read_write_bell_duration == $d6"
-}
-!if (osbyte_read_write_bell_envelope) != $d4 {
-    !error "Assertion failed: osbyte_read_write_bell_envelope == $d4"
-}
-!if (osbyte_read_write_bell_frequency) != $d5 {
-    !error "Assertion failed: osbyte_read_write_bell_frequency == $d5"
-}
-!if (osbyte_read_write_cassette_serial_selection) != $cd {
-    !error "Assertion failed: osbyte_read_write_cassette_serial_selection == $cd"
-}
-!if (osbyte_read_write_cfs_rfs_switch) != $b7 {
-    !error "Assertion failed: osbyte_read_write_cfs_rfs_switch == $b7"
-}
-!if (osbyte_read_write_cfs_timeout) != $b0 {
-    !error "Assertion failed: osbyte_read_write_cfs_timeout == $b0"
-}
-!if (osbyte_read_write_char_destination_status) != $ec {
-    !error "Assertion failed: osbyte_read_write_char_destination_status == $ec"
-}
-!if (osbyte_read_write_characters_c0_cf_status) != $dd {
-    !error "Assertion failed: osbyte_read_write_characters_c0_cf_status == $dd"
-}
-!if (osbyte_read_write_characters_d0_df_status) != $de {
-    !error "Assertion failed: osbyte_read_write_characters_d0_df_status == $de"
-}
-!if (osbyte_read_write_characters_e0_ef_status) != $df {
-    !error "Assertion failed: osbyte_read_write_characters_e0_ef_status == $df"
-}
-!if (osbyte_read_write_characters_f0_ff_status) != $e0 {
-    !error "Assertion failed: osbyte_read_write_characters_f0_ff_status == $e0"
-}
-!if (osbyte_read_write_ctrl_function_key_status) != $e3 {
-    !error "Assertion failed: osbyte_read_write_ctrl_function_key_status == $e3"
-}
-!if (osbyte_read_write_ctrl_shift_function_key_status) != $e4 {
-    !error "Assertion failed: osbyte_read_write_ctrl_shift_function_key_status == $e4"
-}
-!if (osbyte_read_write_current_language_rom_bank) != $fc {
-    !error "Assertion failed: osbyte_read_write_current_language_rom_bank == $fc"
-}
-!if (osbyte_read_write_current_oshwm) != $b4 {
-    !error "Assertion failed: osbyte_read_write_current_oshwm == $b4"
-}
-!if (osbyte_read_write_cursor_editing_status) != $ed {
-    !error "Assertion failed: osbyte_read_write_cursor_editing_status == $ed"
-}
-!if (osbyte_read_write_econet_keyboard_disable) != $c9 {
-    !error "Assertion failed: osbyte_read_write_econet_keyboard_disable == $c9"
-}
-!if (osbyte_read_write_econet_os_call_interception) != $ce {
-    !error "Assertion failed: osbyte_read_write_econet_os_call_interception == $ce"
-}
-!if (osbyte_read_write_econet_osrdch_interception) != $cf {
-    !error "Assertion failed: osbyte_read_write_econet_osrdch_interception == $cf"
-}
-!if (osbyte_read_write_econet_oswrch_interception) != $d0 {
-    !error "Assertion failed: osbyte_read_write_econet_oswrch_interception == $d0"
-}
-!if (osbyte_read_write_escape_break_effect) != $c8 {
-    !error "Assertion failed: osbyte_read_write_escape_break_effect == $c8"
-}
-!if (osbyte_read_write_escape_char) != $dc {
-    !error "Assertion failed: osbyte_read_write_escape_char == $dc"
-}
-!if (osbyte_read_write_escape_effects) != $e6 {
-    !error "Assertion failed: osbyte_read_write_escape_effects == $e6"
-}
-!if (osbyte_read_write_escape_status) != $e5 {
-    !error "Assertion failed: osbyte_read_write_escape_status == $e5"
-}
-!if (osbyte_read_write_exec_file_handle) != $c6 {
-    !error "Assertion failed: osbyte_read_write_exec_file_handle == $c6"
-}
-!if (osbyte_read_write_first_byte_break_intercept) != $f7 {
-    !error "Assertion failed: osbyte_read_write_first_byte_break_intercept == $f7"
-}
-!if (osbyte_read_write_flash_counter) != $c1 {
-    !error "Assertion failed: osbyte_read_write_flash_counter == $c1"
-}
-!if (osbyte_read_write_function_key_status) != $e1 {
-    !error "Assertion failed: osbyte_read_write_function_key_status == $e1"
-}
-!if (osbyte_read_write_input_source) != $b1 {
-    !error "Assertion failed: osbyte_read_write_input_source == $b1"
-}
-!if (osbyte_read_write_keyboard_repeat_delay) != $c4 {
-    !error "Assertion failed: osbyte_read_write_keyboard_repeat_delay == $c4"
-}
-!if (osbyte_read_write_keyboard_repeat_rate) != $c5 {
-    !error "Assertion failed: osbyte_read_write_keyboard_repeat_rate == $c5"
-}
-!if (osbyte_read_write_keyboard_semaphore) != $b2 {
-    !error "Assertion failed: osbyte_read_write_keyboard_semaphore == $b2"
-}
-!if (osbyte_read_write_keyboard_status) != $ca {
-    !error "Assertion failed: osbyte_read_write_keyboard_status == $ca"
-}
-!if (osbyte_read_write_last_break_type) != $fd {
-    !error "Assertion failed: osbyte_read_write_last_break_type == $fd"
-}
-!if (osbyte_read_write_lines_since_last_page) != $d9 {
-    !error "Assertion failed: osbyte_read_write_lines_since_last_page == $d9"
-}
-!if (osbyte_read_write_mark_count) != $c2 {
-    !error "Assertion failed: osbyte_read_write_mark_count == $c2"
-}
-!if (osbyte_read_write_max_adc_channel) != $bd {
-    !error "Assertion failed: osbyte_read_write_max_adc_channel == $bd"
-}
-!if (osbyte_read_write_primary_oshwm) != $b3 {
-    !error "Assertion failed: osbyte_read_write_primary_oshwm == $b3"
-}
-!if (osbyte_read_write_printer_destination) != $f5 {
-    !error "Assertion failed: osbyte_read_write_printer_destination == $f5"
-}
-!if (osbyte_read_write_printer_ignore_char) != $f6 {
-    !error "Assertion failed: osbyte_read_write_printer_ignore_char == $f6"
-}
-!if (osbyte_read_write_rom_bank_at_last_brk) != $ba {
-    !error "Assertion failed: osbyte_read_write_rom_bank_at_last_brk == $ba"
-}
-!if (osbyte_read_write_second_byte_break_intercept) != $f8 {
-    !error "Assertion failed: osbyte_read_write_second_byte_break_intercept == $f8"
-}
-!if (osbyte_read_write_serial_handshake_extent) != $cb {
-    !error "Assertion failed: osbyte_read_write_serial_handshake_extent == $cb"
-}
-!if (osbyte_read_write_serial_input_suppression) != $cc {
-    !error "Assertion failed: osbyte_read_write_serial_input_suppression == $cc"
-}
-!if (osbyte_read_write_serial_mode) != $b5 {
-    !error "Assertion failed: osbyte_read_write_serial_mode == $b5"
-}
-!if (osbyte_read_write_serial_user_flag) != $bf {
-    !error "Assertion failed: osbyte_read_write_serial_user_flag == $bf"
-}
-!if (osbyte_read_write_shift_function_key_status) != $e2 {
-    !error "Assertion failed: osbyte_read_write_shift_function_key_status == $e2"
-}
-!if (osbyte_read_write_soft_key_consistency_flag) != $f4 {
-    !error "Assertion failed: osbyte_read_write_soft_key_consistency_flag == $f4"
-}
-!if (osbyte_read_write_soft_key_length) != $d8 {
-    !error "Assertion failed: osbyte_read_write_soft_key_length == $d8"
-}
-!if (osbyte_read_write_sound_suppression) != $d2 {
-    !error "Assertion failed: osbyte_read_write_sound_suppression == $d2"
-}
-!if (osbyte_read_write_space_count) != $c3 {
-    !error "Assertion failed: osbyte_read_write_space_count == $c3"
-}
-!if (osbyte_read_write_speech_suppression) != $d1 {
-    !error "Assertion failed: osbyte_read_write_speech_suppression == $d1"
-}
-!if (osbyte_read_write_spool_file_handle) != $c7 {
-    !error "Assertion failed: osbyte_read_write_spool_file_handle == $c7"
-}
-!if (osbyte_read_write_startup_boot_options) != $d7 {
-    !error "Assertion failed: osbyte_read_write_startup_boot_options == $d7"
-}
-!if (osbyte_read_write_startup_options) != $ff {
-    !error "Assertion failed: osbyte_read_write_startup_options == $ff"
-}
-!if (osbyte_read_write_system_via_irq_mask) != $e9 {
-    !error "Assertion failed: osbyte_read_write_system_via_irq_mask == $e9"
-}
-!if (osbyte_read_write_tab_char) != $db {
-    !error "Assertion failed: osbyte_read_write_tab_char == $db"
-}
-!if (osbyte_read_write_third_byte_break_intercept) != $f9 {
-    !error "Assertion failed: osbyte_read_write_third_byte_break_intercept == $f9"
-}
-!if (osbyte_read_write_timer_switch_state) != $f3 {
-    !error "Assertion failed: osbyte_read_write_timer_switch_state == $f3"
-}
-!if (osbyte_read_write_user_via_irq_mask) != $e7 {
-    !error "Assertion failed: osbyte_read_write_user_via_irq_mask == $e7"
-}
-!if (osbyte_read_write_vdu_queue_size) != $da {
-    !error "Assertion failed: osbyte_read_write_vdu_queue_size == $da"
-}
-!if (osbyte_reflect_keyboard_status_in_leds) != $76 {
-    !error "Assertion failed: osbyte_reflect_keyboard_status_in_leds == $76"
-}
-!if (osbyte_reserved_for_application_software) != $a3 {
-    !error "Assertion failed: osbyte_reserved_for_application_software == $a3"
-}
-!if (osbyte_reset_soft_keys) != $12 {
-    !error "Assertion failed: osbyte_reset_soft_keys == $12"
-}
-!if (osbyte_restore_group_of_font_definitions) != $19 {
-    !error "Assertion failed: osbyte_restore_group_of_font_definitions == $19"
-}
-!if (osbyte_rom) != $8d {
-    !error "Assertion failed: osbyte_rom == $8d"
-}
-!if (osbyte_scan_keyboard) != $79 {
-    !error "Assertion failed: osbyte_scan_keyboard == $79"
-}
-!if (osbyte_scan_keyboard_from_16) != $7a {
-    !error "Assertion failed: osbyte_scan_keyboard_from_16 == $7a"
-}
-!if (osbyte_select_adc_channels) != $10 {
-    !error "Assertion failed: osbyte_select_adc_channels == $10"
-}
-!if (osbyte_select_input_stream) != $02 {
-    !error "Assertion failed: osbyte_select_input_stream == $02"
-}
-!if (osbyte_select_output_stream) != $03 {
-    !error "Assertion failed: osbyte_select_output_stream == $03"
-}
-!if (osbyte_select_printer) != $05 {
-    !error "Assertion failed: osbyte_select_printer == $05"
-}
-!if (osbyte_selects_internal_or_external_bus) != $6b {
-    !error "Assertion failed: osbyte_selects_internal_or_external_bus == $6b"
-}
-!if (osbyte_set_cursor_editing) != $04 {
-    !error "Assertion failed: osbyte_set_cursor_editing == $04"
-}
-!if (osbyte_set_escape) != $7d {
-    !error "Assertion failed: osbyte_set_escape == $7d"
-}
-!if (osbyte_set_flashing_mark) != $09 {
-    !error "Assertion failed: osbyte_set_flashing_mark == $09"
-}
-!if (osbyte_set_flashing_space) != $0a {
-    !error "Assertion failed: osbyte_set_flashing_space == $0a"
-}
-!if (osbyte_set_keyboard_repeat_delay) != $0b {
-    !error "Assertion failed: osbyte_set_keyboard_repeat_delay == $0b"
-}
-!if (osbyte_set_keyboard_repeat_rate) != $0c {
-    !error "Assertion failed: osbyte_set_keyboard_repeat_rate == $0c"
-}
-!if (osbyte_set_printer_ignore) != $06 {
-    !error "Assertion failed: osbyte_set_printer_ignore == $06"
-}
-!if (osbyte_set_serial_receive_rate) != $07 {
-    !error "Assertion failed: osbyte_set_serial_receive_rate == $07"
-}
-!if (osbyte_set_serial_transmit_rate) != $08 {
-    !error "Assertion failed: osbyte_set_serial_transmit_rate == $08"
-}
-!if (osbyte_set_user_flag) != $01 {
-    !error "Assertion failed: osbyte_set_user_flag == $01"
-}
-!if (osbyte_tape) != $8c {
-    !error "Assertion failed: osbyte_tape == $8c"
-}
-!if (osbyte_test_for_sideways_ram) != $44 {
-    !error "Assertion failed: osbyte_test_for_sideways_ram == $44"
-}
-!if (osbyte_tv) != $90 {
-    !error "Assertion failed: osbyte_tv == $90"
-}
-!if (osbyte_vsync) != $13 {
-    !error "Assertion failed: osbyte_vsync == $13"
-}
-!if (osbyte_write_cmos_ram) != $a2 {
-    !error "Assertion failed: osbyte_write_cmos_ram == $a2"
-}
-!if (osbyte_write_fred) != $93 {
-    !error "Assertion failed: osbyte_write_fred == $93"
-}
-!if (osbyte_write_jim) != $95 {
-    !error "Assertion failed: osbyte_write_jim == $95"
-}
-!if (osbyte_write_keys_pressed) != $78 {
-    !error "Assertion failed: osbyte_write_keys_pressed == $78"
-}
-!if (osbyte_write_sheila) != $97 {
-    !error "Assertion failed: osbyte_write_sheila == $97"
-}
-!if (osbyte_write_speech) != $9f {
-    !error "Assertion failed: osbyte_write_speech == $9f"
-}
-!if (osbyte_write_video_ula_control) != $9a {
-    !error "Assertion failed: osbyte_write_video_ula_control == $9a"
-}
-!if (osbyte_write_video_ula_palette) != $9b {
-    !error "Assertion failed: osbyte_write_video_ula_palette == $9b"
-}
-!if (osfile_create) != $07 {
-    !error "Assertion failed: osfile_create == $07"
-}
-!if (osfile_delete) != $06 {
-    !error "Assertion failed: osfile_delete == $06"
-}
-!if (osfile_load) != $ff {
-    !error "Assertion failed: osfile_load == $ff"
-}
-!if (osfile_read_catalogue_info) != $05 {
-    !error "Assertion failed: osfile_read_catalogue_info == $05"
-}
-!if (osfile_save) != $00 {
-    !error "Assertion failed: osfile_save == $00"
-}
-!if (osfile_write_attributes) != $04 {
-    !error "Assertion failed: osfile_write_attributes == $04"
-}
-!if (osfile_write_catalogue_info) != $01 {
-    !error "Assertion failed: osfile_write_catalogue_info == $01"
-}
-!if (osfile_write_exec_addr) != $03 {
-    !error "Assertion failed: osfile_write_exec_addr == $03"
-}
-!if (osfile_write_load_addr) != $02 {
-    !error "Assertion failed: osfile_write_load_addr == $02"
-}
-!if (osfind_close) != $00 {
-    !error "Assertion failed: osfind_close == $00"
-}
-!if (osfind_open_input) != $40 {
-    !error "Assertion failed: osfind_open_input == $40"
-}
-!if (osfind_open_output) != $80 {
-    !error "Assertion failed: osfind_open_output == $80"
-}
-!if (osfind_open_random_access) != $c0 {
-    !error "Assertion failed: osfind_open_random_access == $c0"
-}
-!if (osgbpb_append_bytes) != $02 {
-    !error "Assertion failed: osgbpb_append_bytes == $02"
-}
-!if (osgbpb_read_bytes_from_current_position) != $04 {
-    !error "Assertion failed: osgbpb_read_bytes_from_current_position == $04"
-}
-!if (osgbpb_read_bytes_from_position) != $03 {
-    !error "Assertion failed: osgbpb_read_bytes_from_position == $03"
-}
-!if (osgbpb_read_current_directory) != $06 {
-    !error "Assertion failed: osgbpb_read_current_directory == $06"
-}
-!if (osgbpb_read_current_library) != $07 {
-    !error "Assertion failed: osgbpb_read_current_library == $07"
-}
-!if (osgbpb_read_file_names) != $08 {
-    !error "Assertion failed: osgbpb_read_file_names == $08"
-}
-!if (osgbpb_read_title_option_and_drive) != $05 {
-    !error "Assertion failed: osgbpb_read_title_option_and_drive == $05"
-}
-!if (osgbpb_write_bytes) != $01 {
-    !error "Assertion failed: osgbpb_write_bytes == $01"
-}
-!if (osword_envelope) != $08 {
-    !error "Assertion failed: osword_envelope == $08"
-}
-!if (osword_read_char) != $0a {
-    !error "Assertion failed: osword_read_char == $0a"
-}
-!if (osword_read_clock) != $01 {
-    !error "Assertion failed: osword_read_clock == $01"
-}
-!if (osword_read_cmos_clock) != $0e {
-    !error "Assertion failed: osword_read_cmos_clock == $0e"
-}
-!if (osword_read_graphics_cursor_position) != $0d {
-    !error "Assertion failed: osword_read_graphics_cursor_position == $0d"
-}
-!if (osword_read_interval_timer) != $03 {
-    !error "Assertion failed: osword_read_interval_timer == $03"
-}
-!if (osword_read_io_memory) != $05 {
-    !error "Assertion failed: osword_read_io_memory == $05"
-}
-!if (osword_read_line) != $00 {
-    !error "Assertion failed: osword_read_line == $00"
-}
-!if (osword_read_palette) != $0b {
-    !error "Assertion failed: osword_read_palette == $0b"
-}
-!if (osword_read_pixel) != $09 {
-    !error "Assertion failed: osword_read_pixel == $09"
-}
-!if (osword_sound) != $07 {
-    !error "Assertion failed: osword_sound == $07"
-}
-!if (osword_write_clock) != $02 {
-    !error "Assertion failed: osword_write_clock == $02"
-}
-!if (osword_write_cmos_clock) != $0f {
-    !error "Assertion failed: osword_write_cmos_clock == $0f"
-}
-!if (osword_write_interval_timer) != $04 {
-    !error "Assertion failed: osword_write_interval_timer == $04"
-}
-!if (osword_write_io_memory) != $06 {
-    !error "Assertion failed: osword_write_io_memory == $06"
-}
-!if (osword_write_palette) != $0c {
-    !error "Assertion failed: osword_write_palette == $0c"
 }

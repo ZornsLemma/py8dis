@@ -124,18 +124,16 @@ def level_data(addr, index):
     addr += 5
     comment(addr, "Platform data (Y, startX, endX)")
     mylabel(addr, lab + "platform_start")
-    for i in range(0, platform_count):
-        byte(addr, 3)
-        decimal(addr, 3)
-        addr += 3
+    byte(addr, platform_count * 3, 3)
+    decimal(addr, platform_count * 3)
+    addr += platform_count * 3
     mylabel(addr, lab + "platform_end")
 
     comment(addr, "Ladder data (X, bottom Y, top Y)")
     mylabel(addr, lab + "ladder_start")
-    for i in range(0, ladder_count):
-        byte(addr, 3)
-        decimal(addr, 3)
-        addr += 3
+    byte(addr, ladder_count*3, 3)
+    decimal(addr, ladder_count*3)
+    addr += ladder_count*3
     mylabel(addr, lab + "ladder_end")
 
     if (has_lifts):
@@ -145,26 +143,23 @@ def level_data(addr, index):
 
     mylabel(addr, lab + "eggs_start")
     comment(addr, "Data for 12 eggs (X, Y)")
-    for i in range(0, 12):
-        byte(addr, 2)
-        decimal(addr, 2)
-        addr += 2
+    byte(addr, 24, 2)
+    decimal(addr, 24)
+    addr += 24
     mylabel(addr, lab + "eggs_end")
 
     comment(addr, "Seed data (X, Y)")
     mylabel(addr, lab + "seed_start")
-    for i in range(0, seed_count):
-        byte(addr, 2)
-        decimal(addr, 2)
-        addr += 2
+    byte(addr, seed_count*2, 2)
+    decimal(addr, seed_count*2)
+    addr += seed_count*2
     mylabel(addr, lab + "seed_end")
 
     mylabel(addr, lab + "bird_data")
     comment(addr, "Bird data (X, Y)")
-    for i in range(0, 5):
-        byte(addr, 2)
-        decimal(addr, 2)
-        addr += 2
+    byte(addr, 5*2, 2)
+    decimal(addr, 5*2)
+    addr += 5*2
     return addr
 
 def declare_stringn(addr, lab):
@@ -489,6 +484,8 @@ label_with_comment(0x1A26, "printstring", "Print string at address YYXX" +
     "\n	?YYXX = string length")
 mylabel(0x1A30, "printstringloop")
 label_with_comment(0x1A3B, "handlekeyboard", "Handle keyboard input")
+comment(0x1a3b, "Check the H key pressed (pause)", align=Align.BEFORE_LINE, indent=1)
+comment(0x1a48, "Check the H key still pressed (pause)", align=Align.BEFORE_LINE, indent=1)
 mylabel(0x1A48, "paused")
 mylabel(0x1A67, "stillpaused")
 mylabel(0x1A6E, "checkkeys")
@@ -715,7 +712,8 @@ mylabel(0x279A, "resethiscoretabloop")
 mylabel(0x27A3, "clearhiscorenameloop")
 char(0x27a2)
 char(0x27ab)
-char(0x27b0)
+#char(0x27b0)
+expr(0x27b0, "char_ampersand")
 char(0x27b5)
 mylabel(0x27BB, "clearhiscoreloop")
 label_with_comment(0x27CB, "checknewhiscore", "Check if we have a new high score, and insert it into the correct place" +
@@ -868,8 +866,7 @@ mylabel(0x2F86, "playdeathtune")
 mylabel(0x2F92, "playdeathtuneloop")
 label_with_comment(0x2FB0, "deathtunedata", "Death tune data")
 mylabel(0x2FB1, "deathtune_start")
-for x in range(0x2FB1, 0x2FD1, 2):
-    byte(x, 2, 2)
+byte(0x2FB1, 0x2FD1-0x2FB1, 2)
 decimal(0x2FB1, 0x2FD1 - 0x2FB1)
 mylabel(0x2FD1, "deathtune_end")
 label_with_comment(0x2FD1, "envelope1", "Envelope data")
@@ -967,26 +964,27 @@ DigitsColour = Colour2
 StatusColour = Colour2
 LivesColour = Colour4
 
-constant(Colour0, "Colour0")
-constant(Colour1, "Colour1")
-constant(Colour2, "Colour2")
-constant(Colour3, "Colour3")
-constant(Colour4, "Colour4")
-constant(Colour5, "Colour5")
-constant(Colour6, "Colour6")
-constant(Colour7, "Colour7")
-constant(Colour8, "Colour8")
-constant(Colour9, "Colour9")
-constant(Colour10, "Colour10")
-constant(Colour11, "Colour11")
-constant(Colour12, "Colour12")
-constant(Colour13, "Colour13")
-constant(Colour14, "Colour14")
-constant(Colour15, "Colour15")
+constant(Colour0, "Colour0", format=Format.HEX)
+constant(Colour1, "Colour1", format=Format.HEX)
+constant(Colour2, "Colour2", format=Format.HEX)
+constant(Colour3, "Colour3", format=Format.HEX)
+constant(Colour4, "Colour4", format=Format.HEX)
+constant(Colour5, "Colour5", format=Format.HEX)
+constant(Colour6, "Colour6", format=Format.HEX)
+constant(Colour7, "Colour7", format=Format.HEX)
+constant(Colour8, "Colour8", format=Format.HEX)
+constant(Colour9, "Colour9", format=Format.HEX)
+constant(Colour10, "Colour10", format=Format.HEX)
+constant(Colour11, "Colour11", format=Format.HEX)
+constant(Colour12, "Colour12", format=Format.HEX)
+constant(Colour13, "Colour13", format=Format.HEX)
+constant(Colour14, "Colour14", format=Format.HEX)
+constant(Colour15, "Colour15", format=Format.HEX)
 
+constant('&', "char_ampersand", format=Format.CHAR)
 
-constant(EggColour,      "EggColour")
-constant(LiftColour,     "LiftColour")
+constant(EggColour,      "EggColour", "For the collectable eggs")   # Just to test inline comments
+constant(LiftColour,     "LiftColour", "This is the colour of the lift:", align=Align.BEFORE_LINE)  # Just an example to test Align.BEFORE_LINE
 constant(LadderColour,   "LadderColour")
 constant(SeedColour,     "SeedColour")
 constant(PlatformColour, "PlatformColour")
@@ -997,12 +995,12 @@ constant(BirdColour,     "BirdColour")
 constant(LogoColour,     "LogoColour")
 constant(DigitsColour,   "DigitsColour")
 constant(StatusColour,   "StatusColour")
-constant(LivesColour,    "LivesColour")
+constant(LivesColour,    "LivesColour", "...for the lives displayed in the status area at the top of the screen above the play area below the score if I remember correctly", align=Align.AFTER_LINE)  # Just an example to test Align.AFTER_LINE
 
-constant(1, "MapId_Platform")
-constant(2, "MapId_Ladder")
-constant(4, "MapId_Egg")
-constant(8, "MapId_Seed")
+constant(1, "MapId_Platform", format=Format.BINARY)
+constant(2, "MapId_Ladder", format=Format.BINARY)
+constant(4, "MapId_Egg", format=Format.BINARY)
+constant(8, "MapId_Seed", format=Format.BINARY)
 
 sprite_constants = {
     0: "SpriteId_Blank",

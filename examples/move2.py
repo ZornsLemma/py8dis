@@ -11,7 +11,7 @@ entry(0x2000)
 low_a_move_id = move(0x900, 0x2010, 0x2022-0x2010)
 with low_a_move_id:
     label(0x900, "low_a")
-    nonentry(0x90d) # TODO: should this use nonentry() with dest address resolved via implicit move_id?
+    nonentry(0x90d)
 low_b_move_id = move(0x901, 0x2029, 0x2039-0x2029)
 with low_b_move_id:
     entry(0x901, "low_b")

@@ -9,119 +9,123 @@
 ; ----------------------------------------------------------------------------------
 
 ; Constants
-BigBirdColour                     = 32
-BirdColour                        = 128
-CageColour                        = 32
-Colour0                           = 0
-Colour1                           = 2
-Colour10                          = 136
-Colour11                          = 138
-Colour12                          = 160
-Colour13                          = 162
-Colour14                          = 168
-Colour15                          = 170
-Colour2                           = 8
-Colour3                           = 10
-Colour4                           = 32
-Colour5                           = 34
-Colour6                           = 40
-Colour7                           = 42
-Colour8                           = 128
-Colour9                           = 130
-DigitsColour                      = 8
-EggColour                         = 2
-LadderColour                      = 8
-LiftColour                        = 2
-LivesColour                       = 32
-LogoColour                        = 2
-MapId_Egg                         = 4
-MapId_Ladder                      = 2
-MapId_Platform                    = 1
-MapId_Seed                        = 8
-PlatformColour                    = 10
-PlayerColour                      = 32
-SeedColour                        = 8
-SpriteId_BigBirdLeft1             = 17
-SpriteId_BigBirdLeft2             = 18
-SpriteId_BigBirdRight1            = 15
-SpriteId_BigBirdRight2            = 16
-SpriteId_BigC                     = 48
-SpriteId_BigE                     = 53
-SpriteId_BigG                     = 54
-SpriteId_BigH                     = 49
-SpriteId_BigI                     = 52
-SpriteId_BigK                     = 51
-SpriteId_BigU                     = 50
-SpriteId_BirdEatLeft1             = 29
-SpriteId_BirdEatLeft2             = 30
-SpriteId_BirdEatRight1            = 27
-SpriteId_BirdEatRight2            = 28
-SpriteId_BirdLeft1                = 23
-SpriteId_BirdLeft2                = 24
-SpriteId_BirdRight1               = 21
-SpriteId_BirdRight2               = 22
-SpriteId_BirdUpDown1              = 25
-SpriteId_BirdUpDown2              = 26
-SpriteId_Blank                    = 0
-SpriteId_Bonus                    = 45
-SpriteId_Cage                     = 20
-SpriteId_CageWithHole             = 19
-SpriteId_Digit0                   = 31
-SpriteId_Digit1                   = 32
-SpriteId_Digit2                   = 33
-SpriteId_Digit3                   = 34
-SpriteId_Digit4                   = 35
-SpriteId_Digit5                   = 36
-SpriteId_Digit6                   = 37
-SpriteId_Digit7                   = 38
-SpriteId_Digit8                   = 39
-SpriteId_Digit9                   = 40
-SpriteId_Egg                      = 3
-SpriteId_HighlightBox             = 42
-SpriteId_Ladder                   = 2
-SpriteId_Level                    = 44
-SpriteId_Life                     = 47
-SpriteId_Lift                     = 5
-SpriteId_ManLeft1                 = 9
-SpriteId_ManLeft2                 = 10
-SpriteId_ManLeft3                 = 11
-SpriteId_ManRight1                = 6
-SpriteId_ManRight2                = 7
-SpriteId_ManRight3                = 8
-SpriteId_ManUpDown1               = 12
-SpriteId_ManUpDown2               = 13
-SpriteId_ManUpDown3               = 14
-SpriteId_Platform                 = 1
-SpriteId_Player                   = 43
-SpriteId_Score                    = 41
-SpriteId_Seed                     = 4
-SpriteId_Time                     = 46
-StatusColour                      = 8
-inkey_key_1                       = 207
-inkey_key_2                       = 206
-inkey_key_3                       = 238
-inkey_key_4                       = 237
-inkey_key_ctrl                    = 254
-inkey_key_escape                  = 143
-inkey_key_h                       = 171
-inkey_key_k                       = 185
-inkey_key_s                       = 174
-inkey_key_shift                   = 255
-osbyte_clear_escape               = 124
-osbyte_flush_buffer_class         = 15
-osbyte_inkey                      = 129
-osbyte_read_key_table_low         = 172
-osbyte_read_write_bell_duration   = 214
-osbyte_read_write_escape_status   = 229
-osbyte_scan_keyboard              = 121
-osbyte_scan_keyboard_from_16      = 122
-osbyte_set_cursor_editing         = 4
-osbyte_tape                       = 140
-osword_envelope                   = 8
-osword_read_interval_timer        = 3
-osword_read_line                  = 0
-osword_sound                      = 7
-osword_write_interval_timer       = 4
+BigBirdColour                   = 32
+BirdColour                      = 128
+CageColour                      = 32
+char_ampersand                  = '&'
+Colour0                         = $00
+Colour1                         = $02
+Colour2                         = $08
+Colour3                         = $0a
+Colour4                         = $20
+Colour5                         = $22
+Colour6                         = $28
+Colour7                         = $2a
+Colour8                         = $80
+Colour9                         = $82
+Colour10                        = $88
+Colour11                        = $8a
+Colour12                        = $a0
+Colour13                        = $a2
+Colour14                        = $a8
+Colour15                        = $aa
+DigitsColour                    = 8
+EggColour                       = 2         ; For the collectable eggs
+inkey_key_1                     = 207
+inkey_key_2                     = 206
+inkey_key_3                     = 238
+inkey_key_4                     = 237
+inkey_key_ctrl                  = 254
+inkey_key_escape                = 143
+inkey_key_h                     = 171
+inkey_key_k                     = 185
+inkey_key_s                     = 174
+inkey_key_shift                 = 255
+LadderColour                    = 8
+; This is the colour of the lift:
+LiftColour                      = 2
+LivesColour                     = 32
+; ...for the lives displayed in the status area at the top of the screen above the play
+; area below the score if I remember correctly
+LogoColour                      = 2
+MapId_Egg                       = %00000100
+MapId_Ladder                    = %00000010
+MapId_Platform                  = %00000001
+MapId_Seed                      = %00001000
+osbyte_clear_escape             = 124
+osbyte_flush_buffer_class       = 15
+osbyte_inkey                    = 129
+osbyte_read_key_table_low       = 172
+osbyte_read_write_bell_duration = 214
+osbyte_read_write_escape_status = 229
+osbyte_scan_keyboard            = 121
+osbyte_scan_keyboard_from_16    = 122
+osbyte_set_cursor_editing       = 4
+osbyte_tape                     = 140
+osword_envelope                 = 8
+osword_read_interval_timer      = 3
+osword_read_line                = 0
+osword_sound                    = 7
+osword_write_interval_timer     = 4
+PlatformColour                  = 10
+PlayerColour                    = 32
+SeedColour                      = 8
+SpriteId_BigBirdLeft1           = 17
+SpriteId_BigBirdLeft2           = 18
+SpriteId_BigBirdRight1          = 15
+SpriteId_BigBirdRight2          = 16
+SpriteId_BigC                   = 48
+SpriteId_BigE                   = 53
+SpriteId_BigG                   = 54
+SpriteId_BigH                   = 49
+SpriteId_BigI                   = 52
+SpriteId_BigK                   = 51
+SpriteId_BigU                   = 50
+SpriteId_BirdEatLeft1           = 29
+SpriteId_BirdEatLeft2           = 30
+SpriteId_BirdEatRight1          = 27
+SpriteId_BirdEatRight2          = 28
+SpriteId_BirdLeft1              = 23
+SpriteId_BirdLeft2              = 24
+SpriteId_BirdRight1             = 21
+SpriteId_BirdRight2             = 22
+SpriteId_BirdUpDown1            = 25
+SpriteId_BirdUpDown2            = 26
+SpriteId_Blank                  = 0
+SpriteId_Bonus                  = 45
+SpriteId_Cage                   = 20
+SpriteId_CageWithHole           = 19
+SpriteId_Digit0                 = 31
+SpriteId_Digit1                 = 32
+SpriteId_Digit2                 = 33
+SpriteId_Digit3                 = 34
+SpriteId_Digit4                 = 35
+SpriteId_Digit5                 = 36
+SpriteId_Digit6                 = 37
+SpriteId_Digit7                 = 38
+SpriteId_Digit8                 = 39
+SpriteId_Digit9                 = 40
+SpriteId_Egg                    = 3
+SpriteId_HighlightBox           = 42
+SpriteId_Ladder                 = 2
+SpriteId_Level                  = 44
+SpriteId_Life                   = 47
+SpriteId_Lift                   = 5
+SpriteId_ManLeft1               = 9
+SpriteId_ManLeft2               = 10
+SpriteId_ManLeft3               = 11
+SpriteId_ManRight1              = 6
+SpriteId_ManRight2              = 7
+SpriteId_ManRight3              = 8
+SpriteId_ManUpDown1             = 12
+SpriteId_ManUpDown2             = 13
+SpriteId_ManUpDown3             = 14
+SpriteId_Platform               = 1
+SpriteId_Player                 = 43
+SpriteId_Score                  = 41
+SpriteId_Seed                   = 4
+SpriteId_Time                   = 46
+StatusColour                    = 8
 
 ; Memory locations
 intervaltimerblock      = $00
@@ -232,7 +236,7 @@ osbyte                  = $fff4
 ; ----------------------------------------------------------------------------------
 spritetable
 pydis_start
-    !byte 150,  24                                                    ; 1100: 96 18       ..
+    !byte 150, 24                                                     ; 1100: 96 18       ..
     !word $3600                                                       ; 1102: 00 36       .6
     !byte 8, 8                                                        ; 1104: 08 08       ..
     !word sprite_platform                                             ; 1106: 00 12       ..
@@ -242,25 +246,25 @@ pydis_start
     !word sprite_egg                                                  ; 110e: 10 12       ..
     !byte 8, 8                                                        ; 1110: 08 08       ..
     !word sprite_seed                                                 ; 1112: 18 12       ..
-    !byte 16,  4                                                      ; 1114: 10 04       ..
+    !byte 16, 4                                                       ; 1114: 10 04       ..
     !word sprite_lift                                                 ; 1116: 20 12        .
-    !byte  8, 16                                                      ; 1118: 08 10       ..
+    !byte 8, 16                                                       ; 1118: 08 10       ..
     !word sprite_manright1                                            ; 111a: 28 12       (.
-    !byte  8, 16                                                      ; 111c: 08 10       ..
+    !byte 8, 16                                                       ; 111c: 08 10       ..
     !word sprite_manright2                                            ; 111e: 38 12       8.
-    !byte  8, 16                                                      ; 1120: 08 10       ..
+    !byte 8, 16                                                       ; 1120: 08 10       ..
     !word sprite_manright3                                            ; 1122: 48 12       H.
-    !byte  8, 16                                                      ; 1124: 08 10       ..
+    !byte 8, 16                                                       ; 1124: 08 10       ..
     !word sprite_manleft1                                             ; 1126: 58 12       X.
-    !byte  8, 16                                                      ; 1128: 08 10       ..
+    !byte 8, 16                                                       ; 1128: 08 10       ..
     !word sprite_manleft2                                             ; 112a: 68 12       h.
-    !byte  8, 16                                                      ; 112c: 08 10       ..
+    !byte 8, 16                                                       ; 112c: 08 10       ..
     !word sprite_manleft3                                             ; 112e: 78 12       x.
-    !byte  8, 16                                                      ; 1130: 08 10       ..
+    !byte 8, 16                                                       ; 1130: 08 10       ..
     !word sprite_manupdown1                                           ; 1132: 88 12       ..
-    !byte  8, 18                                                      ; 1134: 08 12       ..
+    !byte 8, 18                                                       ; 1134: 08 12       ..
     !word sprite_manupdown2                                           ; 1136: 98 12       ..
-    !byte  8, 18                                                      ; 1138: 08 12       ..
+    !byte 8, 18                                                       ; 1138: 08 12       ..
     !word sprite_manupdown3                                           ; 113a: aa 12       ..
     !byte 16, 24                                                      ; 113c: 10 18       ..
     !word sprite_bigbirdright1                                        ; 113e: bc 12       ..
@@ -274,17 +278,17 @@ pydis_start
     !word sprite_cagewithhole                                         ; 114e: 7c 13       |.
     !byte 24, 48                                                      ; 1150: 18 30       .0
     !word sprite_cage                                                 ; 1152: 0c 14       ..
-    !byte  8, 20                                                      ; 1154: 08 14       ..
+    !byte 8, 20                                                       ; 1154: 08 14       ..
     !word sprite_birdright1                                           ; 1156: 9c 14       ..
-    !byte  8, 20                                                      ; 1158: 08 14       ..
+    !byte 8, 20                                                       ; 1158: 08 14       ..
     !word sprite_birdright2                                           ; 115a: b0 14       ..
-    !byte  8, 20                                                      ; 115c: 08 14       ..
+    !byte 8, 20                                                       ; 115c: 08 14       ..
     !word sprite_birdleft1                                            ; 115e: c4 14       ..
-    !byte  8, 20                                                      ; 1160: 08 14       ..
+    !byte 8, 20                                                       ; 1160: 08 14       ..
     !word sprite_birdleft2                                            ; 1162: d8 14       ..
-    !byte  8, 20                                                      ; 1164: 08 14       ..
+    !byte 8, 20                                                       ; 1164: 08 14       ..
     !word sprite_birdupdown1                                          ; 1166: ec 14       ..
-    !byte  8, 22                                                      ; 1168: 08 16       ..
+    !byte 8, 22                                                       ; 1168: 08 16       ..
     !word sprite_birdupdown2                                          ; 116a: 00 15       ..
     !byte 16, 20                                                      ; 116c: 10 14       ..
     !word sprite_birdeatright1                                        ; 116e: 16 15       ..
@@ -314,17 +318,17 @@ pydis_start
     !word sprite_digit8                                               ; 119e: ee 15       ..
     !byte 8, 7                                                        ; 11a0: 08 07       ..
     !word sprite_digit9                                               ; 11a2: f5 15       ..
-    !byte 24,  9                                                      ; 11a4: 18 09       ..
+    !byte 24, 9                                                       ; 11a4: 18 09       ..
     !word sprite_score                                                ; 11a6: fc 15       ..
-    !byte 32,  9                                                      ; 11a8: 20 09        .
+    !byte 32, 9                                                       ; 11a8: 20 09        .
     !word sprite_highlightbox                                         ; 11aa: 17 16       ..
-    !byte 32,  9                                                      ; 11ac: 20 09        .
+    !byte 32, 9                                                       ; 11ac: 20 09        .
     !word sprite_player                                               ; 11ae: 3b 16       ;.
-    !byte 40,  9                                                      ; 11b0: 28 09       (.
+    !byte 40, 9                                                       ; 11b0: 28 09       (.
     !word sprite_level                                                ; 11b2: 5f 16       _.
-    !byte 48,  9                                                      ; 11b4: 30 09       0.
+    !byte 48, 9                                                       ; 11b4: 30 09       0.
     !word sprite_bonus                                                ; 11b6: 8c 16       ..
-    !byte 40,  9                                                      ; 11b8: 28 09       (.
+    !byte 40, 9                                                       ; 11b8: 28 09       (.
     !word sprite_time                                                 ; 11ba: c2 16       ..
     !byte 8, 3                                                        ; 11bc: 08 03       ..
     !word sprite_life                                                 ; 11be: ef 16       ..
@@ -1318,15 +1322,12 @@ sprite_bigg
     !byte %....####, %#####...                                        ; 1892: 0f f8       ..
     !byte %......##, %####....                                        ; 1894: 03 f0       ..
 unused4
-    !byte  32,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 1896: 20 00 00...  ..
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18a2: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18ae: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18ba: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18c6: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18d2: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18de: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0  ; 18ea: 00 00 00... ...
-    !byte   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  13, 255  ; 18f6: 00 00 00... ...
+    !byte 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0 ; 1896: 20 00 00...  ..
+    !byte  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0 ; 18a9: 00 00 00... ...
+    !byte  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0 ; 18bc: 00 00 00... ...
+    !byte  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0 ; 18cf: 00 00 00... ...
+    !byte  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,   0, 0, 0, 0, 0, 0, 0 ; 18e2: 00 00 00... ...
+    !byte  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 255                   ; 18f5: 00 00 00... ...
 
 ; ----------------------------------------------------------------------------------
 ; Plot sprite
@@ -1571,6 +1572,7 @@ printstringloop
 ; Handle keyboard input
 ; ----------------------------------------------------------------------------------
 handlekeyboard
+    ; Check the H key pressed (pause)
     ldx #inkey_key_h                                                  ; 1a3b: a2 ab       ..             ; X=inkey key value
     ldy #$ff                                                          ; 1a3d: a0 ff       ..
     lda #osbyte_inkey                                                 ; 1a3f: a9 81       ..
@@ -1578,6 +1580,7 @@ handlekeyboard
     cpy #0                                                            ; 1a44: c0 00       ..             ; X and Y contain $ff if the key is pressed
     beq checkkeys                                                     ; 1a46: f0 26       .&
 paused
+    ; Check the H key still pressed (pause)
     ldx #inkey_key_h                                                  ; 1a48: a2 ab       ..             ; X=inkey key value
     ldy #$ff                                                          ; 1a4a: a0 ff       ..
     lda #osbyte_inkey                                                 ; 1a4c: a9 81       ..
@@ -3744,7 +3747,7 @@ clearhiscorenameloop
     lda #'F'                                                          ; 27aa: a9 46       .F
     sta (read),y                                                      ; 27ac: 91 76       .v
     dey                                                               ; 27ae: 88          .
-    lda #'&'                                                          ; 27af: a9 26       .&
+    lda #char_ampersand                                               ; 27af: a9 26       .&
     sta (read),y                                                      ; 27b1: 91 76       .v
     dey                                                               ; 27b3: 88          .
     lda #'A'                                                          ; 27b4: a9 41       .A
@@ -3992,14 +3995,14 @@ exitgethiscorename
 string_highscores
     !byte string_highscores_end - string_highscores_start             ; 293f: 17          .
 string_highscores_start
-    !byte 18,  0,  1, 25,  4, 32,  1, 32,  3                          ; 2940: 12 00 01... ...
+    !byte 18, 0, 1, 25, 4, 32, 1, 32, 3                               ; 2940: 12 00 01... ...
     !text "HIGH SCORES"                                               ; 2949: 48 49 47... HIG
-    !byte 18,  0,  3                                                  ; 2954: 12 00 03    ...
+    !byte 18, 0, 3                                                    ; 2954: 12 00 03    ...
 string_highscores_end
 string_hiscorepos
     !byte string_hiscorepos_end - string_hiscorepos_start             ; 2957: 06          .
 string_hiscorepos_start
-    !byte 25,  4, 32,  0                                              ; 2958: 19 04 20... ..
+    !byte 25, 4, 32, 0                                                ; 2958: 19 04 20... ..
 hiscoreypos
     !byte 0                                                           ; 295c: 00          .
     !byte 0                                                           ; 295d: 00          .
@@ -4007,20 +4010,19 @@ string_hiscorepos_end
 string_hiscoreprompt
     !byte string_hiscoreprompt_end - string_hiscoreprompt_start       ; 295e: 0a          .
 string_hiscoreprompt_start
-    !byte  18,   0,   1,  25,   4, 160,   2                           ; 295f: 12 00 01... ...
+    !byte 18, 0, 1, 25, 4, 160, 2                                     ; 295f: 12 00 01... ...
 promptypos
     !byte 0                                                           ; 2966: 00          .
-    !byte  0, 62                                                      ; 2967: 00 3e       .>
+    !byte 0, 62                                                       ; 2967: 00 3e       .>
 string_hiscoreprompt_end
 string_enteryourname
     !byte string_enteryourname_end - string_enteryourname_start       ; 2969: 33          3
 string_enteryourname_start
-    !byte  24,   0,   0,   0,   0, 255,   4, 124,   3,  16,  26,  18  ; 296a: 18 00 00... ...
-    !byte   0,   1,  25,   4, 160,   0, 160,   0                      ; 2976: 00 01 19... ...
+    !byte  24, 0,   0, 0, 0, 255, 4, 124, 3, 16, 26, 18, 0, 1, 25, 4  ; 296a: 18 00 00... ...
+    !byte 160, 0, 160, 0                                              ; 297a: a0 00 a0... ...
     !text "ENTER YOUR NAME"                                           ; 297e: 45 4e 54... ENT
-    !byte  25,   4, 128,   1, 100,   0,  18,   0,   2                 ; 298d: 19 04 80... ...
-    !text "Play"                                                      ; 2996: 50 6c 61... Pla
-    !text "er "                                                       ; 299a: 65 72 20    er
+    !byte 25, 4, 128, 1, 100, 0, 18, 0, 2                             ; 298d: 19 04 80... ...
+    !text "Player "                                                   ; 2996: 50 6c 61... Pla
 string_enteryourname_end
 osword0block
     !word hiscorenamebuffer                                           ; 299d: a2 29       .)             ; Buffer address for input (2 bytes)
@@ -4180,21 +4182,21 @@ allplayersdead
 string_gameover
     !byte $1d                                                         ; 2a94: 1d          .
 string_gameover_start
-    !byte $18,   0,   1, $50,   1,   0,   4, $14,   2, $10, $1a, $19  ; 2a95: 18 00 01... ...
-    !byte   4, $60,   1, $f4,   1, $12,   0,   8                      ; 2aa1: 04 60 01... .`.
+    !byte $18, 0,   1, $50, 1, 0, 4, $14, 2, $10, $1a, $19, 4, $60, 1 ; 2a95: 18 00 01... ...
+    !byte $f4, 1, $12,   0, 8                                         ; 2aa4: f4 01 12... ...
     !text "GAME OVER"                                                 ; 2aa9: 47 41 4d... GAM
 string_gameover_end
 string_getready
     !byte $16                                                         ; 2ab2: 16          .
 string_getready_start
-    !byte $10, $19,   4, $60,   1, $f4,   1, $12,   0,   4            ; 2ab3: 10 19 04... ...
+    !byte $10, $19, 4, $60, 1, $f4, 1, $12, 0, 4                      ; 2ab3: 10 19 04... ...
     !text "Get Ready"                                                 ; 2abd: 47 65 74... Get
-    !byte $12,   0,   8                                               ; 2ac6: 12 00 08    ...
+    !byte $12, 0, 8                                                   ; 2ac6: 12 00 08    ...
 string_getready_end
 string_playerN
     !byte $0d                                                         ; 2ac9: 0d          .
 string_playerN_start
-    !byte $19,   4, $80,   1, $90,   1                                ; 2aca: 19 04 80... ...
+    !byte $19, 4, $80, 1, $90, 1                                      ; 2aca: 19 04 80... ...
     !text "Player "                                                   ; 2ad0: 50 6c 61... Pla
 
 ; ----------------------------------------------------------------------------------
@@ -4403,7 +4405,7 @@ resetperplayerloop
 string_howmanyplayers
     !byte 25                                                          ; 2c44: 19          .
 string_howmanyplayers_start
-    !byte  16,  25,   4,  32,   0, 244,   1                           ; 2c45: 10 19 04... ...
+    !byte 16, 25, 4, 32, 0, 244, 1                                    ; 2c45: 10 19 04... ...
     !text "How many players? "                                        ; 2c4c: 48 6f 77... How
 
 ; ----------------------------------------------------------------------------------
@@ -4554,12 +4556,11 @@ showkeyhelp
 string_keyhelp
     !byte string_keyhelp_end - string_keyhelp_start                   ; 2d4c: 3b          ;
 string_keyhelp_start
-    !byte  25,   4, 128,   0, 100,   0,  18,   0,   4                 ; 2d4d: 19 04 80... ...
+    !byte 25, 4, 128, 0, 100, 0, 18, 0, 4                             ; 2d4d: 19 04 80... ...
     !text "Press "                                                    ; 2d56: 50 72 65... Pre
-    !byte 18,  0,  8, 83, 32, 18,  0,  4                              ; 2d5c: 12 00 08... ...
+    !byte 18, 0, 8, 83, 32, 18, 0, 4                                  ; 2d5c: 12 00 08... ...
     !text "to start"                                                  ; 2d64: 74 6f 20... to
-    !byte  25,   4, 128,   0,  50,   0,  18,   0,   8,  75,  32,  18  ; 2d6c: 19 04 80... ...
-    !byte   0,   4                                                    ; 2d78: 00 04       ..
+    !byte 25, 4, 128, 0, 50, 0, 18, 0, 8, 75, 32, 18, 0, 4            ; 2d6c: 19 04 80... ...
     !text "to change keys"                                            ; 2d7a: 74 6f 20... to
 
 ; ----------------------------------------------------------------------------------
@@ -4932,11 +4933,11 @@ deathtune_start
     !byte 33,  4                                                      ; 2fb5: 21 04       !.
     !byte 25,  2                                                      ; 2fb7: 19 02       ..
     !byte 21,  4                                                      ; 2fb9: 15 04       ..
-    !byte 5, 2                                                        ; 2fbb: 05 02       ..
+    !byte  5,  2                                                      ; 2fbb: 05 02       ..
     !byte 13,  4                                                      ; 2fbd: 0d 04       ..
-    !byte 1, 2                                                        ; 2fbf: 01 02       ..
+    !byte  1,  2                                                      ; 2fbf: 01 02       ..
     !byte  5, 12                                                      ; 2fc1: 05 0c       ..
-    !byte 5, 1                                                        ; 2fc3: 05 01       ..
+    !byte  5,  1                                                      ; 2fc3: 05 01       ..
     !byte 13,  1                                                      ; 2fc5: 0d 01       ..
     !byte 21,  1                                                      ; 2fc7: 15 01       ..
     !byte 25,  1                                                      ; 2fc9: 19 01       ..
@@ -4958,6 +4959,7 @@ codemain_end
 relocated_code
 relocated_code_end
 
+; Move 1: $3000 to $0900 for length 2048
 !pseudopc $0900 {
 ; ----------------------------------------------------------------------------------
 ; Show the currently defined keys on screen
@@ -5227,40 +5229,40 @@ returninkey
 string_keyselection
     !byte string_keyselection_end - string_keyselection_start         ; 31b2: 29          )   :0ab2[1]
 string_keyselection_start
-    !byte  16,  18,   0,   4,  25,   4, 224,   1, 182,   3            ; 31b3: 10 12 00... ... :0ab3[1]
+    !byte 16, 18, 0, 4, 25, 4, 224, 1, 182, 3                         ; 31b3: 10 12 00... ... :0ab3[1]
     !text "K E Y"                                                     ; 31bd: 4b 20 45... K E :0abd[1]
-    !byte 25,  4, 96,  0, 82,  3                                      ; 31c2: 19 04 60... ..` :0ac2[1]
+    !byte 25, 4, 96, 0, 82, 3                                         ; 31c2: 19 04 60... ..` :0ac2[1]
     !text "S E L E C T I O N"                                         ; 31c8: 53 20 45... S E :0ac8[1]
-    !byte 18,  0,  2                                                  ; 31d9: 12 00 02    ... :0ad9[1]
+    !byte 18, 0, 2                                                    ; 31d9: 12 00 02    ... :0ad9[1]
 string_keyselection_end
 string_up
     !byte string_up_end - string_up_start                             ; 31dc: 0c          .   :0adc[1]
 string_up_start
-    !byte  25,   4, 196,   0, 188,   2                                ; 31dd: 19 04 c4... ... :0add[1]
+    !byte 25, 4, 196, 0, 188, 2                                       ; 31dd: 19 04 c4... ... :0add[1]
     !text "Up .. "                                                    ; 31e3: 55 70 20... Up  :0ae3[1]
 string_up_end
 string_down
     !byte string_down_end - string_down_start                         ; 31e9: 0e          .   :0ae9[1]
 string_down_start
-    !byte  25,   4,  64,   0, 108,   2                                ; 31ea: 19 04 40... ..@ :0aea[1]
+    !byte 25, 4, 64, 0, 108, 2                                        ; 31ea: 19 04 40... ..@ :0aea[1]
     !text "Down .. "                                                  ; 31f0: 44 6f 77... Dow :0af0[1]
 string_down_end
 string_left
     !byte string_left_end - string_left_start                         ; 31f8: 0e          .   :0af8[1]
 string_left_start
-    !byte 25,  4, 64,  0, 28,  2, 76                                  ; 31f9: 19 04 40... ..@ :0af9[1]
-    !text "eft .. "                                                   ; 3200: 65 66 74... eft :0b00[1]
+    !byte 25, 4, 64, 0, 28, 2                                         ; 31f9: 19 04 40... ..@ :0af9[1]
+    !text "Left .. "                                                  ; 31ff: 4c 65 66... Lef :0aff[1]
 string_left_end
 string_right
     !byte string_right_end - string_right_start                       ; 3207: 0f          .   :0b07[1]
 string_right_start
-    !byte  25,   4,   0,   0, 204,   1                                ; 3208: 19 04 00... ... :0b08[1]
+    !byte 25, 4, 0, 0, 204, 1                                         ; 3208: 19 04 00... ... :0b08[1]
     !text "Right .. "                                                 ; 320e: 52 69 67... Rig :0b0e[1]
 string_right_end
 string_jump
     !byte string_jump_end - string_jump_start                         ; 3217: 0e          .   :0b17[1]
 string_jump_start
-    !byte  25,   4,  64,   0, 124,   1                                ; 3218: 19 04 40... ..@ :0b18[1]
+    !byte 25, 4, 64, 0, 124, 1                                        ; 3218: 19 04 40... ..@ :0b18[1]
     !text "Jump .. "                                                  ; 321e: 4a 75 6d... Jum :0b1e[1]
 string_jump_end
 string_tab
@@ -5392,17 +5394,17 @@ printkeyname
 string_keys
     !byte string_keys_end - string_keys_start                         ; 32f8: 10          .   :0bf8[1]
 string_keys_start
-    !byte 25,  4,  0,  2, 32,  3, 18                                  ; 32f9: 19 04 00... ... :0bf9[1]
+    !byte 25, 4, 0, 2, 32, 3, 18                                      ; 32f9: 19 04 00... ... :0bf9[1]
     !byte 0, 4                                                        ; 3300: 00 04       ..  :0c00[1]
     !text "KEYS"                                                      ; 3302: 4b 45 59... KEY :0c02[1]
-    !byte 18,  0,  8                                                  ; 3306: 12 00 08    ... :0c06[1]
+    !byte 18, 0, 8                                                    ; 3306: 12 00 08    ... :0c06[1]
 string_keys_end
 string_holdabort
     !byte string_holdabort_end - string_holdabort_start               ; 3309: 2e          .   :0c09[1]
 string_holdabort_start
-    !byte 18,  0,  2, 25,  4, 64,  0, 24,  1                          ; 330a: 12 00 02... ... :0c0a[1]
+    !byte 18, 0, 2, 25, 4, 64, 0, 24, 1                               ; 330a: 12 00 02... ... :0c0a[1]
     !text "Hold .. 'H'"                                               ; 3313: 48 6f 6c... Hol :0c13[1]
-    !byte  25,   4,   0,   0, 200,   0                                ; 331e: 19 04 00... ... :0c1e[1]
+    !byte 25, 4, 0, 0, 200, 0                                         ; 331e: 19 04 00... ... :0c1e[1]
     !text "Abort .. Escape +'H'"                                      ; 3324: 41 62 6f... Abo :0c24[1]
 
 ; ----------------------------------------------------------------------------------
@@ -5554,15 +5556,15 @@ map0platform_start
 ; Ladder data (X, bottom Y, top Y)
 map0platform_end
 map0ladder_start
-    !byte  3,  7, 13                                                  ; 33fc: 03 07 0d    ... :0cfc[1]
-    !byte  7,  2, 23                                                  ; 33ff: 07 02 17    ... :0cff[1]
-    !byte 11,  2,  8                                                  ; 3402: 0b 02 08    ... :0d02[1]
-    !byte 16,  2,  8                                                  ; 3405: 10 02 08    ... :0d05[1]
+    !byte  3, 7, 13                                                   ; 33fc: 03 07 0d    ... :0cfc[1]
+    !byte  7, 2, 23                                                   ; 33ff: 07 02 17    ... :0cff[1]
+    !byte 11, 2,  8                                                   ; 3402: 0b 02 08    ... :0d02[1]
+    !byte 16, 2,  8                                                   ; 3405: 10 02 08    ... :0d05[1]
 ; Data for 12 eggs (X, Y)
 map0ladder_end
 map0eggs_start
-    !byte 4, 2                                                        ; 3408: 04 02       ..  :0d08[1]
-    !byte 1, 7                                                        ; 340a: 01 07       ..  :0d0a[1]
+    !byte  4,  2                                                      ; 3408: 04 02       ..  :0d08[1]
+    !byte  1,  7                                                      ; 340a: 01 07       ..  :0d0a[1]
     !byte 13,  7                                                      ; 340c: 0d 07       ..  :0d0c[1]
     !byte 18,  7                                                      ; 340e: 12 07       ..  :0d0e[1]
     !byte  2, 12                                                      ; 3410: 02 0c       ..  :0d10[1]
@@ -5576,9 +5578,9 @@ map0eggs_start
 ; Seed data (X, Y)
 map0eggs_end
 map0seed_start
-    !byte 2, 2                                                        ; 3420: 02 02       ..  :0d20[1]
+    !byte  2,  2                                                      ; 3420: 02 02       ..  :0d20[1]
     !byte 13,  2                                                      ; 3422: 0d 02       ..  :0d22[1]
-    !byte 5, 7                                                        ; 3424: 05 07       ..  :0d24[1]
+    !byte  5,  7                                                      ; 3424: 05 07       ..  :0d24[1]
     !byte 14,  7                                                      ; 3426: 0e 07       ..  :0d26[1]
     !byte  5, 12                                                      ; 3428: 05 0c       ..  :0d28[1]
     !byte 15, 12                                                      ; 342a: 0f 0c       ..  :0d2a[1]
@@ -5592,7 +5594,7 @@ map0bird_data
     !byte  5, 17                                                      ; 3434: 05 11       ..  :0d34[1]
     !byte  8, 22                                                      ; 3436: 08 16       ..  :0d36[1]
     !byte  4, 12                                                      ; 3438: 04 0c       ..  :0d38[1]
-    !byte 6, 7                                                        ; 343a: 06 07       ..  :0d3a[1]
+    !byte  6,  7                                                      ; 343a: 06 07       ..  :0d3a[1]
     !byte 12,  2                                                      ; 343c: 0c 02       ..  :0d3c[1]
 ; 
 ; ----------------------------------------------------------------------------------
@@ -5606,9 +5608,9 @@ map1data
     !byte                                             3               ; 3442: 03          .   :0d42[1]
 ; Platform data (Y, startX, endX)
 map1platform_start
-    !byte 1, 0, 3                                                     ; 3443: 01 00 03    ... :0d43[1]
+    !byte  1,  0,  3                                                  ; 3443: 01 00 03    ... :0d43[1]
     !byte  1,  5, 19                                                  ; 3446: 01 05 13    ... :0d46[1]
-    !byte 6, 0, 6                                                     ; 3449: 06 00 06    ... :0d49[1]
+    !byte  6,  0,  6                                                  ; 3449: 06 00 06    ... :0d49[1]
     !byte  6,  8, 10                                                  ; 344c: 06 08 0a    ... :0d4c[1]
     !byte  6, 12, 14                                                  ; 344f: 06 0c 0e    ... :0d4f[1]
     !byte  6, 16, 19                                                  ; 3452: 06 10 13    ... :0d52[1]
@@ -5625,7 +5627,7 @@ map1ladder_start
     !byte  2,  2, 18                                                  ; 346a: 02 02 12    ... :0d6a[1]
     !byte  4, 17, 23                                                  ; 346d: 04 11 17    ... :0d6d[1]
     !byte  6,  7, 18                                                  ; 3470: 06 07 12    ... :0d70[1]
-    !byte 9, 2, 8                                                     ; 3473: 09 02 08    ... :0d73[1]
+    !byte  9,  2,  8                                                  ; 3473: 09 02 08    ... :0d73[1]
     !byte  9, 12, 23                                                  ; 3476: 09 0c 17    ... :0d76[1]
     !byte 13, 12, 18                                                  ; 3479: 0d 0c 12    ... :0d79[1]
     !byte 17,  2, 13                                                  ; 347c: 11 02 0d    ... :0d7c[1]
@@ -5633,10 +5635,10 @@ map1ladder_start
 ; Data for 12 eggs (X, Y)
 map1ladder_end
 map1eggs_start
-    !byte 5, 2                                                        ; 3482: 05 02       ..  :0d82[1]
+    !byte  5,  2                                                      ; 3482: 05 02       ..  :0d82[1]
     !byte 12,  2                                                      ; 3484: 0c 02       ..  :0d84[1]
-    !byte 0, 7                                                        ; 3486: 00 07       ..  :0d86[1]
-    !byte 4, 7                                                        ; 3488: 04 07       ..  :0d88[1]
+    !byte  0,  7                                                      ; 3486: 00 07       ..  :0d86[1]
+    !byte  4,  7                                                      ; 3488: 04 07       ..  :0d88[1]
     !byte 13,  7                                                      ; 348a: 0d 07       ..  :0d8a[1]
     !byte  0, 12                                                      ; 348c: 00 0c       ..  :0d8c[1]
     !byte  7, 12                                                      ; 348e: 07 0c       ..  :0d8e[1]
@@ -5648,8 +5650,8 @@ map1eggs_start
 ; Seed data (X, Y)
 map1eggs_end
 map1seed_start
-    !byte 0, 2                                                        ; 349a: 00 02       ..  :0d9a[1]
-    !byte 3, 2                                                        ; 349c: 03 02       ..  :0d9c[1]
+    !byte  0,  2                                                      ; 349a: 00 02       ..  :0d9a[1]
+    !byte  3,  2                                                      ; 349c: 03 02       ..  :0d9c[1]
     !byte 15,  2                                                      ; 349e: 0f 02       ..  :0d9e[1]
     !byte 16,  7                                                      ; 34a0: 10 07       ..  :0da0[1]
     !byte  0, 17                                                      ; 34a2: 00 11       ..  :0da2[1]
@@ -5659,7 +5661,7 @@ map1seed_start
 map1seed_end
 map1bird_data
     !byte  6, 22                                                      ; 34a8: 06 16       ..  :0da8[1]
-    !byte 1, 2                                                        ; 34aa: 01 02       ..  :0daa[1]
+    !byte  1,  2                                                      ; 34aa: 01 02       ..  :0daa[1]
     !byte 18, 12                                                      ; 34ac: 12 0c       ..  :0dac[1]
     !byte 11, 12                                                      ; 34ae: 0b 0c       ..  :0dae[1]
     !byte 13, 22                                                      ; 34b0: 0d 16       ..  :0db0[1]
@@ -5675,9 +5677,9 @@ map2data
     !byte                                             3               ; 34b6: 03          .   :0db6[1]
 ; Platform data (Y, startX, endX)
 map2platform_start
-    !byte 1, 0, 2                                                     ; 34b7: 01 00 02    ... :0db7[1]
-    !byte 2, 3, 4                                                     ; 34ba: 02 03 04    ... :0dba[1]
-    !byte 1, 7, 9                                                     ; 34bd: 01 07 09    ... :0dbd[1]
+    !byte  1,  0,  2                                                  ; 34b7: 01 00 02    ... :0db7[1]
+    !byte  2,  3,  4                                                  ; 34ba: 02 03 04    ... :0dba[1]
+    !byte  1,  7,  9                                                  ; 34bd: 01 07 09    ... :0dbd[1]
     !byte  1, 11, 19                                                  ; 34c0: 01 0b 13    ... :0dc0[1]
     !byte  5, 15, 18                                                  ; 34c3: 05 0f 12    ... :0dc3[1]
     !byte 10,  0,  4                                                  ; 34c6: 0a 00 04    ... :0dc6[1]
@@ -5714,12 +5716,12 @@ map2ladder_end
     !byte 5                                                           ; 3514: 05          .   :0e14[1]
 ; Data for 12 eggs (X, Y)
 map2eggs_start
-    !byte 4, 3                                                        ; 3515: 04 03       ..  :0e15[1]
+    !byte  4,  3                                                      ; 3515: 04 03       ..  :0e15[1]
     !byte 15,  2                                                      ; 3517: 0f 02       ..  :0e17[1]
     !byte 16,  6                                                      ; 3519: 10 06       ..  :0e19[1]
     !byte  4, 11                                                      ; 351b: 04 0b       ..  :0e1b[1]
     !byte  4, 20                                                      ; 351d: 04 14       ..  :0e1d[1]
-    !byte 9, 7                                                        ; 351f: 09 07       ..  :0e1f[1]
+    !byte  9,  7                                                      ; 351f: 09 07       ..  :0e1f[1]
     !byte 15,  9                                                      ; 3521: 0f 09       ..  :0e21[1]
     !byte 15, 13                                                      ; 3523: 0f 0d       ..  :0e23[1]
     !byte  1, 16                                                      ; 3525: 01 10       ..  :0e25[1]
@@ -5729,9 +5731,9 @@ map2eggs_start
 ; Seed data (X, Y)
 map2eggs_end
 map2seed_start
-    !byte 2, 2                                                        ; 352d: 02 02       ..  :0e2d[1]
+    !byte  2,  2                                                      ; 352d: 02 02       ..  :0e2d[1]
     !byte  2, 11                                                      ; 352f: 02 0b       ..  :0e2f[1]
-    !byte 7, 7                                                        ; 3531: 07 07       ..  :0e31[1]
+    !byte  7,  7                                                      ; 3531: 07 07       ..  :0e31[1]
     !byte  7, 20                                                      ; 3533: 07 14       ..  :0e33[1]
     !byte  0, 16                                                      ; 3535: 00 10       ..  :0e35[1]
     !byte 13,  2                                                      ; 3537: 0d 02       ..  :0e37[1]
@@ -5745,8 +5747,8 @@ map2bird_data
     !byte  2, 16                                                      ; 3541: 02 10       ..  :0e41[1]
     !byte  9, 20                                                      ; 3543: 09 14       ..  :0e43[1]
     !byte 17,  6                                                      ; 3545: 11 06       ..  :0e45[1]
-    !byte 0, 2                                                        ; 3547: 00 02       ..  :0e47[1]
-    !byte 8, 7                                                        ; 3549: 08 07       ..  :0e49[1]
+    !byte  0,  2                                                      ; 3547: 00 02       ..  :0e47[1]
+    !byte  8,  7                                                      ; 3549: 08 07       ..  :0e49[1]
 ; 
 ; ----------------------------------------------------------------------------------
 ; Map 3 Data
@@ -5759,10 +5761,10 @@ map3data
     !byte                                             4               ; 354f: 04          .   :0e4f[1]
 ; Platform data (Y, startX, endX)
 map3platform_start
-    !byte 1, 0, 4                                                     ; 3550: 01 00 04    ... :0e50[1]
+    !byte  1,  0,  4                                                  ; 3550: 01 00 04    ... :0e50[1]
     !byte  1,  6, 10                                                  ; 3553: 01 06 0a    ... :0e53[1]
     !byte  1, 13, 19                                                  ; 3556: 01 0d 13    ... :0e56[1]
-    !byte 6, 0, 4                                                     ; 3559: 06 00 04    ... :0e59[1]
+    !byte  6,  0,  4                                                  ; 3559: 06 00 04    ... :0e59[1]
     !byte  6,  7, 10                                                  ; 355c: 06 07 0a    ... :0e5c[1]
     !byte  6, 13, 17                                                  ; 355f: 06 0d 11    ... :0e5f[1]
     !byte  5, 19, 19                                                  ; 3562: 05 13 13    ... :0e62[1]
@@ -5788,7 +5790,7 @@ map3platform_start
 ; Ladder data (X, bottom Y, top Y)
 map3platform_end
 map3ladder_start
-    !byte 3, 2, 8                                                     ; 359e: 03 02 08    ... :0e9e[1]
+    !byte  3,  2,  8                                                  ; 359e: 03 02 08    ... :0e9e[1]
     !byte  8,  2, 23                                                  ; 35a1: 08 02 17    ... :0ea1[1]
     !byte 14, 12, 23                                                  ; 35a4: 0e 0c 17    ... :0ea4[1]
     !byte 15,  2,  8                                                  ; 35a7: 0f 02 08    ... :0ea7[1]
@@ -5798,10 +5800,10 @@ map3ladder_end
     !byte $0b                                                         ; 35ad: 0b          .   :0ead[1]
 ; Data for 12 eggs (X, Y)
 map3eggs_start
-    !byte 0, 2                                                        ; 35ae: 00 02       ..  :0eae[1]
+    !byte  0,  2                                                      ; 35ae: 00 02       ..  :0eae[1]
     !byte  0, 13                                                      ; 35b0: 00 0d       ..  :0eb0[1]
     !byte  0, 18                                                      ; 35b2: 00 12       ..  :0eb2[1]
-    !byte 7, 7                                                        ; 35b4: 07 07       ..  :0eb4[1]
+    !byte  7,  7                                                      ; 35b4: 07 07       ..  :0eb4[1]
     !byte  9, 17                                                      ; 35b6: 09 11       ..  :0eb6[1]
     !byte 13,  2                                                      ; 35b8: 0d 02       ..  :0eb8[1]
     !byte 16,  7                                                      ; 35ba: 10 07       ..  :0eba[1]
@@ -5813,7 +5815,7 @@ map3eggs_start
 ; Seed data (X, Y)
 map3eggs_end
 map3seed_start
-    !byte 0, 7                                                        ; 35c6: 00 07       ..  :0ec6[1]
+    !byte  0,  7                                                      ; 35c6: 00 07       ..  :0ec6[1]
     !byte 10,  2                                                      ; 35c8: 0a 02       ..  :0ec8[1]
     !byte 18,  2                                                      ; 35ca: 12 02       ..  :0eca[1]
     !byte  5, 15                                                      ; 35cc: 05 0f       ..  :0ecc[1]
@@ -5825,7 +5827,7 @@ map3bird_data
     !byte 10, 22                                                      ; 35d2: 0a 16       ..  :0ed2[1]
     !byte 17, 22                                                      ; 35d4: 11 16       ..  :0ed4[1]
     !byte 17,  2                                                      ; 35d6: 11 02       ..  :0ed6[1]
-    !byte 4, 2                                                        ; 35d8: 04 02       ..  :0ed8[1]
+    !byte  4,  2                                                      ; 35d8: 04 02       ..  :0ed8[1]
     !byte 10,  7                                                      ; 35da: 0a 07       ..  :0eda[1]
 ; 
 ; ----------------------------------------------------------------------------------
@@ -5839,11 +5841,11 @@ map4data
     !byte                                             4               ; 35e0: 04          .   :0ee0[1]
 ; Platform data (Y, startX, endX)
 map4platform_start
-    !byte 1, 0, 1                                                     ; 35e1: 01 00 01    ... :0ee1[1]
+    !byte  1,  0,  1                                                  ; 35e1: 01 00 01    ... :0ee1[1]
     !byte  1,  3, 11                                                  ; 35e4: 01 03 0b    ... :0ee4[1]
     !byte  1, 13, 15                                                  ; 35e7: 01 0d 0f    ... :0ee7[1]
     !byte  1, 18, 19                                                  ; 35ea: 01 12 13    ... :0eea[1]
-    !byte 6, 0, 5                                                     ; 35ed: 06 00 05    ... :0eed[1]
+    !byte  6,  0,  5                                                  ; 35ed: 06 00 05    ... :0eed[1]
     !byte  6,  9, 12                                                  ; 35f0: 06 09 0c    ... :0ef0[1]
     !byte  6, 14, 15                                                  ; 35f3: 06 0e 0f    ... :0ef3[1]
     !byte 11,  0,  5                                                  ; 35f6: 0b 00 05    ... :0ef6[1]
@@ -5859,10 +5861,10 @@ map4platform_start
 ; Ladder data (X, bottom Y, top Y)
 map4platform_end
 map4ladder_start
-    !byte 3, 2, 8                                                     ; 3614: 03 02 08    ... :0f14[1]
+    !byte  3,  2,  8                                                  ; 3614: 03 02 08    ... :0f14[1]
     !byte  2, 12, 18                                                  ; 3617: 02 0c 12    ... :0f17[1]
     !byte  4, 12, 23                                                  ; 361a: 04 0c 17    ... :0f1a[1]
-    !byte 7, 2, 7                                                     ; 361d: 07 02 07    ... :0f1d[1]
+    !byte  7,  2,  7                                                  ; 361d: 07 02 07    ... :0f1d[1]
     !byte  7, 10, 17                                                  ; 3620: 07 0a 11    ... :0f20[1]
     !byte 10,  2,  8                                                  ; 3623: 0a 02 08    ... :0f23[1]
     !byte 12,  7, 13                                                  ; 3626: 0c 07 0d    ... :0f26[1]
@@ -5873,11 +5875,11 @@ map4ladder_end
     !byte $10                                                         ; 362f: 10          .   :0f2f[1]
 ; Data for 12 eggs (X, Y)
 map4eggs_start
-    !byte 0, 2                                                        ; 3630: 00 02       ..  :0f30[1]
-    !byte 0, 7                                                        ; 3632: 00 07       ..  :0f32[1]
+    !byte  0,  2                                                      ; 3630: 00 02       ..  :0f30[1]
+    !byte  0,  7                                                      ; 3632: 00 07       ..  :0f32[1]
     !byte  0, 12                                                      ; 3634: 00 0c       ..  :0f34[1]
     !byte  0, 17                                                      ; 3636: 00 11       ..  :0f36[1]
-    !byte 5, 7                                                        ; 3638: 05 07       ..  :0f38[1]
+    !byte  5,  7                                                      ; 3638: 05 07       ..  :0f38[1]
     !byte  5, 22                                                      ; 363a: 05 16       ..  :0f3a[1]
     !byte  9, 11                                                      ; 363c: 09 0b       ..  :0f3c[1]
     !byte 13,  6                                                      ; 363e: 0d 06       ..  :0f3e[1]
@@ -5888,9 +5890,9 @@ map4eggs_start
 ; Seed data (X, Y)
 map4eggs_end
 map4seed_start
-    !byte 4, 2                                                        ; 3648: 04 02       ..  :0f48[1]
-    !byte 5, 2                                                        ; 364a: 05 02       ..  :0f4a[1]
-    !byte 6, 2                                                        ; 364c: 06 02       ..  :0f4c[1]
+    !byte  4,  2                                                      ; 3648: 04 02       ..  :0f48[1]
+    !byte  5,  2                                                      ; 364a: 05 02       ..  :0f4a[1]
+    !byte  6,  2                                                      ; 364c: 06 02       ..  :0f4c[1]
     !byte 13,  2                                                      ; 364e: 0d 02       ..  :0f4e[1]
     !byte 15,  2                                                      ; 3650: 0f 02       ..  :0f50[1]
     !byte 18,  2                                                      ; 3652: 12 02       ..  :0f52[1]
@@ -5904,7 +5906,7 @@ map4seed_start
 ; Bird data (X, Y)
 map4seed_end
 map4bird_data
-    !byte 1, 7                                                        ; 3662: 01 07       ..  :0f62[1]
+    !byte  1,  7                                                      ; 3662: 01 07       ..  :0f62[1]
     !byte  3, 12                                                      ; 3664: 03 0c       ..  :0f64[1]
     !byte  1, 17                                                      ; 3666: 01 11       ..  :0f66[1]
     !byte 14, 12                                                      ; 3668: 0e 0c       ..  :0f68[1]
@@ -5921,11 +5923,11 @@ map5data
     !byte                                             4               ; 3670: 04          .   :0f70[1]
 ; Platform data (Y, startX, endX)
 map5platform_start
-    !byte 1, 0, 2                                                     ; 3671: 01 00 02    ... :0f71[1]
-    !byte 1, 6, 8                                                     ; 3674: 01 06 08    ... :0f74[1]
+    !byte  1,  0,  2                                                  ; 3671: 01 00 02    ... :0f71[1]
+    !byte  1,  6,  8                                                  ; 3674: 01 06 08    ... :0f74[1]
     !byte  1, 11, 14                                                  ; 3677: 01 0b 0e    ... :0f77[1]
-    !byte 6, 0, 1                                                     ; 367a: 06 00 01    ... :0f7a[1]
-    !byte 6, 3, 5                                                     ; 367d: 06 03 05    ... :0f7d[1]
+    !byte  6,  0,  1                                                  ; 367a: 06 00 01    ... :0f7a[1]
+    !byte  6,  3,  5                                                  ; 367d: 06 03 05    ... :0f7d[1]
     !byte  6, 12, 14                                                  ; 3680: 06 0c 0e    ... :0f80[1]
     !byte 11,  2,  7                                                  ; 3683: 0b 02 07    ... :0f83[1]
     !byte 11, 12, 17                                                  ; 3686: 0b 0c 11    ... :0f86[1]
@@ -5940,7 +5942,7 @@ map5platform_start
 ; Ladder data (X, bottom Y, top Y)
 map5platform_end
 map5ladder_start
-    !byte 0, 2, 8                                                     ; 36a1: 00 02 08    ... :0fa1[1]
+    !byte  0,  2,  8                                                  ; 36a1: 00 02 08    ... :0fa1[1]
     !byte  4,  4, 18                                                  ; 36a4: 04 04 12    ... :0fa4[1]
     !byte 14,  7, 13                                                  ; 36a7: 0e 07 0d    ... :0fa7[1]
     !byte 14, 19, 23                                                  ; 36aa: 0e 13 17    ... :0faa[1]
@@ -5951,9 +5953,9 @@ map5ladder_end
     !byte 9                                                           ; 36b3: 09          .   :0fb3[1]
 ; Data for 12 eggs (X, Y)
 map5eggs_start
-    !byte 2, 2                                                        ; 36b4: 02 02       ..  :0fb4[1]
+    !byte  2,  2                                                      ; 36b4: 02 02       ..  :0fb4[1]
     !byte 16,  2                                                      ; 36b6: 10 02       ..  :0fb6[1]
-    !byte 5, 7                                                        ; 36b8: 05 07       ..  :0fb8[1]
+    !byte  5,  7                                                      ; 36b8: 05 07       ..  :0fb8[1]
     !byte 12,  7                                                      ; 36ba: 0c 07       ..  :0fba[1]
     !byte 12, 12                                                      ; 36bc: 0c 0c       ..  :0fbc[1]
     !byte 16, 12                                                      ; 36be: 10 0c       ..  :0fbe[1]
@@ -5979,7 +5981,7 @@ map5seed_start
 map5seed_end
 map5bird_data
     !byte  1, 17                                                      ; 36de: 01 11       ..  :0fde[1]
-    !byte 1, 2                                                        ; 36e0: 01 02       ..  :0fe0[1]
+    !byte  1,  2                                                      ; 36e0: 01 02       ..  :0fe0[1]
     !byte 18, 17                                                      ; 36e2: 12 11       ..  :0fe2[1]
     !byte 13,  7                                                      ; 36e4: 0d 07       ..  :0fe4[1]
     !byte 18, 11                                                      ; 36e6: 12 0b       ..  :0fe6[1]
@@ -5999,16 +6001,16 @@ map6platform_start
     !byte 16,  0,  4                                                  ; 36f0: 10 00 04    ... :0ff0[1]
     !byte 16,  6,  7                                                  ; 36f3: 10 06 07    ... :0ff3[1]
     !byte 11,  0,  2                                                  ; 36f6: 0b 00 02    ... :0ff6[1]
-    !byte 6, 1, 3                                                     ; 36f9: 06 01 03    ... :0ff9[1]
-    !byte 4, 0, 1                                                     ; 36fc: 04 00 01    ... :0ffc[1]
-    !byte 1, 3, 4                                                     ; 36ff: 01 03 04    ... :0fff[1]
-    !byte 2, 5, 6                                                     ; 3702: 02 05 06    ... :1002[1]
-    !byte 1, 7, 8                                                     ; 3705: 01 07 08    ... :1005[1]
-    !byte 2, 9, 9                                                     ; 3708: 02 09 09    ... :1008[1]
-    !byte 3, 9, 9                                                     ; 370b: 03 09 09    ... :100b[1]
+    !byte  6,  1,  3                                                  ; 36f9: 06 01 03    ... :0ff9[1]
+    !byte  4,  0,  1                                                  ; 36fc: 04 00 01    ... :0ffc[1]
+    !byte  1,  3,  4                                                  ; 36ff: 01 03 04    ... :0fff[1]
+    !byte  2,  5,  6                                                  ; 3702: 02 05 06    ... :1002[1]
+    !byte  1,  7,  8                                                  ; 3705: 01 07 08    ... :1005[1]
+    !byte  2,  9,  9                                                  ; 3708: 02 09 09    ... :1008[1]
+    !byte  3,  9,  9                                                  ; 370b: 03 09 09    ... :100b[1]
     !byte  3, 12, 12                                                  ; 370e: 03 0c 0c    ... :100e[1]
-    !byte 8, 5, 8                                                     ; 3711: 08 05 08    ... :1011[1]
-    !byte 9, 5, 5                                                     ; 3714: 09 05 05    ... :1014[1]
+    !byte  8,  5,  8                                                  ; 3711: 08 05 08    ... :1011[1]
+    !byte  9,  5,  5                                                  ; 3714: 09 05 05    ... :1014[1]
     !byte 10,  5,  5                                                  ; 3717: 0a 05 05    ... :1017[1]
     !byte 11,  5,  5                                                  ; 371a: 0b 05 05    ... :101a[1]
     !byte 12,  5,  5                                                  ; 371d: 0c 05 05    ... :101d[1]
@@ -6022,7 +6024,7 @@ map6platform_start
 map6platform_end
 map6ladder_start
     !byte  1,  2, 18                                                  ; 3732: 01 02 12    ... :1032[1]
-    !byte 3, 2, 8                                                     ; 3735: 03 02 08    ... :1035[1]
+    !byte  3,  2,  8                                                  ; 3735: 03 02 08    ... :1035[1]
     !byte  5, 20, 24                                                  ; 3738: 05 14 18    ... :1038[1]
     !byte  7, 20, 24                                                  ; 373b: 07 14 18    ... :103b[1]
     !byte  9, 20, 24                                                  ; 373e: 09 14 18    ... :103e[1]
@@ -6038,8 +6040,8 @@ map6eggs_start
     !byte 10, 23                                                      ; 374c: 0a 17       ..  :104c[1]
     !byte 15, 22                                                      ; 374e: 0f 16       ..  :104e[1]
     !byte  7, 17                                                      ; 3750: 07 11       ..  :1050[1]
-    !byte 2, 3                                                        ; 3752: 02 03       ..  :1052[1]
-    !byte 7, 9                                                        ; 3754: 07 09       ..  :1054[1]
+    !byte  2,  3                                                      ; 3752: 02 03       ..  :1052[1]
+    !byte  7,  9                                                      ; 3754: 07 09       ..  :1054[1]
     !byte 11, 12                                                      ; 3756: 0b 0c       ..  :1056[1]
     !byte 16, 15                                                      ; 3758: 10 0f       ..  :1058[1]
     !byte 16, 10                                                      ; 375a: 10 0a       ..  :105a[1]
@@ -6048,9 +6050,9 @@ map6eggs_start
 ; Seed data (X, Y)
 map6eggs_end
 map6seed_start
-    !byte 2, 7                                                        ; 3760: 02 07       ..  :1060[1]
+    !byte  2,  7                                                      ; 3760: 02 07       ..  :1060[1]
     !byte  3, 17                                                      ; 3762: 03 11       ..  :1062[1]
-    !byte 8, 9                                                        ; 3764: 08 09       ..  :1064[1]
+    !byte  8,  9                                                      ; 3764: 08 09       ..  :1064[1]
     !byte 12, 22                                                      ; 3766: 0c 16       ..  :1066[1]
 ; Bird data (X, Y)
 map6seed_end
@@ -6058,7 +6060,7 @@ map6bird_data
     !byte 13, 22                                                      ; 3768: 0d 16       ..  :1068[1]
     !byte  1, 17                                                      ; 376a: 01 11       ..  :106a[1]
     !byte 14, 10                                                      ; 376c: 0e 0a       ..  :106c[1]
-    !byte 0, 5                                                        ; 376e: 00 05       ..  :106e[1]
+    !byte  0,  5                                                      ; 376e: 00 05       ..  :106e[1]
     !byte  2, 12                                                      ; 3770: 02 0c       ..  :1070[1]
 ; 
 ; ----------------------------------------------------------------------------------
@@ -6073,7 +6075,7 @@ map7data
 ; Platform data (Y, startX, endX)
 map7platform_start
     !byte  1,  0, 19                                                  ; 3777: 01 00 13    ... :1077[1]
-    !byte 6, 2, 4                                                     ; 377a: 06 02 04    ... :107a[1]
+    !byte  6,  2,  4                                                  ; 377a: 06 02 04    ... :107a[1]
     !byte  6,  7, 13                                                  ; 377d: 06 07 0d    ... :107d[1]
     !byte  6, 16, 18                                                  ; 3780: 06 10 12    ... :1080[1]
     !byte 11,  2,  5                                                  ; 3783: 0b 02 05    ... :1083[1]
@@ -6090,7 +6092,7 @@ map7platform_start
 ; Ladder data (X, bottom Y, top Y)
 map7platform_end
 map7ladder_start
-    !byte 3, 2, 8                                                     ; 37a4: 03 02 08    ... :10a4[1]
+    !byte  3,  2,  8                                                  ; 37a4: 03 02 08    ... :10a4[1]
     !byte 17,  2,  8                                                  ; 37a7: 11 02 08    ... :10a7[1]
     !byte 10,  7, 13                                                  ; 37aa: 0a 07 0d    ... :10aa[1]
     !byte  4, 12, 18                                                  ; 37ad: 04 0c 12    ... :10ad[1]
@@ -6099,7 +6101,7 @@ map7ladder_start
 ; Data for 12 eggs (X, Y)
 map7ladder_end
 map7eggs_start
-    !byte 5, 6                                                        ; 37b6: 05 06       ..  :10b6[1]
+    !byte  5,  6                                                      ; 37b6: 05 06       ..  :10b6[1]
     !byte 15,  6                                                      ; 37b8: 0f 06       ..  :10b8[1]
     !byte  6, 11                                                      ; 37ba: 06 0b       ..  :10ba[1]
     !byte 14, 11                                                      ; 37bc: 0e 0b       ..  :10bc[1]
@@ -6114,22 +6116,22 @@ map7eggs_start
 ; Seed data (X, Y)
 map7eggs_end
 map7seed_start
-    !byte 1, 2                                                        ; 37ce: 01 02       ..  :10ce[1]
-    !byte 2, 2                                                        ; 37d0: 02 02       ..  :10d0[1]
-    !byte 4, 2                                                        ; 37d2: 04 02       ..  :10d2[1]
-    !byte 5, 2                                                        ; 37d4: 05 02       ..  :10d4[1]
-    !byte 6, 2                                                        ; 37d6: 06 02       ..  :10d6[1]
-    !byte 8, 2                                                        ; 37d8: 08 02       ..  :10d8[1]
-    !byte 9, 2                                                        ; 37da: 09 02       ..  :10da[1]
-    !byte 10,  2                                                      ; 37dc: 0a 02       ..  :10dc[1]
-    !byte 11,  2                                                      ; 37de: 0b 02       ..  :10de[1]
-    !byte 12,  2                                                      ; 37e0: 0c 02       ..  :10e0[1]
-    !byte 13,  2                                                      ; 37e2: 0d 02       ..  :10e2[1]
-    !byte 14,  2                                                      ; 37e4: 0e 02       ..  :10e4[1]
-    !byte 15,  2                                                      ; 37e6: 0f 02       ..  :10e6[1]
-    !byte 16,  2                                                      ; 37e8: 10 02       ..  :10e8[1]
-    !byte 18,  2                                                      ; 37ea: 12 02       ..  :10ea[1]
-    !byte 19,  2                                                      ; 37ec: 13 02       ..  :10ec[1]
+    !byte  1, 2                                                       ; 37ce: 01 02       ..  :10ce[1]
+    !byte  2, 2                                                       ; 37d0: 02 02       ..  :10d0[1]
+    !byte  4, 2                                                       ; 37d2: 04 02       ..  :10d2[1]
+    !byte  5, 2                                                       ; 37d4: 05 02       ..  :10d4[1]
+    !byte  6, 2                                                       ; 37d6: 06 02       ..  :10d6[1]
+    !byte  8, 2                                                       ; 37d8: 08 02       ..  :10d8[1]
+    !byte  9, 2                                                       ; 37da: 09 02       ..  :10da[1]
+    !byte 10, 2                                                       ; 37dc: 0a 02       ..  :10dc[1]
+    !byte 11, 2                                                       ; 37de: 0b 02       ..  :10de[1]
+    !byte 12, 2                                                       ; 37e0: 0c 02       ..  :10e0[1]
+    !byte 13, 2                                                       ; 37e2: 0d 02       ..  :10e2[1]
+    !byte 14, 2                                                       ; 37e4: 0e 02       ..  :10e4[1]
+    !byte 15, 2                                                       ; 37e6: 0f 02       ..  :10e6[1]
+    !byte 16, 2                                                       ; 37e8: 10 02       ..  :10e8[1]
+    !byte 18, 2                                                       ; 37ea: 12 02       ..  :10ea[1]
+    !byte 19, 2                                                       ; 37ec: 13 02       ..  :10ec[1]
 ; Bird data (X, Y)
 map7seed_end
 map7bird_data
@@ -6491,89 +6493,11 @@ pydis_end
 !if (>string_vdu19) != $2b {
     !error "Assertion failed: >string_vdu19 == $2b"
 }
-!if (BigBirdColour) != $20 {
-    !error "Assertion failed: BigBirdColour == $20"
-}
-!if (BirdColour) != $80 {
-    !error "Assertion failed: BirdColour == $80"
-}
-!if (CageColour) != $20 {
-    !error "Assertion failed: CageColour == $20"
-}
-!if (DigitsColour) != $08 {
-    !error "Assertion failed: DigitsColour == $08"
-}
-!if (EggColour) != $02 {
-    !error "Assertion failed: EggColour == $02"
-}
-!if (LadderColour) != $08 {
-    !error "Assertion failed: LadderColour == $08"
-}
-!if (LiftColour) != $02 {
-    !error "Assertion failed: LiftColour == $02"
-}
-!if (LivesColour) != $20 {
-    !error "Assertion failed: LivesColour == $20"
-}
-!if (LogoColour) != $02 {
-    !error "Assertion failed: LogoColour == $02"
-}
-!if (MapId_Egg) != $04 {
-    !error "Assertion failed: MapId_Egg == $04"
-}
-!if (MapId_Ladder) != $02 {
-    !error "Assertion failed: MapId_Ladder == $02"
-}
-!if (MapId_Platform) != $01 {
-    !error "Assertion failed: MapId_Platform == $01"
-}
-!if (MapId_Seed) != $08 {
-    !error "Assertion failed: MapId_Seed == $08"
-}
-!if (PlatformColour) != $0a {
-    !error "Assertion failed: PlatformColour == $0a"
-}
-!if (PlayerColour) != $20 {
-    !error "Assertion failed: PlayerColour == $20"
-}
-!if (SeedColour) != $08 {
-    !error "Assertion failed: SeedColour == $08"
-}
-!if (SpriteId_BigBirdRight1) != $0f {
-    !error "Assertion failed: SpriteId_BigBirdRight1 == $0f"
-}
-!if (SpriteId_BigC) != $30 {
-    !error "Assertion failed: SpriteId_BigC == $30"
-}
-!if (SpriteId_BigE) != $35 {
-    !error "Assertion failed: SpriteId_BigE == $35"
-}
-!if (SpriteId_BigG) != $36 {
-    !error "Assertion failed: SpriteId_BigG == $36"
-}
-!if (SpriteId_BigH) != $31 {
-    !error "Assertion failed: SpriteId_BigH == $31"
-}
-!if (SpriteId_BigI) != $34 {
-    !error "Assertion failed: SpriteId_BigI == $34"
-}
-!if (SpriteId_BigK) != $33 {
-    !error "Assertion failed: SpriteId_BigK == $33"
-}
-!if (SpriteId_BigU) != $32 {
-    !error "Assertion failed: SpriteId_BigU == $32"
-}
-!if (SpriteId_BirdEatLeft1) != $1d {
-    !error "Assertion failed: SpriteId_BirdEatLeft1 == $1d"
-}
 !if (SpriteId_BirdEatRight1 - SpriteId_BirdRight1) != $06 {
     !error "Assertion failed: SpriteId_BirdEatRight1 - SpriteId_BirdRight1 == $06"
 }
 !if (SpriteId_BirdLeft1 - SpriteId_BirdRight1) != $02 {
     !error "Assertion failed: SpriteId_BirdLeft1 - SpriteId_BirdRight1 == $02"
-}
-!if (SpriteId_BirdRight1) != $15 {
-    !error "Assertion failed: SpriteId_BirdRight1 == $15"
 }
 !if (SpriteId_BirdRight1 - SpriteId_BirdRight1) != $00 {
     !error "Assertion failed: SpriteId_BirdRight1 - SpriteId_BirdRight1 == $00"
@@ -6581,92 +6505,11 @@ pydis_end
 !if (SpriteId_BirdUpDown1 - SpriteId_BirdRight1) != $04 {
     !error "Assertion failed: SpriteId_BirdUpDown1 - SpriteId_BirdRight1 == $04"
 }
-!if (SpriteId_Blank) != $00 {
-    !error "Assertion failed: SpriteId_Blank == $00"
-}
-!if (SpriteId_Bonus) != $2d {
-    !error "Assertion failed: SpriteId_Bonus == $2d"
-}
-!if (SpriteId_CageWithHole) != $13 {
-    !error "Assertion failed: SpriteId_CageWithHole == $13"
-}
-!if (SpriteId_Digit0) != $1f {
-    !error "Assertion failed: SpriteId_Digit0 == $1f"
-}
-!if (SpriteId_Egg) != $03 {
-    !error "Assertion failed: SpriteId_Egg == $03"
-}
-!if (SpriteId_HighlightBox) != $2a {
-    !error "Assertion failed: SpriteId_HighlightBox == $2a"
-}
-!if (SpriteId_Ladder) != $02 {
-    !error "Assertion failed: SpriteId_Ladder == $02"
-}
-!if (SpriteId_Level) != $2c {
-    !error "Assertion failed: SpriteId_Level == $2c"
-}
-!if (SpriteId_Life) != $2f {
-    !error "Assertion failed: SpriteId_Life == $2f"
-}
-!if (SpriteId_Lift) != $05 {
-    !error "Assertion failed: SpriteId_Lift == $05"
-}
-!if (SpriteId_ManLeft1) != $09 {
-    !error "Assertion failed: SpriteId_ManLeft1 == $09"
-}
-!if (SpriteId_ManRight1) != $06 {
-    !error "Assertion failed: SpriteId_ManRight1 == $06"
-}
-!if (SpriteId_ManUpDown1) != $0c {
-    !error "Assertion failed: SpriteId_ManUpDown1 == $0c"
-}
-!if (SpriteId_Platform) != $01 {
-    !error "Assertion failed: SpriteId_Platform == $01"
-}
-!if (SpriteId_Player) != $2b {
-    !error "Assertion failed: SpriteId_Player == $2b"
-}
-!if (SpriteId_Score) != $29 {
-    !error "Assertion failed: SpriteId_Score == $29"
-}
-!if (SpriteId_Seed) != $04 {
-    !error "Assertion failed: SpriteId_Seed == $04"
-}
-!if (SpriteId_Time) != $2e {
-    !error "Assertion failed: SpriteId_Time == $2e"
-}
-!if (StatusColour) != $08 {
-    !error "Assertion failed: StatusColour == $08"
-}
 !if (hiscorenamebuffer) != $29a2 {
     !error "Assertion failed: hiscorenamebuffer == $29a2"
 }
 !if (hiscorenamebuffer_end - hiscorenamebuffer - 1) != $08 {
     !error "Assertion failed: hiscorenamebuffer_end - hiscorenamebuffer - 1 == $08"
-}
-!if (inkey_key_1) != $cf {
-    !error "Assertion failed: inkey_key_1 == $cf"
-}
-!if (inkey_key_2) != $ce {
-    !error "Assertion failed: inkey_key_2 == $ce"
-}
-!if (inkey_key_3) != $ee {
-    !error "Assertion failed: inkey_key_3 == $ee"
-}
-!if (inkey_key_4) != $ed {
-    !error "Assertion failed: inkey_key_4 == $ed"
-}
-!if (inkey_key_escape) != $8f {
-    !error "Assertion failed: inkey_key_escape == $8f"
-}
-!if (inkey_key_h) != $ab {
-    !error "Assertion failed: inkey_key_h == $ab"
-}
-!if (inkey_key_k) != $b9 {
-    !error "Assertion failed: inkey_key_k == $b9"
-}
-!if (inkey_key_s) != $ae {
-    !error "Assertion failed: inkey_key_s == $ae"
 }
 !if (map0data) != $0cd0 {
     !error "Assertion failed: map0data == $0cd0"
@@ -6691,51 +6534,6 @@ pydis_end
 }
 !if (map7data) != $1072 {
     !error "Assertion failed: map7data == $1072"
-}
-!if (osbyte_clear_escape) != $7c {
-    !error "Assertion failed: osbyte_clear_escape == $7c"
-}
-!if (osbyte_flush_buffer_class) != $0f {
-    !error "Assertion failed: osbyte_flush_buffer_class == $0f"
-}
-!if (osbyte_inkey) != $81 {
-    !error "Assertion failed: osbyte_inkey == $81"
-}
-!if (osbyte_read_key_table_low) != $ac {
-    !error "Assertion failed: osbyte_read_key_table_low == $ac"
-}
-!if (osbyte_read_write_bell_duration) != $d6 {
-    !error "Assertion failed: osbyte_read_write_bell_duration == $d6"
-}
-!if (osbyte_read_write_escape_status) != $e5 {
-    !error "Assertion failed: osbyte_read_write_escape_status == $e5"
-}
-!if (osbyte_scan_keyboard) != $79 {
-    !error "Assertion failed: osbyte_scan_keyboard == $79"
-}
-!if (osbyte_scan_keyboard_from_16) != $7a {
-    !error "Assertion failed: osbyte_scan_keyboard_from_16 == $7a"
-}
-!if (osbyte_set_cursor_editing) != $04 {
-    !error "Assertion failed: osbyte_set_cursor_editing == $04"
-}
-!if (osbyte_tape) != $8c {
-    !error "Assertion failed: osbyte_tape == $8c"
-}
-!if (osword_envelope) != $08 {
-    !error "Assertion failed: osword_envelope == $08"
-}
-!if (osword_read_interval_timer) != $03 {
-    !error "Assertion failed: osword_read_interval_timer == $03"
-}
-!if (osword_read_line) != $00 {
-    !error "Assertion failed: osword_read_line == $00"
-}
-!if (osword_sound) != $07 {
-    !error "Assertion failed: osword_sound == $07"
-}
-!if (osword_write_interval_timer) != $04 {
-    !error "Assertion failed: osword_write_interval_timer == $04"
 }
 !if (sprite_bigbirdleft1) != $131c {
     !error "Assertion failed: sprite_bigbirdleft1 == $131c"

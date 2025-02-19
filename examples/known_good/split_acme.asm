@@ -38,9 +38,10 @@ pydis_end
 ; Label references by decreasing frequency:
 ;     l0070:              3
 ;     osasci:             2
-;     print_and_inc_zp:   1
-;     sub_c0908:          1
 ;     loop_c2006:         1
+;     print_and_inc_zp:   1
+;     pydis_start:        1
+;     sub_c0908:          1
 
 ; Automatically generated labels:
 ;     l0070
