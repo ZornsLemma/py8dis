@@ -152,7 +152,7 @@ def move(dest_runtime_addr, src_binary_addr, length):
     assert all(memory_binary[i] is not None for i in range(src_binary_addr, src_binary_addr+length))
     return movemanager.add_move(dest_runtime_addr, src_binary_addr, length)
 
-def constant(value, name, comment=None, align=Align.INLINE, format=Format.DEFAULT):
+def constant(value, name, comment=None, *, align=Align.INLINE, format=Format.DEFAULT):
     """Give a name to a constant value for use in the assembly.
 
     These names can then be used in subsequent calls to expr().
@@ -165,6 +165,8 @@ def label(runtime_addr, name, move_id=None):
     """Define a label name for a runtime address."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    assert isinstance(name, str)
+    assert (move_id == None) or isinstance(move_id, int)
     if move_id is None:
         # Look up the associated binary address, just to get the best move_id
         _, move_id = movemanager.r2b(runtime_addr)
@@ -274,7 +276,7 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
                 auto_comment(runtime_addr, config.get_subroutine_footer(), word_wrap=False)
     trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
-def convert_inline_to_align_internal(inline, align):
+def _convert_inline_to_align_internal(inline, align):
     # If no 'align' value is specified, convert the old True/False 'inline' values into the modern 'Align' type
     if align == None:
         if inline:
@@ -285,7 +287,7 @@ def convert_inline_to_align_internal(inline, align):
     assert isinstance(align, Align)
     return align
 
-def comment(runtime_addr, text, inline=False, align=None, indent=0, word_wrap=True):
+def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True, *, align=None):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
@@ -293,9 +295,13 @@ def comment(runtime_addr, text, inline=False, align=None, indent=0, word_wrap=Tr
     to the end of the line), or standalone (a separate line of output).
     The comment is word wrapped by default.
     """
+    assert isinstance(inline, bool)
+    assert isinstance(indent, int)
+    assert isinstance(word_wrap, bool)
+    assert (align == None) or isinstance(align, Align)
 
     # Convert the old True/False values into the modern 'Align' type as needed
-    align = convert_inline_to_align_internal(inline, align)
+    align = _convert_inline_to_align_internal(inline, align)
 
     disassembly.comment(runtime_addr, text, word_wrap=word_wrap, indent=indent, align=align, auto_generated=False)
 
@@ -303,7 +309,7 @@ def formatted_comment(runtime_addr, text, inline=False, align=None, indent=0):
     """Add a comment without word wrapping."""
 
     # Convert the old True/False values into the modern 'Align' type as needed
-    align = convert_inline_to_align_internal(inline, align)
+    align = _convert_inline_to_align_internal(inline, align)
 
     disassembly.comment(runtime_addr, text, word_wrap=False, indent=indent, align=align)
 
@@ -317,7 +323,7 @@ def auto_comment(runtime_addr, text, inline=False, align=None, indent=0, show_bl
         return
 
     # Convert the old True/False values into the modern 'Align' type as needed
-    align = convert_inline_to_align_internal(inline, align)
+    align = _convert_inline_to_align_internal(inline, align)
 
     if not (runtime_addr in trace.no_auto_comment_set):
         # Make sure we are within the binary
