@@ -4022,8 +4022,7 @@ string_enteryourname_start
     .byt 160, 0, 160, 0                                               // 297a: a0 00 a0... ...
     .asc "ENTER YOUR NAME"                                            // 297e: 45 4e 54... ENT
     .byt 25, 4, 128, 1, 100, 0, 18, 0, 2                              // 298d: 19 04 80... ...
-    .asc "Play"                                                       // 2996: 50 6c 61... Pla
-    .asc "er "                                                        // 299a: 65 72 20    er
+    .asc "Player "                                                    // 2996: 50 6c 61... Pla
 string_enteryourname_end
 osword0block
     .word hiscorenamebuffer                                           // 299d: a2 29       .)             // Buffer address for input (2 bytes)
@@ -5251,8 +5250,8 @@ string_down_end
 string_left
     .byt string_left_end - string_left_start                          // 31f8: 0e          .   :0af8[1]
 string_left_start
-    .byt 25, 4, 64, 0, 28, 2, 76                                      // 31f9: 19 04 40... ..@ :0af9[1]
-    .asc "eft .. "                                                    // 3200: 65 66 74... eft :0b00[1]
+    .byt 25, 4, 64, 0, 28, 2                                          // 31f9: 19 04 40... ..@ :0af9[1]
+    .asc "Left .. "                                                   // 31ff: 4c 65 66... Lef :0aff[1]
 string_left_end
 string_right
     .byt string_right_end - string_right_start                        // 3207: 0f          .   :0b07[1]

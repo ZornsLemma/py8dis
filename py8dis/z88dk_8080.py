@@ -110,7 +110,7 @@ class Z88DK(assembler.Assembler):
         result = []
 
         if config.get_include_assertions():
-            spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
+            spa = sorted((str(expr), self.hex(value) if type(value) == int else '"' + value + '"') for expr, value in self.pending_assertions.items())
             for expr, value in spa:
                 result.append("; ASSERT ((%s) == %s)" % (expr, value))
 

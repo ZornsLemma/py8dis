@@ -157,6 +157,7 @@ def constant(value, name, comment=None, align=Align.INLINE, format=Format.DEFAUL
 
     These names can then be used in subsequent calls to expr().
     """
+    assert((comment == None) or (isinstance(comment, str)))
 
     disassembly.add_constant(value, name, comment, align, format)
 

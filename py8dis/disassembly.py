@@ -534,6 +534,10 @@ def calculate_move_ranges():
 def constant_value_to_string(value, format):
     """Convert the given value of a constant, return the string value used to define the constant as specified by the format parameter"""
 
+    # If given a string with no format specified, treat it as a string
+    if isinstance(value, str) and (format == Format.DEFAULT):
+        format = Format.STRING
+
     if (format == Format.DECIMAL) or ((format == Format.DEFAULT) and config.get_constants_are_decimal()):
         return str(value)
     elif (format == Format.HEX) or ((format == Format.DEFAULT) and not config.get_constants_are_decimal()):
@@ -542,7 +546,10 @@ def constant_value_to_string(value, format):
     elif format == Format.BINARY:
         formatter = config.get_assembler()
         return mainformatter.binary_formatter(value, 8 if ((value >= 0) and (value < 256)) else 16)
-    assert(format == Format.CHAR)
+    elif format == Format.STRING:
+        formatter = config.get_assembler()
+        return str('"' + value + '"')
+    assert(format == Format.CHAR, "unknown format {0}".format(format))
     return str("'" + value + "'")
 
 def emit_constants():

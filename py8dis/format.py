@@ -6,3 +6,4 @@ class Format(Enum):
     DECIMAL = auto()
     BINARY = auto()
     CHAR = auto()
+    STRING = auto()

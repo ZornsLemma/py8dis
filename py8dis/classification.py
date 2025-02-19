@@ -123,8 +123,13 @@ class String(object):
         result = []
         prefix = utils.make_indent(1) + assembler().string_prefix()
         s = prefix
-        state = 0
+        state = 0       # 0=not started first string yet, 1=within string, 2=finished string
         s_i = 0
+
+        if binary_loc.binary_addr in expressions:
+            s = get_expression(binary_loc.binary_addr, memory_binary[binary_loc.binary_addr])
+            result.append(mainformatter.add_inline_comment_including_hexdump(binary_loc, self._length, "", annotations, prefix + s))
+            return result
 
         for i in range(self._length):
             c = memory_binary[binary_loc.binary_addr + i]
@@ -150,15 +155,16 @@ class String(object):
                 if state == 1:
                     s += '"'
                 temp_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + s_i, binary_loc.move_id)
-                result.append(mainformatter.add_inline_comment(temp_binary_loc, i - s_i, "", annotations, s))
+                result.append(mainformatter.add_inline_comment_including_hexdump(temp_binary_loc, i - s_i, "", annotations, s))
                 s = prefix
                 s_i = i + 1
                 state = 0
+
         if s != prefix:
             if state == 1:
                 s += '"'
             temp_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + s_i, binary_loc.move_id)
-            result.append(mainformatter.add_inline_comment(temp_binary_loc, self._length - s_i, "", annotations, s))
+            result.append(mainformatter.add_inline_comment_including_hexdump(temp_binary_loc, self._length - s_i, "", annotations, s))
         return result
 
 
@@ -185,11 +191,15 @@ def check_expr(expr, value):
     # probably be retained even if expression evaluation is supported directly
     # in py8dis.
 
-    # Don't clutter the output with 'constant = value' as assertions
+    # Don't clutter the output with pedantic 'constant = value' assertions
     for constant in disassembly.constants:
         if expr == constant.name:
-            if (constant.value != value) and (constant.format != Format.CHAR):
-                utils.warn("Constant '{0}' found to be {1} but expected to be {2}".format(expr, constant.value, value))
+            if constant.format == Format.CHAR:
+                return
+            elif constant.format == Format.STRING:
+                return
+            elif (constant.value != value):
+                utils.die("Constant '{0}' found to be {1} but expected to be {2}".format(expr, constant.value, value))
             return
 
     config.get_assembler().assert_expr(expr, value)
@@ -198,6 +208,14 @@ def get_expression(binary_addr, expected_value):
     """Get the previously supplied expression for the given address."""
 
     expression = expressions[binary_addr]
+    classification = disassembly.get_classification(binary_addr)
+    if isinstance(classification, String):
+        length = classification.length()
+        string_at_binary = ""
+        for i in range(length):
+            string_at_binary += chr(memory_binary[binary_addr])
+            binary_addr += 1
+        expected_value = string_at_binary
     check_expr(expression, expected_value)
     return expression
 
@@ -378,10 +396,12 @@ def autostring(min_length=3):
         i = 0
         while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1) and utils.isprint(memory_binary[addr + i]):
             i += 1
-            if movemanager.b2r(addr + i) in labelmanager.labels:
-                break
+            runtime_addr = movemanager.b2r(addr + i)
+            # if this runtime address has a label that is not an expression, then break out (marking the end of the classification)
+            if runtime_addr in labelmanager.labels:
+                if not labelmanager.labels[runtime_addr].is_only_an_expression():
+                    break
         if i >= min_length:
-            # TODO: I suspect the next two line fragment should be wrapped up if I keep it, probably repeated a bit (probably something like "with movemanager.b2r(binary_addr) as runtime_addr:...", although I probably can't reuse the b2r function, but maybe think about it)
             runtime_addr = movemanager.b2r(addr)
             with movemanager.move_id_for_binary_addr[addr]:
                 string(runtime_addr, i)

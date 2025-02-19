@@ -123,7 +123,7 @@ class Acme(assembler.Assembler):
 
         # At the end of the assembly, we output assertions.
         if config.get_include_assertions():
-            spa = sorted((str(expr), self.hex(value)) for expr, value in self.pending_assertions.items())
+            spa = sorted((str(expr), self.hex(value) if type(value) == int else '"' + value + '"') for expr, value in self.pending_assertions.items())
             old = ("", 0)
             for expr, value in spa:
                 if old != (expr, value):

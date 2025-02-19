@@ -360,7 +360,7 @@ class Cpu8080(cpu.Cpu):
             return "%s%s" % (utils.make_indent(1), utils.force_case(self.mnemonic))
 
         def as_string_list(self, binary_loc, annotations):
-            result = [mainformatter.add_inline_comment(binary_loc, self.length(), "", annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_loc.binary_addr, 0)) + "%s", self.as_string(binary_loc.binary_addr)))]
+            result = [mainformatter.add_inline_comment_including_hexdump(binary_loc, self.length(), "", annotations, utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_loc.binary_addr, 0)) + "%s", self.as_string(binary_loc.binary_addr)))]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result

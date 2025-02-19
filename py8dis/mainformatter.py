@@ -67,7 +67,7 @@ def add_hex_dump(binary_addr, length, cycles_description, s):
     s += utils.plainhex4(binary_addr) + ": " + dump_hex + dump_chars + cycles_description + dump_cpu_state + dump_move
     return s
 
-def add_inline_comment(binary_loc, length, cycles_description, annotations, s):
+def add_inline_comment_including_hexdump(binary_loc, length, cycles_description, annotations, s):
     """Creates the entire inline comment for the line as a string.
 
     Creates a string including the hex dump and character equivalents,
@@ -98,7 +98,7 @@ def format_data_block_line(binary_loc, text, start_index, end_index, element_siz
     result = data_prefix + text
 
     current_binary_loc = movemanager.BinaryLocation(binary_loc.binary_addr + start_index*element_size, binary_loc.move_id)
-    result = add_inline_comment(current_binary_loc, (end_index - start_index)*element_size, "", annotations, result)
+    result = add_inline_comment_including_hexdump(current_binary_loc, (end_index - start_index)*element_size, "", annotations, result)
     return result
 
 def format_data_block(binary_loc, length, cols, element_size, annotations):

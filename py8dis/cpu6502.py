@@ -608,7 +608,7 @@ class Cpu6502(cpu.Cpu):
 
         def as_string_list(self, binary_loc, annotations):
             lazy_string = utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_loc.binary_addr, 0)) + "%s", self.as_string(binary_loc.binary_addr))
-            result = [mainformatter.add_inline_comment(binary_loc, self.length(), self.cycles_description(binary_loc.binary_addr), annotations, lazy_string)]
+            result = [mainformatter.add_inline_comment_including_hexdump(binary_loc, self.length(), self.cycles_description(binary_loc.binary_addr), annotations, lazy_string)]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result

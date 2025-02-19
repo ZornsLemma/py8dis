@@ -46,6 +46,9 @@ class Label(object):
         assert isinstance(reference_binary_loc, movemanager.BinaryLocation)
         self.references.append(reference_binary_loc)
 
+    def is_only_an_expression(self):
+        return not self.explicit_names and not self.local_labels and self.expressions
+
     def all_names_by_move_id(self):
         """Return all label names and expressions for this label for each move_id"""
 
