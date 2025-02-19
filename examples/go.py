@@ -51,6 +51,8 @@ def run_py8dis(f, assembler):
         result = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
+    except FileNotFoundError as e:
+        return "File not found: {0}".format(e)
     f.asm_output_file.write_text(result)
     return None
 
@@ -88,7 +90,7 @@ def single_test(basename: Path,
         return "unknown assembler"
 
     if result:
-        return "{0}. ".format(result)
+        return result
 
     result = check_identical(f.binary_output_file, f.binary_original_file)
     if result:
@@ -105,6 +107,9 @@ def call_acme(basename: Path,
     """Test Acme assembler."""
     f = Filepaths(basename, "acme")
 
+    if not shutil.which('acme'):
+        return "skipped"
+
     try:
         # Assemble with Acme
         cmd = ['acme', '-o', str(f.binary_output_file)]
@@ -116,6 +121,8 @@ def call_acme(basename: Path,
 
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
+    except FileNotFoundError as e:
+        return "File not found: {0}".format(e)
 
 ##################################################################################################
 def call_beebasm(basename: Path,
@@ -124,6 +131,9 @@ def call_beebasm(basename: Path,
                  make_extras: bool = False) -> bool:
     """Test Beebasm assembler."""
     f = Filepaths(basename, "beebasm")
+
+    if not shutil.which('beebasm'):
+        return "skipped"
 
     try:
         # Assemble with Beebasm
@@ -138,6 +148,8 @@ def call_beebasm(basename: Path,
         return None
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
+    except FileNotFoundError as e:
+        return "File not found: {0}".format(e)
 
 ##################################################################################################
 def call_xa(basename: Path,
@@ -146,6 +158,9 @@ def call_xa(basename: Path,
             make_extras: bool = False) -> bool:
     """Test xa assembler."""
     f = Filepaths(basename, "xa")
+
+    if not shutil.which('xa'):
+        return "skipped"
 
     try:
         # Run through py8dis
@@ -170,6 +185,8 @@ def call_xa(basename: Path,
         return None
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
+    except FileNotFoundError as e:
+        return "File not found: {0}".format(e)
 
 ##################################################################################################
 def call_z80asm(basename: Path,
@@ -178,6 +195,9 @@ def call_z80asm(basename: Path,
                 make_extras: bool = False) -> bool:
     """Test z88dk-z80asm assembler for 8080 tests."""
     f = Filepaths(basename, "8080")
+
+    if not shutil.which('z88dk-z80asm'):
+        return "skipped"
 
     try:
         # Assemble with z88dk-z80asm
@@ -189,6 +209,8 @@ def call_z80asm(basename: Path,
         return None
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
+    except FileNotFoundError as e:
+        return "File not found: {0}".format(e)
 
 ##################################################################################################
 def run_tests(files: List[Path],
@@ -201,13 +223,18 @@ def run_tests(files: List[Path],
 
     for filename in files:
         for assembler in assemblers:
-            print(f"{filename}_{assembler}: ", end='', flush=True)
+            name = f"{filename}_{assembler}: "
+            print(name, end='', flush=True)
             result = single_test(filename, assembler, check_asm_against_known_good, make_known_good, make_extras)
-            if result != None:
-                print("failed. {0}. ".format(result))
-                success = False
-            else:
+            spaces = 30 - len(name)
+            print(f"{' ' * spaces}", end='')
+            if result == None:
                 print("passed. ")
+            elif result == "skipped":
+                print("skipped (assembler not found). ")
+            else:
+                print("failed. '{0}'. ".format(result))
+                success = False
     return success
 
 ##################################################################################################
