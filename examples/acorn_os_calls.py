@@ -1,8 +1,6 @@
 from commands import *
 import acorn
 
-acorn.bbc()
-
 def mycom(addr, com):
     blank(addr)
     comment(addr, "*************** Test OSBYTE " + '0x%02x' % com + " ***************", indent=1)
@@ -12,6 +10,7 @@ def mycom(addr, com):
 # The md5sum is optional but helps avoid confusion if there are multiple versions
 # of the same program.
 load(0x1100, "acorn_os_calls.orig", "6502")
+acorn.master()
 
 label(0x70, "mem")
 

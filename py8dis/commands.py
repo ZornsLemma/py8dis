@@ -192,7 +192,7 @@ def expr_label(runtime_addr, s):
 
     return label(runtime_addr, s)
 
-def optional_label(runtime_addr, name, base_runtime_addr=None):
+def optional_label(runtime_addr, name, base_runtime_addr=None, *, definable_inline=True):
     """Set a label at a runtime address, but only output if used.
 
     When two consecutive bytes share a label (e.g. `userv` and `userv+1`) then `base_runtime_addr` points to the first byte."""
@@ -200,7 +200,7 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if base_runtime_addr is not None:
         base_runtime_addr = memorymanager.RuntimeAddr(base_runtime_addr)
-    disassembly.add_optional_label(runtime_addr, name, base_addr=base_runtime_addr)
+    disassembly.add_optional_label(runtime_addr, name, base_addr=base_runtime_addr, definable_inline=definable_inline)
 
 def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
@@ -238,7 +238,7 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
         if is_entry_point:
             entry(runtime_addr, name)
         else:
-            optional_label(runtime_addr, name, move_id)
+            optional_label(runtime_addr, name, move_id, definable_inline=True)
 
     # Use default hook function
     if hook == False and trace.cpu.default_subroutine_hook:

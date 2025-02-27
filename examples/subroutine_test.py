@@ -2,11 +2,10 @@ from commands import *
 import acorn
 import config
 
-acorn.bbc()
-
 config.set_label_references(False)
 
 load(0x2000, "subroutine_test.orig", "6502")
+acorn.bbc()
 
 subroutine(0x2000, "start")
 subroutine(0x2010,

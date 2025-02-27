@@ -9,12 +9,12 @@ config.set_show_cpu_state(False)
 config.set_show_char_literals(False)
 config.set_show_all_labels(False)
 
-acorn.bbc()
-
 # Load the program to be disassembled into the debugger's memory.
 # The md5sum is optional but helps avoid confusion if there are
 # multiple versions of the same program.
 load(0x2000, "align_test.orig", "6502", "ba85fca1feae301af81806d3102b0851")
+
+acorn.master()
 
 # Start tracing instructions at 0x2000.
 entry(0x2000)

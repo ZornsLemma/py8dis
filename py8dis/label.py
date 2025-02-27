@@ -42,6 +42,9 @@ class Label(object):
         # Set of move_id's that apply at this label's address
         self.emit_opportunities = set()
 
+        # By default, allow label to be defined inline
+        self.definable_inline = True
+
     def add_reference(self, reference_binary_loc):
         assert isinstance(reference_binary_loc, movemanager.BinaryLocation)
         self.references.append(reference_binary_loc)
@@ -221,6 +224,9 @@ class Label(object):
     def collate_explicit_names_for_move_id(self, emit_addr, offset, binary_loc):
         assembler = config.get_assembler()
         result = []
+
+        if not self.definable_inline:
+            return result
 
         for name in self.explicit_names[binary_loc.move_id]:
             if name.emitted:

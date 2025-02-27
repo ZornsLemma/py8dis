@@ -2,7 +2,6 @@ from commands import *
 import config
 import acorn
 
-acorn.bbc()
 config.set_label_references(False)
 
 
@@ -11,6 +10,7 @@ config.set_label_references(False)
 # The md5sum is optional but helps avoid confusion if there are
 # multiple versions of the same program.
 load(0x2000, "local_labels.orig", "6502", "ac64dbf0050be82f97f01b22262406a8")
+acorn.bbc()
 
 # Start tracing instructions at 0x2000.
 entry(0x2000)

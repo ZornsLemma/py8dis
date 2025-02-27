@@ -47,7 +47,7 @@ format_hint = {}
 
 # Optional labels are only output if they are used.
 #
-# `optional_labels` stores tuple (string, base_address) indexed by
+# `optional_labels` stores tuple (string, base_address, definable_inline) indexed by
 # runtime address, as created by `optional_label()`
 optional_labels = {}
 
@@ -145,12 +145,13 @@ def is_simple_name(s):
         return c.isalnum() or c == "_"
     return valid_first(s[0]) and all(valid_later(c) for c in s)
 
-def add_label(runtime_addr, s, move_id):
+def add_label(runtime_addr, s, move_id, *, definable_inline=True):
     """Add a label at the given runtime address and move_id."""
 
     memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
 
     label = labelmanager.labels[runtime_addr]
+    label.definable_inline = label.definable_inline and definable_inline
     if s is not None:
         if is_simple_name(s):
             label.add_explicit_name(s, move_id)
@@ -164,7 +165,7 @@ def add_label(runtime_addr, s, move_id):
 
     return label
 
-def add_optional_label(runtime_addr, s, *, base_addr=None):
+def add_optional_label(runtime_addr, s, *, base_addr=None, definable_inline=True):
     """Add a label at the given runtime address, but only output if used.
 
     When two consecutive bytes share a base label name (e.g. `userv`
@@ -174,7 +175,7 @@ def add_optional_label(runtime_addr, s, *, base_addr=None):
 
     # Check if already present
     if runtime_addr in optional_labels:
-        assert optional_labels[runtime_addr] == (s, base_addr)
+        assert optional_labels[runtime_addr] == (s, base_addr, definable_inline)
         return
 
     # Check base_addr is valid
@@ -185,7 +186,7 @@ def add_optional_label(runtime_addr, s, *, base_addr=None):
         assert optional_labels[base_addr][1] is None
     else:
         assert is_simple_name(s)
-    optional_labels[runtime_addr] = (s, base_addr)
+    optional_labels[runtime_addr] = (s, base_addr, definable_inline)
 
 def add_local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     """Add a label at the given runtime address, valid only if referenced in the region specified.
@@ -347,12 +348,14 @@ def suggest_label_name(runtime_addr, binary_addr, move_id):
     # If no explicit label or expression is suitable, try the optional
     # labels.
     if runtime_addr in optional_labels:
-        s, base_addr = optional_labels[runtime_addr]
+        s, base_addr, definable_inline = optional_labels[runtime_addr]
+        if not definable_inline:
+            label.definable_inline = False
         if base_addr is not None:
             # TODO: If our "suggestion" is not acted on, we will have
             # added this base label unnecessarily. I don't think this
             # is a big deal, but ideally we wouldn't do it.
-            add_label(base_addr, optional_labels[base_addr][0], None)
+            add_label(base_addr, optional_labels[base_addr][0], None, definable_inline=definable_inline)
         return ((s, None), False) # TODO: optional labels don't have a move_id at the moment?
 
     # Make up a brand new label name.
@@ -549,7 +552,7 @@ def constant_value_to_string(value, format):
     elif format == Format.STRING:
         formatter = config.get_assembler()
         return str('"' + value + '"')
-    assert(format == Format.CHAR, "unknown format {0}".format(format))
+    assert format == Format.CHAR, "unknown format {0}".format(format)
     return str("'" + value + "'")
 
 def emit_constants():
@@ -816,8 +819,9 @@ def emit_addr(binary_loc):
     for i in range(1, classification_length):
         runtime_addr = movemanager.b2r(binary_loc.binary_addr + i)
         if runtime_addr in labelmanager.labels:
-            label_list = labelmanager.labels[runtime_addr].definition_string_list(movemanager.b2r(binary_loc.binary_addr), binary_loc)
-            pending_labels.extend(label_list)
+            if labelmanager.labels[runtime_addr].definable_inline:
+                label_list = labelmanager.labels[runtime_addr].definition_string_list(movemanager.b2r(binary_loc.binary_addr), binary_loc)
+                pending_labels.extend(label_list)
 
     # Emit label definitions for this address.
     result.extend(emit_labels(binary_loc))

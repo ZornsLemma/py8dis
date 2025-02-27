@@ -2588,26 +2588,31 @@ def mos_labels():
     optional_label(0xffc2, "gsinit")
     optional_label(0xffc5, "gsread")
 
-    subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=False)
-    subroutine(0xffb9, "osrdsc", None, None, hook=osrdsc_hook, is_entry_point=False)
-    subroutine(0xffbc, "vduchr", None, None, hook=oswrch_hook, is_entry_point=False)
-    subroutine(0xffbf, "oseven", None, None, hook=oseven_hook, is_entry_point=False)
-    subroutine(0xffce, "osfind", None, None, hook=osfind_hook, is_entry_point=False)
-    subroutine(0xffc8, "nvrdch", None, None, hook=osrdch_hook, is_entry_point=False)
-    subroutine(0xffcb, "nvwrch", None, None, hook=oswrch_hook, is_entry_point=False)
-    subroutine(0xffd1, "osgbpb", None, None, hook=osgbpb_hook, is_entry_point=False)
-    subroutine(0xffd4, "osbput", None, None, hook=osbput_hook, is_entry_point=False)
-    subroutine(0xffd7, "osbget", None, None, hook=osbget_hook, is_entry_point=False)
-    subroutine(0xffda, "osargs", None, None, hook=osargs_hook, is_entry_point=False)
-    subroutine(0xffe0, "osrdch", None, None, hook=osrdch_hook, is_entry_point=False)
-    subroutine(0xffe3, "osasci", None, None, hook=oswrch_hook, is_entry_point=False)
-    subroutine(0xffe7, "osnewl", None, None, hook=osnewl_hook, is_entry_point=False)
-    subroutine(0xffec, "oswrcr", None, None, hook=oswrcr_hook, is_entry_point=False)
-    subroutine(0xffee, "oswrch", None, None, hook=oswrch_hook, is_entry_point=False)
-    subroutine(0xfff4, "osbyte", None, None, hook=osbyte_hook, is_entry_point=False)
-    subroutine(0xfff1, "osword", None, None, hook=osword_hook, is_entry_point=False)
-    subroutine(0xffdd, "osfile", None, None, hook=osfile_hook, is_entry_point=False)
-    subroutine(0xfff7, "oscli",  None, None, hook=oscli_hook,  is_entry_point=False)
+    # If we did the load() first, then we can trace the OS routines as entry points
+    if trace.cpu:
+        is_entry_point = False
+    else:
+        is_entry_point = False
+
+    subroutine(0xffb9, "osrdsc", None, None, hook=osrdsc_hook, is_entry_point=is_entry_point)
+    subroutine(0xffbc, "vduchr", None, None, hook=oswrch_hook, is_entry_point=is_entry_point)
+    subroutine(0xffbf, "oseven", None, None, hook=oseven_hook, is_entry_point=is_entry_point)
+    subroutine(0xffce, "osfind", None, None, hook=osfind_hook, is_entry_point=is_entry_point)
+    subroutine(0xffc8, "nvrdch", None, None, hook=osrdch_hook, is_entry_point=is_entry_point)
+    subroutine(0xffcb, "nvwrch", None, None, hook=oswrch_hook, is_entry_point=is_entry_point)
+    subroutine(0xffd1, "osgbpb", None, None, hook=osgbpb_hook, is_entry_point=is_entry_point)
+    subroutine(0xffd4, "osbput", None, None, hook=osbput_hook, is_entry_point=is_entry_point)
+    subroutine(0xffd7, "osbget", None, None, hook=osbget_hook, is_entry_point=is_entry_point)
+    subroutine(0xffda, "osargs", None, None, hook=osargs_hook, is_entry_point=is_entry_point)
+    subroutine(0xffe0, "osrdch", None, None, hook=osrdch_hook, is_entry_point=is_entry_point)
+    subroutine(0xffe3, "osasci", None, None, hook=oswrch_hook, is_entry_point=is_entry_point)
+    subroutine(0xffe7, "osnewl", None, None, hook=osnewl_hook, is_entry_point=is_entry_point)
+    subroutine(0xffec, "oswrcr", None, None, hook=oswrcr_hook, is_entry_point=is_entry_point)
+    subroutine(0xffee, "oswrch", None, None, hook=oswrch_hook, is_entry_point=is_entry_point)
+    subroutine(0xfff4, "osbyte", None, None, hook=osbyte_hook, is_entry_point=is_entry_point)
+    subroutine(0xfff1, "osword", None, None, hook=osword_hook, is_entry_point=is_entry_point)
+    subroutine(0xffdd, "osfile", None, None, hook=osfile_hook, is_entry_point=is_entry_point)
+    subroutine(0xfff7, "oscli",  None, None, hook=oscli_hook,  is_entry_point=is_entry_point)
 
     trace.substitute_constant_list.append(cpu6502.SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
     trace.substitute_constant_list.append(cpu6502.SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
@@ -2642,45 +2647,56 @@ def is_sideways_rom():
     # ENHANCE: We could recognise tube transfer/relocation data in header
 
 def label_tube(base, name):
-    optional_label(base + 0, "tube_%s_r1_status" % name)
-    optional_label(base + 1, "tube_%s_r1_data" % name)
-    optional_label(base + 2, "tube_%s_r2_status" % name)
-    optional_label(base + 3, "tube_%s_r2_data" % name)
-    optional_label(base + 4, "tube_%s_r3_status" % name)
-    optional_label(base + 5, "tube_%s_r3_data" % name)
-    optional_label(base + 6, "tube_%s_r4_status" % name)
-    optional_label(base + 7, "tube_%s_r4_data" % name)
+    optional_label(base + 0, "tube_%s_r1_status" % name, definable_inline=False)
+    optional_label(base + 1, "tube_%s_r1_data" % name, definable_inline=False)
+    optional_label(base + 2, "tube_%s_r2_status" % name, definable_inline=False)
+    optional_label(base + 3, "tube_%s_r2_data" % name, definable_inline=False)
+    optional_label(base + 4, "tube_%s_r3_status" % name, definable_inline=False)
+    optional_label(base + 5, "tube_%s_r3_data" % name, definable_inline=False)
+    optional_label(base + 6, "tube_%s_r4_status" % name, definable_inline=False)
+    optional_label(base + 7, "tube_%s_r4_data" % name, definable_inline=False)
 
 def hardware_bbc():
-    optional_label(0xfe00, "crtc_address_register")
-    optional_label(0xfe01, "crtc_address_write")
+    optional_label(0xfdfe, "jim_paged_entry_point", definable_inline=False)
+    optional_label(0xfe00, "crtc_address_register", definable_inline=False)
+    optional_label(0xfe01, "crtc_address_write", definable_inline=False)
 
-    optional_label(0xfe20, "video_ula_control")
-    optional_label(0xfe21, "video_ula_palette")
+    optional_label(0xfe10, "serial_ula", definable_inline=False)
+
+    optional_label(0xfe20, "video_ula_control", definable_inline=False)
+    optional_label(0xfe21, "video_ula_palette", definable_inline=False)
 
     optional_label(0xfe30, "romsel")
 
     def label_via(base, name):
-        optional_label(base +  0, name + "_via_orb_irb")
-        optional_label(base +  1, name + "_via_ora_ira")
-        optional_label(base +  2, name + "_via_ddrb")
-        optional_label(base +  3, name + "_via_ddra")
-        optional_label(base +  4, name + "_via_t1c_l")
-        optional_label(base +  5, name + "_via_t1c_h")
-        optional_label(base +  6, name + "_via_t1l_l")
-        optional_label(base +  7, name + "_via_t1l_h")
-        optional_label(base +  8, name + "_via_t2c_l")
-        optional_label(base +  9, name + "_via_t2c_h")
-        optional_label(base + 10, name + "_via_sr")
-        optional_label(base + 11, name + "_via_acr")
-        optional_label(base + 12, name + "_via_pcr")
-        optional_label(base + 13, name + "_via_ifr")
-        optional_label(base + 14, name + "_via_ier")
-        optional_label(base + 15, name + "_via_ora_ira")
+        optional_label(base +  0, name + "_via_orb_irb", definable_inline=False)
+        optional_label(base +  1, name + "_via_ora_ira", definable_inline=False)
+        optional_label(base +  2, name + "_via_ddrb", definable_inline=False)
+        optional_label(base +  3, name + "_via_ddra", definable_inline=False)
+        optional_label(base +  4, name + "_via_t1c_l", definable_inline=False)
+        optional_label(base +  5, name + "_via_t1c_h", definable_inline=False)
+        optional_label(base +  6, name + "_via_t1l_l", definable_inline=False)
+        optional_label(base +  7, name + "_via_t1l_h", definable_inline=False)
+        optional_label(base +  8, name + "_via_t2c_l", definable_inline=False)
+        optional_label(base +  9, name + "_via_t2c_h", definable_inline=False)
+        optional_label(base + 10, name + "_via_sr", definable_inline=False)
+        optional_label(base + 11, name + "_via_acr", definable_inline=False)
+        optional_label(base + 12, name + "_via_pcr", definable_inline=False)
+        optional_label(base + 13, name + "_via_ifr", definable_inline=False)
+        optional_label(base + 14, name + "_via_ier", definable_inline=False)
+        optional_label(base + 15, name + "_via_ora_ira", definable_inline=False)
     label_via(0xfe40, "system")
     label_via(0xfe60, "user")
 
     label_tube(0xfee0, "host")
+
+def add_oswrsc():
+    # If we did the load() first, then we can trace the OS routines as entry points
+    if trace.cpu:
+        is_entry_point = False
+    else:
+        is_entry_point = False
+    subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=is_entry_point)
 
 def hardware_b_plus():
     hardware_bbc()
@@ -2694,15 +2710,26 @@ def hardware_6502sp():
     label_tube(0xfef8, "parasite")
 
 def bbc():
+    if not trace.cpu:
+        utils.warn("Please place call to acorn.bbc() after the load() command.")
+
     mos_labels()
     hardware_bbc()
 
 def b_plus():
+    if not trace.cpu:
+        utils.warn("Please place call to acorn.b_plus() after the load() command.")
+
     mos_labels()
+    add_oswrsc()
     hardware_b_plus()
 
 def master():
+    if not trace.cpu:
+        utils.warn("Please place call to acorn.master() after the load() command.")
+
     mos_labels()
+    add_oswrsc()
     hardware_master()
 
 # TODO: Maybe have a "throw everything in" function for getting started quickly?
