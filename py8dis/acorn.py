@@ -2658,11 +2658,13 @@ def hardware(machine):
     # decisions about how to decode these addresses.
     #######################################################################
 
+    optional_label(0xfc00, "fred", definable_inline=False)
+
     # FC00-03 Byte-Wide Expansion RAM
-    optional_label(0xfc00, "fred_expansion_ram_addr_b0_b7", definable_inline=False)
-    optional_label(0xfc01, "fred_expansion_ram_addr_b8_b15", definable_inline=False)
-    optional_label(0xfc02, "fred_expansion_ram_addr_b16_b23", definable_inline=False)
-    optional_label(0xfc03, "fred_expansion_ram_data", definable_inline=False)
+    #optional_label(0xfc00, "fred_bytewide_expansion_ram_addr_b0_b7", definable_inline=False)
+    #optional_label(0xfc01, "fred_bytewide_expansion_ram_addr_b8_b15", definable_inline=False)
+    #optional_label(0xfc02, "fred_bytewide_expansion_ram_addr_b16_b23", definable_inline=False)
+    #optional_label(0xfc03, "fred_bytewide_expansion_ram_data", definable_inline=False)
 
     # FC04-05 BeebOPL (FM Synthsiser for the BBC Micro)
     optional_label(0xfc04, "fred_beebopl0", definable_inline=False)
@@ -2972,6 +2974,7 @@ def hardware(machine):
     #######################################################################
     # JIM, see https://mdfs.net/Docs/Comp/BBC/Hardware/JIMAddrs
     #######################################################################
+    optional_label(0xfd00, "jim", definable_inline=False)
 
     # FDF0-F7 Torch SASI/SCSI Hard Drive Access
     optional_label(0xfdf0, "torch_sasi_slash_scsi_data")
@@ -3070,7 +3073,72 @@ def hardware(machine):
         label_via(0xfe40, "system")
         label_via(0xfe60, "user")
 
-        label_tube(0xfee0, "host")
+        if machine == machinetype.MachineType.MACHINE_BBC or machine == machinetype.MachineType.MACHINE_BPLUS:
+            # FE80-9F 8271 Floppy disk controller (BBC B, B+)
+            # FE80-9F 1770 Floppy disk controller (BBC B, B+)
+            optional_label(0xfe80, "fdc_8271_command_or_status_or_1770_drive_control", definable_inline=False)
+            optional_label(0xfe81, "fdc_8271_parameter_or_result", definable_inline=False)
+            optional_label(0xfe82, "fdc_8271_reset", definable_inline=False)
+            optional_label(0xfe84, "fdc_8271_data_or_1770_command_or_status", definable_inline=False)
+
+            optional_label(0xfe85, "fdc_1770_track", definable_inline=False)
+            optional_label(0xfe86, "fdc_1770_sector", definable_inline=False)
+            optional_label(0xfe87, "fdc_1770_data", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_MASTER:
+            # FE80-9F Master internal expansion port (PL12)
+            for i in range(0,16):
+                optional_label(0xfe80+i, "internal_expansion_port_{0}".format(i), definable_inline=False)
+
+            # FE80-8F Videodisc SCSI controller (Master)
+            #optional_label(0xfe80, "videodisc_data", definable_inline=False)
+            #optional_label(0xfe81, "videodisc_status", definable_inline=False)
+            #optional_label(0xfe82, "videodisc_select", definable_inline=False)
+            #optional_label(0xfe83, "videodisc_int_enable", definable_inline=False)
+
+        # FEA0-BF 6854 ALDC Econet controller
+        optional_label(0xfea0, "econet_control1_or_status1", definable_inline=False)
+        optional_label(0xfea1, "econet_control23_or_status2", definable_inline=False)
+        optional_label(0xfea2, "econet_data_continue_frame", definable_inline=False)
+        optional_label(0xfea3, "econet_data_terminate_frame", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_BBC or machine == machinetype.MachineType.MACHINE_BPLUS:
+            # FEC0-DF Analogue-to-digital convertor (B/B+)
+            optional_label(0xfec0, "adc_start_conversion_or_status", definable_inline=False)
+            optional_label(0xfec1, "adc_read_data_high_byte", definable_inline=False)
+            optional_label(0xfec2, "adc_read_data_low_byte", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_MASTER:
+            # FEC0-DF "Network interface" (Master)
+            for i in range(0, 32):
+                optional_label(0xfec0+i, "network_interface_{0}".format(i))
+
+            # FEDF    Eureka memory control
+            #optional_label(0xfedf, "eureka_memory_control", definable_inline=False)
+
+        # FEE0-FF Tube control
+        optional_label(0xfee0, "tube_status_1_and_tube_control", definable_inline=False)
+        optional_label(0xfee1, "tube_data_register_1", definable_inline=False)
+        optional_label(0xfee2, "tube_status_register_2", definable_inline=False)
+        optional_label(0xfee3, "tube_data_register_2", definable_inline=False)
+        optional_label(0xfee4, "tube_status_register_3", definable_inline=False)
+        optional_label(0xfee5, "tube_data_register_3", definable_inline=False)
+        optional_label(0xfee6, "tube_status_register_4_and_cpu_control", definable_inline=False)
+        optional_label(0xfee7, "tube_data_register_4", definable_inline=False)
+
+        # Torch Tube control
+        # FEE0-EF 6522 VIA access to Torch 8255, release Torch reset line
+        #optional_label(0xfee0, "torch_tube_data_out_from_host", definable_inline=False)
+        #optional_label(0xfee1, "torch_tube_data_in_to_host", definable_inline=False)
+        #optional_label(0xfeed, "torch_tube_status", definable_inline=False)
+        #for i in range(0,16):
+        #    optional_label(0xfef0+i, "torch_tube_via_access_{0}_assert_reset_line".format(i))
+
+        # CUBE Tube control (may also be mirrored at &FEE0)
+        # FEF0-FF 6522 VIA access to CUBE 8255
+        optional_label(0xfef0, "cube_tube_data_out_from_host", definable_inline=False)
+        optional_label(0xfef1, "cube_tube_data_in_to_host", definable_inline=False)
+        optional_label(0xfefd, "cube_tube_status", definable_inline=False)
 
 def add_oswrsc():
     subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=False)
