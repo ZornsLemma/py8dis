@@ -1277,7 +1277,7 @@ class Cpu6502(cpu.Cpu):
                         if c.reg_changes and (c.reg_changes[reg] == 'A'):
                             # Get the value of the register
                             r = state[reg].value
-                            if r:
+                            if r != None:
                                 move_id = movemanager.move_id_for_binary_addr[binary_addr]
                                 binary_loc = movemanager.BinaryLocation(binary_addr, move_id)
                                 formatter = config.get_assembler()

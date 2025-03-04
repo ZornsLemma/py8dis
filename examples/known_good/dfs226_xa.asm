@@ -1210,7 +1210,7 @@ c8482
     jsr c940c                                                         // 8489: 20 0c 94     ..
     ldy #$ff                                                          // 848c: a0 ff       ..
     sty l00a8                                                         // 848e: 84 a8       ..
-    iny                                                               // 8490: c8          .
+    iny                                                               // 8490: c8          .              // Y=$00
     sty l00aa                                                         // 8491: 84 aa       ..
 // $8493 referenced 1 time by $84a3
 loop_c8493
@@ -7511,7 +7511,7 @@ cabcf
     ldy #$ff                                                          // abda: a0 ff       ..
     sty l00ae                                                         // abdc: 84 ae       ..
     sty l00b0                                                         // abde: 84 b0       ..
-    iny                                                               // abe0: c8          .
+    iny                                                               // abe0: c8          .              // Y=$00
     sty l00ac                                                         // abe1: 84 ac       ..
     lda #$20 // ' '                                                   // abe3: a9 20       .
     sta l00af                                                         // abe5: 85 af       ..

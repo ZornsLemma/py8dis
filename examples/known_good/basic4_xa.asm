@@ -2871,7 +2871,7 @@ c91d1
     sta l002d                                                         // 91dd: 85 2d       .-
     lda (l002a)                                                       // 91df: b2 2a       .*
     sta l002c                                                         // 91e1: 85 2c       .,
-    dey                                                               // 91e3: 88          .
+    dey                                                               // 91e3: 88          .              // Y=$00
 // $91e4 referenced 1 time by $91ec
 loop_c91e4
     lda l0600,y                                                       // 91e4: b9 00 06    ...
@@ -8216,7 +8216,7 @@ sub_caf61
     ldy #$ff                                                          // af64: a0 ff       ..
     cmp #$7e // '~'                                                   // af66: c9 7e       .~
     beq caf6d                                                         // af68: f0 03       ..
-    iny                                                               // af6a: c8          .
+    iny                                                               // af6a: c8          .              // Y=$00
     dec l001b                                                         // af6b: c6 1b       ..
 // $af6d referenced 1 time by $af68
 caf6d
@@ -10022,7 +10022,7 @@ cbaa6
     sta l003a                                                         // bab0: 85 3a       .:
     ldy #$ff                                                          // bab2: a0 ff       ..
     sty l003b                                                         // bab4: 84 3b       .;
-    iny                                                               // bab6: c8          .
+    iny                                                               // bab6: c8          .              // Y=$00
     ldx #$37 // '7'                                                   // bab7: a2 37       .7
     tya                                                               // bab9: 98          .
     jsr osword                                                        // baba: 20 f1 ff     ..

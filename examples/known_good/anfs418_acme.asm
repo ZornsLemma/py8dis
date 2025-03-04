@@ -4351,7 +4351,7 @@ ca114
     ldy #$ff                                                          ; a117: a0 ff       ..
     sty l00ba                                                         ; a119: 84 ba       ..
     sty l0098                                                         ; a11b: 84 98       ..
-    iny                                                               ; a11d: c8          .
+    iny                                                               ; a11d: c8          .              ; Y=$00
     ldx #$4a ; 'J'                                                    ; a11e: a2 4a       .J
     jsr sub_ca140                                                     ; a120: 20 40 a1     @.
     bcs ca133                                                         ; a123: b0 0e       ..
@@ -5483,7 +5483,7 @@ cac67
     ldy #1                                                            ; ac68: a0 01       ..
     sta (l009a),y                                                     ; ac6a: 91 9a       ..
     txa                                                               ; ac6c: 8a          .
-    dey                                                               ; ac6d: 88          .
+    dey                                                               ; ac6d: 88          .              ; Y=$00
     pha                                                               ; ac6e: 48          H
 ; $ac6f referenced 1 time by $ac7b
 loop_cac6f
@@ -5535,7 +5535,7 @@ loop_cacaf
     ldx l009e                                                         ; acc3: a6 9e       ..
     inc l009e                                                         ; acc5: e6 9e       ..
     inc l00aa                                                         ; acc7: e6 aa       ..
-    dey                                                               ; acc9: 88          .
+    dey                                                               ; acc9: 88          .              ; Y=$00
     lda l00aa                                                         ; acca: a5 aa       ..
     cpx #$f9                                                          ; accc: e0 f9       ..
     bne loop_cacaf                                                    ; acce: d0 df       ..
@@ -7062,7 +7062,7 @@ cb5cd
 sub_cb5d8
     ldy #1                                                            ; b5d8: a0 01       ..
     sty l10d0                                                         ; b5da: 8c d0 10    ...
-    dey                                                               ; b5dd: 88          .
+    dey                                                               ; b5dd: 88          .              ; Y=$00
     sty l10cb                                                         ; b5de: 8c cb 10    ...
     sty l10cf                                                         ; b5e1: 8c cf 10    ...
     sty l10d6                                                         ; b5e4: 8c d6 10    ...
