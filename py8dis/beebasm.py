@@ -281,11 +281,19 @@ class Beebasm(assembler.Assembler):
         # For outputting strings
         return utils.force_case("equs ")
 
-    def string_chr(self, c):
+    def char_literal(self, n):
         # When composing a literal character, this returns a character string
         # from an integer, or None if not possible
-        if utils.isprint(c) and chr(c) not in ('"'):
-            return chr(c)
+        quote = "'"
+        if utils.isprint(n) and chr(n) not in ('"'):
+            return quote + chr(n) + quote
+        return None
+
+    def string_chr(self, n):
+        # When composing a literal string, this returns a character string
+        # from an integer, or None if not possible
+        if utils.isprint(n) and chr(n) not in ('"'):
+            return chr(n)
         return None
 
     def binary_format(self, s):

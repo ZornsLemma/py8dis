@@ -160,15 +160,29 @@ class Acme(assembler.Assembler):
         # For outputting strings
         return utils.force_case("!text ")
 
-    def string_chr(self, i):
+    def char_literal(self, n):
         # When composing a literal character, this returns a character string
         # from an integer, or None if not possible
-        if i == ord('\\'):
+        quote = "'"
+        if n == ord('\\'):
             return None
-        if i == ord('"'):
+        if n == ord('"'):
             return None
-        if utils.isprint(i):
-            return chr(i)
+        if n == ord('\''):
+            return quote + "\\'" + quote
+        if utils.isprint(n):
+            return quote + chr(n) + quote
+        return None
+
+    def string_chr(self, n):
+        # When composing a literal string, this returns a character string
+        # from an integer, or None if not possible
+        if n == ord('\\'):
+            return None
+        if n == ord('"'):
+            return None
+        if utils.isprint(n):
+            return chr(n)
         return None
 
     def binary_format(self, s):

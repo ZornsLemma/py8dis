@@ -160,9 +160,9 @@ def char_formatter(n, bits):
     decimal integer.
     """
 
-    c = config.get_assembler().string_chr(n)
+    c = config.get_assembler().char_literal(n)
     if c is not None:
-        return "'%s'" % c
+        return c
     return uint_formatter(n, bits)
 
 def binary_formatter(n, bits):

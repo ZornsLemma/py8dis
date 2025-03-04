@@ -52,10 +52,11 @@ python3 go.py "acorn_os_calls"  $OPT --assemblers acme beebasm xa       # test a
 
 # ROMs
 python3 go.py "os12"            $OPT --assemblers acme beebasm xa       # MOS 1.20
-python3 go.py "basic4"          $OPT --assemblers acme beebasm xa       # BASIC
-python3 go.py "dfs226"          $OPT --assemblers acme beebasm xa       # DFS
-python3 go.py "dfs226b"         $OPT --assemblers acme beebasm xa       # DFS with an artificially added move() for testing
-python3 go.py "anfs418"         $OPT --assemblers acme beebasm xa       # Networks filing system
+python3 go.py "basic4"          $OPT --assemblers acme beebasm xa       # BASIC 4
+python3 go.py "dfs226"          $OPT --assemblers acme beebasm xa       # DFS 2.26
+python3 go.py "dfs226b"         $OPT --assemblers acme beebasm xa       # DFS with an artificially added move() just for testing
+python3 go.py "anfs418"         $OPT --assemblers acme beebasm xa       # Network filing system 4.18
+python3 go.py "lisp406"         $OPT --assemblers acme beebasm          # Lisp 4.06 (xa is excluded since it can't cope with: 'ldx #(>(LISPEN-LISVAL-1))+1')
 
 # Games
 python3 go.py "chuckie"         $OPT --assemblers acme beebasm xa       # Chuckie Egg

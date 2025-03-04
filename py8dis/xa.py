@@ -215,8 +215,29 @@ class Xa(assembler.Assembler):
         # For outputting strings
         return utils.force_case(".asc ")
 
-    def string_chr(self, c):
+    def char_literal(self, n):
         # When composing a literal character, this returns a character string
+        # from an integer, or None if not possible
+        quote = "'"
+        if chr(n) == '"':
+            return None
+        if chr(n) == '\'':
+            return None
+        if chr(n) == '^':
+            return None
+        if chr(n) == '\\':
+            return None
+        # xa has a bug which can affect strings containing '/', so we force them
+        # to be encoded specially. See
+        # https://stardot.org.uk/forums/viewtopic.php?p=351954#p351954 for more.
+        if chr(n) == '/':
+            return None
+        if utils.isprint(n):
+            return quote + chr(n) + quote
+        return None
+
+    def string_chr(self, n):
+        # When composing a literal string, this returns a character string
         # from an integer, or None if not possible
 
         # Different versions of xa have different policies about which characters
@@ -225,19 +246,19 @@ class Xa(assembler.Assembler):
 
         # Workaround for a bug in xa that means an escaped double quote in a
         # string doesn't play well with a // comment, causing a syntax error
-        if chr(c) == '"':
+        if chr(n) == '"':
             return "\", 34, \""
-        if chr(c) == '^':
+        if chr(n) == '^':
             return "\", 94, \""
-        if chr(c) == '\\':
+        if chr(n) == '\\':
             return "\", 92, \""
         # xa has a bug which can affect strings containing '/', so we force them
         # to be encoded specially. See
         # https://stardot.org.uk/forums/viewtopic.php?p=351954#p351954 for more.
-        if chr(c) == '/':
+        if chr(n) == '/':
             return None
-        if utils.isprint(c):
-            return chr(c)
+        if utils.isprint(n):
+            return chr(n)
         return None
 
     def binary_format(self, s):
