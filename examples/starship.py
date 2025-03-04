@@ -16,7 +16,7 @@ config.set_show_cpu_state(False)
 config.set_show_char_literals(False)
 config.set_show_all_labels(False)
 
-load(0x0e00, "starship.orig", "6502")
+load(0x1f00, "starship.orig", "6502")
 
 acorn.mos_labels()
 acorn.hardware_bbc()
@@ -133,7 +133,9 @@ def my_label_maker(addr, context, suggestion):
 set_label_maker_hook(my_label_maker)
 
 # Relocate code: move(dets, source, length)
-# move(0x0e00, 0x1f00, 0x42b0)
+move(0x0e00, 0x1f00, 0x42b1)
+
+entry(0x61b1)
 
 # Zero page
 mylabel(0x70, "screen_address_low")
