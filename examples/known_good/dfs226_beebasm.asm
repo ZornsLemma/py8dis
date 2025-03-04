@@ -33,256 +33,256 @@ service_unrecognised_osword         = 8
 tube_brkv_handler_fwd               = 22
 
 ; Memory locations
-l0000               = &0000
-l0001               = &0001
-l0002               = &0002
-l0003               = &0003
-l0012               = &0012
-l0013               = &0013
-l0014               = &0014
-l0015               = &0015
-l00a0               = &00a0
-l00a1               = &00a1
-l00a2               = &00a2
-l00a3               = &00a3
-l00a4               = &00a4
-l00a5               = &00a5
-l00a6               = &00a6
-l00a7               = &00a7
-l00a8               = &00a8
-l00a9               = &00a9
-l00aa               = &00aa
-l00ab               = &00ab
-l00ac               = &00ac
-l00ad               = &00ad
-l00ae               = &00ae
-l00af               = &00af
-l00b0               = &00b0
-l00b1               = &00b1
-l00b2               = &00b2
-l00b3               = &00b3
-l00b4               = &00b4
-l00b5               = &00b5
-l00b6               = &00b6
-l00b7               = &00b7
-l00b8               = &00b8
-l00b9               = &00b9
-l00ba               = &00ba
-l00bb               = &00bb
-l00bc               = &00bc
-l00bd               = &00bd
-l00be               = &00be
-l00bf               = &00bf
-l00c0               = &00c0
-l00c1               = &00c1
-l00c2               = &00c2
-l00c3               = &00c3
-l00c4               = &00c4
-l00c5               = &00c5
-l00c6               = &00c6
-l00c7               = &00c7
-l00c8               = &00c8
-l00c9               = &00c9
-l00ca               = &00ca
-l00cc               = &00cc
-l00cd               = &00cd
-l00ce               = &00ce
-l00cf               = &00cf
-l00ef               = &00ef
-l00f0               = &00f0
-l00f1               = &00f1
-os_text_ptr         = &00f2
-l00f3               = &00f3
-romsel_copy         = &00f4
-osrdsc_ptr          = &00f6
-l00f7               = &00f7
-l00fd               = &00fd
-l00ff               = &00ff
-l0100               = &0100
-l0101               = &0101
-l0102               = &0102
-l0103               = &0103
-l0104               = &0104
-l0105               = &0105
-l0107               = &0107
-l0109               = &0109
-l010b               = &010b
-l010c               = &010c
-l010d               = &010d
-l010e               = &010e
-l0128               = &0128
-brkv                = &0202
-bytev               = &020a
-filev               = &0212
-fscv                = &021e
-evntv               = &0220
-l028d               = &028d
-l0700               = &0700
-l0cff               = &0cff
-l0d00               = &0d00
-l0df0               = &0df0
-l0e00               = &0e00
-l0e07               = &0e07
-l0e08               = &0e08
-l0e0e               = &0e0e
-l0e0f               = &0e0f
-l0e10               = &0e10
-l0ef8               = &0ef8
-l0f00               = &0f00
-l0f04               = &0f04
-l0f05               = &0f05
-l0f06               = &0f06
-l0f07               = &0f07
-l0f08               = &0f08
-l0f09               = &0f09
-l0f0a               = &0f0a
-l0f0b               = &0f0b
-l0f0c               = &0f0c
-l0f0d               = &0f0d
-l0f0e               = &0f0e
-l0f0f               = &0f0f
-l0f10               = &0f10
-l1000               = &1000
-l1001               = &1001
-l1002               = &1002
-l1003               = &1003
-l1004               = &1004
-l1005               = &1005
-l1006               = &1006
-l1007               = &1007
-l100e               = &100e
-l1045               = &1045
-l1047               = &1047
-l104d               = &104d
-l104e               = &104e
-l1050               = &1050
-l1058               = &1058
-l105f               = &105f
-l1060               = &1060
-l1061               = &1061
-l1062               = &1062
-l1063               = &1063
-l1064               = &1064
-l1065               = &1065
-l1067               = &1067
-l1069               = &1069
-l1072               = &1072
-l1074               = &1074
-l1075               = &1075
-l1076               = &1076
-l1077               = &1077
-l1078               = &1078
-l1079               = &1079
-l107a               = &107a
-l107d               = &107d
-l107e               = &107e
-l107f               = &107f
-l1081               = &1081
-l1082               = &1082
-l1083               = &1083
-l1086               = &1086
-l1087               = &1087
-l1088               = &1088
-l1089               = &1089
-l108a               = &108a
-l108b               = &108b
-l108c               = &108c
-l108f               = &108f
-l1090               = &1090
-l1091               = &1091
-l1092               = &1092
-l1093               = &1093
-l1094               = &1094
-l1095               = &1095
-l1096               = &1096
-l1097               = &1097
-l1098               = &1098
-l1099               = &1099
-l109a               = &109a
-l109b               = &109b
-l109d               = &109d
-l109e               = &109e
-l109f               = &109f
-l10c0               = &10c0
-l10c1               = &10c1
-l10c2               = &10c2
-l10c3               = &10c3
-l10c4               = &10c4
-l10c5               = &10c5
-l10c6               = &10c6
-l10c7               = &10c7
-l10c9               = &10c9
-l10ca               = &10ca
-l10cb               = &10cb
-l10cc               = &10cc
-l10cd               = &10cd
-l10ce               = &10ce
-l10cf               = &10cf
-l10d0               = &10d0
-l10d1               = &10d1
-l10d2               = &10d2
-l10d3               = &10d3
-l10d6               = &10d6
-l10d7               = &10d7
-l10d8               = &10d8
-l10d9               = &10d9
-l10da               = &10da
-l10db               = &10db
-l10dc               = &10dc
-l10dd               = &10dd
-l10de               = &10de
-l10e2               = &10e2
-l10e3               = &10e3
-l10e4               = &10e4
-l1100               = &1100
-l1109               = &1109
-l110b               = &110b
-l110c               = &110c
-l110d               = &110d
-l110e               = &110e
-l110f               = &110f
-l1110               = &1110
-l1111               = &1111
-l1112               = &1112
-l1113               = &1113
-l1114               = &1114
-l1115               = &1115
-l1116               = &1116
-l1117               = &1117
-l1119               = &1119
-l111a               = &111a
-l111b               = &111b
-l111c               = &111c
-l111d               = &111d
-romsel              = &fe30
-lfe80               = &fe80
-lfe84               = &fe84
-lfe85               = &fe85
-lfe86               = &fe86
-lfe87               = &fe87
-tube_host_r1_status = &fee0
-tube_host_r1_data   = &fee1
-tube_host_r2_status = &fee2
-tube_host_r2_data   = &fee3
-tube_host_r3_data   = &fee5
-tube_host_r4_status = &fee6
-tube_host_r4_data   = &fee7
-osrdsc              = &ffb9
-gsinit              = &ffc2
-gsread              = &ffc5
-osfind              = &ffce
-osgbpb              = &ffd1
-osbput              = &ffd4
-osbget              = &ffd7
-osargs              = &ffda
-osfile              = &ffdd
-osrdch              = &ffe0
-osasci              = &ffe3
-osnewl              = &ffe7
-oswrch              = &ffee
-osword              = &fff1
-osbyte              = &fff4
-oscli               = &fff7
+l0000                                           = &0000
+l0001                                           = &0001
+l0002                                           = &0002
+l0003                                           = &0003
+l0012                                           = &0012
+l0013                                           = &0013
+l0014                                           = &0014
+l0015                                           = &0015
+l00a0                                           = &00a0
+l00a1                                           = &00a1
+l00a2                                           = &00a2
+l00a3                                           = &00a3
+l00a4                                           = &00a4
+l00a5                                           = &00a5
+l00a6                                           = &00a6
+l00a7                                           = &00a7
+l00a8                                           = &00a8
+l00a9                                           = &00a9
+l00aa                                           = &00aa
+l00ab                                           = &00ab
+l00ac                                           = &00ac
+l00ad                                           = &00ad
+l00ae                                           = &00ae
+l00af                                           = &00af
+l00b0                                           = &00b0
+l00b1                                           = &00b1
+l00b2                                           = &00b2
+l00b3                                           = &00b3
+l00b4                                           = &00b4
+l00b5                                           = &00b5
+l00b6                                           = &00b6
+l00b7                                           = &00b7
+l00b8                                           = &00b8
+l00b9                                           = &00b9
+l00ba                                           = &00ba
+l00bb                                           = &00bb
+l00bc                                           = &00bc
+l00bd                                           = &00bd
+l00be                                           = &00be
+l00bf                                           = &00bf
+l00c0                                           = &00c0
+l00c1                                           = &00c1
+l00c2                                           = &00c2
+l00c3                                           = &00c3
+l00c4                                           = &00c4
+l00c5                                           = &00c5
+l00c6                                           = &00c6
+l00c7                                           = &00c7
+l00c8                                           = &00c8
+l00c9                                           = &00c9
+l00ca                                           = &00ca
+l00cc                                           = &00cc
+l00cd                                           = &00cd
+l00ce                                           = &00ce
+l00cf                                           = &00cf
+l00ef                                           = &00ef
+l00f0                                           = &00f0
+l00f1                                           = &00f1
+os_text_ptr                                     = &00f2
+l00f3                                           = &00f3
+romsel_copy                                     = &00f4
+osrdsc_ptr                                      = &00f6
+l00f7                                           = &00f7
+l00fd                                           = &00fd
+l00ff                                           = &00ff
+l0100                                           = &0100
+l0101                                           = &0101
+l0102                                           = &0102
+l0103                                           = &0103
+l0104                                           = &0104
+l0105                                           = &0105
+l0107                                           = &0107
+l0109                                           = &0109
+l010b                                           = &010b
+l010c                                           = &010c
+l010d                                           = &010d
+l010e                                           = &010e
+l0128                                           = &0128
+brkv                                            = &0202
+bytev                                           = &020a
+filev                                           = &0212
+fscv                                            = &021e
+evntv                                           = &0220
+l028d                                           = &028d
+l0700                                           = &0700
+l0cff                                           = &0cff
+l0d00                                           = &0d00
+l0df0                                           = &0df0
+l0e00                                           = &0e00
+l0e07                                           = &0e07
+l0e08                                           = &0e08
+l0e0e                                           = &0e0e
+l0e0f                                           = &0e0f
+l0e10                                           = &0e10
+l0ef8                                           = &0ef8
+l0f00                                           = &0f00
+l0f04                                           = &0f04
+l0f05                                           = &0f05
+l0f06                                           = &0f06
+l0f07                                           = &0f07
+l0f08                                           = &0f08
+l0f09                                           = &0f09
+l0f0a                                           = &0f0a
+l0f0b                                           = &0f0b
+l0f0c                                           = &0f0c
+l0f0d                                           = &0f0d
+l0f0e                                           = &0f0e
+l0f0f                                           = &0f0f
+l0f10                                           = &0f10
+l1000                                           = &1000
+l1001                                           = &1001
+l1002                                           = &1002
+l1003                                           = &1003
+l1004                                           = &1004
+l1005                                           = &1005
+l1006                                           = &1006
+l1007                                           = &1007
+l100e                                           = &100e
+l1045                                           = &1045
+l1047                                           = &1047
+l104d                                           = &104d
+l104e                                           = &104e
+l1050                                           = &1050
+l1058                                           = &1058
+l105f                                           = &105f
+l1060                                           = &1060
+l1061                                           = &1061
+l1062                                           = &1062
+l1063                                           = &1063
+l1064                                           = &1064
+l1065                                           = &1065
+l1067                                           = &1067
+l1069                                           = &1069
+l1072                                           = &1072
+l1074                                           = &1074
+l1075                                           = &1075
+l1076                                           = &1076
+l1077                                           = &1077
+l1078                                           = &1078
+l1079                                           = &1079
+l107a                                           = &107a
+l107d                                           = &107d
+l107e                                           = &107e
+l107f                                           = &107f
+l1081                                           = &1081
+l1082                                           = &1082
+l1083                                           = &1083
+l1086                                           = &1086
+l1087                                           = &1087
+l1088                                           = &1088
+l1089                                           = &1089
+l108a                                           = &108a
+l108b                                           = &108b
+l108c                                           = &108c
+l108f                                           = &108f
+l1090                                           = &1090
+l1091                                           = &1091
+l1092                                           = &1092
+l1093                                           = &1093
+l1094                                           = &1094
+l1095                                           = &1095
+l1096                                           = &1096
+l1097                                           = &1097
+l1098                                           = &1098
+l1099                                           = &1099
+l109a                                           = &109a
+l109b                                           = &109b
+l109d                                           = &109d
+l109e                                           = &109e
+l109f                                           = &109f
+l10c0                                           = &10c0
+l10c1                                           = &10c1
+l10c2                                           = &10c2
+l10c3                                           = &10c3
+l10c4                                           = &10c4
+l10c5                                           = &10c5
+l10c6                                           = &10c6
+l10c7                                           = &10c7
+l10c9                                           = &10c9
+l10ca                                           = &10ca
+l10cb                                           = &10cb
+l10cc                                           = &10cc
+l10cd                                           = &10cd
+l10ce                                           = &10ce
+l10cf                                           = &10cf
+l10d0                                           = &10d0
+l10d1                                           = &10d1
+l10d2                                           = &10d2
+l10d3                                           = &10d3
+l10d6                                           = &10d6
+l10d7                                           = &10d7
+l10d8                                           = &10d8
+l10d9                                           = &10d9
+l10da                                           = &10da
+l10db                                           = &10db
+l10dc                                           = &10dc
+l10dd                                           = &10dd
+l10de                                           = &10de
+l10e2                                           = &10e2
+l10e3                                           = &10e3
+l10e4                                           = &10e4
+l1100                                           = &1100
+l1109                                           = &1109
+l110b                                           = &110b
+l110c                                           = &110c
+l110d                                           = &110d
+l110e                                           = &110e
+l110f                                           = &110f
+l1110                                           = &1110
+l1111                                           = &1111
+l1112                                           = &1112
+l1113                                           = &1113
+l1114                                           = &1114
+l1115                                           = &1115
+l1116                                           = &1116
+l1117                                           = &1117
+l1119                                           = &1119
+l111a                                           = &111a
+l111b                                           = &111b
+l111c                                           = &111c
+l111d                                           = &111d
+romsel                                          = &fe30
+fdc_8271_command_or_status_or_1770_drive_control = &fe80
+fdc_8271_data_or_1770_command_or_status         = &fe84
+fdc_1770_track                                  = &fe85
+fdc_1770_sector                                 = &fe86
+fdc_1770_data                                   = &fe87
+tube_status_1_and_tube_control                  = &fee0
+tube_data_register_1                            = &fee1
+tube_status_register_2                          = &fee2
+tube_data_register_2                            = &fee3
+tube_data_register_3                            = &fee5
+tube_status_register_4_and_cpu_control          = &fee6
+tube_data_register_4                            = &fee7
+osrdsc                                          = &ffb9
+gsinit                                          = &ffc2
+gsread                                          = &ffc5
+osfind                                          = &ffce
+osgbpb                                          = &ffd1
+osbput                                          = &ffd4
+osbget                                          = &ffd7
+osargs                                          = &ffda
+osfile                                          = &ffdd
+osrdch                                          = &ffe0
+osasci                                          = &ffe3
+osnewl                                          = &ffe7
+oswrch                                          = &ffee
+osword                                          = &fff1
+osbyte                                          = &fff4
+oscli                                           = &fff7
 
     org &8000
 
@@ -2364,7 +2364,7 @@ l8004 = service_entry+1
     ldx l00a7                                                         ; 8c21: a6 a7       ..
     cpx #&80                                                          ; 8c23: e0 80       ..
     bne c8c2e                                                         ; 8c25: d0 07       ..
-    lda lfe84                                                         ; 8c27: ad 84 fe    ...
+    lda fdc_8271_data_or_1770_command_or_status                       ; 8c27: ad 84 fe    ...
     and #&20 ; ' '                                                    ; 8c2a: 29 20       )
     ora (l00b0),y                                                     ; 8c2c: 11 b0       ..
 ; &8c2e referenced 1 time by &8c25
@@ -2389,7 +2389,7 @@ l8004 = service_entry+1
 ; &8c4e referenced 1 time by &8c49
 .c8c4e
     jsr sub_c8f5e                                                     ; 8c4e: 20 5e 8f     ^.
-    lda lfe87                                                         ; 8c51: ad 87 fe    ...
+    lda fdc_1770_data                                                 ; 8c51: ad 87 fe    ...
     pla                                                               ; 8c54: 68          h
     rts                                                               ; 8c55: 60          `
 
@@ -2482,7 +2482,7 @@ l8004 = service_entry+1
 .c8cd6
     sty l00a3                                                         ; 8cd6: 84 a3       ..
     eor l911d,x                                                       ; 8cd8: 5d 1d 91    ]..
-    sta lfe80                                                         ; 8cdb: 8d 80 fe    ...
+    sta fdc_8271_command_or_status_or_1770_drive_control              ; 8cdb: 8d 80 fe    ...
     lsr a                                                             ; 8cde: 4a          J
     ldx l1088                                                         ; 8cdf: ae 88 10    ...
     bcs c8ce7                                                         ; 8ce2: b0 03       ..
@@ -2656,7 +2656,7 @@ l8004 = service_entry+1
 .loop_c8de9
     lda #&e0                                                          ; 8de9: a9 e0       ..
     sta l00a2                                                         ; 8deb: 85 a2       ..
-    sta lfe84                                                         ; 8ded: 8d 84 fe    ...
+    sta fdc_8271_data_or_1770_command_or_status                       ; 8ded: 8d 84 fe    ...
 ; &8df0 referenced 1 time by &8df2
 .loop_c8df0
     lda l00a2                                                         ; 8df0: a5 a2       ..
@@ -2728,7 +2728,7 @@ l8004 = service_entry+1
 ; &8e53 referenced 3 times by &8e38, &8e3c, &8e46
 .c8e53
     sty l00a5                                                         ; 8e53: 84 a5       ..
-    sta lfe84                                                         ; 8e55: 8d 84 fe    ...
+    sta fdc_8271_data_or_1770_command_or_status                       ; 8e55: 8d 84 fe    ...
     cmp #&f0                                                          ; 8e58: c9 f0       ..
     bcc c8e64                                                         ; 8e5a: 90 08       ..
     jsr c8e9f                                                         ; 8e5c: 20 9f 8e     ..
@@ -2754,7 +2754,7 @@ l8004 = service_entry+1
     sty l00a5                                                         ; 8e74: 84 a5       ..
     ora l00a4                                                         ; 8e76: 05 a4       ..
     sta l00a7                                                         ; 8e78: 85 a7       ..
-    sta lfe84                                                         ; 8e7a: 8d 84 fe    ...
+    sta fdc_8271_data_or_1770_command_or_status                       ; 8e7a: 8d 84 fe    ...
     bit l00b2                                                         ; 8e7d: 24 b2       $.
     bmi c8e64                                                         ; 8e7f: 30 e3       0.
     cmp #&20 ; ' '                                                    ; 8e81: c9 20       .
@@ -2768,7 +2768,7 @@ l8004 = service_entry+1
     lda #opcode_rti                                                   ; 8e8d: a9 40       .@
     sta nmi_handler_ram                                               ; 8e8f: 8d 00 0d    ...
     lda #0                                                            ; 8e92: a9 00       ..
-    sta lfe80                                                         ; 8e94: 8d 80 fe    ...
+    sta fdc_8271_command_or_status_or_1770_drive_control              ; 8e94: 8d 80 fe    ...
     lda l00ff                                                         ; 8e97: a5 ff       ..
     sta l1082                                                         ; 8e99: 8d 82 10    ...
     sta l00a2                                                         ; 8e9c: 85 a2       ..
@@ -2778,15 +2778,15 @@ l8004 = service_entry+1
 
 ; &8e9f referenced 2 times by &8e5c, &8ea3
 .c8e9f
-    lda lfe84                                                         ; 8e9f: ad 84 fe    ...
+    lda fdc_8271_data_or_1770_command_or_status                       ; 8e9f: ad 84 fe    ...
     ror a                                                             ; 8ea2: 6a          j
     bcc c8e9f                                                         ; 8ea3: 90 fa       ..
 ; &8ea5 referenced 2 times by &8e6c, &8ea9
 .c8ea5
-    lda lfe84                                                         ; 8ea5: ad 84 fe    ...
+    lda fdc_8271_data_or_1770_command_or_status                       ; 8ea5: ad 84 fe    ...
     ror a                                                             ; 8ea8: 6a          j
     bcs c8ea5                                                         ; 8ea9: b0 fa       ..
-    lda lfe84                                                         ; 8eab: ad 84 fe    ...
+    lda fdc_8271_data_or_1770_command_or_status                       ; 8eab: ad 84 fe    ...
     rts                                                               ; 8eae: 60          `
 
 ; &8eaf referenced 1 time by &8d14
@@ -2866,8 +2866,8 @@ l8004 = service_entry+1
     beq c8f21                                                         ; 8f15: f0 0a       ..
 ; &8f17 referenced 1 time by &8f1d
 .loop_c8f17
-    sta lfe87                                                         ; 8f17: 8d 87 fe    ...
-    cmp lfe87                                                         ; 8f1a: cd 87 fe    ...
+    sta fdc_1770_data                                                 ; 8f17: 8d 87 fe    ...
+    cmp fdc_1770_data                                                 ; 8f1a: cd 87 fe    ...
     bne loop_c8f17                                                    ; 8f1d: d0 f8       ..
     lda #&10                                                          ; 8f1f: a9 10       ..
 ; &8f21 referenced 1 time by &8f15
@@ -2878,8 +2878,8 @@ l8004 = service_entry+1
     lda (l00b0),y                                                     ; 8f28: b1 b0       ..
 ; &8f2a referenced 3 times by &8c44, &8d10, &8f30
 .c8f2a
-    sta lfe85                                                         ; 8f2a: 8d 85 fe    ...
-    cmp lfe85                                                         ; 8f2d: cd 85 fe    ...
+    sta fdc_1770_track                                                ; 8f2a: 8d 85 fe    ...
+    cmp fdc_1770_track                                                ; 8f2d: cd 85 fe    ...
     bne c8f2a                                                         ; 8f30: d0 f8       ..
     rts                                                               ; 8f32: 60          `
 
@@ -3033,7 +3033,7 @@ l8004 = service_entry+1
 ; &8fd2 referenced 2 times by &8e8f, &8f99
 .nmi_handler_ram
     pha                                                               ; 8fd2: 48          H   :0d00[4]
-    lda lfe84                                                         ; 8fd3: ad 84 fe    ... :0d01[4]
+    lda fdc_8271_data_or_1770_command_or_status                       ; 8fd3: ad 84 fe    ... :0d01[4]
 ; The operand of this and is modified at runtime.
 .nmi_and_imm
     and #&18                                                          ; 8fd6: 29 18       ).  :0d04[4]
@@ -3084,20 +3084,20 @@ nmi_XXX5 = l0d1f+1
     lda l00cf                                                         ; 8ffa: a5 cf       ..  :0d28[4]
 ; &8ffc referenced 1 time by &0d30[4]
 .l0d2a
-    sta lfe86                                                         ; 8ffc: 8d 86 fe    ... :0d2a[4]
-    cmp lfe86                                                         ; 8fff: cd 86 fe    ... :0d2d[4]
+    sta fdc_1770_sector                                               ; 8ffc: 8d 86 fe    ... :0d2a[4]
+    cmp fdc_1770_sector                                               ; 8fff: cd 86 fe    ... :0d2d[4]
     bne l0d2a                                                         ; 9002: d0 f8       ..  :0d30[4]
     lda l00a7                                                         ; 9004: a5 a7       ..  :0d32[4]
-    sta lfe84                                                         ; 9006: 8d 84 fe    ... :0d34[4]
+    sta fdc_8271_data_or_1770_command_or_status                       ; 9006: 8d 84 fe    ... :0d34[4]
     pla                                                               ; 9009: 68          h   :0d37[4]
     rti                                                               ; 900a: 40          @   :0d38[4]
 
 ; &900b referenced 1 time by &0d08[4]
 .nmi_XXX2
-    lda lfe87                                                         ; 900b: ad 87 fe    ... :0d39[4]
+    lda fdc_1770_data                                                 ; 900b: ad 87 fe    ... :0d39[4]
 ; The operand of this sta is modified at runtime.
 .nmi_sta_abs
-    sta tube_host_r3_data                                             ; 900e: 8d e5 fe    ... :0d3c[4]
+    sta tube_data_register_3                                          ; 900e: 8d e5 fe    ... :0d3c[4]
 ; &900f referenced 3 times by &0d37[6], &0d3f[4], &903e
 ; &9010 referenced 2 times by &0d44[4], &9041
 ; The first two bytes of the following instruction may be patched at runtime.
@@ -3122,13 +3122,13 @@ nmi_XXX5 = l0d1f+1
     rti                                                               ; 9023: 40          @   :0d51[4]
 
 .nmi_XXX1
-    lda lfe87                                                         ; 9024: ad 87 fe    ... :0d52[4]
+    lda fdc_1770_data                                                 ; 9024: ad 87 fe    ... :0d52[4]
     pla                                                               ; 9027: 68          h   :0d55[4]
     rti                                                               ; 9028: 40          @   :0d56[4]
 
 .nmi_XXX8
     lda #0                                                            ; 9029: a9 00       ..  :0d57[4]
-    sta lfe87                                                         ; 902b: 8d 87 fe    ... :0d59[4]
+    sta fdc_1770_data                                                 ; 902b: 8d 87 fe    ... :0d59[4]
     pla                                                               ; 902e: 68          h   :0d5c[4]
     rti                                                               ; 902f: 40          @   :0d5d[4]
 
@@ -3152,10 +3152,10 @@ nmi_XXX5 = l0d1f+1
     org &0d39
 ; The operand of this lda is modified at runtime.
 .nmi_lda_abs
-    lda tube_host_r3_data                                             ; 9030: ad e5 fe    ... :0d39[5]
+    lda tube_data_register_3                                          ; 9030: ad e5 fe    ... :0d39[5]
 ; &9031 referenced 2 times by &0d3f[5], &8fbd
 ; &9032 referenced 2 times by &0d44[5], &8fc3
-    sta lfe87                                                         ; 9033: 8d 87 fe    ... :0d3c[5]
+    sta fdc_1770_data                                                 ; 9033: 8d 87 fe    ... :0d3c[5]
     inc nmi_lda_abs+1                                                 ; 9036: ee 3a 0d    .:. :0d3f[5]
     bne nmi_XXX7                                                      ; 9039: d0 03       ..  :0d42[5]
     inc nmi_lda_abs+2                                                 ; 903b: ee 3b 0d    .;. :0d44[5]
@@ -3205,11 +3205,11 @@ nmi_XXX5 = l0d1f+1
 ; Move 6: &9067 to &0d00 for length 148
     org &0d00
     pha                                                               ; 9067: 48          H   :0d00[6]
-    lda lfe84                                                         ; 9068: ad 84 fe    ... :0d01[6]
+    lda fdc_8271_data_or_1770_command_or_status                       ; 9068: ad 84 fe    ... :0d01[6]
     and #&1b                                                          ; 906b: 29 1b       ).  :0d04[6]
     cmp #3                                                            ; 906d: c9 03       ..  :0d06[6]
     bne l0d0f                                                         ; 906f: d0 05       ..  :0d08[6]
-    lda lfe87                                                         ; 9071: ad 87 fe    ... :0d0a[6]
+    lda fdc_1770_data                                                 ; 9071: ad 87 fe    ... :0d0a[6]
 ; The operand of this bcs is modified at runtime
 .nmi_bcs
     bcs nmi_XXX21                                                     ; 9074: b0 26       .&  :0d0d[6]
@@ -3224,7 +3224,7 @@ nmi_XXX5 = l0d1f+1
 ; The operand of this sta is modified at runtime.
 .nmi_XXX17
 .nmi_sta_abs2
-    sta tube_host_r3_data                                             ; 907c: 8d e5 fe    ... :0d15[6]
+    sta tube_data_register_3                                          ; 907c: 8d e5 fe    ... :0d15[6]
     inc nmi_sta_abs2+1                                                ; 907f: ee 16 0d    ... :0d18[6]
     bne nmi_XXX18                                                     ; 9082: d0 03       ..  :0d1b[6]
     inc nmi_sta_abs2+2                                                ; 9084: ee 17 0d    ... :0d1d[6]
@@ -3255,7 +3255,7 @@ nmi_XXX5 = l0d1f+1
     lda #nmi_XXX10-(nmi_bcs+2)                                        ; 90a4: a9 32       .2  :0d3d[6]
     bne l0d30                                                         ; 90a6: d0 ef       ..  :0d3f[6]
 .nmi_XXX10
-    sbc lfe87                                                         ; 90a8: ed 87 fe    ... :0d41[6]
+    sbc fdc_1770_data                                                 ; 90a8: ed 87 fe    ... :0d41[6]
     sta l00b5                                                         ; 90ab: 85 b5       ..  :0d44[6]
     lda #nmi_XXX11-(nmi_bcs+2)                                        ; 90ad: a9 3b       .;  :0d46[6]
     bne l0d30                                                         ; 90af: d0 e6       ..  :0d48[6]   ; ALWAYS branch
@@ -3336,8 +3336,8 @@ nmi_XXX5 = l0d1f+1
 
 .nmi_handler2_rom_end
 ; &90fb referenced 3 times by &8d41, &8d92, &9101
-    sta lfe86                                                         ; 90fb: 8d 86 fe    ...
-    cmp lfe86                                                         ; 90fe: cd 86 fe    ...
+    sta fdc_1770_sector                                               ; 90fb: 8d 86 fe    ...
+    cmp fdc_1770_sector                                               ; 90fe: cd 86 fe    ...
     bne nmi_handler2_rom_end                                          ; 9101: d0 f8       ..
     rts                                                               ; 9103: 60          `
 
@@ -3347,8 +3347,8 @@ nmi_XXX5 = l0d1f+1
     lda #&5a ; 'Z'                                                    ; 9106: a9 5a       .Z
 ; &9108 referenced 1 time by &9111
 .loop_c9108
-    sta lfe85                                                         ; 9108: 8d 85 fe    ...
-    cmp lfe85                                                         ; 910b: cd 85 fe    ...
+    sta fdc_1770_track                                                ; 9108: 8d 85 fe    ...
+    cmp fdc_1770_track                                                ; 910b: cd 85 fe    ...
     beq c9115                                                         ; 910e: f0 05       ..
     dex                                                               ; 9110: ca          .
     bne loop_c9108                                                    ; 9111: d0 f5       ..
@@ -3359,7 +3359,7 @@ nmi_XXX5 = l0d1f+1
 
 ; &9115 referenced 1 time by &910e
 .c9115
-    lda lfe80                                                         ; 9115: ad 80 fe    ...
+    lda fdc_8271_command_or_status_or_1770_drive_control              ; 9115: ad 80 fe    ...
     and #3                                                            ; 9118: 29 03       ).
     beq loop_c9113                                                    ; 911a: f0 f7       ..
     rts                                                               ; 911c: 60          `
@@ -3706,7 +3706,7 @@ nmi_XXX5 = l0d1f+1
 .loop_c9357
     sbc #1                                                            ; 9357: e9 01       ..
     bne loop_c9357                                                    ; 9359: d0 fc       ..
-    lda tube_host_r3_data                                             ; 935b: ad e5 fe    ...
+    lda tube_data_register_3                                          ; 935b: ad e5 fe    ...
     sta (l00b0),y                                                     ; 935e: 91 b0       ..
     iny                                                               ; 9360: c8          .
     dex                                                               ; 9361: ca          .
@@ -3846,7 +3846,7 @@ nmi_XXX5 = l0d1f+1
     ldy #&80                                                          ; 93fd: a0 80       ..
 ; &93ff referenced 1 time by &93fb
 .c93ff
-    bit lfe84                                                         ; 93ff: 2c 84 fe    ,..
+    bit fdc_8271_data_or_1770_command_or_status                       ; 93ff: 2c 84 fe    ,..
     bpl c940e                                                         ; 9402: 10 0a       ..
     lda l1082                                                         ; 9404: ad 82 10    ...
     cmp l00cd                                                         ; 9407: c5 cd       ..
@@ -4064,7 +4064,7 @@ nmi_XXX5 = l0d1f+1
     pha                                                               ; 9572: 48          H
     lda #6                                                            ; 9573: a9 06       ..
     jsr sub_c8020                                                     ; 9575: 20 20 80      .
-    lda lfe87                                                         ; 9578: ad 87 fe    ...
+    lda fdc_1770_data                                                 ; 9578: ad 87 fe    ...
     ldx #&0d                                                          ; 957b: a2 0d       ..
 ; &957d referenced 1 time by &9584
 .loop_c957d
@@ -4724,7 +4724,7 @@ nmi_XXX5 = l0d1f+1
 .c996e
     bit l1081                                                         ; 996e: 2c 81 10    ,..
     bpl c9978                                                         ; 9971: 10 05       ..
-    sta tube_host_r3_data                                             ; 9973: 8d e5 fe    ...
+    sta tube_data_register_3                                          ; 9973: 8d e5 fe    ...
     bmi c993b                                                         ; 9976: 30 c3       0.             ; ALWAYS branch
 
 ; &9978 referenced 1 time by &9971
@@ -4742,7 +4742,7 @@ nmi_XXX5 = l0d1f+1
 .sub_c9988
     bit l1081                                                         ; 9988: 2c 81 10    ,..
     bpl c9993                                                         ; 998b: 10 06       ..
-    lda tube_host_r3_data                                             ; 998d: ad e5 fe    ...
+    lda tube_data_register_3                                          ; 998d: ad e5 fe    ...
     jmp c993b                                                         ; 9990: 4c 3b 99    L;.
 
 ; &9993 referenced 1 time by &998b
@@ -7823,9 +7823,9 @@ nmi_XXX5 = l0d1f+1
     lda #&7f                                                          ; ad77: a9 7f       ..  :059c[2]
 ; &ad79 referenced 4 times by &053f[2], &054f[2], &05a1[2], &067d[2]
 .c059e
-    bit tube_host_r2_status                                           ; ad79: 2c e2 fe    ,.. :059e[2]
+    bit tube_status_register_2                                        ; ad79: 2c e2 fe    ,.. :059e[2]
     bvc c059e                                                         ; ad7c: 50 fb       P.  :05a1[2]
-    sta tube_host_r2_data                                             ; ad7e: 8d e3 fe    ... :05a3[2]
+    sta tube_data_register_2                                          ; ad7e: 8d e3 fe    ... :05a3[2]
 ; &ad81 referenced 1 time by &05cf[2]
 .c05a6
     jmp c0036                                                         ; ad81: 4c 36 00    L6. :05a6[2]
@@ -7883,12 +7883,12 @@ nmi_XXX5 = l0d1f+1
     jsr osbyte                                                        ; add4: 20 f4 ff     .. :05f9[2]
 ; &add7 referenced 2 times by &05ff[2], &0625[2]
 .c05fc
-    bit tube_host_r2_status                                           ; add7: 2c e2 fe    ,.. :05fc[2]
+    bit tube_status_register_2                                        ; add7: 2c e2 fe    ,.. :05fc[2]
 .sub_c05ff
 l0600 = sub_c05ff+1
     bvc c05fc                                                         ; adda: 50 fb       P.  :05ff[2]
 ; &addb referenced 1 time by &af22
-    stx tube_host_r2_data                                             ; addc: 8e e3 fe    ... :0601[2]
+    stx tube_data_register_2                                          ; addc: 8e e3 fe    ... :0601[2]
 ; &addf referenced 1 time by &0617[2]
 .loop_c0604
     jmp c0036                                                         ; addf: 4c 36 00    L6. :0604[2]
@@ -7906,9 +7906,9 @@ l0600 = sub_c05ff+1
     jsr write_tube_r2_data                                            ; adf5: 20 95 06     .. :061a[2]
 ; &adf8 referenced 1 time by &0620[2]
 .loop_c061d
-    bit tube_host_r2_status                                           ; adf8: 2c e2 fe    ,.. :061d[2]
+    bit tube_status_register_2                                        ; adf8: 2c e2 fe    ,.. :061d[2]
     bvc loop_c061d                                                    ; adfb: 50 fb       P.  :0620[2]
-    sty tube_host_r2_data                                             ; adfd: 8c e3 fe    ... :0622[2]
+    sty tube_data_register_2                                          ; adfd: 8c e3 fe    ... :0622[2]
     bvs c05fc                                                         ; ae00: 70 d5       p.  :0625[2]   ; ALWAYS branch
 
 .sub_c0627
@@ -7916,16 +7916,16 @@ l0600 = sub_c05ff+1
     tay                                                               ; ae05: a8          .   :062a[2]
 ; &ae06 referenced 1 time by &062e[2]
 .loop_c062b
-    bit tube_host_r2_status                                           ; ae06: 2c e2 fe    ,.. :062b[2]
+    bit tube_status_register_2                                        ; ae06: 2c e2 fe    ,.. :062b[2]
     bpl loop_c062b                                                    ; ae09: 10 fb       ..  :062e[2]
-    ldx tube_host_r2_data                                             ; ae0b: ae e3 fe    ... :0630[2]
+    ldx tube_data_register_2                                          ; ae0b: ae e3 fe    ... :0630[2]
     dex                                                               ; ae0e: ca          .   :0633[2]
     bmi c0645                                                         ; ae0f: 30 0f       0.  :0634[2]
 ; &ae11 referenced 2 times by &0639[2], &0642[2]
 .c0636
-    bit tube_host_r2_status                                           ; ae11: 2c e2 fe    ,.. :0636[2]
+    bit tube_status_register_2                                        ; ae11: 2c e2 fe    ,.. :0636[2]
     bpl c0636                                                         ; ae14: 10 fb       ..  :0639[2]
-    lda tube_host_r2_data                                             ; ae16: ad e3 fe    ... :063b[2]
+    lda tube_data_register_2                                          ; ae16: ad e3 fe    ... :063b[2]
     sta l0128,x                                                       ; ae19: 9d 28 01    .(. :063e[2]
     dex                                                               ; ae1c: ca          .   :0641[2]
     bpl c0636                                                         ; ae1d: 10 f2       ..  :0642[2]
@@ -7937,9 +7937,9 @@ l0600 = sub_c05ff+1
     jsr osword                                                        ; ae24: 20 f1 ff     .. :0649[2]
 ; &ae27 referenced 1 time by &064f[2]
 .loop_c064c
-    bit tube_host_r2_status                                           ; ae27: 2c e2 fe    ,.. :064c[2]
+    bit tube_status_register_2                                        ; ae27: 2c e2 fe    ,.. :064c[2]
     bpl loop_c064c                                                    ; ae2a: 10 fb       ..  :064f[2]
-    ldx tube_host_r2_data                                             ; ae2c: ae e3 fe    ... :0651[2]
+    ldx tube_data_register_2                                          ; ae2c: ae e3 fe    ... :0651[2]
     dex                                                               ; ae2f: ca          .   :0654[2]
     bmi c0665                                                         ; ae30: 30 0e       0.  :0655[2]
 ; &ae32 referenced 1 time by &0663[2]
@@ -7947,9 +7947,9 @@ l0600 = sub_c05ff+1
     ldy l0128,x                                                       ; ae32: bc 28 01    .(. :0657[2]
 ; &ae35 referenced 1 time by &065d[2]
 .loop_c065a
-    bit tube_host_r2_status                                           ; ae35: 2c e2 fe    ,.. :065a[2]
+    bit tube_status_register_2                                        ; ae35: 2c e2 fe    ,.. :065a[2]
     bvc loop_c065a                                                    ; ae38: 50 fb       P.  :065d[2]
-    sty tube_host_r2_data                                             ; ae3a: 8c e3 fe    ... :065f[2]
+    sty tube_data_register_2                                          ; ae3a: 8c e3 fe    ... :065f[2]
     dex                                                               ; ae3d: ca          .   :0662[2]
     bpl loop_c0657                                                    ; ae3e: 10 f2       ..  :0663[2]
 ; &ae40 referenced 1 time by &0655[2]
@@ -7989,17 +7989,17 @@ l0600 = sub_c05ff+1
 ; Wait for register 2 to have space and write A to it.
 ; &ae70 referenced 14 times by &0020[3], &0026[3], &002c[3], &0474[1], &053b[2], &0572[2], &0579[2], &05c2[2], &05c9[2], &05e8[2], &061a[2], &0684[2], &068a[2], &0698[2]
 .write_tube_r2_data
-    bit tube_host_r2_status                                           ; ae70: 2c e2 fe    ,.. :0695[2]
+    bit tube_status_register_2                                        ; ae70: 2c e2 fe    ,.. :0695[2]
     bvc write_tube_r2_data                                            ; ae73: 50 fb       P.  :0698[2]
-    sta tube_host_r2_data                                             ; ae75: 8d e3 fe    ... :069a[2]
+    sta tube_data_register_2                                          ; ae75: 8d e3 fe    ... :069a[2]
     rts                                                               ; ae78: 60          `   :069d[2]
 
 ; Wait for register 4 to have space and write A to it.
 ; &ae79 referenced 8 times by &0018[3], &0418[1], &041d[1], &043b[1], &0443[1], &0448[1], &0463[1], &06a1[2]
 .write_tube_r4_data
-    bit tube_host_r4_status                                           ; ae79: 2c e6 fe    ,.. :069e[2]
+    bit tube_status_register_4_and_cpu_control                        ; ae79: 2c e6 fe    ,.. :069e[2]
     bvc write_tube_r4_data                                            ; ae7c: 50 fb       P.  :06a1[2]
-    sta tube_host_r4_data                                             ; ae7e: 8d e7 fe    ... :06a3[2]
+    sta tube_data_register_4                                          ; ae7e: 8d e7 fe    ... :06a3[2]
     rts                                                               ; ae81: 60          `   :06a6[2]
 
 ; &ae82 referenced 1 time by &0403[1]
@@ -8020,17 +8020,17 @@ l0600 = sub_c05ff+1
 ; Wait for register 1 to have space and write A to it.
 ; &ae97 referenced 5 times by &06ab[2], &06b0[2], &06b4[2], &06b8[2], &06bf[2]
 .write_tube_r1_data
-    bit tube_host_r1_status                                           ; ae97: 2c e0 fe    ,.. :06bc[2]
+    bit tube_status_1_and_tube_control                                ; ae97: 2c e0 fe    ,.. :06bc[2]
     bvc write_tube_r1_data                                            ; ae9a: 50 fb       P.  :06bf[2]
-    sta tube_host_r1_data                                             ; ae9c: 8d e1 fe    ... :06c1[2]
+    sta tube_data_register_1                                          ; ae9c: 8d e1 fe    ... :06c1[2]
     rts                                                               ; ae9f: 60          `   :06c4[2]
 
 ; Wait for register 2 to have data and read A from it.
 ; &aea0 referenced 21 times by &0520[2], &0524[2], &052d[2], &0542[2], &0552[2], &055e[2], &0564[2], &056c[2], &0586[2], &05ab[2], &05bc[2], &05d3[2], &05db[2], &05f2[2], &05f6[2], &0607[2], &060b[2], &060f[2], &0627[2], &066a[2], &06c8[2]
 .read_tube_r2_data
-    bit tube_host_r2_status                                           ; aea0: 2c e2 fe    ,.. :06c5[2]
+    bit tube_status_register_2                                        ; aea0: 2c e2 fe    ,.. :06c5[2]
     bpl read_tube_r2_data                                             ; aea3: 10 fb       ..  :06c8[2]
-    lda tube_host_r2_data                                             ; aea5: ad e3 fe    ... :06ca[2]
+    lda tube_data_register_2                                          ; aea5: ad e3 fe    ... :06ca[2]
     rts                                                               ; aea8: 60          `   :06cd[2]
 
 
@@ -8081,9 +8081,9 @@ l0600 = sub_c05ff+1
     jsr osbyte                                                        ; aee5: 20 f4 ff     ..            ; Explode character definition RAM (six extra pages), can redefine all characters 32-255 (X=6)
 ; &aee8 referenced 2 times by &aeeb, &aef5
 .tube_banner_loop
-    bit tube_host_r1_status                                           ; aee8: 2c e0 fe    ,..
+    bit tube_status_1_and_tube_control                                ; aee8: 2c e0 fe    ,..
     bpl tube_banner_loop                                              ; aeeb: 10 fb       ..
-    lda tube_host_r1_data                                             ; aeed: ad e1 fe    ...
+    lda tube_data_register_1                                          ; aeed: ad e1 fe    ...
     beq lda_0_rts                                                     ; aef0: f0 43       .C
     jsr oswrch                                                        ; aef2: 20 ee ff     ..            ; Write character
     jmp tube_banner_loop                                              ; aef5: 4c e8 ae    L..
@@ -8099,7 +8099,7 @@ l0600 = sub_c05ff+1
     lda #>tube_brkv_handler                                           ; af07: a9 00       ..
     sta brkv+1                                                        ; af09: 8d 03 02    ...
     lda #&8e                                                          ; af0c: a9 8e       ..
-    sta tube_host_r1_status                                           ; af0e: 8d e0 fe    ...
+    sta tube_status_1_and_tube_control                                ; af0e: 8d e0 fe    ...
     ldy #0                                                            ; af11: a0 00       ..
 ; &af13 referenced 1 time by &af26
 .loop_caf13
@@ -8135,7 +8135,7 @@ l0600 = sub_c05ff+1
 .tube_brkv_handler
     lda #&ff                                                          ; af38: a9 ff       ..  :0016[3]
     jsr write_tube_r4_data                                            ; af3a: 20 9e 06     .. :0018[3]
-    lda tube_host_r2_data                                             ; af3d: ad e3 fe    ... :001b[3]
+    lda tube_data_register_2                                          ; af3d: ad e3 fe    ... :001b[3]
     lda #0                                                            ; af40: a9 00       ..  :001e[3]
     jsr write_tube_r2_data                                            ; af42: 20 95 06     .. :0020[3]
     tay                                                               ; af45: a8          .   :0023[3]
@@ -8155,19 +8155,19 @@ l0600 = sub_c05ff+1
     cli                                                               ; af57: 58          X   :0035[3]
 ; &af58 referenced 6 times by &0044[3], &057f[2], &05a6[2], &0604[2], &0665[2], &0692[2]
 .c0036
-    bit tube_host_r1_status                                           ; af58: 2c e0 fe    ,.. :0036[3]
+    bit tube_status_1_and_tube_control                                ; af58: 2c e0 fe    ,.. :0036[3]
     bpl c0041                                                         ; af5b: 10 06       ..  :0039[3]
 ; &af5d referenced 1 time by &0049[3]
 .loop_c003b
-    lda tube_host_r1_data                                             ; af5d: ad e1 fe    ... :003b[3]
+    lda tube_data_register_1                                          ; af5d: ad e1 fe    ... :003b[3]
     jsr oswrch                                                        ; af60: 20 ee ff     .. :003e[3]   ; Write character
 ; &af63 referenced 1 time by &0039[3]
 .c0041
-    bit tube_host_r2_status                                           ; af63: 2c e2 fe    ,.. :0041[3]
+    bit tube_status_register_2                                        ; af63: 2c e2 fe    ,.. :0041[3]
     bpl c0036                                                         ; af66: 10 f0       ..  :0044[3]
-    bit tube_host_r1_status                                           ; af68: 2c e0 fe    ,.. :0046[3]
+    bit tube_status_1_and_tube_control                                ; af68: 2c e0 fe    ,.. :0046[3]
     bmi loop_c003b                                                    ; af6b: 30 f0       0.  :0049[3]
-    ldx tube_host_r2_data                                             ; af6d: ae e3 fe    ... :004b[3]
+    ldx tube_data_register_2                                          ; af6d: ae e3 fe    ... :004b[3]
 ; Patch the following JMP so we effectively do JMP (&500,X)
 
 ; Extra comment after a blank line
@@ -8273,20 +8273,20 @@ jump_address_low = sub_c0050+1
     dey                                                               ; afc4: 88          .   :044b[1]
     bpl loop_c0446                                                    ; afc5: 10 f8       ..  :044c[1]
     ldy #&18                                                          ; afc7: a0 18       ..  :044e[1]
-    sty tube_host_r1_status                                           ; afc9: 8c e0 fe    ... :0450[1]
+    sty tube_status_1_and_tube_control                                ; afc9: 8c e0 fe    ... :0450[1]
     lda tube_entry_flags,x                                            ; afcc: bd 18 05    ... :0453[1]
-    sta tube_host_r1_status                                           ; afcf: 8d e0 fe    ... :0456[1]
+    sta tube_status_1_and_tube_control                                ; afcf: 8d e0 fe    ... :0456[1]
     lsr a                                                             ; afd2: 4a          J   :0459[1]
     lsr a                                                             ; afd3: 4a          J   :045a[1]
     bcc c0463                                                         ; afd4: 90 06       ..  :045b[1]
-    bit tube_host_r3_data                                             ; afd6: 2c e5 fe    ,.. :045d[1]
-    bit tube_host_r3_data                                             ; afd9: 2c e5 fe    ,.. :0460[1]
+    bit tube_data_register_3                                          ; afd6: 2c e5 fe    ,.. :045d[1]
+    bit tube_data_register_3                                          ; afd9: 2c e5 fe    ,.. :0460[1]
 ; &afdc referenced 1 time by &045b[1]
 .c0463
     jsr write_tube_r4_data                                            ; afdc: 20 9e 06     .. :0463[1]
 ; &afdf referenced 1 time by &0469[1]
 .loop_c0466
-    bit tube_host_r4_status                                           ; afdf: 2c e6 fe    ,.. :0466[1]
+    bit tube_status_register_4_and_cpu_control                        ; afdf: 2c e6 fe    ,.. :0466[1]
     bvc loop_c0466                                                    ; afe2: 50 fb       P.  :0469[1]
     bcs c047a                                                         ; afe4: b0 0d       ..  :046b[1]
     cpx #4                                                            ; afe6: e0 04       ..  :046d[1]
@@ -8302,7 +8302,7 @@ jump_address_low = sub_c0050+1
     lsr a                                                             ; aff3: 4a          J   :047a[1]
     bcc c0482                                                         ; aff4: 90 05       ..  :047b[1]
     ldy #&88                                                          ; aff6: a0 88       ..  :047d[1]
-    sty tube_host_r1_status                                           ; aff8: 8c e0 fe    ... :047f[1]
+    sty tube_status_1_and_tube_control                                ; aff8: 8c e0 fe    ... :047f[1]
 ; &affb referenced 2 times by &046f[1], &047b[1]
 .c0482
     plp                                                               ; affb: 28          (   :0482[1]
@@ -8336,7 +8336,7 @@ jump_address_low = sub_c0050+1
 ; &b01f referenced 1 time by &04af[1]
 .loop_c04a6
     lda (l0000),y                                                     ; b01f: b1 00       ..  :04a6[1]
-    sta tube_host_r3_data                                             ; b021: 8d e5 fe    ... :04a8[1]
+    sta tube_data_register_3                                          ; b021: 8d e5 fe    ... :04a8[1]
     nop                                                               ; b024: ea          .   :04ab[1]
     nop                                                               ; b025: ea          .   :04ac[1]
     nop                                                               ; b026: ea          .   :04ad[1]
@@ -10453,7 +10453,7 @@ lb6ce = sub_cb6cd+1
     jsr cbe89                                                         ; bd69: 20 89 be     ..
 ; &bd6c referenced 1 time by &bd7a
 .loop_cbd6c
-    lda tube_host_r3_data                                             ; bd6c: ad e5 fe    ...
+    lda tube_data_register_3                                          ; bd6c: ad e5 fe    ...
     sta (l00b8),y                                                     ; bd6f: 91 b8       ..
     ldx #3                                                            ; bd71: a2 03       ..
     jsr cbe8d                                                         ; bd73: 20 8d be     ..
@@ -10479,7 +10479,7 @@ lb6ce = sub_cb6cd+1
     jsr cbe89                                                         ; bd96: 20 89 be     ..
 ; &bd99 referenced 1 time by &bda1
 .loop_cbd99
-    lda tube_host_r3_data                                             ; bd99: ad e5 fe    ...
+    lda tube_data_register_3                                          ; bd99: ad e5 fe    ...
     sta (l00b8),y                                                     ; bd9c: 91 b8       ..
     lda (l00b8),y                                                     ; bd9e: b1 b8       ..
     iny                                                               ; bda0: c8          .
@@ -10555,7 +10555,7 @@ lb6ce = sub_cb6cd+1
 ; &be0e referenced 1 time by &be1d
 .loop_cbe0e
     lda (l00b8),y                                                     ; be0e: b1 b8       ..
-    sta tube_host_r3_data                                             ; be10: 8d e5 fe    ...
+    sta tube_data_register_3                                          ; be10: 8d e5 fe    ...
     ldx #3                                                            ; be13: a2 03       ..
     jsr cbe8d                                                         ; be15: 20 8d be     ..
     iny                                                               ; be18: c8          .
@@ -10576,7 +10576,7 @@ lb6ce = sub_cb6cd+1
 ; &be31 referenced 1 time by &be3a
 .loop_cbe31
     lda (l00b8),y                                                     ; be31: b1 b8       ..
-    sta tube_host_r3_data                                             ; be33: 8d e5 fe    ...
+    sta tube_data_register_3                                          ; be33: 8d e5 fe    ...
     nop                                                               ; be36: ea          .
     nop                                                               ; be37: ea          .
     nop                                                               ; be38: ea          .
@@ -10859,1449 +10859,1449 @@ lb6ce = sub_cb6cd+1
 .pydis_end
 
 ; Label references by decreasing frequency:
-;     l00b8:                                125
-;     l00b0:                                105
-;     l00ba:                                 44
-;     l00bf:                                 42
-;     l00bc:                                 41
-;     l00b6:                                 35
-;     l00be:                                 31
-;     l00cd:                                 31
-;     print_inline_l809f_top_bit_clear:      31
-;     l00c2:                                 30
-;     l00b1:                                 29
-;     sub_c83e3:                             29
-;     l00b9:                                 28
-;     l00bb:                                 28
-;     l00b5:                                 26
-;     l00bd:                                 26
-;     l00b4:                                 25
-;     l00b3:                                 23
-;     l00c1:                                 23
-;     os_text_ptr:                           23
-;     osbyte:                                22
-;     l0f0e:                                 21
-;     read_tube_r2_data:                     21
-;     romsel_copy:                           21
-;     c809f:                                 20
-;     l00c4:                                 20
-;     l00b2:                                 19
-;     l10c2:                                 19
-;     l0001:                                 18
-;     l00a8:                                 18
-;     l00aa:                                 18
-;     l00c5:                                 18
-;     l00c9:                                 18
-;     l10de:                                 18
-;     l0000:                                 17
-;     l00b7:                                 17
-;     l0e0f:                                 17
-;     l0f06:                                 17
-;     l1000:                                 17
-;     ca3dc:                                 16
-;     cb82b:                                 16
-;     l00a2:                                 16
-;     l00ab:                                 16
-;     l00ae:                                 16
-;     l00c0:                                 15
-;     l00c3:                                 15
-;     l00c7:                                 15
-;     l0f05:                                 15
-;     l00cc:                                 14
-;     l1117:                                 14
-;     tube_entry:                            14
-;     write_tube_r2_data:                    14
-;     l00a1:                                 13
-;     l00a5:                                 13
-;     l00c8:                                 13
-;     l0d30:                                 13
-;     l0f07:                                 13
-;     sub_ca14a:                             13
-;     tube_host_r3_data:                     13
-;     clc_jmp_gsinit:                        12
-;     l00ac:                                 12
-;     osasci:                                12
-;     sub_cb841:                             12
-;     c996e:                                 11
-;     cac0f:                                 11
-;     generate_error_precheck:               11
-;     l00c6:                                 11
-;     l0e08:                                 11
-;     lfe84:                                 11
-;     osrdsc_ptr:                            11
-;     sub_c8149:                             11
-;     tube_host_r2_data:                     11
-;     c93e6:                                 10
-;     cb203:                                 10
-;     l00a9:                                 10
-;     l1111:                                 10
-;     l1112:                                 10
-;     lfe87:                                 10
-;     sub_c80c3:                             10
-;     tube_host_r2_status:                   10
-;     cbbd0:                                  9
-;     l00ca:                                  9
-;     l1074:                                  9
-;     l108a:                                  9
-;     l1097:                                  9
-;     l10c0:                                  9
-;     l1110:                                  9
-;     c8816:                                  8
-;     l00ce:                                  8
-;     l00ff:                                  8
-;     l0100:                                  8
-;     l0df0:                                  8
-;     l0f04:                                  8
-;     l1060:                                  8
-;     l1082:                                  8
-;     l108b:                                  8
-;     l1090:                                  8
-;     l1096:                                  8
-;     l10ca:                                  8
-;     l10cf:                                  8
-;     l10d1:                                  8
-;     osbyte_read:                            8
-;     osfind:                                 8
-;     sub_c81b0:                              8
-;     sub_c81bf:                              8
-;     sub_c8b7b:                              8
-;     sub_cb85d:                              8
-;     tube_host_r1_status:                    8
-;     write_tube_r4_data:                     8
-;     c8b8b:                                  7
-;     generate_error2:                        7
-;     l00a7:                                  7
-;     l00cf:                                  7
-;     l0f08:                                  7
-;     l1075:                                  7
-;     l10c9:                                  7
-;     l10d2:                                  7
-;     l1114:                                  7
-;     osrdsc:                                 7
-;     print_inline_osasci_top_bit_clear:      7
-;     sub_c8284:                              7
-;     sub_c8380:                              7
-;     sub_cb580:                              7
-;     sub_cbab9:                              7
-;     c0036:                                  6
-;     c940c:                                  6
-;     cb8fb:                                  6
-;     command_table:                          6
-;     generate_error_precheck_bad:            6
-;     l0015:                                  6
-;     l00f3:                                  6
-;     l00f7:                                  6
-;     l0f0f:                                  6
-;     l1100:                                  6
-;     lb726:                                  6
-;     oswrch:                                 6
-;     sub_c8280:                              6
-;     sub_c82fe:                              6
-;     sub_c87da:                              6
-;     sub_c99ac:                              6
-;     sub_c9e75:                              6
-;     sub_cb5f2:                              6
-;     zero_stacked_XXX:                       6
-;     c8125:                                  5
-;     c8ba2:                                  5
-;     c9257:                                  5
-;     c99a3:                                  5
-;     cb795:                                  5
-;     cbe7b:                                  5
-;     l00a6:                                  5
-;     l00af:                                  5
-;     l00f0:                                  5
-;     l1087:                                  5
-;     l1088:                                  5
-;     l1099:                                  5
-;     l10c7:                                  5
-;     l10dd:                                  5
-;     l110c:                                  5
-;     l1115:                                  5
-;     l1116:                                  5
-;     nmi_XXX23:                              5
-;     osnewl:                                 5
-;     sub_c80bb:                              5
-;     sub_c80ed:                              5
-;     sub_c80f3:                              5
-;     sub_c830a:                              5
-;     sub_c8335:                              5
-;     sub_c8386:                              5
-;     sub_c840c:                              5
-;     sub_c8f3f:                              5
-;     sub_c9a6e:                              5
-;     sub_c9ab8:                              5
-;     sub_ca0de:                              5
-;     sub_ca1b4:                              5
-;     sub_cb6fe:                              5
-;     sub_cb745:                              5
-;     sub_cb850:                              5
-;     sub_cba67:                              5
-;     write_tube_r1_data:                     5
-;     c059e:                                  4
-;     c81a7:                                  4
-;     c8225:                                  4
-;     c8d74:                                  4
-;     c8d91:                                  4
-;     c8e0e:                                  4
-;     c8e12:                                  4
-;     c8e64:                                  4
-;     c940e:                                  4
-;     c9436:                                  4
-;     c993b:                                  4
-;     c9adf:                                  4
-;     c9ae9:                                  4
-;     ca5e5:                                  4
-;     cb446:                                  4
-;     cb68c:                                  4
-;     cbe7a:                                  4
-;     cbee8:                                  4
-;     generate_error:                         4
-;     generate_error_precheck_disc:           4
-;     inc16_ae:                               4
-;     l0002:                                  4
-;     l0e00:                                  4
-;     l0f0c:                                  4
-;     l0f0d:                                  4
-;     l1069:                                  4
-;     l1076:                                  4
-;     l1077:                                  4
-;     l1081:                                  4
-;     l1086:                                  4
-;     l1095:                                  4
-;     l10c4:                                  4
-;     l10cb:                                  4
-;     l10cc:                                  4
-;     l10ce:                                  4
-;     l10d9:                                  4
-;     l10da:                                  4
-;     l110d:                                  4
-;     l1113:                                  4
-;     l111a:                                  4
-;     l111d:                                  4
-;     lb57f:                                  4
-;     lbfff:                                  4
-;     lfe85:                                  4
-;     lfe86:                                  4
-;     nmi_beq+1:                              4
-;     osbget:                                 4
-;     osbput:                                 4
-;     osfile:                                 4
-;     osrdch:                                 4
-;     romsel:                                 4
-;     sub_c80c8:                              4
-;     sub_c8174:                              4
-;     sub_c821d:                              4
-;     sub_c82b2:                              4
-;     sub_c8327:                              4
-;     sub_c8f6b:                              4
-;     sub_c9965:                              4
-;     sub_c9a8d:                              4
-;     sub_ca379:                              4
-;     sub_ca9ca:                              4
-;     sub_caacf:                              4
-;     sub_cac18:                              4
-;     sub_cac62:                              4
-;     sub_cb616:                              4
-;     sub_cb68f:                              4
-;     sub_cb83f:                              4
-;     sub_cbac2:                              4
-;     sub_cbb00:                              4
-;     bytev:                                  3
-;     c059c:                                  3
-;     c8103:                                  3
-;     c8290:                                  3
-;     c82e6:                                  3
-;     c8454:                                  3
-;     c89d7:                                  3
-;     c8d41:                                  3
-;     c8e53:                                  3
-;     c8ecc:                                  3
-;     c8f2a:                                  3
-;     c91af:                                  3
-;     c9214:                                  3
-;     c9444:                                  3
-;     c94bc:                                  3
-;     c9738:                                  3
-;     c99ed:                                  3
-;     c9a8c:                                  3
-;     c9d5d:                                  3
-;     ca06b:                                  3
-;     ca14f:                                  3
-;     ca1c0:                                  3
-;     ca660:                                  3
-;     caa42:                                  3
-;     caa44:                                  3
-;     cacc4:                                  3
-;     cb1d5:                                  3
-;     cb371:                                  3
-;     cb684:                                  3
-;     cb6ca:                                  3
-;     cbab4:                                  3
-;     cbe47:                                  3
-;     cbe89:                                  3
-;     cbe8d:                                  3
-;     generate_error_precheck_open:           3
-;     l0054:                                  3
-;     l00ef:                                  3
-;     l0107:                                  3
-;     l0109:                                  3
-;     l0d3d:                                  3
-;     l0ef8:                                  3
-;     l1092:                                  3
-;     l1093:                                  3
-;     l1094:                                  3
-;     l1098:                                  3
-;     l109d:                                  3
-;     l109f:                                  3
-;     l10c3:                                  3
-;     l10c5:                                  3
-;     l10c6:                                  3
-;     l10d0:                                  3
-;     l10d3:                                  3
-;     l10d6:                                  3
-;     l10d7:                                  3
-;     l1119:                                  3
-;     l111c:                                  3
-;     lfe80:                                  3
-;     nmi_handler2_rom_end:                   3
-;     nmi_lda_immXXX3+1:                      3
-;     nmi_lda_zp:                             3
-;     nmi_sta_abs+1:                          3
-;     nmi_sta_abs2+1:                         3
-;     oscli:                                  3
-;     osword:                                 3
-;     sram_table:                             3
-;     sub_c0582:                              3
-;     sub_c81be:                              3
-;     sub_c833a:                              3
-;     sub_c836e:                              3
-;     sub_c8456:                              3
-;     sub_c8b86:                              3
-;     sub_c8f7a:                              3
-;     sub_c93fd:                              3
-;     sub_c9526:                              3
-;     sub_c9940:                              3
-;     sub_c9be5:                              3
-;     sub_c9e30:                              3
-;     sub_c9f0f:                              3
-;     sub_c9f16:                              3
-;     sub_c9f1e:                              3
-;     sub_ca315:                              3
-;     sub_ca384:                              3
-;     sub_ca530:                              3
-;     sub_ca9c2:                              3
-;     sub_cac0c:                              3
-;     sub_cb58b:                              3
-;     sub_cb84e:                              3
-;     sub_cb986:                              3
-;     sub_cbac4:                              3
-;     sub_cbf7c:                              3
-;     tube_host_r1_data:                      3
-;     c0434:                                  2
-;     c0482:                                  2
-;     c0491:                                  2
-;     c04bc:                                  2
-;     c053a:                                  2
-;     c05fc:                                  2
-;     c0636:                                  2
-;     c0d60:                                  2
-;     c815d:                                  2
-;     c822a:                                  2
-;     c825d:                                  2
-;     c82fd:                                  2
-;     c8543:                                  2
-;     c8560:                                  2
-;     c85bc:                                  2
-;     c8703:                                  2
-;     c8705:                                  2
-;     c873b:                                  2
-;     c8808:                                  2
-;     c883f:                                  2
-;     c88a6:                                  2
-;     c88f4:                                  2
-;     c898a:                                  2
-;     c89a5:                                  2
-;     c89b4:                                  2
-;     c8a00:                                  2
-;     c8a6e:                                  2
-;     c8be3:                                  2
-;     c8c12:                                  2
-;     c8cb2:                                  2
-;     c8d0d:                                  2
-;     c8d13:                                  2
-;     c8e0d:                                  2
-;     c8e32:                                  2
-;     c8e9f:                                  2
-;     c8ea5:                                  2
-;     c8eb7:                                  2
-;     c8eeb:                                  2
-;     c8f3e:                                  2
-;     c91df:                                  2
-;     c9289:                                  2
-;     c9367:                                  2
-;     c94a9:                                  2
-;     c94c6:                                  2
-;     c95fd:                                  2
-;     c9628:                                  2
-;     c965a:                                  2
-;     c96b7:                                  2
-;     c97b3:                                  2
-;     c9b6e:                                  2
-;     c9bc5:                                  2
-;     c9dcd:                                  2
-;     c9dd5:                                  2
-;     c9e41:                                  2
-;     ca01d:                                  2
-;     ca021:                                  2
-;     ca06c:                                  2
-;     ca0f5:                                  2
-;     ca10b:                                  2
-;     ca19f:                                  2
-;     ca2f2:                                  2
-;     ca38b:                                  2
-;     ca411:                                  2
-;     ca414:                                  2
-;     ca5ab:                                  2
-;     ca637:                                  2
-;     ca845:                                  2
-;     ca86b:                                  2
-;     ca87a:                                  2
-;     ca97d:                                  2
-;     ca9ff:                                  2
-;     caa1c:                                  2
-;     caa51:                                  2
-;     cab1a:                                  2
-;     cab41:                                  2
-;     cab54:                                  2
-;     cabbc:                                  2
-;     caed3:                                  2
-;     cb280:                                  2
-;     cb297:                                  2
-;     cb2a0:                                  2
-;     cb300:                                  2
-;     cb406:                                  2
-;     cb45e:                                  2
-;     cb655:                                  2
-;     cb718:                                  2
-;     cb7ed:                                  2
-;     cb8e4:                                  2
-;     cb9e8:                                  2
-;     cba10:                                  2
-;     cbaf8:                                  2
-;     cbafd:                                  2
-;     cbb28:                                  2
-;     cbb2a:                                  2
-;     cbc13:                                  2
-;     cbc3a:                                  2
-;     cbcb9:                                  2
-;     cbdb9:                                  2
-;     cbec1:                                  2
-;     cbf8e:                                  2
-;     fscv:                                   2
-;     general_service_handler_indirect:       2
-;     gsinit:                                 2
-;     gsread:                                 2
-;     invert_l1065:                           2
-;     just_rts:                               2
-;     l0003:                                  2
-;     l0012:                                  2
-;     l0014:                                  2
-;     l0053:                                  2
-;     l0055:                                  2
-;     l0056:                                  2
-;     l00a0:                                  2
-;     l00a3:                                  2
-;     l00a4:                                  2
-;     l00ad:                                  2
-;     l00fd:                                  2
-;     l0101:                                  2
-;     l0102:                                  2
-;     l0105:                                  2
-;     l010b:                                  2
-;     l0128:                                  2
-;     l0500:                                  2
-;     l0700:                                  2
-;     l0d00:                                  2
-;     l0d26:                                  2
-;     l0e07:                                  2
-;     l0f0a:                                  2
-;     l0f0b:                                  2
-;     l1045:                                  2
-;     l1062:                                  2
-;     l1065:                                  2
-;     l1067:                                  2
-;     l1078:                                  2
-;     l107d:                                  2
-;     l107e:                                  2
-;     l107f:                                  2
-;     l1089:                                  2
-;     l108c:                                  2
-;     l1091:                                  2
-;     l109a:                                  2
-;     l109b:                                  2
-;     l109e:                                  2
-;     l10c1:                                  2
-;     l10cd:                                  2
-;     l10d8:                                  2
-;     l10db:                                  2
-;     l10dc:                                  2
-;     l10e2:                                  2
-;     l10e3:                                  2
-;     l10e4:                                  2
-;     l1109:                                  2
-;     l110b:                                  2
-;     l110e:                                  2
-;     l110f:                                  2
-;     l111b:                                  2
-;     la1d3:                                  2
-;     lb872:                                  2
-;     nmi_XXX7:                               2
-;     nmi_handler_ram:                        2
-;     nmi_lda_abs+1:                          2
-;     nmi_lda_abs+2:                          2
-;     nmi_lda_immXXX4+1:                      2
-;     nmi_lda_zp+1:                           2
-;     nmi_sta_abs+2:                          2
-;     nmi_sta_abs2+2:                         2
-;     osargs:                                 2
-;     osgbpb:                                 2
-;     sub_c04ce:                              2
-;     sub_c809a:                              2
-;     sub_c80e3:                              2
-;     sub_c81ae:                              2
-;     sub_c81c5:                              2
-;     sub_c8266:                              2
-;     sub_c826d:                              2
-;     sub_c82bb:                              2
-;     sub_c82e8:                              2
-;     sub_c841b:                              2
-;     sub_c8439:                              2
-;     sub_c8555:                              2
-;     sub_c8745:                              2
-;     sub_c87db:                              2
-;     sub_c87e3:                              2
-;     sub_c8855:                              2
-;     sub_c8862:                              2
-;     sub_c8951:                              2
-;     sub_c89da:                              2
-;     sub_c8a77:                              2
-;     sub_c8ab3:                              2
-;     sub_c8b4d:                              2
-;     sub_c8b64:                              2
-;     sub_c9279:                              2
-;     sub_c928a:                              2
-;     sub_c93c5:                              2
-;     sub_c93d3:                              2
-;     sub_c93f5:                              2
-;     sub_c9432:                              2
-;     sub_c9445:                              2
-;     sub_c9516:                              2
-;     sub_c952e:                              2
-;     sub_c992c:                              2
-;     sub_c995a:                              2
-;     sub_c99f3:                              2
-;     sub_c9a0f:                              2
-;     sub_c9a50:                              2
-;     sub_c9a60:                              2
-;     sub_c9a63:                              2
-;     sub_c9a78:                              2
-;     sub_c9a82:                              2
-;     sub_c9aa3:                              2
-;     sub_c9ac8:                              2
-;     sub_c9ad8:                              2
-;     sub_c9b79:                              2
-;     sub_c9bf2:                              2
-;     sub_c9d1e:                              2
-;     sub_c9df4:                              2
-;     sub_c9e1e:                              2
-;     sub_c9e54:                              2
-;     sub_c9ef4:                              2
-;     sub_c9f14:                              2
-;     sub_c9f26:                              2
-;     sub_ca168:                              2
-;     sub_ca1c6:                              2
-;     sub_ca324:                              2
-;     sub_ca3ec:                              2
-;     sub_ca51f:                              2
-;     sub_ca5b2:                              2
-;     sub_ca90d:                              2
-;     sub_caa53:                              2
-;     sub_caac2:                              2
-;     sub_caaf1:                              2
-;     sub_cac4e:                              2
-;     sub_cb598:                              2
-;     sub_cb5ce:                              2
-;     sub_cb5ee:                              2
-;     sub_cb607:                              2
-;     sub_cb61e:                              2
-;     sub_cb65f:                              2
-;     sub_cb6b1:                              2
-;     sub_cb9f5:                              2
-;     sub_cbc68:                              2
-;     sub_cbe83:                              2
-;     sub_cbe9d:                              2
-;     sub_cbec2:                              2
-;     sub_cbf82:                              2
-;     tube_banner_loop:                       2
-;     tube_host_r4_status:                    2
-;     brkv:                                   1
-;     c0032:                                  1
-;     c0041:                                  1
-;     c0400:                                  1
-;     c0432:                                  1
-;     c0463:                                  1
-;     c047a:                                  1
-;     c0484:                                  1
-;     c048c:                                  1
-;     c049b:                                  1
-;     c04f7:                                  1
-;     c0552:                                  1
-;     c0593:                                  1
-;     c05a6:                                  1
-;     c0645:                                  1
-;     c0665:                                  1
-;     c06a7:                                  1
-;     c0d74:                                  1
-;     c0d80:                                  1
-;     c8040:                                  1
-;     c8093:                                  1
-;     c8096:                                  1
-;     c80d0:                                  1
-;     c8111:                                  1
-;     c8115:                                  1
-;     c812e:                                  1
-;     c815b:                                  1
-;     c815f:                                  1
-;     c8184:                                  1
-;     c818a:                                  1
-;     c81a2:                                  1
-;     c81bd:                                  1
-;     c8243:                                  1
-;     c8286:                                  1
-;     c828b:                                  1
-;     c82be:                                  1
-;     c82d9:                                  1
-;     c82e7:                                  1
-;     c82fb:                                  1
-;     c8306:                                  1
-;     c8332:                                  1
-;     c8333:                                  1
-;     c83ab:                                  1
-;     c83cd:                                  1
-;     c83e2:                                  1
-;     c842b:                                  1
-;     c8436:                                  1
-;     c8438:                                  1
-;     c8453:                                  1
-;     c8477:                                  1
-;     c8481:                                  1
-;     c8482:                                  1
-;     c849d:                                  1
-;     c853e:                                  1
-;     c855f:                                  1
-;     c8573:                                  1
-;     c859b:                                  1
-;     c85c5:                                  1
-;     c8734:                                  1
-;     c8759:                                  1
-;     c8779:                                  1
-;     c877c:                                  1
-;     c87ab:                                  1
-;     c87b8:                                  1
-;     c87c6:                                  1
-;     c8815:                                  1
-;     c8837:                                  1
-;     c8864:                                  1
-;     c8867:                                  1
-;     c892d:                                  1
-;     c8945:                                  1
-;     c8968:                                  1
-;     c896b:                                  1
-;     c89ad:                                  1
-;     c89e2:                                  1
-;     c89f6:                                  1
-;     c8a19:                                  1
-;     c8a49:                                  1
-;     c8a50:                                  1
-;     c8a54:                                  1
-;     c8a82:                                  1
-;     c8ad0:                                  1
-;     c8aeb:                                  1
-;     c8b18:                                  1
-;     c8b60:                                  1
-;     c8b77:                                  1
-;     c8bfb:                                  1
-;     c8c2e:                                  1
-;     c8c3a:                                  1
-;     c8c4e:                                  1
-;     c8c61:                                  1
-;     c8c87:                                  1
-;     c8cae:                                  1
-;     c8cc1:                                  1
-;     c8cd6:                                  1
-;     c8ce7:                                  1
-;     c8cfc:                                  1
-;     c8d03:                                  1
-;     c8d5d:                                  1
-;     c8d92:                                  1
-;     c8dd2:                                  1
-;     c8de2:                                  1
-;     c8e03:                                  1
-;     c8e4d:                                  1
-;     c8e6f:                                  1
-;     c8e72:                                  1
-;     c8e9e:                                  1
-;     c8eaf:                                  1
-;     c8ecb:                                  1
-;     c8edf:                                  1
-;     c8ef8:                                  1
-;     c8f12:                                  1
-;     c8f21:                                  1
-;     c8f81:                                  1
-;     c8fb5:                                  1
-;     c8fc7:                                  1
-;     c9060:                                  1
-;     c9115:                                  1
-;     c91cc:                                  1
-;     c91eb:                                  1
-;     c91f3:                                  1
-;     c91f9:                                  1
-;     c9201:                                  1
-;     c920d:                                  1
-;     c921f:                                  1
-;     c922b:                                  1
-;     c9238:                                  1
-;     c923b:                                  1
-;     c923f:                                  1
-;     c9249:                                  1
-;     c925a:                                  1
-;     c926a:                                  1
-;     c9276:                                  1
-;     c929c:                                  1
-;     c92bd:                                  1
-;     c92c4:                                  1
-;     c92c7:                                  1
-;     c92d6:                                  1
-;     c92e3:                                  1
-;     c9302:                                  1
-;     c936b:                                  1
-;     c9379:                                  1
-;     c938d:                                  1
-;     c9390:                                  1
-;     c93a8:                                  1
-;     c93b1:                                  1
-;     c93c4:                                  1
-;     c93e2:                                  1
-;     c93e5:                                  1
-;     c93ff:                                  1
-;     c9450:                                  1
-;     c945c:                                  1
-;     c948d:                                  1
-;     c94c1:                                  1
-;     c94c2:                                  1
-;     c94d4:                                  1
-;     c9504:                                  1
-;     c9535:                                  1
-;     c9556:                                  1
-;     c956d:                                  1
-;     c956f:                                  1
-;     c95e4:                                  1
-;     c95e7:                                  1
-;     c9649:                                  1
-;     c964a:                                  1
-;     c9658:                                  1
-;     c967a:                                  1
-;     c9682:                                  1
-;     c9683:                                  1
-;     c969e:                                  1
-;     c96c3:                                  1
-;     c96e4:                                  1
-;     c96e9:                                  1
-;     c96ec:                                  1
-;     c96f5:                                  1
-;     c9700:                                  1
-;     c9714:                                  1
-;     c9736:                                  1
-;     c973c:                                  1
-;     c973d:                                  1
-;     c975b:                                  1
-;     c976c:                                  1
-;     c97e6:                                  1
-;     c981f:                                  1
-;     c982e:                                  1
-;     c9835:                                  1
-;     c984c:                                  1
-;     c9859:                                  1
-;     c986b:                                  1
-;     c9873:                                  1
-;     c98b1:                                  1
-;     c98ba:                                  1
-;     c98cd:                                  1
-;     c98ed:                                  1
-;     c98f0:                                  1
-;     c994b:                                  1
-;     c9978:                                  1
-;     c9993:                                  1
-;     c99ea:                                  1
-;     c9a2a:                                  1
-;     c9a3f:                                  1
-;     c9a73:                                  1
-;     c9a77:                                  1
-;     c9ad4:                                  1
-;     c9bc2:                                  1
-;     c9c16:                                  1
-;     c9c33:                                  1
-;     c9c51:                                  1
-;     c9c58:                                  1
-;     c9c6b:                                  1
-;     c9c8b:                                  1
-;     c9cee:                                  1
-;     c9d12:                                  1
-;     c9d2b:                                  1
-;     c9d57:                                  1
-;     c9d67:                                  1
-;     c9d71:                                  1
-;     c9d72:                                  1
-;     c9d86:                                  1
-;     c9d89:                                  1
-;     c9db4:                                  1
-;     c9dce:                                  1
-;     c9e13:                                  1
-;     c9e16:                                  1
-;     c9e28:                                  1
-;     c9e2a:                                  1
-;     c9e5c:                                  1
-;     c9e6f:                                  1
-;     c9e71:                                  1
-;     c9eb3:                                  1
-;     c9ec2:                                  1
-;     c9ef1:                                  1
-;     c9f0d:                                  1
-;     c9f19:                                  1
-;     c9f5e:                                  1
-;     c9f64:                                  1
-;     c9f6a:                                  1
-;     c9f6b:                                  1
-;     c9f88:                                  1
-;     c9fd9:                                  1
-;     c9ff4:                                  1
-;     ca005:                                  1
-;     ca054:                                  1
-;     ca075:                                  1
-;     ca0a9:                                  1
-;     ca17a:                                  1
-;     ca183:                                  1
-;     ca1c1:                                  1
-;     ca1d2:                                  1
-;     ca27a:                                  1
-;     ca2ab:                                  1
-;     ca30d:                                  1
-;     ca321:                                  1
-;     ca34a:                                  1
-;     ca378:                                  1
-;     ca38c:                                  1
-;     ca38e:                                  1
-;     ca3ae:                                  1
-;     ca3bd:                                  1
-;     ca3fb:                                  1
-;     ca40c:                                  1
-;     ca45d:                                  1
-;     ca47b:                                  1
-;     ca4fa:                                  1
-;     ca538:                                  1
-;     ca547:                                  1
-;     ca574:                                  1
-;     ca595:                                  1
-;     ca5a0:                                  1
-;     ca5c4:                                  1
-;     ca5e2:                                  1
-;     ca5fb:                                  1
-;     ca605:                                  1
-;     ca63a:                                  1
-;     ca647:                                  1
-;     ca652:                                  1
-;     ca65d:                                  1
-;     ca675:                                  1
-;     ca68a:                                  1
-;     ca6b3:                                  1
-;     ca6b6:                                  1
-;     ca6bb:                                  1
-;     ca6ce:                                  1
-;     ca6e2:                                  1
-;     ca70a:                                  1
-;     ca712:                                  1
-;     ca721:                                  1
-;     ca728:                                  1
-;     ca73a:                                  1
-;     ca787:                                  1
-;     ca7a4:                                  1
-;     ca7f2:                                  1
-;     ca7f7:                                  1
-;     ca818:                                  1
-;     ca82f:                                  1
-;     ca856:                                  1
-;     ca8bd:                                  1
-;     ca8fa:                                  1
-;     ca902:                                  1
-;     ca90c:                                  1
-;     ca95d:                                  1
-;     ca96c:                                  1
-;     ca970:                                  1
-;     ca982:                                  1
-;     ca98d:                                  1
-;     ca9b8:                                  1
-;     caa0a:                                  1
-;     caa0d:                                  1
-;     caa78:                                  1
-;     caa7a:                                  1
-;     caa86:                                  1
-;     caab7:                                  1
-;     caabe:                                  1
-;     caace:                                  1
-;     cab09:                                  1
-;     cab17:                                  1
-;     cab2e:                                  1
-;     cab35:                                  1
-;     cab3d:                                  1
-;     cab7d:                                  1
-;     cab93:                                  1
-;     caba4:                                  1
-;     cabcf:                                  1
-;     cabfb:                                  1
-;     cac28:                                  1
-;     cac45:                                  1
-;     cacc7:                                  1
-;     caed7:                                  1
-;     cb1dd:                                  1
-;     cb1fc:                                  1
-;     cb20f:                                  1
-;     cb221:                                  1
-;     cb23d:                                  1
-;     cb260:                                  1
-;     cb268:                                  1
-;     cb2b2:                                  1
-;     cb2e1:                                  1
-;     cb2e7:                                  1
-;     cb305:                                  1
-;     cb314:                                  1
-;     cb337:                                  1
-;     cb34f:                                  1
-;     cb352:                                  1
-;     cb375:                                  1
-;     cb37f:                                  1
-;     cb382:                                  1
-;     cb397:                                  1
-;     cb3ba:                                  1
-;     cb3de:                                  1
-;     cb40e:                                  1
-;     cb44b:                                  1
-;     cb45a:                                  1
-;     cb470:                                  1
-;     cb4af:                                  1
-;     cb4b4:                                  1
-;     cb4d8:                                  1
-;     cb4df:                                  1
-;     cb4e9:                                  1
-;     cb4ee:                                  1
-;     cb502:                                  1
-;     cb534:                                  1
-;     cb597:                                  1
-;     cb5d0:                                  1
-;     cb5e6:                                  1
-;     cb65e:                                  1
-;     cb6a6:                                  1
-;     cb6c2:                                  1
-;     cb6d2:                                  1
-;     cb6eb:                                  1
-;     cb6f5:                                  1
-;     cb725:                                  1
-;     cb736:                                  1
-;     cb7ae:                                  1
-;     cb7b2:                                  1
-;     cb7e8:                                  1
-;     cb7ec:                                  1
-;     cb898:                                  1
-;     cb8e6:                                  1
-;     cb8f5:                                  1
-;     cb9ae:                                  1
-;     cb9d2:                                  1
-;     cb9d9:                                  1
-;     cb9ee:                                  1
-;     cb9f7:                                  1
-;     cba15:                                  1
-;     cba19:                                  1
-;     cba27:                                  1
-;     cba28:                                  1
-;     cba2e:                                  1
-;     cba2f:                                  1
-;     cba78:                                  1
-;     cba8c:                                  1
-;     cba9e:                                  1
-;     cbab0:                                  1
-;     cbab1:                                  1
-;     cbad0:                                  1
-;     cbb07:                                  1
-;     cbb33:                                  1
-;     cbb36:                                  1
-;     cbb4c:                                  1
-;     cbb6f:                                  1
-;     cbb89:                                  1
-;     cbb90:                                  1
-;     cbba1:                                  1
-;     cbbbe:                                  1
-;     cbbd9:                                  1
-;     cbbf3:                                  1
-;     cbc2c:                                  1
-;     cbc54:                                  1
-;     cbc64:                                  1
-;     cbc78:                                  1
-;     cbc93:                                  1
-;     cbcb2:                                  1
-;     cbcd6:                                  1
-;     cbce1:                                  1
-;     cbcf9:                                  1
-;     cbd0e:                                  1
-;     cbd1b:                                  1
-;     cbd40:                                  1
-;     cbd46:                                  1
-;     cbd7e:                                  1
-;     cbda3:                                  1
-;     cbdba:                                  1
-;     cbdc0:                                  1
-;     cbdd3:                                  1
-;     cbddd:                                  1
-;     cbe21:                                  1
-;     cbe3c:                                  1
-;     cbe52:                                  1
-;     cbee0:                                  1
-;     cbeee:                                  1
-;     cbf33:                                  1
-;     cbf46:                                  1
-;     cbf8a:                                  1
-;     cbfa3:                                  1
-;     cbfb2:                                  1
-;     command_table+1:                        1
-;     copyright_offset:                       1
-;     evntv:                                  1
-;     filev:                                  1
-;     general_service_handler:                1
-;     generate_error_precheck_disc_changed:   1
-;     generate_error_precheck_locked:         1
-;     jump_address_low:                       1
-;     l0013:                                  1
-;     l00f1:                                  1
-;     l0103:                                  1
-;     l0104:                                  1
-;     l010c:                                  1
-;     l010d:                                  1
-;     l010e:                                  1
-;     l028d:                                  1
-;     l0600:                                  1
-;     l0cff:                                  1
-;     l0d0f:                                  1
-;     l0d12:                                  1
-;     l0d2a:                                  1
-;     l0d50:                                  1
-;     l0e0e:                                  1
-;     l0e10:                                  1
-;     l0f00:                                  1
-;     l0f09:                                  1
-;     l0f10:                                  1
-;     l1001:                                  1
-;     l1002:                                  1
-;     l1003:                                  1
-;     l1004:                                  1
-;     l1005:                                  1
-;     l1006:                                  1
-;     l1007:                                  1
-;     l100e:                                  1
-;     l1047:                                  1
-;     l104d:                                  1
-;     l104e:                                  1
-;     l1050:                                  1
-;     l1058:                                  1
-;     l105f:                                  1
-;     l1061:                                  1
-;     l1063:                                  1
-;     l1064:                                  1
-;     l1072:                                  1
-;     l1079:                                  1
-;     l107a:                                  1
-;     l1083:                                  1
-;     l108f:                                  1
-;     l8001:                                  1
-;     l8002:                                  1
-;     l8004:                                  1
-;     l911d:                                  1
-;     l9121:                                  1
-;     l9139:                                  1
-;     l913f:                                  1
-;     l9145:                                  1
-;     l9146:                                  1
-;     l9191:                                  1
-;     l91a0:                                  1
-;     l9aec:                                  1
-;     l9b0f:                                  1
-;     l9b18:                                  1
-;     l9b21:                                  1
-;     l9b29:                                  1
-;     l9b31:                                  1
-;     l9b3a:                                  1
-;     l9b43:                                  1
-;     language_entry:                         1
-;     lb075:                                  1
-;     lb175:                                  1
-;     lb283:                                  1
-;     lb6c6:                                  1
-;     lb6ce:                                  1
-;     lb774:                                  1
-;     lb87e:                                  1
-;     lb924:                                  1
-;     lb979:                                  1
-;     lb97a:                                  1
-;     lb980:                                  1
-;     lbb3a:                                  1
-;     lbb3e:                                  1
-;     lbb42:                                  1
-;     lbf4f:                                  1
-;     lda_0_rts:                              1
-;     loop_c0029:                             1
-;     loop_c003b:                             1
-;     loop_c0446:                             1
-;     loop_c0466:                             1
-;     loop_c0471:                             1
-;     loop_c04a6:                             1
-;     loop_c04e1:                             1
-;     loop_c0564:                             1
-;     loop_c0577:                             1
-;     loop_c0586:                             1
-;     loop_c05ab:                             1
-;     loop_c05c7:                             1
-;     loop_c05d3:                             1
-;     loop_c05e6:                             1
-;     loop_c0604:                             1
-;     loop_c061d:                             1
-;     loop_c062b:                             1
-;     loop_c064c:                             1
-;     loop_c0657:                             1
-;     loop_c065a:                             1
-;     loop_c8064:                             1
-;     loop_c8086:                             1
-;     loop_c813a:                             1
-;     loop_c8161:                             1
-;     loop_c816b:                             1
-;     loop_c818c:                             1
-;     loop_c820c:                             1
-;     loop_c820d:                             1
-;     loop_c821c:                             1
-;     loop_c826f:                             1
-;     loop_c82c7:                             1
-;     loop_c82d1:                             1
-;     loop_c830d:                             1
-;     loop_c8326:                             1
-;     loop_c8370:                             1
-;     loop_c8390:                             1
-;     loop_c8397:                             1
-;     loop_c83f0:                             1
-;     loop_c83fa:                             1
-;     loop_c8406:                             1
-;     loop_c8425:                             1
-;     loop_c8463:                             1
-;     loop_c8493:                             1
-;     loop_c84e7:                             1
-;     loop_c8527:                             1
-;     loop_c8552:                             1
-;     loop_c8564:                             1
-;     loop_c857b:                             1
-;     loop_c85b5:                             1
-;     loop_c8717:                             1
-;     loop_c8725:                             1
-;     loop_c87a0:                             1
-;     loop_c87be:                             1
-;     loop_c88bc:                             1
-;     loop_c895f:                             1
-;     loop_c8990:                             1
-;     loop_c89c4:                             1
-;     loop_c89ca:                             1
-;     loop_c8a17:                             1
-;     loop_c8ac8:                             1
-;     loop_c8ad8:                             1
-;     loop_c8af0:                             1
-;     loop_c8afb:                             1
-;     loop_c8b80:                             1
-;     loop_c8bea:                             1
-;     loop_c8c58:                             1
-;     loop_c8c71:                             1
-;     loop_c8d14:                             1
-;     loop_c8d17:                             1
-;     loop_c8dac:                             1
-;     loop_c8dba:                             1
-;     loop_c8de9:                             1
-;     loop_c8df0:                             1
-;     loop_c8e14:                             1
-;     loop_c8e85:                             1
-;     loop_c8f17:                             1
-;     loop_c8f6c:                             1
-;     loop_c8f96:                             1
-;     loop_c8fac:                             1
-;     loop_c9047:                             1
-;     loop_c9108:                             1
-;     loop_c9113:                             1
-;     loop_c91ba:                             1
-;     loop_c91e7:                             1
-;     loop_c92ef:                             1
-;     loop_c9355:                             1
-;     loop_c9357:                             1
-;     loop_c936f:                             1
-;     loop_c9382:                             1
-;     loop_c93bd:                             1
-;     loop_c93da:                             1
-;     loop_c953a:                             1
-;     loop_c957d:                             1
-;     loop_c9593:                             1
-;     loop_c95b6:                             1
-;     loop_c95d9:                             1
-;     loop_c95ec:                             1
-;     loop_c9618:                             1
-;     loop_c96c2:                             1
-;     loop_c96f2:                             1
-;     loop_c979d:                             1
-;     loop_c97c8:                             1
-;     loop_c9803:                             1
-;     loop_c9837:                             1
-;     loop_c9851:                             1
-;     loop_c985e:                             1
-;     loop_c9881:                             1
-;     loop_c98a0:                             1
-;     loop_c98c1:                             1
-;     loop_c98e4:                             1
-;     loop_c9942:                             1
-;     loop_c994e:                             1
-;     loop_c9964:                             1
-;     loop_c99a8:                             1
-;     loop_c9b50:                             1
-;     loop_c9b5e:                             1
-;     loop_c9b63:                             1
-;     loop_c9bcf:                             1
-;     loop_c9be4:                             1
-;     loop_c9c38:                             1
-;     loop_c9c5d:                             1
-;     loop_c9c90:                             1
-;     loop_c9ca8:                             1
-;     loop_c9d03:                             1
-;     loop_c9d43:                             1
-;     loop_c9e07:                             1
-;     loop_c9e74:                             1
-;     loop_c9e8c:                             1
-;     loop_c9f6e:                             1
-;     loop_ca061:                             1
-;     loop_ca11d:                             1
-;     loop_ca132:                             1
-;     loop_ca143:                             1
-;     loop_ca16e:                             1
-;     loop_ca1aa:                             1
-;     loop_ca1cc:                             1
-;     loop_ca487:                             1
-;     loop_ca521:                             1
-;     loop_ca76f:                             1
-;     loop_ca7a7:                             1
-;     loop_ca7c6:                             1
-;     loop_ca7e0:                             1
-;     loop_ca7e1:                             1
-;     loop_ca941:                             1
-;     loop_ca947:                             1
-;     loop_ca953:                             1
-;     loop_ca9ab:                             1
-;     loop_ca9e7:                             1
-;     loop_caa01:                             1
-;     loop_caab8:                             1
-;     loop_cab6b:                             1
-;     loop_cab80:                             1
-;     loop_cabad:                             1
-;     loop_cabf4:                             1
-;     loop_cac46:                             1
-;     loop_caf13:                             1
-;     loop_caf2d:                             1
-;     loop_cb1e3:                             1
-;     loop_cb1ed:                             1
-;     loop_cb249:                             1
-;     loop_cb275:                             1
-;     loop_cb2b4:                             1
-;     loop_cb2bd:                             1
-;     loop_cb2d1:                             1
-;     loop_cb44d:                             1
-;     loop_cb4a8:                             1
-;     loop_cb55e:                             1
-;     loop_cb578:                             1
-;     loop_cb5c6:                             1
-;     loop_cb5ed:                             1
-;     loop_cb6b3:                             1
-;     loop_cb75a:                             1
-;     loop_cb7be:                             1
-;     loop_cb7d7:                             1
-;     loop_cb7dd:                             1
-;     loop_cb910:                             1
-;     loop_cb999:                             1
-;     loop_cb9bd:                             1
-;     loop_cb9cc:                             1
-;     loop_cb9d1:                             1
-;     loop_cb9f9:                             1
-;     loop_cba1a:                             1
-;     loop_cba94:                             1
-;     loop_cbab8:                             1
-;     loop_cbaea:                             1
-;     loop_cbbe4:                             1
-;     loop_cbbfe:                             1
-;     loop_cbc70:                             1
-;     loop_cbcd3:                             1
-;     loop_cbd08:                             1
-;     loop_cbd2b:                             1
-;     loop_cbd6c:                             1
-;     loop_cbd99:                             1
-;     loop_cbe0e:                             1
-;     loop_cbe31:                             1
-;     loop_cbeab:                             1
-;     loop_cbf1c:                             1
-;     loop_cbf78:                             1
-;     nmi3_handler_rom_end:                   1
-;     nmi3_handler_rom_start-1:               1
-;     nmi_XXX18:                              1
-;     nmi_XXX2:                               1
-;     nmi_XXX21:                              1
-;     nmi_XXX5:                               1
-;     nmi_XXX6:                               1
-;     nmi_XXX6+1:                             1
-;     nmi_and_imm+1:                          1
-;     nmi_and_table:                          1
-;     nmi_bcs+1:                              1
-;     nmi_cmp_imm_or_bcs:                     1
-;     nmi_cmp_imm_or_bcs+1:                   1
-;     nmi_handler2_rom_start-1:               1
-;     nmi_handler_rom_start:                  1
-;     nmi_lda_abs:                            1
-;     opt4_table:                             1
-;     osbyte_write_0:                         1
-;     pla_rts:                                1
-;     pydis_start:                            1
-;     rom_header:                             1
-;     rom_type:                               1
-;     service_entry:                          1
-;     service_handler:                        1
-;     service_handler_help_and_tube:          1
-;     service_handler_tube_main_init:         1
-;     set_c_iff_have_fdc:                     1
-;     sram_table+1:                           1
-;     sub_c0414:                              1
-;     sub_c0421:                              1
-;     sub_c04c7:                              1
-;     sub_c8020:                              1
-;     sub_c809d:                              1
-;     sub_c80b8:                              1
-;     sub_c80d3:                              1
-;     sub_c80db:                              1
-;     sub_c80e6:                              1
-;     sub_c80f6:                              1
-;     sub_c81b7:                              1
-;     sub_c81c0:                              1
-;     sub_c81c4:                              1
-;     sub_c81ca:                              1
-;     sub_c8222:                              1
-;     sub_c83bf:                              1
-;     sub_c83d1:                              1
-;     sub_c83d4:                              1
-;     sub_c83ee:                              1
-;     sub_c842c:                              1
-;     sub_c85e3:                              1
-;     sub_c8602:                              1
-;     sub_c8826:                              1
-;     sub_c8932:                              1
-;     sub_c8979:                              1
-;     sub_c8b25:                              1
-;     sub_c8bf6:                              1
-;     sub_c8bf9:                              1
-;     sub_c8c56:                              1
-;     sub_c8c65:                              1
-;     sub_c8d1a:                              1
-;     sub_c8dc6:                              1
-;     sub_c8eec:                              1
-;     sub_c8efa:                              1
-;     sub_c8eff:                              1
-;     sub_c8f33:                              1
-;     sub_c8f37:                              1
-;     sub_c8f4f:                              1
-;     sub_c8f5e:                              1
-;     sub_c8f75:                              1
-;     sub_c8f82:                              1
-;     sub_c8f94:                              1
-;     sub_c929d:                              1
-;     sub_c93b4:                              1
-;     sub_c93d8:                              1
-;     sub_c93f1:                              1
-;     sub_c93f9:                              1
-;     sub_c9536:                              1
-;     sub_c965d:                              1
-;     sub_c97e8:                              1
-;     sub_c9832:                              1
-;     sub_c9988:                              1
-;     sub_c9a32:                              1
-;     sub_c9a4b:                              1
-;     sub_c9ad3:                              1
-;     sub_c9b51:                              1
-;     sub_c9b61:                              1
-;     sub_c9bca:                              1
-;     sub_c9bcd:                              1
-;     sub_c9d19:                              1
-;     sub_c9d75:                              1
-;     sub_c9e94:                              1
-;     sub_c9f7c:                              1
-;     sub_c9f82:                              1
-;     sub_ca0b8:                              1
-;     sub_ca0f6:                              1
-;     sub_ca190:                              1
-;     sub_ca3e4:                              1
-;     sub_ca4e1:                              1
-;     sub_ca663:                              1
-;     sub_ca73d:                              1
-;     sub_ca76c:                              1
-;     sub_ca779:                              1
-;     sub_ca788:                              1
-;     sub_ca7c4:                              1
-;     sub_ca7c5:                              1
-;     sub_ca7ce:                              1
-;     sub_ca8be:                              1
-;     sub_ca8e2:                              1
-;     sub_ca9bf:                              1
-;     sub_caa12:                              1
-;     sub_caa9a:                              1
-;     sub_caadd:                              1
-;     sub_caaea:                              1
-;     sub_caba9:                              1
-;     sub_cac47:                              1
-;     sub_cac6a:                              1
-;     sub_cac72:                              1
-;     sub_cb234:                              1
-;     sub_cb2c8:                              1
-;     sub_cb6e6:                              1
-;     sub_cb771:                              1
-;     sub_cb7b6:                              1
-;     sub_cb86f:                              1
-;     sub_cb882:                              1
-;     sub_cbad2:                              1
-;     sub_cbe91:                              1
-;     sub_cbf84:                              1
-;     tube_brkv_handler:                      1
-;     tube_entry_claim_tube:                  1
-;     tube_entry_flags:                       1
-;     tube_entry_small_a:                     1
-;     tube_host_code1:                        1
-;     tube_host_code2:                        1
-;     tube_host_code2+256:                    1
-;     tube_host_code3:                        1
-;     tube_host_osword_0_loop:                1
-;     tube_host_osword_0_no_escape:           1
-;     tube_host_osword_0_no_escape_loop:      1
-;     tube_host_r4_data:                      1
+;     l00b8:                                            125
+;     l00b0:                                            105
+;     l00ba:                                             44
+;     l00bf:                                             42
+;     l00bc:                                             41
+;     l00b6:                                             35
+;     l00be:                                             31
+;     l00cd:                                             31
+;     print_inline_l809f_top_bit_clear:                  31
+;     l00c2:                                             30
+;     l00b1:                                             29
+;     sub_c83e3:                                         29
+;     l00b9:                                             28
+;     l00bb:                                             28
+;     l00b5:                                             26
+;     l00bd:                                             26
+;     l00b4:                                             25
+;     l00b3:                                             23
+;     l00c1:                                             23
+;     os_text_ptr:                                       23
+;     osbyte:                                            22
+;     l0f0e:                                             21
+;     read_tube_r2_data:                                 21
+;     romsel_copy:                                       21
+;     c809f:                                             20
+;     l00c4:                                             20
+;     l00b2:                                             19
+;     l10c2:                                             19
+;     l0001:                                             18
+;     l00a8:                                             18
+;     l00aa:                                             18
+;     l00c5:                                             18
+;     l00c9:                                             18
+;     l10de:                                             18
+;     l0000:                                             17
+;     l00b7:                                             17
+;     l0e0f:                                             17
+;     l0f06:                                             17
+;     l1000:                                             17
+;     ca3dc:                                             16
+;     cb82b:                                             16
+;     l00a2:                                             16
+;     l00ab:                                             16
+;     l00ae:                                             16
+;     l00c0:                                             15
+;     l00c3:                                             15
+;     l00c7:                                             15
+;     l0f05:                                             15
+;     l00cc:                                             14
+;     l1117:                                             14
+;     tube_entry:                                        14
+;     write_tube_r2_data:                                14
+;     l00a1:                                             13
+;     l00a5:                                             13
+;     l00c8:                                             13
+;     l0d30:                                             13
+;     l0f07:                                             13
+;     sub_ca14a:                                         13
+;     tube_data_register_3:                              13
+;     clc_jmp_gsinit:                                    12
+;     l00ac:                                             12
+;     osasci:                                            12
+;     sub_cb841:                                         12
+;     c996e:                                             11
+;     cac0f:                                             11
+;     fdc_8271_data_or_1770_command_or_status:           11
+;     generate_error_precheck:                           11
+;     l00c6:                                             11
+;     l0e08:                                             11
+;     osrdsc_ptr:                                        11
+;     sub_c8149:                                         11
+;     tube_data_register_2:                              11
+;     c93e6:                                             10
+;     cb203:                                             10
+;     fdc_1770_data:                                     10
+;     l00a9:                                             10
+;     l1111:                                             10
+;     l1112:                                             10
+;     sub_c80c3:                                         10
+;     tube_status_register_2:                            10
+;     cbbd0:                                              9
+;     l00ca:                                              9
+;     l1074:                                              9
+;     l108a:                                              9
+;     l1097:                                              9
+;     l10c0:                                              9
+;     l1110:                                              9
+;     c8816:                                              8
+;     l00ce:                                              8
+;     l00ff:                                              8
+;     l0100:                                              8
+;     l0df0:                                              8
+;     l0f04:                                              8
+;     l1060:                                              8
+;     l1082:                                              8
+;     l108b:                                              8
+;     l1090:                                              8
+;     l1096:                                              8
+;     l10ca:                                              8
+;     l10cf:                                              8
+;     l10d1:                                              8
+;     osbyte_read:                                        8
+;     osfind:                                             8
+;     sub_c81b0:                                          8
+;     sub_c81bf:                                          8
+;     sub_c8b7b:                                          8
+;     sub_cb85d:                                          8
+;     tube_status_1_and_tube_control:                     8
+;     write_tube_r4_data:                                 8
+;     c8b8b:                                              7
+;     generate_error2:                                    7
+;     l00a7:                                              7
+;     l00cf:                                              7
+;     l0f08:                                              7
+;     l1075:                                              7
+;     l10c9:                                              7
+;     l10d2:                                              7
+;     l1114:                                              7
+;     osrdsc:                                             7
+;     print_inline_osasci_top_bit_clear:                  7
+;     sub_c8284:                                          7
+;     sub_c8380:                                          7
+;     sub_cb580:                                          7
+;     sub_cbab9:                                          7
+;     c0036:                                              6
+;     c940c:                                              6
+;     cb8fb:                                              6
+;     command_table:                                      6
+;     generate_error_precheck_bad:                        6
+;     l0015:                                              6
+;     l00f3:                                              6
+;     l00f7:                                              6
+;     l0f0f:                                              6
+;     l1100:                                              6
+;     lb726:                                              6
+;     oswrch:                                             6
+;     sub_c8280:                                          6
+;     sub_c82fe:                                          6
+;     sub_c87da:                                          6
+;     sub_c99ac:                                          6
+;     sub_c9e75:                                          6
+;     sub_cb5f2:                                          6
+;     zero_stacked_XXX:                                   6
+;     c8125:                                              5
+;     c8ba2:                                              5
+;     c9257:                                              5
+;     c99a3:                                              5
+;     cb795:                                              5
+;     cbe7b:                                              5
+;     l00a6:                                              5
+;     l00af:                                              5
+;     l00f0:                                              5
+;     l1087:                                              5
+;     l1088:                                              5
+;     l1099:                                              5
+;     l10c7:                                              5
+;     l10dd:                                              5
+;     l110c:                                              5
+;     l1115:                                              5
+;     l1116:                                              5
+;     nmi_XXX23:                                          5
+;     osnewl:                                             5
+;     sub_c80bb:                                          5
+;     sub_c80ed:                                          5
+;     sub_c80f3:                                          5
+;     sub_c830a:                                          5
+;     sub_c8335:                                          5
+;     sub_c8386:                                          5
+;     sub_c840c:                                          5
+;     sub_c8f3f:                                          5
+;     sub_c9a6e:                                          5
+;     sub_c9ab8:                                          5
+;     sub_ca0de:                                          5
+;     sub_ca1b4:                                          5
+;     sub_cb6fe:                                          5
+;     sub_cb745:                                          5
+;     sub_cb850:                                          5
+;     sub_cba67:                                          5
+;     write_tube_r1_data:                                 5
+;     c059e:                                              4
+;     c81a7:                                              4
+;     c8225:                                              4
+;     c8d74:                                              4
+;     c8d91:                                              4
+;     c8e0e:                                              4
+;     c8e12:                                              4
+;     c8e64:                                              4
+;     c940e:                                              4
+;     c9436:                                              4
+;     c993b:                                              4
+;     c9adf:                                              4
+;     c9ae9:                                              4
+;     ca5e5:                                              4
+;     cb446:                                              4
+;     cb68c:                                              4
+;     cbe7a:                                              4
+;     cbee8:                                              4
+;     fdc_1770_sector:                                    4
+;     fdc_1770_track:                                     4
+;     generate_error:                                     4
+;     generate_error_precheck_disc:                       4
+;     inc16_ae:                                           4
+;     l0002:                                              4
+;     l0e00:                                              4
+;     l0f0c:                                              4
+;     l0f0d:                                              4
+;     l1069:                                              4
+;     l1076:                                              4
+;     l1077:                                              4
+;     l1081:                                              4
+;     l1086:                                              4
+;     l1095:                                              4
+;     l10c4:                                              4
+;     l10cb:                                              4
+;     l10cc:                                              4
+;     l10ce:                                              4
+;     l10d9:                                              4
+;     l10da:                                              4
+;     l110d:                                              4
+;     l1113:                                              4
+;     l111a:                                              4
+;     l111d:                                              4
+;     lb57f:                                              4
+;     lbfff:                                              4
+;     nmi_beq+1:                                          4
+;     osbget:                                             4
+;     osbput:                                             4
+;     osfile:                                             4
+;     osrdch:                                             4
+;     romsel:                                             4
+;     sub_c80c8:                                          4
+;     sub_c8174:                                          4
+;     sub_c821d:                                          4
+;     sub_c82b2:                                          4
+;     sub_c8327:                                          4
+;     sub_c8f6b:                                          4
+;     sub_c9965:                                          4
+;     sub_c9a8d:                                          4
+;     sub_ca379:                                          4
+;     sub_ca9ca:                                          4
+;     sub_caacf:                                          4
+;     sub_cac18:                                          4
+;     sub_cac62:                                          4
+;     sub_cb616:                                          4
+;     sub_cb68f:                                          4
+;     sub_cb83f:                                          4
+;     sub_cbac2:                                          4
+;     sub_cbb00:                                          4
+;     bytev:                                              3
+;     c059c:                                              3
+;     c8103:                                              3
+;     c8290:                                              3
+;     c82e6:                                              3
+;     c8454:                                              3
+;     c89d7:                                              3
+;     c8d41:                                              3
+;     c8e53:                                              3
+;     c8ecc:                                              3
+;     c8f2a:                                              3
+;     c91af:                                              3
+;     c9214:                                              3
+;     c9444:                                              3
+;     c94bc:                                              3
+;     c9738:                                              3
+;     c99ed:                                              3
+;     c9a8c:                                              3
+;     c9d5d:                                              3
+;     ca06b:                                              3
+;     ca14f:                                              3
+;     ca1c0:                                              3
+;     ca660:                                              3
+;     caa42:                                              3
+;     caa44:                                              3
+;     cacc4:                                              3
+;     cb1d5:                                              3
+;     cb371:                                              3
+;     cb684:                                              3
+;     cb6ca:                                              3
+;     cbab4:                                              3
+;     cbe47:                                              3
+;     cbe89:                                              3
+;     cbe8d:                                              3
+;     fdc_8271_command_or_status_or_1770_drive_control:   3
+;     generate_error_precheck_open:                       3
+;     l0054:                                              3
+;     l00ef:                                              3
+;     l0107:                                              3
+;     l0109:                                              3
+;     l0d3d:                                              3
+;     l0ef8:                                              3
+;     l1092:                                              3
+;     l1093:                                              3
+;     l1094:                                              3
+;     l1098:                                              3
+;     l109d:                                              3
+;     l109f:                                              3
+;     l10c3:                                              3
+;     l10c5:                                              3
+;     l10c6:                                              3
+;     l10d0:                                              3
+;     l10d3:                                              3
+;     l10d6:                                              3
+;     l10d7:                                              3
+;     l1119:                                              3
+;     l111c:                                              3
+;     nmi_handler2_rom_end:                               3
+;     nmi_lda_immXXX3+1:                                  3
+;     nmi_lda_zp:                                         3
+;     nmi_sta_abs+1:                                      3
+;     nmi_sta_abs2+1:                                     3
+;     oscli:                                              3
+;     osword:                                             3
+;     sram_table:                                         3
+;     sub_c0582:                                          3
+;     sub_c81be:                                          3
+;     sub_c833a:                                          3
+;     sub_c836e:                                          3
+;     sub_c8456:                                          3
+;     sub_c8b86:                                          3
+;     sub_c8f7a:                                          3
+;     sub_c93fd:                                          3
+;     sub_c9526:                                          3
+;     sub_c9940:                                          3
+;     sub_c9be5:                                          3
+;     sub_c9e30:                                          3
+;     sub_c9f0f:                                          3
+;     sub_c9f16:                                          3
+;     sub_c9f1e:                                          3
+;     sub_ca315:                                          3
+;     sub_ca384:                                          3
+;     sub_ca530:                                          3
+;     sub_ca9c2:                                          3
+;     sub_cac0c:                                          3
+;     sub_cb58b:                                          3
+;     sub_cb84e:                                          3
+;     sub_cb986:                                          3
+;     sub_cbac4:                                          3
+;     sub_cbf7c:                                          3
+;     tube_data_register_1:                               3
+;     c0434:                                              2
+;     c0482:                                              2
+;     c0491:                                              2
+;     c04bc:                                              2
+;     c053a:                                              2
+;     c05fc:                                              2
+;     c0636:                                              2
+;     c0d60:                                              2
+;     c815d:                                              2
+;     c822a:                                              2
+;     c825d:                                              2
+;     c82fd:                                              2
+;     c8543:                                              2
+;     c8560:                                              2
+;     c85bc:                                              2
+;     c8703:                                              2
+;     c8705:                                              2
+;     c873b:                                              2
+;     c8808:                                              2
+;     c883f:                                              2
+;     c88a6:                                              2
+;     c88f4:                                              2
+;     c898a:                                              2
+;     c89a5:                                              2
+;     c89b4:                                              2
+;     c8a00:                                              2
+;     c8a6e:                                              2
+;     c8be3:                                              2
+;     c8c12:                                              2
+;     c8cb2:                                              2
+;     c8d0d:                                              2
+;     c8d13:                                              2
+;     c8e0d:                                              2
+;     c8e32:                                              2
+;     c8e9f:                                              2
+;     c8ea5:                                              2
+;     c8eb7:                                              2
+;     c8eeb:                                              2
+;     c8f3e:                                              2
+;     c91df:                                              2
+;     c9289:                                              2
+;     c9367:                                              2
+;     c94a9:                                              2
+;     c94c6:                                              2
+;     c95fd:                                              2
+;     c9628:                                              2
+;     c965a:                                              2
+;     c96b7:                                              2
+;     c97b3:                                              2
+;     c9b6e:                                              2
+;     c9bc5:                                              2
+;     c9dcd:                                              2
+;     c9dd5:                                              2
+;     c9e41:                                              2
+;     ca01d:                                              2
+;     ca021:                                              2
+;     ca06c:                                              2
+;     ca0f5:                                              2
+;     ca10b:                                              2
+;     ca19f:                                              2
+;     ca2f2:                                              2
+;     ca38b:                                              2
+;     ca411:                                              2
+;     ca414:                                              2
+;     ca5ab:                                              2
+;     ca637:                                              2
+;     ca845:                                              2
+;     ca86b:                                              2
+;     ca87a:                                              2
+;     ca97d:                                              2
+;     ca9ff:                                              2
+;     caa1c:                                              2
+;     caa51:                                              2
+;     cab1a:                                              2
+;     cab41:                                              2
+;     cab54:                                              2
+;     cabbc:                                              2
+;     caed3:                                              2
+;     cb280:                                              2
+;     cb297:                                              2
+;     cb2a0:                                              2
+;     cb300:                                              2
+;     cb406:                                              2
+;     cb45e:                                              2
+;     cb655:                                              2
+;     cb718:                                              2
+;     cb7ed:                                              2
+;     cb8e4:                                              2
+;     cb9e8:                                              2
+;     cba10:                                              2
+;     cbaf8:                                              2
+;     cbafd:                                              2
+;     cbb28:                                              2
+;     cbb2a:                                              2
+;     cbc13:                                              2
+;     cbc3a:                                              2
+;     cbcb9:                                              2
+;     cbdb9:                                              2
+;     cbec1:                                              2
+;     cbf8e:                                              2
+;     fscv:                                               2
+;     general_service_handler_indirect:                   2
+;     gsinit:                                             2
+;     gsread:                                             2
+;     invert_l1065:                                       2
+;     just_rts:                                           2
+;     l0003:                                              2
+;     l0012:                                              2
+;     l0014:                                              2
+;     l0053:                                              2
+;     l0055:                                              2
+;     l0056:                                              2
+;     l00a0:                                              2
+;     l00a3:                                              2
+;     l00a4:                                              2
+;     l00ad:                                              2
+;     l00fd:                                              2
+;     l0101:                                              2
+;     l0102:                                              2
+;     l0105:                                              2
+;     l010b:                                              2
+;     l0128:                                              2
+;     l0500:                                              2
+;     l0700:                                              2
+;     l0d00:                                              2
+;     l0d26:                                              2
+;     l0e07:                                              2
+;     l0f0a:                                              2
+;     l0f0b:                                              2
+;     l1045:                                              2
+;     l1062:                                              2
+;     l1065:                                              2
+;     l1067:                                              2
+;     l1078:                                              2
+;     l107d:                                              2
+;     l107e:                                              2
+;     l107f:                                              2
+;     l1089:                                              2
+;     l108c:                                              2
+;     l1091:                                              2
+;     l109a:                                              2
+;     l109b:                                              2
+;     l109e:                                              2
+;     l10c1:                                              2
+;     l10cd:                                              2
+;     l10d8:                                              2
+;     l10db:                                              2
+;     l10dc:                                              2
+;     l10e2:                                              2
+;     l10e3:                                              2
+;     l10e4:                                              2
+;     l1109:                                              2
+;     l110b:                                              2
+;     l110e:                                              2
+;     l110f:                                              2
+;     l111b:                                              2
+;     la1d3:                                              2
+;     lb872:                                              2
+;     nmi_XXX7:                                           2
+;     nmi_handler_ram:                                    2
+;     nmi_lda_abs+1:                                      2
+;     nmi_lda_abs+2:                                      2
+;     nmi_lda_immXXX4+1:                                  2
+;     nmi_lda_zp+1:                                       2
+;     nmi_sta_abs+2:                                      2
+;     nmi_sta_abs2+2:                                     2
+;     osargs:                                             2
+;     osgbpb:                                             2
+;     sub_c04ce:                                          2
+;     sub_c809a:                                          2
+;     sub_c80e3:                                          2
+;     sub_c81ae:                                          2
+;     sub_c81c5:                                          2
+;     sub_c8266:                                          2
+;     sub_c826d:                                          2
+;     sub_c82bb:                                          2
+;     sub_c82e8:                                          2
+;     sub_c841b:                                          2
+;     sub_c8439:                                          2
+;     sub_c8555:                                          2
+;     sub_c8745:                                          2
+;     sub_c87db:                                          2
+;     sub_c87e3:                                          2
+;     sub_c8855:                                          2
+;     sub_c8862:                                          2
+;     sub_c8951:                                          2
+;     sub_c89da:                                          2
+;     sub_c8a77:                                          2
+;     sub_c8ab3:                                          2
+;     sub_c8b4d:                                          2
+;     sub_c8b64:                                          2
+;     sub_c9279:                                          2
+;     sub_c928a:                                          2
+;     sub_c93c5:                                          2
+;     sub_c93d3:                                          2
+;     sub_c93f5:                                          2
+;     sub_c9432:                                          2
+;     sub_c9445:                                          2
+;     sub_c9516:                                          2
+;     sub_c952e:                                          2
+;     sub_c992c:                                          2
+;     sub_c995a:                                          2
+;     sub_c99f3:                                          2
+;     sub_c9a0f:                                          2
+;     sub_c9a50:                                          2
+;     sub_c9a60:                                          2
+;     sub_c9a63:                                          2
+;     sub_c9a78:                                          2
+;     sub_c9a82:                                          2
+;     sub_c9aa3:                                          2
+;     sub_c9ac8:                                          2
+;     sub_c9ad8:                                          2
+;     sub_c9b79:                                          2
+;     sub_c9bf2:                                          2
+;     sub_c9d1e:                                          2
+;     sub_c9df4:                                          2
+;     sub_c9e1e:                                          2
+;     sub_c9e54:                                          2
+;     sub_c9ef4:                                          2
+;     sub_c9f14:                                          2
+;     sub_c9f26:                                          2
+;     sub_ca168:                                          2
+;     sub_ca1c6:                                          2
+;     sub_ca324:                                          2
+;     sub_ca3ec:                                          2
+;     sub_ca51f:                                          2
+;     sub_ca5b2:                                          2
+;     sub_ca90d:                                          2
+;     sub_caa53:                                          2
+;     sub_caac2:                                          2
+;     sub_caaf1:                                          2
+;     sub_cac4e:                                          2
+;     sub_cb598:                                          2
+;     sub_cb5ce:                                          2
+;     sub_cb5ee:                                          2
+;     sub_cb607:                                          2
+;     sub_cb61e:                                          2
+;     sub_cb65f:                                          2
+;     sub_cb6b1:                                          2
+;     sub_cb9f5:                                          2
+;     sub_cbc68:                                          2
+;     sub_cbe83:                                          2
+;     sub_cbe9d:                                          2
+;     sub_cbec2:                                          2
+;     sub_cbf82:                                          2
+;     tube_banner_loop:                                   2
+;     tube_status_register_4_and_cpu_control:             2
+;     brkv:                                               1
+;     c0032:                                              1
+;     c0041:                                              1
+;     c0400:                                              1
+;     c0432:                                              1
+;     c0463:                                              1
+;     c047a:                                              1
+;     c0484:                                              1
+;     c048c:                                              1
+;     c049b:                                              1
+;     c04f7:                                              1
+;     c0552:                                              1
+;     c0593:                                              1
+;     c05a6:                                              1
+;     c0645:                                              1
+;     c0665:                                              1
+;     c06a7:                                              1
+;     c0d74:                                              1
+;     c0d80:                                              1
+;     c8040:                                              1
+;     c8093:                                              1
+;     c8096:                                              1
+;     c80d0:                                              1
+;     c8111:                                              1
+;     c8115:                                              1
+;     c812e:                                              1
+;     c815b:                                              1
+;     c815f:                                              1
+;     c8184:                                              1
+;     c818a:                                              1
+;     c81a2:                                              1
+;     c81bd:                                              1
+;     c8243:                                              1
+;     c8286:                                              1
+;     c828b:                                              1
+;     c82be:                                              1
+;     c82d9:                                              1
+;     c82e7:                                              1
+;     c82fb:                                              1
+;     c8306:                                              1
+;     c8332:                                              1
+;     c8333:                                              1
+;     c83ab:                                              1
+;     c83cd:                                              1
+;     c83e2:                                              1
+;     c842b:                                              1
+;     c8436:                                              1
+;     c8438:                                              1
+;     c8453:                                              1
+;     c8477:                                              1
+;     c8481:                                              1
+;     c8482:                                              1
+;     c849d:                                              1
+;     c853e:                                              1
+;     c855f:                                              1
+;     c8573:                                              1
+;     c859b:                                              1
+;     c85c5:                                              1
+;     c8734:                                              1
+;     c8759:                                              1
+;     c8779:                                              1
+;     c877c:                                              1
+;     c87ab:                                              1
+;     c87b8:                                              1
+;     c87c6:                                              1
+;     c8815:                                              1
+;     c8837:                                              1
+;     c8864:                                              1
+;     c8867:                                              1
+;     c892d:                                              1
+;     c8945:                                              1
+;     c8968:                                              1
+;     c896b:                                              1
+;     c89ad:                                              1
+;     c89e2:                                              1
+;     c89f6:                                              1
+;     c8a19:                                              1
+;     c8a49:                                              1
+;     c8a50:                                              1
+;     c8a54:                                              1
+;     c8a82:                                              1
+;     c8ad0:                                              1
+;     c8aeb:                                              1
+;     c8b18:                                              1
+;     c8b60:                                              1
+;     c8b77:                                              1
+;     c8bfb:                                              1
+;     c8c2e:                                              1
+;     c8c3a:                                              1
+;     c8c4e:                                              1
+;     c8c61:                                              1
+;     c8c87:                                              1
+;     c8cae:                                              1
+;     c8cc1:                                              1
+;     c8cd6:                                              1
+;     c8ce7:                                              1
+;     c8cfc:                                              1
+;     c8d03:                                              1
+;     c8d5d:                                              1
+;     c8d92:                                              1
+;     c8dd2:                                              1
+;     c8de2:                                              1
+;     c8e03:                                              1
+;     c8e4d:                                              1
+;     c8e6f:                                              1
+;     c8e72:                                              1
+;     c8e9e:                                              1
+;     c8eaf:                                              1
+;     c8ecb:                                              1
+;     c8edf:                                              1
+;     c8ef8:                                              1
+;     c8f12:                                              1
+;     c8f21:                                              1
+;     c8f81:                                              1
+;     c8fb5:                                              1
+;     c8fc7:                                              1
+;     c9060:                                              1
+;     c9115:                                              1
+;     c91cc:                                              1
+;     c91eb:                                              1
+;     c91f3:                                              1
+;     c91f9:                                              1
+;     c9201:                                              1
+;     c920d:                                              1
+;     c921f:                                              1
+;     c922b:                                              1
+;     c9238:                                              1
+;     c923b:                                              1
+;     c923f:                                              1
+;     c9249:                                              1
+;     c925a:                                              1
+;     c926a:                                              1
+;     c9276:                                              1
+;     c929c:                                              1
+;     c92bd:                                              1
+;     c92c4:                                              1
+;     c92c7:                                              1
+;     c92d6:                                              1
+;     c92e3:                                              1
+;     c9302:                                              1
+;     c936b:                                              1
+;     c9379:                                              1
+;     c938d:                                              1
+;     c9390:                                              1
+;     c93a8:                                              1
+;     c93b1:                                              1
+;     c93c4:                                              1
+;     c93e2:                                              1
+;     c93e5:                                              1
+;     c93ff:                                              1
+;     c9450:                                              1
+;     c945c:                                              1
+;     c948d:                                              1
+;     c94c1:                                              1
+;     c94c2:                                              1
+;     c94d4:                                              1
+;     c9504:                                              1
+;     c9535:                                              1
+;     c9556:                                              1
+;     c956d:                                              1
+;     c956f:                                              1
+;     c95e4:                                              1
+;     c95e7:                                              1
+;     c9649:                                              1
+;     c964a:                                              1
+;     c9658:                                              1
+;     c967a:                                              1
+;     c9682:                                              1
+;     c9683:                                              1
+;     c969e:                                              1
+;     c96c3:                                              1
+;     c96e4:                                              1
+;     c96e9:                                              1
+;     c96ec:                                              1
+;     c96f5:                                              1
+;     c9700:                                              1
+;     c9714:                                              1
+;     c9736:                                              1
+;     c973c:                                              1
+;     c973d:                                              1
+;     c975b:                                              1
+;     c976c:                                              1
+;     c97e6:                                              1
+;     c981f:                                              1
+;     c982e:                                              1
+;     c9835:                                              1
+;     c984c:                                              1
+;     c9859:                                              1
+;     c986b:                                              1
+;     c9873:                                              1
+;     c98b1:                                              1
+;     c98ba:                                              1
+;     c98cd:                                              1
+;     c98ed:                                              1
+;     c98f0:                                              1
+;     c994b:                                              1
+;     c9978:                                              1
+;     c9993:                                              1
+;     c99ea:                                              1
+;     c9a2a:                                              1
+;     c9a3f:                                              1
+;     c9a73:                                              1
+;     c9a77:                                              1
+;     c9ad4:                                              1
+;     c9bc2:                                              1
+;     c9c16:                                              1
+;     c9c33:                                              1
+;     c9c51:                                              1
+;     c9c58:                                              1
+;     c9c6b:                                              1
+;     c9c8b:                                              1
+;     c9cee:                                              1
+;     c9d12:                                              1
+;     c9d2b:                                              1
+;     c9d57:                                              1
+;     c9d67:                                              1
+;     c9d71:                                              1
+;     c9d72:                                              1
+;     c9d86:                                              1
+;     c9d89:                                              1
+;     c9db4:                                              1
+;     c9dce:                                              1
+;     c9e13:                                              1
+;     c9e16:                                              1
+;     c9e28:                                              1
+;     c9e2a:                                              1
+;     c9e5c:                                              1
+;     c9e6f:                                              1
+;     c9e71:                                              1
+;     c9eb3:                                              1
+;     c9ec2:                                              1
+;     c9ef1:                                              1
+;     c9f0d:                                              1
+;     c9f19:                                              1
+;     c9f5e:                                              1
+;     c9f64:                                              1
+;     c9f6a:                                              1
+;     c9f6b:                                              1
+;     c9f88:                                              1
+;     c9fd9:                                              1
+;     c9ff4:                                              1
+;     ca005:                                              1
+;     ca054:                                              1
+;     ca075:                                              1
+;     ca0a9:                                              1
+;     ca17a:                                              1
+;     ca183:                                              1
+;     ca1c1:                                              1
+;     ca1d2:                                              1
+;     ca27a:                                              1
+;     ca2ab:                                              1
+;     ca30d:                                              1
+;     ca321:                                              1
+;     ca34a:                                              1
+;     ca378:                                              1
+;     ca38c:                                              1
+;     ca38e:                                              1
+;     ca3ae:                                              1
+;     ca3bd:                                              1
+;     ca3fb:                                              1
+;     ca40c:                                              1
+;     ca45d:                                              1
+;     ca47b:                                              1
+;     ca4fa:                                              1
+;     ca538:                                              1
+;     ca547:                                              1
+;     ca574:                                              1
+;     ca595:                                              1
+;     ca5a0:                                              1
+;     ca5c4:                                              1
+;     ca5e2:                                              1
+;     ca5fb:                                              1
+;     ca605:                                              1
+;     ca63a:                                              1
+;     ca647:                                              1
+;     ca652:                                              1
+;     ca65d:                                              1
+;     ca675:                                              1
+;     ca68a:                                              1
+;     ca6b3:                                              1
+;     ca6b6:                                              1
+;     ca6bb:                                              1
+;     ca6ce:                                              1
+;     ca6e2:                                              1
+;     ca70a:                                              1
+;     ca712:                                              1
+;     ca721:                                              1
+;     ca728:                                              1
+;     ca73a:                                              1
+;     ca787:                                              1
+;     ca7a4:                                              1
+;     ca7f2:                                              1
+;     ca7f7:                                              1
+;     ca818:                                              1
+;     ca82f:                                              1
+;     ca856:                                              1
+;     ca8bd:                                              1
+;     ca8fa:                                              1
+;     ca902:                                              1
+;     ca90c:                                              1
+;     ca95d:                                              1
+;     ca96c:                                              1
+;     ca970:                                              1
+;     ca982:                                              1
+;     ca98d:                                              1
+;     ca9b8:                                              1
+;     caa0a:                                              1
+;     caa0d:                                              1
+;     caa78:                                              1
+;     caa7a:                                              1
+;     caa86:                                              1
+;     caab7:                                              1
+;     caabe:                                              1
+;     caace:                                              1
+;     cab09:                                              1
+;     cab17:                                              1
+;     cab2e:                                              1
+;     cab35:                                              1
+;     cab3d:                                              1
+;     cab7d:                                              1
+;     cab93:                                              1
+;     caba4:                                              1
+;     cabcf:                                              1
+;     cabfb:                                              1
+;     cac28:                                              1
+;     cac45:                                              1
+;     cacc7:                                              1
+;     caed7:                                              1
+;     cb1dd:                                              1
+;     cb1fc:                                              1
+;     cb20f:                                              1
+;     cb221:                                              1
+;     cb23d:                                              1
+;     cb260:                                              1
+;     cb268:                                              1
+;     cb2b2:                                              1
+;     cb2e1:                                              1
+;     cb2e7:                                              1
+;     cb305:                                              1
+;     cb314:                                              1
+;     cb337:                                              1
+;     cb34f:                                              1
+;     cb352:                                              1
+;     cb375:                                              1
+;     cb37f:                                              1
+;     cb382:                                              1
+;     cb397:                                              1
+;     cb3ba:                                              1
+;     cb3de:                                              1
+;     cb40e:                                              1
+;     cb44b:                                              1
+;     cb45a:                                              1
+;     cb470:                                              1
+;     cb4af:                                              1
+;     cb4b4:                                              1
+;     cb4d8:                                              1
+;     cb4df:                                              1
+;     cb4e9:                                              1
+;     cb4ee:                                              1
+;     cb502:                                              1
+;     cb534:                                              1
+;     cb597:                                              1
+;     cb5d0:                                              1
+;     cb5e6:                                              1
+;     cb65e:                                              1
+;     cb6a6:                                              1
+;     cb6c2:                                              1
+;     cb6d2:                                              1
+;     cb6eb:                                              1
+;     cb6f5:                                              1
+;     cb725:                                              1
+;     cb736:                                              1
+;     cb7ae:                                              1
+;     cb7b2:                                              1
+;     cb7e8:                                              1
+;     cb7ec:                                              1
+;     cb898:                                              1
+;     cb8e6:                                              1
+;     cb8f5:                                              1
+;     cb9ae:                                              1
+;     cb9d2:                                              1
+;     cb9d9:                                              1
+;     cb9ee:                                              1
+;     cb9f7:                                              1
+;     cba15:                                              1
+;     cba19:                                              1
+;     cba27:                                              1
+;     cba28:                                              1
+;     cba2e:                                              1
+;     cba2f:                                              1
+;     cba78:                                              1
+;     cba8c:                                              1
+;     cba9e:                                              1
+;     cbab0:                                              1
+;     cbab1:                                              1
+;     cbad0:                                              1
+;     cbb07:                                              1
+;     cbb33:                                              1
+;     cbb36:                                              1
+;     cbb4c:                                              1
+;     cbb6f:                                              1
+;     cbb89:                                              1
+;     cbb90:                                              1
+;     cbba1:                                              1
+;     cbbbe:                                              1
+;     cbbd9:                                              1
+;     cbbf3:                                              1
+;     cbc2c:                                              1
+;     cbc54:                                              1
+;     cbc64:                                              1
+;     cbc78:                                              1
+;     cbc93:                                              1
+;     cbcb2:                                              1
+;     cbcd6:                                              1
+;     cbce1:                                              1
+;     cbcf9:                                              1
+;     cbd0e:                                              1
+;     cbd1b:                                              1
+;     cbd40:                                              1
+;     cbd46:                                              1
+;     cbd7e:                                              1
+;     cbda3:                                              1
+;     cbdba:                                              1
+;     cbdc0:                                              1
+;     cbdd3:                                              1
+;     cbddd:                                              1
+;     cbe21:                                              1
+;     cbe3c:                                              1
+;     cbe52:                                              1
+;     cbee0:                                              1
+;     cbeee:                                              1
+;     cbf33:                                              1
+;     cbf46:                                              1
+;     cbf8a:                                              1
+;     cbfa3:                                              1
+;     cbfb2:                                              1
+;     command_table+1:                                    1
+;     copyright_offset:                                   1
+;     evntv:                                              1
+;     filev:                                              1
+;     general_service_handler:                            1
+;     generate_error_precheck_disc_changed:               1
+;     generate_error_precheck_locked:                     1
+;     jump_address_low:                                   1
+;     l0013:                                              1
+;     l00f1:                                              1
+;     l0103:                                              1
+;     l0104:                                              1
+;     l010c:                                              1
+;     l010d:                                              1
+;     l010e:                                              1
+;     l028d:                                              1
+;     l0600:                                              1
+;     l0cff:                                              1
+;     l0d0f:                                              1
+;     l0d12:                                              1
+;     l0d2a:                                              1
+;     l0d50:                                              1
+;     l0e0e:                                              1
+;     l0e10:                                              1
+;     l0f00:                                              1
+;     l0f09:                                              1
+;     l0f10:                                              1
+;     l1001:                                              1
+;     l1002:                                              1
+;     l1003:                                              1
+;     l1004:                                              1
+;     l1005:                                              1
+;     l1006:                                              1
+;     l1007:                                              1
+;     l100e:                                              1
+;     l1047:                                              1
+;     l104d:                                              1
+;     l104e:                                              1
+;     l1050:                                              1
+;     l1058:                                              1
+;     l105f:                                              1
+;     l1061:                                              1
+;     l1063:                                              1
+;     l1064:                                              1
+;     l1072:                                              1
+;     l1079:                                              1
+;     l107a:                                              1
+;     l1083:                                              1
+;     l108f:                                              1
+;     l8001:                                              1
+;     l8002:                                              1
+;     l8004:                                              1
+;     l911d:                                              1
+;     l9121:                                              1
+;     l9139:                                              1
+;     l913f:                                              1
+;     l9145:                                              1
+;     l9146:                                              1
+;     l9191:                                              1
+;     l91a0:                                              1
+;     l9aec:                                              1
+;     l9b0f:                                              1
+;     l9b18:                                              1
+;     l9b21:                                              1
+;     l9b29:                                              1
+;     l9b31:                                              1
+;     l9b3a:                                              1
+;     l9b43:                                              1
+;     language_entry:                                     1
+;     lb075:                                              1
+;     lb175:                                              1
+;     lb283:                                              1
+;     lb6c6:                                              1
+;     lb6ce:                                              1
+;     lb774:                                              1
+;     lb87e:                                              1
+;     lb924:                                              1
+;     lb979:                                              1
+;     lb97a:                                              1
+;     lb980:                                              1
+;     lbb3a:                                              1
+;     lbb3e:                                              1
+;     lbb42:                                              1
+;     lbf4f:                                              1
+;     lda_0_rts:                                          1
+;     loop_c0029:                                         1
+;     loop_c003b:                                         1
+;     loop_c0446:                                         1
+;     loop_c0466:                                         1
+;     loop_c0471:                                         1
+;     loop_c04a6:                                         1
+;     loop_c04e1:                                         1
+;     loop_c0564:                                         1
+;     loop_c0577:                                         1
+;     loop_c0586:                                         1
+;     loop_c05ab:                                         1
+;     loop_c05c7:                                         1
+;     loop_c05d3:                                         1
+;     loop_c05e6:                                         1
+;     loop_c0604:                                         1
+;     loop_c061d:                                         1
+;     loop_c062b:                                         1
+;     loop_c064c:                                         1
+;     loop_c0657:                                         1
+;     loop_c065a:                                         1
+;     loop_c8064:                                         1
+;     loop_c8086:                                         1
+;     loop_c813a:                                         1
+;     loop_c8161:                                         1
+;     loop_c816b:                                         1
+;     loop_c818c:                                         1
+;     loop_c820c:                                         1
+;     loop_c820d:                                         1
+;     loop_c821c:                                         1
+;     loop_c826f:                                         1
+;     loop_c82c7:                                         1
+;     loop_c82d1:                                         1
+;     loop_c830d:                                         1
+;     loop_c8326:                                         1
+;     loop_c8370:                                         1
+;     loop_c8390:                                         1
+;     loop_c8397:                                         1
+;     loop_c83f0:                                         1
+;     loop_c83fa:                                         1
+;     loop_c8406:                                         1
+;     loop_c8425:                                         1
+;     loop_c8463:                                         1
+;     loop_c8493:                                         1
+;     loop_c84e7:                                         1
+;     loop_c8527:                                         1
+;     loop_c8552:                                         1
+;     loop_c8564:                                         1
+;     loop_c857b:                                         1
+;     loop_c85b5:                                         1
+;     loop_c8717:                                         1
+;     loop_c8725:                                         1
+;     loop_c87a0:                                         1
+;     loop_c87be:                                         1
+;     loop_c88bc:                                         1
+;     loop_c895f:                                         1
+;     loop_c8990:                                         1
+;     loop_c89c4:                                         1
+;     loop_c89ca:                                         1
+;     loop_c8a17:                                         1
+;     loop_c8ac8:                                         1
+;     loop_c8ad8:                                         1
+;     loop_c8af0:                                         1
+;     loop_c8afb:                                         1
+;     loop_c8b80:                                         1
+;     loop_c8bea:                                         1
+;     loop_c8c58:                                         1
+;     loop_c8c71:                                         1
+;     loop_c8d14:                                         1
+;     loop_c8d17:                                         1
+;     loop_c8dac:                                         1
+;     loop_c8dba:                                         1
+;     loop_c8de9:                                         1
+;     loop_c8df0:                                         1
+;     loop_c8e14:                                         1
+;     loop_c8e85:                                         1
+;     loop_c8f17:                                         1
+;     loop_c8f6c:                                         1
+;     loop_c8f96:                                         1
+;     loop_c8fac:                                         1
+;     loop_c9047:                                         1
+;     loop_c9108:                                         1
+;     loop_c9113:                                         1
+;     loop_c91ba:                                         1
+;     loop_c91e7:                                         1
+;     loop_c92ef:                                         1
+;     loop_c9355:                                         1
+;     loop_c9357:                                         1
+;     loop_c936f:                                         1
+;     loop_c9382:                                         1
+;     loop_c93bd:                                         1
+;     loop_c93da:                                         1
+;     loop_c953a:                                         1
+;     loop_c957d:                                         1
+;     loop_c9593:                                         1
+;     loop_c95b6:                                         1
+;     loop_c95d9:                                         1
+;     loop_c95ec:                                         1
+;     loop_c9618:                                         1
+;     loop_c96c2:                                         1
+;     loop_c96f2:                                         1
+;     loop_c979d:                                         1
+;     loop_c97c8:                                         1
+;     loop_c9803:                                         1
+;     loop_c9837:                                         1
+;     loop_c9851:                                         1
+;     loop_c985e:                                         1
+;     loop_c9881:                                         1
+;     loop_c98a0:                                         1
+;     loop_c98c1:                                         1
+;     loop_c98e4:                                         1
+;     loop_c9942:                                         1
+;     loop_c994e:                                         1
+;     loop_c9964:                                         1
+;     loop_c99a8:                                         1
+;     loop_c9b50:                                         1
+;     loop_c9b5e:                                         1
+;     loop_c9b63:                                         1
+;     loop_c9bcf:                                         1
+;     loop_c9be4:                                         1
+;     loop_c9c38:                                         1
+;     loop_c9c5d:                                         1
+;     loop_c9c90:                                         1
+;     loop_c9ca8:                                         1
+;     loop_c9d03:                                         1
+;     loop_c9d43:                                         1
+;     loop_c9e07:                                         1
+;     loop_c9e74:                                         1
+;     loop_c9e8c:                                         1
+;     loop_c9f6e:                                         1
+;     loop_ca061:                                         1
+;     loop_ca11d:                                         1
+;     loop_ca132:                                         1
+;     loop_ca143:                                         1
+;     loop_ca16e:                                         1
+;     loop_ca1aa:                                         1
+;     loop_ca1cc:                                         1
+;     loop_ca487:                                         1
+;     loop_ca521:                                         1
+;     loop_ca76f:                                         1
+;     loop_ca7a7:                                         1
+;     loop_ca7c6:                                         1
+;     loop_ca7e0:                                         1
+;     loop_ca7e1:                                         1
+;     loop_ca941:                                         1
+;     loop_ca947:                                         1
+;     loop_ca953:                                         1
+;     loop_ca9ab:                                         1
+;     loop_ca9e7:                                         1
+;     loop_caa01:                                         1
+;     loop_caab8:                                         1
+;     loop_cab6b:                                         1
+;     loop_cab80:                                         1
+;     loop_cabad:                                         1
+;     loop_cabf4:                                         1
+;     loop_cac46:                                         1
+;     loop_caf13:                                         1
+;     loop_caf2d:                                         1
+;     loop_cb1e3:                                         1
+;     loop_cb1ed:                                         1
+;     loop_cb249:                                         1
+;     loop_cb275:                                         1
+;     loop_cb2b4:                                         1
+;     loop_cb2bd:                                         1
+;     loop_cb2d1:                                         1
+;     loop_cb44d:                                         1
+;     loop_cb4a8:                                         1
+;     loop_cb55e:                                         1
+;     loop_cb578:                                         1
+;     loop_cb5c6:                                         1
+;     loop_cb5ed:                                         1
+;     loop_cb6b3:                                         1
+;     loop_cb75a:                                         1
+;     loop_cb7be:                                         1
+;     loop_cb7d7:                                         1
+;     loop_cb7dd:                                         1
+;     loop_cb910:                                         1
+;     loop_cb999:                                         1
+;     loop_cb9bd:                                         1
+;     loop_cb9cc:                                         1
+;     loop_cb9d1:                                         1
+;     loop_cb9f9:                                         1
+;     loop_cba1a:                                         1
+;     loop_cba94:                                         1
+;     loop_cbab8:                                         1
+;     loop_cbaea:                                         1
+;     loop_cbbe4:                                         1
+;     loop_cbbfe:                                         1
+;     loop_cbc70:                                         1
+;     loop_cbcd3:                                         1
+;     loop_cbd08:                                         1
+;     loop_cbd2b:                                         1
+;     loop_cbd6c:                                         1
+;     loop_cbd99:                                         1
+;     loop_cbe0e:                                         1
+;     loop_cbe31:                                         1
+;     loop_cbeab:                                         1
+;     loop_cbf1c:                                         1
+;     loop_cbf78:                                         1
+;     nmi3_handler_rom_end:                               1
+;     nmi3_handler_rom_start-1:                           1
+;     nmi_XXX18:                                          1
+;     nmi_XXX2:                                           1
+;     nmi_XXX21:                                          1
+;     nmi_XXX5:                                           1
+;     nmi_XXX6:                                           1
+;     nmi_XXX6+1:                                         1
+;     nmi_and_imm+1:                                      1
+;     nmi_and_table:                                      1
+;     nmi_bcs+1:                                          1
+;     nmi_cmp_imm_or_bcs:                                 1
+;     nmi_cmp_imm_or_bcs+1:                               1
+;     nmi_handler2_rom_start-1:                           1
+;     nmi_handler_rom_start:                              1
+;     nmi_lda_abs:                                        1
+;     opt4_table:                                         1
+;     osbyte_write_0:                                     1
+;     pla_rts:                                            1
+;     pydis_start:                                        1
+;     rom_header:                                         1
+;     rom_type:                                           1
+;     service_entry:                                      1
+;     service_handler:                                    1
+;     service_handler_help_and_tube:                      1
+;     service_handler_tube_main_init:                     1
+;     set_c_iff_have_fdc:                                 1
+;     sram_table+1:                                       1
+;     sub_c0414:                                          1
+;     sub_c0421:                                          1
+;     sub_c04c7:                                          1
+;     sub_c8020:                                          1
+;     sub_c809d:                                          1
+;     sub_c80b8:                                          1
+;     sub_c80d3:                                          1
+;     sub_c80db:                                          1
+;     sub_c80e6:                                          1
+;     sub_c80f6:                                          1
+;     sub_c81b7:                                          1
+;     sub_c81c0:                                          1
+;     sub_c81c4:                                          1
+;     sub_c81ca:                                          1
+;     sub_c8222:                                          1
+;     sub_c83bf:                                          1
+;     sub_c83d1:                                          1
+;     sub_c83d4:                                          1
+;     sub_c83ee:                                          1
+;     sub_c842c:                                          1
+;     sub_c85e3:                                          1
+;     sub_c8602:                                          1
+;     sub_c8826:                                          1
+;     sub_c8932:                                          1
+;     sub_c8979:                                          1
+;     sub_c8b25:                                          1
+;     sub_c8bf6:                                          1
+;     sub_c8bf9:                                          1
+;     sub_c8c56:                                          1
+;     sub_c8c65:                                          1
+;     sub_c8d1a:                                          1
+;     sub_c8dc6:                                          1
+;     sub_c8eec:                                          1
+;     sub_c8efa:                                          1
+;     sub_c8eff:                                          1
+;     sub_c8f33:                                          1
+;     sub_c8f37:                                          1
+;     sub_c8f4f:                                          1
+;     sub_c8f5e:                                          1
+;     sub_c8f75:                                          1
+;     sub_c8f82:                                          1
+;     sub_c8f94:                                          1
+;     sub_c929d:                                          1
+;     sub_c93b4:                                          1
+;     sub_c93d8:                                          1
+;     sub_c93f1:                                          1
+;     sub_c93f9:                                          1
+;     sub_c9536:                                          1
+;     sub_c965d:                                          1
+;     sub_c97e8:                                          1
+;     sub_c9832:                                          1
+;     sub_c9988:                                          1
+;     sub_c9a32:                                          1
+;     sub_c9a4b:                                          1
+;     sub_c9ad3:                                          1
+;     sub_c9b51:                                          1
+;     sub_c9b61:                                          1
+;     sub_c9bca:                                          1
+;     sub_c9bcd:                                          1
+;     sub_c9d19:                                          1
+;     sub_c9d75:                                          1
+;     sub_c9e94:                                          1
+;     sub_c9f7c:                                          1
+;     sub_c9f82:                                          1
+;     sub_ca0b8:                                          1
+;     sub_ca0f6:                                          1
+;     sub_ca190:                                          1
+;     sub_ca3e4:                                          1
+;     sub_ca4e1:                                          1
+;     sub_ca663:                                          1
+;     sub_ca73d:                                          1
+;     sub_ca76c:                                          1
+;     sub_ca779:                                          1
+;     sub_ca788:                                          1
+;     sub_ca7c4:                                          1
+;     sub_ca7c5:                                          1
+;     sub_ca7ce:                                          1
+;     sub_ca8be:                                          1
+;     sub_ca8e2:                                          1
+;     sub_ca9bf:                                          1
+;     sub_caa12:                                          1
+;     sub_caa9a:                                          1
+;     sub_caadd:                                          1
+;     sub_caaea:                                          1
+;     sub_caba9:                                          1
+;     sub_cac47:                                          1
+;     sub_cac6a:                                          1
+;     sub_cac72:                                          1
+;     sub_cb234:                                          1
+;     sub_cb2c8:                                          1
+;     sub_cb6e6:                                          1
+;     sub_cb771:                                          1
+;     sub_cb7b6:                                          1
+;     sub_cb86f:                                          1
+;     sub_cb882:                                          1
+;     sub_cbad2:                                          1
+;     sub_cbe91:                                          1
+;     sub_cbf84:                                          1
+;     tube_brkv_handler:                                  1
+;     tube_data_register_4:                               1
+;     tube_entry_claim_tube:                              1
+;     tube_entry_flags:                                   1
+;     tube_entry_small_a:                                 1
+;     tube_host_code1:                                    1
+;     tube_host_code2:                                    1
+;     tube_host_code2+256:                                1
+;     tube_host_code3:                                    1
+;     tube_host_osword_0_loop:                            1
+;     tube_host_osword_0_no_escape:                       1
+;     tube_host_osword_0_no_escape_loop:                  1
 
 ; Automatically generated labels:
 ;     c0032
@@ -13175,11 +13175,6 @@ lb6ce = sub_cb6cd+1
 ;     lbb42
 ;     lbf4f
 ;     lbfff
-;     lfe80
-;     lfe84
-;     lfe85
-;     lfe86
-;     lfe87
 ;     loop_c0029
 ;     loop_c003b
 ;     loop_c0446

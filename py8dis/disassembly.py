@@ -549,6 +549,9 @@ def constant_value_to_string(value, format):
     elif format == Format.BINARY:
         formatter = config.get_assembler()
         return mainformatter.binary_formatter(value, 8 if ((value >= 0) and (value < 256)) else 16)
+    elif format == Format.PICTURE_BINARY:
+        formatter = config.get_assembler()
+        return mainformatter.picture_binary_formatter(value, 8 if ((value >= 0) and (value < 256)) else 16)
     elif format == Format.STRING:
         formatter = config.get_assembler()
         return str('"' + value + '"')

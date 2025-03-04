@@ -33,261 +33,261 @@ service_unrecognised_osword         = 8
 tube_brkv_handler_fwd               = 22
 
 // Memory locations
-l0000                   = $0000
-l0001                   = $0001
-l0002                   = $0002
-l0003                   = $0003
-l0012                   = $0012
-l0013                   = $0013
-l0014                   = $0014
-l0015                   = $0015
-l00a0                   = $00a0
-l00a1                   = $00a1
-l00a2                   = $00a2
-l00a3                   = $00a3
-l00a4                   = $00a4
-l00a5                   = $00a5
-l00a6                   = $00a6
-l00a7                   = $00a7
-l00a8                   = $00a8
-l00a9                   = $00a9
-l00aa                   = $00aa
-l00ab                   = $00ab
-l00ac                   = $00ac
-l00ad                   = $00ad
-l00ae                   = $00ae
-l00af                   = $00af
-l00b0                   = $00b0
-l00b1                   = $00b1
-l00b2                   = $00b2
-l00b3                   = $00b3
-l00b4                   = $00b4
-l00b5                   = $00b5
-l00b6                   = $00b6
-l00b7                   = $00b7
-l00b8                   = $00b8
-l00b9                   = $00b9
-l00ba                   = $00ba
-l00bb                   = $00bb
-l00bc                   = $00bc
-l00bd                   = $00bd
-l00be                   = $00be
-l00bf                   = $00bf
-l00c0                   = $00c0
-l00c1                   = $00c1
-l00c2                   = $00c2
-l00c3                   = $00c3
-l00c4                   = $00c4
-l00c5                   = $00c5
-l00c6                   = $00c6
-l00c7                   = $00c7
-l00c8                   = $00c8
-l00c9                   = $00c9
-l00ca                   = $00ca
-l00cc                   = $00cc
-l00cd                   = $00cd
-l00ce                   = $00ce
-l00cf                   = $00cf
-l00ef                   = $00ef
-l00f0                   = $00f0
-l00f1                   = $00f1
-os_text_ptr             = $00f2
-l00f3                   = $00f3
-romsel_copy             = $00f4
-osrdsc_ptr              = $00f6
-l00f7                   = $00f7
-l00fd                   = $00fd
-l00ff                   = $00ff
-l0100                   = $0100
-l0101                   = $0101
-l0102                   = $0102
-l0103                   = $0103
-l0104                   = $0104
-l0105                   = $0105
-l0107                   = $0107
-l0109                   = $0109
-l010b                   = $010b
-l010c                   = $010c
-l010d                   = $010d
-l010e                   = $010e
-l0128                   = $0128
-brkv                    = $0202
-bytev                   = $020a
-filev                   = $0212
-fscv                    = $021e
-evntv                   = $0220
-l028d                   = $028d
-l0700                   = $0700
-l0cff                   = $0cff
-l0df0                   = $0df0
-l0e00                   = $0e00
-l0e07                   = $0e07
-l0e08                   = $0e08
-l0e0e                   = $0e0e
-l0e0f                   = $0e0f
-l0e10                   = $0e10
-l0ef8                   = $0ef8
-l0f00                   = $0f00
-l0f04                   = $0f04
-l0f05                   = $0f05
-l0f06                   = $0f06
-l0f07                   = $0f07
-l0f08                   = $0f08
-l0f09                   = $0f09
-l0f0a                   = $0f0a
-l0f0b                   = $0f0b
-l0f0c                   = $0f0c
-l0f0d                   = $0f0d
-l0f0e                   = $0f0e
-l0f0f                   = $0f0f
-l0f10                   = $0f10
-l1000                   = $1000
-l1001                   = $1001
-l1002                   = $1002
-l1003                   = $1003
-l1004                   = $1004
-l1005                   = $1005
-l1006                   = $1006
-l1007                   = $1007
-l100e                   = $100e
-l1045                   = $1045
-l1047                   = $1047
-l104d                   = $104d
-l104e                   = $104e
-l1050                   = $1050
-l1058                   = $1058
-l105f                   = $105f
-l1060                   = $1060
-l1061                   = $1061
-l1062                   = $1062
-l1063                   = $1063
-l1064                   = $1064
-l1065                   = $1065
-l1067                   = $1067
-l1069                   = $1069
-l1072                   = $1072
-l1074                   = $1074
-l1075                   = $1075
-l1076                   = $1076
-l1077                   = $1077
-l1078                   = $1078
-l1079                   = $1079
-l107a                   = $107a
-l107d                   = $107d
-l107e                   = $107e
-l107f                   = $107f
-l1081                   = $1081
-l1082                   = $1082
-l1083                   = $1083
-l1086                   = $1086
-l1087                   = $1087
-l1088                   = $1088
-l1089                   = $1089
-l108a                   = $108a
-l108b                   = $108b
-l108c                   = $108c
-l108f                   = $108f
-l1090                   = $1090
-l1091                   = $1091
-l1092                   = $1092
-l1093                   = $1093
-l1094                   = $1094
-l1095                   = $1095
-l1096                   = $1096
-l1097                   = $1097
-l1098                   = $1098
-l1099                   = $1099
-l109a                   = $109a
-l109b                   = $109b
-l109d                   = $109d
-l109e                   = $109e
-l109f                   = $109f
-l10c0                   = $10c0
-l10c1                   = $10c1
-l10c2                   = $10c2
-l10c3                   = $10c3
-l10c4                   = $10c4
-l10c5                   = $10c5
-l10c6                   = $10c6
-l10c7                   = $10c7
-l10c9                   = $10c9
-l10ca                   = $10ca
-l10cb                   = $10cb
-l10cc                   = $10cc
-l10cd                   = $10cd
-l10ce                   = $10ce
-l10cf                   = $10cf
-l10d0                   = $10d0
-l10d1                   = $10d1
-l10d2                   = $10d2
-l10d3                   = $10d3
-l10d6                   = $10d6
-l10d7                   = $10d7
-l10d8                   = $10d8
-l10d9                   = $10d9
-l10da                   = $10da
-l10db                   = $10db
-l10dc                   = $10dc
-l10dd                   = $10dd
-l10de                   = $10de
-l10e2                   = $10e2
-l10e3                   = $10e3
-l10e4                   = $10e4
-l1100                   = $1100
-l1109                   = $1109
-l110b                   = $110b
-l110c                   = $110c
-l110d                   = $110d
-l110e                   = $110e
-l110f                   = $110f
-l1110                   = $1110
-l1111                   = $1111
-l1112                   = $1112
-l1113                   = $1113
-l1114                   = $1114
-l1115                   = $1115
-l1116                   = $1116
-l1117                   = $1117
-l1119                   = $1119
-l111a                   = $111a
-l111b                   = $111b
-l111c                   = $111c
-l111d                   = $111d
-nmi3_handler_rom_start  = $9030
-nmi_handler_rom_end     = $9030
-nmi_handler2_rom_start  = $9067
-tube_host_code2         = $acdb
-tube_host_code3         = $af38
-tube_host_code1         = $af79
-romsel                  = $fe30
-lfe80                   = $fe80
-lfe84                   = $fe84
-lfe85                   = $fe85
-lfe86                   = $fe86
-lfe87                   = $fe87
-tube_host_r1_status     = $fee0
-tube_host_r1_data       = $fee1
-tube_host_r2_status     = $fee2
-tube_host_r2_data       = $fee3
-tube_host_r3_data       = $fee5
-tube_host_r4_status     = $fee6
-tube_host_r4_data       = $fee7
-osrdsc                  = $ffb9
-gsinit                  = $ffc2
-gsread                  = $ffc5
-osfind                  = $ffce
-osgbpb                  = $ffd1
-osbput                  = $ffd4
-osbget                  = $ffd7
-osargs                  = $ffda
-osfile                  = $ffdd
-osrdch                  = $ffe0
-osasci                  = $ffe3
-osnewl                  = $ffe7
-oswrch                  = $ffee
-osword                  = $fff1
-osbyte                  = $fff4
-oscli                   = $fff7
+l0000                                           = $0000
+l0001                                           = $0001
+l0002                                           = $0002
+l0003                                           = $0003
+l0012                                           = $0012
+l0013                                           = $0013
+l0014                                           = $0014
+l0015                                           = $0015
+l00a0                                           = $00a0
+l00a1                                           = $00a1
+l00a2                                           = $00a2
+l00a3                                           = $00a3
+l00a4                                           = $00a4
+l00a5                                           = $00a5
+l00a6                                           = $00a6
+l00a7                                           = $00a7
+l00a8                                           = $00a8
+l00a9                                           = $00a9
+l00aa                                           = $00aa
+l00ab                                           = $00ab
+l00ac                                           = $00ac
+l00ad                                           = $00ad
+l00ae                                           = $00ae
+l00af                                           = $00af
+l00b0                                           = $00b0
+l00b1                                           = $00b1
+l00b2                                           = $00b2
+l00b3                                           = $00b3
+l00b4                                           = $00b4
+l00b5                                           = $00b5
+l00b6                                           = $00b6
+l00b7                                           = $00b7
+l00b8                                           = $00b8
+l00b9                                           = $00b9
+l00ba                                           = $00ba
+l00bb                                           = $00bb
+l00bc                                           = $00bc
+l00bd                                           = $00bd
+l00be                                           = $00be
+l00bf                                           = $00bf
+l00c0                                           = $00c0
+l00c1                                           = $00c1
+l00c2                                           = $00c2
+l00c3                                           = $00c3
+l00c4                                           = $00c4
+l00c5                                           = $00c5
+l00c6                                           = $00c6
+l00c7                                           = $00c7
+l00c8                                           = $00c8
+l00c9                                           = $00c9
+l00ca                                           = $00ca
+l00cc                                           = $00cc
+l00cd                                           = $00cd
+l00ce                                           = $00ce
+l00cf                                           = $00cf
+l00ef                                           = $00ef
+l00f0                                           = $00f0
+l00f1                                           = $00f1
+os_text_ptr                                     = $00f2
+l00f3                                           = $00f3
+romsel_copy                                     = $00f4
+osrdsc_ptr                                      = $00f6
+l00f7                                           = $00f7
+l00fd                                           = $00fd
+l00ff                                           = $00ff
+l0100                                           = $0100
+l0101                                           = $0101
+l0102                                           = $0102
+l0103                                           = $0103
+l0104                                           = $0104
+l0105                                           = $0105
+l0107                                           = $0107
+l0109                                           = $0109
+l010b                                           = $010b
+l010c                                           = $010c
+l010d                                           = $010d
+l010e                                           = $010e
+l0128                                           = $0128
+brkv                                            = $0202
+bytev                                           = $020a
+filev                                           = $0212
+fscv                                            = $021e
+evntv                                           = $0220
+l028d                                           = $028d
+l0700                                           = $0700
+l0cff                                           = $0cff
+l0df0                                           = $0df0
+l0e00                                           = $0e00
+l0e07                                           = $0e07
+l0e08                                           = $0e08
+l0e0e                                           = $0e0e
+l0e0f                                           = $0e0f
+l0e10                                           = $0e10
+l0ef8                                           = $0ef8
+l0f00                                           = $0f00
+l0f04                                           = $0f04
+l0f05                                           = $0f05
+l0f06                                           = $0f06
+l0f07                                           = $0f07
+l0f08                                           = $0f08
+l0f09                                           = $0f09
+l0f0a                                           = $0f0a
+l0f0b                                           = $0f0b
+l0f0c                                           = $0f0c
+l0f0d                                           = $0f0d
+l0f0e                                           = $0f0e
+l0f0f                                           = $0f0f
+l0f10                                           = $0f10
+l1000                                           = $1000
+l1001                                           = $1001
+l1002                                           = $1002
+l1003                                           = $1003
+l1004                                           = $1004
+l1005                                           = $1005
+l1006                                           = $1006
+l1007                                           = $1007
+l100e                                           = $100e
+l1045                                           = $1045
+l1047                                           = $1047
+l104d                                           = $104d
+l104e                                           = $104e
+l1050                                           = $1050
+l1058                                           = $1058
+l105f                                           = $105f
+l1060                                           = $1060
+l1061                                           = $1061
+l1062                                           = $1062
+l1063                                           = $1063
+l1064                                           = $1064
+l1065                                           = $1065
+l1067                                           = $1067
+l1069                                           = $1069
+l1072                                           = $1072
+l1074                                           = $1074
+l1075                                           = $1075
+l1076                                           = $1076
+l1077                                           = $1077
+l1078                                           = $1078
+l1079                                           = $1079
+l107a                                           = $107a
+l107d                                           = $107d
+l107e                                           = $107e
+l107f                                           = $107f
+l1081                                           = $1081
+l1082                                           = $1082
+l1083                                           = $1083
+l1086                                           = $1086
+l1087                                           = $1087
+l1088                                           = $1088
+l1089                                           = $1089
+l108a                                           = $108a
+l108b                                           = $108b
+l108c                                           = $108c
+l108f                                           = $108f
+l1090                                           = $1090
+l1091                                           = $1091
+l1092                                           = $1092
+l1093                                           = $1093
+l1094                                           = $1094
+l1095                                           = $1095
+l1096                                           = $1096
+l1097                                           = $1097
+l1098                                           = $1098
+l1099                                           = $1099
+l109a                                           = $109a
+l109b                                           = $109b
+l109d                                           = $109d
+l109e                                           = $109e
+l109f                                           = $109f
+l10c0                                           = $10c0
+l10c1                                           = $10c1
+l10c2                                           = $10c2
+l10c3                                           = $10c3
+l10c4                                           = $10c4
+l10c5                                           = $10c5
+l10c6                                           = $10c6
+l10c7                                           = $10c7
+l10c9                                           = $10c9
+l10ca                                           = $10ca
+l10cb                                           = $10cb
+l10cc                                           = $10cc
+l10cd                                           = $10cd
+l10ce                                           = $10ce
+l10cf                                           = $10cf
+l10d0                                           = $10d0
+l10d1                                           = $10d1
+l10d2                                           = $10d2
+l10d3                                           = $10d3
+l10d6                                           = $10d6
+l10d7                                           = $10d7
+l10d8                                           = $10d8
+l10d9                                           = $10d9
+l10da                                           = $10da
+l10db                                           = $10db
+l10dc                                           = $10dc
+l10dd                                           = $10dd
+l10de                                           = $10de
+l10e2                                           = $10e2
+l10e3                                           = $10e3
+l10e4                                           = $10e4
+l1100                                           = $1100
+l1109                                           = $1109
+l110b                                           = $110b
+l110c                                           = $110c
+l110d                                           = $110d
+l110e                                           = $110e
+l110f                                           = $110f
+l1110                                           = $1110
+l1111                                           = $1111
+l1112                                           = $1112
+l1113                                           = $1113
+l1114                                           = $1114
+l1115                                           = $1115
+l1116                                           = $1116
+l1117                                           = $1117
+l1119                                           = $1119
+l111a                                           = $111a
+l111b                                           = $111b
+l111c                                           = $111c
+l111d                                           = $111d
+nmi3_handler_rom_start                          = $9030
+nmi_handler_rom_end                             = $9030
+nmi_handler2_rom_start                          = $9067
+tube_host_code2                                 = $acdb
+tube_host_code3                                 = $af38
+tube_host_code1                                 = $af79
+romsel                                          = $fe30
+fdc_8271_command_or_status_or_1770_drive_control = $fe80
+fdc_8271_data_or_1770_command_or_status         = $fe84
+fdc_1770_track                                  = $fe85
+fdc_1770_sector                                 = $fe86
+fdc_1770_data                                   = $fe87
+tube_status_1_and_tube_control                  = $fee0
+tube_data_register_1                            = $fee1
+tube_status_register_2                          = $fee2
+tube_data_register_2                            = $fee3
+tube_data_register_3                            = $fee5
+tube_status_register_4_and_cpu_control          = $fee6
+tube_data_register_4                            = $fee7
+osrdsc                                          = $ffb9
+gsinit                                          = $ffc2
+gsread                                          = $ffc5
+osfind                                          = $ffce
+osgbpb                                          = $ffd1
+osbput                                          = $ffd4
+osbget                                          = $ffd7
+osargs                                          = $ffda
+osfile                                          = $ffdd
+osrdch                                          = $ffe0
+osasci                                          = $ffe3
+osnewl                                          = $ffe7
+oswrch                                          = $ffee
+osword                                          = $fff1
+osbyte                                          = $fff4
+oscli                                           = $fff7
 
     * = $2000
 
@@ -2372,7 +2372,7 @@ c8c12
     ldx l00a7                                                         // 2c21: a6 a7       ..  :8c21[1]
     cpx #$80                                                          // 2c23: e0 80       ..  :8c23[1]
     bne c8c2e                                                         // 2c25: d0 07       ..  :8c25[1]
-    lda lfe84                                                         // 2c27: ad 84 fe    ... :8c27[1]
+    lda fdc_8271_data_or_1770_command_or_status                       // 2c27: ad 84 fe    ... :8c27[1]
     and #$20 // ' '                                                   // 2c2a: 29 20       )   :8c2a[1]
     ora (l00b0),y                                                     // 2c2c: 11 b0       ..  :8c2c[1]
 // $2c2e referenced 1 time by $8c25[1]
@@ -2397,7 +2397,7 @@ c8c3a
 // $2c4e referenced 1 time by $8c49[1]
 c8c4e
     jsr sub_c8f5e                                                     // 2c4e: 20 5e 8f     ^. :8c4e[1]
-    lda lfe87                                                         // 2c51: ad 87 fe    ... :8c51[1]
+    lda fdc_1770_data                                                 // 2c51: ad 87 fe    ... :8c51[1]
     pla                                                               // 2c54: 68          h   :8c54[1]
     rts                                                               // 2c55: 60          `   :8c55[1]
 
@@ -2490,7 +2490,7 @@ c8cc1
 c8cd6
     sty l00a3                                                         // 2cd6: 84 a3       ..  :8cd6[1]
     eor l911d,x                                                       // 2cd8: 5d 1d 91    ].. :8cd8[1]
-    sta lfe80                                                         // 2cdb: 8d 80 fe    ... :8cdb[1]
+    sta fdc_8271_command_or_status_or_1770_drive_control              // 2cdb: 8d 80 fe    ... :8cdb[1]
     lsr                                                               // 2cde: 4a          J   :8cde[1]
     ldx l1088                                                         // 2cdf: ae 88 10    ... :8cdf[1]
     bcs c8ce7                                                         // 2ce2: b0 03       ..  :8ce2[1]
@@ -2664,7 +2664,7 @@ c8de2
 loop_c8de9
     lda #$e0                                                          // 2de9: a9 e0       ..  :8de9[1]
     sta l00a2                                                         // 2deb: 85 a2       ..  :8deb[1]
-    sta lfe84                                                         // 2ded: 8d 84 fe    ... :8ded[1]
+    sta fdc_8271_data_or_1770_command_or_status                       // 2ded: 8d 84 fe    ... :8ded[1]
 // $2df0 referenced 1 time by $8df2[1]
 loop_c8df0
     lda l00a2                                                         // 2df0: a5 a2       ..  :8df0[1]
@@ -2736,7 +2736,7 @@ c8e4d
 // $2e53 referenced 3 times by $8e38[1], $8e3c[1], $8e46[1]
 c8e53
     sty l00a5                                                         // 2e53: 84 a5       ..  :8e53[1]
-    sta lfe84                                                         // 2e55: 8d 84 fe    ... :8e55[1]
+    sta fdc_8271_data_or_1770_command_or_status                       // 2e55: 8d 84 fe    ... :8e55[1]
     cmp #$f0                                                          // 2e58: c9 f0       ..  :8e58[1]
     bcc c8e64                                                         // 2e5a: 90 08       ..  :8e5a[1]
     jsr c8e9f                                                         // 2e5c: 20 9f 8e     .. :8e5c[1]
@@ -2762,7 +2762,7 @@ c8e72
     sty l00a5                                                         // 2e74: 84 a5       ..  :8e74[1]
     ora l00a4                                                         // 2e76: 05 a4       ..  :8e76[1]
     sta l00a7                                                         // 2e78: 85 a7       ..  :8e78[1]
-    sta lfe84                                                         // 2e7a: 8d 84 fe    ... :8e7a[1]
+    sta fdc_8271_data_or_1770_command_or_status                       // 2e7a: 8d 84 fe    ... :8e7a[1]
     bit l00b2                                                         // 2e7d: 24 b2       $.  :8e7d[1]
     bmi c8e64                                                         // 2e7f: 30 e3       0.  :8e7f[1]
     cmp #$20 // ' '                                                   // 2e81: c9 20       .   :8e81[1]
@@ -2776,7 +2776,7 @@ loop_c8e85
     lda #opcode_rti                                                   // 2e8d: a9 40       .@  :8e8d[1]
     sta nmi_handler_ram                                               // 2e8f: 8d 00 0d    ... :8e8f[1]
     lda #0                                                            // 2e92: a9 00       ..  :8e92[1]
-    sta lfe80                                                         // 2e94: 8d 80 fe    ... :8e94[1]
+    sta fdc_8271_command_or_status_or_1770_drive_control              // 2e94: 8d 80 fe    ... :8e94[1]
     lda l00ff                                                         // 2e97: a5 ff       ..  :8e97[1]
     sta l1082                                                         // 2e99: 8d 82 10    ... :8e99[1]
     sta l00a2                                                         // 2e9c: 85 a2       ..  :8e9c[1]
@@ -2786,15 +2786,15 @@ c8e9e
 
 // $2e9f referenced 2 times by $8e5c[1], $8ea3[1]
 c8e9f
-    lda lfe84                                                         // 2e9f: ad 84 fe    ... :8e9f[1]
+    lda fdc_8271_data_or_1770_command_or_status                       // 2e9f: ad 84 fe    ... :8e9f[1]
     ror                                                               // 2ea2: 6a          j   :8ea2[1]
     bcc c8e9f                                                         // 2ea3: 90 fa       ..  :8ea3[1]
 // $2ea5 referenced 2 times by $8e6c[1], $8ea9[1]
 c8ea5
-    lda lfe84                                                         // 2ea5: ad 84 fe    ... :8ea5[1]
+    lda fdc_8271_data_or_1770_command_or_status                       // 2ea5: ad 84 fe    ... :8ea5[1]
     ror                                                               // 2ea8: 6a          j   :8ea8[1]
     bcs c8ea5                                                         // 2ea9: b0 fa       ..  :8ea9[1]
-    lda lfe84                                                         // 2eab: ad 84 fe    ... :8eab[1]
+    lda fdc_8271_data_or_1770_command_or_status                       // 2eab: ad 84 fe    ... :8eab[1]
     rts                                                               // 2eae: 60          `   :8eae[1]
 
 // $2eaf referenced 1 time by $8d14[1]
@@ -2874,8 +2874,8 @@ c8f12
     beq c8f21                                                         // 2f15: f0 0a       ..  :8f15[1]
 // $2f17 referenced 1 time by $8f1d[1]
 loop_c8f17
-    sta lfe87                                                         // 2f17: 8d 87 fe    ... :8f17[1]
-    cmp lfe87                                                         // 2f1a: cd 87 fe    ... :8f1a[1]
+    sta fdc_1770_data                                                 // 2f17: 8d 87 fe    ... :8f17[1]
+    cmp fdc_1770_data                                                 // 2f1a: cd 87 fe    ... :8f1a[1]
     bne loop_c8f17                                                    // 2f1d: d0 f8       ..  :8f1d[1]
     lda #$10                                                          // 2f1f: a9 10       ..  :8f1f[1]
 // $2f21 referenced 1 time by $8f15[1]
@@ -2886,8 +2886,8 @@ c8f21
     lda (l00b0),y                                                     // 2f28: b1 b0       ..  :8f28[1]
 // $2f2a referenced 3 times by $8c44[1], $8d10[1], $8f30[1]
 c8f2a
-    sta lfe85                                                         // 2f2a: 8d 85 fe    ... :8f2a[1]
-    cmp lfe85                                                         // 2f2d: cd 85 fe    ... :8f2d[1]
+    sta fdc_1770_track                                                // 2f2a: 8d 85 fe    ... :8f2a[1]
+    cmp fdc_1770_track                                                // 2f2d: cd 85 fe    ... :8f2d[1]
     bne c8f2a                                                         // 2f30: d0 f8       ..  :8f30[1]
     rts                                                               // 2f32: 60          `   :8f32[1]
 
@@ -3042,7 +3042,7 @@ nmi_handler_rom_start
 // $2fd2 referenced 2 times by $8e8f[1], $8f99[1]
 nmi_handler_ram
     pha                                                               // 2fd2: 48          H   :0d00[5]
-    lda lfe84                                                         // 2fd3: ad 84 fe    ... :0d01[5]
+    lda fdc_8271_data_or_1770_command_or_status                       // 2fd3: ad 84 fe    ... :0d01[5]
 // The operand of this and is modified at runtime.
 nmi_and_imm
     and #$18                                                          // 2fd6: 29 18       ).  :0d04[5]
@@ -3093,20 +3093,20 @@ l0d26
     lda l00cf                                                         // 2ffa: a5 cf       ..  :0d28[5]
 // $2ffc referenced 1 time by $0d30[5]
 l0d2a
-    sta lfe86                                                         // 2ffc: 8d 86 fe    ... :0d2a[5]
-    cmp lfe86                                                         // 2fff: cd 86 fe    ... :0d2d[5]
+    sta fdc_1770_sector                                               // 2ffc: 8d 86 fe    ... :0d2a[5]
+    cmp fdc_1770_sector                                               // 2fff: cd 86 fe    ... :0d2d[5]
     bne l0d2a                                                         // 3002: d0 f8       ..  :0d30[5]
     lda l00a7                                                         // 3004: a5 a7       ..  :0d32[5]
-    sta lfe84                                                         // 3006: 8d 84 fe    ... :0d34[5]
+    sta fdc_8271_data_or_1770_command_or_status                       // 3006: 8d 84 fe    ... :0d34[5]
     pla                                                               // 3009: 68          h   :0d37[5]
     rti                                                               // 300a: 40          @   :0d38[5]
 
 // $300b referenced 1 time by $0d08[5]
 nmi_XXX2
-    lda lfe87                                                         // 300b: ad 87 fe    ... :0d39[5]
+    lda fdc_1770_data                                                 // 300b: ad 87 fe    ... :0d39[5]
 // The operand of this sta is modified at runtime.
 nmi_sta_abs
-    sta tube_host_r3_data                                             // 300e: 8d e5 fe    ... :0d3c[5]
+    sta tube_data_register_3                                          // 300e: 8d e5 fe    ... :0d3c[5]
 // $300f referenced 3 times by $0d37[7], $0d3f[5], $903e[1]
 // $3010 referenced 2 times by $0d44[5], $9041[1]
 // The first two bytes of the following instruction may be patched at runtime.
@@ -3131,13 +3131,13 @@ l0d50
     rti                                                               // 3023: 40          @   :0d51[5]
 
 nmi_XXX1
-    lda lfe87                                                         // 3024: ad 87 fe    ... :0d52[5]
+    lda fdc_1770_data                                                 // 3024: ad 87 fe    ... :0d52[5]
     pla                                                               // 3027: 68          h   :0d55[5]
     rti                                                               // 3028: 40          @   :0d56[5]
 
 nmi_XXX8
     lda #0                                                            // 3029: a9 00       ..  :0d57[5]
-    sta lfe87                                                         // 302b: 8d 87 fe    ... :0d59[5]
+    sta fdc_1770_data                                                 // 302b: 8d 87 fe    ... :0d59[5]
     pla                                                               // 302e: 68          h   :0d5c[5]
     rti                                                               // 302f: 40          @   :0d5d[5]
 
@@ -3147,10 +3147,10 @@ nmi_XXX8
 * = $0d39
 // The operand of this lda is modified at runtime.
 nmi_lda_abs
-    lda tube_host_r3_data                                             // 3030: ad e5 fe    ... :0d39[6]
+    lda tube_data_register_3                                          // 3030: ad e5 fe    ... :0d39[6]
 // $3031 referenced 2 times by $0d3f[6], $8fbd[1]
 // $3032 referenced 2 times by $0d44[6], $8fc3[1]
-    sta lfe87                                                         // 3033: 8d 87 fe    ... :0d3c[6]
+    sta fdc_1770_data                                                 // 3033: 8d 87 fe    ... :0d3c[6]
     inc nmi_lda_abs+1                                                 // 3036: ee 3a 0d    .:. :0d3f[6]
     bne nmi_XXX7                                                      // 3039: d0 03       ..  :0d42[6]
     inc nmi_lda_abs+2                                                 // 303b: ee 3b 0d    .;. :0d44[6]
@@ -3191,11 +3191,11 @@ c9060
 // Move 7: $3067 to $0d00 for length 148
 * = $0d00
     pha                                                               // 3067: 48          H   :0d00[7]
-    lda lfe84                                                         // 3068: ad 84 fe    ... :0d01[7]
+    lda fdc_8271_data_or_1770_command_or_status                       // 3068: ad 84 fe    ... :0d01[7]
     and #$1b                                                          // 306b: 29 1b       ).  :0d04[7]
     cmp #3                                                            // 306d: c9 03       ..  :0d06[7]
     bne l0d0f                                                         // 306f: d0 05       ..  :0d08[7]
-    lda lfe87                                                         // 3071: ad 87 fe    ... :0d0a[7]
+    lda fdc_1770_data                                                 // 3071: ad 87 fe    ... :0d0a[7]
 // The operand of this bcs is modified at runtime
 nmi_bcs
     bcs nmi_XXX21                                                     // 3074: b0 26       .&  :0d0d[7]
@@ -3210,7 +3210,7 @@ l0d0f
 // The operand of this sta is modified at runtime.
 nmi_XXX17
 nmi_sta_abs2
-    sta tube_host_r3_data                                             // 307c: 8d e5 fe    ... :0d15[7]
+    sta tube_data_register_3                                          // 307c: 8d e5 fe    ... :0d15[7]
     inc nmi_sta_abs2+1                                                // 307f: ee 16 0d    ... :0d18[7]
     bne nmi_XXX18                                                     // 3082: d0 03       ..  :0d1b[7]
     inc nmi_sta_abs2+2                                                // 3084: ee 17 0d    ... :0d1d[7]
@@ -3241,7 +3241,7 @@ l0d3d
     lda #nmi_XXX10-(nmi_bcs+2)                                        // 30a4: a9 32       .2  :0d3d[7]
     bne l0d30                                                         // 30a6: d0 ef       ..  :0d3f[7]
 nmi_XXX10
-    sbc lfe87                                                         // 30a8: ed 87 fe    ... :0d41[7]
+    sbc fdc_1770_data                                                 // 30a8: ed 87 fe    ... :0d41[7]
     sta l00b5                                                         // 30ab: 85 b5       ..  :0d44[7]
     lda #nmi_XXX11-(nmi_bcs+2)                                        // 30ad: a9 3b       .;  :0d46[7]
     bne l0d30                                                         // 30af: d0 e6       ..  :0d48[7]   // ALWAYS branch
@@ -3313,8 +3313,8 @@ nmi_XXX20
 * = $90fb
 // $30fb referenced 3 times by $8d41[1], $8d92[1], $9101[1]
 nmi_handler2_rom_end
-    sta lfe86                                                         // 30fb: 8d 86 fe    ... :90fb[1]
-    cmp lfe86                                                         // 30fe: cd 86 fe    ... :90fe[1]
+    sta fdc_1770_sector                                               // 30fb: 8d 86 fe    ... :90fb[1]
+    cmp fdc_1770_sector                                               // 30fe: cd 86 fe    ... :90fe[1]
     bne nmi_handler2_rom_end                                          // 3101: d0 f8       ..  :9101[1]
     rts                                                               // 3103: 60          `   :9103[1]
 
@@ -3324,8 +3324,8 @@ set_c_iff_have_fdc
     lda #$5a // 'Z'                                                   // 3106: a9 5a       .Z  :9106[1]
 // $3108 referenced 1 time by $9111[1]
 loop_c9108
-    sta lfe85                                                         // 3108: 8d 85 fe    ... :9108[1]
-    cmp lfe85                                                         // 310b: cd 85 fe    ... :910b[1]
+    sta fdc_1770_track                                                // 3108: 8d 85 fe    ... :9108[1]
+    cmp fdc_1770_track                                                // 310b: cd 85 fe    ... :910b[1]
     beq c9115                                                         // 310e: f0 05       ..  :910e[1]
     dex                                                               // 3110: ca          .   :9110[1]
     bne loop_c9108                                                    // 3111: d0 f5       ..  :9111[1]
@@ -3336,7 +3336,7 @@ loop_c9113
 
 // $3115 referenced 1 time by $910e[1]
 c9115
-    lda lfe80                                                         // 3115: ad 80 fe    ... :9115[1]
+    lda fdc_8271_command_or_status_or_1770_drive_control              // 3115: ad 80 fe    ... :9115[1]
     and #3                                                            // 3118: 29 03       ).  :9118[1]
     beq loop_c9113                                                    // 311a: f0 f7       ..  :911a[1]
     rts                                                               // 311c: 60          `   :911c[1]
@@ -3675,7 +3675,7 @@ loop_c9355
 loop_c9357
     sbc #1                                                            // 3357: e9 01       ..  :9357[1]
     bne loop_c9357                                                    // 3359: d0 fc       ..  :9359[1]
-    lda tube_host_r3_data                                             // 335b: ad e5 fe    ... :935b[1]
+    lda tube_data_register_3                                          // 335b: ad e5 fe    ... :935b[1]
     sta (l00b0),y                                                     // 335e: 91 b0       ..  :935e[1]
     iny                                                               // 3360: c8          .   :9360[1]
     dex                                                               // 3361: ca          .   :9361[1]
@@ -3815,7 +3815,7 @@ sub_c93fd
     ldy #$80                                                          // 33fd: a0 80       ..  :93fd[1]
 // $33ff referenced 1 time by $93fb[1]
 c93ff
-    bit lfe84                                                         // 33ff: 2c 84 fe    ,.. :93ff[1]
+    bit fdc_8271_data_or_1770_command_or_status                       // 33ff: 2c 84 fe    ,.. :93ff[1]
     bpl c940e                                                         // 3402: 10 0a       ..  :9402[1]
     lda l1082                                                         // 3404: ad 82 10    ... :9404[1]
     cmp l00cd                                                         // 3407: c5 cd       ..  :9407[1]
@@ -4033,7 +4033,7 @@ c956f
     pha                                                               // 3572: 48          H   :9572[1]
     lda #6                                                            // 3573: a9 06       ..  :9573[1]
     jsr sub_c8020                                                     // 3575: 20 20 80      . :9575[1]
-    lda lfe87                                                         // 3578: ad 87 fe    ... :9578[1]
+    lda fdc_1770_data                                                 // 3578: ad 87 fe    ... :9578[1]
     ldx #$0d                                                          // 357b: a2 0d       ..  :957b[1]
 // $357d referenced 1 time by $9584[1]
 loop_c957d
@@ -4693,7 +4693,7 @@ sub_c9965
 c996e
     bit l1081                                                         // 396e: 2c 81 10    ,.. :996e[1]
     bpl c9978                                                         // 3971: 10 05       ..  :9971[1]
-    sta tube_host_r3_data                                             // 3973: 8d e5 fe    ... :9973[1]
+    sta tube_data_register_3                                          // 3973: 8d e5 fe    ... :9973[1]
     bmi c993b                                                         // 3976: 30 c3       0.  :9976[1]   // ALWAYS branch
 
 // $3978 referenced 1 time by $9971[1]
@@ -4711,7 +4711,7 @@ c9978
 sub_c9988
     bit l1081                                                         // 3988: 2c 81 10    ,.. :9988[1]
     bpl c9993                                                         // 398b: 10 06       ..  :998b[1]
-    lda tube_host_r3_data                                             // 398d: ad e5 fe    ... :998d[1]
+    lda tube_data_register_3                                          // 398d: ad e5 fe    ... :998d[1]
     jmp c993b                                                         // 3990: 4c 3b 99    L;. :9990[1]
 
 // $3993 referenced 1 time by $998b[1]
@@ -7791,9 +7791,9 @@ c059c
     lda #$7f                                                          // 4d77: a9 7f       ..  :059c[3]
 // $4d79 referenced 4 times by $053f[3], $054f[3], $05a1[3], $067d[3]
 c059e
-    bit tube_host_r2_status                                           // 4d79: 2c e2 fe    ,.. :059e[3]
+    bit tube_status_register_2                                        // 4d79: 2c e2 fe    ,.. :059e[3]
     bvc c059e                                                         // 4d7c: 50 fb       P.  :05a1[3]
-    sta tube_host_r2_data                                             // 4d7e: 8d e3 fe    ... :05a3[3]
+    sta tube_data_register_2                                          // 4d7e: 8d e3 fe    ... :05a3[3]
 // $4d81 referenced 1 time by $05cf[3]
 c05a6
     jmp c0036                                                         // 4d81: 4c 36 00    L6. :05a6[3]
@@ -7851,12 +7851,12 @@ sub_c05f2
     jsr osbyte                                                        // 4dd4: 20 f4 ff     .. :05f9[3]
 // $4dd7 referenced 2 times by $05ff[3], $0625[3]
 c05fc
-    bit tube_host_r2_status                                           // 4dd7: 2c e2 fe    ,.. :05fc[3]
+    bit tube_status_register_2                                        // 4dd7: 2c e2 fe    ,.. :05fc[3]
 sub_c05ff
 l0600 = sub_c05ff+1
     bvc c05fc                                                         // 4dda: 50 fb       P.  :05ff[3]
 // $4ddb referenced 1 time by $af22[1]
-    stx tube_host_r2_data                                             // 4ddc: 8e e3 fe    ... :0601[3]
+    stx tube_data_register_2                                          // 4ddc: 8e e3 fe    ... :0601[3]
 // $4ddf referenced 1 time by $0617[3]
 loop_c0604
     jmp c0036                                                         // 4ddf: 4c 36 00    L6. :0604[3]
@@ -7874,9 +7874,9 @@ sub_c0607
     jsr write_tube_r2_data                                            // 4df5: 20 95 06     .. :061a[3]
 // $4df8 referenced 1 time by $0620[3]
 loop_c061d
-    bit tube_host_r2_status                                           // 4df8: 2c e2 fe    ,.. :061d[3]
+    bit tube_status_register_2                                        // 4df8: 2c e2 fe    ,.. :061d[3]
     bvc loop_c061d                                                    // 4dfb: 50 fb       P.  :0620[3]
-    sty tube_host_r2_data                                             // 4dfd: 8c e3 fe    ... :0622[3]
+    sty tube_data_register_2                                          // 4dfd: 8c e3 fe    ... :0622[3]
     bvs c05fc                                                         // 4e00: 70 d5       p.  :0625[3]   // ALWAYS branch
 
 sub_c0627
@@ -7884,16 +7884,16 @@ sub_c0627
     tay                                                               // 4e05: a8          .   :062a[3]
 // $4e06 referenced 1 time by $062e[3]
 loop_c062b
-    bit tube_host_r2_status                                           // 4e06: 2c e2 fe    ,.. :062b[3]
+    bit tube_status_register_2                                        // 4e06: 2c e2 fe    ,.. :062b[3]
     bpl loop_c062b                                                    // 4e09: 10 fb       ..  :062e[3]
-    ldx tube_host_r2_data                                             // 4e0b: ae e3 fe    ... :0630[3]
+    ldx tube_data_register_2                                          // 4e0b: ae e3 fe    ... :0630[3]
     dex                                                               // 4e0e: ca          .   :0633[3]
     bmi c0645                                                         // 4e0f: 30 0f       0.  :0634[3]
 // $4e11 referenced 2 times by $0639[3], $0642[3]
 c0636
-    bit tube_host_r2_status                                           // 4e11: 2c e2 fe    ,.. :0636[3]
+    bit tube_status_register_2                                        // 4e11: 2c e2 fe    ,.. :0636[3]
     bpl c0636                                                         // 4e14: 10 fb       ..  :0639[3]
-    lda tube_host_r2_data                                             // 4e16: ad e3 fe    ... :063b[3]
+    lda tube_data_register_2                                          // 4e16: ad e3 fe    ... :063b[3]
     sta l0128,x                                                       // 4e19: 9d 28 01    .(. :063e[3]
     dex                                                               // 4e1c: ca          .   :0641[3]
     bpl c0636                                                         // 4e1d: 10 f2       ..  :0642[3]
@@ -7905,9 +7905,9 @@ c0645
     jsr osword                                                        // 4e24: 20 f1 ff     .. :0649[3]
 // $4e27 referenced 1 time by $064f[3]
 loop_c064c
-    bit tube_host_r2_status                                           // 4e27: 2c e2 fe    ,.. :064c[3]
+    bit tube_status_register_2                                        // 4e27: 2c e2 fe    ,.. :064c[3]
     bpl loop_c064c                                                    // 4e2a: 10 fb       ..  :064f[3]
-    ldx tube_host_r2_data                                             // 4e2c: ae e3 fe    ... :0651[3]
+    ldx tube_data_register_2                                          // 4e2c: ae e3 fe    ... :0651[3]
     dex                                                               // 4e2f: ca          .   :0654[3]
     bmi c0665                                                         // 4e30: 30 0e       0.  :0655[3]
 // $4e32 referenced 1 time by $0663[3]
@@ -7915,9 +7915,9 @@ loop_c0657
     ldy l0128,x                                                       // 4e32: bc 28 01    .(. :0657[3]
 // $4e35 referenced 1 time by $065d[3]
 loop_c065a
-    bit tube_host_r2_status                                           // 4e35: 2c e2 fe    ,.. :065a[3]
+    bit tube_status_register_2                                        // 4e35: 2c e2 fe    ,.. :065a[3]
     bvc loop_c065a                                                    // 4e38: 50 fb       P.  :065d[3]
-    sty tube_host_r2_data                                             // 4e3a: 8c e3 fe    ... :065f[3]
+    sty tube_data_register_2                                          // 4e3a: 8c e3 fe    ... :065f[3]
     dex                                                               // 4e3d: ca          .   :0662[3]
     bpl loop_c0657                                                    // 4e3e: 10 f2       ..  :0663[3]
 // $4e40 referenced 1 time by $0655[3]
@@ -7957,17 +7957,17 @@ tube_host_osword_0_no_escape_loop
 // Wait for register 2 to have space and write A to it.
 // $4e70 referenced 14 times by $0020[4], $0026[4], $002c[4], $0474[2], $053b[3], $0572[3], $0579[3], $05c2[3], $05c9[3], $05e8[3], $061a[3], $0684[3], $068a[3], $0698[3]
 write_tube_r2_data
-    bit tube_host_r2_status                                           // 4e70: 2c e2 fe    ,.. :0695[3]
+    bit tube_status_register_2                                        // 4e70: 2c e2 fe    ,.. :0695[3]
     bvc write_tube_r2_data                                            // 4e73: 50 fb       P.  :0698[3]
-    sta tube_host_r2_data                                             // 4e75: 8d e3 fe    ... :069a[3]
+    sta tube_data_register_2                                          // 4e75: 8d e3 fe    ... :069a[3]
     rts                                                               // 4e78: 60          `   :069d[3]
 
 // Wait for register 4 to have space and write A to it.
 // $4e79 referenced 8 times by $0018[4], $0418[2], $041d[2], $043b[2], $0443[2], $0448[2], $0463[2], $06a1[3]
 write_tube_r4_data
-    bit tube_host_r4_status                                           // 4e79: 2c e6 fe    ,.. :069e[3]
+    bit tube_status_register_4_and_cpu_control                        // 4e79: 2c e6 fe    ,.. :069e[3]
     bvc write_tube_r4_data                                            // 4e7c: 50 fb       P.  :06a1[3]
-    sta tube_host_r4_data                                             // 4e7e: 8d e7 fe    ... :06a3[3]
+    sta tube_data_register_4                                          // 4e7e: 8d e7 fe    ... :06a3[3]
     rts                                                               // 4e81: 60          `   :06a6[3]
 
 // $4e82 referenced 1 time by $0403[2]
@@ -7988,17 +7988,17 @@ tube_evntv_handler
 // Wait for register 1 to have space and write A to it.
 // $4e97 referenced 5 times by $06ab[3], $06b0[3], $06b4[3], $06b8[3], $06bf[3]
 write_tube_r1_data
-    bit tube_host_r1_status                                           // 4e97: 2c e0 fe    ,.. :06bc[3]
+    bit tube_status_1_and_tube_control                                // 4e97: 2c e0 fe    ,.. :06bc[3]
     bvc write_tube_r1_data                                            // 4e9a: 50 fb       P.  :06bf[3]
-    sta tube_host_r1_data                                             // 4e9c: 8d e1 fe    ... :06c1[3]
+    sta tube_data_register_1                                          // 4e9c: 8d e1 fe    ... :06c1[3]
     rts                                                               // 4e9f: 60          `   :06c4[3]
 
 // Wait for register 2 to have data and read A from it.
 // $4ea0 referenced 21 times by $0520[3], $0524[3], $052d[3], $0542[3], $0552[3], $055e[3], $0564[3], $056c[3], $0586[3], $05ab[3], $05bc[3], $05d3[3], $05db[3], $05f2[3], $05f6[3], $0607[3], $060b[3], $060f[3], $0627[3], $066a[3], $06c8[3]
 read_tube_r2_data
-    bit tube_host_r2_status                                           // 4ea0: 2c e2 fe    ,.. :06c5[3]
+    bit tube_status_register_2                                        // 4ea0: 2c e2 fe    ,.. :06c5[3]
     bpl read_tube_r2_data                                             // 4ea3: 10 fb       ..  :06c8[3]
-    lda tube_host_r2_data                                             // 4ea5: ad e3 fe    ... :06ca[3]
+    lda tube_data_register_2                                          // 4ea5: ad e3 fe    ... :06ca[3]
     rts                                                               // 4ea8: 60          `   :06cd[3]
 
 * = $4ea9
@@ -8040,9 +8040,9 @@ caed7
     jsr osbyte                                                        // 4ee5: 20 f4 ff     .. :aee5[1]   // Explode character definition RAM (six extra pages), can redefine all characters 32-255 (X=6)
 // $4ee8 referenced 2 times by $aeeb[1], $aef5[1]
 tube_banner_loop
-    bit tube_host_r1_status                                           // 4ee8: 2c e0 fe    ,.. :aee8[1]
+    bit tube_status_1_and_tube_control                                // 4ee8: 2c e0 fe    ,.. :aee8[1]
     bpl tube_banner_loop                                              // 4eeb: 10 fb       ..  :aeeb[1]
-    lda tube_host_r1_data                                             // 4eed: ad e1 fe    ... :aeed[1]
+    lda tube_data_register_1                                          // 4eed: ad e1 fe    ... :aeed[1]
     beq lda_0_rts                                                     // 4ef0: f0 43       .C  :aef0[1]
     jsr oswrch                                                        // 4ef2: 20 ee ff     .. :aef2[1]   // Write character
     jmp tube_banner_loop                                              // 4ef5: 4c e8 ae    L.. :aef5[1]
@@ -8058,7 +8058,7 @@ service_handler_tube_main_init
     lda #>tube_brkv_handler                                           // 4f07: a9 00       ..  :af07[1]
     sta brkv+1                                                        // 4f09: 8d 03 02    ... :af09[1]
     lda #$8e                                                          // 4f0c: a9 8e       ..  :af0c[1]
-    sta tube_host_r1_status                                           // 4f0e: 8d e0 fe    ... :af0e[1]
+    sta tube_status_1_and_tube_control                                // 4f0e: 8d e0 fe    ... :af0e[1]
     ldy #0                                                            // 4f11: a0 00       ..  :af11[1]
 // $4f13 referenced 1 time by $af26[1]
 loop_caf13
@@ -8093,7 +8093,7 @@ just_rts
 tube_brkv_handler
     lda #$ff                                                          // 4f38: a9 ff       ..  :0016[4]
     jsr write_tube_r4_data                                            // 4f3a: 20 9e 06     .. :0018[4]
-    lda tube_host_r2_data                                             // 4f3d: ad e3 fe    ... :001b[4]
+    lda tube_data_register_2                                          // 4f3d: ad e3 fe    ... :001b[4]
     lda #0                                                            // 4f40: a9 00       ..  :001e[4]
     jsr write_tube_r2_data                                            // 4f42: 20 95 06     .. :0020[4]
     tay                                                               // 4f45: a8          .   :0023[4]
@@ -8113,19 +8113,19 @@ c0032
     cli                                                               // 4f57: 58          X   :0035[4]
 // $4f58 referenced 6 times by $0044[4], $057f[3], $05a6[3], $0604[3], $0665[3], $0692[3]
 c0036
-    bit tube_host_r1_status                                           // 4f58: 2c e0 fe    ,.. :0036[4]
+    bit tube_status_1_and_tube_control                                // 4f58: 2c e0 fe    ,.. :0036[4]
     bpl c0041                                                         // 4f5b: 10 06       ..  :0039[4]
 // $4f5d referenced 1 time by $0049[4]
 loop_c003b
-    lda tube_host_r1_data                                             // 4f5d: ad e1 fe    ... :003b[4]
+    lda tube_data_register_1                                          // 4f5d: ad e1 fe    ... :003b[4]
     jsr oswrch                                                        // 4f60: 20 ee ff     .. :003e[4]   // Write character
 // $4f63 referenced 1 time by $0039[4]
 c0041
-    bit tube_host_r2_status                                           // 4f63: 2c e2 fe    ,.. :0041[4]
+    bit tube_status_register_2                                        // 4f63: 2c e2 fe    ,.. :0041[4]
     bpl c0036                                                         // 4f66: 10 f0       ..  :0044[4]
-    bit tube_host_r1_status                                           // 4f68: 2c e0 fe    ,.. :0046[4]
+    bit tube_status_1_and_tube_control                                // 4f68: 2c e0 fe    ,.. :0046[4]
     bmi loop_c003b                                                    // 4f6b: 30 f0       0.  :0049[4]
-    ldx tube_host_r2_data                                             // 4f6d: ae e3 fe    ... :004b[4]
+    ldx tube_data_register_2                                          // 4f6d: ae e3 fe    ... :004b[4]
 // Patch the following JMP so we effectively do JMP (&500,X)
     stx `jump_address_low                                             // 4f70: 86 51       .Q  :004e[4]
 sub_c0050
@@ -8215,20 +8215,20 @@ loop_c0446
     dey                                                               // 4fc4: 88          .   :044b[2]
     bpl loop_c0446                                                    // 4fc5: 10 f8       ..  :044c[2]
     ldy #$18                                                          // 4fc7: a0 18       ..  :044e[2]
-    sty tube_host_r1_status                                           // 4fc9: 8c e0 fe    ... :0450[2]
+    sty tube_status_1_and_tube_control                                // 4fc9: 8c e0 fe    ... :0450[2]
     lda tube_entry_flags,x                                            // 4fcc: bd 18 05    ... :0453[2]
-    sta tube_host_r1_status                                           // 4fcf: 8d e0 fe    ... :0456[2]
+    sta tube_status_1_and_tube_control                                // 4fcf: 8d e0 fe    ... :0456[2]
     lsr                                                               // 4fd2: 4a          J   :0459[2]
     lsr                                                               // 4fd3: 4a          J   :045a[2]
     bcc c0463                                                         // 4fd4: 90 06       ..  :045b[2]
-    bit tube_host_r3_data                                             // 4fd6: 2c e5 fe    ,.. :045d[2]
-    bit tube_host_r3_data                                             // 4fd9: 2c e5 fe    ,.. :0460[2]
+    bit tube_data_register_3                                          // 4fd6: 2c e5 fe    ,.. :045d[2]
+    bit tube_data_register_3                                          // 4fd9: 2c e5 fe    ,.. :0460[2]
 // $4fdc referenced 1 time by $045b[2]
 c0463
     jsr write_tube_r4_data                                            // 4fdc: 20 9e 06     .. :0463[2]
 // $4fdf referenced 1 time by $0469[2]
 loop_c0466
-    bit tube_host_r4_status                                           // 4fdf: 2c e6 fe    ,.. :0466[2]
+    bit tube_status_register_4_and_cpu_control                        // 4fdf: 2c e6 fe    ,.. :0466[2]
     bvc loop_c0466                                                    // 4fe2: 50 fb       P.  :0469[2]
     bcs c047a                                                         // 4fe4: b0 0d       ..  :046b[2]
     cpx #4                                                            // 4fe6: e0 04       ..  :046d[2]
@@ -8244,7 +8244,7 @@ c047a
     lsr                                                               // 4ff3: 4a          J   :047a[2]
     bcc c0482                                                         // 4ff4: 90 05       ..  :047b[2]
     ldy #$88                                                          // 4ff6: a0 88       ..  :047d[2]
-    sty tube_host_r1_status                                           // 4ff8: 8c e0 fe    ... :047f[2]
+    sty tube_status_1_and_tube_control                                // 4ff8: 8c e0 fe    ... :047f[2]
 // $4ffb referenced 2 times by $046f[2], $047b[2]
 c0482
     plp                                                               // 4ffb: 28          (   :0482[2]
@@ -8278,7 +8278,7 @@ c049b
 // $501f referenced 1 time by $04af[2]
 loop_c04a6
     lda (l0000),y                                                     // 501f: b1 00       ..  :04a6[2]
-    sta tube_host_r3_data                                             // 5021: 8d e5 fe    ... :04a8[2]
+    sta tube_data_register_3                                          // 5021: 8d e5 fe    ... :04a8[2]
     nop                                                               // 5024: ea          .   :04ab[2]
     nop                                                               // 5025: ea          .   :04ac[2]
     nop                                                               // 5026: ea          .   :04ad[2]
@@ -10386,7 +10386,7 @@ cbd46
     jsr cbe89                                                         // 5d69: 20 89 be     .. :bd69[1]
 // $5d6c referenced 1 time by $bd7a[1]
 loop_cbd6c
-    lda tube_host_r3_data                                             // 5d6c: ad e5 fe    ... :bd6c[1]
+    lda tube_data_register_3                                          // 5d6c: ad e5 fe    ... :bd6c[1]
     sta (l00b8),y                                                     // 5d6f: 91 b8       ..  :bd6f[1]
     ldx #3                                                            // 5d71: a2 03       ..  :bd71[1]
     jsr cbe8d                                                         // 5d73: 20 8d be     .. :bd73[1]
@@ -10412,7 +10412,7 @@ cbd7e
     jsr cbe89                                                         // 5d96: 20 89 be     .. :bd96[1]
 // $5d99 referenced 1 time by $bda1[1]
 loop_cbd99
-    lda tube_host_r3_data                                             // 5d99: ad e5 fe    ... :bd99[1]
+    lda tube_data_register_3                                          // 5d99: ad e5 fe    ... :bd99[1]
     sta (l00b8),y                                                     // 5d9c: 91 b8       ..  :bd9c[1]
     lda (l00b8),y                                                     // 5d9e: b1 b8       ..  :bd9e[1]
     iny                                                               // 5da0: c8          .   :bda0[1]
@@ -10488,7 +10488,7 @@ cbddd
 // $5e0e referenced 1 time by $be1d[1]
 loop_cbe0e
     lda (l00b8),y                                                     // 5e0e: b1 b8       ..  :be0e[1]
-    sta tube_host_r3_data                                             // 5e10: 8d e5 fe    ... :be10[1]
+    sta tube_data_register_3                                          // 5e10: 8d e5 fe    ... :be10[1]
     ldx #3                                                            // 5e13: a2 03       ..  :be13[1]
     jsr cbe8d                                                         // 5e15: 20 8d be     .. :be15[1]
     iny                                                               // 5e18: c8          .   :be18[1]
@@ -10509,7 +10509,7 @@ cbe21
 // $5e31 referenced 1 time by $be3a[1]
 loop_cbe31
     lda (l00b8),y                                                     // 5e31: b1 b8       ..  :be31[1]
-    sta tube_host_r3_data                                             // 5e33: 8d e5 fe    ... :be33[1]
+    sta tube_data_register_3                                          // 5e33: 8d e5 fe    ... :be33[1]
     nop                                                               // 5e36: ea          .   :be36[1]
     nop                                                               // 5e37: ea          .   :be37[1]
     nop                                                               // 5e38: ea          .   :be38[1]
@@ -10793,1447 +10793,1447 @@ lbfff
 pydis_end
 
 // Label references by decreasing frequency:
-//     l00b8:                                125
-//     l00b0:                                105
-//     l00ba:                                 44
-//     l00bf:                                 42
-//     l00bc:                                 41
-//     l00b6:                                 35
-//     l00be:                                 31
-//     l00cd:                                 31
-//     print_inline_l809f_top_bit_clear:      31
-//     l00c2:                                 30
-//     l00b1:                                 29
-//     sub_c83e3:                             29
-//     l00b9:                                 28
-//     l00bb:                                 28
-//     l00b5:                                 26
-//     l00bd:                                 26
-//     l00b4:                                 25
-//     l00b3:                                 23
-//     l00c1:                                 23
-//     os_text_ptr:                           23
-//     osbyte:                                22
-//     l0f0e:                                 21
-//     read_tube_r2_data:                     21
-//     romsel_copy:                           21
-//     c809f:                                 20
-//     l00c4:                                 20
-//     l00b2:                                 19
-//     l10c2:                                 19
-//     l0001:                                 18
-//     l00a8:                                 18
-//     l00aa:                                 18
-//     l00c5:                                 18
-//     l00c9:                                 18
-//     l10de:                                 18
-//     l0000:                                 17
-//     l00b7:                                 17
-//     l0e0f:                                 17
-//     l0f06:                                 17
-//     l1000:                                 17
-//     ca3dc:                                 16
-//     cb82b:                                 16
-//     l00a2:                                 16
-//     l00ab:                                 16
-//     l00ae:                                 16
-//     l00c0:                                 15
-//     l00c3:                                 15
-//     l00c7:                                 15
-//     l0f05:                                 15
-//     l00cc:                                 14
-//     l1117:                                 14
-//     tube_entry:                            14
-//     write_tube_r2_data:                    14
-//     l00a1:                                 13
-//     l00a5:                                 13
-//     l00c8:                                 13
-//     l0d30:                                 13
-//     l0f07:                                 13
-//     sub_ca14a:                             13
-//     tube_host_r3_data:                     13
-//     clc_jmp_gsinit:                        12
-//     l00ac:                                 12
-//     osasci:                                12
-//     sub_cb841:                             12
-//     c996e:                                 11
-//     cac0f:                                 11
-//     generate_error_precheck:               11
-//     l00c6:                                 11
-//     l0e08:                                 11
-//     lfe84:                                 11
-//     osrdsc_ptr:                            11
-//     sub_c8149:                             11
-//     tube_host_r2_data:                     11
-//     c93e6:                                 10
-//     cb203:                                 10
-//     l00a9:                                 10
-//     l1111:                                 10
-//     l1112:                                 10
-//     lfe87:                                 10
-//     sub_c80c3:                             10
-//     tube_host_r2_status:                   10
-//     cbbd0:                                  9
-//     l00ca:                                  9
-//     l1074:                                  9
-//     l108a:                                  9
-//     l1097:                                  9
-//     l10c0:                                  9
-//     l1110:                                  9
-//     c8816:                                  8
-//     l00ce:                                  8
-//     l00ff:                                  8
-//     l0100:                                  8
-//     l0df0:                                  8
-//     l0f04:                                  8
-//     l1060:                                  8
-//     l1082:                                  8
-//     l108b:                                  8
-//     l1090:                                  8
-//     l1096:                                  8
-//     l10ca:                                  8
-//     l10cf:                                  8
-//     l10d1:                                  8
-//     osbyte_read:                            8
-//     osfind:                                 8
-//     sub_c81b0:                              8
-//     sub_c81bf:                              8
-//     sub_c8b7b:                              8
-//     sub_cb85d:                              8
-//     tube_host_r1_status:                    8
-//     write_tube_r4_data:                     8
-//     c8b8b:                                  7
-//     generate_error2:                        7
-//     l00a7:                                  7
-//     l00cf:                                  7
-//     l0f08:                                  7
-//     l1075:                                  7
-//     l10c9:                                  7
-//     l10d2:                                  7
-//     l1114:                                  7
-//     osrdsc:                                 7
-//     print_inline_osasci_top_bit_clear:      7
-//     sub_c8284:                              7
-//     sub_c8380:                              7
-//     sub_cb580:                              7
-//     sub_cbab9:                              7
-//     c0036:                                  6
-//     c940c:                                  6
-//     cb8fb:                                  6
-//     command_table:                          6
-//     generate_error_precheck_bad:            6
-//     l0015:                                  6
-//     l00f3:                                  6
-//     l00f7:                                  6
-//     l0f0f:                                  6
-//     l1100:                                  6
-//     lb726:                                  6
-//     oswrch:                                 6
-//     sub_c8280:                              6
-//     sub_c82fe:                              6
-//     sub_c87da:                              6
-//     sub_c99ac:                              6
-//     sub_c9e75:                              6
-//     sub_cb5f2:                              6
-//     zero_stacked_XXX:                       6
-//     c8125:                                  5
-//     c8ba2:                                  5
-//     c9257:                                  5
-//     c99a3:                                  5
-//     cb795:                                  5
-//     cbe7b:                                  5
-//     l00a6:                                  5
-//     l00af:                                  5
-//     l00f0:                                  5
-//     l1087:                                  5
-//     l1088:                                  5
-//     l1099:                                  5
-//     l10c7:                                  5
-//     l10dd:                                  5
-//     l110c:                                  5
-//     l1115:                                  5
-//     l1116:                                  5
-//     nmi_XXX23:                              5
-//     osnewl:                                 5
-//     sub_c80bb:                              5
-//     sub_c80ed:                              5
-//     sub_c80f3:                              5
-//     sub_c830a:                              5
-//     sub_c8335:                              5
-//     sub_c8386:                              5
-//     sub_c840c:                              5
-//     sub_c8f3f:                              5
-//     sub_c9a6e:                              5
-//     sub_c9ab8:                              5
-//     sub_ca0de:                              5
-//     sub_ca1b4:                              5
-//     sub_cb6fe:                              5
-//     sub_cb745:                              5
-//     sub_cb850:                              5
-//     sub_cba67:                              5
-//     write_tube_r1_data:                     5
-//     c059e:                                  4
-//     c81a7:                                  4
-//     c8225:                                  4
-//     c8d74:                                  4
-//     c8d91:                                  4
-//     c8e0e:                                  4
-//     c8e12:                                  4
-//     c8e64:                                  4
-//     c940e:                                  4
-//     c9436:                                  4
-//     c993b:                                  4
-//     c9adf:                                  4
-//     c9ae9:                                  4
-//     ca5e5:                                  4
-//     cb446:                                  4
-//     cb68c:                                  4
-//     cbe7a:                                  4
-//     cbee8:                                  4
-//     generate_error:                         4
-//     generate_error_precheck_disc:           4
-//     inc16_ae:                               4
-//     l0002:                                  4
-//     l0e00:                                  4
-//     l0f0c:                                  4
-//     l0f0d:                                  4
-//     l1069:                                  4
-//     l1076:                                  4
-//     l1077:                                  4
-//     l1081:                                  4
-//     l1086:                                  4
-//     l1095:                                  4
-//     l10c4:                                  4
-//     l10cb:                                  4
-//     l10cc:                                  4
-//     l10ce:                                  4
-//     l10d9:                                  4
-//     l10da:                                  4
-//     l110d:                                  4
-//     l1113:                                  4
-//     l111a:                                  4
-//     l111d:                                  4
-//     lb57f:                                  4
-//     lbfff:                                  4
-//     lfe85:                                  4
-//     lfe86:                                  4
-//     nmi_beq+1:                              4
-//     osbget:                                 4
-//     osbput:                                 4
-//     osfile:                                 4
-//     osrdch:                                 4
-//     romsel:                                 4
-//     sub_c80c8:                              4
-//     sub_c8174:                              4
-//     sub_c821d:                              4
-//     sub_c82b2:                              4
-//     sub_c8327:                              4
-//     sub_c8f6b:                              4
-//     sub_c9965:                              4
-//     sub_c9a8d:                              4
-//     sub_ca379:                              4
-//     sub_ca9ca:                              4
-//     sub_caacf:                              4
-//     sub_cac18:                              4
-//     sub_cac62:                              4
-//     sub_cb616:                              4
-//     sub_cb68f:                              4
-//     sub_cb83f:                              4
-//     sub_cbac2:                              4
-//     sub_cbb00:                              4
-//     bytev:                                  3
-//     c059c:                                  3
-//     c8103:                                  3
-//     c8290:                                  3
-//     c82e6:                                  3
-//     c8454:                                  3
-//     c89d7:                                  3
-//     c8d41:                                  3
-//     c8e53:                                  3
-//     c8ecc:                                  3
-//     c8f2a:                                  3
-//     c91af:                                  3
-//     c9214:                                  3
-//     c9444:                                  3
-//     c94bc:                                  3
-//     c9738:                                  3
-//     c99ed:                                  3
-//     c9a8c:                                  3
-//     c9d5d:                                  3
-//     ca06b:                                  3
-//     ca14f:                                  3
-//     ca1c0:                                  3
-//     ca660:                                  3
-//     caa42:                                  3
-//     caa44:                                  3
-//     cacc4:                                  3
-//     cb1d5:                                  3
-//     cb371:                                  3
-//     cb684:                                  3
-//     cb6ca:                                  3
-//     cbab4:                                  3
-//     cbe47:                                  3
-//     cbe89:                                  3
-//     cbe8d:                                  3
-//     generate_error_precheck_open:           3
-//     l0054:                                  3
-//     l00ef:                                  3
-//     l0107:                                  3
-//     l0109:                                  3
-//     l0d3d:                                  3
-//     l0ef8:                                  3
-//     l1092:                                  3
-//     l1093:                                  3
-//     l1094:                                  3
-//     l1098:                                  3
-//     l109d:                                  3
-//     l109f:                                  3
-//     l10c3:                                  3
-//     l10c5:                                  3
-//     l10c6:                                  3
-//     l10d0:                                  3
-//     l10d3:                                  3
-//     l10d6:                                  3
-//     l10d7:                                  3
-//     l1119:                                  3
-//     l111c:                                  3
-//     lfe80:                                  3
-//     nmi_handler2_rom_end:                   3
-//     nmi_lda_immXXX3+1:                      3
-//     nmi_lda_zp:                             3
-//     nmi_sta_abs+1:                          3
-//     nmi_sta_abs2+1:                         3
-//     oscli:                                  3
-//     osword:                                 3
-//     sram_table:                             3
-//     sub_c0582:                              3
-//     sub_c81be:                              3
-//     sub_c833a:                              3
-//     sub_c836e:                              3
-//     sub_c8456:                              3
-//     sub_c8b86:                              3
-//     sub_c8f7a:                              3
-//     sub_c93fd:                              3
-//     sub_c9526:                              3
-//     sub_c9940:                              3
-//     sub_c9be5:                              3
-//     sub_c9e30:                              3
-//     sub_c9f0f:                              3
-//     sub_c9f16:                              3
-//     sub_c9f1e:                              3
-//     sub_ca315:                              3
-//     sub_ca384:                              3
-//     sub_ca530:                              3
-//     sub_ca9c2:                              3
-//     sub_cac0c:                              3
-//     sub_cb58b:                              3
-//     sub_cb84e:                              3
-//     sub_cb986:                              3
-//     sub_cbac4:                              3
-//     sub_cbf7c:                              3
-//     tube_host_r1_data:                      3
-//     c0434:                                  2
-//     c0482:                                  2
-//     c0491:                                  2
-//     c04bc:                                  2
-//     c053a:                                  2
-//     c05fc:                                  2
-//     c0636:                                  2
-//     c0d60:                                  2
-//     c815d:                                  2
-//     c822a:                                  2
-//     c825d:                                  2
-//     c82fd:                                  2
-//     c8543:                                  2
-//     c8560:                                  2
-//     c85bc:                                  2
-//     c8703:                                  2
-//     c8705:                                  2
-//     c873b:                                  2
-//     c8808:                                  2
-//     c883f:                                  2
-//     c88a6:                                  2
-//     c88f4:                                  2
-//     c898a:                                  2
-//     c89a5:                                  2
-//     c89b4:                                  2
-//     c8a00:                                  2
-//     c8a6e:                                  2
-//     c8be3:                                  2
-//     c8c12:                                  2
-//     c8cb2:                                  2
-//     c8d0d:                                  2
-//     c8d13:                                  2
-//     c8e0d:                                  2
-//     c8e32:                                  2
-//     c8e9f:                                  2
-//     c8ea5:                                  2
-//     c8eb7:                                  2
-//     c8eeb:                                  2
-//     c8f3e:                                  2
-//     c91df:                                  2
-//     c9289:                                  2
-//     c9367:                                  2
-//     c94a9:                                  2
-//     c94c6:                                  2
-//     c95fd:                                  2
-//     c9628:                                  2
-//     c965a:                                  2
-//     c96b7:                                  2
-//     c97b3:                                  2
-//     c9b6e:                                  2
-//     c9bc5:                                  2
-//     c9dcd:                                  2
-//     c9dd5:                                  2
-//     c9e41:                                  2
-//     ca01d:                                  2
-//     ca021:                                  2
-//     ca06c:                                  2
-//     ca0f5:                                  2
-//     ca10b:                                  2
-//     ca19f:                                  2
-//     ca2f2:                                  2
-//     ca38b:                                  2
-//     ca411:                                  2
-//     ca414:                                  2
-//     ca5ab:                                  2
-//     ca637:                                  2
-//     ca845:                                  2
-//     ca86b:                                  2
-//     ca87a:                                  2
-//     ca97d:                                  2
-//     ca9ff:                                  2
-//     caa1c:                                  2
-//     caa51:                                  2
-//     cab1a:                                  2
-//     cab41:                                  2
-//     cab54:                                  2
-//     cabbc:                                  2
-//     caed3:                                  2
-//     cb280:                                  2
-//     cb297:                                  2
-//     cb2a0:                                  2
-//     cb300:                                  2
-//     cb406:                                  2
-//     cb45e:                                  2
-//     cb655:                                  2
-//     cb718:                                  2
-//     cb7ed:                                  2
-//     cb8e4:                                  2
-//     cb9e8:                                  2
-//     cba10:                                  2
-//     cbaf8:                                  2
-//     cbafd:                                  2
-//     cbb28:                                  2
-//     cbb2a:                                  2
-//     cbc13:                                  2
-//     cbc3a:                                  2
-//     cbcb9:                                  2
-//     cbdb9:                                  2
-//     cbec1:                                  2
-//     cbf8e:                                  2
-//     fscv:                                   2
-//     general_service_handler_indirect:       2
-//     gsinit:                                 2
-//     gsread:                                 2
-//     invert_l1065:                           2
-//     just_rts:                               2
-//     l0003:                                  2
-//     l0012:                                  2
-//     l0014:                                  2
-//     l0053:                                  2
-//     l0055:                                  2
-//     l0056:                                  2
-//     l00a0:                                  2
-//     l00a3:                                  2
-//     l00a4:                                  2
-//     l00ad:                                  2
-//     l00fd:                                  2
-//     l0101:                                  2
-//     l0102:                                  2
-//     l0105:                                  2
-//     l010b:                                  2
-//     l0128:                                  2
-//     l0500:                                  2
-//     l0700:                                  2
-//     l0d26:                                  2
-//     l0e07:                                  2
-//     l0f0a:                                  2
-//     l0f0b:                                  2
-//     l1045:                                  2
-//     l1062:                                  2
-//     l1065:                                  2
-//     l1067:                                  2
-//     l1078:                                  2
-//     l107d:                                  2
-//     l107e:                                  2
-//     l107f:                                  2
-//     l1089:                                  2
-//     l108c:                                  2
-//     l1091:                                  2
-//     l109a:                                  2
-//     l109b:                                  2
-//     l109e:                                  2
-//     l10c1:                                  2
-//     l10cd:                                  2
-//     l10d8:                                  2
-//     l10db:                                  2
-//     l10dc:                                  2
-//     l10e2:                                  2
-//     l10e3:                                  2
-//     l10e4:                                  2
-//     l1109:                                  2
-//     l110b:                                  2
-//     l110e:                                  2
-//     l110f:                                  2
-//     l111b:                                  2
-//     la1d3:                                  2
-//     lb872:                                  2
-//     nmi_XXX7:                               2
-//     nmi_handler_ram:                        2
-//     nmi_lda_abs+1:                          2
-//     nmi_lda_abs+2:                          2
-//     nmi_lda_immXXX4+1:                      2
-//     nmi_lda_zp+1:                           2
-//     nmi_sta_abs+2:                          2
-//     nmi_sta_abs2+2:                         2
-//     osargs:                                 2
-//     osgbpb:                                 2
-//     sub_c04ce:                              2
-//     sub_c809a:                              2
-//     sub_c80e3:                              2
-//     sub_c81ae:                              2
-//     sub_c81c5:                              2
-//     sub_c8266:                              2
-//     sub_c826d:                              2
-//     sub_c82bb:                              2
-//     sub_c82e8:                              2
-//     sub_c841b:                              2
-//     sub_c8439:                              2
-//     sub_c8555:                              2
-//     sub_c8745:                              2
-//     sub_c87db:                              2
-//     sub_c87e3:                              2
-//     sub_c8855:                              2
-//     sub_c8862:                              2
-//     sub_c8951:                              2
-//     sub_c89da:                              2
-//     sub_c8a77:                              2
-//     sub_c8ab3:                              2
-//     sub_c8b4d:                              2
-//     sub_c8b64:                              2
-//     sub_c9279:                              2
-//     sub_c928a:                              2
-//     sub_c93c5:                              2
-//     sub_c93d3:                              2
-//     sub_c93f5:                              2
-//     sub_c9432:                              2
-//     sub_c9445:                              2
-//     sub_c9516:                              2
-//     sub_c952e:                              2
-//     sub_c992c:                              2
-//     sub_c995a:                              2
-//     sub_c99f3:                              2
-//     sub_c9a0f:                              2
-//     sub_c9a50:                              2
-//     sub_c9a60:                              2
-//     sub_c9a63:                              2
-//     sub_c9a78:                              2
-//     sub_c9a82:                              2
-//     sub_c9aa3:                              2
-//     sub_c9ac8:                              2
-//     sub_c9ad8:                              2
-//     sub_c9b79:                              2
-//     sub_c9bf2:                              2
-//     sub_c9d1e:                              2
-//     sub_c9df4:                              2
-//     sub_c9e1e:                              2
-//     sub_c9e54:                              2
-//     sub_c9ef4:                              2
-//     sub_c9f14:                              2
-//     sub_c9f26:                              2
-//     sub_ca168:                              2
-//     sub_ca1c6:                              2
-//     sub_ca324:                              2
-//     sub_ca3ec:                              2
-//     sub_ca51f:                              2
-//     sub_ca5b2:                              2
-//     sub_ca90d:                              2
-//     sub_caa53:                              2
-//     sub_caac2:                              2
-//     sub_caaf1:                              2
-//     sub_cac4e:                              2
-//     sub_cb598:                              2
-//     sub_cb5ce:                              2
-//     sub_cb5ee:                              2
-//     sub_cb607:                              2
-//     sub_cb61e:                              2
-//     sub_cb65f:                              2
-//     sub_cb6b1:                              2
-//     sub_cb9f5:                              2
-//     sub_cbc68:                              2
-//     sub_cbe83:                              2
-//     sub_cbe9d:                              2
-//     sub_cbec2:                              2
-//     sub_cbf82:                              2
-//     tube_banner_loop:                       2
-//     tube_host_r4_status:                    2
-//     brkv:                                   1
-//     c0032:                                  1
-//     c0041:                                  1
-//     c0400:                                  1
-//     c0432:                                  1
-//     c0463:                                  1
-//     c047a:                                  1
-//     c0484:                                  1
-//     c048c:                                  1
-//     c049b:                                  1
-//     c04f7:                                  1
-//     c0552:                                  1
-//     c0593:                                  1
-//     c05a6:                                  1
-//     c0645:                                  1
-//     c0665:                                  1
-//     c06a7:                                  1
-//     c0d74:                                  1
-//     c0d80:                                  1
-//     c8040:                                  1
-//     c8093:                                  1
-//     c8096:                                  1
-//     c80d0:                                  1
-//     c8111:                                  1
-//     c8115:                                  1
-//     c812e:                                  1
-//     c815b:                                  1
-//     c815f:                                  1
-//     c8184:                                  1
-//     c818a:                                  1
-//     c81a2:                                  1
-//     c81bd:                                  1
-//     c8243:                                  1
-//     c8286:                                  1
-//     c828b:                                  1
-//     c82be:                                  1
-//     c82d9:                                  1
-//     c82e7:                                  1
-//     c82fb:                                  1
-//     c8306:                                  1
-//     c8332:                                  1
-//     c8333:                                  1
-//     c83ab:                                  1
-//     c83cd:                                  1
-//     c83e2:                                  1
-//     c842b:                                  1
-//     c8436:                                  1
-//     c8438:                                  1
-//     c8453:                                  1
-//     c8477:                                  1
-//     c8481:                                  1
-//     c8482:                                  1
-//     c849d:                                  1
-//     c853e:                                  1
-//     c855f:                                  1
-//     c8573:                                  1
-//     c859b:                                  1
-//     c85c5:                                  1
-//     c8734:                                  1
-//     c8759:                                  1
-//     c8779:                                  1
-//     c877c:                                  1
-//     c87ab:                                  1
-//     c87b8:                                  1
-//     c87c6:                                  1
-//     c8815:                                  1
-//     c8837:                                  1
-//     c8864:                                  1
-//     c8867:                                  1
-//     c892d:                                  1
-//     c8945:                                  1
-//     c8968:                                  1
-//     c896b:                                  1
-//     c89ad:                                  1
-//     c89e2:                                  1
-//     c89f6:                                  1
-//     c8a19:                                  1
-//     c8a49:                                  1
-//     c8a50:                                  1
-//     c8a54:                                  1
-//     c8a82:                                  1
-//     c8ad0:                                  1
-//     c8aeb:                                  1
-//     c8b18:                                  1
-//     c8b60:                                  1
-//     c8b77:                                  1
-//     c8bfb:                                  1
-//     c8c2e:                                  1
-//     c8c3a:                                  1
-//     c8c4e:                                  1
-//     c8c61:                                  1
-//     c8c87:                                  1
-//     c8cae:                                  1
-//     c8cc1:                                  1
-//     c8cd6:                                  1
-//     c8ce7:                                  1
-//     c8cfc:                                  1
-//     c8d03:                                  1
-//     c8d5d:                                  1
-//     c8d92:                                  1
-//     c8dd2:                                  1
-//     c8de2:                                  1
-//     c8e03:                                  1
-//     c8e4d:                                  1
-//     c8e6f:                                  1
-//     c8e72:                                  1
-//     c8e9e:                                  1
-//     c8eaf:                                  1
-//     c8ecb:                                  1
-//     c8edf:                                  1
-//     c8ef8:                                  1
-//     c8f12:                                  1
-//     c8f21:                                  1
-//     c8f81:                                  1
-//     c8fb5:                                  1
-//     c8fc7:                                  1
-//     c9060:                                  1
-//     c9115:                                  1
-//     c91cc:                                  1
-//     c91eb:                                  1
-//     c91f3:                                  1
-//     c91f9:                                  1
-//     c9201:                                  1
-//     c920d:                                  1
-//     c921f:                                  1
-//     c922b:                                  1
-//     c9238:                                  1
-//     c923b:                                  1
-//     c923f:                                  1
-//     c9249:                                  1
-//     c925a:                                  1
-//     c926a:                                  1
-//     c9276:                                  1
-//     c929c:                                  1
-//     c92bd:                                  1
-//     c92c4:                                  1
-//     c92c7:                                  1
-//     c92d6:                                  1
-//     c92e3:                                  1
-//     c9302:                                  1
-//     c936b:                                  1
-//     c9379:                                  1
-//     c938d:                                  1
-//     c9390:                                  1
-//     c93a8:                                  1
-//     c93b1:                                  1
-//     c93c4:                                  1
-//     c93e2:                                  1
-//     c93e5:                                  1
-//     c93ff:                                  1
-//     c9450:                                  1
-//     c945c:                                  1
-//     c948d:                                  1
-//     c94c1:                                  1
-//     c94c2:                                  1
-//     c94d4:                                  1
-//     c9504:                                  1
-//     c9535:                                  1
-//     c9556:                                  1
-//     c956d:                                  1
-//     c956f:                                  1
-//     c95e4:                                  1
-//     c95e7:                                  1
-//     c9649:                                  1
-//     c964a:                                  1
-//     c9658:                                  1
-//     c967a:                                  1
-//     c9682:                                  1
-//     c9683:                                  1
-//     c969e:                                  1
-//     c96c3:                                  1
-//     c96e4:                                  1
-//     c96e9:                                  1
-//     c96ec:                                  1
-//     c96f5:                                  1
-//     c9700:                                  1
-//     c9714:                                  1
-//     c9736:                                  1
-//     c973c:                                  1
-//     c973d:                                  1
-//     c975b:                                  1
-//     c976c:                                  1
-//     c97e6:                                  1
-//     c981f:                                  1
-//     c982e:                                  1
-//     c9835:                                  1
-//     c984c:                                  1
-//     c9859:                                  1
-//     c986b:                                  1
-//     c9873:                                  1
-//     c98b1:                                  1
-//     c98ba:                                  1
-//     c98cd:                                  1
-//     c98ed:                                  1
-//     c98f0:                                  1
-//     c994b:                                  1
-//     c9978:                                  1
-//     c9993:                                  1
-//     c99ea:                                  1
-//     c9a2a:                                  1
-//     c9a3f:                                  1
-//     c9a73:                                  1
-//     c9a77:                                  1
-//     c9ad4:                                  1
-//     c9bc2:                                  1
-//     c9c16:                                  1
-//     c9c33:                                  1
-//     c9c51:                                  1
-//     c9c58:                                  1
-//     c9c6b:                                  1
-//     c9c8b:                                  1
-//     c9cee:                                  1
-//     c9d12:                                  1
-//     c9d2b:                                  1
-//     c9d57:                                  1
-//     c9d67:                                  1
-//     c9d71:                                  1
-//     c9d72:                                  1
-//     c9d86:                                  1
-//     c9d89:                                  1
-//     c9db4:                                  1
-//     c9dce:                                  1
-//     c9e13:                                  1
-//     c9e16:                                  1
-//     c9e28:                                  1
-//     c9e2a:                                  1
-//     c9e5c:                                  1
-//     c9e6f:                                  1
-//     c9e71:                                  1
-//     c9eb3:                                  1
-//     c9ec2:                                  1
-//     c9ef1:                                  1
-//     c9f0d:                                  1
-//     c9f19:                                  1
-//     c9f5e:                                  1
-//     c9f64:                                  1
-//     c9f6a:                                  1
-//     c9f6b:                                  1
-//     c9f88:                                  1
-//     c9fd9:                                  1
-//     c9ff4:                                  1
-//     ca005:                                  1
-//     ca054:                                  1
-//     ca075:                                  1
-//     ca0a9:                                  1
-//     ca17a:                                  1
-//     ca183:                                  1
-//     ca1c1:                                  1
-//     ca1d2:                                  1
-//     ca27a:                                  1
-//     ca2ab:                                  1
-//     ca30d:                                  1
-//     ca321:                                  1
-//     ca34a:                                  1
-//     ca378:                                  1
-//     ca38c:                                  1
-//     ca38e:                                  1
-//     ca3ae:                                  1
-//     ca3bd:                                  1
-//     ca3fb:                                  1
-//     ca40c:                                  1
-//     ca45d:                                  1
-//     ca47b:                                  1
-//     ca4fa:                                  1
-//     ca538:                                  1
-//     ca547:                                  1
-//     ca574:                                  1
-//     ca595:                                  1
-//     ca5a0:                                  1
-//     ca5c4:                                  1
-//     ca5e2:                                  1
-//     ca5fb:                                  1
-//     ca605:                                  1
-//     ca63a:                                  1
-//     ca647:                                  1
-//     ca652:                                  1
-//     ca65d:                                  1
-//     ca675:                                  1
-//     ca68a:                                  1
-//     ca6b3:                                  1
-//     ca6b6:                                  1
-//     ca6bb:                                  1
-//     ca6ce:                                  1
-//     ca6e2:                                  1
-//     ca70a:                                  1
-//     ca712:                                  1
-//     ca721:                                  1
-//     ca728:                                  1
-//     ca73a:                                  1
-//     ca787:                                  1
-//     ca7a4:                                  1
-//     ca7f2:                                  1
-//     ca7f7:                                  1
-//     ca818:                                  1
-//     ca82f:                                  1
-//     ca856:                                  1
-//     ca8bd:                                  1
-//     ca8fa:                                  1
-//     ca902:                                  1
-//     ca90c:                                  1
-//     ca95d:                                  1
-//     ca96c:                                  1
-//     ca970:                                  1
-//     ca982:                                  1
-//     ca98d:                                  1
-//     ca9b8:                                  1
-//     caa0a:                                  1
-//     caa0d:                                  1
-//     caa78:                                  1
-//     caa7a:                                  1
-//     caa86:                                  1
-//     caab7:                                  1
-//     caabe:                                  1
-//     caace:                                  1
-//     cab09:                                  1
-//     cab17:                                  1
-//     cab2e:                                  1
-//     cab35:                                  1
-//     cab3d:                                  1
-//     cab7d:                                  1
-//     cab93:                                  1
-//     caba4:                                  1
-//     cabcf:                                  1
-//     cabfb:                                  1
-//     cac28:                                  1
-//     cac45:                                  1
-//     cacc7:                                  1
-//     caed7:                                  1
-//     cb1dd:                                  1
-//     cb1fc:                                  1
-//     cb20f:                                  1
-//     cb221:                                  1
-//     cb23d:                                  1
-//     cb260:                                  1
-//     cb268:                                  1
-//     cb2b2:                                  1
-//     cb2e1:                                  1
-//     cb2e7:                                  1
-//     cb305:                                  1
-//     cb314:                                  1
-//     cb337:                                  1
-//     cb34f:                                  1
-//     cb352:                                  1
-//     cb375:                                  1
-//     cb37f:                                  1
-//     cb382:                                  1
-//     cb397:                                  1
-//     cb3ba:                                  1
-//     cb3de:                                  1
-//     cb40e:                                  1
-//     cb44b:                                  1
-//     cb45a:                                  1
-//     cb470:                                  1
-//     cb4af:                                  1
-//     cb4b4:                                  1
-//     cb4d8:                                  1
-//     cb4df:                                  1
-//     cb4e9:                                  1
-//     cb4ee:                                  1
-//     cb502:                                  1
-//     cb534:                                  1
-//     cb597:                                  1
-//     cb5d0:                                  1
-//     cb5e6:                                  1
-//     cb65e:                                  1
-//     cb6a6:                                  1
-//     cb6c2:                                  1
-//     cb6d2:                                  1
-//     cb6eb:                                  1
-//     cb6f5:                                  1
-//     cb725:                                  1
-//     cb736:                                  1
-//     cb7ae:                                  1
-//     cb7b2:                                  1
-//     cb7e8:                                  1
-//     cb7ec:                                  1
-//     cb898:                                  1
-//     cb8e6:                                  1
-//     cb8f5:                                  1
-//     cb9ae:                                  1
-//     cb9d2:                                  1
-//     cb9d9:                                  1
-//     cb9ee:                                  1
-//     cb9f7:                                  1
-//     cba15:                                  1
-//     cba19:                                  1
-//     cba27:                                  1
-//     cba28:                                  1
-//     cba2e:                                  1
-//     cba2f:                                  1
-//     cba78:                                  1
-//     cba8c:                                  1
-//     cba9e:                                  1
-//     cbab0:                                  1
-//     cbab1:                                  1
-//     cbad0:                                  1
-//     cbb07:                                  1
-//     cbb33:                                  1
-//     cbb36:                                  1
-//     cbb4c:                                  1
-//     cbb6f:                                  1
-//     cbb89:                                  1
-//     cbb90:                                  1
-//     cbba1:                                  1
-//     cbbbe:                                  1
-//     cbbd9:                                  1
-//     cbbf3:                                  1
-//     cbc2c:                                  1
-//     cbc54:                                  1
-//     cbc64:                                  1
-//     cbc78:                                  1
-//     cbc93:                                  1
-//     cbcb2:                                  1
-//     cbcd6:                                  1
-//     cbce1:                                  1
-//     cbcf9:                                  1
-//     cbd0e:                                  1
-//     cbd1b:                                  1
-//     cbd40:                                  1
-//     cbd46:                                  1
-//     cbd7e:                                  1
-//     cbda3:                                  1
-//     cbdba:                                  1
-//     cbdc0:                                  1
-//     cbdd3:                                  1
-//     cbddd:                                  1
-//     cbe21:                                  1
-//     cbe3c:                                  1
-//     cbe52:                                  1
-//     cbee0:                                  1
-//     cbeee:                                  1
-//     cbf33:                                  1
-//     cbf46:                                  1
-//     cbf8a:                                  1
-//     cbfa3:                                  1
-//     cbfb2:                                  1
-//     command_table+1:                        1
-//     copyright_offset:                       1
-//     evntv:                                  1
-//     filev:                                  1
-//     general_service_handler:                1
-//     generate_error_precheck_disc_changed:   1
-//     generate_error_precheck_locked:         1
-//     jump_address_low:                       1
-//     l0013:                                  1
-//     l00f1:                                  1
-//     l0103:                                  1
-//     l0104:                                  1
-//     l010c:                                  1
-//     l010d:                                  1
-//     l010e:                                  1
-//     l028d:                                  1
-//     l0600:                                  1
-//     l0cff:                                  1
-//     l0d0f:                                  1
-//     l0d12:                                  1
-//     l0d2a:                                  1
-//     l0d50:                                  1
-//     l0e0e:                                  1
-//     l0e10:                                  1
-//     l0f00:                                  1
-//     l0f09:                                  1
-//     l0f10:                                  1
-//     l1001:                                  1
-//     l1002:                                  1
-//     l1003:                                  1
-//     l1004:                                  1
-//     l1005:                                  1
-//     l1006:                                  1
-//     l1007:                                  1
-//     l100e:                                  1
-//     l1047:                                  1
-//     l104d:                                  1
-//     l104e:                                  1
-//     l1050:                                  1
-//     l1058:                                  1
-//     l105f:                                  1
-//     l1061:                                  1
-//     l1063:                                  1
-//     l1064:                                  1
-//     l1072:                                  1
-//     l1079:                                  1
-//     l107a:                                  1
-//     l1083:                                  1
-//     l108f:                                  1
-//     l8001:                                  1
-//     l8002:                                  1
-//     l8004:                                  1
-//     l911d:                                  1
-//     l9121:                                  1
-//     l9139:                                  1
-//     l913f:                                  1
-//     l9145:                                  1
-//     l9146:                                  1
-//     l9191:                                  1
-//     l91a0:                                  1
-//     l9aec:                                  1
-//     l9b0f:                                  1
-//     l9b18:                                  1
-//     l9b21:                                  1
-//     l9b29:                                  1
-//     l9b31:                                  1
-//     l9b3a:                                  1
-//     l9b43:                                  1
-//     language_entry:                         1
-//     lb075:                                  1
-//     lb175:                                  1
-//     lb283:                                  1
-//     lb6c6:                                  1
-//     lb6ce:                                  1
-//     lb774:                                  1
-//     lb87e:                                  1
-//     lb924:                                  1
-//     lb979:                                  1
-//     lb97a:                                  1
-//     lb980:                                  1
-//     lbb3a:                                  1
-//     lbb3e:                                  1
-//     lbb42:                                  1
-//     lbf4f:                                  1
-//     lda_0_rts:                              1
-//     loop_c0029:                             1
-//     loop_c003b:                             1
-//     loop_c0446:                             1
-//     loop_c0466:                             1
-//     loop_c0471:                             1
-//     loop_c04a6:                             1
-//     loop_c04e1:                             1
-//     loop_c0564:                             1
-//     loop_c0577:                             1
-//     loop_c0586:                             1
-//     loop_c05ab:                             1
-//     loop_c05c7:                             1
-//     loop_c05d3:                             1
-//     loop_c05e6:                             1
-//     loop_c0604:                             1
-//     loop_c061d:                             1
-//     loop_c062b:                             1
-//     loop_c064c:                             1
-//     loop_c0657:                             1
-//     loop_c065a:                             1
-//     loop_c8064:                             1
-//     loop_c8086:                             1
-//     loop_c813a:                             1
-//     loop_c8161:                             1
-//     loop_c816b:                             1
-//     loop_c818c:                             1
-//     loop_c820c:                             1
-//     loop_c820d:                             1
-//     loop_c821c:                             1
-//     loop_c826f:                             1
-//     loop_c82c7:                             1
-//     loop_c82d1:                             1
-//     loop_c830d:                             1
-//     loop_c8326:                             1
-//     loop_c8370:                             1
-//     loop_c8390:                             1
-//     loop_c8397:                             1
-//     loop_c83f0:                             1
-//     loop_c83fa:                             1
-//     loop_c8406:                             1
-//     loop_c8425:                             1
-//     loop_c8463:                             1
-//     loop_c8493:                             1
-//     loop_c84e7:                             1
-//     loop_c8527:                             1
-//     loop_c8552:                             1
-//     loop_c8564:                             1
-//     loop_c857b:                             1
-//     loop_c85b5:                             1
-//     loop_c8717:                             1
-//     loop_c8725:                             1
-//     loop_c87a0:                             1
-//     loop_c87be:                             1
-//     loop_c88bc:                             1
-//     loop_c895f:                             1
-//     loop_c8990:                             1
-//     loop_c89c4:                             1
-//     loop_c89ca:                             1
-//     loop_c8a17:                             1
-//     loop_c8ac8:                             1
-//     loop_c8ad8:                             1
-//     loop_c8af0:                             1
-//     loop_c8afb:                             1
-//     loop_c8b80:                             1
-//     loop_c8bea:                             1
-//     loop_c8c58:                             1
-//     loop_c8c71:                             1
-//     loop_c8d14:                             1
-//     loop_c8d17:                             1
-//     loop_c8dac:                             1
-//     loop_c8dba:                             1
-//     loop_c8de9:                             1
-//     loop_c8df0:                             1
-//     loop_c8e14:                             1
-//     loop_c8e85:                             1
-//     loop_c8f17:                             1
-//     loop_c8f6c:                             1
-//     loop_c8f96:                             1
-//     loop_c8fac:                             1
-//     loop_c9047:                             1
-//     loop_c9108:                             1
-//     loop_c9113:                             1
-//     loop_c91ba:                             1
-//     loop_c91e7:                             1
-//     loop_c92ef:                             1
-//     loop_c9355:                             1
-//     loop_c9357:                             1
-//     loop_c936f:                             1
-//     loop_c9382:                             1
-//     loop_c93bd:                             1
-//     loop_c93da:                             1
-//     loop_c953a:                             1
-//     loop_c957d:                             1
-//     loop_c9593:                             1
-//     loop_c95b6:                             1
-//     loop_c95d9:                             1
-//     loop_c95ec:                             1
-//     loop_c9618:                             1
-//     loop_c96c2:                             1
-//     loop_c96f2:                             1
-//     loop_c979d:                             1
-//     loop_c97c8:                             1
-//     loop_c9803:                             1
-//     loop_c9837:                             1
-//     loop_c9851:                             1
-//     loop_c985e:                             1
-//     loop_c9881:                             1
-//     loop_c98a0:                             1
-//     loop_c98c1:                             1
-//     loop_c98e4:                             1
-//     loop_c9942:                             1
-//     loop_c994e:                             1
-//     loop_c9964:                             1
-//     loop_c99a8:                             1
-//     loop_c9b50:                             1
-//     loop_c9b5e:                             1
-//     loop_c9b63:                             1
-//     loop_c9bcf:                             1
-//     loop_c9be4:                             1
-//     loop_c9c38:                             1
-//     loop_c9c5d:                             1
-//     loop_c9c90:                             1
-//     loop_c9ca8:                             1
-//     loop_c9d03:                             1
-//     loop_c9d43:                             1
-//     loop_c9e07:                             1
-//     loop_c9e74:                             1
-//     loop_c9e8c:                             1
-//     loop_c9f6e:                             1
-//     loop_ca061:                             1
-//     loop_ca11d:                             1
-//     loop_ca132:                             1
-//     loop_ca143:                             1
-//     loop_ca16e:                             1
-//     loop_ca1aa:                             1
-//     loop_ca1cc:                             1
-//     loop_ca487:                             1
-//     loop_ca521:                             1
-//     loop_ca76f:                             1
-//     loop_ca7a7:                             1
-//     loop_ca7c6:                             1
-//     loop_ca7e0:                             1
-//     loop_ca7e1:                             1
-//     loop_ca941:                             1
-//     loop_ca947:                             1
-//     loop_ca953:                             1
-//     loop_ca9ab:                             1
-//     loop_ca9e7:                             1
-//     loop_caa01:                             1
-//     loop_caab8:                             1
-//     loop_cab6b:                             1
-//     loop_cab80:                             1
-//     loop_cabad:                             1
-//     loop_cabf4:                             1
-//     loop_cac46:                             1
-//     loop_caf13:                             1
-//     loop_caf2d:                             1
-//     loop_cb1e3:                             1
-//     loop_cb1ed:                             1
-//     loop_cb249:                             1
-//     loop_cb275:                             1
-//     loop_cb2b4:                             1
-//     loop_cb2bd:                             1
-//     loop_cb2d1:                             1
-//     loop_cb44d:                             1
-//     loop_cb4a8:                             1
-//     loop_cb55e:                             1
-//     loop_cb578:                             1
-//     loop_cb5c6:                             1
-//     loop_cb5ed:                             1
-//     loop_cb6b3:                             1
-//     loop_cb75a:                             1
-//     loop_cb7be:                             1
-//     loop_cb7d7:                             1
-//     loop_cb7dd:                             1
-//     loop_cb910:                             1
-//     loop_cb999:                             1
-//     loop_cb9bd:                             1
-//     loop_cb9cc:                             1
-//     loop_cb9d1:                             1
-//     loop_cb9f9:                             1
-//     loop_cba1a:                             1
-//     loop_cba94:                             1
-//     loop_cbab8:                             1
-//     loop_cbaea:                             1
-//     loop_cbbe4:                             1
-//     loop_cbbfe:                             1
-//     loop_cbc70:                             1
-//     loop_cbcd3:                             1
-//     loop_cbd08:                             1
-//     loop_cbd2b:                             1
-//     loop_cbd6c:                             1
-//     loop_cbd99:                             1
-//     loop_cbe0e:                             1
-//     loop_cbe31:                             1
-//     loop_cbeab:                             1
-//     loop_cbf1c:                             1
-//     loop_cbf78:                             1
-//     nmi3_handler_rom_end:                   1
-//     nmi3_handler_rom_start-1:               1
-//     nmi_XXX18:                              1
-//     nmi_XXX2:                               1
-//     nmi_XXX21:                              1
-//     nmi_XXX5:                               1
-//     nmi_XXX6:                               1
-//     nmi_XXX6+1:                             1
-//     nmi_and_imm+1:                          1
-//     nmi_and_table:                          1
-//     nmi_bcs+1:                              1
-//     nmi_cmp_imm_or_bcs:                     1
-//     nmi_cmp_imm_or_bcs+1:                   1
-//     nmi_handler2_rom_start-1:               1
-//     nmi_handler_rom_start:                  1
-//     nmi_lda_abs:                            1
-//     opt4_table:                             1
-//     osbyte_write_0:                         1
-//     pla_rts:                                1
-//     rom_header:                             1
-//     rom_type:                               1
-//     service_entry:                          1
-//     service_handler:                        1
-//     service_handler_help_and_tube:          1
-//     service_handler_tube_main_init:         1
-//     set_c_iff_have_fdc:                     1
-//     sram_table+1:                           1
-//     sub_c0414:                              1
-//     sub_c0421:                              1
-//     sub_c04c7:                              1
-//     sub_c8020:                              1
-//     sub_c809d:                              1
-//     sub_c80b8:                              1
-//     sub_c80d3:                              1
-//     sub_c80db:                              1
-//     sub_c80e6:                              1
-//     sub_c80f6:                              1
-//     sub_c81b7:                              1
-//     sub_c81c0:                              1
-//     sub_c81c4:                              1
-//     sub_c81ca:                              1
-//     sub_c8222:                              1
-//     sub_c83bf:                              1
-//     sub_c83d1:                              1
-//     sub_c83d4:                              1
-//     sub_c83ee:                              1
-//     sub_c842c:                              1
-//     sub_c85e3:                              1
-//     sub_c8602:                              1
-//     sub_c8826:                              1
-//     sub_c8932:                              1
-//     sub_c8979:                              1
-//     sub_c8b25:                              1
-//     sub_c8bf6:                              1
-//     sub_c8bf9:                              1
-//     sub_c8c56:                              1
-//     sub_c8c65:                              1
-//     sub_c8d1a:                              1
-//     sub_c8dc6:                              1
-//     sub_c8eec:                              1
-//     sub_c8efa:                              1
-//     sub_c8eff:                              1
-//     sub_c8f33:                              1
-//     sub_c8f37:                              1
-//     sub_c8f4f:                              1
-//     sub_c8f5e:                              1
-//     sub_c8f75:                              1
-//     sub_c8f82:                              1
-//     sub_c8f94:                              1
-//     sub_c929d:                              1
-//     sub_c93b4:                              1
-//     sub_c93d8:                              1
-//     sub_c93f1:                              1
-//     sub_c93f9:                              1
-//     sub_c9536:                              1
-//     sub_c965d:                              1
-//     sub_c97e8:                              1
-//     sub_c9832:                              1
-//     sub_c9988:                              1
-//     sub_c9a32:                              1
-//     sub_c9a4b:                              1
-//     sub_c9ad3:                              1
-//     sub_c9b51:                              1
-//     sub_c9b61:                              1
-//     sub_c9bca:                              1
-//     sub_c9bcd:                              1
-//     sub_c9d19:                              1
-//     sub_c9d75:                              1
-//     sub_c9e94:                              1
-//     sub_c9f7c:                              1
-//     sub_c9f82:                              1
-//     sub_ca0b8:                              1
-//     sub_ca0f6:                              1
-//     sub_ca190:                              1
-//     sub_ca3e4:                              1
-//     sub_ca4e1:                              1
-//     sub_ca663:                              1
-//     sub_ca73d:                              1
-//     sub_ca76c:                              1
-//     sub_ca779:                              1
-//     sub_ca788:                              1
-//     sub_ca7c4:                              1
-//     sub_ca7c5:                              1
-//     sub_ca7ce:                              1
-//     sub_ca8be:                              1
-//     sub_ca8e2:                              1
-//     sub_ca9bf:                              1
-//     sub_caa12:                              1
-//     sub_caa9a:                              1
-//     sub_caadd:                              1
-//     sub_caaea:                              1
-//     sub_caba9:                              1
-//     sub_cac47:                              1
-//     sub_cac6a:                              1
-//     sub_cac72:                              1
-//     sub_cb234:                              1
-//     sub_cb2c8:                              1
-//     sub_cb6e6:                              1
-//     sub_cb771:                              1
-//     sub_cb7b6:                              1
-//     sub_cb86f:                              1
-//     sub_cb882:                              1
-//     sub_cbad2:                              1
-//     sub_cbe91:                              1
-//     sub_cbf84:                              1
-//     tube_brkv_handler:                      1
-//     tube_entry_claim_tube:                  1
-//     tube_entry_flags:                       1
-//     tube_entry_small_a:                     1
-//     tube_host_code1:                        1
-//     tube_host_code2:                        1
-//     tube_host_code2+256:                    1
-//     tube_host_code3:                        1
-//     tube_host_osword_0_loop:                1
-//     tube_host_osword_0_no_escape:           1
-//     tube_host_osword_0_no_escape_loop:      1
-//     tube_host_r4_data:                      1
+//     l00b8:                                            125
+//     l00b0:                                            105
+//     l00ba:                                             44
+//     l00bf:                                             42
+//     l00bc:                                             41
+//     l00b6:                                             35
+//     l00be:                                             31
+//     l00cd:                                             31
+//     print_inline_l809f_top_bit_clear:                  31
+//     l00c2:                                             30
+//     l00b1:                                             29
+//     sub_c83e3:                                         29
+//     l00b9:                                             28
+//     l00bb:                                             28
+//     l00b5:                                             26
+//     l00bd:                                             26
+//     l00b4:                                             25
+//     l00b3:                                             23
+//     l00c1:                                             23
+//     os_text_ptr:                                       23
+//     osbyte:                                            22
+//     l0f0e:                                             21
+//     read_tube_r2_data:                                 21
+//     romsel_copy:                                       21
+//     c809f:                                             20
+//     l00c4:                                             20
+//     l00b2:                                             19
+//     l10c2:                                             19
+//     l0001:                                             18
+//     l00a8:                                             18
+//     l00aa:                                             18
+//     l00c5:                                             18
+//     l00c9:                                             18
+//     l10de:                                             18
+//     l0000:                                             17
+//     l00b7:                                             17
+//     l0e0f:                                             17
+//     l0f06:                                             17
+//     l1000:                                             17
+//     ca3dc:                                             16
+//     cb82b:                                             16
+//     l00a2:                                             16
+//     l00ab:                                             16
+//     l00ae:                                             16
+//     l00c0:                                             15
+//     l00c3:                                             15
+//     l00c7:                                             15
+//     l0f05:                                             15
+//     l00cc:                                             14
+//     l1117:                                             14
+//     tube_entry:                                        14
+//     write_tube_r2_data:                                14
+//     l00a1:                                             13
+//     l00a5:                                             13
+//     l00c8:                                             13
+//     l0d30:                                             13
+//     l0f07:                                             13
+//     sub_ca14a:                                         13
+//     tube_data_register_3:                              13
+//     clc_jmp_gsinit:                                    12
+//     l00ac:                                             12
+//     osasci:                                            12
+//     sub_cb841:                                         12
+//     c996e:                                             11
+//     cac0f:                                             11
+//     fdc_8271_data_or_1770_command_or_status:           11
+//     generate_error_precheck:                           11
+//     l00c6:                                             11
+//     l0e08:                                             11
+//     osrdsc_ptr:                                        11
+//     sub_c8149:                                         11
+//     tube_data_register_2:                              11
+//     c93e6:                                             10
+//     cb203:                                             10
+//     fdc_1770_data:                                     10
+//     l00a9:                                             10
+//     l1111:                                             10
+//     l1112:                                             10
+//     sub_c80c3:                                         10
+//     tube_status_register_2:                            10
+//     cbbd0:                                              9
+//     l00ca:                                              9
+//     l1074:                                              9
+//     l108a:                                              9
+//     l1097:                                              9
+//     l10c0:                                              9
+//     l1110:                                              9
+//     c8816:                                              8
+//     l00ce:                                              8
+//     l00ff:                                              8
+//     l0100:                                              8
+//     l0df0:                                              8
+//     l0f04:                                              8
+//     l1060:                                              8
+//     l1082:                                              8
+//     l108b:                                              8
+//     l1090:                                              8
+//     l1096:                                              8
+//     l10ca:                                              8
+//     l10cf:                                              8
+//     l10d1:                                              8
+//     osbyte_read:                                        8
+//     osfind:                                             8
+//     sub_c81b0:                                          8
+//     sub_c81bf:                                          8
+//     sub_c8b7b:                                          8
+//     sub_cb85d:                                          8
+//     tube_status_1_and_tube_control:                     8
+//     write_tube_r4_data:                                 8
+//     c8b8b:                                              7
+//     generate_error2:                                    7
+//     l00a7:                                              7
+//     l00cf:                                              7
+//     l0f08:                                              7
+//     l1075:                                              7
+//     l10c9:                                              7
+//     l10d2:                                              7
+//     l1114:                                              7
+//     osrdsc:                                             7
+//     print_inline_osasci_top_bit_clear:                  7
+//     sub_c8284:                                          7
+//     sub_c8380:                                          7
+//     sub_cb580:                                          7
+//     sub_cbab9:                                          7
+//     c0036:                                              6
+//     c940c:                                              6
+//     cb8fb:                                              6
+//     command_table:                                      6
+//     generate_error_precheck_bad:                        6
+//     l0015:                                              6
+//     l00f3:                                              6
+//     l00f7:                                              6
+//     l0f0f:                                              6
+//     l1100:                                              6
+//     lb726:                                              6
+//     oswrch:                                             6
+//     sub_c8280:                                          6
+//     sub_c82fe:                                          6
+//     sub_c87da:                                          6
+//     sub_c99ac:                                          6
+//     sub_c9e75:                                          6
+//     sub_cb5f2:                                          6
+//     zero_stacked_XXX:                                   6
+//     c8125:                                              5
+//     c8ba2:                                              5
+//     c9257:                                              5
+//     c99a3:                                              5
+//     cb795:                                              5
+//     cbe7b:                                              5
+//     l00a6:                                              5
+//     l00af:                                              5
+//     l00f0:                                              5
+//     l1087:                                              5
+//     l1088:                                              5
+//     l1099:                                              5
+//     l10c7:                                              5
+//     l10dd:                                              5
+//     l110c:                                              5
+//     l1115:                                              5
+//     l1116:                                              5
+//     nmi_XXX23:                                          5
+//     osnewl:                                             5
+//     sub_c80bb:                                          5
+//     sub_c80ed:                                          5
+//     sub_c80f3:                                          5
+//     sub_c830a:                                          5
+//     sub_c8335:                                          5
+//     sub_c8386:                                          5
+//     sub_c840c:                                          5
+//     sub_c8f3f:                                          5
+//     sub_c9a6e:                                          5
+//     sub_c9ab8:                                          5
+//     sub_ca0de:                                          5
+//     sub_ca1b4:                                          5
+//     sub_cb6fe:                                          5
+//     sub_cb745:                                          5
+//     sub_cb850:                                          5
+//     sub_cba67:                                          5
+//     write_tube_r1_data:                                 5
+//     c059e:                                              4
+//     c81a7:                                              4
+//     c8225:                                              4
+//     c8d74:                                              4
+//     c8d91:                                              4
+//     c8e0e:                                              4
+//     c8e12:                                              4
+//     c8e64:                                              4
+//     c940e:                                              4
+//     c9436:                                              4
+//     c993b:                                              4
+//     c9adf:                                              4
+//     c9ae9:                                              4
+//     ca5e5:                                              4
+//     cb446:                                              4
+//     cb68c:                                              4
+//     cbe7a:                                              4
+//     cbee8:                                              4
+//     fdc_1770_sector:                                    4
+//     fdc_1770_track:                                     4
+//     generate_error:                                     4
+//     generate_error_precheck_disc:                       4
+//     inc16_ae:                                           4
+//     l0002:                                              4
+//     l0e00:                                              4
+//     l0f0c:                                              4
+//     l0f0d:                                              4
+//     l1069:                                              4
+//     l1076:                                              4
+//     l1077:                                              4
+//     l1081:                                              4
+//     l1086:                                              4
+//     l1095:                                              4
+//     l10c4:                                              4
+//     l10cb:                                              4
+//     l10cc:                                              4
+//     l10ce:                                              4
+//     l10d9:                                              4
+//     l10da:                                              4
+//     l110d:                                              4
+//     l1113:                                              4
+//     l111a:                                              4
+//     l111d:                                              4
+//     lb57f:                                              4
+//     lbfff:                                              4
+//     nmi_beq+1:                                          4
+//     osbget:                                             4
+//     osbput:                                             4
+//     osfile:                                             4
+//     osrdch:                                             4
+//     romsel:                                             4
+//     sub_c80c8:                                          4
+//     sub_c8174:                                          4
+//     sub_c821d:                                          4
+//     sub_c82b2:                                          4
+//     sub_c8327:                                          4
+//     sub_c8f6b:                                          4
+//     sub_c9965:                                          4
+//     sub_c9a8d:                                          4
+//     sub_ca379:                                          4
+//     sub_ca9ca:                                          4
+//     sub_caacf:                                          4
+//     sub_cac18:                                          4
+//     sub_cac62:                                          4
+//     sub_cb616:                                          4
+//     sub_cb68f:                                          4
+//     sub_cb83f:                                          4
+//     sub_cbac2:                                          4
+//     sub_cbb00:                                          4
+//     bytev:                                              3
+//     c059c:                                              3
+//     c8103:                                              3
+//     c8290:                                              3
+//     c82e6:                                              3
+//     c8454:                                              3
+//     c89d7:                                              3
+//     c8d41:                                              3
+//     c8e53:                                              3
+//     c8ecc:                                              3
+//     c8f2a:                                              3
+//     c91af:                                              3
+//     c9214:                                              3
+//     c9444:                                              3
+//     c94bc:                                              3
+//     c9738:                                              3
+//     c99ed:                                              3
+//     c9a8c:                                              3
+//     c9d5d:                                              3
+//     ca06b:                                              3
+//     ca14f:                                              3
+//     ca1c0:                                              3
+//     ca660:                                              3
+//     caa42:                                              3
+//     caa44:                                              3
+//     cacc4:                                              3
+//     cb1d5:                                              3
+//     cb371:                                              3
+//     cb684:                                              3
+//     cb6ca:                                              3
+//     cbab4:                                              3
+//     cbe47:                                              3
+//     cbe89:                                              3
+//     cbe8d:                                              3
+//     fdc_8271_command_or_status_or_1770_drive_control:   3
+//     generate_error_precheck_open:                       3
+//     l0054:                                              3
+//     l00ef:                                              3
+//     l0107:                                              3
+//     l0109:                                              3
+//     l0d3d:                                              3
+//     l0ef8:                                              3
+//     l1092:                                              3
+//     l1093:                                              3
+//     l1094:                                              3
+//     l1098:                                              3
+//     l109d:                                              3
+//     l109f:                                              3
+//     l10c3:                                              3
+//     l10c5:                                              3
+//     l10c6:                                              3
+//     l10d0:                                              3
+//     l10d3:                                              3
+//     l10d6:                                              3
+//     l10d7:                                              3
+//     l1119:                                              3
+//     l111c:                                              3
+//     nmi_handler2_rom_end:                               3
+//     nmi_lda_immXXX3+1:                                  3
+//     nmi_lda_zp:                                         3
+//     nmi_sta_abs+1:                                      3
+//     nmi_sta_abs2+1:                                     3
+//     oscli:                                              3
+//     osword:                                             3
+//     sram_table:                                         3
+//     sub_c0582:                                          3
+//     sub_c81be:                                          3
+//     sub_c833a:                                          3
+//     sub_c836e:                                          3
+//     sub_c8456:                                          3
+//     sub_c8b86:                                          3
+//     sub_c8f7a:                                          3
+//     sub_c93fd:                                          3
+//     sub_c9526:                                          3
+//     sub_c9940:                                          3
+//     sub_c9be5:                                          3
+//     sub_c9e30:                                          3
+//     sub_c9f0f:                                          3
+//     sub_c9f16:                                          3
+//     sub_c9f1e:                                          3
+//     sub_ca315:                                          3
+//     sub_ca384:                                          3
+//     sub_ca530:                                          3
+//     sub_ca9c2:                                          3
+//     sub_cac0c:                                          3
+//     sub_cb58b:                                          3
+//     sub_cb84e:                                          3
+//     sub_cb986:                                          3
+//     sub_cbac4:                                          3
+//     sub_cbf7c:                                          3
+//     tube_data_register_1:                               3
+//     c0434:                                              2
+//     c0482:                                              2
+//     c0491:                                              2
+//     c04bc:                                              2
+//     c053a:                                              2
+//     c05fc:                                              2
+//     c0636:                                              2
+//     c0d60:                                              2
+//     c815d:                                              2
+//     c822a:                                              2
+//     c825d:                                              2
+//     c82fd:                                              2
+//     c8543:                                              2
+//     c8560:                                              2
+//     c85bc:                                              2
+//     c8703:                                              2
+//     c8705:                                              2
+//     c873b:                                              2
+//     c8808:                                              2
+//     c883f:                                              2
+//     c88a6:                                              2
+//     c88f4:                                              2
+//     c898a:                                              2
+//     c89a5:                                              2
+//     c89b4:                                              2
+//     c8a00:                                              2
+//     c8a6e:                                              2
+//     c8be3:                                              2
+//     c8c12:                                              2
+//     c8cb2:                                              2
+//     c8d0d:                                              2
+//     c8d13:                                              2
+//     c8e0d:                                              2
+//     c8e32:                                              2
+//     c8e9f:                                              2
+//     c8ea5:                                              2
+//     c8eb7:                                              2
+//     c8eeb:                                              2
+//     c8f3e:                                              2
+//     c91df:                                              2
+//     c9289:                                              2
+//     c9367:                                              2
+//     c94a9:                                              2
+//     c94c6:                                              2
+//     c95fd:                                              2
+//     c9628:                                              2
+//     c965a:                                              2
+//     c96b7:                                              2
+//     c97b3:                                              2
+//     c9b6e:                                              2
+//     c9bc5:                                              2
+//     c9dcd:                                              2
+//     c9dd5:                                              2
+//     c9e41:                                              2
+//     ca01d:                                              2
+//     ca021:                                              2
+//     ca06c:                                              2
+//     ca0f5:                                              2
+//     ca10b:                                              2
+//     ca19f:                                              2
+//     ca2f2:                                              2
+//     ca38b:                                              2
+//     ca411:                                              2
+//     ca414:                                              2
+//     ca5ab:                                              2
+//     ca637:                                              2
+//     ca845:                                              2
+//     ca86b:                                              2
+//     ca87a:                                              2
+//     ca97d:                                              2
+//     ca9ff:                                              2
+//     caa1c:                                              2
+//     caa51:                                              2
+//     cab1a:                                              2
+//     cab41:                                              2
+//     cab54:                                              2
+//     cabbc:                                              2
+//     caed3:                                              2
+//     cb280:                                              2
+//     cb297:                                              2
+//     cb2a0:                                              2
+//     cb300:                                              2
+//     cb406:                                              2
+//     cb45e:                                              2
+//     cb655:                                              2
+//     cb718:                                              2
+//     cb7ed:                                              2
+//     cb8e4:                                              2
+//     cb9e8:                                              2
+//     cba10:                                              2
+//     cbaf8:                                              2
+//     cbafd:                                              2
+//     cbb28:                                              2
+//     cbb2a:                                              2
+//     cbc13:                                              2
+//     cbc3a:                                              2
+//     cbcb9:                                              2
+//     cbdb9:                                              2
+//     cbec1:                                              2
+//     cbf8e:                                              2
+//     fscv:                                               2
+//     general_service_handler_indirect:                   2
+//     gsinit:                                             2
+//     gsread:                                             2
+//     invert_l1065:                                       2
+//     just_rts:                                           2
+//     l0003:                                              2
+//     l0012:                                              2
+//     l0014:                                              2
+//     l0053:                                              2
+//     l0055:                                              2
+//     l0056:                                              2
+//     l00a0:                                              2
+//     l00a3:                                              2
+//     l00a4:                                              2
+//     l00ad:                                              2
+//     l00fd:                                              2
+//     l0101:                                              2
+//     l0102:                                              2
+//     l0105:                                              2
+//     l010b:                                              2
+//     l0128:                                              2
+//     l0500:                                              2
+//     l0700:                                              2
+//     l0d26:                                              2
+//     l0e07:                                              2
+//     l0f0a:                                              2
+//     l0f0b:                                              2
+//     l1045:                                              2
+//     l1062:                                              2
+//     l1065:                                              2
+//     l1067:                                              2
+//     l1078:                                              2
+//     l107d:                                              2
+//     l107e:                                              2
+//     l107f:                                              2
+//     l1089:                                              2
+//     l108c:                                              2
+//     l1091:                                              2
+//     l109a:                                              2
+//     l109b:                                              2
+//     l109e:                                              2
+//     l10c1:                                              2
+//     l10cd:                                              2
+//     l10d8:                                              2
+//     l10db:                                              2
+//     l10dc:                                              2
+//     l10e2:                                              2
+//     l10e3:                                              2
+//     l10e4:                                              2
+//     l1109:                                              2
+//     l110b:                                              2
+//     l110e:                                              2
+//     l110f:                                              2
+//     l111b:                                              2
+//     la1d3:                                              2
+//     lb872:                                              2
+//     nmi_XXX7:                                           2
+//     nmi_handler_ram:                                    2
+//     nmi_lda_abs+1:                                      2
+//     nmi_lda_abs+2:                                      2
+//     nmi_lda_immXXX4+1:                                  2
+//     nmi_lda_zp+1:                                       2
+//     nmi_sta_abs+2:                                      2
+//     nmi_sta_abs2+2:                                     2
+//     osargs:                                             2
+//     osgbpb:                                             2
+//     sub_c04ce:                                          2
+//     sub_c809a:                                          2
+//     sub_c80e3:                                          2
+//     sub_c81ae:                                          2
+//     sub_c81c5:                                          2
+//     sub_c8266:                                          2
+//     sub_c826d:                                          2
+//     sub_c82bb:                                          2
+//     sub_c82e8:                                          2
+//     sub_c841b:                                          2
+//     sub_c8439:                                          2
+//     sub_c8555:                                          2
+//     sub_c8745:                                          2
+//     sub_c87db:                                          2
+//     sub_c87e3:                                          2
+//     sub_c8855:                                          2
+//     sub_c8862:                                          2
+//     sub_c8951:                                          2
+//     sub_c89da:                                          2
+//     sub_c8a77:                                          2
+//     sub_c8ab3:                                          2
+//     sub_c8b4d:                                          2
+//     sub_c8b64:                                          2
+//     sub_c9279:                                          2
+//     sub_c928a:                                          2
+//     sub_c93c5:                                          2
+//     sub_c93d3:                                          2
+//     sub_c93f5:                                          2
+//     sub_c9432:                                          2
+//     sub_c9445:                                          2
+//     sub_c9516:                                          2
+//     sub_c952e:                                          2
+//     sub_c992c:                                          2
+//     sub_c995a:                                          2
+//     sub_c99f3:                                          2
+//     sub_c9a0f:                                          2
+//     sub_c9a50:                                          2
+//     sub_c9a60:                                          2
+//     sub_c9a63:                                          2
+//     sub_c9a78:                                          2
+//     sub_c9a82:                                          2
+//     sub_c9aa3:                                          2
+//     sub_c9ac8:                                          2
+//     sub_c9ad8:                                          2
+//     sub_c9b79:                                          2
+//     sub_c9bf2:                                          2
+//     sub_c9d1e:                                          2
+//     sub_c9df4:                                          2
+//     sub_c9e1e:                                          2
+//     sub_c9e54:                                          2
+//     sub_c9ef4:                                          2
+//     sub_c9f14:                                          2
+//     sub_c9f26:                                          2
+//     sub_ca168:                                          2
+//     sub_ca1c6:                                          2
+//     sub_ca324:                                          2
+//     sub_ca3ec:                                          2
+//     sub_ca51f:                                          2
+//     sub_ca5b2:                                          2
+//     sub_ca90d:                                          2
+//     sub_caa53:                                          2
+//     sub_caac2:                                          2
+//     sub_caaf1:                                          2
+//     sub_cac4e:                                          2
+//     sub_cb598:                                          2
+//     sub_cb5ce:                                          2
+//     sub_cb5ee:                                          2
+//     sub_cb607:                                          2
+//     sub_cb61e:                                          2
+//     sub_cb65f:                                          2
+//     sub_cb6b1:                                          2
+//     sub_cb9f5:                                          2
+//     sub_cbc68:                                          2
+//     sub_cbe83:                                          2
+//     sub_cbe9d:                                          2
+//     sub_cbec2:                                          2
+//     sub_cbf82:                                          2
+//     tube_banner_loop:                                   2
+//     tube_status_register_4_and_cpu_control:             2
+//     brkv:                                               1
+//     c0032:                                              1
+//     c0041:                                              1
+//     c0400:                                              1
+//     c0432:                                              1
+//     c0463:                                              1
+//     c047a:                                              1
+//     c0484:                                              1
+//     c048c:                                              1
+//     c049b:                                              1
+//     c04f7:                                              1
+//     c0552:                                              1
+//     c0593:                                              1
+//     c05a6:                                              1
+//     c0645:                                              1
+//     c0665:                                              1
+//     c06a7:                                              1
+//     c0d74:                                              1
+//     c0d80:                                              1
+//     c8040:                                              1
+//     c8093:                                              1
+//     c8096:                                              1
+//     c80d0:                                              1
+//     c8111:                                              1
+//     c8115:                                              1
+//     c812e:                                              1
+//     c815b:                                              1
+//     c815f:                                              1
+//     c8184:                                              1
+//     c818a:                                              1
+//     c81a2:                                              1
+//     c81bd:                                              1
+//     c8243:                                              1
+//     c8286:                                              1
+//     c828b:                                              1
+//     c82be:                                              1
+//     c82d9:                                              1
+//     c82e7:                                              1
+//     c82fb:                                              1
+//     c8306:                                              1
+//     c8332:                                              1
+//     c8333:                                              1
+//     c83ab:                                              1
+//     c83cd:                                              1
+//     c83e2:                                              1
+//     c842b:                                              1
+//     c8436:                                              1
+//     c8438:                                              1
+//     c8453:                                              1
+//     c8477:                                              1
+//     c8481:                                              1
+//     c8482:                                              1
+//     c849d:                                              1
+//     c853e:                                              1
+//     c855f:                                              1
+//     c8573:                                              1
+//     c859b:                                              1
+//     c85c5:                                              1
+//     c8734:                                              1
+//     c8759:                                              1
+//     c8779:                                              1
+//     c877c:                                              1
+//     c87ab:                                              1
+//     c87b8:                                              1
+//     c87c6:                                              1
+//     c8815:                                              1
+//     c8837:                                              1
+//     c8864:                                              1
+//     c8867:                                              1
+//     c892d:                                              1
+//     c8945:                                              1
+//     c8968:                                              1
+//     c896b:                                              1
+//     c89ad:                                              1
+//     c89e2:                                              1
+//     c89f6:                                              1
+//     c8a19:                                              1
+//     c8a49:                                              1
+//     c8a50:                                              1
+//     c8a54:                                              1
+//     c8a82:                                              1
+//     c8ad0:                                              1
+//     c8aeb:                                              1
+//     c8b18:                                              1
+//     c8b60:                                              1
+//     c8b77:                                              1
+//     c8bfb:                                              1
+//     c8c2e:                                              1
+//     c8c3a:                                              1
+//     c8c4e:                                              1
+//     c8c61:                                              1
+//     c8c87:                                              1
+//     c8cae:                                              1
+//     c8cc1:                                              1
+//     c8cd6:                                              1
+//     c8ce7:                                              1
+//     c8cfc:                                              1
+//     c8d03:                                              1
+//     c8d5d:                                              1
+//     c8d92:                                              1
+//     c8dd2:                                              1
+//     c8de2:                                              1
+//     c8e03:                                              1
+//     c8e4d:                                              1
+//     c8e6f:                                              1
+//     c8e72:                                              1
+//     c8e9e:                                              1
+//     c8eaf:                                              1
+//     c8ecb:                                              1
+//     c8edf:                                              1
+//     c8ef8:                                              1
+//     c8f12:                                              1
+//     c8f21:                                              1
+//     c8f81:                                              1
+//     c8fb5:                                              1
+//     c8fc7:                                              1
+//     c9060:                                              1
+//     c9115:                                              1
+//     c91cc:                                              1
+//     c91eb:                                              1
+//     c91f3:                                              1
+//     c91f9:                                              1
+//     c9201:                                              1
+//     c920d:                                              1
+//     c921f:                                              1
+//     c922b:                                              1
+//     c9238:                                              1
+//     c923b:                                              1
+//     c923f:                                              1
+//     c9249:                                              1
+//     c925a:                                              1
+//     c926a:                                              1
+//     c9276:                                              1
+//     c929c:                                              1
+//     c92bd:                                              1
+//     c92c4:                                              1
+//     c92c7:                                              1
+//     c92d6:                                              1
+//     c92e3:                                              1
+//     c9302:                                              1
+//     c936b:                                              1
+//     c9379:                                              1
+//     c938d:                                              1
+//     c9390:                                              1
+//     c93a8:                                              1
+//     c93b1:                                              1
+//     c93c4:                                              1
+//     c93e2:                                              1
+//     c93e5:                                              1
+//     c93ff:                                              1
+//     c9450:                                              1
+//     c945c:                                              1
+//     c948d:                                              1
+//     c94c1:                                              1
+//     c94c2:                                              1
+//     c94d4:                                              1
+//     c9504:                                              1
+//     c9535:                                              1
+//     c9556:                                              1
+//     c956d:                                              1
+//     c956f:                                              1
+//     c95e4:                                              1
+//     c95e7:                                              1
+//     c9649:                                              1
+//     c964a:                                              1
+//     c9658:                                              1
+//     c967a:                                              1
+//     c9682:                                              1
+//     c9683:                                              1
+//     c969e:                                              1
+//     c96c3:                                              1
+//     c96e4:                                              1
+//     c96e9:                                              1
+//     c96ec:                                              1
+//     c96f5:                                              1
+//     c9700:                                              1
+//     c9714:                                              1
+//     c9736:                                              1
+//     c973c:                                              1
+//     c973d:                                              1
+//     c975b:                                              1
+//     c976c:                                              1
+//     c97e6:                                              1
+//     c981f:                                              1
+//     c982e:                                              1
+//     c9835:                                              1
+//     c984c:                                              1
+//     c9859:                                              1
+//     c986b:                                              1
+//     c9873:                                              1
+//     c98b1:                                              1
+//     c98ba:                                              1
+//     c98cd:                                              1
+//     c98ed:                                              1
+//     c98f0:                                              1
+//     c994b:                                              1
+//     c9978:                                              1
+//     c9993:                                              1
+//     c99ea:                                              1
+//     c9a2a:                                              1
+//     c9a3f:                                              1
+//     c9a73:                                              1
+//     c9a77:                                              1
+//     c9ad4:                                              1
+//     c9bc2:                                              1
+//     c9c16:                                              1
+//     c9c33:                                              1
+//     c9c51:                                              1
+//     c9c58:                                              1
+//     c9c6b:                                              1
+//     c9c8b:                                              1
+//     c9cee:                                              1
+//     c9d12:                                              1
+//     c9d2b:                                              1
+//     c9d57:                                              1
+//     c9d67:                                              1
+//     c9d71:                                              1
+//     c9d72:                                              1
+//     c9d86:                                              1
+//     c9d89:                                              1
+//     c9db4:                                              1
+//     c9dce:                                              1
+//     c9e13:                                              1
+//     c9e16:                                              1
+//     c9e28:                                              1
+//     c9e2a:                                              1
+//     c9e5c:                                              1
+//     c9e6f:                                              1
+//     c9e71:                                              1
+//     c9eb3:                                              1
+//     c9ec2:                                              1
+//     c9ef1:                                              1
+//     c9f0d:                                              1
+//     c9f19:                                              1
+//     c9f5e:                                              1
+//     c9f64:                                              1
+//     c9f6a:                                              1
+//     c9f6b:                                              1
+//     c9f88:                                              1
+//     c9fd9:                                              1
+//     c9ff4:                                              1
+//     ca005:                                              1
+//     ca054:                                              1
+//     ca075:                                              1
+//     ca0a9:                                              1
+//     ca17a:                                              1
+//     ca183:                                              1
+//     ca1c1:                                              1
+//     ca1d2:                                              1
+//     ca27a:                                              1
+//     ca2ab:                                              1
+//     ca30d:                                              1
+//     ca321:                                              1
+//     ca34a:                                              1
+//     ca378:                                              1
+//     ca38c:                                              1
+//     ca38e:                                              1
+//     ca3ae:                                              1
+//     ca3bd:                                              1
+//     ca3fb:                                              1
+//     ca40c:                                              1
+//     ca45d:                                              1
+//     ca47b:                                              1
+//     ca4fa:                                              1
+//     ca538:                                              1
+//     ca547:                                              1
+//     ca574:                                              1
+//     ca595:                                              1
+//     ca5a0:                                              1
+//     ca5c4:                                              1
+//     ca5e2:                                              1
+//     ca5fb:                                              1
+//     ca605:                                              1
+//     ca63a:                                              1
+//     ca647:                                              1
+//     ca652:                                              1
+//     ca65d:                                              1
+//     ca675:                                              1
+//     ca68a:                                              1
+//     ca6b3:                                              1
+//     ca6b6:                                              1
+//     ca6bb:                                              1
+//     ca6ce:                                              1
+//     ca6e2:                                              1
+//     ca70a:                                              1
+//     ca712:                                              1
+//     ca721:                                              1
+//     ca728:                                              1
+//     ca73a:                                              1
+//     ca787:                                              1
+//     ca7a4:                                              1
+//     ca7f2:                                              1
+//     ca7f7:                                              1
+//     ca818:                                              1
+//     ca82f:                                              1
+//     ca856:                                              1
+//     ca8bd:                                              1
+//     ca8fa:                                              1
+//     ca902:                                              1
+//     ca90c:                                              1
+//     ca95d:                                              1
+//     ca96c:                                              1
+//     ca970:                                              1
+//     ca982:                                              1
+//     ca98d:                                              1
+//     ca9b8:                                              1
+//     caa0a:                                              1
+//     caa0d:                                              1
+//     caa78:                                              1
+//     caa7a:                                              1
+//     caa86:                                              1
+//     caab7:                                              1
+//     caabe:                                              1
+//     caace:                                              1
+//     cab09:                                              1
+//     cab17:                                              1
+//     cab2e:                                              1
+//     cab35:                                              1
+//     cab3d:                                              1
+//     cab7d:                                              1
+//     cab93:                                              1
+//     caba4:                                              1
+//     cabcf:                                              1
+//     cabfb:                                              1
+//     cac28:                                              1
+//     cac45:                                              1
+//     cacc7:                                              1
+//     caed7:                                              1
+//     cb1dd:                                              1
+//     cb1fc:                                              1
+//     cb20f:                                              1
+//     cb221:                                              1
+//     cb23d:                                              1
+//     cb260:                                              1
+//     cb268:                                              1
+//     cb2b2:                                              1
+//     cb2e1:                                              1
+//     cb2e7:                                              1
+//     cb305:                                              1
+//     cb314:                                              1
+//     cb337:                                              1
+//     cb34f:                                              1
+//     cb352:                                              1
+//     cb375:                                              1
+//     cb37f:                                              1
+//     cb382:                                              1
+//     cb397:                                              1
+//     cb3ba:                                              1
+//     cb3de:                                              1
+//     cb40e:                                              1
+//     cb44b:                                              1
+//     cb45a:                                              1
+//     cb470:                                              1
+//     cb4af:                                              1
+//     cb4b4:                                              1
+//     cb4d8:                                              1
+//     cb4df:                                              1
+//     cb4e9:                                              1
+//     cb4ee:                                              1
+//     cb502:                                              1
+//     cb534:                                              1
+//     cb597:                                              1
+//     cb5d0:                                              1
+//     cb5e6:                                              1
+//     cb65e:                                              1
+//     cb6a6:                                              1
+//     cb6c2:                                              1
+//     cb6d2:                                              1
+//     cb6eb:                                              1
+//     cb6f5:                                              1
+//     cb725:                                              1
+//     cb736:                                              1
+//     cb7ae:                                              1
+//     cb7b2:                                              1
+//     cb7e8:                                              1
+//     cb7ec:                                              1
+//     cb898:                                              1
+//     cb8e6:                                              1
+//     cb8f5:                                              1
+//     cb9ae:                                              1
+//     cb9d2:                                              1
+//     cb9d9:                                              1
+//     cb9ee:                                              1
+//     cb9f7:                                              1
+//     cba15:                                              1
+//     cba19:                                              1
+//     cba27:                                              1
+//     cba28:                                              1
+//     cba2e:                                              1
+//     cba2f:                                              1
+//     cba78:                                              1
+//     cba8c:                                              1
+//     cba9e:                                              1
+//     cbab0:                                              1
+//     cbab1:                                              1
+//     cbad0:                                              1
+//     cbb07:                                              1
+//     cbb33:                                              1
+//     cbb36:                                              1
+//     cbb4c:                                              1
+//     cbb6f:                                              1
+//     cbb89:                                              1
+//     cbb90:                                              1
+//     cbba1:                                              1
+//     cbbbe:                                              1
+//     cbbd9:                                              1
+//     cbbf3:                                              1
+//     cbc2c:                                              1
+//     cbc54:                                              1
+//     cbc64:                                              1
+//     cbc78:                                              1
+//     cbc93:                                              1
+//     cbcb2:                                              1
+//     cbcd6:                                              1
+//     cbce1:                                              1
+//     cbcf9:                                              1
+//     cbd0e:                                              1
+//     cbd1b:                                              1
+//     cbd40:                                              1
+//     cbd46:                                              1
+//     cbd7e:                                              1
+//     cbda3:                                              1
+//     cbdba:                                              1
+//     cbdc0:                                              1
+//     cbdd3:                                              1
+//     cbddd:                                              1
+//     cbe21:                                              1
+//     cbe3c:                                              1
+//     cbe52:                                              1
+//     cbee0:                                              1
+//     cbeee:                                              1
+//     cbf33:                                              1
+//     cbf46:                                              1
+//     cbf8a:                                              1
+//     cbfa3:                                              1
+//     cbfb2:                                              1
+//     command_table+1:                                    1
+//     copyright_offset:                                   1
+//     evntv:                                              1
+//     filev:                                              1
+//     general_service_handler:                            1
+//     generate_error_precheck_disc_changed:               1
+//     generate_error_precheck_locked:                     1
+//     jump_address_low:                                   1
+//     l0013:                                              1
+//     l00f1:                                              1
+//     l0103:                                              1
+//     l0104:                                              1
+//     l010c:                                              1
+//     l010d:                                              1
+//     l010e:                                              1
+//     l028d:                                              1
+//     l0600:                                              1
+//     l0cff:                                              1
+//     l0d0f:                                              1
+//     l0d12:                                              1
+//     l0d2a:                                              1
+//     l0d50:                                              1
+//     l0e0e:                                              1
+//     l0e10:                                              1
+//     l0f00:                                              1
+//     l0f09:                                              1
+//     l0f10:                                              1
+//     l1001:                                              1
+//     l1002:                                              1
+//     l1003:                                              1
+//     l1004:                                              1
+//     l1005:                                              1
+//     l1006:                                              1
+//     l1007:                                              1
+//     l100e:                                              1
+//     l1047:                                              1
+//     l104d:                                              1
+//     l104e:                                              1
+//     l1050:                                              1
+//     l1058:                                              1
+//     l105f:                                              1
+//     l1061:                                              1
+//     l1063:                                              1
+//     l1064:                                              1
+//     l1072:                                              1
+//     l1079:                                              1
+//     l107a:                                              1
+//     l1083:                                              1
+//     l108f:                                              1
+//     l8001:                                              1
+//     l8002:                                              1
+//     l8004:                                              1
+//     l911d:                                              1
+//     l9121:                                              1
+//     l9139:                                              1
+//     l913f:                                              1
+//     l9145:                                              1
+//     l9146:                                              1
+//     l9191:                                              1
+//     l91a0:                                              1
+//     l9aec:                                              1
+//     l9b0f:                                              1
+//     l9b18:                                              1
+//     l9b21:                                              1
+//     l9b29:                                              1
+//     l9b31:                                              1
+//     l9b3a:                                              1
+//     l9b43:                                              1
+//     language_entry:                                     1
+//     lb075:                                              1
+//     lb175:                                              1
+//     lb283:                                              1
+//     lb6c6:                                              1
+//     lb6ce:                                              1
+//     lb774:                                              1
+//     lb87e:                                              1
+//     lb924:                                              1
+//     lb979:                                              1
+//     lb97a:                                              1
+//     lb980:                                              1
+//     lbb3a:                                              1
+//     lbb3e:                                              1
+//     lbb42:                                              1
+//     lbf4f:                                              1
+//     lda_0_rts:                                          1
+//     loop_c0029:                                         1
+//     loop_c003b:                                         1
+//     loop_c0446:                                         1
+//     loop_c0466:                                         1
+//     loop_c0471:                                         1
+//     loop_c04a6:                                         1
+//     loop_c04e1:                                         1
+//     loop_c0564:                                         1
+//     loop_c0577:                                         1
+//     loop_c0586:                                         1
+//     loop_c05ab:                                         1
+//     loop_c05c7:                                         1
+//     loop_c05d3:                                         1
+//     loop_c05e6:                                         1
+//     loop_c0604:                                         1
+//     loop_c061d:                                         1
+//     loop_c062b:                                         1
+//     loop_c064c:                                         1
+//     loop_c0657:                                         1
+//     loop_c065a:                                         1
+//     loop_c8064:                                         1
+//     loop_c8086:                                         1
+//     loop_c813a:                                         1
+//     loop_c8161:                                         1
+//     loop_c816b:                                         1
+//     loop_c818c:                                         1
+//     loop_c820c:                                         1
+//     loop_c820d:                                         1
+//     loop_c821c:                                         1
+//     loop_c826f:                                         1
+//     loop_c82c7:                                         1
+//     loop_c82d1:                                         1
+//     loop_c830d:                                         1
+//     loop_c8326:                                         1
+//     loop_c8370:                                         1
+//     loop_c8390:                                         1
+//     loop_c8397:                                         1
+//     loop_c83f0:                                         1
+//     loop_c83fa:                                         1
+//     loop_c8406:                                         1
+//     loop_c8425:                                         1
+//     loop_c8463:                                         1
+//     loop_c8493:                                         1
+//     loop_c84e7:                                         1
+//     loop_c8527:                                         1
+//     loop_c8552:                                         1
+//     loop_c8564:                                         1
+//     loop_c857b:                                         1
+//     loop_c85b5:                                         1
+//     loop_c8717:                                         1
+//     loop_c8725:                                         1
+//     loop_c87a0:                                         1
+//     loop_c87be:                                         1
+//     loop_c88bc:                                         1
+//     loop_c895f:                                         1
+//     loop_c8990:                                         1
+//     loop_c89c4:                                         1
+//     loop_c89ca:                                         1
+//     loop_c8a17:                                         1
+//     loop_c8ac8:                                         1
+//     loop_c8ad8:                                         1
+//     loop_c8af0:                                         1
+//     loop_c8afb:                                         1
+//     loop_c8b80:                                         1
+//     loop_c8bea:                                         1
+//     loop_c8c58:                                         1
+//     loop_c8c71:                                         1
+//     loop_c8d14:                                         1
+//     loop_c8d17:                                         1
+//     loop_c8dac:                                         1
+//     loop_c8dba:                                         1
+//     loop_c8de9:                                         1
+//     loop_c8df0:                                         1
+//     loop_c8e14:                                         1
+//     loop_c8e85:                                         1
+//     loop_c8f17:                                         1
+//     loop_c8f6c:                                         1
+//     loop_c8f96:                                         1
+//     loop_c8fac:                                         1
+//     loop_c9047:                                         1
+//     loop_c9108:                                         1
+//     loop_c9113:                                         1
+//     loop_c91ba:                                         1
+//     loop_c91e7:                                         1
+//     loop_c92ef:                                         1
+//     loop_c9355:                                         1
+//     loop_c9357:                                         1
+//     loop_c936f:                                         1
+//     loop_c9382:                                         1
+//     loop_c93bd:                                         1
+//     loop_c93da:                                         1
+//     loop_c953a:                                         1
+//     loop_c957d:                                         1
+//     loop_c9593:                                         1
+//     loop_c95b6:                                         1
+//     loop_c95d9:                                         1
+//     loop_c95ec:                                         1
+//     loop_c9618:                                         1
+//     loop_c96c2:                                         1
+//     loop_c96f2:                                         1
+//     loop_c979d:                                         1
+//     loop_c97c8:                                         1
+//     loop_c9803:                                         1
+//     loop_c9837:                                         1
+//     loop_c9851:                                         1
+//     loop_c985e:                                         1
+//     loop_c9881:                                         1
+//     loop_c98a0:                                         1
+//     loop_c98c1:                                         1
+//     loop_c98e4:                                         1
+//     loop_c9942:                                         1
+//     loop_c994e:                                         1
+//     loop_c9964:                                         1
+//     loop_c99a8:                                         1
+//     loop_c9b50:                                         1
+//     loop_c9b5e:                                         1
+//     loop_c9b63:                                         1
+//     loop_c9bcf:                                         1
+//     loop_c9be4:                                         1
+//     loop_c9c38:                                         1
+//     loop_c9c5d:                                         1
+//     loop_c9c90:                                         1
+//     loop_c9ca8:                                         1
+//     loop_c9d03:                                         1
+//     loop_c9d43:                                         1
+//     loop_c9e07:                                         1
+//     loop_c9e74:                                         1
+//     loop_c9e8c:                                         1
+//     loop_c9f6e:                                         1
+//     loop_ca061:                                         1
+//     loop_ca11d:                                         1
+//     loop_ca132:                                         1
+//     loop_ca143:                                         1
+//     loop_ca16e:                                         1
+//     loop_ca1aa:                                         1
+//     loop_ca1cc:                                         1
+//     loop_ca487:                                         1
+//     loop_ca521:                                         1
+//     loop_ca76f:                                         1
+//     loop_ca7a7:                                         1
+//     loop_ca7c6:                                         1
+//     loop_ca7e0:                                         1
+//     loop_ca7e1:                                         1
+//     loop_ca941:                                         1
+//     loop_ca947:                                         1
+//     loop_ca953:                                         1
+//     loop_ca9ab:                                         1
+//     loop_ca9e7:                                         1
+//     loop_caa01:                                         1
+//     loop_caab8:                                         1
+//     loop_cab6b:                                         1
+//     loop_cab80:                                         1
+//     loop_cabad:                                         1
+//     loop_cabf4:                                         1
+//     loop_cac46:                                         1
+//     loop_caf13:                                         1
+//     loop_caf2d:                                         1
+//     loop_cb1e3:                                         1
+//     loop_cb1ed:                                         1
+//     loop_cb249:                                         1
+//     loop_cb275:                                         1
+//     loop_cb2b4:                                         1
+//     loop_cb2bd:                                         1
+//     loop_cb2d1:                                         1
+//     loop_cb44d:                                         1
+//     loop_cb4a8:                                         1
+//     loop_cb55e:                                         1
+//     loop_cb578:                                         1
+//     loop_cb5c6:                                         1
+//     loop_cb5ed:                                         1
+//     loop_cb6b3:                                         1
+//     loop_cb75a:                                         1
+//     loop_cb7be:                                         1
+//     loop_cb7d7:                                         1
+//     loop_cb7dd:                                         1
+//     loop_cb910:                                         1
+//     loop_cb999:                                         1
+//     loop_cb9bd:                                         1
+//     loop_cb9cc:                                         1
+//     loop_cb9d1:                                         1
+//     loop_cb9f9:                                         1
+//     loop_cba1a:                                         1
+//     loop_cba94:                                         1
+//     loop_cbab8:                                         1
+//     loop_cbaea:                                         1
+//     loop_cbbe4:                                         1
+//     loop_cbbfe:                                         1
+//     loop_cbc70:                                         1
+//     loop_cbcd3:                                         1
+//     loop_cbd08:                                         1
+//     loop_cbd2b:                                         1
+//     loop_cbd6c:                                         1
+//     loop_cbd99:                                         1
+//     loop_cbe0e:                                         1
+//     loop_cbe31:                                         1
+//     loop_cbeab:                                         1
+//     loop_cbf1c:                                         1
+//     loop_cbf78:                                         1
+//     nmi3_handler_rom_end:                               1
+//     nmi3_handler_rom_start-1:                           1
+//     nmi_XXX18:                                          1
+//     nmi_XXX2:                                           1
+//     nmi_XXX21:                                          1
+//     nmi_XXX5:                                           1
+//     nmi_XXX6:                                           1
+//     nmi_XXX6+1:                                         1
+//     nmi_and_imm+1:                                      1
+//     nmi_and_table:                                      1
+//     nmi_bcs+1:                                          1
+//     nmi_cmp_imm_or_bcs:                                 1
+//     nmi_cmp_imm_or_bcs+1:                               1
+//     nmi_handler2_rom_start-1:                           1
+//     nmi_handler_rom_start:                              1
+//     nmi_lda_abs:                                        1
+//     opt4_table:                                         1
+//     osbyte_write_0:                                     1
+//     pla_rts:                                            1
+//     rom_header:                                         1
+//     rom_type:                                           1
+//     service_entry:                                      1
+//     service_handler:                                    1
+//     service_handler_help_and_tube:                      1
+//     service_handler_tube_main_init:                     1
+//     set_c_iff_have_fdc:                                 1
+//     sram_table+1:                                       1
+//     sub_c0414:                                          1
+//     sub_c0421:                                          1
+//     sub_c04c7:                                          1
+//     sub_c8020:                                          1
+//     sub_c809d:                                          1
+//     sub_c80b8:                                          1
+//     sub_c80d3:                                          1
+//     sub_c80db:                                          1
+//     sub_c80e6:                                          1
+//     sub_c80f6:                                          1
+//     sub_c81b7:                                          1
+//     sub_c81c0:                                          1
+//     sub_c81c4:                                          1
+//     sub_c81ca:                                          1
+//     sub_c8222:                                          1
+//     sub_c83bf:                                          1
+//     sub_c83d1:                                          1
+//     sub_c83d4:                                          1
+//     sub_c83ee:                                          1
+//     sub_c842c:                                          1
+//     sub_c85e3:                                          1
+//     sub_c8602:                                          1
+//     sub_c8826:                                          1
+//     sub_c8932:                                          1
+//     sub_c8979:                                          1
+//     sub_c8b25:                                          1
+//     sub_c8bf6:                                          1
+//     sub_c8bf9:                                          1
+//     sub_c8c56:                                          1
+//     sub_c8c65:                                          1
+//     sub_c8d1a:                                          1
+//     sub_c8dc6:                                          1
+//     sub_c8eec:                                          1
+//     sub_c8efa:                                          1
+//     sub_c8eff:                                          1
+//     sub_c8f33:                                          1
+//     sub_c8f37:                                          1
+//     sub_c8f4f:                                          1
+//     sub_c8f5e:                                          1
+//     sub_c8f75:                                          1
+//     sub_c8f82:                                          1
+//     sub_c8f94:                                          1
+//     sub_c929d:                                          1
+//     sub_c93b4:                                          1
+//     sub_c93d8:                                          1
+//     sub_c93f1:                                          1
+//     sub_c93f9:                                          1
+//     sub_c9536:                                          1
+//     sub_c965d:                                          1
+//     sub_c97e8:                                          1
+//     sub_c9832:                                          1
+//     sub_c9988:                                          1
+//     sub_c9a32:                                          1
+//     sub_c9a4b:                                          1
+//     sub_c9ad3:                                          1
+//     sub_c9b51:                                          1
+//     sub_c9b61:                                          1
+//     sub_c9bca:                                          1
+//     sub_c9bcd:                                          1
+//     sub_c9d19:                                          1
+//     sub_c9d75:                                          1
+//     sub_c9e94:                                          1
+//     sub_c9f7c:                                          1
+//     sub_c9f82:                                          1
+//     sub_ca0b8:                                          1
+//     sub_ca0f6:                                          1
+//     sub_ca190:                                          1
+//     sub_ca3e4:                                          1
+//     sub_ca4e1:                                          1
+//     sub_ca663:                                          1
+//     sub_ca73d:                                          1
+//     sub_ca76c:                                          1
+//     sub_ca779:                                          1
+//     sub_ca788:                                          1
+//     sub_ca7c4:                                          1
+//     sub_ca7c5:                                          1
+//     sub_ca7ce:                                          1
+//     sub_ca8be:                                          1
+//     sub_ca8e2:                                          1
+//     sub_ca9bf:                                          1
+//     sub_caa12:                                          1
+//     sub_caa9a:                                          1
+//     sub_caadd:                                          1
+//     sub_caaea:                                          1
+//     sub_caba9:                                          1
+//     sub_cac47:                                          1
+//     sub_cac6a:                                          1
+//     sub_cac72:                                          1
+//     sub_cb234:                                          1
+//     sub_cb2c8:                                          1
+//     sub_cb6e6:                                          1
+//     sub_cb771:                                          1
+//     sub_cb7b6:                                          1
+//     sub_cb86f:                                          1
+//     sub_cb882:                                          1
+//     sub_cbad2:                                          1
+//     sub_cbe91:                                          1
+//     sub_cbf84:                                          1
+//     tube_brkv_handler:                                  1
+//     tube_data_register_4:                               1
+//     tube_entry_claim_tube:                              1
+//     tube_entry_flags:                                   1
+//     tube_entry_small_a:                                 1
+//     tube_host_code1:                                    1
+//     tube_host_code2:                                    1
+//     tube_host_code2+256:                                1
+//     tube_host_code3:                                    1
+//     tube_host_osword_0_loop:                            1
+//     tube_host_osword_0_no_escape:                       1
+//     tube_host_osword_0_no_escape_loop:                  1
 
 // Automatically generated labels:
 //     c0032
@@ -13106,11 +13106,6 @@ pydis_end
 //     lbb42
 //     lbf4f
 //     lbfff
-//     lfe80
-//     lfe84
-//     lfe85
-//     lfe86
-//     lfe87
 //     loop_c0029
 //     loop_c003b
 //     loop_c0446

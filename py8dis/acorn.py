@@ -3045,7 +3045,7 @@ def hardware(machine):
 
         optional_label(0xfe30, "romsel", definable_inline=False)
 
-        if machine == machinetype.MachineType.MACHINE_BPLUS or machine == machinetype.MachineType.MACHINE_MASTER:
+        if (machine == machinetype.MachineType.MACHINE_BPLUS) or (machine == machinetype.MachineType.MACHINE_MASTER):
             optional_label(0xfe34, "acccon", definable_inline=False)
 
         if machine == machinetype.MachineType.MACHINE_MASTER:
@@ -3073,7 +3073,7 @@ def hardware(machine):
         label_via(0xfe40, "system")
         label_via(0xfe60, "user")
 
-        if machine == machinetype.MachineType.MACHINE_BBC or machine == machinetype.MachineType.MACHINE_BPLUS:
+        if (machine == machinetype.MachineType.MACHINE_BBC) or (machine == machinetype.MachineType.MACHINE_BPLUS):
             # FE80-9F 8271 Floppy disk controller (BBC B, B+)
             # FE80-9F 1770 Floppy disk controller (BBC B, B+)
             optional_label(0xfe80, "fdc_8271_command_or_status_or_1770_drive_control", definable_inline=False)
@@ -3102,7 +3102,7 @@ def hardware(machine):
         optional_label(0xfea2, "econet_data_continue_frame", definable_inline=False)
         optional_label(0xfea3, "econet_data_terminate_frame", definable_inline=False)
 
-        if machine == machinetype.MachineType.MACHINE_BBC or machine == machinetype.MachineType.MACHINE_BPLUS:
+        if (machine == machinetype.MachineType.MACHINE_BBC) or (machine == machinetype.MachineType.MACHINE_BPLUS):
             # FEC0-DF Analogue-to-digital convertor (B/B+)
             optional_label(0xfec0, "adc_start_conversion_or_status", definable_inline=False)
             optional_label(0xfec1, "adc_read_data_high_byte", definable_inline=False)

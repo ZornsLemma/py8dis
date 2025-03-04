@@ -5,5 +5,6 @@ class Format(Enum):
     HEX = auto()
     DECIMAL = auto()
     BINARY = auto()
+    PICTURE_BINARY = auto()
     CHAR = auto()
     STRING = auto()

@@ -1000,7 +1000,7 @@ constant(LivesColour,    "LivesColour", "...for the lives displayed in the statu
 constant(1, "MapId_Platform", format=Format.BINARY)
 constant(2, "MapId_Ladder", format=Format.BINARY)
 constant(4, "MapId_Egg", format=Format.BINARY)
-constant(8, "MapId_Seed", format=Format.BINARY)
+constant(8, "MapId_Seed", format=Format.PICTURE_BINARY)     # Just to test py8dis
 
 sprite_constants = {
     0: "SpriteId_Blank",
