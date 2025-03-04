@@ -524,7 +524,7 @@ class Cpu6502(cpu.Cpu):
                 if c == 'U':
                     state[reg].previous_use       = binary_addr # The address of the previous use of the register if present
 
-        def update_cpu_state(self, binary_addr, state):
+        def clear_state_if_label_here(self, binary_addr, state):
             # if there's a label at this address, then we lose all known state.
             # This is because somewhere will be jumping to the label with unknown state.
             runtime_addr = movemanager.b2r(memorymanager.BinaryAddr(binary_addr))
@@ -533,6 +533,11 @@ class Cpu6502(cpu.Cpu):
                     label = labelmanager.labels[runtime_addr]
                     if not label.is_empty():
                         state.clear()
+
+        def update_cpu_state(self, binary_addr, state):
+            # if there's a label at this address, then we lose all known state.
+            # This is because somewhere will be jumping to the label with unknown state.
+            self.clear_state_if_label_here(binary_addr, state)
 
             # otherwise we update state if there's an update function
             if self.update is not None:
@@ -896,6 +901,10 @@ class Cpu6502(cpu.Cpu):
             return True
 
         def update_cpu_state(self, binary_addr, state):
+            # if there's a label at this address, then we lose all known state.
+            # This is because somewhere will be jumping to the label with unknown state.
+            self.clear_state_if_label_here(binary_addr, state)
+
             # If a conditional branch is not taken, we continue tracing with registers unaltered.
             pass
 
@@ -1075,6 +1084,9 @@ class Cpu6502(cpu.Cpu):
             if v is not None:
                 state['n'] = ((v & 0x80) == 0x80)
                 state['z'] = (v == 0)
+            else:
+                state['n'] = None
+                state['z'] = None
         return transfer
 
     def neutral(self, binary_addr, state):
@@ -1234,6 +1246,7 @@ class Cpu6502(cpu.Cpu):
     def show_register_knowledge(self):
         """Adds comments to show any known state of the processor"""
         binary_addr = 0
+        state = trace.cpu.CpuState()
 
         while binary_addr < 0x10000:
             c = disassembly.classifications[binary_addr]
@@ -1248,14 +1261,41 @@ class Cpu6502(cpu.Cpu):
                             # Get the value of the register
                             r = state[reg].value
                             if r:
-                                runtime_addr = movemanager.b2r(memorymanager.BinaryAddr(binary_addr))
+                                move_id = movemanager.move_id_for_binary_addr[binary_addr]
+                                binary_loc = movemanager.BinaryLocation(binary_addr, move_id)
                                 formatter = config.get_assembler()
                                 r = formatter.hex(r)
-                                disassembly.comment(runtime_addr, "{0}={1}".format(reg.upper(), r), align=Align.INLINE, auto_generated=True)
+                                disassembly.comment_binary(binary_loc, "{0}={1}".format(reg.upper(), r), align=Align.INLINE, auto_generated=True)
 
+                # Find "ALWAYS branch" instructions
+                always_branch = False
+                if isinstance(c, self.OpcodeConditionalBranch):
+                    if c.mnemonic.upper() == "BCC" and state['c'] == False:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BCS" and state['c'] == True:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BVC" and state['v'] == False:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BVS" and state['v'] == True:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BNE" and state['z'] == False:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BEQ" and state['z'] == True:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BPL" and state['n'] == False:
+                        always_branch = True
+                    elif c.mnemonic.upper() == "BMI" and state['n'] == True:
+                        always_branch = True
+
+                    if always_branch:
+                        move_id = movemanager.move_id_for_binary_addr[binary_addr]
+                        binary_loc = movemanager.BinaryLocation(binary_addr, move_id)
+                        disassembly.comment_binary(binary_loc, "ALWAYS branch", align=Align.INLINE, auto_generated=True)
+                        disassembly.add_raw_annotation(binary_loc, "", align=Align.AFTER_LINE)
                 binary_addr += c.length()
             else:
                 binary_addr += 1
+                state = trace.cpu.CpuState()
 
 
     def find_subroutine_calls(self):
@@ -1318,6 +1358,7 @@ class Cpu6502(cpu.Cpu):
                 addr += c.length()
             else:
                 addr += 1
+                state = trace.cpu.CpuState()
 
     def substitute_constants(self):
         if len(trace.substitute_constant_list) == 0:

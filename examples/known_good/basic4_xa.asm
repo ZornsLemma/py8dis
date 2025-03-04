@@ -3763,7 +3763,8 @@ c972c
     inc l000a                                                         // 972c: e6 0a       ..
     jsr c9c6a                                                         // 972e: 20 6a 9c     j.
     lda #$ff                                                          // 9731: a9 ff       ..
-    bne loop_c9724                                                    // 9733: d0 ef       ..
+    bne loop_c9724                                                    // 9733: d0 ef       ..             // ALWAYS branch
+
 // $9735 referenced 1 time by $9716
 c9735
     inc l000a                                                         // 9735: e6 0a       ..
@@ -3881,7 +3882,8 @@ loop_c97c6
     ldy #3                                                            // 97ca: a0 03       ..
     lda #0                                                            // 97cc: a9 00       ..
     sta (l002a),y                                                     // 97ce: 91 2a       .*
-    beq c97ee                                                         // 97d0: f0 1c       ..
+    beq c97ee                                                         // 97d0: f0 1c       ..             // ALWAYS branch
+
 // $97d2 referenced 1 time by $97f9
 c97d2
     tsx                                                               // 97d2: ba          .
@@ -10425,7 +10427,8 @@ loop_cbcdc
 // $bce6 referenced 1 time by $bcda
 cbce6
     lda #$0d                                                          // bce6: a9 0d       ..
-    bne loop_cbcd1                                                    // bce8: d0 e7       ..
+    bne loop_cbcd1                                                    // bce8: d0 e7       ..             // ALWAYS branch
+
 // $bcea referenced 1 time by $bcb0
 cbcea
     lda (l0004)                                                       // bcea: b2 04       ..

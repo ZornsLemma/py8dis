@@ -764,7 +764,8 @@ c825d
 sub_c8266
     jsr sub_c93f9                                                     ; 8266: 20 f9 93     ..
     lda #0                                                            ; 8269: a9 00       ..
-    beq c828b                                                         ; 826b: f0 1e       ..
+    beq c828b                                                         ; 826b: f0 1e       ..             ; ALWAYS branch
+
 ; $826d referenced 2 times by $9bd9, $a4f2
 sub_c826d
     ldx #6                                                            ; 826d: a2 06       ..
@@ -777,11 +778,13 @@ loop_c826f
     lda #$20 ; ' '                                                    ; 8277: a9 20       .
     sta l105f                                                         ; 8279: 8d 5f 10    ._.
     lda #$58 ; 'X'                                                    ; 827c: a9 58       .X
-    bne c8286                                                         ; 827e: d0 06       ..
+    bne c8286                                                         ; 827e: d0 06       ..             ; ALWAYS branch
+
 ; $8280 referenced 6 times by $8260, $877c, $87ab, $87c6, $8a10, $a4db
 sub_c8280
     ldx #0                                                            ; 8280: a2 00       ..
-    beq c8290                                                         ; 8282: f0 0c       ..
+    beq c8290                                                         ; 8282: f0 0c       ..             ; ALWAYS branch
+
 ; $8284 referenced 7 times by $8225, $87bb, $89f8, $8a7a, $8bcf, $9a7b, $9c28
 sub_c8284
     lda #0                                                            ; 8284: a9 00       ..
@@ -1170,7 +1173,8 @@ sub_c8456
     php                                                               ; 845c: 08          .
     lda #0                                                            ; 845d: a9 00       ..
     sta l00b9                                                         ; 845f: 85 b9       ..
-    beq c8477                                                         ; 8461: f0 14       ..
+    beq c8477                                                         ; 8461: f0 14       ..             ; ALWAYS branch
+
 ; $8463 referenced 1 time by $847a
 loop_c8463
     jsr sub_c8439                                                     ; 8463: 20 39 84     9.
@@ -1359,7 +1363,8 @@ c859b
 loop_c85b5
     jsr ca3dc                                                         ; 85b5: 20 dc a3     ..
     ldy #$ff                                                          ; 85b8: a0 ff       ..
-    bne c85c5                                                         ; 85ba: d0 09       ..
+    bne c85c5                                                         ; 85ba: d0 09       ..             ; ALWAYS branch
+
 ; $85bc referenced 2 times by $85aa, $85b0
 c85bc
     ldy l00a8                                                         ; 85bc: a4 a8       ..
@@ -1741,7 +1746,8 @@ sub_c8826
     iny                                                               ; 8831: c8          .
     iny                                                               ; 8832: c8          .
     ldx #2                                                            ; 8833: a2 02       ..
-    bne c883f                                                         ; 8835: d0 08       ..
+    bne c883f                                                         ; 8835: d0 08       ..             ; ALWAYS branch
+
 ; $8837 referenced 1 time by $882f
 c8837
     lda l0f0e,y                                                       ; 8837: b9 0e 0f    ...
@@ -1763,7 +1769,8 @@ c883f
 ; $8855 referenced 2 times by $9f61, $a561
 sub_c8855
     lda #$80                                                          ; 8855: a9 80       ..
-    bne c8864                                                         ; 8857: d0 0b       ..
+    bne c8864                                                         ; 8857: d0 0b       ..             ; ALWAYS branch
+
     jsr sub_c8a77                                                     ; 8859: 20 77 8a     w.
     jsr sub_c9a82                                                     ; 885c: 20 82 9a     ..
     jsr sub_c8386                                                     ; 885f: 20 86 83     ..
@@ -1881,7 +1888,8 @@ sub_c8932
 
 sub_c893f
     ldx #0                                                            ; 893f: a2 00       ..
-    beq c8945                                                         ; 8941: f0 02       ..
+    beq c8945                                                         ; 8941: f0 02       ..             ; ALWAYS branch
+
 sub_c8943
     ldx #2                                                            ; 8943: a2 02       ..
 ; $8945 referenced 1 time by $8941
@@ -2320,7 +2328,8 @@ loop_c8bea
 ; $8bf6 referenced 1 time by $9466
 sub_c8bf6
     clc                                                               ; 8bf6: 18          .
-    bcc c8bfb                                                         ; 8bf7: 90 02       ..
+    bcc c8bfb                                                         ; 8bf7: 90 02       ..             ; ALWAYS branch
+
 ; $8bf9 referenced 1 time by $9211
 sub_c8bf9
     cli                                                               ; 8bf9: 58          X
@@ -3223,7 +3232,8 @@ nmi_XXX10
     sbc lfe87                                                         ; 90a8: ed 87 fe    ... :0d41[6]
     sta l00b5                                                         ; 90ab: 85 b5       ..  :0d44[6]
     lda #nmi_XXX11-(nmi_bcs+2)                                        ; 90ad: a9 3b       .;  :0d46[6]
-    bne l0d30                                                         ; 90af: d0 e6       ..  :0d48[6]
+    bne l0d30                                                         ; 90af: d0 e6       ..  :0d48[6]   ; ALWAYS branch
+
 nmi_XXX11
     lda #nmi_XXX12-(nmi_bcs+2)                                        ; 90b1: a9 3f       .?  :0d4a[6]
     bne l0d30                                                         ; 90b3: d0 e2       ..  :0d4c[6]
@@ -3232,22 +3242,26 @@ nmi_XXX12
     ora l00b5                                                         ; 90b7: 05 b5       ..  :0d50[6]
     sta l00b5                                                         ; 90b9: 85 b5       ..  :0d52[6]
     lda #nmi_XXX13-(nmi_bcs+2)                                        ; 90bb: a9 49       .I  :0d54[6]
-    bne l0d30                                                         ; 90bd: d0 d8       ..  :0d56[6]
+    bne l0d30                                                         ; 90bd: d0 d8       ..  :0d56[6]   ; ALWAYS branch
+
 nmi_XXX13
     lda #nmi_XXX14-(nmi_bcs+2)                                        ; 90bf: a9 4d       .M  :0d58[6]
-    bne l0d30                                                         ; 90c1: d0 d4       ..  :0d5a[6]
+    bne l0d30                                                         ; 90c1: d0 d4       ..  :0d5a[6]   ; ALWAYS branch
+
 nmi_XXX14
     lda l00b3                                                         ; 90c3: a5 b3       ..  :0d5c[6]
     sta l00a6                                                         ; 90c5: 85 a6       ..  :0d5e[6]
 ; $90c7 referenced 2 times by $8dac, $8dbd
 c0d60
     lda #nmi_XXX15-(nmi_bcs+2)                                        ; 90c7: a9 55       .U  :0d60[6]
-    bne l0d30                                                         ; 90c9: d0 cc       ..  :0d62[6]
+    bne l0d30                                                         ; 90c9: d0 cc       ..  :0d62[6]   ; ALWAYS branch
+
 nmi_XXX15
     lda l00b4                                                         ; 90cb: a5 b4       ..  :0d64[6]
     sta l00a7                                                         ; 90cd: 85 a7       ..  :0d66[6]
     lda #nmi_XXX16-(nmi_bcs+2)                                        ; 90cf: a9 5d       .]  :0d68[6]
-    bne l0d30                                                         ; 90d1: d0 c4       ..  :0d6a[6]
+    bne l0d30                                                         ; 90d1: d0 c4       ..  :0d6a[6]   ; ALWAYS branch
+
 nmi_XXX16
     cmp #$fb                                                          ; 90d3: c9 fb       ..  :0d6c[6]
     beq c0d74                                                         ; 90d5: f0 04       ..  :0d6e[6]
@@ -3260,22 +3274,27 @@ c0d74
     bne c0d80                                                         ; 90df: d0 06       ..  :0d78[6]
     inc l00cf                                                         ; 90e1: e6 cf       ..  :0d7a[6]
     lda #nmi_XXX17-(nmi_bcs+2)                                        ; 90e3: a9 06       ..  :0d7c[6]
-    bne l0d30                                                         ; 90e5: d0 b0       ..  :0d7e[6]
+    bne l0d30                                                         ; 90e5: d0 b0       ..  :0d7e[6]   ; ALWAYS branch
+
 ; $90e7 referenced 1 time by $0d78[6]
 c0d80
     inc l00a5                                                         ; 90e7: e6 a5       ..  :0d80[6]
     lda #nmi_XXX18-(nmi_bcs+2)                                        ; 90e9: a9 11       ..  :0d82[6]
-    bne l0d30                                                         ; 90eb: d0 aa       ..  :0d84[6]
+    bne l0d30                                                         ; 90eb: d0 aa       ..  :0d84[6]   ; ALWAYS branch
+
 nmi_XXX22
     lda #nmi_XXX19-(nmi_bcs+2)                                        ; 90ed: a9 7b       .{  :0d86[6]
-    bne l0d30                                                         ; 90ef: d0 a6       ..  :0d88[6]
+    bne l0d30                                                         ; 90ef: d0 a6       ..  :0d88[6]   ; ALWAYS branch
+
 nmi_XXX19
     lda #nmi_XXX20-(nmi_bcs+2)                                        ; 90f1: a9 7f       ..  :0d8a[6]
-    bne l0d30                                                         ; 90f3: d0 a2       ..  :0d8c[6]
+    bne l0d30                                                         ; 90f3: d0 a2       ..  :0d8c[6]   ; ALWAYS branch
+
 nmi_XXX20
     bne nmi_XXX23                                                     ; 90f5: d0 a3       ..  :0d8e[6]
     lda #nmi_XXX21-(nmi_bcs+2)                                        ; 90f7: a9 26       .&  :0d90[6]
-    bne l0d30                                                         ; 90f9: d0 9c       ..  :0d92[6]
+    bne l0d30                                                         ; 90f9: d0 9c       ..  :0d92[6]   ; ALWAYS branch
+
 }
 
 nmi_handler2_rom_end
@@ -3391,7 +3410,8 @@ c91df
 ; $91e7 referenced 1 time by $91ff
 loop_c91e7
     lda #$fe                                                          ; 91e7: a9 fe       ..
-    bmi c9214                                                         ; 91e9: 30 29       0)
+    bmi c9214                                                         ; 91e9: 30 29       0)             ; ALWAYS branch
+
 ; $91eb referenced 1 time by $91e2
 c91eb
     cmp #$23 ; '#'                                                    ; 91eb: c9 23       .#
@@ -3453,7 +3473,8 @@ c9238
 ; $923b referenced 1 time by $9229
 c923b
     lda #0                                                            ; 923b: a9 00       ..
-    beq c9257                                                         ; 923d: f0 18       ..
+    beq c9257                                                         ; 923d: f0 18       ..             ; ALWAYS branch
+
 ; $923f referenced 1 time by $91d6
 c923f
     jsr sub_c928a                                                     ; 923f: 20 8a 92     ..
@@ -3769,15 +3790,18 @@ c93e6
 ; $93f1 referenced 1 time by $a737
 sub_c93f1
     ldy #$a0                                                          ; 93f1: a0 a0       ..
-    bne c940e                                                         ; 93f3: d0 19       ..
+    bne c940e                                                         ; 93f3: d0 19       ..             ; ALWAYS branch
+
 ; $93f5 referenced 2 times by $9636, $a7ce
 sub_c93f5
     ldy #$81                                                          ; 93f5: a0 81       ..
-    bne c940e                                                         ; 93f7: d0 15       ..
+    bne c940e                                                         ; 93f7: d0 15       ..             ; ALWAYS branch
+
 ; $93f9 referenced 1 time by $8266
 sub_c93f9
     ldy #$81                                                          ; 93f9: a0 81       ..
-    bne c93ff                                                         ; 93fb: d0 02       ..
+    bne c93ff                                                         ; 93fb: d0 02       ..             ; ALWAYS branch
+
 ; $93fd referenced 3 times by $8287, $988e, $98da
 sub_c93fd
     ldy #$80                                                          ; 93fd: a0 80       ..
@@ -4128,7 +4152,8 @@ c964a
     bcc c965a                                                         ; 9650: 90 08       ..
     beq c9658                                                         ; 9652: f0 04       ..
     ldx #$4e ; 'N'                                                    ; 9654: a2 4e       .N
-    bne c965a                                                         ; 9656: d0 02       ..
+    bne c965a                                                         ; 9656: d0 02       ..             ; ALWAYS branch
+
 ; $9658 referenced 1 time by $9652
 c9658
     ldx #$50 ; 'P'                                                    ; 9658: a2 50       .P
@@ -4516,7 +4541,8 @@ loop_c9881
     sta l10d7                                                         ; 9893: 8d d7 10    ...
     lda #$98                                                          ; 9896: a9 98       ..
     sta l10d8                                                         ; 9898: 8d d8 10    ...
-    bne c9859                                                         ; 989b: d0 bc       ..
+    bne c9859                                                         ; 989b: d0 bc       ..             ; ALWAYS branch
+
     ldy l1069                                                         ; 989d: ac 69 10    .i.
 ; $98a0 referenced 1 time by $98b8
 loop_c98a0
@@ -4648,7 +4674,8 @@ loop_c9964
 ; $9965 referenced 4 times by $9906, $9911, $9919, $9924
 sub_c9965
     lda #1                                                            ; 9965: a9 01       ..
-    bne c996e                                                         ; 9967: d0 05       ..
+    bne c996e                                                         ; 9967: d0 05       ..             ; ALWAYS branch
+
     jsr sub_c9e94                                                     ; 9969: 20 94 9e     ..
     bcs loop_c9964                                                    ; 996c: b0 f6       ..
 ; $996e referenced 11 times by $98bc, $98c4, $98df, $98f0, $98fe, $9903, $990e, $9917, $9921, $992a, $9967
@@ -4698,7 +4725,8 @@ sub_c99ac
     lda #$2a ; '*'                                                    ; 99ac: a9 2a       .*
     sta l10ce                                                         ; 99ae: 8d ce 10    ...
     lda #$23 ; '#'                                                    ; 99b1: a9 23       .#
-    bne loop_c99a8                                                    ; 99b3: d0 f3       ..
+    bne loop_c99a8                                                    ; 99b3: d0 f3       ..             ; ALWAYS branch
+
     jsr sub_c9a6e                                                     ; 99b5: 20 6e 9a     n.
     jsr sub_c8386                                                     ; 99b8: 20 86 83     ..
     lda #1                                                            ; 99bb: a9 01       ..
@@ -4883,23 +4911,27 @@ sub_c9ac8
     lda #$0f                                                          ; 9acb: a9 0f       ..
     ldx #1                                                            ; 9acd: a2 01       ..
     ldy #0                                                            ; 9acf: a0 00       ..
-    beq c9ae9                                                         ; 9ad1: f0 16       ..
+    beq c9ae9                                                         ; 9ad1: f0 16       ..             ; ALWAYS branch
+
 ; $9ad3 referenced 1 time by $80ac
 sub_c9ad3
     tax                                                               ; 9ad3: aa          .
 ; $9ad4 referenced 1 time by $80b5
 c9ad4
     lda #3                                                            ; 9ad4: a9 03       ..
-    bne c9ae9                                                         ; 9ad6: d0 11       ..
+    bne c9ae9                                                         ; 9ad6: d0 11       ..             ; ALWAYS branch
+
 ; $9ad8 referenced 2 times by $9436, $abbc
 sub_c9ad8
     jsr sub_c83e3                                                     ; 9ad8: 20 e3 83     ..
     lda #$7e ; '~'                                                    ; 9adb: a9 7e       .~
-    bne c9ae9                                                         ; 9add: d0 0a       ..
+    bne c9ae9                                                         ; 9add: d0 0a       ..             ; ALWAYS branch
+
 ; $9adf referenced 4 times by $9593, $9599, $95be, $9aa5
 c9adf
     lda #$8f                                                          ; 9adf: a9 8f       ..
-    bne c9ae9                                                         ; 9ae1: d0 06       ..
+    bne c9ae9                                                         ; 9ae1: d0 06       ..             ; ALWAYS branch
+
     lda #$ff                                                          ; 9ae3: a9 ff       ..
 ; $9ae5 referenced 8 times by $80a5, $9588, $96a0, $9e32, $9e43, $aae2, $ac7c, $aeb7
 osbyte_read
@@ -5213,7 +5245,8 @@ loop_c9d03
 c9d12
     lda #$20 ; ' '                                                    ; 9d12: a9 20       .
     sta l1117,y                                                       ; 9d14: 99 17 11    ...
-    bne loop_c9d03                                                    ; 9d17: d0 ea       ..
+    bne loop_c9d03                                                    ; 9d17: d0 ea       ..             ; ALWAYS branch
+
 ; $9d19 referenced 1 time by $9c66
 sub_c9d19
     txa                                                               ; 9d19: 8a          .
@@ -5255,7 +5288,8 @@ loop_c9d43
     dec l00b2                                                         ; 9d50: c6 b2       ..
     bne loop_c9d43                                                    ; 9d52: d0 ef       ..
     sec                                                               ; 9d54: 38          8
-    bcs c9d67                                                         ; 9d55: b0 10       ..
+    bcs c9d67                                                         ; 9d55: b0 10       ..             ; ALWAYS branch
+
 ; $9d57 referenced 1 time by $9d38
 c9d57
     sty l10c2                                                         ; 9d57: 8c c2 10    ...
@@ -5430,7 +5464,8 @@ sub_c9e30
     jsr sub_c9e54                                                     ; 9e38: 20 54 9e     T.
     bne c9e41                                                         ; 9e3b: d0 04       ..
     lda #osbyte_rw_exec_handle                                        ; 9e3d: a9 c6       ..
-    bne osbyte_write_0                                                ; 9e3f: d0 0c       ..
+    bne osbyte_write_0                                                ; 9e3f: d0 0c       ..             ; ALWAYS branch
+
 ; $9e41 referenced 2 times by $9e36, $9e3b
 c9e41
     lda #osbyte_read_write_spool_file_handle                          ; 9e41: a9 c7       ..
@@ -5464,7 +5499,8 @@ c9e5c
     jsr sub_ca0de                                                     ; 9e66: 20 de a0     ..
     bne c9e6f                                                         ; 9e69: d0 04       ..
     ldx #$ff                                                          ; 9e6b: a2 ff       ..
-    bne c9e71                                                         ; 9e6d: d0 02       ..
+    bne c9e71                                                         ; 9e6d: d0 02       ..             ; ALWAYS branch
+
 ; $9e6f referenced 1 time by $9e69
 c9e6f
     ldx #0                                                            ; 9e6f: a2 00       ..
@@ -5876,7 +5912,8 @@ sub_ca137
     tya                                                               ; a137: 98          .
     ldx #$9d                                                          ; a138: a2 9d       ..
     ldy #6                                                            ; a13a: a0 06       ..
-    bne ca10b                                                         ; a13c: d0 cd       ..
+    bne ca10b                                                         ; a13c: d0 cd       ..             ; ALWAYS branch
+
     jsr clc_jmp_gsinit                                                ; a13e: 20 4c 87     L.
     beq ca1c0                                                         ; a141: f0 7d       .}
 ; $a143 referenced 1 time by $a146
@@ -6161,7 +6198,8 @@ sub_ca379
     bit l00a9                                                         ; a37c: 24 a9       $.
     bpl ca38b                                                         ; a37e: 10 0b       ..
     lda #0                                                            ; a380: a9 00       ..
-    beq ca38e                                                         ; a382: f0 0a       ..
+    beq ca38e                                                         ; a382: f0 0a       ..             ; ALWAYS branch
+
 ; $a384 referenced 3 times by $a440, $a4e4, $a581
 sub_ca384
     jsr sub_c83e3                                                     ; a384: 20 e3 83     ..
@@ -6397,7 +6435,8 @@ sub_ca530
     lda #0                                                            ; a530: a9 00       ..
     sta l00bc                                                         ; a532: 85 bc       ..
     sta l00c0                                                         ; a534: 85 c0       ..
-    beq ca5ab                                                         ; a536: f0 73       .s
+    beq ca5ab                                                         ; a536: f0 73       .s             ; ALWAYS branch
+
 ; $a538 referenced 1 time by $a5af
 ca538
     lda l00c4                                                         ; a538: a5 c4       ..
@@ -6477,7 +6516,8 @@ sub_ca5b2
 
 sub_ca5bb
     lda #0                                                            ; a5bb: a9 00       ..
-    beq ca5c4                                                         ; a5bd: f0 05       ..
+    beq ca5c4                                                         ; a5bd: f0 05       ..             ; ALWAYS branch
+
 sub_ca5bf
     lda #$ff                                                          ; a5bf: a9 ff       ..
     sta l1082                                                         ; a5c1: 8d 82 10    ...
@@ -6817,7 +6857,8 @@ ca7f2
 
 sub_ca7f3
     sec                                                               ; a7f3: 38          8
-    bcs ca7f7                                                         ; a7f4: b0 01       ..
+    bcs ca7f7                                                         ; a7f4: b0 01       ..             ; ALWAYS branch
+
 sub_ca7f6
     clc                                                               ; a7f6: 18          .
 ; $a7f7 referenced 1 time by $a7f4
@@ -7036,7 +7077,8 @@ ca970
     cpy #$2c ; ','                                                    ; a975: c0 2c       .,
     beq ca97d                                                         ; a977: f0 04       ..
     lda #$20 ; ' '                                                    ; a979: a9 20       .
-    bne ca982                                                         ; a97b: d0 05       ..
+    bne ca982                                                         ; a97b: d0 05       ..             ; ALWAYS branch
+
 ; $a97d referenced 2 times by $a973, $a977
 ca97d
     ldy #$2c ; ','                                                    ; a97d: a0 2c       .,
@@ -7210,7 +7252,8 @@ sub_caa53
     pha                                                               ; aa71: 48          H
     bmi caa78                                                         ; aa72: 30 04       0.
     ldy #$20 ; ' '                                                    ; aa74: a0 20       .
-    bne caa7a                                                         ; aa76: d0 02       ..
+    bne caa7a                                                         ; aa76: d0 02       ..             ; ALWAYS branch
+
 ; $aa78 referenced 1 time by $aa72
 caa78
     ldy #$53 ; 'S'                                                    ; aa78: a0 53       .S
@@ -7316,7 +7359,8 @@ sub_caaf1
 sub_caafd
     jsr sub_cac18                                                     ; aafd: 20 18 ac     ..
     lda #0                                                            ; ab00: a9 00       ..
-    beq cab09                                                         ; ab02: f0 05       ..
+    beq cab09                                                         ; ab02: f0 05       ..             ; ALWAYS branch
+
 sub_cab04
     jsr sub_cac18                                                     ; ab04: 20 18 ac     ..
     lda #$ff                                                          ; ab07: a9 ff       ..
@@ -7468,7 +7512,8 @@ cabcf
     sty l00aa                                                         ; abec: 84 aa       ..
     ldy l00ab                                                         ; abee: a4 ab       ..
     ldx #0                                                            ; abf0: a2 00       ..
-    beq cabfb                                                         ; abf2: f0 07       ..
+    beq cabfb                                                         ; abf2: f0 07       ..             ; ALWAYS branch
+
 ; $abf4 referenced 1 time by $abff
 loop_cabf4
     lda (l00ac,x)                                                     ; abf4: a1 ac       ..
@@ -8328,7 +8373,8 @@ cb1d5
     tsx                                                               ; b1d5: ba          .
     lda #0                                                            ; b1d6: a9 00       ..
     sta l0104,x                                                       ; b1d8: 9d 04 01    ...
-    beq cb203                                                         ; b1db: f0 26       .&
+    beq cb203                                                         ; b1db: f0 26       .&             ; ALWAYS branch
+
 ; $b1dd referenced 1 time by $b1d0
 cb1dd
     cmp #$42 ; 'B'                                                    ; b1dd: c9 42       .B
@@ -8427,7 +8473,8 @@ cb260
     cmp #$45 ; 'E'                                                    ; b260: c9 45       .E
     bne cb203                                                         ; b262: d0 9f       ..
     ldy #$fd                                                          ; b264: a0 fd       ..
-    bne loop_cb249                                                    ; b266: d0 e1       ..
+    bne loop_cb249                                                    ; b266: d0 e1       ..             ; ALWAYS branch
+
 ; $b268 referenced 1 time by $b23f
 cb268
     cmp #9                                                            ; b268: c9 09       ..
@@ -9027,7 +9074,8 @@ loop_cb5ed
 ; $b5ee referenced 2 times by $b375, $b4d8
 sub_cb5ee
     lda #$80                                                          ; b5ee: a9 80       ..
-    bne cb5d0                                                         ; b5f0: d0 de       ..
+    bne cb5d0                                                         ; b5f0: d0 de       ..             ; ALWAYS branch
+
 ; $b5f2 referenced 6 times by $b21b, $b371, $b45a, $b477, $b4ea, $b534
 sub_cb5f2
     ldy #$fa                                                          ; b5f2: a0 fa       ..
@@ -9676,13 +9724,15 @@ cb9d9
 cb9e8
     lda #0                                                            ; b9e8: a9 00       ..
     sta l00bf                                                         ; b9ea: 85 bf       ..
-    beq loop_cb9d1                                                    ; b9ec: f0 e3       ..
+    beq loop_cb9d1                                                    ; b9ec: f0 e3       ..             ; ALWAYS branch
+
 ; $b9ee referenced 1 time by $b9a6
 cb9ee
     lda #$ff                                                          ; b9ee: a9 ff       ..
     sta l00bf                                                         ; b9f0: 85 bf       ..
     sec                                                               ; b9f2: 38          8
-    bcs cb9d2                                                         ; b9f3: b0 dd       ..
+    bcs cb9d2                                                         ; b9f3: b0 dd       ..             ; ALWAYS branch
+
 ; $b9f5 referenced 2 times by $b225, $b297
 sub_cb9f5
     ldx #0                                                            ; b9f5: a2 00       ..
@@ -9820,7 +9870,8 @@ cba9e
     php                                                               ; baaa: 08          .
     iny                                                               ; baab: c8          .
     beq cbab1                                                         ; baac: f0 03       ..
-    bcc cba78                                                         ; baae: 90 c8       ..
+    bcc cba78                                                         ; baae: 90 c8       ..             ; ALWAYS branch
+
 ; $bab0 referenced 1 time by $ba9e
 cbab0
     pla                                                               ; bab0: 68          h
@@ -9959,7 +10010,8 @@ lbb42
 
 sub_cbb46
     lda #$c0                                                          ; bb46: a9 c0       ..
-    bne cbb4c                                                         ; bb48: d0 02       ..
+    bne cbb4c                                                         ; bb48: d0 02       ..             ; ALWAYS branch
+
 sub_cbb4a
     lda #$40 ; '@'                                                    ; bb4a: a9 40       .@
 ; $bb4c referenced 1 time by $bb48
@@ -10050,7 +10102,8 @@ cbbd0
 
 sub_cbbd3
     lda #$c0                                                          ; bbd3: a9 c0       ..
-    bne cbbd9                                                         ; bbd5: d0 02       ..
+    bne cbbd9                                                         ; bbd5: d0 02       ..             ; ALWAYS branch
+
 sub_cbbd7
     lda #$40 ; '@'                                                    ; bbd7: a9 40       .@
 ; $bbd9 referenced 1 time by $bbd5
@@ -10262,7 +10315,8 @@ cbd0e
     jsr sub_cb580                                                     ; bd12: 20 80 b5     ..
     ldx #$bc                                                          ; bd15: a2 bc       ..
     ldy #$b1                                                          ; bd17: a0 b1       ..
-    bne loop_cbd08                                                    ; bd19: d0 ed       ..
+    bne loop_cbd08                                                    ; bd19: d0 ed       ..             ; ALWAYS branch
+
 ; $bd1b referenced 1 time by $bcf7
 cbd1b
     lda l00b3                                                         ; bd1b: a5 b3       ..
@@ -10376,7 +10430,8 @@ cbdc0
     ldx l00be                                                         ; bdcb: a6 be       ..
     beq cbdb9                                                         ; bdcd: f0 ea       ..
     lda #1                                                            ; bdcf: a9 01       ..
-    bne cbddd                                                         ; bdd1: d0 0a       ..
+    bne cbddd                                                         ; bdd1: d0 0a       ..             ; ALWAYS branch
+
 ; $bdd3 referenced 1 time by $bdc9
 cbdd3
     lda #0                                                            ; bdd3: a9 00       ..
@@ -10576,7 +10631,8 @@ cbee0
 cbee8
     ldx romsel_copy                                                   ; bee8: a6 f4       ..
     lda #0                                                            ; beea: a9 00       ..
-    beq general_service_handler_indirect                              ; beec: f0 ef       ..
+    beq general_service_handler_indirect                              ; beec: f0 ef       ..             ; ALWAYS branch
+
 ; $beee referenced 1 time by $bee6
 cbeee
     lda #osbyte_write_shadow_memory_use                               ; beee: a9 72       .r
@@ -10696,7 +10752,8 @@ cbfa3
     cpx #$0b                                                          ; bfaa: e0 0b       ..
     bne cbf8e                                                         ; bfac: d0 e0       ..
     ldx #1                                                            ; bfae: a2 01       ..
-    bne cbf8e                                                         ; bfb0: d0 dc       ..
+    bne cbf8e                                                         ; bfb0: d0 dc       ..             ; ALWAYS branch
+
 ; $bfb2 referenced 1 time by $bfa8
 cbfb2
     pla                                                               ; bfb2: 68          h

@@ -60,7 +60,8 @@ l090a
 ; $2035 referenced 1 time by $090f[1]
 low_b_baz
     ldx #2                                                            ; 2035: a2 02       ..  :090d[2]
-    bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]
+    bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]   ; ALWAYS branch
+
 }
 
 sub_c2039

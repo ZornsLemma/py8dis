@@ -784,7 +784,8 @@ l8004 = service_entry+1
 .sub_c8266
     jsr sub_c93f9                                                     ; 2266: 20 f9 93     .. :8266[1]
     lda #0                                                            ; 2269: a9 00       ..  :8269[1]
-    beq c828b                                                         ; 226b: f0 1e       ..  :826b[1]
+    beq c828b                                                         ; 226b: f0 1e       ..  :826b[1]   ; ALWAYS branch
+
 ; &226d referenced 2 times by &9bd9[1], &a4f2[1]
 .sub_c826d
     ldx #6                                                            ; 226d: a2 06       ..  :826d[1]
@@ -797,11 +798,13 @@ l8004 = service_entry+1
     lda #&20 ; ' '                                                    ; 2277: a9 20       .   :8277[1]
     sta l105f                                                         ; 2279: 8d 5f 10    ._. :8279[1]
     lda #&58 ; 'X'                                                    ; 227c: a9 58       .X  :827c[1]
-    bne c8286                                                         ; 227e: d0 06       ..  :827e[1]
+    bne c8286                                                         ; 227e: d0 06       ..  :827e[1]   ; ALWAYS branch
+
 ; &2280 referenced 6 times by &8260[1], &877c[1], &87ab[1], &87c6[1], &8a10[1], &a4db[1]
 .sub_c8280
     ldx #0                                                            ; 2280: a2 00       ..  :8280[1]
-    beq c8290                                                         ; 2282: f0 0c       ..  :8282[1]
+    beq c8290                                                         ; 2282: f0 0c       ..  :8282[1]   ; ALWAYS branch
+
 ; &2284 referenced 7 times by &8225[1], &87bb[1], &89f8[1], &8a7a[1], &8bcf[1], &9a7b[1], &9c28[1]
 .sub_c8284
     lda #0                                                            ; 2284: a9 00       ..  :8284[1]
@@ -1190,7 +1193,8 @@ l8004 = service_entry+1
     php                                                               ; 245c: 08          .   :845c[1]
     lda #0                                                            ; 245d: a9 00       ..  :845d[1]
     sta l00b9                                                         ; 245f: 85 b9       ..  :845f[1]
-    beq c8477                                                         ; 2461: f0 14       ..  :8461[1]
+    beq c8477                                                         ; 2461: f0 14       ..  :8461[1]   ; ALWAYS branch
+
 ; &2463 referenced 1 time by &847a[1]
 .loop_c8463
     jsr sub_c8439                                                     ; 2463: 20 39 84     9. :8463[1]
@@ -1379,7 +1383,8 @@ l8004 = service_entry+1
 .loop_c85b5
     jsr ca3dc                                                         ; 25b5: 20 dc a3     .. :85b5[1]
     ldy #&ff                                                          ; 25b8: a0 ff       ..  :85b8[1]
-    bne c85c5                                                         ; 25ba: d0 09       ..  :85ba[1]
+    bne c85c5                                                         ; 25ba: d0 09       ..  :85ba[1]   ; ALWAYS branch
+
 ; &25bc referenced 2 times by &85aa[1], &85b0[1]
 .c85bc
     ldy l00a8                                                         ; 25bc: a4 a8       ..  :85bc[1]
@@ -1761,7 +1766,8 @@ l8004 = service_entry+1
     iny                                                               ; 2831: c8          .   :8831[1]
     iny                                                               ; 2832: c8          .   :8832[1]
     ldx #2                                                            ; 2833: a2 02       ..  :8833[1]
-    bne c883f                                                         ; 2835: d0 08       ..  :8835[1]
+    bne c883f                                                         ; 2835: d0 08       ..  :8835[1]   ; ALWAYS branch
+
 ; &2837 referenced 1 time by &882f[1]
 .c8837
     lda l0f0e,y                                                       ; 2837: b9 0e 0f    ... :8837[1]
@@ -1783,7 +1789,8 @@ l8004 = service_entry+1
 ; &2855 referenced 2 times by &9f61[1], &a561[1]
 .sub_c8855
     lda #&80                                                          ; 2855: a9 80       ..  :8855[1]
-    bne c8864                                                         ; 2857: d0 0b       ..  :8857[1]
+    bne c8864                                                         ; 2857: d0 0b       ..  :8857[1]   ; ALWAYS branch
+
     jsr sub_c8a77                                                     ; 2859: 20 77 8a     w. :8859[1]
     jsr sub_c9a82                                                     ; 285c: 20 82 9a     .. :885c[1]
     jsr sub_c8386                                                     ; 285f: 20 86 83     .. :885f[1]
@@ -1901,7 +1908,8 @@ l8004 = service_entry+1
 
 .sub_c893f
     ldx #0                                                            ; 293f: a2 00       ..  :893f[1]
-    beq c8945                                                         ; 2941: f0 02       ..  :8941[1]
+    beq c8945                                                         ; 2941: f0 02       ..  :8941[1]   ; ALWAYS branch
+
 .sub_c8943
     ldx #2                                                            ; 2943: a2 02       ..  :8943[1]
 ; &2945 referenced 1 time by &8941[1]
@@ -2340,7 +2348,8 @@ l8004 = service_entry+1
 ; &2bf6 referenced 1 time by &9466[1]
 .sub_c8bf6
     clc                                                               ; 2bf6: 18          .   :8bf6[1]
-    bcc c8bfb                                                         ; 2bf7: 90 02       ..  :8bf7[1]
+    bcc c8bfb                                                         ; 2bf7: 90 02       ..  :8bf7[1]   ; ALWAYS branch
+
 ; &2bf9 referenced 1 time by &9211[1]
 .sub_c8bf9
     cli                                                               ; 2bf9: 58          X   :8bf9[1]
@@ -3291,7 +3300,8 @@ nmi_XXX5 = l0d1f+1
     sbc lfe87                                                         ; 30a8: ed 87 fe    ... :0d41[7]
     sta l00b5                                                         ; 30ab: 85 b5       ..  :0d44[7]
     lda #nmi_XXX11-(nmi_bcs+2)                                        ; 30ad: a9 3b       .;  :0d46[7]
-    bne l0d30                                                         ; 30af: d0 e6       ..  :0d48[7]
+    bne l0d30                                                         ; 30af: d0 e6       ..  :0d48[7]   ; ALWAYS branch
+
 .nmi_XXX11
     lda #nmi_XXX12-(nmi_bcs+2)                                        ; 30b1: a9 3f       .?  :0d4a[7]
     bne l0d30                                                         ; 30b3: d0 e2       ..  :0d4c[7]
@@ -3300,22 +3310,26 @@ nmi_XXX5 = l0d1f+1
     ora l00b5                                                         ; 30b7: 05 b5       ..  :0d50[7]
     sta l00b5                                                         ; 30b9: 85 b5       ..  :0d52[7]
     lda #nmi_XXX13-(nmi_bcs+2)                                        ; 30bb: a9 49       .I  :0d54[7]
-    bne l0d30                                                         ; 30bd: d0 d8       ..  :0d56[7]
+    bne l0d30                                                         ; 30bd: d0 d8       ..  :0d56[7]   ; ALWAYS branch
+
 .nmi_XXX13
     lda #nmi_XXX14-(nmi_bcs+2)                                        ; 30bf: a9 4d       .M  :0d58[7]
-    bne l0d30                                                         ; 30c1: d0 d4       ..  :0d5a[7]
+    bne l0d30                                                         ; 30c1: d0 d4       ..  :0d5a[7]   ; ALWAYS branch
+
 .nmi_XXX14
     lda l00b3                                                         ; 30c3: a5 b3       ..  :0d5c[7]
     sta l00a6                                                         ; 30c5: 85 a6       ..  :0d5e[7]
 ; &30c7 referenced 2 times by &8dac[1], &8dbd[1]
 .c0d60
     lda #nmi_XXX15-(nmi_bcs+2)                                        ; 30c7: a9 55       .U  :0d60[7]
-    bne l0d30                                                         ; 30c9: d0 cc       ..  :0d62[7]
+    bne l0d30                                                         ; 30c9: d0 cc       ..  :0d62[7]   ; ALWAYS branch
+
 .nmi_XXX15
     lda l00b4                                                         ; 30cb: a5 b4       ..  :0d64[7]
     sta l00a7                                                         ; 30cd: 85 a7       ..  :0d66[7]
     lda #nmi_XXX16-(nmi_bcs+2)                                        ; 30cf: a9 5d       .]  :0d68[7]
-    bne l0d30                                                         ; 30d1: d0 c4       ..  :0d6a[7]
+    bne l0d30                                                         ; 30d1: d0 c4       ..  :0d6a[7]   ; ALWAYS branch
+
 .nmi_XXX16
     cmp #&fb                                                          ; 30d3: c9 fb       ..  :0d6c[7]
     beq c0d74                                                         ; 30d5: f0 04       ..  :0d6e[7]
@@ -3328,22 +3342,27 @@ nmi_XXX5 = l0d1f+1
     bne c0d80                                                         ; 30df: d0 06       ..  :0d78[7]
     inc l00cf                                                         ; 30e1: e6 cf       ..  :0d7a[7]
     lda #nmi_XXX17-(nmi_bcs+2)                                        ; 30e3: a9 06       ..  :0d7c[7]
-    bne l0d30                                                         ; 30e5: d0 b0       ..  :0d7e[7]
+    bne l0d30                                                         ; 30e5: d0 b0       ..  :0d7e[7]   ; ALWAYS branch
+
 ; &30e7 referenced 1 time by &0d78[7]
 .c0d80
     inc l00a5                                                         ; 30e7: e6 a5       ..  :0d80[7]
     lda #nmi_XXX18-(nmi_bcs+2)                                        ; 30e9: a9 11       ..  :0d82[7]
-    bne l0d30                                                         ; 30eb: d0 aa       ..  :0d84[7]
+    bne l0d30                                                         ; 30eb: d0 aa       ..  :0d84[7]   ; ALWAYS branch
+
 .nmi_XXX22
     lda #nmi_XXX19-(nmi_bcs+2)                                        ; 30ed: a9 7b       .{  :0d86[7]
-    bne l0d30                                                         ; 30ef: d0 a6       ..  :0d88[7]
+    bne l0d30                                                         ; 30ef: d0 a6       ..  :0d88[7]   ; ALWAYS branch
+
 .nmi_XXX19
     lda #nmi_XXX20-(nmi_bcs+2)                                        ; 30f1: a9 7f       ..  :0d8a[7]
-    bne l0d30                                                         ; 30f3: d0 a2       ..  :0d8c[7]
+    bne l0d30                                                         ; 30f3: d0 a2       ..  :0d8c[7]   ; ALWAYS branch
+
 .nmi_XXX20
     bne nmi_XXX23                                                     ; 30f5: d0 a3       ..  :0d8e[7]
     lda #nmi_XXX21-(nmi_bcs+2)                                        ; 30f7: a9 26       .&  :0d90[7]
-    bne l0d30                                                         ; 30f9: d0 9c       ..  :0d92[7]
+    bne l0d30                                                         ; 30f9: d0 9c       ..  :0d92[7]   ; ALWAYS branch
+
 
     ; Copy the newly assembled block of code back to it's proper place in the binary
     ; file.
@@ -3465,7 +3484,8 @@ nmi_XXX5 = l0d1f+1
 ; &31e7 referenced 1 time by &91ff[1]
 .loop_c91e7
     lda #&fe                                                          ; 31e7: a9 fe       ..  :91e7[1]
-    bmi c9214                                                         ; 31e9: 30 29       0)  :91e9[1]
+    bmi c9214                                                         ; 31e9: 30 29       0)  :91e9[1]   ; ALWAYS branch
+
 ; &31eb referenced 1 time by &91e2[1]
 .c91eb
     cmp #&23 ; '#'                                                    ; 31eb: c9 23       .#  :91eb[1]
@@ -3527,7 +3547,8 @@ nmi_XXX5 = l0d1f+1
 ; &323b referenced 1 time by &9229[1]
 .c923b
     lda #0                                                            ; 323b: a9 00       ..  :923b[1]
-    beq c9257                                                         ; 323d: f0 18       ..  :923d[1]
+    beq c9257                                                         ; 323d: f0 18       ..  :923d[1]   ; ALWAYS branch
+
 ; &323f referenced 1 time by &91d6[1]
 .c923f
     jsr sub_c928a                                                     ; 323f: 20 8a 92     .. :923f[1]
@@ -3843,15 +3864,18 @@ nmi_XXX5 = l0d1f+1
 ; &33f1 referenced 1 time by &a737[1]
 .sub_c93f1
     ldy #&a0                                                          ; 33f1: a0 a0       ..  :93f1[1]
-    bne c940e                                                         ; 33f3: d0 19       ..  :93f3[1]
+    bne c940e                                                         ; 33f3: d0 19       ..  :93f3[1]   ; ALWAYS branch
+
 ; &33f5 referenced 2 times by &9636[1], &a7ce[1]
 .sub_c93f5
     ldy #&81                                                          ; 33f5: a0 81       ..  :93f5[1]
-    bne c940e                                                         ; 33f7: d0 15       ..  :93f7[1]
+    bne c940e                                                         ; 33f7: d0 15       ..  :93f7[1]   ; ALWAYS branch
+
 ; &33f9 referenced 1 time by &8266[1]
 .sub_c93f9
     ldy #&81                                                          ; 33f9: a0 81       ..  :93f9[1]
-    bne c93ff                                                         ; 33fb: d0 02       ..  :93fb[1]
+    bne c93ff                                                         ; 33fb: d0 02       ..  :93fb[1]   ; ALWAYS branch
+
 ; &33fd referenced 3 times by &8287[1], &988e[1], &98da[1]
 .sub_c93fd
     ldy #&80                                                          ; 33fd: a0 80       ..  :93fd[1]
@@ -4202,7 +4226,8 @@ nmi_XXX5 = l0d1f+1
     bcc c965a                                                         ; 3650: 90 08       ..  :9650[1]
     beq c9658                                                         ; 3652: f0 04       ..  :9652[1]
     ldx #&4e ; 'N'                                                    ; 3654: a2 4e       .N  :9654[1]
-    bne c965a                                                         ; 3656: d0 02       ..  :9656[1]
+    bne c965a                                                         ; 3656: d0 02       ..  :9656[1]   ; ALWAYS branch
+
 ; &3658 referenced 1 time by &9652[1]
 .c9658
     ldx #&50 ; 'P'                                                    ; 3658: a2 50       .P  :9658[1]
@@ -4590,7 +4615,8 @@ nmi_XXX5 = l0d1f+1
     sta l10d7                                                         ; 3893: 8d d7 10    ... :9893[1]
     lda #&98                                                          ; 3896: a9 98       ..  :9896[1]
     sta l10d8                                                         ; 3898: 8d d8 10    ... :9898[1]
-    bne c9859                                                         ; 389b: d0 bc       ..  :989b[1]
+    bne c9859                                                         ; 389b: d0 bc       ..  :989b[1]   ; ALWAYS branch
+
     ldy l1069                                                         ; 389d: ac 69 10    .i. :989d[1]
 ; &38a0 referenced 1 time by &98b8[1]
 .loop_c98a0
@@ -4722,7 +4748,8 @@ nmi_XXX5 = l0d1f+1
 ; &3965 referenced 4 times by &9906[1], &9911[1], &9919[1], &9924[1]
 .sub_c9965
     lda #1                                                            ; 3965: a9 01       ..  :9965[1]
-    bne c996e                                                         ; 3967: d0 05       ..  :9967[1]
+    bne c996e                                                         ; 3967: d0 05       ..  :9967[1]   ; ALWAYS branch
+
     jsr sub_c9e94                                                     ; 3969: 20 94 9e     .. :9969[1]
     bcs loop_c9964                                                    ; 396c: b0 f6       ..  :996c[1]
 ; &396e referenced 11 times by &98bc[1], &98c4[1], &98df[1], &98f0[1], &98fe[1], &9903[1], &990e[1], &9917[1], &9921[1], &992a[1], &9967[1]
@@ -4772,7 +4799,8 @@ nmi_XXX5 = l0d1f+1
     lda #&2a ; '*'                                                    ; 39ac: a9 2a       .*  :99ac[1]
     sta l10ce                                                         ; 39ae: 8d ce 10    ... :99ae[1]
     lda #&23 ; '#'                                                    ; 39b1: a9 23       .#  :99b1[1]
-    bne loop_c99a8                                                    ; 39b3: d0 f3       ..  :99b3[1]
+    bne loop_c99a8                                                    ; 39b3: d0 f3       ..  :99b3[1]   ; ALWAYS branch
+
     jsr sub_c9a6e                                                     ; 39b5: 20 6e 9a     n. :99b5[1]
     jsr sub_c8386                                                     ; 39b8: 20 86 83     .. :99b8[1]
     lda #1                                                            ; 39bb: a9 01       ..  :99bb[1]
@@ -4957,23 +4985,27 @@ nmi_XXX5 = l0d1f+1
     lda #&0f                                                          ; 3acb: a9 0f       ..  :9acb[1]
     ldx #1                                                            ; 3acd: a2 01       ..  :9acd[1]
     ldy #0                                                            ; 3acf: a0 00       ..  :9acf[1]
-    beq c9ae9                                                         ; 3ad1: f0 16       ..  :9ad1[1]
+    beq c9ae9                                                         ; 3ad1: f0 16       ..  :9ad1[1]   ; ALWAYS branch
+
 ; &3ad3 referenced 1 time by &80ac[1]
 .sub_c9ad3
     tax                                                               ; 3ad3: aa          .   :9ad3[1]
 ; &3ad4 referenced 1 time by &80b5[1]
 .c9ad4
     lda #3                                                            ; 3ad4: a9 03       ..  :9ad4[1]
-    bne c9ae9                                                         ; 3ad6: d0 11       ..  :9ad6[1]
+    bne c9ae9                                                         ; 3ad6: d0 11       ..  :9ad6[1]   ; ALWAYS branch
+
 ; &3ad8 referenced 2 times by &9436[1], &abbc[1]
 .sub_c9ad8
     jsr sub_c83e3                                                     ; 3ad8: 20 e3 83     .. :9ad8[1]
     lda #&7e ; '~'                                                    ; 3adb: a9 7e       .~  :9adb[1]
-    bne c9ae9                                                         ; 3add: d0 0a       ..  :9add[1]
+    bne c9ae9                                                         ; 3add: d0 0a       ..  :9add[1]   ; ALWAYS branch
+
 ; &3adf referenced 4 times by &9593[1], &9599[1], &95be[1], &9aa5[1]
 .c9adf
     lda #&8f                                                          ; 3adf: a9 8f       ..  :9adf[1]
-    bne c9ae9                                                         ; 3ae1: d0 06       ..  :9ae1[1]
+    bne c9ae9                                                         ; 3ae1: d0 06       ..  :9ae1[1]   ; ALWAYS branch
+
     lda #&ff                                                          ; 3ae3: a9 ff       ..  :9ae3[1]
 ; &3ae5 referenced 8 times by &80a5[1], &9588[1], &96a0[1], &9e32[1], &9e43[1], &aae2[1], &ac7c[1], &aeb7[1]
 .osbyte_read
@@ -5287,7 +5319,8 @@ nmi_XXX5 = l0d1f+1
 .c9d12
     lda #&20 ; ' '                                                    ; 3d12: a9 20       .   :9d12[1]
     sta l1117,y                                                       ; 3d14: 99 17 11    ... :9d14[1]
-    bne loop_c9d03                                                    ; 3d17: d0 ea       ..  :9d17[1]
+    bne loop_c9d03                                                    ; 3d17: d0 ea       ..  :9d17[1]   ; ALWAYS branch
+
 ; &3d19 referenced 1 time by &9c66[1]
 .sub_c9d19
     txa                                                               ; 3d19: 8a          .   :9d19[1]
@@ -5329,7 +5362,8 @@ nmi_XXX5 = l0d1f+1
     dec l00b2                                                         ; 3d50: c6 b2       ..  :9d50[1]
     bne loop_c9d43                                                    ; 3d52: d0 ef       ..  :9d52[1]
     sec                                                               ; 3d54: 38          8   :9d54[1]
-    bcs c9d67                                                         ; 3d55: b0 10       ..  :9d55[1]
+    bcs c9d67                                                         ; 3d55: b0 10       ..  :9d55[1]   ; ALWAYS branch
+
 ; &3d57 referenced 1 time by &9d38[1]
 .c9d57
     sty l10c2                                                         ; 3d57: 8c c2 10    ... :9d57[1]
@@ -5504,7 +5538,8 @@ nmi_XXX5 = l0d1f+1
     jsr sub_c9e54                                                     ; 3e38: 20 54 9e     T. :9e38[1]
     bne c9e41                                                         ; 3e3b: d0 04       ..  :9e3b[1]
     lda #osbyte_rw_exec_handle                                        ; 3e3d: a9 c6       ..  :9e3d[1]
-    bne osbyte_write_0                                                ; 3e3f: d0 0c       ..  :9e3f[1]
+    bne osbyte_write_0                                                ; 3e3f: d0 0c       ..  :9e3f[1]   ; ALWAYS branch
+
 ; &3e41 referenced 2 times by &9e36[1], &9e3b[1]
 .c9e41
     lda #osbyte_read_write_spool_file_handle                          ; 3e41: a9 c7       ..  :9e41[1]
@@ -5538,7 +5573,8 @@ nmi_XXX5 = l0d1f+1
     jsr sub_ca0de                                                     ; 3e66: 20 de a0     .. :9e66[1]
     bne c9e6f                                                         ; 3e69: d0 04       ..  :9e69[1]
     ldx #&ff                                                          ; 3e6b: a2 ff       ..  :9e6b[1]
-    bne c9e71                                                         ; 3e6d: d0 02       ..  :9e6d[1]
+    bne c9e71                                                         ; 3e6d: d0 02       ..  :9e6d[1]   ; ALWAYS branch
+
 ; &3e6f referenced 1 time by &9e69[1]
 .c9e6f
     ldx #0                                                            ; 3e6f: a2 00       ..  :9e6f[1]
@@ -5950,7 +5986,8 @@ nmi_XXX5 = l0d1f+1
     tya                                                               ; 4137: 98          .   :a137[1]
     ldx #&9d                                                          ; 4138: a2 9d       ..  :a138[1]
     ldy #6                                                            ; 413a: a0 06       ..  :a13a[1]
-    bne ca10b                                                         ; 413c: d0 cd       ..  :a13c[1]
+    bne ca10b                                                         ; 413c: d0 cd       ..  :a13c[1]   ; ALWAYS branch
+
     jsr clc_jmp_gsinit                                                ; 413e: 20 4c 87     L. :a13e[1]
     beq ca1c0                                                         ; 4141: f0 7d       .}  :a141[1]
 ; &4143 referenced 1 time by &a146[1]
@@ -6235,7 +6272,8 @@ nmi_XXX5 = l0d1f+1
     bit l00a9                                                         ; 437c: 24 a9       $.  :a37c[1]
     bpl ca38b                                                         ; 437e: 10 0b       ..  :a37e[1]
     lda #0                                                            ; 4380: a9 00       ..  :a380[1]
-    beq ca38e                                                         ; 4382: f0 0a       ..  :a382[1]
+    beq ca38e                                                         ; 4382: f0 0a       ..  :a382[1]   ; ALWAYS branch
+
 ; &4384 referenced 3 times by &a440[1], &a4e4[1], &a581[1]
 .sub_ca384
     jsr sub_c83e3                                                     ; 4384: 20 e3 83     .. :a384[1]
@@ -6471,7 +6509,8 @@ nmi_XXX5 = l0d1f+1
     lda #0                                                            ; 4530: a9 00       ..  :a530[1]
     sta l00bc                                                         ; 4532: 85 bc       ..  :a532[1]
     sta l00c0                                                         ; 4534: 85 c0       ..  :a534[1]
-    beq ca5ab                                                         ; 4536: f0 73       .s  :a536[1]
+    beq ca5ab                                                         ; 4536: f0 73       .s  :a536[1]   ; ALWAYS branch
+
 ; &4538 referenced 1 time by &a5af[1]
 .ca538
     lda l00c4                                                         ; 4538: a5 c4       ..  :a538[1]
@@ -6551,7 +6590,8 @@ nmi_XXX5 = l0d1f+1
 
 .sub_ca5bb
     lda #0                                                            ; 45bb: a9 00       ..  :a5bb[1]
-    beq ca5c4                                                         ; 45bd: f0 05       ..  :a5bd[1]
+    beq ca5c4                                                         ; 45bd: f0 05       ..  :a5bd[1]   ; ALWAYS branch
+
 .sub_ca5bf
     lda #&ff                                                          ; 45bf: a9 ff       ..  :a5bf[1]
     sta l1082                                                         ; 45c1: 8d 82 10    ... :a5c1[1]
@@ -6891,7 +6931,8 @@ nmi_XXX5 = l0d1f+1
 
 .sub_ca7f3
     sec                                                               ; 47f3: 38          8   :a7f3[1]
-    bcs ca7f7                                                         ; 47f4: b0 01       ..  :a7f4[1]
+    bcs ca7f7                                                         ; 47f4: b0 01       ..  :a7f4[1]   ; ALWAYS branch
+
 .sub_ca7f6
     clc                                                               ; 47f6: 18          .   :a7f6[1]
 ; &47f7 referenced 1 time by &a7f4[1]
@@ -7110,7 +7151,8 @@ nmi_XXX5 = l0d1f+1
     cpy #&2c ; ','                                                    ; 4975: c0 2c       .,  :a975[1]
     beq ca97d                                                         ; 4977: f0 04       ..  :a977[1]
     lda #&20 ; ' '                                                    ; 4979: a9 20       .   :a979[1]
-    bne ca982                                                         ; 497b: d0 05       ..  :a97b[1]
+    bne ca982                                                         ; 497b: d0 05       ..  :a97b[1]   ; ALWAYS branch
+
 ; &497d referenced 2 times by &a973[1], &a977[1]
 .ca97d
     ldy #&2c ; ','                                                    ; 497d: a0 2c       .,  :a97d[1]
@@ -7284,7 +7326,8 @@ nmi_XXX5 = l0d1f+1
     pha                                                               ; 4a71: 48          H   :aa71[1]
     bmi caa78                                                         ; 4a72: 30 04       0.  :aa72[1]
     ldy #&20 ; ' '                                                    ; 4a74: a0 20       .   :aa74[1]
-    bne caa7a                                                         ; 4a76: d0 02       ..  :aa76[1]
+    bne caa7a                                                         ; 4a76: d0 02       ..  :aa76[1]   ; ALWAYS branch
+
 ; &4a78 referenced 1 time by &aa72[1]
 .caa78
     ldy #&53 ; 'S'                                                    ; 4a78: a0 53       .S  :aa78[1]
@@ -7390,7 +7433,8 @@ nmi_XXX5 = l0d1f+1
 .sub_caafd
     jsr sub_cac18                                                     ; 4afd: 20 18 ac     .. :aafd[1]
     lda #0                                                            ; 4b00: a9 00       ..  :ab00[1]
-    beq cab09                                                         ; 4b02: f0 05       ..  :ab02[1]
+    beq cab09                                                         ; 4b02: f0 05       ..  :ab02[1]   ; ALWAYS branch
+
 .sub_cab04
     jsr sub_cac18                                                     ; 4b04: 20 18 ac     .. :ab04[1]
     lda #&ff                                                          ; 4b07: a9 ff       ..  :ab07[1]
@@ -7542,7 +7586,8 @@ nmi_XXX5 = l0d1f+1
     sty l00aa                                                         ; 4bec: 84 aa       ..  :abec[1]
     ldy l00ab                                                         ; 4bee: a4 ab       ..  :abee[1]
     ldx #0                                                            ; 4bf0: a2 00       ..  :abf0[1]
-    beq cabfb                                                         ; 4bf2: f0 07       ..  :abf2[1]
+    beq cabfb                                                         ; 4bf2: f0 07       ..  :abf2[1]   ; ALWAYS branch
+
 ; &4bf4 referenced 1 time by &abff[1]
 .loop_cabf4
     lda (l00ac,x)                                                     ; 4bf4: a1 ac       ..  :abf4[1]
@@ -8457,7 +8502,8 @@ jump_address_low = sub_c0050+1
     tsx                                                               ; 51d5: ba          .   :b1d5[1]
     lda #0                                                            ; 51d6: a9 00       ..  :b1d6[1]
     sta l0104,x                                                       ; 51d8: 9d 04 01    ... :b1d8[1]
-    beq cb203                                                         ; 51db: f0 26       .&  :b1db[1]
+    beq cb203                                                         ; 51db: f0 26       .&  :b1db[1]   ; ALWAYS branch
+
 ; &51dd referenced 1 time by &b1d0[1]
 .cb1dd
     cmp #&42 ; 'B'                                                    ; 51dd: c9 42       .B  :b1dd[1]
@@ -8556,7 +8602,8 @@ jump_address_low = sub_c0050+1
     cmp #&45 ; 'E'                                                    ; 5260: c9 45       .E  :b260[1]
     bne cb203                                                         ; 5262: d0 9f       ..  :b262[1]
     ldy #&fd                                                          ; 5264: a0 fd       ..  :b264[1]
-    bne loop_cb249                                                    ; 5266: d0 e1       ..  :b266[1]
+    bne loop_cb249                                                    ; 5266: d0 e1       ..  :b266[1]   ; ALWAYS branch
+
 ; &5268 referenced 1 time by &b23f[1]
 .cb268
     cmp #9                                                            ; 5268: c9 09       ..  :b268[1]
@@ -9156,7 +9203,8 @@ jump_address_low = sub_c0050+1
 ; &55ee referenced 2 times by &b375[1], &b4d8[1]
 .sub_cb5ee
     lda #&80                                                          ; 55ee: a9 80       ..  :b5ee[1]
-    bne cb5d0                                                         ; 55f0: d0 de       ..  :b5f0[1]
+    bne cb5d0                                                         ; 55f0: d0 de       ..  :b5f0[1]   ; ALWAYS branch
+
 ; &55f2 referenced 6 times by &b21b[1], &b371[1], &b45a[1], &b477[1], &b4ea[1], &b534[1]
 .sub_cb5f2
     ldy #&fa                                                          ; 55f2: a0 fa       ..  :b5f2[1]
@@ -9805,13 +9853,15 @@ lb6ce = sub_cb6cd+1
 .cb9e8
     lda #0                                                            ; 59e8: a9 00       ..  :b9e8[1]
     sta l00bf                                                         ; 59ea: 85 bf       ..  :b9ea[1]
-    beq loop_cb9d1                                                    ; 59ec: f0 e3       ..  :b9ec[1]
+    beq loop_cb9d1                                                    ; 59ec: f0 e3       ..  :b9ec[1]   ; ALWAYS branch
+
 ; &59ee referenced 1 time by &b9a6[1]
 .cb9ee
     lda #&ff                                                          ; 59ee: a9 ff       ..  :b9ee[1]
     sta l00bf                                                         ; 59f0: 85 bf       ..  :b9f0[1]
     sec                                                               ; 59f2: 38          8   :b9f2[1]
-    bcs cb9d2                                                         ; 59f3: b0 dd       ..  :b9f3[1]
+    bcs cb9d2                                                         ; 59f3: b0 dd       ..  :b9f3[1]   ; ALWAYS branch
+
 ; &59f5 referenced 2 times by &b225[1], &b297[1]
 .sub_cb9f5
     ldx #0                                                            ; 59f5: a2 00       ..  :b9f5[1]
@@ -9949,7 +9999,8 @@ lb6ce = sub_cb6cd+1
     php                                                               ; 5aaa: 08          .   :baaa[1]
     iny                                                               ; 5aab: c8          .   :baab[1]
     beq cbab1                                                         ; 5aac: f0 03       ..  :baac[1]
-    bcc cba78                                                         ; 5aae: 90 c8       ..  :baae[1]
+    bcc cba78                                                         ; 5aae: 90 c8       ..  :baae[1]   ; ALWAYS branch
+
 ; &5ab0 referenced 1 time by &ba9e[1]
 .cbab0
     pla                                                               ; 5ab0: 68          h   :bab0[1]
@@ -10088,7 +10139,8 @@ lb6ce = sub_cb6cd+1
 
 .sub_cbb46
     lda #&c0                                                          ; 5b46: a9 c0       ..  :bb46[1]
-    bne cbb4c                                                         ; 5b48: d0 02       ..  :bb48[1]
+    bne cbb4c                                                         ; 5b48: d0 02       ..  :bb48[1]   ; ALWAYS branch
+
 .sub_cbb4a
     lda #&40 ; '@'                                                    ; 5b4a: a9 40       .@  :bb4a[1]
 ; &5b4c referenced 1 time by &bb48[1]
@@ -10179,7 +10231,8 @@ lb6ce = sub_cb6cd+1
 
 .sub_cbbd3
     lda #&c0                                                          ; 5bd3: a9 c0       ..  :bbd3[1]
-    bne cbbd9                                                         ; 5bd5: d0 02       ..  :bbd5[1]
+    bne cbbd9                                                         ; 5bd5: d0 02       ..  :bbd5[1]   ; ALWAYS branch
+
 .sub_cbbd7
     lda #&40 ; '@'                                                    ; 5bd7: a9 40       .@  :bbd7[1]
 ; &5bd9 referenced 1 time by &bbd5[1]
@@ -10391,7 +10444,8 @@ lb6ce = sub_cb6cd+1
     jsr sub_cb580                                                     ; 5d12: 20 80 b5     .. :bd12[1]
     ldx #&bc                                                          ; 5d15: a2 bc       ..  :bd15[1]
     ldy #&b1                                                          ; 5d17: a0 b1       ..  :bd17[1]
-    bne loop_cbd08                                                    ; 5d19: d0 ed       ..  :bd19[1]
+    bne loop_cbd08                                                    ; 5d19: d0 ed       ..  :bd19[1]   ; ALWAYS branch
+
 ; &5d1b referenced 1 time by &bcf7[1]
 .cbd1b
     lda l00b3                                                         ; 5d1b: a5 b3       ..  :bd1b[1]
@@ -10505,7 +10559,8 @@ lb6ce = sub_cb6cd+1
     ldx l00be                                                         ; 5dcb: a6 be       ..  :bdcb[1]
     beq cbdb9                                                         ; 5dcd: f0 ea       ..  :bdcd[1]
     lda #1                                                            ; 5dcf: a9 01       ..  :bdcf[1]
-    bne cbddd                                                         ; 5dd1: d0 0a       ..  :bdd1[1]
+    bne cbddd                                                         ; 5dd1: d0 0a       ..  :bdd1[1]   ; ALWAYS branch
+
 ; &5dd3 referenced 1 time by &bdc9[1]
 .cbdd3
     lda #0                                                            ; 5dd3: a9 00       ..  :bdd3[1]
@@ -10705,7 +10760,8 @@ lb6ce = sub_cb6cd+1
 .cbee8
     ldx romsel_copy                                                   ; 5ee8: a6 f4       ..  :bee8[1]
     lda #0                                                            ; 5eea: a9 00       ..  :beea[1]
-    beq general_service_handler_indirect                              ; 5eec: f0 ef       ..  :beec[1]
+    beq general_service_handler_indirect                              ; 5eec: f0 ef       ..  :beec[1]   ; ALWAYS branch
+
 ; &5eee referenced 1 time by &bee6[1]
 .cbeee
     lda #osbyte_write_shadow_memory_use                               ; 5eee: a9 72       .r  :beee[1]
@@ -10824,7 +10880,8 @@ lb6ce = sub_cb6cd+1
     cpx #&0b                                                          ; 5faa: e0 0b       ..  :bfaa[1]
     bne cbf8e                                                         ; 5fac: d0 e0       ..  :bfac[1]
     ldx #1                                                            ; 5fae: a2 01       ..  :bfae[1]
-    bne cbf8e                                                         ; 5fb0: d0 dc       ..  :bfb0[1]
+    bne cbf8e                                                         ; 5fb0: d0 dc       ..  :bfb0[1]   ; ALWAYS branch
+
 ; &5fb2 referenced 1 time by &bfa8[1]
 .cbfb2
     pla                                                               ; 5fb2: 68          h   :bfb2[1]
