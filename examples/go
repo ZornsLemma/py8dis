@@ -61,3 +61,4 @@ python3 go.py "lisp406"         $OPT --assemblers acme beebasm          # Lisp 4
 # Games
 python3 go.py "chuckie"         $OPT --assemblers acme beebasm xa       # Chuckie Egg
 python3 go.py "planb"           $OPT --assemblers acme beebasm xa       # Plan B
+python3 go.py "starship"        $OPT --assemblers acme beebasm xa       # Starship Command (skeleton)

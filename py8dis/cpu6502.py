@@ -1273,7 +1273,7 @@ class Cpu6502(cpu.Cpu):
                 for reg in ['a', 'x', 'y']:
                     # If we know about the state of the register 'reg'
                     if state and state[reg]:
-                        # If this instruction uses the register 'reg'
+                        # If this instruction alters the register 'reg'
                         if c.reg_changes and (c.reg_changes[reg] == 'A'):
                             # Get the value of the register
                             r = state[reg].value
