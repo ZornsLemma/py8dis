@@ -2264,7 +2264,8 @@ attemptclimbup
     jsr getmapblock                                                   ; 1eb8: 20 c8 23     .#
     and #MapId_Ladder                                                 ; 1ebb: 29 02       ).
     beq nottryingclimb                                                ; 1ebd: f0 19       ..
-    bne doclimb                                                       ; 1ebf: d0 0c       ..
+    bne doclimb                                                       ; 1ebf: d0 0c       ..             ; ALWAYS branch
+
 attemptclimbdown
     ldx playercharx                                                   ; 1ec1: a6 42       .B
     ldy playerchary                                                   ; 1ec3: a4 43       .C
@@ -2902,7 +2903,8 @@ trylefttestblock
     jsr getmapblock                                                   ; 22b4: 20 c8 23     .#
     cmp #MapId_Platform                                               ; 22b7: c9 01       ..
     beq horizmovefailed                                               ; 22b9: f0 41       .A
-    bne horizmovesucceeded                                            ; 22bb: d0 3d       .=
+    bne horizmovesucceeded                                            ; 22bb: d0 3d       .=             ; ALWAYS branch
+
 tryrightmovement
     lda playerx                                                       ; 22bd: a5 40       .@
     cmp #$98                                                          ; 22bf: c9 98       ..

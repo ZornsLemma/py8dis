@@ -549,7 +549,8 @@ l8004 = service_entry+1
     bcs c815f                                                         ; 8141: b0 1c       ..
     cpx #7                                                            ; 8143: e0 07       ..
     bne loop_c813a                                                    ; 8145: d0 f3       ..
-    beq c8125                                                         ; 8147: f0 dc       ..
+    beq c8125                                                         ; 8147: f0 dc       ..             ; ALWAYS branch
+
 ; &8149 referenced 11 times by &8105, &811c, &812f, &813e, &8990, &899c, &89af, &89cb, &8a19, &8b8b, &a143
 .sub_c8149
     jsr gsread                                                        ; 8149: 20 c5 ff     ..
@@ -1915,7 +1916,8 @@ l8004 = service_entry+1
     cpy #&c0                                                          ; 895f: c0 c0       ..
     bcc c8968                                                         ; 8961: 90 05       ..
     lda l1000,y                                                       ; 8963: b9 00 10    ...
-    bcs c896b                                                         ; 8966: b0 03       ..
+    bcs c896b                                                         ; 8966: b0 03       ..             ; ALWAYS branch
+
 ; &8968 referenced 1 time by &8961
 .c8968
     lda l1100,y                                                       ; 8968: b9 00 11    ...
@@ -2031,7 +2033,8 @@ l8004 = service_entry+1
     jsr sub_c8335                                                     ; 8a0d: 20 35 83     5.
     jsr sub_c8280                                                     ; 8a10: 20 80 82     ..
     bcs c8a00                                                         ; 8a13: b0 eb       ..
-    bcc c89d7                                                         ; 8a15: 90 c0       ..
+    bcc c89d7                                                         ; 8a15: 90 c0       ..             ; ALWAYS branch
+
 ; &8a17 referenced 1 time by &8a22
 .loop_c8a17
     ldx #&80                                                          ; 8a17: a2 80       ..
@@ -3492,7 +3495,8 @@ nmi_XXX5 = l0d1f+1
     bcs c922b                                                         ; 9222: b0 07       ..
     lda l00c2                                                         ; 9224: a5 c2       ..
     sta l108b,x                                                       ; 9226: 9d 8b 10    ...
-    bcc c923b                                                         ; 9229: 90 10       ..
+    bcc c923b                                                         ; 9229: 90 10       ..             ; ALWAYS branch
+
 ; &922b referenced 1 time by &9222
 .c922b
     jsr sub_c9279                                                     ; 922b: 20 79 92     y.
@@ -3514,7 +3518,8 @@ nmi_XXX5 = l0d1f+1
     jsr sub_c928a                                                     ; 923f: 20 8a 92     ..
     bcs c9249                                                         ; 9242: b0 05       ..
     lda l108b,x                                                       ; 9244: bd 8b 10    ...
-    bcc c9257                                                         ; 9247: 90 0e       ..
+    bcc c9257                                                         ; 9247: 90 0e       ..             ; ALWAYS branch
+
 ; &9249 referenced 1 time by &9242
 .c9249
     jsr sub_c9279                                                     ; 9249: 20 79 92     y.
@@ -4117,7 +4122,8 @@ nmi_XXX5 = l0d1f+1
     cpy #&c0                                                          ; 95db: c0 c0       ..
     bcc c95e4                                                         ; 95dd: 90 05       ..
     sta l1000,y                                                       ; 95df: 99 00 10    ...
-    bcs c95e7                                                         ; 95e2: b0 03       ..
+    bcs c95e7                                                         ; 95e2: b0 03       ..             ; ALWAYS branch
+
 ; &95e4 referenced 1 time by &95dd
 .c95e4
     sta l1100,y                                                       ; 95e4: 99 00 11    ...
@@ -4136,7 +4142,8 @@ nmi_XXX5 = l0d1f+1
     sta l111d,y                                                       ; 95f4: 99 1d 11    ...
     sbc #&1f                                                          ; 95f7: e9 1f       ..
     bne loop_c95ec                                                    ; 95f9: d0 f1       ..
-    beq c9628                                                         ; 95fb: f0 2b       .+
+    beq c9628                                                         ; 95fb: f0 2b       .+             ; ALWAYS branch
+
 ; &95fd referenced 2 times by &95c8, &95cc
 .c95fd
     jsr sub_c9aa3                                                     ; 95fd: 20 a3 9a     ..
@@ -4623,7 +4630,8 @@ nmi_XXX5 = l0d1f+1
     cpy #8                                                            ; 98e4: c0 08       ..
     bcs c98ed                                                         ; 98e6: b0 05       ..
     lda l0e00,y                                                       ; 98e8: b9 00 0e    ...
-    bcc c98f0                                                         ; 98eb: 90 03       ..
+    bcc c98f0                                                         ; 98eb: 90 03       ..             ; ALWAYS branch
+
 ; &98ed referenced 1 time by &98e6
 .c98ed
     lda l0ef8,y                                                       ; 98ed: b9 f8 0e    ...
@@ -4717,7 +4725,8 @@ nmi_XXX5 = l0d1f+1
     bit l1081                                                         ; 996e: 2c 81 10    ,..
     bpl c9978                                                         ; 9971: 10 05       ..
     sta tube_host_r3_data                                             ; 9973: 8d e5 fe    ...
-    bmi c993b                                                         ; 9976: 30 c3       0.
+    bmi c993b                                                         ; 9976: 30 c3       0.             ; ALWAYS branch
+
 ; &9978 referenced 1 time by &9971
 .c9978
     jsr sub_c992c                                                     ; 9978: 20 2c 99     ,.
@@ -5954,7 +5963,8 @@ nmi_XXX5 = l0d1f+1
 .loop_ca143
     jsr sub_c8149                                                     ; a143: 20 49 81     I.
     bcc loop_ca143                                                    ; a146: 90 fb       ..
-    bcs loop_ca132                                                    ; a148: b0 e8       ..
+    bcs loop_ca132                                                    ; a148: b0 e8       ..             ; ALWAYS branch
+
 ; &a14a referenced 13 times by &8257, &8753, &8785, &879a, &87ee, &89b7, &89e9, &8baf, &8bc1, &a324, &a32d, &a469, &a5cb
 .sub_ca14a
     jsr clc_jmp_gsinit                                                ; a14a: 20 4c 87     L.
@@ -6930,7 +6940,8 @@ nmi_XXX5 = l0d1f+1
     and #&f8                                                          ; a83e: 29 f8       ).
     tay                                                               ; a840: a8          .
     beq ca86b                                                         ; a841: f0 28       .(
-    bne ca856                                                         ; a843: d0 11       ..
+    bne ca856                                                         ; a843: d0 11       ..             ; ALWAYS branch
+
 ; &a845 referenced 2 times by &a869, &a889
 .ca845
     jsr sub_ca8e2                                                     ; a845: 20 e2 a8     ..
@@ -7501,7 +7512,8 @@ nmi_XXX5 = l0d1f+1
 .caba4
     plp                                                               ; aba4: 28          (
     bcs cab41                                                         ; aba5: b0 9a       ..
-    bcc cab54                                                         ; aba7: 90 ab       ..
+    bcc cab54                                                         ; aba7: 90 ab       ..             ; ALWAYS branch
+
 ; &aba9 referenced 1 time by &ab93
 .sub_caba9
     lda #8                                                            ; aba9: a9 08       ..
@@ -7840,7 +7852,8 @@ nmi_XXX5 = l0d1f+1
     jsr write_tube_r2_data                                            ; ada4: 20 95 06     .. :05c9[2]
     dex                                                               ; ada7: ca          .   :05cc[2]
     bne loop_c05c7                                                    ; ada8: d0 f8       ..  :05cd[2]
-    beq c05a6                                                         ; adaa: f0 d5       ..  :05cf[2]
+    beq c05a6                                                         ; adaa: f0 d5       ..  :05cf[2]   ; ALWAYS branch
+
 .sub_c05d1
     ldx #&0d                                                          ; adac: a2 0d       ..  :05d1[2]
 ; &adae referenced 1 time by &05d9[2]
@@ -7896,7 +7909,8 @@ l0600 = sub_c05ff+1
     bit tube_host_r2_status                                           ; adf8: 2c e2 fe    ,.. :061d[2]
     bvc loop_c061d                                                    ; adfb: 50 fb       P.  :0620[2]
     sty tube_host_r2_data                                             ; adfd: 8c e3 fe    ... :0622[2]
-    bvs c05fc                                                         ; ae00: 70 d5       p.  :0625[2]
+    bvs c05fc                                                         ; ae00: 70 d5       p.  :0625[2]   ; ALWAYS branch
+
 .sub_c0627
     jsr read_tube_r2_data                                             ; ae02: 20 c5 06     .. :0627[2]
     tay                                                               ; ae05: a8          .   :062a[2]
@@ -8584,7 +8598,8 @@ jump_address_low = sub_c0050+1
     beq cb2a0                                                         ; b2aa: f0 f4       ..
     cpx #&20 ; ' '                                                    ; b2ac: e0 20       .
     bne cb2a0                                                         ; b2ae: d0 f0       ..
-    beq cb297                                                         ; b2b0: f0 e5       ..
+    beq cb297                                                         ; b2b0: f0 e5       ..             ; ALWAYS branch
+
 ; &b2b2 referenced 1 time by &b29c
 .cb2b2
     ldy #0                                                            ; b2b2: a0 00       ..
@@ -8686,7 +8701,8 @@ jump_address_low = sub_c0050+1
     jsr sub_cb5ce                                                     ; b345: 20 ce b5     ..
     jsr sub_cb607                                                     ; b348: 20 07 b6     ..
     bne cb371                                                         ; b34b: d0 24       .$
-    beq cb352                                                         ; b34d: f0 03       ..
+    beq cb352                                                         ; b34d: f0 03       ..             ; ALWAYS branch
+
 ; &b34f referenced 1 time by &b36f
 .cb34f
     jsr sub_cb65f                                                     ; b34f: 20 5f b6     _.
@@ -8717,7 +8733,8 @@ jump_address_low = sub_c0050+1
     jsr sub_cb5ee                                                     ; b375: 20 ee b5     ..
     jsr sub_cb616                                                     ; b378: 20 16 b6     ..
     beq cb371                                                         ; b37b: f0 f4       ..
-    bne cb382                                                         ; b37d: d0 03       ..
+    bne cb382                                                         ; b37d: d0 03       ..             ; ALWAYS branch
+
 ; &b37f referenced 1 time by &b3b6
 .cb37f
     jsr sub_cb65f                                                     ; b37f: 20 5f b6     _.
@@ -8753,7 +8770,8 @@ jump_address_low = sub_c0050+1
     jsr cb82b                                                         ; b3b0: 20 2b b8     +.
     jsr sub_cb616                                                     ; b3b3: 20 16 b6     ..
     bne cb37f                                                         ; b3b6: d0 c7       ..
-    beq cb371                                                         ; b3b8: f0 b7       ..
+    beq cb371                                                         ; b3b8: f0 b7       ..             ; ALWAYS branch
+
 ; &b3ba referenced 1 time by &b33e
 .cb3ba
     ldy #&f9                                                          ; b3ba: a0 f9       ..
@@ -9435,7 +9453,8 @@ lb6ce = sub_cb6cd+1
     inc l00b7                                                         ; b7a5: e6 b7       ..
     jsr sub_cb85d                                                     ; b7a7: 20 5d b8     ].
     bvs cb7ed                                                         ; b7aa: 70 41       pA
-    bvc cb7b2                                                         ; b7ac: 50 04       P.
+    bvc cb7b2                                                         ; b7ac: 50 04       P.             ; ALWAYS branch
+
 ; &b7ae referenced 1 time by &b803
 .cb7ae
     ldx l00be                                                         ; b7ae: a6 be       ..
@@ -9840,7 +9859,8 @@ lb6ce = sub_cb6cd+1
     bpl loop_cba1a                                                    ; ba20: 10 f8       ..
     bcs cba27                                                         ; ba22: b0 03       ..
     inx                                                               ; ba24: e8          .
-    bcc cb9f7                                                         ; ba25: 90 d0       ..
+    bcc cb9f7                                                         ; ba25: 90 d0       ..             ; ALWAYS branch
+
 ; &ba27 referenced 1 time by &ba22
 .cba27
     dex                                                               ; ba27: ca          .
@@ -10441,7 +10461,8 @@ lb6ce = sub_cb6cd+1
     iny                                                               ; bd77: c8          .
     cpy l00be                                                         ; bd78: c4 be       ..
     bne loop_cbd6c                                                    ; bd7a: d0 f0       ..
-    beq cbda3                                                         ; bd7c: f0 25       .%
+    beq cbda3                                                         ; bd7c: f0 25       .%             ; ALWAYS branch
+
 ; &bd7e referenced 1 time by &bd4f
 .cbd7e
     lda #0                                                            ; bd7e: a9 00       ..
@@ -10541,7 +10562,8 @@ lb6ce = sub_cb6cd+1
     cpy l00be                                                         ; be19: c4 be       ..
     cpy l00be                                                         ; be1b: c4 be       ..
     bne loop_cbe0e                                                    ; be1d: d0 ef       ..
-    beq cbe3c                                                         ; be1f: f0 1b       ..
+    beq cbe3c                                                         ; be1f: f0 1b       ..             ; ALWAYS branch
+
 ; &be21 referenced 1 time by &bdf6
 .cbe21
     inc l00b9                                                         ; be21: e6 b9       ..

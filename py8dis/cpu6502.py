@@ -137,7 +137,7 @@ class Cpu6502(cpu.Cpu):
             0x0a: self.OpcodeImplied(           "ASL A",      "A--", cycles="2", update=self.update_nzc_clear_a),
             0x0d: self.OpcodeDataAbs(           "ORA addr",   "A--", cycles="4", update=self.update_nz_clear_a),
             0x0e: self.OpcodeDataAbs(           "ASL addr",   "---", cycles="6", update=self.update_nzc),
-            0x10: self.OpcodeConditionalBranch( "BPL offset", "---", cycles="2a", update=self.update_branch),
+            0x10: self.OpcodeConditionalBranch( "BPL offset", "---", cycles="2a", update=self.make_branch('n', True)),
             0x11: self.OpcodeZp(                "ORA (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_nz_clear_a),
             0x15: self.OpcodeZp(                "ORA zp,X",   "AU-", cycles="4",  update=self.update_nz_clear_a),
             0x16: self.OpcodeZp(                "ASL zp,X",   "-U-", cycles="6",  update=self.update_nzc),
@@ -156,7 +156,7 @@ class Cpu6502(cpu.Cpu):
             0x2c: self.OpcodeDataAbs(           "BIT addr",   "U--", cycles="4",  update=self.update_bit),
             0x2d: self.OpcodeDataAbs(           "AND addr",   "A--", cycles="4",  update=self.update_nz_clear_a),
             0x2e: self.OpcodeDataAbs(           "ROL addr",   "---", cycles="6",  update=self.update_nzc),
-            0x30: self.OpcodeConditionalBranch( "BMI offset", "---", cycles="2a", update=self.update_branch),
+            0x30: self.OpcodeConditionalBranch( "BMI offset", "---", cycles="2a", update=self.make_branch('n', False)),
             0x31: self.OpcodeZp(                "AND (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_nz_clear_a),
             0x35: self.OpcodeZp(                "AND zp,X",   "AU-", cycles="4",  update=self.update_nz_clear_a),
             0x36: self.OpcodeZp(                "ROL zp,X",   "-U-", cycles="6",  update=self.update_nzc),
@@ -174,7 +174,7 @@ class Cpu6502(cpu.Cpu):
             0x4c: self.OpcodeJmpAbs(            "JMP addr",   "---", cycles="3"),
             0x4d: self.OpcodeDataAbs(           "EOR addr",   "A--", cycles="4",  update=self.update_nz_clear_a),
             0x4e: self.OpcodeDataAbs(           "LSR addr",   "---", cycles="6",  update=self.update_nzc),
-            0x50: self.OpcodeConditionalBranch( "BVC offset", "---", cycles="2a", update=self.update_branch),
+            0x50: self.OpcodeConditionalBranch( "BVC offset", "---", cycles="2a", update=self.make_branch('v', True)),
             0x51: self.OpcodeZp(                "EOR (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_nz_clear_a),
             0x55: self.OpcodeZp(                "EOR zp,X",   "AU-", cycles="4",  update=self.update_nz_clear_a),
             0x56: self.OpcodeZp(                "LSR zp,X",   "-U-", cycles="6",  update=self.update_nzc),
@@ -192,7 +192,7 @@ class Cpu6502(cpu.Cpu):
             0x6c: self.OpcodeJmpInd(            "JMP (addr)", "---", cycles="5"),
             0x6d: self.OpcodeDataAbs(           "ADC addr",   "A--", cycles="4",  update=self.update_adc_sbc),
             0x6e: self.OpcodeDataAbs(           "ROR addr",   "---", cycles="6",  update=self.update_nzc),
-            0x70: self.OpcodeConditionalBranch( "BVS offset", "---", cycles="2a", update=self.update_branch),
+            0x70: self.OpcodeConditionalBranch( "BVS offset", "---", cycles="2a", update=self.make_branch('v', False)),
             0x71: self.OpcodeZp(                "ADC (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_adc_sbc),
             0x75: self.OpcodeZp(                "ADC zp,X",   "AU-", cycles="4",  update=self.update_adc_sbc),
             0x76: self.OpcodeZp(                "ROR zp,X",   "-U-", cycles="6",  update=self.update_nzc),
@@ -209,7 +209,7 @@ class Cpu6502(cpu.Cpu):
             0x8c: self.OpcodeDataAbs(           "STY addr",   "--U", cycles="4",  update=self.neutral),
             0x8d: self.OpcodeDataAbs(           "STA addr",   "U--", cycles="4",  update=self.neutral),
             0x8e: self.OpcodeDataAbs(           "STX addr",   "-U-", cycles="4",  update=self.neutral),
-            0x90: self.OpcodeConditionalBranch( "BCC offset", "---", cycles="2a", update=self.update_branch),
+            0x90: self.OpcodeConditionalBranch( "BCC offset", "---", cycles="2a", update=self.make_branch('c', True)),
             0x91: self.OpcodeZp(                "STA (zp),Y", "U-U", cycles="6",  has_abs_version=False, update=self.neutral),
             0x94: self.OpcodeZp(                "STY zp,X",   "-UU", cycles="4",  update=self.neutral),
             0x95: self.OpcodeZp(                "STA zp,X",   "UU-", cycles="4",  update=self.neutral),
@@ -230,7 +230,7 @@ class Cpu6502(cpu.Cpu):
             0xac: self.OpcodeDataAbs(           "LDY addr",   "--O", cycles="4",  update=self.update_nz),
             0xad: self.OpcodeDataAbs(           "LDA addr",   "O--", cycles="4",  update=self.update_nz),
             0xae: self.OpcodeDataAbs(           "LDX addr",   "-O-", cycles="4",  update=self.update_nz),
-            0xb0: self.OpcodeConditionalBranch( "BCS offset", "---", cycles="2a", update=self.update_branch),
+            0xb0: self.OpcodeConditionalBranch( "BCS offset", "---", cycles="2a", update=self.make_branch('c', False)),
             0xb1: self.OpcodeZp(                "LDA (zp),Y", "O-U", cycles="5b", has_abs_version=False, update=self.update_nz),
             0xb4: self.OpcodeZp(                "LDY zp,X",   "-UO", cycles="4",  update=self.update_nz),
             0xb5: self.OpcodeZp(                "LDA zp,X",   "OU-", cycles="4",  update=self.update_nz),
@@ -252,7 +252,7 @@ class Cpu6502(cpu.Cpu):
             0xcc: self.OpcodeDataAbs(           "CPY addr",   "--U", cycles="4",  update=self.update_nzc),
             0xcd: self.OpcodeDataAbs(           "CMP addr",   "U--", cycles="4",  update=self.update_nzc),
             0xce: self.OpcodeDataAbs(           "DEC addr",   "---", cycles="6",  update=self.update_nz),
-            0xd0: self.OpcodeConditionalBranch( "BNE offset", "---", cycles="2a", update=self.update_branch),
+            0xd0: self.OpcodeConditionalBranch( "BNE offset", "---", cycles="2a", update=self.make_branch('z', True)),
             0xd1: self.OpcodeZp(                "CMP (zp),Y", "U-U", cycles="5b", has_abs_version=False, update=self.update_nzc),
             0xd5: self.OpcodeZp(                "CMP zp,X",   "UU-", cycles="4",  update=self.update_nzc),
             0xd6: self.OpcodeZp(                "DEC zp,X",   "-U-", cycles="6",  update=self.update_nz),
@@ -271,7 +271,7 @@ class Cpu6502(cpu.Cpu):
             0xec: self.OpcodeDataAbs(           "CPX addr",   "-U-", cycles="4",  update=self.update_nzc),
             0xed: self.OpcodeDataAbs(           "SBC addr",   "A--", cycles="4",  update=self.update_adc_sbc),
             0xee: self.OpcodeDataAbs(           "INC addr",   "---", cycles="6",  update=self.update_nz),
-            0xf0: self.OpcodeConditionalBranch( "BEQ offset", "---", cycles="2a", update=self.update_branch),
+            0xf0: self.OpcodeConditionalBranch( "BEQ offset", "---", cycles="2a", update=self.make_branch('z', False)),
             0xf1: self.OpcodeZp(                "SBC (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_adc_sbc),
             0xf5: self.OpcodeZp(                "SBC zp,X",   "AU-", cycles="4",  update=self.update_adc_sbc),
             0xf6: self.OpcodeZp(                "INC zp,X",   "---", cycles="6",  update=self.update_nz),
@@ -905,8 +905,10 @@ class Cpu6502(cpu.Cpu):
             # This is because somewhere will be jumping to the label with unknown state.
             self.clear_state_if_label_here(binary_addr, state)
 
-            # If a conditional branch is not taken, we continue tracing with registers unaltered.
-            pass
+            # If a conditional branch is not taken, we continue tracing
+            if self.update is not None:
+                self.regular_update(binary_addr, state)
+                self.update(binary_addr, state)
 
         def as_string(self, binary_addr):
             return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self.target(binary_addr), binary_addr))
@@ -1089,6 +1091,22 @@ class Cpu6502(cpu.Cpu):
                 state['z'] = None
         return transfer
 
+    def make_branch(self, flag, flag_state):
+        # If a flag state is not currently known, this sets the flag state *assuming the branch is
+        # NOT taken*. e.g. if "BNE addr" then we set the Z flag assuming the branch is not taken
+        # i.e. Z=1
+        # This let's us continue tracing with appropriate state from the next instruction after
+        # the branch.
+
+        # This also helps detect a pair of opposite conditional branches, marking 'ALWAYS branch':
+        #    BNE addr1
+        #    BEQ addr2              ; ALWAYS branch
+        def update_branch(addr, state):
+            if state[flag] == None:
+                state[flag] = flag_state
+
+        return update_branch
+
     def neutral(self, binary_addr, state):
         assert binary_addr is not None
         pass
@@ -1101,10 +1119,6 @@ class Cpu6502(cpu.Cpu):
     def update_nz_clear_a(self, binary_addr, state):
         self.update_nz(binary_addr, state)
         state['a'].value = None
-
-    def update_branch(self, binary_addr, state):
-        assert binary_addr is not None
-        pass
 
     def update_nzc(self, binary_addr, state):
         assert binary_addr is not None
@@ -1253,6 +1267,9 @@ class Cpu6502(cpu.Cpu):
             if c is not None:
                 state = trace.cpu.cpu_state_optimistic[binary_addr]
 
+                # Show the value of a register as an inline comment (if known) once they have been
+                # altered (e.g. for 'LDY #0:LDA (zp),Y:STA mem:INY' output '; Y=1' on the 'INY' line).
+
                 for reg in ['a', 'x', 'y']:
                     # If we know about the state of the register 'reg'
                     if state and state[reg]:
@@ -1270,6 +1287,7 @@ class Cpu6502(cpu.Cpu):
                 # Find "ALWAYS branch" instructions
                 always_branch = False
                 if isinstance(c, self.OpcodeConditionalBranch):
+                    # if the state of the flag is known and will cause the instruction to branch, then 'ALWAYS branch' is output
                     if c.mnemonic.upper() == "BCC" and state['c'] == False:
                         always_branch = True
                     elif c.mnemonic.upper() == "BCS" and state['c'] == True:
@@ -1291,7 +1309,7 @@ class Cpu6502(cpu.Cpu):
                         move_id = movemanager.move_id_for_binary_addr[binary_addr]
                         binary_loc = movemanager.BinaryLocation(binary_addr, move_id)
                         disassembly.comment_binary(binary_loc, "ALWAYS branch", align=Align.INLINE, auto_generated=True)
-                        disassembly.add_raw_annotation(binary_loc, "", align=Align.AFTER_LINE)
+                        disassembly.add_raw_annotation(binary_loc, "", align=Align.AFTER_LINE)  # add a blank line after ALWAYS branch
                 binary_addr += c.length()
             else:
                 binary_addr += 1

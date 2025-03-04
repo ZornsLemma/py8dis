@@ -4846,7 +4846,8 @@ loop_c9cfd
     cmp #$8b                                                          ; 9d04: c9 8b       ..
     bne loop_c9cfd                                                    ; 9d06: d0 f5       ..
     sty l000a                                                         ; 9d08: 84 0a       ..
-    beq c9ced                                                         ; 9d0a: f0 e1       ..
+    beq c9ced                                                         ; 9d0a: f0 e1       ..             ; ALWAYS branch
+
 ; $9d0c referenced 1 time by $9d01
 c9d0c
     jmp c907d                                                         ; 9d0c: 4c 7d 90    L}.
@@ -7860,7 +7861,8 @@ loop_cad5e
     lda (l0019),y                                                     ; ad6d: b1 19       ..
     cmp #$22 ; '"'                                                    ; ad6f: c9 22       ."
     beq loop_cad5d                                                    ; ad71: f0 ea       ..
-    bne cad53                                                         ; ad73: d0 de       ..
+    bne cad53                                                         ; ad73: d0 de       ..             ; ALWAYS branch
+
 ; $ad75 referenced 1 time by $ad62
 cad75
     jmp c9357                                                         ; ad75: 4c 57 93    LW.
