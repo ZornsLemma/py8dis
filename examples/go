@@ -30,9 +30,12 @@ OPT="$EXT $CHK $MKG"
 
 echo "Options: $OPT"
 
+# 8080 code
 python3 go.py "example8080"     $OPT --assemblers z88dk-8080            # hello world example for the 8080 instruction set
 python3 go.py "test8080"        $OPT --assemblers z88dk-8080            # testing the whole 8080 instruction set
 
+# 6502 code
+# Tests
 python3 go.py "align_test"      $OPT --assemblers acme beebasm xa       # tests for formatting
 python3 go.py "string_stuff1"   $OPT --assemblers acme beebasm          # xa omitted since it can't do string constants e.g. 'page = "1900"'
 python3 go.py "string_stuff2"   $OPT --assemblers beebasm               # testing the beebasm specific expression 'STR$~(page)'
@@ -41,14 +44,19 @@ python3 go.py "moving2"         $OPT --assemblers acme beebasm xa       # tests 
 python3 go.py "moving3"         $OPT --assemblers acme beebasm xa       # tests for the move() command
 python3 go.py "helloworld"      $OPT --assemblers acme beebasm xa       # the basic hello world test
 python3 go.py "local_labels"    $OPT --assemblers acme beebasm xa       # labels defined as local to one move region
+python3 go.py "move"            $OPT --assemblers acme beebasm xa       # a move() test
+python3 go.py "move2"           $OPT --assemblers acme beebasm xa       # another move() test
+python3 go.py "split"           $OPT --assemblers acme beebasm xa       # loads *two* binary files to disassemble
+python3 go.py "subroutine_test" $OPT --assemblers acme beebasm xa       # demonstrates the use of the subroutine() command
+python3 go.py "acorn_os_calls"  $OPT --assemblers acme beebasm xa       # test all the os calls for acorn machines
+
+# ROMs
 python3 go.py "os12"            $OPT --assemblers acme beebasm xa       # MOS 1.20
 python3 go.py "basic4"          $OPT --assemblers acme beebasm xa       # BASIC
 python3 go.py "dfs226"          $OPT --assemblers acme beebasm xa       # DFS
 python3 go.py "dfs226b"         $OPT --assemblers acme beebasm xa       # DFS with an artificially added move() for testing
 python3 go.py "anfs418"         $OPT --assemblers acme beebasm xa       # Networks filing system
-python3 go.py "move"            $OPT --assemblers acme beebasm xa       # a move() test
-python3 go.py "move2"           $OPT --assemblers acme beebasm xa       # another move() test
-python3 go.py "split"           $OPT --assemblers acme beebasm xa       # loads *two* binary files to disassemble
+
+# Games
 python3 go.py "chuckie"         $OPT --assemblers acme beebasm xa       # Chuckie Egg
-python3 go.py "subroutine_test" $OPT --assemblers acme beebasm xa       # demonstrates the use of the subroutine() command
-python3 go.py "acorn_os_calls"  $OPT --assemblers acme beebasm xa       # test all the os calls for acorn machines
+python3 go.py "planb"           $OPT --assemblers acme beebasm xa       # Plan B
