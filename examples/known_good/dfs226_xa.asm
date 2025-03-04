@@ -2421,7 +2421,7 @@ c8c87
     ror l00a1                                                         // 8c87: 66 a1       f.
     ldy #3                                                            // 8c89: a0 03       ..
     lda (l00b0),y                                                     // 8c8b: b1 b0       ..
-    iny                                                               // 8c8d: c8          .
+    iny                                                               // 8c8d: c8          .              // Y=$04
     and (l00b0),y                                                     // 8c8e: 31 b0       1.
     cmp #$ff                                                          // 8c90: c9 ff       ..
     clc                                                               // 8c92: 18          .
@@ -2999,7 +2999,7 @@ c8fb5
     ldy #1                                                            // 8fb9: a0 01       ..
     lda (l00b0),y                                                     // 8fbb: b1 b0       ..
     sta nmi_lda_abs+1,x                                               // 8fbd: 9d 3a 0d    .:.
-    iny                                                               // 8fc0: c8          .
+    iny                                                               // 8fc0: c8          .              // Y=$02
     lda (l00b0),y                                                     // 8fc1: b1 b0       ..
     sta nmi_lda_abs+2,x                                               // 8fc3: 9d 3b 0d    .;.
     rts                                                               // 8fc6: 60          `
@@ -3478,8 +3478,8 @@ c925a
     beq c926a                                                         // 9262: f0 06       ..
     cpy #$18                                                          // 9264: c0 18       ..
     bne c9276                                                         // 9266: d0 0e       ..
-    inx                                                               // 9268: e8          .
-    inx                                                               // 9269: e8          .
+    inx                                                               // 9268: e8          .              // X=$01
+    inx                                                               // 9269: e8          .              // X=$02
 // $926a referenced 1 time by $9262
 c926a
     lda l00c2                                                         // 926a: a5 c2       ..
@@ -3497,7 +3497,7 @@ sub_c9279
     lda l00c1                                                         // 927b: a5 c1       ..
     cmp #$12                                                          // 927d: c9 12       ..
     beq c9289                                                         // 927f: f0 08       ..
-    inx                                                               // 9281: e8          .
+    inx                                                               // 9281: e8          .              // X=$01
     cmp #$1a                                                          // 9282: c9 1a       ..
     beq c9289                                                         // 9284: f0 03       ..
     lda #$fe                                                          // 9286: a9 fe       ..
@@ -3600,7 +3600,7 @@ c9302
     ldy #$0d                                                          // 930b: a0 0d       ..
     sta (l00b2),y                                                     // 930d: 91 b2       ..
     lda l00b6                                                         // 930f: a5 b6       ..
-    iny                                                               // 9311: c8          .
+    iny                                                               // 9311: c8          .              // Y=$0e
     sta (l00b2),y                                                     // 9312: 91 b2       ..
     pla                                                               // 9314: 68          h
     and #$1f                                                          // 9315: 29 1f       ).
@@ -4186,7 +4186,7 @@ c969e
     and (l00b0),y                                                     // 96a7: 31 b0       1.
     sta (l00b0),y                                                     // 96a9: 91 b0       ..
     php                                                               // 96ab: 08          .
-    iny                                                               // 96ac: c8          .
+    iny                                                               // 96ac: c8          .              // Y=$d4
     plp                                                               // 96ad: 28          (
     bpl c96b7                                                         // 96ae: 10 07       ..
     lda (l00b0),y                                                     // 96b0: b1 b0       ..
@@ -4259,8 +4259,8 @@ c9700
     cmp #$0d                                                          // 9708: c9 0d       ..
     bne loop_c96f2                                                    // 970a: d0 e6       ..
     tya                                                               // 970c: 98          .
-    inx                                                               // 970d: e8          .
-    inx                                                               // 970e: e8          .
+    inx                                                               // 970d: e8          .              // X=$d0
+    inx                                                               // 970e: e8          .              // X=$d1
     ldy #2                                                            // 970f: a0 02       ..
     jmp ca10b                                                         // 9711: 4c 0b a1    L..
 
@@ -4327,14 +4327,14 @@ c976c
     lda #0                                                            // 976c: a9 00       ..
     tay                                                               // 976e: a8          .
     sta (l00c7),y                                                     // 976f: 91 c7       ..
-    iny                                                               // 9771: c8          .
+    iny                                                               // 9771: c8          .              // Y=$01
     lda l0f07                                                         // 9772: ad 07 0f    ...
     sta (l00c7),y                                                     // 9775: 91 c7       ..
-    iny                                                               // 9777: c8          .
+    iny                                                               // 9777: c8          .              // Y=$02
     lda l0f06                                                         // 9778: ad 06 0f    ...
     and #3                                                            // 977b: 29 03       ).
     sta (l00c7),y                                                     // 977d: 91 c7       ..
-    iny                                                               // 977f: c8          .
+    iny                                                               // 977f: c8          .              // Y=$03
     lda #0                                                            // 9780: a9 00       ..
     sta (l00c7),y                                                     // 9782: 91 c7       ..
     rts                                                               // 9784: 60          `
@@ -4732,10 +4732,10 @@ sub_c99f3
     ldy #2                                                            // 99f6: a0 02       ..
     lda (l00b0),y                                                     // 99f8: b1 b0       ..
     sta l0f08,x                                                       // 99fa: 9d 08 0f    ...
-    iny                                                               // 99fd: c8          .
+    iny                                                               // 99fd: c8          .              // Y=$03
     lda (l00b0),y                                                     // 99fe: b1 b0       ..
     sta l0f09,x                                                       // 9a00: 9d 09 0f    ...
-    iny                                                               // 9a03: c8          .
+    iny                                                               // 9a03: c8          .              // Y=$04
     lda (l00b0),y                                                     // 9a04: b1 b0       ..
     asl                                                               // 9a06: 0a          .
     asl                                                               // 9a07: 0a          .
@@ -4748,10 +4748,10 @@ sub_c9a0f
     ldy #6                                                            // 9a12: a0 06       ..
     lda (l00b0),y                                                     // 9a14: b1 b0       ..
     sta l0f0a,x                                                       // 9a16: 9d 0a 0f    ...
-    iny                                                               // 9a19: c8          .
+    iny                                                               // 9a19: c8          .              // Y=$07
     lda (l00b0),y                                                     // 9a1a: b1 b0       ..
     sta l0f0b,x                                                       // 9a1c: 9d 0b 0f    ...
-    iny                                                               // 9a1f: c8          .
+    iny                                                               // 9a1f: c8          .              // Y=$08
     lda (l00b0),y                                                     // 9a20: b1 b0       ..
     ror                                                               // 9a22: 6a          j
     ror                                                               // 9a23: 6a          j
@@ -4858,7 +4858,7 @@ sub_c9aa3
     lda #$ff                                                          // 9aad: a9 ff       ..
     sta (l00b0),y                                                     // 9aaf: 91 b0       ..
     sta l10d3                                                         // 9ab1: 8d d3 10    ...
-    iny                                                               // 9ab4: c8          .
+    iny                                                               // 9ab4: c8          .              // Y=$d4
     sta (l00b0),y                                                     // 9ab5: 91 b0       ..
     rts                                                               // 9ab7: 60          `
 
@@ -4897,14 +4897,14 @@ sub_c9ad8
 c9adf
     lda #$8f                                                          // 9adf: a9 8f       ..
     bne c9ae9                                                         // 9ae1: d0 06       ..
-    lda #osbyte_read_write_startup_options                            // 9ae3: a9 ff       ..
+    lda #$ff                                                          // 9ae3: a9 ff       ..
 // $9ae5 referenced 8 times by $80a5, $9588, $96a0, $9e32, $9e43, $aae2, $ac7c, $aeb7
 osbyte_read
     ldx #0                                                            // 9ae5: a2 00       ..
     ldy #$ff                                                          // 9ae7: a0 ff       ..
 // $9ae9 referenced 4 times by $9ad1, $9ad6, $9add, $9ae1
 c9ae9
-    jmp osbyte                                                        // 9ae9: 4c f4 ff    L..            // Read start-up option byte
+    jmp osbyte                                                        // 9ae9: 4c f4 ff    L..
 
 // $9aec referenced 1 time by $957d
 l9aec
@@ -5434,12 +5434,12 @@ c9e41
     jsr osbyte_read                                                   // 9e43: 20 e5 9a     ..
     jsr sub_c9e54                                                     // 9e46: 20 54 9e     T.
     bne c9e5c                                                         // 9e49: d0 11       ..
-    lda #osbyte_read_write_spool_file_handle                          // 9e4b: a9 c7       ..
+    lda #$c7                                                          // 9e4b: a9 c7       ..
 // $9e4d referenced 1 time by $9e3f
 osbyte_write_0
-    ldx #0                                                            // 9e4d: a2 00       ..             // X=File handle
+    ldx #0                                                            // 9e4d: a2 00       ..
     ldy #0                                                            // 9e4f: a0 00       ..
-    jmp osbyte                                                        // 9e51: 4c f4 ff    L..            // Write *SPOOL file handle, value X=0
+    jmp osbyte                                                        // 9e51: 4c f4 ff    L..
 
 // $9e54 referenced 2 times by $9e38, $9e46
 sub_c9e54
@@ -6687,7 +6687,7 @@ sub_ca73d
     ldx #0                                                            // a73d: a2 00       ..
     stx l1091                                                         // a73f: 8e 91 10    ...
     stx l109a                                                         // a742: 8e 9a 10    ...
-    dex                                                               // a745: ca          .
+    dex                                                               // a745: ca          .              // X=$ff
     stx l1093                                                         // a746: 8e 93 10    ...
     stx l1094                                                         // a749: 8e 94 10    ...
     lda l10cf                                                         // a74c: ad cf 10    ...
@@ -7590,10 +7590,10 @@ sub_cac72
     sta bytev+1                                                       // ac9f: 8d 0b 02    ...
     lda #$b2                                                          // aca2: a9 b2       ..
     sta (l00b0),y                                                     // aca4: 91 b0       ..
-    iny                                                               // aca6: c8          .
+    iny                                                               // aca6: c8          .              // Y=$10
     lda #$ac                                                          // aca7: a9 ac       ..
     sta (l00b0),y                                                     // aca9: 91 b0       ..
-    iny                                                               // acab: c8          .
+    iny                                                               // acab: c8          .              // Y=$11
     lda romsel_copy                                                   // acac: a5 f4       ..
     sta (l00b0),y                                                     // acae: 91 b0       ..
     plp                                                               // acb0: 28          (
@@ -8509,7 +8509,7 @@ cb2e7
     ldy #$f2                                                          // b2ea: a0 f2       ..
     lda (l00b8),y                                                     // b2ec: b1 b8       ..
     tax                                                               // b2ee: aa          .
-    iny                                                               // b2ef: c8          .
+    iny                                                               // b2ef: c8          .              // Y=$f3
     lda (l00b8),y                                                     // b2f0: b1 b8       ..
     jsr sub_cb85d                                                     // b2f2: 20 5d b8     ].
     bvs cb305                                                         // b2f5: 70 0e       p.
@@ -8530,7 +8530,7 @@ cb305
     ldy #$f3                                                          // b30a: a0 f3       ..
     sta (l00b8),y                                                     // b30c: 91 b8       ..
     txa                                                               // b30e: 8a          .
-    dey                                                               // b30f: 88          .
+    dey                                                               // b30f: 88          .              // Y=$f2
     sta (l00b8),y                                                     // b310: 91 b8       ..
     ldy l00ba                                                         // b312: a4 ba       ..
 // $b314 referenced 1 time by $b2fe
@@ -8610,7 +8610,7 @@ cb382
     sta (l00b8),y                                                     // b389: 91 b8       ..
     cmp #$ff                                                          // b38b: c9 ff       ..
     bne cb397                                                         // b38d: d0 08       ..
-    iny                                                               // b38f: c8          .
+    iny                                                               // b38f: c8          .              // Y=$f5
     lda (l00b8),y                                                     // b390: b1 b8       ..
     sec                                                               // b392: 38          8
     sbc #1                                                            // b393: e9 01       ..
@@ -8639,13 +8639,13 @@ cb3ba
     ldy #$f9                                                          // b3ba: a0 f9       ..
     lda (l00b8),y                                                     // b3bc: b1 b8       ..
     bmi cb3de                                                         // b3be: 30 1e       0.
-    dey                                                               // b3c0: 88          .
+    dey                                                               // b3c0: 88          .              // Y=$f8
     ora (l00b8),y                                                     // b3c1: 11 b8       ..
     bne cb406                                                         // b3c3: d0 41       .A
     lda #0                                                            // b3c5: a9 00       ..
     sta (l00b8),y                                                     // b3c7: 91 b8       ..
     lda #1                                                            // b3c9: a9 01       ..
-    iny                                                               // b3cb: c8          .
+    iny                                                               // b3cb: c8          .              // Y=$f9
     sta (l00b8),y                                                     // b3cc: 91 b8       ..
     ldy #$f6                                                          // b3ce: a0 f6       ..
     lda #0                                                            // b3d0: a9 00       ..
@@ -8653,7 +8653,7 @@ cb3ba
     ldx l00b9                                                         // b3d4: a6 b9       ..
     inx                                                               // b3d6: e8          .
     txa                                                               // b3d7: 8a          .
-    iny                                                               // b3d8: c8          .
+    iny                                                               // b3d8: c8          .              // Y=$f7
     sta (l00b8),y                                                     // b3d9: 91 b8       ..
     jmp cb406                                                         // b3db: 4c 06 b4    L..
 
@@ -8679,7 +8679,7 @@ cb3de
     sta (l00b8),y                                                     // b3fe: 91 b8       ..
     pla                                                               // b400: 68          h
     sbc l00bb                                                         // b401: e5 bb       ..
-    iny                                                               // b403: c8          .
+    iny                                                               // b403: c8          .              // Y=$f9
     sta (l00b8),y                                                     // b404: 91 b8       ..
 // $b406 referenced 2 times by $b3c3, $b3db
 cb406
@@ -8699,7 +8699,7 @@ cb40e
     ldy #$f0                                                          // b418: a0 f0       ..
     lda (l00b8),y                                                     // b41a: b1 b8       ..
     pha                                                               // b41c: 48          H
-    dey                                                               // b41d: 88          .
+    dey                                                               // b41d: 88          .              // Y=$ef
     lda (l00b8),y                                                     // b41e: b1 b8       ..
     pha                                                               // b420: 48          H
     dex                                                               // b421: ca          .
@@ -8713,7 +8713,7 @@ cb40e
     sta (l00b8),y                                                     // b432: 91 b8       ..
     sta l00ba                                                         // b434: 85 ba       ..
     lda l010c,x                                                       // b436: bd 0c 01    ...
-    iny                                                               // b439: c8          .
+    iny                                                               // b439: c8          .              // Y=$f5
     sta (l00b8),y                                                     // b43a: 91 b8       ..
     sta l00bb                                                         // b43c: 85 bb       ..
     lda l010d,x                                                       // b43e: bd 0d 01    ...
@@ -8771,13 +8771,13 @@ cb470
     ldy #$f7                                                          // b488: a0 f7       ..
     lda (l00b8),y                                                     // b48a: b1 b8       ..
     pha                                                               // b48c: 48          H
-    dey                                                               // b48d: 88          .
+    dey                                                               // b48d: 88          .              // Y=$f6
     lda (l00b8),y                                                     // b48e: b1 b8       ..
     pha                                                               // b490: 48          H
     ldy #$f0                                                          // b491: a0 f0       ..
     lda (l00b8),y                                                     // b493: b1 b8       ..
     pha                                                               // b495: 48          H
-    dey                                                               // b496: 88          .
+    dey                                                               // b496: 88          .              // Y=$ef
     lda (l00b8),y                                                     // b497: b1 b8       ..
     pha                                                               // b499: 48          H
     tsx                                                               // b49a: ba          .
@@ -8887,7 +8887,7 @@ cb534
     adc (l00b8),y                                                     // b545: 71 b8       q.
     tax                                                               // b547: aa          .
     lda l00bb                                                         // b548: a5 bb       ..
-    iny                                                               // b54a: c8          .
+    iny                                                               // b54a: c8          .              // Y=$fc
     adc (l00b8),y                                                     // b54b: 71 b8       q.
     pha                                                               // b54d: 48          H
     txa                                                               // b54e: 8a          .
@@ -8909,7 +8909,7 @@ loop_cb55e
     ldy #$f0                                                          // b562: a0 f0       ..
     lda (l00b8),y                                                     // b564: b1 b8       ..
     pha                                                               // b566: 48          H
-    dey                                                               // b567: 88          .
+    dey                                                               // b567: 88          .              // Y=$ef
     tsx                                                               // b568: ba          .
     lda (l00b8),y                                                     // b569: b1 b8       ..
     pha                                                               // b56b: 48          H
@@ -8960,7 +8960,7 @@ sub_cb598
     ldy #$fc                                                          // b5a0: a0 fc       ..
     lda (l00b8),y                                                     // b5a2: b1 b8       ..
     pha                                                               // b5a4: 48          H
-    dey                                                               // b5a5: 88          .
+    dey                                                               // b5a5: 88          .              // Y=$fb
     lda (l00b8),y                                                     // b5a6: b1 b8       ..
     pha                                                               // b5a8: 48          H
     lda #$ff                                                          // b5a9: a9 ff       ..
@@ -8969,7 +8969,7 @@ sub_cb598
     ldy #$f7                                                          // b5ad: a0 f7       ..
     lda (l00b8),y                                                     // b5af: b1 b8       ..
     pha                                                               // b5b1: 48          H
-    dey                                                               // b5b2: 88          .
+    dey                                                               // b5b2: 88          .              // Y=$f6
     lda (l00b8),y                                                     // b5b3: b1 b8       ..
     pha                                                               // b5b5: 48          H
     tsx                                                               // b5b6: ba          .
@@ -8997,7 +8997,7 @@ cb5d0
     ldy #$ef                                                          // b5d1: a0 ef       ..
     lda (l00b8),y                                                     // b5d3: b1 b8       ..
     tax                                                               // b5d5: aa          .
-    iny                                                               // b5d6: c8          .
+    iny                                                               // b5d6: c8          .              // Y=$f0
     lda (l00b8),y                                                     // b5d7: b1 b8       ..
     tay                                                               // b5d9: a8          .
     pla                                                               // b5da: 68          h
@@ -9049,7 +9049,7 @@ sub_cb607
 sub_cb616
     ldy #$f4                                                          // b616: a0 f4       ..
     lda (l00b8),y                                                     // b618: b1 b8       ..
-    iny                                                               // b61a: c8          .
+    iny                                                               // b61a: c8          .              // Y=$f5
     ora (l00b8),y                                                     // b61b: 11 b8       ..
     rts                                                               // b61d: 60          `
 
@@ -9064,7 +9064,7 @@ sub_cb61e
     sbc l00ba                                                         // b62a: e5 ba       ..
     sta (l00b8),y                                                     // b62c: 91 b8       ..
     sta l00ba                                                         // b62e: 85 ba       ..
-    iny                                                               // b630: c8          .
+    iny                                                               // b630: c8          .              // Y=$f5
     lda (l00b8),y                                                     // b631: b1 b8       ..
     sbc l00bb                                                         // b633: e5 bb       ..
     sta (l00b8),y                                                     // b635: 91 b8       ..
@@ -9869,7 +9869,7 @@ sub_cbad2
     sta (l00b8),y                                                     // badc: 91 b8       ..
     lda l00f3                                                         // bade: a5 f3       ..
     adc #0                                                            // bae0: 69 00       i.
-    iny                                                               // bae2: c8          .
+    iny                                                               // bae2: c8          .              // Y=$f0
     sta (l00b8),y                                                     // bae3: 91 b8       ..
     pla                                                               // bae5: 68          h
     tay                                                               // bae6: a8          .
@@ -9986,7 +9986,7 @@ cbb6f
     sec                                                               // bb7b: 38          8
     sbc (l00b8),y                                                     // bb7c: f1 b8       ..
     sta l00bc                                                         // bb7e: 85 bc       ..
-    iny                                                               // bb80: c8          .
+    iny                                                               // bb80: c8          .              // Y=$f3
     lda l00bd                                                         // bb81: a5 bd       ..
     sbc (l00b8),y                                                     // bb83: f1 b8       ..
     bcc cbbd0                                                         // bb85: 90 49       .I
@@ -10031,7 +10031,7 @@ cbbbe
     ldy #$f8                                                          // bbc3: a0 f8       ..
     lda #0                                                            // bbc5: a9 00       ..
     sta (l00b8),y                                                     // bbc7: 91 b8       ..
-    iny                                                               // bbc9: c8          .
+    iny                                                               // bbc9: c8          .              // Y=$f9
     txa                                                               // bbca: 8a          .
     sta (l00b8),y                                                     // bbcb: 91 b8       ..
     jmp cb2e7                                                         // bbcd: 4c e7 b2    L..
@@ -10444,7 +10444,7 @@ cbe47
     ldx #1                                                            // be47: a2 01       ..
     inc l00ba,x                                                       // be49: f6 ba       ..
     bne cbe52                                                         // be4b: d0 05       ..
-    inx                                                               // be4d: e8          .
+    inx                                                               // be4d: e8          .              // X=$02
     cpx #4                                                            // be4e: e0 04       ..
     bcc cbe47                                                         // be50: 90 f5       ..
 // $be52 referenced 1 time by $be4b

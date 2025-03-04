@@ -48,12 +48,14 @@ class Filepaths:
 def run_py8dis(f, assembler):
     cmd = ['python3', str(f.control_file), '--'+assembler]
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
     except FileNotFoundError as e:
         return "File not found: {0}".format(e)
-    f.asm_output_file.write_text(result)
+    f.asm_output_file.write_text(result.stdout)
+    if result.stderr:
+        print(result.stderr)
     return None
 
 ##################################################################################################

@@ -175,7 +175,7 @@ def add_optional_label(runtime_addr, s, *, base_addr=None, definable_inline=True
 
     # Check if already present
     if runtime_addr in optional_labels:
-        assert optional_labels[runtime_addr] == (s, base_addr, definable_inline)
+        assert optional_labels[runtime_addr] == (s, base_addr, definable_inline), "Optional label at {0} redefined, was {1}".format(hex(runtime_addr), optional_labels[runtime_addr][0])
         return
 
     # Check base_addr is valid
@@ -185,7 +185,7 @@ def add_optional_label(runtime_addr, s, *, base_addr=None, definable_inline=True
         assert base_addr in optional_labels
         assert optional_labels[base_addr][1] is None
     else:
-        assert is_simple_name(s)
+        assert is_simple_name(s), "This is not a simple label name: {0}".format(s)
     optional_labels[runtime_addr] = (s, base_addr, definable_inline)
 
 def add_local_label(runtime_addr, name, start_addr, end_addr, move_id=None):

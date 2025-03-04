@@ -1,277 +1,276 @@
 ; Constants
-inkey_key_ctrl                                  = 254
-osbyte_acknowledge_escape                       = 126
-osbyte_close_spool_exec                         = 119
-osbyte_explode_chars                            = 20
-osbyte_flush_buffer_class                       = 15
-osbyte_insert_input_buffer                      = 153
-osbyte_issue_service_request                    = 143
-osbyte_read_os_version                          = 0
-osbyte_read_write_econet_keyboard_disable       = 201
-osbyte_read_write_econet_os_call_interception   = 206
-osbyte_scan_keyboard                            = 121
-osbyte_scan_keyboard_from_16                    = 122
-osbyte_vsync                                    = 19
-osbyte_write_keys_pressed                       = 120
-osfile_read_catalogue_info                      = 5
-osfind_close                                    = 0
-osfind_open_input                               = 64
-osword_read_palette                             = 11
-service_claim_absolute_workspace                = 1
-service_vectors_changed                         = 15
+inkey_key_ctrl                              = 254
+osbyte_acknowledge_escape                   = 126
+osbyte_close_spool_exec                     = 119
+osbyte_explode_chars                        = 20
+osbyte_flush_buffer_class                   = 15
+osbyte_insert_input_buffer                  = 153
+osbyte_issue_service_request                = 143
+osbyte_read_os_version                      = 0
+osbyte_read_write_econet_keyboard_disable   = 201
+osbyte_scan_keyboard                        = 121
+osbyte_scan_keyboard_from_16                = 122
+osbyte_vsync                                = 19
+osbyte_write_keys_pressed                   = 120
+osfile_read_catalogue_info                  = 5
+osfind_close                                = 0
+osfind_open_input                           = 64
+osword_read_palette                         = 11
+service_claim_absolute_workspace            = 1
+service_vectors_changed                     = 15
 
 ; Memory locations
-l0000               = $00
-l0001               = $01
-l0012               = $12
-l0013               = $13
-l0014               = $14
-l0015               = $15
-l0016               = $16
-l0032               = $32
-l0053               = $53
-l0054               = $54
-l0055               = $55
-l0056               = $56
-l0063               = $63
-l0078               = $78
-l0098               = $98
-l0099               = $99
-l009a               = $9a
-l009b               = $9b
-l009c               = $9c
-l009d               = $9d
-l009e               = $9e
-l009f               = $9f
-l00a0               = $a0
-l00a1               = $a1
-l00a2               = $a2
-l00a3               = $a3
-l00a4               = $a4
-l00a5               = $a5
-l00a6               = $a6
-l00a7               = $a7
-l00a8               = $a8
-l00a9               = $a9
-l00aa               = $aa
-l00ab               = $ab
-l00ac               = $ac
-l00ad               = $ad
-l00ae               = $ae
-l00af               = $af
-l00b0               = $b0
-l00b1               = $b1
-l00b2               = $b2
-l00b3               = $b3
-l00b4               = $b4
-l00b5               = $b5
-l00b6               = $b6
-l00b7               = $b7
-l00b8               = $b8
-l00b9               = $b9
-l00ba               = $ba
-l00bb               = $bb
-l00bc               = $bc
-l00bd               = $bd
-l00be               = $be
-l00bf               = $bf
-l00c0               = $c0
-l00c1               = $c1
-l00c2               = $c2
-l00c4               = $c4
-l00c7               = $c7
-l00c8               = $c8
-l00cc               = $cc
-l00cd               = $cd
-l00d0               = $d0
-l00ed               = $ed
-l00ef               = $ef
-l00f0               = $f0
-os_text_ptr         = $f2
-l00f3               = $f3
-romsel_copy         = $f4
-osrdsc_ptr          = $f6
-l00f7               = $f7
-l00fd               = $fd
-l00ff               = $ff
-l0100               = $0100
-l0101               = $0101
-l0102               = $0102
-l0103               = $0103
-l0104               = $0104
-brkv                = $0202
-filev               = $0212
-fscv                = $021e
-evntv               = $0220
-netv                = $0224
-l026a               = $026a
-l028d               = $028d
-l02a0               = $02a0
-l0350               = $0350
-l0351               = $0351
-l0355               = $0355
-l04c7               = $04c7
-l04ce               = $04ce
-l0500               = $0500
-l0518               = $0518
-l0600               = $0600
-l0601               = $0601
-l0695               = $0695
-l069e               = $069e
-l0a00               = $0a00
-l0a81               = $0a81
-l0cff               = $0cff
-l0d07               = $0d07
-l0d0c               = $0d0c
-l0d0d               = $0d0d
-l0d0e               = $0d0e
-l0d11               = $0d11
-l0d1a               = $0d1a
-l0d1e               = $0d1e
-l0d20               = $0d20
-l0d21               = $0d21
-l0d22               = $0d22
-l0d23               = $0d23
-l0d24               = $0d24
-l0d25               = $0d25
-l0d26               = $0d26
-l0d3e               = $0d3e
-l0d3f               = $0d3f
-l0d40               = $0d40
-l0d41               = $0d41
-l0d60               = $0d60
-l0d61               = $0d61
-l0d62               = $0d62
-l0d63               = $0d63
-l0d64               = $0d64
-l0d65               = $0d65
-l0d68               = $0d68
-l0d69               = $0d69
-l0d6a               = $0d6a
-l0d6b               = $0d6b
-l0d6c               = $0d6c
-l0d6d               = $0d6d
-l0d6e               = $0d6e
-l0d6f               = $0d6f
-l0d71               = $0d71
-l0df0               = $0df0
-l0dfe               = $0dfe
-l0e00               = $0e00
-l0e01               = $0e01
-l0e02               = $0e02
-l0e03               = $0e03
-l0e04               = $0e04
-l0e05               = $0e05
-l0e06               = $0e06
-l0e07               = $0e07
-l0e08               = $0e08
-l0e09               = $0e09
-l0e0a               = $0e0a
-l0e0b               = $0e0b
-l0e14               = $0e14
-l0e2f               = $0e2f
-l0e30               = $0e30
-l0e31               = $0e31
-l0e32               = $0e32
-l0e38               = $0e38
-l0e81               = $0e81
-l0ef7               = $0ef7
-l0f00               = $0f00
-l0f01               = $0f01
-l0f02               = $0f02
-l0f03               = $0f03
-l0f04               = $0f04
-l0f05               = $0f05
-l0f06               = $0f06
-l0f07               = $0f07
-l0f08               = $0f08
-l0f09               = $0f09
-l0f0a               = $0f0a
-l0f0b               = $0f0b
-l0f0c               = $0f0c
-l0f0d               = $0f0d
-l0f0e               = $0f0e
-l0f10               = $0f10
-l0f11               = $0f11
-l0f12               = $0f12
-l0f13               = $0f13
-l0f14               = $0f14
-l0f2f               = $0f2f
-l0f30               = $0f30
-l0fc8               = $0fc8
-l0fdc               = $0fdc
-l0fdd               = $0fdd
-l0fde               = $0fde
-l0fdf               = $0fdf
-l0fe0               = $0fe0
-l0ff0               = $0ff0
-l0fff               = $0fff
-l1000               = $1000
-l1010               = $1010
-l1020               = $1020
-l1030               = $1030
-l1040               = $1040
-l1050               = $1050
-l1060               = $1060
-l1070               = $1070
-l1071               = $1071
-l1072               = $1072
-l1073               = $1073
-l1074               = $1074
-l1078               = $1078
-l1088               = $1088
-l1098               = $1098
-l10a8               = $10a8
-l10b8               = $10b8
-l10c8               = $10c8
-l10c9               = $10c9
-l10ca               = $10ca
-l10cb               = $10cb
-l10cc               = $10cc
-l10cd               = $10cd
-l10ce               = $10ce
-l10cf               = $10cf
-l10d0               = $10d0
-l10d1               = $10d1
-l10d4               = $10d4
-l10d5               = $10d5
-l10d6               = $10d6
-l10d7               = $10d7
-l10d8               = $10d8
-l10d9               = $10d9
-l10f3               = $10f3
-lfe18               = $fe18
-video_ula_control   = $fe20
-romsel              = $fe30
-system_via_sr       = $fe4a
-system_via_acr      = $fe4b
-system_via_ifr      = $fe4d
-system_via_ier      = $fe4e
-lfe87               = $fe87
-lfea0               = $fea0
-lfea1               = $fea1
-lfea2               = $fea2
-lfea3               = $fea3
-tube_host_r1_status = $fee0
-tube_host_r1_data   = $fee1
-tube_host_r3_data   = $fee5
-tube_host_r4_status = $fee6
-lffb0               = $ffb0
-osrdsc              = $ffb9
-lffbd               = $ffbd
-gsinit              = $ffc2
-gsread              = $ffc5
-osfind              = $ffce
-osbget              = $ffd7
-osargs              = $ffda
-osfile              = $ffdd
-osrdch              = $ffe0
-osasci              = $ffe3
-osnewl              = $ffe7
-oswrch              = $ffee
-osword              = $fff1
-osbyte              = $fff4
-oscli               = $fff7
+l0000                       = $00
+l0001                       = $01
+l0012                       = $12
+l0013                       = $13
+l0014                       = $14
+l0015                       = $15
+l0016                       = $16
+l0032                       = $32
+l0053                       = $53
+l0054                       = $54
+l0055                       = $55
+l0056                       = $56
+l0063                       = $63
+l0078                       = $78
+l0098                       = $98
+l0099                       = $99
+l009a                       = $9a
+l009b                       = $9b
+l009c                       = $9c
+l009d                       = $9d
+l009e                       = $9e
+l009f                       = $9f
+l00a0                       = $a0
+l00a1                       = $a1
+l00a2                       = $a2
+l00a3                       = $a3
+l00a4                       = $a4
+l00a5                       = $a5
+l00a6                       = $a6
+l00a7                       = $a7
+l00a8                       = $a8
+l00a9                       = $a9
+l00aa                       = $aa
+l00ab                       = $ab
+l00ac                       = $ac
+l00ad                       = $ad
+l00ae                       = $ae
+l00af                       = $af
+l00b0                       = $b0
+l00b1                       = $b1
+l00b2                       = $b2
+l00b3                       = $b3
+l00b4                       = $b4
+l00b5                       = $b5
+l00b6                       = $b6
+l00b7                       = $b7
+l00b8                       = $b8
+l00b9                       = $b9
+l00ba                       = $ba
+l00bb                       = $bb
+l00bc                       = $bc
+l00bd                       = $bd
+l00be                       = $be
+l00bf                       = $bf
+l00c0                       = $c0
+l00c1                       = $c1
+l00c2                       = $c2
+l00c4                       = $c4
+l00c7                       = $c7
+l00c8                       = $c8
+l00cc                       = $cc
+l00cd                       = $cd
+l00d0                       = $d0
+l00ed                       = $ed
+l00ef                       = $ef
+l00f0                       = $f0
+os_text_ptr                 = $f2
+l00f3                       = $f3
+romsel_copy                 = $f4
+osrdsc_ptr                  = $f6
+l00f7                       = $f7
+l00fd                       = $fd
+l00ff                       = $ff
+l0100                       = $0100
+l0101                       = $0101
+l0102                       = $0102
+l0103                       = $0103
+l0104                       = $0104
+brkv                        = $0202
+filev                       = $0212
+fscv                        = $021e
+evntv                       = $0220
+netv                        = $0224
+l026a                       = $026a
+l028d                       = $028d
+l02a0                       = $02a0
+l0350                       = $0350
+l0351                       = $0351
+l0355                       = $0355
+l04c7                       = $04c7
+l04ce                       = $04ce
+l0500                       = $0500
+l0518                       = $0518
+l0600                       = $0600
+l0601                       = $0601
+l0695                       = $0695
+l069e                       = $069e
+l0a00                       = $0a00
+l0a81                       = $0a81
+l0cff                       = $0cff
+l0d07                       = $0d07
+l0d0c                       = $0d0c
+l0d0d                       = $0d0d
+l0d0e                       = $0d0e
+l0d11                       = $0d11
+l0d1a                       = $0d1a
+l0d1e                       = $0d1e
+l0d20                       = $0d20
+l0d21                       = $0d21
+l0d22                       = $0d22
+l0d23                       = $0d23
+l0d24                       = $0d24
+l0d25                       = $0d25
+l0d26                       = $0d26
+l0d3e                       = $0d3e
+l0d3f                       = $0d3f
+l0d40                       = $0d40
+l0d41                       = $0d41
+l0d60                       = $0d60
+l0d61                       = $0d61
+l0d62                       = $0d62
+l0d63                       = $0d63
+l0d64                       = $0d64
+l0d65                       = $0d65
+l0d68                       = $0d68
+l0d69                       = $0d69
+l0d6a                       = $0d6a
+l0d6b                       = $0d6b
+l0d6c                       = $0d6c
+l0d6d                       = $0d6d
+l0d6e                       = $0d6e
+l0d6f                       = $0d6f
+l0d71                       = $0d71
+l0df0                       = $0df0
+l0dfe                       = $0dfe
+l0e00                       = $0e00
+l0e01                       = $0e01
+l0e02                       = $0e02
+l0e03                       = $0e03
+l0e04                       = $0e04
+l0e05                       = $0e05
+l0e06                       = $0e06
+l0e07                       = $0e07
+l0e08                       = $0e08
+l0e09                       = $0e09
+l0e0a                       = $0e0a
+l0e0b                       = $0e0b
+l0e14                       = $0e14
+l0e2f                       = $0e2f
+l0e30                       = $0e30
+l0e31                       = $0e31
+l0e32                       = $0e32
+l0e38                       = $0e38
+l0e81                       = $0e81
+l0ef7                       = $0ef7
+l0f00                       = $0f00
+l0f01                       = $0f01
+l0f02                       = $0f02
+l0f03                       = $0f03
+l0f04                       = $0f04
+l0f05                       = $0f05
+l0f06                       = $0f06
+l0f07                       = $0f07
+l0f08                       = $0f08
+l0f09                       = $0f09
+l0f0a                       = $0f0a
+l0f0b                       = $0f0b
+l0f0c                       = $0f0c
+l0f0d                       = $0f0d
+l0f0e                       = $0f0e
+l0f10                       = $0f10
+l0f11                       = $0f11
+l0f12                       = $0f12
+l0f13                       = $0f13
+l0f14                       = $0f14
+l0f2f                       = $0f2f
+l0f30                       = $0f30
+l0fc8                       = $0fc8
+l0fdc                       = $0fdc
+l0fdd                       = $0fdd
+l0fde                       = $0fde
+l0fdf                       = $0fdf
+l0fe0                       = $0fe0
+l0ff0                       = $0ff0
+l0fff                       = $0fff
+l1000                       = $1000
+l1010                       = $1010
+l1020                       = $1020
+l1030                       = $1030
+l1040                       = $1040
+l1050                       = $1050
+l1060                       = $1060
+l1070                       = $1070
+l1071                       = $1071
+l1072                       = $1072
+l1073                       = $1073
+l1074                       = $1074
+l1078                       = $1078
+l1088                       = $1088
+l1098                       = $1098
+l10a8                       = $10a8
+l10b8                       = $10b8
+l10c8                       = $10c8
+l10c9                       = $10c9
+l10ca                       = $10ca
+l10cb                       = $10cb
+l10cc                       = $10cc
+l10cd                       = $10cd
+l10ce                       = $10ce
+l10cf                       = $10cf
+l10d0                       = $10d0
+l10d1                       = $10d1
+l10d4                       = $10d4
+l10d5                       = $10d5
+l10d6                       = $10d6
+l10d7                       = $10d7
+l10d8                       = $10d8
+l10d9                       = $10d9
+l10f3                       = $10f3
+station_id_disable_net_nmis = $fe18
+video_ula_control           = $fe20
+romsel                      = $fe30
+system_via_sr               = $fe4a
+system_via_acr              = $fe4b
+system_via_ifr              = $fe4d
+system_via_ier              = $fe4e
+lfe87                       = $fe87
+lfea0                       = $fea0
+lfea1                       = $fea1
+lfea2                       = $fea2
+lfea3                       = $fea3
+tube_host_r1_status         = $fee0
+tube_host_r1_data           = $fee1
+tube_host_r3_data           = $fee5
+tube_host_r4_status         = $fee6
+lffb0                       = $ffb0
+osrdsc                      = $ffb9
+lffbd                       = $ffbd
+gsinit                      = $ffc2
+gsread                      = $ffc5
+osfind                      = $ffce
+osbget                      = $ffd7
+osargs                      = $ffda
+osfile                      = $ffdd
+osrdch                      = $ffe0
+osasci                      = $ffe3
+osnewl                      = $ffe7
+oswrch                      = $ffee
+osword                      = $fff1
+osbyte                      = $fff4
+oscli                       = $fff7
 
     * = $8000
 
@@ -358,7 +357,7 @@ c806c
 
 ; $8074 referenced 1 time by $8f5d
 sub_c8074
-    bit lfe18                                                         ; 8074: 2c 18 fe    ,..
+    bit station_id_disable_net_nmis                                   ; 8074: 2c 18 fe    ,..
     jsr sub_c8969                                                     ; 8077: 20 69 89     i.
     lda #$ea                                                          ; 807a: a9 ea       ..
     ldx #0                                                            ; 807c: a2 00       ..
@@ -384,7 +383,7 @@ loop_c8096
     sty l0d23                                                         ; 80a4: 8c 23 0d    .#.
     sty l0099                                                         ; 80a7: 84 99       ..
     sty l0d65                                                         ; 80a9: 8c 65 0d    .e.
-    ldy lfe18                                                         ; 80ac: ac 18 fe    ...
+    ldy station_id_disable_net_nmis                                   ; 80ac: ac 18 fe    ...
     sty l0d22                                                         ; 80af: 8c 22 0d    .".
     lda #$80                                                          ; 80b2: a9 80       ..
     sta l0d60                                                         ; 80b4: 8d 60 0d    .`.
@@ -400,7 +399,7 @@ c80be
     bit lfea1                                                         ; 80c0: 2c a1 fe    ,..
     beq c80fd                                                         ; 80c3: f0 38       .8
     lda lfea2                                                         ; 80c5: ad a2 fe    ...
-    cmp lfe18                                                         ; 80c8: cd 18 fe    ...
+    cmp station_id_disable_net_nmis                                   ; 80c8: cd 18 fe    ...
     beq c80d6                                                         ; 80cb: f0 09       ..
     cmp #$ff                                                          ; 80cd: c9 ff       ..
     bne c80e9                                                         ; 80cf: d0 18       ..
@@ -576,7 +575,7 @@ sub_c858c
     ldy #2                                                            ; 858e: a0 02       ..
     lda (l00a0),y                                                     ; 8590: b1 a0       ..
     sta l0d20                                                         ; 8592: 8d 20 0d    . .
-    iny                                                               ; 8595: c8          .
+    iny                                                               ; 8595: c8          .              ; Y=$03
     lda (l00a0),y                                                     ; 8596: b1 a0       ..
     sta l0d21                                                         ; 8598: 8d 21 0d    .!.
     ldy #0                                                            ; 859b: a0 00       ..
@@ -651,9 +650,9 @@ c85fb
     sei                                                               ; 85fe: 78          x
 sub_c85ff
 l8600 = sub_c85ff+1
-    bit lfe18                                                         ; 85ff: 2c 18 fe    ,..
+    bit station_id_disable_net_nmis                                   ; 85ff: 2c 18 fe    ,..
 ; $8600 referenced 1 time by $867c
-    bit lfe18                                                         ; 8602: 2c 18 fe    ,..
+    bit station_id_disable_net_nmis                                   ; 8602: 2c 18 fe    ,..
     bit lfea1                                                         ; 8605: 2c a1 fe    ,..
     beq c8619                                                         ; 8608: f0 0f       ..
     lda lfea0                                                         ; 860a: ad a0 fe    ...
@@ -871,7 +870,7 @@ sub_c88f2
     lda (l00a6),y                                                     ; 88f4: b1 a6       ..
     cmp #$ff                                                          ; 88f6: c9 ff       ..
     bne c8901                                                         ; 88f8: d0 07       ..
-    dey                                                               ; 88fa: 88          .
+    dey                                                               ; 88fa: 88          .              ; Y=$06
     lda (l00a6),y                                                     ; 88fb: b1 a6       ..
     cmp #$fe                                                          ; 88fd: c9 fe       ..
     bcs c8945                                                         ; 88ff: b0 44       .D
@@ -972,8 +971,8 @@ c8988
     lda l0d0d                                                         ; 898f: ad 0d 0d    ...
     eor #$80                                                          ; 8992: 49 80       I.
     bne c8988                                                         ; 8994: d0 f2       ..
-    bit lfe18                                                         ; 8996: 2c 18 fe    ,..
-    bit lfe18                                                         ; 8999: 2c 18 fe    ,..
+    bit station_id_disable_net_nmis                                   ; 8996: 2c 18 fe    ,..
+    bit station_id_disable_net_nmis                                   ; 8999: 2c 18 fe    ,..
     sta l0d60                                                         ; 899c: 8d 60 0d    .`.
     sta l0d62                                                         ; 899f: 8d 62 0d    .b.
     ldy #5                                                            ; 89a2: a0 05       ..
@@ -983,7 +982,7 @@ l89a6 = c89a4+2
     jmp c8978                                                         ; 89a4: 4c 78 89    Lx.
 
 ; $89a6 referenced 1 time by $8096
-    bit lfe18                                                         ; 89a7: 2c 18 fe    ,..
+    bit station_id_disable_net_nmis                                   ; 89a7: 2c 18 fe    ,..
     pha                                                               ; 89aa: 48          H
     tya                                                               ; 89ab: 98          .
     pha                                                               ; 89ac: 48          H
@@ -1244,12 +1243,12 @@ sub_c8ad4
 ; $8aea referenced 1 time by $959f
 sub_c8aea
     stx l009e                                                         ; 8aea: 86 9e       ..
-    lda #osbyte_read_write_econet_os_call_interception                ; 8aec: a9 ce       ..
+    lda #$ce                                                          ; 8aec: a9 ce       ..
 ; $8aee referenced 1 time by $8af9
 loop_c8aee
     ldx l009e                                                         ; 8aee: a6 9e       ..
     ldy #$7f                                                          ; 8af0: a0 7f       ..
-    jsr osbyte                                                        ; 8af2: 20 f4 ff     ..            ; Read/Write OSBYTE and OSWORD call interception status
+    jsr osbyte                                                        ; 8af2: 20 f4 ff     ..
     adc #1                                                            ; 8af5: 69 01       i.
     cmp #$d0                                                          ; 8af7: c9 d0       ..
     beq loop_c8aee                                                    ; 8af9: f0 f3       ..
@@ -1623,7 +1622,7 @@ c8d08
 ; $8d0a referenced 1 time by $8d03
 c8d0a
     lda #osbyte_issue_service_request                                 ; 8d0a: a9 8f       ..
-    jmp osbyte                                                        ; 8d0c: 4c f4 ff    L..            ; Issue paged ROM service call, Reason X=15 - Vectors claimed
+    jmp osbyte                                                        ; 8d0c: 4c f4 ff    L..            ; Issue paged ROM service call
 
     !text "i .boot"                                                   ; 8d0f: 69 20 2e... i .
     !byte $0d                                                         ; 8d16: 0d          .
@@ -1917,11 +1916,11 @@ loop_c8eee
     sta (l009c),y                                                     ; 8f03: 91 9c       ..
     lda #0                                                            ; 8f05: a9 00       ..
     sta l0e01                                                         ; 8f07: 8d 01 0e    ...
-    iny                                                               ; 8f0a: c8          .
+    iny                                                               ; 8f0a: c8          .              ; Y=$03
     sta (l009c),y                                                     ; 8f0b: 91 9c       ..
     ldy #3                                                            ; 8f0d: a0 03       ..
     sta (l009e),y                                                     ; 8f0f: 91 9e       ..
-    dey                                                               ; 8f11: 88          .
+    dey                                                               ; 8f11: 88          .              ; Y=$02
     lda #$eb                                                          ; 8f12: a9 eb       ..
     sta (l009e),y                                                     ; 8f14: 91 9e       ..
     ldx #3                                                            ; 8f16: a2 03       ..
@@ -1950,7 +1949,7 @@ c8f3d
     jsr c8f8c                                                         ; 8f3d: 20 8c 8f     ..
 ; $8f40 referenced 1 time by $8ee5
 c8f40
-    ldy lfe18                                                         ; 8f40: ac 18 fe    ...
+    ldy station_id_disable_net_nmis                                   ; 8f40: ac 18 fe    ...
     tya                                                               ; 8f43: 98          .
     bne c8f4c                                                         ; 8f44: d0 06       ..
 ; $8f46 referenced 1 time by $8f4d
@@ -2642,7 +2641,7 @@ c943c
     ldx #1                                                            ; 9449: a2 01       ..
     stx l0f05                                                         ; 944b: 8e 05 0f    ...
     stx l0f06                                                         ; 944e: 8e 06 0f    ...
-    inx                                                               ; 9451: e8          .
+    inx                                                               ; 9451: e8          .              ; X=$02
     ldy l00b0                                                         ; 9452: a4 b0       ..
     jsr sub_caf06                                                     ; 9454: 20 06 af     ..
     ldy #6                                                            ; 9457: a0 06       ..
@@ -2874,11 +2873,11 @@ c9589
     ldy #$80                                                          ; 958f: a0 80       ..
     lda (l009c),y                                                     ; 9591: b1 9c       ..
     pha                                                               ; 9593: 48          H
-    iny                                                               ; 9594: c8          .
+    iny                                                               ; 9594: c8          .              ; Y=$81
     lda (l009c),y                                                     ; 9595: b1 9c       ..
     ldy #$0f                                                          ; 9597: a0 0f       ..
     sta (l009e),y                                                     ; 9599: 91 9e       ..
-    dey                                                               ; 959b: 88          .
+    dey                                                               ; 959b: 88          .              ; Y=$0e
     pla                                                               ; 959c: 68          h
     sta (l009e),y                                                     ; 959d: 91 9e       ..
     jsr sub_c8aea                                                     ; 959f: 20 ea 8a     ..
@@ -3842,7 +3841,7 @@ c9b56
     beq c9b91                                                         ; 9b6f: f0 20       .
     ldy #$0e                                                          ; 9b71: a0 0e       ..
     sta (l00bb),y                                                     ; 9b73: 91 bb       ..
-    dey                                                               ; 9b75: 88          .
+    dey                                                               ; 9b75: 88          .              ; Y=$0d
     ldx #$0c                                                          ; 9b76: a2 0c       ..
 ; $9b78 referenced 1 time by $9b7f
 loop_c9b78
@@ -4104,7 +4103,7 @@ c9efc
     pha                                                               ; 9f04: 48          H
     beq c9f0a                                                         ; 9f05: f0 03       ..
     ldx #$92                                                          ; 9f07: a2 92       ..
-    dey                                                               ; 9f09: 88          .
+    dey                                                               ; 9f09: 88          .              ; Y=$0a
 ; $9f0a referenced 1 time by $9f05
 c9f0a
     stx l0f02                                                         ; 9f0a: 8e 02 0f    ...
@@ -4484,7 +4483,7 @@ ca1ea
     ldx #1                                                            ; a1f0: a2 01       ..
     stx l0f05                                                         ; a1f2: 8e 05 0f    ...
     stx l0f06                                                         ; a1f5: 8e 06 0f    ...
-    inx                                                               ; a1f8: e8          .
+    inx                                                               ; a1f8: e8          .              ; X=$02
     jsr sub_caf04                                                     ; a1f9: 20 04 af     ..
     ldy #6                                                            ; a1fc: a0 06       ..
     jsr c94ad                                                         ; a1fe: 20 ad 94     ..
@@ -5261,7 +5260,7 @@ cab36
     lda l0d6b                                                         ; ab38: ad 6b 0d    .k.
     sta (l009e),y                                                     ; ab3b: 91 9e       ..
     lda l009d                                                         ; ab3d: a5 9d       ..
-    iny                                                               ; ab3f: c8          .
+    iny                                                               ; ab3f: c8          .              ; Y=$09
     sta (l009e),y                                                     ; ab40: 91 9e       ..
     ldy #5                                                            ; ab42: a0 05       ..
     sta (l009e),y                                                     ; ab44: 91 9e       ..
@@ -5318,11 +5317,11 @@ loop_cab89
     ldy #2                                                            ; ab94: a0 02       ..
     lda (l009e),y                                                     ; ab96: b1 9e       ..
     pha                                                               ; ab98: 48          H
-    iny                                                               ; ab99: c8          .
+    iny                                                               ; ab99: c8          .              ; Y=$03
     lda (l009e),y                                                     ; ab9a: b1 9e       ..
     ldy #$24 ; '$'                                                    ; ab9c: a0 24       .$
     sta (l009c),y                                                     ; ab9e: 91 9c       ..
-    dey                                                               ; aba0: 88          .
+    dey                                                               ; aba0: 88          .              ; Y=$23
     pla                                                               ; aba1: 68          h
     sta (l009c),y                                                     ; aba2: 91 9c       ..
     ldx #$0b                                                          ; aba4: a2 0b       ..
@@ -5429,7 +5428,7 @@ cac4a
     lda #$ff                                                          ; ac54: a9 ff       ..
     ldy #8                                                            ; ac56: a0 08       ..
     sta (l009a),y                                                     ; ac58: 91 9a       ..
-    iny                                                               ; ac5a: c8          .
+    iny                                                               ; ac5a: c8          .              ; Y=$09
     sta (l009a),y                                                     ; ac5b: 91 9a       ..
     pla                                                               ; ac5d: 68          h
     tax                                                               ; ac5e: aa          .
@@ -5490,7 +5489,7 @@ loop_cacaf
     pla                                                               ; acba: 68          h
     ldy #0                                                            ; acbb: a0 00       ..
     sta (l009e),y                                                     ; acbd: 91 9e       ..
-    iny                                                               ; acbf: c8          .
+    iny                                                               ; acbf: c8          .              ; Y=$01
     lda (l009e),y                                                     ; acc0: b1 9e       ..
     pha                                                               ; acc2: 48          H
     ldx l009e                                                         ; acc3: a6 9e       ..
@@ -6160,7 +6159,7 @@ cb0b9
     ldy #2                                                            ; b0b9: a0 02       ..
     lda l00b5                                                         ; b0bb: a5 b5       ..
     sta (l009e),y                                                     ; b0bd: 91 9e       ..
-    iny                                                               ; b0bf: c8          .
+    iny                                                               ; b0bf: c8          .              ; Y=$03
     lda l00b6                                                         ; b0c0: a5 b6       ..
     sta (l009e),y                                                     ; b0c2: 91 9e       ..
     rts                                                               ; b0c4: 60          `
@@ -6191,7 +6190,7 @@ sub_cb0ea
     ldy #2                                                            ; b0ea: a0 02       ..
     lda (l009e),y                                                     ; b0ec: b1 9e       ..
     sta l00b5                                                         ; b0ee: 85 b5       ..
-    iny                                                               ; b0f0: c8          .
+    iny                                                               ; b0f0: c8          .              ; Y=$03
     lda (l009e),y                                                     ; b0f1: b1 9e       ..
     sta l00b6                                                         ; b0f3: 85 b6       ..
     rts                                                               ; b0f5: 60          `
@@ -6368,7 +6367,7 @@ sub_cb1c3
     ldy #$7a ; 'z'                                                    ; b1eb: a0 7a       .z
     lda l00b5                                                         ; b1ed: a5 b5       ..
     sta (l00ae),y                                                     ; b1ef: 91 ae       ..
-    iny                                                               ; b1f1: c8          .
+    iny                                                               ; b1f1: c8          .              ; Y=$7b
     lda l00b6                                                         ; b1f2: a5 b6       ..
     sta (l00ae),y                                                     ; b1f4: 91 ae       ..
     ldy #$10                                                          ; b1f6: a0 10       ..
@@ -8323,7 +8322,7 @@ pydis_end
 ;     l00b3:                                 9
 ;     l0f03:                                 9
 ;     l1000:                                 9
-;     lfe18:                                 9
+;     station_id_disable_net_nmis:           9
 ;     sub_caf04:                             9
 ;     sub_caf32:                             9
 ;     l00af:                                 8
@@ -10136,7 +10135,6 @@ pydis_end
 ;     lbd94
 ;     lbec3
 ;     lbf04
-;     lfe18
 ;     lfe87
 ;     lfea0
 ;     lfea1

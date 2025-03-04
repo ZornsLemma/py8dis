@@ -2430,7 +2430,7 @@ c8c87
     ror l00a1                                                         // 2c87: 66 a1       f.  :8c87[1]
     ldy #3                                                            // 2c89: a0 03       ..  :8c89[1]
     lda (l00b0),y                                                     // 2c8b: b1 b0       ..  :8c8b[1]
-    iny                                                               // 2c8d: c8          .   :8c8d[1]
+    iny                                                               // 2c8d: c8          .   :8c8d[1]   // Y=$04
     and (l00b0),y                                                     // 2c8e: 31 b0       1.  :8c8e[1]
     cmp #$ff                                                          // 2c90: c9 ff       ..  :8c90[1]
     clc                                                               // 2c92: 18          .   :8c92[1]
@@ -3008,7 +3008,7 @@ c8fb5
     ldy #1                                                            // 2fb9: a0 01       ..  :8fb9[1]
     lda (l00b0),y                                                     // 2fbb: b1 b0       ..  :8fbb[1]
     sta nmi_lda_abs+1,x                                               // 2fbd: 9d 3a 0d    .:. :8fbd[1]
-    iny                                                               // 2fc0: c8          .   :8fc0[1]
+    iny                                                               // 2fc0: c8          .   :8fc0[1]   // Y=$02
     lda (l00b0),y                                                     // 2fc1: b1 b0       ..  :8fc1[1]
     sta nmi_lda_abs+2,x                                               // 2fc3: 9d 3b 0d    .;. :8fc3[1]
     rts                                                               // 2fc6: 60          `   :8fc6[1]
@@ -3484,8 +3484,8 @@ c925a
     beq c926a                                                         // 3262: f0 06       ..  :9262[1]
     cpy #$18                                                          // 3264: c0 18       ..  :9264[1]
     bne c9276                                                         // 3266: d0 0e       ..  :9266[1]
-    inx                                                               // 3268: e8          .   :9268[1]
-    inx                                                               // 3269: e8          .   :9269[1]
+    inx                                                               // 3268: e8          .   :9268[1]   // X=$01
+    inx                                                               // 3269: e8          .   :9269[1]   // X=$02
 // $326a referenced 1 time by $9262[1]
 c926a
     lda l00c2                                                         // 326a: a5 c2       ..  :926a[1]
@@ -3503,7 +3503,7 @@ sub_c9279
     lda l00c1                                                         // 327b: a5 c1       ..  :927b[1]
     cmp #$12                                                          // 327d: c9 12       ..  :927d[1]
     beq c9289                                                         // 327f: f0 08       ..  :927f[1]
-    inx                                                               // 3281: e8          .   :9281[1]
+    inx                                                               // 3281: e8          .   :9281[1]   // X=$01
     cmp #$1a                                                          // 3282: c9 1a       ..  :9282[1]
     beq c9289                                                         // 3284: f0 03       ..  :9284[1]
     lda #$fe                                                          // 3286: a9 fe       ..  :9286[1]
@@ -3606,7 +3606,7 @@ c9302
     ldy #$0d                                                          // 330b: a0 0d       ..  :930b[1]
     sta (l00b2),y                                                     // 330d: 91 b2       ..  :930d[1]
     lda l00b6                                                         // 330f: a5 b6       ..  :930f[1]
-    iny                                                               // 3311: c8          .   :9311[1]
+    iny                                                               // 3311: c8          .   :9311[1]   // Y=$0e
     sta (l00b2),y                                                     // 3312: 91 b2       ..  :9312[1]
     pla                                                               // 3314: 68          h   :9314[1]
     and #$1f                                                          // 3315: 29 1f       ).  :9315[1]
@@ -4192,7 +4192,7 @@ c969e
     and (l00b0),y                                                     // 36a7: 31 b0       1.  :96a7[1]
     sta (l00b0),y                                                     // 36a9: 91 b0       ..  :96a9[1]
     php                                                               // 36ab: 08          .   :96ab[1]
-    iny                                                               // 36ac: c8          .   :96ac[1]
+    iny                                                               // 36ac: c8          .   :96ac[1]   // Y=$d4
     plp                                                               // 36ad: 28          (   :96ad[1]
     bpl c96b7                                                         // 36ae: 10 07       ..  :96ae[1]
     lda (l00b0),y                                                     // 36b0: b1 b0       ..  :96b0[1]
@@ -4265,8 +4265,8 @@ c9700
     cmp #$0d                                                          // 3708: c9 0d       ..  :9708[1]
     bne loop_c96f2                                                    // 370a: d0 e6       ..  :970a[1]
     tya                                                               // 370c: 98          .   :970c[1]
-    inx                                                               // 370d: e8          .   :970d[1]
-    inx                                                               // 370e: e8          .   :970e[1]
+    inx                                                               // 370d: e8          .   :970d[1]   // X=$d0
+    inx                                                               // 370e: e8          .   :970e[1]   // X=$d1
     ldy #2                                                            // 370f: a0 02       ..  :970f[1]
     jmp ca10b                                                         // 3711: 4c 0b a1    L.. :9711[1]
 
@@ -4333,14 +4333,14 @@ c976c
     lda #0                                                            // 376c: a9 00       ..  :976c[1]
     tay                                                               // 376e: a8          .   :976e[1]
     sta (l00c7),y                                                     // 376f: 91 c7       ..  :976f[1]
-    iny                                                               // 3771: c8          .   :9771[1]
+    iny                                                               // 3771: c8          .   :9771[1]   // Y=$01
     lda l0f07                                                         // 3772: ad 07 0f    ... :9772[1]
     sta (l00c7),y                                                     // 3775: 91 c7       ..  :9775[1]
-    iny                                                               // 3777: c8          .   :9777[1]
+    iny                                                               // 3777: c8          .   :9777[1]   // Y=$02
     lda l0f06                                                         // 3778: ad 06 0f    ... :9778[1]
     and #3                                                            // 377b: 29 03       ).  :977b[1]
     sta (l00c7),y                                                     // 377d: 91 c7       ..  :977d[1]
-    iny                                                               // 377f: c8          .   :977f[1]
+    iny                                                               // 377f: c8          .   :977f[1]   // Y=$03
     lda #0                                                            // 3780: a9 00       ..  :9780[1]
     sta (l00c7),y                                                     // 3782: 91 c7       ..  :9782[1]
     rts                                                               // 3784: 60          `   :9784[1]
@@ -4738,10 +4738,10 @@ sub_c99f3
     ldy #2                                                            // 39f6: a0 02       ..  :99f6[1]
     lda (l00b0),y                                                     // 39f8: b1 b0       ..  :99f8[1]
     sta l0f08,x                                                       // 39fa: 9d 08 0f    ... :99fa[1]
-    iny                                                               // 39fd: c8          .   :99fd[1]
+    iny                                                               // 39fd: c8          .   :99fd[1]   // Y=$03
     lda (l00b0),y                                                     // 39fe: b1 b0       ..  :99fe[1]
     sta l0f09,x                                                       // 3a00: 9d 09 0f    ... :9a00[1]
-    iny                                                               // 3a03: c8          .   :9a03[1]
+    iny                                                               // 3a03: c8          .   :9a03[1]   // Y=$04
     lda (l00b0),y                                                     // 3a04: b1 b0       ..  :9a04[1]
     asl                                                               // 3a06: 0a          .   :9a06[1]
     asl                                                               // 3a07: 0a          .   :9a07[1]
@@ -4754,10 +4754,10 @@ sub_c9a0f
     ldy #6                                                            // 3a12: a0 06       ..  :9a12[1]
     lda (l00b0),y                                                     // 3a14: b1 b0       ..  :9a14[1]
     sta l0f0a,x                                                       // 3a16: 9d 0a 0f    ... :9a16[1]
-    iny                                                               // 3a19: c8          .   :9a19[1]
+    iny                                                               // 3a19: c8          .   :9a19[1]   // Y=$07
     lda (l00b0),y                                                     // 3a1a: b1 b0       ..  :9a1a[1]
     sta l0f0b,x                                                       // 3a1c: 9d 0b 0f    ... :9a1c[1]
-    iny                                                               // 3a1f: c8          .   :9a1f[1]
+    iny                                                               // 3a1f: c8          .   :9a1f[1]   // Y=$08
     lda (l00b0),y                                                     // 3a20: b1 b0       ..  :9a20[1]
     ror                                                               // 3a22: 6a          j   :9a22[1]
     ror                                                               // 3a23: 6a          j   :9a23[1]
@@ -4864,7 +4864,7 @@ sub_c9aa3
     lda #$ff                                                          // 3aad: a9 ff       ..  :9aad[1]
     sta (l00b0),y                                                     // 3aaf: 91 b0       ..  :9aaf[1]
     sta l10d3                                                         // 3ab1: 8d d3 10    ... :9ab1[1]
-    iny                                                               // 3ab4: c8          .   :9ab4[1]
+    iny                                                               // 3ab4: c8          .   :9ab4[1]   // Y=$d4
     sta (l00b0),y                                                     // 3ab5: 91 b0       ..  :9ab5[1]
     rts                                                               // 3ab7: 60          `   :9ab7[1]
 
@@ -4903,14 +4903,14 @@ sub_c9ad8
 c9adf
     lda #$8f                                                          // 3adf: a9 8f       ..  :9adf[1]
     bne c9ae9                                                         // 3ae1: d0 06       ..  :9ae1[1]
-    lda #osbyte_read_write_startup_options                            // 3ae3: a9 ff       ..  :9ae3[1]
+    lda #$ff                                                          // 3ae3: a9 ff       ..  :9ae3[1]
 // $3ae5 referenced 8 times by $80a5[1], $9588[1], $96a0[1], $9e32[1], $9e43[1], $aae2[1], $ac7c[1], $aeb7[1]
 osbyte_read
     ldx #0                                                            // 3ae5: a2 00       ..  :9ae5[1]
     ldy #$ff                                                          // 3ae7: a0 ff       ..  :9ae7[1]
 // $3ae9 referenced 4 times by $9ad1[1], $9ad6[1], $9add[1], $9ae1[1]
 c9ae9
-    jmp osbyte                                                        // 3ae9: 4c f4 ff    L.. :9ae9[1]   // Read start-up option byte
+    jmp osbyte                                                        // 3ae9: 4c f4 ff    L.. :9ae9[1]
 
 // $3aec referenced 1 time by $957d[1]
 l9aec
@@ -5440,12 +5440,12 @@ c9e41
     jsr osbyte_read                                                   // 3e43: 20 e5 9a     .. :9e43[1]
     jsr sub_c9e54                                                     // 3e46: 20 54 9e     T. :9e46[1]
     bne c9e5c                                                         // 3e49: d0 11       ..  :9e49[1]
-    lda #osbyte_read_write_spool_file_handle                          // 3e4b: a9 c7       ..  :9e4b[1]
+    lda #$c7                                                          // 3e4b: a9 c7       ..  :9e4b[1]
 // $3e4d referenced 1 time by $9e3f[1]
 osbyte_write_0
-    ldx #0                                                            // 3e4d: a2 00       ..  :9e4d[1]   // X=File handle
+    ldx #0                                                            // 3e4d: a2 00       ..  :9e4d[1]
     ldy #0                                                            // 3e4f: a0 00       ..  :9e4f[1]
-    jmp osbyte                                                        // 3e51: 4c f4 ff    L.. :9e51[1]   // Write *SPOOL file handle, value X=0
+    jmp osbyte                                                        // 3e51: 4c f4 ff    L.. :9e51[1]
 
 // $3e54 referenced 2 times by $9e38[1], $9e46[1]
 sub_c9e54
@@ -6693,7 +6693,7 @@ sub_ca73d
     ldx #0                                                            // 473d: a2 00       ..  :a73d[1]
     stx l1091                                                         // 473f: 8e 91 10    ... :a73f[1]
     stx l109a                                                         // 4742: 8e 9a 10    ... :a742[1]
-    dex                                                               // 4745: ca          .   :a745[1]
+    dex                                                               // 4745: ca          .   :a745[1]   // X=$ff
     stx l1093                                                         // 4746: 8e 93 10    ... :a746[1]
     stx l1094                                                         // 4749: 8e 94 10    ... :a749[1]
     lda l10cf                                                         // 474c: ad cf 10    ... :a74c[1]
@@ -7596,10 +7596,10 @@ sub_cac72
     sta bytev+1                                                       // 4c9f: 8d 0b 02    ... :ac9f[1]
     lda #$b2                                                          // 4ca2: a9 b2       ..  :aca2[1]
     sta (l00b0),y                                                     // 4ca4: 91 b0       ..  :aca4[1]
-    iny                                                               // 4ca6: c8          .   :aca6[1]
+    iny                                                               // 4ca6: c8          .   :aca6[1]   // Y=$10
     lda #$ac                                                          // 4ca7: a9 ac       ..  :aca7[1]
     sta (l00b0),y                                                     // 4ca9: 91 b0       ..  :aca9[1]
-    iny                                                               // 4cab: c8          .   :acab[1]
+    iny                                                               // 4cab: c8          .   :acab[1]   // Y=$11
     lda romsel_copy                                                   // 4cac: a5 f4       ..  :acac[1]
     sta (l00b0),y                                                     // 4cae: 91 b0       ..  :acae[1]
     plp                                                               // 4cb0: 28          (   :acb0[1]
@@ -8515,7 +8515,7 @@ cb2e7
     ldy #$f2                                                          // 52ea: a0 f2       ..  :b2ea[1]
     lda (l00b8),y                                                     // 52ec: b1 b8       ..  :b2ec[1]
     tax                                                               // 52ee: aa          .   :b2ee[1]
-    iny                                                               // 52ef: c8          .   :b2ef[1]
+    iny                                                               // 52ef: c8          .   :b2ef[1]   // Y=$f3
     lda (l00b8),y                                                     // 52f0: b1 b8       ..  :b2f0[1]
     jsr sub_cb85d                                                     // 52f2: 20 5d b8     ]. :b2f2[1]
     bvs cb305                                                         // 52f5: 70 0e       p.  :b2f5[1]
@@ -8536,7 +8536,7 @@ cb305
     ldy #$f3                                                          // 530a: a0 f3       ..  :b30a[1]
     sta (l00b8),y                                                     // 530c: 91 b8       ..  :b30c[1]
     txa                                                               // 530e: 8a          .   :b30e[1]
-    dey                                                               // 530f: 88          .   :b30f[1]
+    dey                                                               // 530f: 88          .   :b30f[1]   // Y=$f2
     sta (l00b8),y                                                     // 5310: 91 b8       ..  :b310[1]
     ldy l00ba                                                         // 5312: a4 ba       ..  :b312[1]
 // $5314 referenced 1 time by $b2fe[1]
@@ -8616,7 +8616,7 @@ cb382
     sta (l00b8),y                                                     // 5389: 91 b8       ..  :b389[1]
     cmp #$ff                                                          // 538b: c9 ff       ..  :b38b[1]
     bne cb397                                                         // 538d: d0 08       ..  :b38d[1]
-    iny                                                               // 538f: c8          .   :b38f[1]
+    iny                                                               // 538f: c8          .   :b38f[1]   // Y=$f5
     lda (l00b8),y                                                     // 5390: b1 b8       ..  :b390[1]
     sec                                                               // 5392: 38          8   :b392[1]
     sbc #1                                                            // 5393: e9 01       ..  :b393[1]
@@ -8645,13 +8645,13 @@ cb3ba
     ldy #$f9                                                          // 53ba: a0 f9       ..  :b3ba[1]
     lda (l00b8),y                                                     // 53bc: b1 b8       ..  :b3bc[1]
     bmi cb3de                                                         // 53be: 30 1e       0.  :b3be[1]
-    dey                                                               // 53c0: 88          .   :b3c0[1]
+    dey                                                               // 53c0: 88          .   :b3c0[1]   // Y=$f8
     ora (l00b8),y                                                     // 53c1: 11 b8       ..  :b3c1[1]
     bne cb406                                                         // 53c3: d0 41       .A  :b3c3[1]
     lda #0                                                            // 53c5: a9 00       ..  :b3c5[1]
     sta (l00b8),y                                                     // 53c7: 91 b8       ..  :b3c7[1]
     lda #1                                                            // 53c9: a9 01       ..  :b3c9[1]
-    iny                                                               // 53cb: c8          .   :b3cb[1]
+    iny                                                               // 53cb: c8          .   :b3cb[1]   // Y=$f9
     sta (l00b8),y                                                     // 53cc: 91 b8       ..  :b3cc[1]
     ldy #$f6                                                          // 53ce: a0 f6       ..  :b3ce[1]
     lda #0                                                            // 53d0: a9 00       ..  :b3d0[1]
@@ -8659,7 +8659,7 @@ cb3ba
     ldx l00b9                                                         // 53d4: a6 b9       ..  :b3d4[1]
     inx                                                               // 53d6: e8          .   :b3d6[1]
     txa                                                               // 53d7: 8a          .   :b3d7[1]
-    iny                                                               // 53d8: c8          .   :b3d8[1]
+    iny                                                               // 53d8: c8          .   :b3d8[1]   // Y=$f7
     sta (l00b8),y                                                     // 53d9: 91 b8       ..  :b3d9[1]
     jmp cb406                                                         // 53db: 4c 06 b4    L.. :b3db[1]
 
@@ -8685,7 +8685,7 @@ cb3de
     sta (l00b8),y                                                     // 53fe: 91 b8       ..  :b3fe[1]
     pla                                                               // 5400: 68          h   :b400[1]
     sbc l00bb                                                         // 5401: e5 bb       ..  :b401[1]
-    iny                                                               // 5403: c8          .   :b403[1]
+    iny                                                               // 5403: c8          .   :b403[1]   // Y=$f9
     sta (l00b8),y                                                     // 5404: 91 b8       ..  :b404[1]
 // $5406 referenced 2 times by $b3c3[1], $b3db[1]
 cb406
@@ -8705,7 +8705,7 @@ cb40e
     ldy #$f0                                                          // 5418: a0 f0       ..  :b418[1]
     lda (l00b8),y                                                     // 541a: b1 b8       ..  :b41a[1]
     pha                                                               // 541c: 48          H   :b41c[1]
-    dey                                                               // 541d: 88          .   :b41d[1]
+    dey                                                               // 541d: 88          .   :b41d[1]   // Y=$ef
     lda (l00b8),y                                                     // 541e: b1 b8       ..  :b41e[1]
     pha                                                               // 5420: 48          H   :b420[1]
     dex                                                               // 5421: ca          .   :b421[1]
@@ -8719,7 +8719,7 @@ cb40e
     sta (l00b8),y                                                     // 5432: 91 b8       ..  :b432[1]
     sta l00ba                                                         // 5434: 85 ba       ..  :b434[1]
     lda l010c,x                                                       // 5436: bd 0c 01    ... :b436[1]
-    iny                                                               // 5439: c8          .   :b439[1]
+    iny                                                               // 5439: c8          .   :b439[1]   // Y=$f5
     sta (l00b8),y                                                     // 543a: 91 b8       ..  :b43a[1]
     sta l00bb                                                         // 543c: 85 bb       ..  :b43c[1]
     lda l010d,x                                                       // 543e: bd 0d 01    ... :b43e[1]
@@ -8777,13 +8777,13 @@ cb470
     ldy #$f7                                                          // 5488: a0 f7       ..  :b488[1]
     lda (l00b8),y                                                     // 548a: b1 b8       ..  :b48a[1]
     pha                                                               // 548c: 48          H   :b48c[1]
-    dey                                                               // 548d: 88          .   :b48d[1]
+    dey                                                               // 548d: 88          .   :b48d[1]   // Y=$f6
     lda (l00b8),y                                                     // 548e: b1 b8       ..  :b48e[1]
     pha                                                               // 5490: 48          H   :b490[1]
     ldy #$f0                                                          // 5491: a0 f0       ..  :b491[1]
     lda (l00b8),y                                                     // 5493: b1 b8       ..  :b493[1]
     pha                                                               // 5495: 48          H   :b495[1]
-    dey                                                               // 5496: 88          .   :b496[1]
+    dey                                                               // 5496: 88          .   :b496[1]   // Y=$ef
     lda (l00b8),y                                                     // 5497: b1 b8       ..  :b497[1]
     pha                                                               // 5499: 48          H   :b499[1]
     tsx                                                               // 549a: ba          .   :b49a[1]
@@ -8893,7 +8893,7 @@ cb534
     adc (l00b8),y                                                     // 5545: 71 b8       q.  :b545[1]
     tax                                                               // 5547: aa          .   :b547[1]
     lda l00bb                                                         // 5548: a5 bb       ..  :b548[1]
-    iny                                                               // 554a: c8          .   :b54a[1]
+    iny                                                               // 554a: c8          .   :b54a[1]   // Y=$fc
     adc (l00b8),y                                                     // 554b: 71 b8       q.  :b54b[1]
     pha                                                               // 554d: 48          H   :b54d[1]
     txa                                                               // 554e: 8a          .   :b54e[1]
@@ -8915,7 +8915,7 @@ loop_cb55e
     ldy #$f0                                                          // 5562: a0 f0       ..  :b562[1]
     lda (l00b8),y                                                     // 5564: b1 b8       ..  :b564[1]
     pha                                                               // 5566: 48          H   :b566[1]
-    dey                                                               // 5567: 88          .   :b567[1]
+    dey                                                               // 5567: 88          .   :b567[1]   // Y=$ef
     tsx                                                               // 5568: ba          .   :b568[1]
     lda (l00b8),y                                                     // 5569: b1 b8       ..  :b569[1]
     pha                                                               // 556b: 48          H   :b56b[1]
@@ -8966,7 +8966,7 @@ sub_cb598
     ldy #$fc                                                          // 55a0: a0 fc       ..  :b5a0[1]
     lda (l00b8),y                                                     // 55a2: b1 b8       ..  :b5a2[1]
     pha                                                               // 55a4: 48          H   :b5a4[1]
-    dey                                                               // 55a5: 88          .   :b5a5[1]
+    dey                                                               // 55a5: 88          .   :b5a5[1]   // Y=$fb
     lda (l00b8),y                                                     // 55a6: b1 b8       ..  :b5a6[1]
     pha                                                               // 55a8: 48          H   :b5a8[1]
     lda #$ff                                                          // 55a9: a9 ff       ..  :b5a9[1]
@@ -8975,7 +8975,7 @@ sub_cb598
     ldy #$f7                                                          // 55ad: a0 f7       ..  :b5ad[1]
     lda (l00b8),y                                                     // 55af: b1 b8       ..  :b5af[1]
     pha                                                               // 55b1: 48          H   :b5b1[1]
-    dey                                                               // 55b2: 88          .   :b5b2[1]
+    dey                                                               // 55b2: 88          .   :b5b2[1]   // Y=$f6
     lda (l00b8),y                                                     // 55b3: b1 b8       ..  :b5b3[1]
     pha                                                               // 55b5: 48          H   :b5b5[1]
     tsx                                                               // 55b6: ba          .   :b5b6[1]
@@ -9003,7 +9003,7 @@ cb5d0
     ldy #$ef                                                          // 55d1: a0 ef       ..  :b5d1[1]
     lda (l00b8),y                                                     // 55d3: b1 b8       ..  :b5d3[1]
     tax                                                               // 55d5: aa          .   :b5d5[1]
-    iny                                                               // 55d6: c8          .   :b5d6[1]
+    iny                                                               // 55d6: c8          .   :b5d6[1]   // Y=$f0
     lda (l00b8),y                                                     // 55d7: b1 b8       ..  :b5d7[1]
     tay                                                               // 55d9: a8          .   :b5d9[1]
     pla                                                               // 55da: 68          h   :b5da[1]
@@ -9055,7 +9055,7 @@ sub_cb607
 sub_cb616
     ldy #$f4                                                          // 5616: a0 f4       ..  :b616[1]
     lda (l00b8),y                                                     // 5618: b1 b8       ..  :b618[1]
-    iny                                                               // 561a: c8          .   :b61a[1]
+    iny                                                               // 561a: c8          .   :b61a[1]   // Y=$f5
     ora (l00b8),y                                                     // 561b: 11 b8       ..  :b61b[1]
     rts                                                               // 561d: 60          `   :b61d[1]
 
@@ -9070,7 +9070,7 @@ sub_cb61e
     sbc l00ba                                                         // 562a: e5 ba       ..  :b62a[1]
     sta (l00b8),y                                                     // 562c: 91 b8       ..  :b62c[1]
     sta l00ba                                                         // 562e: 85 ba       ..  :b62e[1]
-    iny                                                               // 5630: c8          .   :b630[1]
+    iny                                                               // 5630: c8          .   :b630[1]   // Y=$f5
     lda (l00b8),y                                                     // 5631: b1 b8       ..  :b631[1]
     sbc l00bb                                                         // 5633: e5 bb       ..  :b633[1]
     sta (l00b8),y                                                     // 5635: 91 b8       ..  :b635[1]
@@ -9875,7 +9875,7 @@ sub_cbad2
     sta (l00b8),y                                                     // 5adc: 91 b8       ..  :badc[1]
     lda l00f3                                                         // 5ade: a5 f3       ..  :bade[1]
     adc #0                                                            // 5ae0: 69 00       i.  :bae0[1]
-    iny                                                               // 5ae2: c8          .   :bae2[1]
+    iny                                                               // 5ae2: c8          .   :bae2[1]   // Y=$f0
     sta (l00b8),y                                                     // 5ae3: 91 b8       ..  :bae3[1]
     pla                                                               // 5ae5: 68          h   :bae5[1]
     tay                                                               // 5ae6: a8          .   :bae6[1]
@@ -9992,7 +9992,7 @@ cbb6f
     sec                                                               // 5b7b: 38          8   :bb7b[1]
     sbc (l00b8),y                                                     // 5b7c: f1 b8       ..  :bb7c[1]
     sta l00bc                                                         // 5b7e: 85 bc       ..  :bb7e[1]
-    iny                                                               // 5b80: c8          .   :bb80[1]
+    iny                                                               // 5b80: c8          .   :bb80[1]   // Y=$f3
     lda l00bd                                                         // 5b81: a5 bd       ..  :bb81[1]
     sbc (l00b8),y                                                     // 5b83: f1 b8       ..  :bb83[1]
     bcc cbbd0                                                         // 5b85: 90 49       .I  :bb85[1]
@@ -10037,7 +10037,7 @@ cbbbe
     ldy #$f8                                                          // 5bc3: a0 f8       ..  :bbc3[1]
     lda #0                                                            // 5bc5: a9 00       ..  :bbc5[1]
     sta (l00b8),y                                                     // 5bc7: 91 b8       ..  :bbc7[1]
-    iny                                                               // 5bc9: c8          .   :bbc9[1]
+    iny                                                               // 5bc9: c8          .   :bbc9[1]   // Y=$f9
     txa                                                               // 5bca: 8a          .   :bbca[1]
     sta (l00b8),y                                                     // 5bcb: 91 b8       ..  :bbcb[1]
     jmp cb2e7                                                         // 5bcd: 4c e7 b2    L.. :bbcd[1]
@@ -10450,7 +10450,7 @@ cbe47
     ldx #1                                                            // 5e47: a2 01       ..  :be47[1]
     inc l00ba,x                                                       // 5e49: f6 ba       ..  :be49[1]
     bne cbe52                                                         // 5e4b: d0 05       ..  :be4b[1]
-    inx                                                               // 5e4d: e8          .   :be4d[1]
+    inx                                                               // 5e4d: e8          .   :be4d[1]   // X=$02
     cpx #4                                                            // 5e4e: e0 04       ..  :be4e[1]
     bcc cbe47                                                         // 5e50: 90 f5       ..  :be50[1]
 // $5e52 referenced 1 time by $be4b[1]

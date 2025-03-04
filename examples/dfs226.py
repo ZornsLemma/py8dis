@@ -81,6 +81,7 @@ constant(0x2b, "service_check_swr_presence")
 constant(0xfe, "service_tube_post_init")
 
 constant(0xc6, "osbyte_rw_exec_handle")
+constant(0xc7, "osbyte_read_write_spool_file_handle")
 
 expr(0xaeaa, "service_help")
 expr(0xaed8, "service_tube_post_init")

@@ -52,6 +52,27 @@ class Label(object):
     def is_only_an_expression(self):
         return not self.explicit_names and not self.local_labels and self.expressions
 
+    def is_empty(self):
+        # Check references
+        for ref in self.references:
+            return False
+
+        # Check local labels
+        for move_id, name_data in self.local_labels.items():
+            if name_data:
+                return False
+
+        # Check explicit names
+        for move_id, name_list in self.explicit_names.items():
+            for name in name_list:
+                return False
+
+        # Check expressions
+        for move_id, expression_list in self.expressions.items():
+            if expression_list:
+                return False
+        return True
+
     def all_names_by_move_id(self):
         """Return all label names and expressions for this label for each move_id"""
 

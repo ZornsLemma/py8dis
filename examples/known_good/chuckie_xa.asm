@@ -1512,13 +1512,13 @@ getspritedata
     lsr                                                               // 19f7: 4a          J
     lsr                                                               // 19f8: 4a          J
     sta spritewidth                                                   // 19f9: 85 7a       .z
-    iny                                                               // 19fb: c8          .
+    iny                                                               // 19fb: c8          .              // Y=$01
     lda (read),y                                                      // 19fc: b1 76       .v
     sta spriteheight                                                  // 19fe: 85 78       .x
-    iny                                                               // 1a00: c8          .
+    iny                                                               // 1a00: c8          .              // Y=$02
     lda (read),y                                                      // 1a01: b1 76       .v
     tax                                                               // 1a03: aa          .
-    iny                                                               // 1a04: c8          .
+    iny                                                               // 1a04: c8          .              // Y=$03
     lda (read),y                                                      // 1a05: b1 76       .v
     stx read                                                          // 1a07: 86 76       .v
     sta read + 1                                                      // 1a09: 85 77       .w
@@ -1759,16 +1759,16 @@ initmap
     ldy #0                                                            // 1b4a: a0 00       ..
     lda (mapdataptr),y                                                // 1b4c: b1 51       .Q
     sta numplatforms                                                  // 1b4e: 85 53       .S
-    iny                                                               // 1b50: c8          .
+    iny                                                               // 1b50: c8          .              // Y=$01
     lda (mapdataptr),y                                                // 1b51: b1 51       .Q
     sta numladders                                                    // 1b53: 85 54       .T
-    iny                                                               // 1b55: c8          .
+    iny                                                               // 1b55: c8          .              // Y=$02
     lda (mapdataptr),y                                                // 1b56: b1 51       .Q
     sta liftflag                                                      // 1b58: 85 55       .U
-    iny                                                               // 1b5a: c8          .
+    iny                                                               // 1b5a: c8          .              // Y=$03
     lda (mapdataptr),y                                                // 1b5b: b1 51       .Q
     sta numseeds                                                      // 1b5d: 85 56       .V
-    iny                                                               // 1b5f: c8          .
+    iny                                                               // 1b5f: c8          .              // Y=$04
     lda (mapdataptr),y                                                // 1b60: b1 51       .Q
     sta numbirds                                                      // 1b62: 85 57       .W
     lda #0                                                            // 1b64: a9 00       ..
@@ -1948,7 +1948,7 @@ alreadycollectedseed
     ldx #SpriteId_CageWithHole                                        // 1c9f: a2 13       ..
     lda bigbirdflag                                                   // 1ca1: a5 35       .5
     beq birdincage                                                    // 1ca3: f0 01       ..
-    inx                                                               // 1ca5: e8          .
+    inx                                                               // 1ca5: e8          .              // X=$14
 birdincage
     txa                                                               // 1ca6: 8a          .
     jsr getspritedata                                                 // 1ca7: 20 db 19     ..
