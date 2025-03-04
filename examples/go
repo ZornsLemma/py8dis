@@ -41,6 +41,7 @@ python3 go.py "moving2"         $OPT --assemblers acme beebasm xa       # tests 
 python3 go.py "moving3"         $OPT --assemblers acme beebasm xa       # tests for the move() command
 python3 go.py "helloworld"      $OPT --assemblers acme beebasm xa       # the basic hello world test
 python3 go.py "local_labels"    $OPT --assemblers acme beebasm xa       # labels defined as local to one move region
+python3 go.py "os12"            $OPT --assemblers acme beebasm xa       # MOS 1.20
 python3 go.py "basic4"          $OPT --assemblers acme beebasm xa       # BASIC
 python3 go.py "dfs226"          $OPT --assemblers acme beebasm xa       # DFS
 python3 go.py "dfs226b"         $OPT --assemblers acme beebasm xa       # DFS with an artificially added move() for testing
