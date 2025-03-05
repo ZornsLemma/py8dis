@@ -36,6 +36,7 @@ python3 go.py "test8080"        $OPT --assemblers z88dk-8080            # testin
 
 # 6502 code
 # Tests
+python3 go.py "char_literals"   $OPT --assemblers acme beebasm xa       # tests for all character literals
 python3 go.py "align_test"      $OPT --assemblers acme beebasm xa       # tests for formatting
 python3 go.py "string_stuff1"   $OPT --assemblers acme beebasm          # xa omitted since it can't do string constants e.g. 'page = "1900"'
 python3 go.py "string_stuff2"   $OPT --assemblers beebasm               # testing the beebasm specific expression 'STR$~(page)'
