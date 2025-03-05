@@ -849,16 +849,16 @@ c83a6
 sub_c83aa
     sec                                                               ; 83aa: 38          8
     ldy #0                                                            ; 83ab: a0 00       ..
-    tya                                                               ; 83ad: 98          .
+    tya                                                               ; 83ad: 98          .              ; A=$00
     sbc l0034                                                         ; 83ae: e5 34       .4
     sta l0034                                                         ; 83b0: 85 34       .4
-    tya                                                               ; 83b2: 98          .
+    tya                                                               ; 83b2: 98          .              ; A=$00
     sbc l0033                                                         ; 83b3: e5 33       .3
     sta l0033                                                         ; 83b5: 85 33       .3
-    tya                                                               ; 83b7: 98          .
+    tya                                                               ; 83b7: 98          .              ; A=$00
     sbc l0032                                                         ; 83b8: e5 32       .2
     sta l0032                                                         ; 83ba: 85 32       .2
-    tya                                                               ; 83bc: 98          .
+    tya                                                               ; 83bc: 98          .              ; A=$00
     sbc l0031                                                         ; 83bd: e5 31       .1
     sta l0031                                                         ; 83bf: 85 31       .1
 ; $83c1 referenced 1 time by $83a8
@@ -2108,7 +2108,7 @@ sub_c8da8
     adc l0037                                                         ; 8dac: 65 37       e7
     sta l0039                                                         ; 8dae: 85 39       .9
     ldy #0                                                            ; 8db0: a0 00       ..
-    tya                                                               ; 8db2: 98          .
+    tya                                                               ; 8db2: 98          .              ; A=$00
     adc l0038                                                         ; 8db3: 65 38       e8
     sta l003a                                                         ; 8db5: 85 3a       .:
 ; $8db7 referenced 1 time by $8dbe
@@ -6256,7 +6256,7 @@ ca4b9
 sub_ca4ba
     clc                                                               ; a4ba: 18          .
     lda #$fc                                                          ; a4bb: a9 fc       ..
-    tax                                                               ; a4bd: aa          .
+    tax                                                               ; a4bd: aa          .              ; X=$fc
     adc l0030                                                         ; a4be: 65 30       e0
     bcs ca4c4                                                         ; a4c0: b0 02       ..
     dec l002f                                                         ; a4c2: c6 2f       ./
@@ -7798,16 +7798,16 @@ sub_cad1c
 cad20
     sec                                                               ; ad20: 38          8
     lda #0                                                            ; ad21: a9 00       ..
-    tay                                                               ; ad23: a8          .
+    tay                                                               ; ad23: a8          .              ; Y=$00
     sbc l002a                                                         ; ad24: e5 2a       .*
     sta l002a                                                         ; ad26: 85 2a       .*
-    tya                                                               ; ad28: 98          .
+    tya                                                               ; ad28: 98          .              ; A=$00
     sbc l002b                                                         ; ad29: e5 2b       .+
     sta l002b                                                         ; ad2b: 85 2b       .+
-    tya                                                               ; ad2d: 98          .
+    tya                                                               ; ad2d: 98          .              ; A=$00
     sbc l002c                                                         ; ad2e: e5 2c       .,
     sta l002c                                                         ; ad30: 85 2c       .,
-    tya                                                               ; ad32: 98          .
+    tya                                                               ; ad32: 98          .              ; A=$00
     sbc l002d                                                         ; ad33: e5 2d       .-
     sta l002d                                                         ; ad35: 85 2d       .-
 ; $ad37 referenced 1 time by $ad0b
@@ -10026,7 +10026,7 @@ cbaa6
     sty l003b                                                         ; bab4: 84 3b       .;
     iny                                                               ; bab6: c8          .              ; Y=$00
     ldx #$37 ; '7'                                                    ; bab7: a2 37       .7
-    tya                                                               ; bab9: 98          .
+    tya                                                               ; bab9: 98          .              ; A=$00
     jsr osword                                                        ; baba: 20 f1 ff     ..
     bcc cbac5                                                         ; babd: 90 06       ..
     jmp c9c41                                                         ; babf: 4c 41 9c    LA.
@@ -10213,7 +10213,7 @@ cbbaf
     lda l003f                                                         ; bbc2: a5 3f       .?
     sta (l003d),y                                                     ; bbc4: 91 3d       .=
     sec                                                               ; bbc6: 38          8
-    tya                                                               ; bbc7: 98          .
+    tya                                                               ; bbc7: 98          .              ; A=$03
     adc l003d                                                         ; bbc8: 65 3d       e=
     sta l003d                                                         ; bbca: 85 3d       .=
     bcc cbbd0                                                         ; bbcc: 90 02       ..
@@ -10799,7 +10799,7 @@ sub_cbe95
     ldx l0018                                                         ; beb9: a6 18       ..
     stx l0042                                                         ; bebb: 86 42       .B
     lda #osfile_save                                                  ; bebd: a9 00       ..
-    tay                                                               ; bebf: a8          .
+    tay                                                               ; bebf: a8          .              ; Y=$00
     ldx #<(l0037)                                                     ; bec0: a2 37       .7
     jsr osfile                                                        ; bec2: 20 dd ff     ..            ; Save a block of memory (returning file length and attributes) (A=0)
     bra cbeeb                                                         ; bec5: 80 24       .$

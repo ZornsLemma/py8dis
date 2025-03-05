@@ -2963,7 +2963,7 @@ c8f81
 sub_c8f82
     lda #osbyte_read_write_startup_options                            // 2f82: a9 ff       ..  :8f82[1]
     ldx #0                                                            // 2f84: a2 00       ..  :8f84[1]
-    tay                                                               // 2f86: a8          .   :8f86[1]
+    tay                                                               // 2f86: a8          .   :8f86[1]   // Y=$ff
     jsr osbyte                                                        // 2f87: 20 f4 ff     .. :8f87[1]   // Read start-up option byte
 
     // X is the startup option byte:
@@ -3643,7 +3643,7 @@ c9302
     lda l00c5                                                         // 331f: a5 c5       ..  :931f[1]
     ldy #0                                                            // 3321: a0 00       ..  :9321[1]
     sta (l00b2),y                                                     // 3323: 91 b2       ..  :9323[1]
-    tya                                                               // 3325: 98          .   :9325[1]
+    tya                                                               // 3325: 98          .   :9325[1]   // A=$00
     sta l00b8                                                         // 3326: 85 b8       ..  :9326[1]
     jsr sub_c93d3                                                     // 3328: 20 d3 93     .. :9328[1]
     jsr sub_c8f3f                                                     // 332b: 20 3f 8f     ?. :932b[1]
@@ -3658,7 +3658,7 @@ c9302
     jsr sub_c8f6b                                                     // 333e: 20 6b 8f     k. :933e[1]
     ldx #$bb                                                          // 3341: a2 bb       ..  :9341[1]
     ldy #0                                                            // 3343: a0 00       ..  :9343[1]
-    tya                                                               // 3345: 98          .   :9345[1]
+    tya                                                               // 3345: 98          .   :9345[1]   // A=$00
     jsr tube_entry                                                    // 3346: 20 06 04     .. :9346[1]
     ldx l00b5                                                         // 3349: a6 b5       ..  :9349[1]
     dex                                                               // 334b: ca          .   :934b[1]
@@ -4125,7 +4125,7 @@ c95fd
     ldy #0                                                            // 3610: a0 00       ..  :9610[1]
     sty l10c0                                                         // 3612: 8c c0 10    ... :9612[1]
     ldx #3                                                            // 3615: a2 03       ..  :9615[1]
-    tya                                                               // 3617: 98          .   :9617[1]
+    tya                                                               // 3617: 98          .   :9617[1]   // A=$00
 // $3618 referenced 1 time by $961c[1]
 loop_c9618
     sta l10de,x                                                       // 3618: 9d de 10    ... :9618[1]
@@ -4363,7 +4363,7 @@ c975b
 // $376c referenced 1 time by $9762[1]
 c976c
     lda #0                                                            // 376c: a9 00       ..  :976c[1]
-    tay                                                               // 376e: a8          .   :976e[1]
+    tay                                                               // 376e: a8          .   :976e[1]   // Y=$00
     sta (l00c7),y                                                     // 376f: 91 c7       ..  :976f[1]
     iny                                                               // 3771: c8          .   :9771[1]   // Y=$01
     lda l0f07                                                         // 3772: ad 07 0f    ... :9772[1]
@@ -6763,7 +6763,7 @@ sub_ca73d
 // $476c referenced 1 time by $a675[1]
 sub_ca76c
     lda #0                                                            // 476c: a9 00       ..  :a76c[1]
-    tay                                                               // 476e: a8          .   :a76e[1]
+    tay                                                               // 476e: a8          .   :a76e[1]   // Y=$00
 // $476f referenced 1 time by $a776[1]
 loop_ca76f
     sta l0e00,y                                                       // 476f: 99 00 0e    ... :a76f[1]
@@ -7521,7 +7521,7 @@ cabcf
     sty l00ac                                                         // 4be1: 84 ac       ..  :abe1[1]
     lda #$20 // ' '                                                   // 4be3: a9 20       .   :abe3[1]
     sta l00af                                                         // 4be5: 85 af       ..  :abe5[1]
-    tya                                                               // 4be7: 98          .   :abe7[1]
+    tya                                                               // 4be7: 98          .   :abe7[1]   // A=$00
     jsr osword                                                        // 4be8: 20 f1 ff     .. :abe8[1]
     php                                                               // 4beb: 08          .   :abeb[1]
     sty l00aa                                                         // 4bec: 84 aa       ..  :abec[1]

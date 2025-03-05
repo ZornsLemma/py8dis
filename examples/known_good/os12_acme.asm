@@ -4831,7 +4831,7 @@ osbyte133EntryPoint
     and #$3f ; '?'                                                    ; d937: 29 3f       )?
     cpy #4                                                            ; d939: c0 04       ..
     bcs cd93e                                                         ; d93b: b0 01       ..
-    txa                                                               ; d93d: 8a          .
+    txa                                                               ; d93d: 8a          .              ; A=$00
 ; $d93e referenced 2 times by $d935, $d93b
 cd93e
     tay                                                               ; d93e: a8          .
@@ -5143,7 +5143,7 @@ cdb87
 ; $dbb8 referenced 2 times by $dba2, $dc65
 cdbb8
     lda #0                                                            ; dbb8: a9 00       ..
-    tax                                                               ; dbba: aa          .
+    tax                                                               ; dbba: aa          .              ; X=$00
     jsr sub_cf137                                                     ; dbbb: 20 37 f1     7.
 ; $dbbe referenced 2 times by $db9f, $dbb6
 cdbbe

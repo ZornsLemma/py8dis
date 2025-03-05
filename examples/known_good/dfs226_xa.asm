@@ -2954,7 +2954,7 @@ c8f81
 sub_c8f82
     lda #osbyte_read_write_startup_options                            // 8f82: a9 ff       ..
     ldx #0                                                            // 8f84: a2 00       ..
-    tay                                                               // 8f86: a8          .
+    tay                                                               // 8f86: a8          .              // Y=$ff
     jsr osbyte                                                        // 8f87: 20 f4 ff     ..            // Read start-up option byte
 
     // X is the startup option byte:
@@ -3637,7 +3637,7 @@ c9302
     lda l00c5                                                         // 931f: a5 c5       ..
     ldy #0                                                            // 9321: a0 00       ..
     sta (l00b2),y                                                     // 9323: 91 b2       ..
-    tya                                                               // 9325: 98          .
+    tya                                                               // 9325: 98          .              // A=$00
     sta l00b8                                                         // 9326: 85 b8       ..
     jsr sub_c93d3                                                     // 9328: 20 d3 93     ..
     jsr sub_c8f3f                                                     // 932b: 20 3f 8f     ?.
@@ -3652,7 +3652,7 @@ c9302
     jsr sub_c8f6b                                                     // 933e: 20 6b 8f     k.
     ldx #$bb                                                          // 9341: a2 bb       ..
     ldy #0                                                            // 9343: a0 00       ..
-    tya                                                               // 9345: 98          .
+    tya                                                               // 9345: 98          .              // A=$00
     jsr tube_entry                                                    // 9346: 20 06 04     ..
     ldx l00b5                                                         // 9349: a6 b5       ..
     dex                                                               // 934b: ca          .
@@ -4119,7 +4119,7 @@ c95fd
     ldy #0                                                            // 9610: a0 00       ..
     sty l10c0                                                         // 9612: 8c c0 10    ...
     ldx #3                                                            // 9615: a2 03       ..
-    tya                                                               // 9617: 98          .
+    tya                                                               // 9617: 98          .              // A=$00
 // $9618 referenced 1 time by $961c
 loop_c9618
     sta l10de,x                                                       // 9618: 9d de 10    ...
@@ -4357,7 +4357,7 @@ c975b
 // $976c referenced 1 time by $9762
 c976c
     lda #0                                                            // 976c: a9 00       ..
-    tay                                                               // 976e: a8          .
+    tay                                                               // 976e: a8          .              // Y=$00
     sta (l00c7),y                                                     // 976f: 91 c7       ..
     iny                                                               // 9771: c8          .              // Y=$01
     lda l0f07                                                         // 9772: ad 07 0f    ...
@@ -6757,7 +6757,7 @@ sub_ca73d
 // $a76c referenced 1 time by $a675
 sub_ca76c
     lda #0                                                            // a76c: a9 00       ..
-    tay                                                               // a76e: a8          .
+    tay                                                               // a76e: a8          .              // Y=$00
 // $a76f referenced 1 time by $a776
 loop_ca76f
     sta l0e00,y                                                       // a76f: 99 00 0e    ...
@@ -7515,7 +7515,7 @@ cabcf
     sty l00ac                                                         // abe1: 84 ac       ..
     lda #$20 // ' '                                                   // abe3: a9 20       .
     sta l00af                                                         // abe5: 85 af       ..
-    tya                                                               // abe7: 98          .
+    tya                                                               // abe7: 98          .              // A=$00
     jsr osword                                                        // abe8: 20 f1 ff     ..
     php                                                               // abeb: 08          .
     sty l00aa                                                         // abec: 84 aa       ..

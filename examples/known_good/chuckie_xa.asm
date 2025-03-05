@@ -1772,7 +1772,7 @@ initmap
     lda (mapdataptr),y                                                // 1b60: b1 51       .Q
     sta numbirds                                                      // 1b62: 85 57       .W
     lda #0                                                            // 1b64: a9 00       ..
-    tax                                                               // 1b66: aa          .
+    tax                                                               // 1b66: aa          .              // X=$00
 clearmaploop
     sta mapdata,x                                                     // 1b67: 9d 00 06    ...
     sta mapdata + $0100,x                                             // 1b6a: 9d 00 07    ...

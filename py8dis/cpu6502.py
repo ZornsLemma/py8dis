@@ -121,10 +121,11 @@ class Cpu6502(cpu.Cpu):
 
         # Each opcode is categorised by how it affects A:
         #
-        # (-) Does not touch A                  (e.g. CLC, PHP, LDX)
-        # (U) Uses A, but doesn't change it     (e.g. CMP, STA, PHA)
-        # (A) Adjusts A, via arithmetic/bitwise (e.g. ASL, ADC, AND)
-        # (O) Overwrites A completely.          (e.g. LDA, PLA)
+        # (-) Does not touch A                   (e.g. CLC, PHP, LDX)
+        # (U) Uses A, but doesn't change it      (e.g. CMP, STA, PHA)
+        # (A) Adjusts A, via arithmetic/bitwise  (e.g. ASL, ADC, AND)
+        # (O) Overwrites A completely.           (e.g. LDA, PLA)
+        # (T) Overwrites A with another register (e.g. TXA, TYA)
         #
         # ...and similarly for the X and Y registers.
         self.opcodes = {
@@ -205,7 +206,7 @@ class Cpu6502(cpu.Cpu):
             0x85: self.OpcodeZp(                "STA zp",     "U--", cycles="3",  update=self.neutral),
             0x86: self.OpcodeZp(                "STX zp",     "-U-", cycles="3",  update=self.neutral),
             0x88: self.OpcodeImplied(           "DEY",        "--A", cycles="2",  update=self.make_decrement('y')),
-            0x8a: self.OpcodeImplied(           "TXA",        "OU-", cycles="2",  update=self.make_transfer('x', 'a')),
+            0x8a: self.OpcodeImplied(           "TXA",        "TU-", cycles="2",  update=self.make_transfer('x', 'a')),
             0x8c: self.OpcodeDataAbs(           "STY addr",   "--U", cycles="4",  update=self.neutral),
             0x8d: self.OpcodeDataAbs(           "STA addr",   "U--", cycles="4",  update=self.neutral),
             0x8e: self.OpcodeDataAbs(           "STX addr",   "-U-", cycles="4",  update=self.neutral),
@@ -214,7 +215,7 @@ class Cpu6502(cpu.Cpu):
             0x94: self.OpcodeZp(                "STY zp,X",   "-UU", cycles="4",  update=self.neutral),
             0x95: self.OpcodeZp(                "STA zp,X",   "UU-", cycles="4",  update=self.neutral),
             0x96: self.OpcodeZp(                "STX zp,Y",   "-UU", cycles="4",  update=self.neutral),
-            0x98: self.OpcodeImplied(           "TYA",        "O-U", cycles="2",  update=self.make_transfer('y', 'a')),
+            0x98: self.OpcodeImplied(           "TYA",        "T-U", cycles="2",  update=self.make_transfer('y', 'a')),
             0x99: self.OpcodeDataAbs(           "STA addr,Y", "U-U", cycles="5",  has_zp_version=False, update=self.neutral),
             0x9a: self.OpcodeImplied(           "TXS",        "-U-", cycles="2",  update=self.neutral), # we don't model S at all
             0x9d: self.OpcodeDataAbs(           "STA addr,X", "UU-", cycles="5",  update=self.neutral),
@@ -224,9 +225,9 @@ class Cpu6502(cpu.Cpu):
             0xa4: self.OpcodeZp(                "LDY zp",     "--O", cycles="3",  update=self.update_nz),
             0xa5: self.OpcodeZp(                "LDA zp",     "O--", cycles="3",  update=self.update_nz),
             0xa6: self.OpcodeZp(                "LDX zp",     "-O-", cycles="3",  update=self.update_nz),
-            0xa8: self.OpcodeImplied(           "TAY",        "U-O", cycles="2",  update=self.make_transfer('a', 'y')),
+            0xa8: self.OpcodeImplied(           "TAY",        "U-T", cycles="2",  update=self.make_transfer('a', 'y')),
             0xa9: self.OpcodeImmediate(         "LDA #imm",   "O--", cycles="2",  update=self.make_load_immediate('a')),
-            0xaa: self.OpcodeImplied(           "TAX",        "UO-", cycles="2",  update=self.make_transfer('a', 'x')),
+            0xaa: self.OpcodeImplied(           "TAX",        "UT-", cycles="2",  update=self.make_transfer('a', 'x')),
             0xac: self.OpcodeDataAbs(           "LDY addr",   "--O", cycles="4",  update=self.update_nz),
             0xad: self.OpcodeDataAbs(           "LDA addr",   "O--", cycles="4",  update=self.update_nz),
             0xae: self.OpcodeDataAbs(           "LDX addr",   "-O-", cycles="4",  update=self.update_nz),
@@ -503,16 +504,17 @@ class Cpu6502(cpu.Cpu):
 
             Each opcode is categorised in reg_changes['a'] by how it affects A:
 
-            (-) Does not touch A                  (e.g. CLC, PHP, LDX)
-            (U) Uses A, but doesn't change it     (e.g. CMP, STA, PHA)
-            (A) Adjusts A, via arithmetic/bitwise (e.g. ASL, ADC, AND)
-            (O) Overwrites A completely.          (e.g. LDA, PLA)
+            (-) Does not touch A                   (e.g. CLC, PHP, LDX)
+            (U) Uses A, but doesn't change it      (e.g. CMP, STA, PHA)
+            (A) Adjusts A, via arithmetic/bitwise  (e.g. ASL, ADC, AND)
+            (O) Overwrites A completely.           (e.g. LDA, PLA)
+            (T) Overwrites A with another register (e.g. TXA, TYA)
 
             ...and similarly for the X and Y registers.
             """
             for reg in ('a','x','y'):
                 c = self.reg_changes[reg]
-                if c == 'O':
+                if c == 'O' or c == 'T':
                     state[reg].value              = None        # Current value, if known
                     state[reg].previous_load_imm  = None        # The address of the previous load immediate instruction if no adjustments made since
                     state[reg].previous_load      = binary_addr # The address of the previous load (immediate or otherwise) instruction if no adjustments made since
@@ -530,9 +532,9 @@ class Cpu6502(cpu.Cpu):
             runtime_addr = movemanager.b2r(memorymanager.BinaryAddr(binary_addr))
             if runtime_addr:
                 if runtime_addr in labelmanager.labels:
-                    label = labelmanager.labels[runtime_addr]
-                    if not label.is_empty():
-                        state.clear()
+                    #label = labelmanager.labels[runtime_addr]
+                    #if not label.is_empty():
+                    state.clear()
 
         def update_cpu_state(self, binary_addr, state):
             # if there's a label at this address, then we lose all known state.
@@ -1274,7 +1276,7 @@ class Cpu6502(cpu.Cpu):
                     # If we know about the state of the register 'reg'
                     if state and state[reg]:
                         # If this instruction alters the register 'reg'
-                        if c.reg_changes and (c.reg_changes[reg] == 'A'):
+                        if c.reg_changes and ((c.reg_changes[reg] == 'A') or (c.reg_changes[reg] == 'T')):
                             # Get the value of the register
                             r = state[reg].value
                             if r != None:

@@ -1138,7 +1138,7 @@ skip_uninversion2
     bcc consider_collisions                                           ; 263a: 90 08       ..  :153a[1]
 remove_torpedo
     lda #0                                                            ; 263c: a9 00       ..  :153c[1]
-    tay                                                               ; 263e: a8          .   :153e[1]
+    tay                                                               ; 263e: a8          .   :153e[1]   ; Y=$00
     sta (temp0_low),y                                                 ; 263f: 91 80       ..  :153f[1]
     jmp move_to_next_enemy_torpedo                                    ; 2641: 4c 89 15    L.. :1541[1]
 
@@ -2475,7 +2475,7 @@ loop6
     clc                                                               ; 2f14: 18          .   :1e14[1]
     adc (temp0_low),y                                                 ; 2f15: 71 80       q.  :1e15[1]
     bcc skip20                                                        ; 2f17: 90 05       ..  :1e17[1]
-    tya                                                               ; 2f19: 98          .   :1e19[1]
+    tya                                                               ; 2f19: 98          .   :1e19[1]   ; A=$00
     sta (temp0_low),y                                                 ; 2f1a: 91 80       ..  :1e1a[1]
     beq move_to_next_starship_explosion_piece                         ; 2f1c: f0 0d       ..  :1e1c[1]   ; ALWAYS branch
 
@@ -7820,7 +7820,7 @@ unused108
 
 entry_point
     lda #0                                                            ; 61b1: a9 00       ..
-    tay                                                               ; 61b3: a8          .
+    tay                                                               ; 61b3: a8          .              ; Y=$00
     sta temp0_low                                                     ; 61b4: 85 80       ..
     lda #$0e                                                          ; 61b6: a9 0e       ..
     sta temp0_high                                                    ; 61b8: 85 81       ..

@@ -1240,9 +1240,9 @@ sub_c8ad4
     lda (l009c),y                                                     // 8ad6: b1 9c       ..
     beq c8afb                                                         // 8ad8: f0 21       .!
     lda #0                                                            // 8ada: a9 00       ..
-    tax                                                               // 8adc: aa          .
+    tax                                                               // 8adc: aa          .              // X=$00
     sta (l009c),y                                                     // 8add: 91 9c       ..
-    tay                                                               // 8adf: a8          .
+    tay                                                               // 8adf: a8          .              // Y=$00
     lda #osbyte_read_write_econet_keyboard_disable                    // 8ae0: a9 c9       ..
     jsr osbyte                                                        // 8ae2: 20 f4 ff     ..            // Enable keyboard (for Econet)
     lda #$0a                                                          // 8ae5: a9 0a       ..
@@ -2510,7 +2510,7 @@ c9348
 // $9349 referenced 2 times by $92eb, $9393
 sub_c9349
     lda #0                                                            // 9349: a9 00       ..
-    tax                                                               // 934b: aa          .
+    tax                                                               // 934b: aa          .              // X=$00
     sta l10d8                                                         // 934c: 8d d8 10    ...
 // $934f referenced 1 time by $9356
 loop_c934f
@@ -2945,7 +2945,7 @@ c95ee
     lda #0                                                            // 95ee: a9 00       ..
     pha                                                               // 95f0: 48          H
     pha                                                               // 95f1: 48          H
-    tay                                                               // 95f2: a8          .
+    tay                                                               // 95f2: a8          .              // Y=$00
     tsx                                                               // 95f3: ba          .
 // $95f4 referenced 3 times by $95fb, $9600, $9605
 c95f4
@@ -3311,7 +3311,7 @@ sub_c983f
 c9846
     ldy #$60 // '`'                                                   // 9846: a0 60       .`
     pha                                                               // 9848: 48          H
-    tya                                                               // 9849: 98          .
+    tya                                                               // 9849: 98          .              // A=$60
     pha                                                               // 984a: 48          H
     ldx #0                                                            // 984b: a2 00       ..
     lda (l009a,x)                                                     // 984d: a1 9a       ..
@@ -4305,7 +4305,7 @@ sub_ca0ce
     cmp #$48 // 'H'                                                   // a0dc: c9 48       .H
     bcc ca0e3                                                         // a0de: 90 03       ..
     ldy #0                                                            // a0e0: a0 00       ..
-    tya                                                               // a0e2: 98          .
+    tya                                                               // a0e2: 98          .              // A=$00
 // $a0e3 referenced 1 time by $a0de
 ca0e3
     rts                                                               // a0e3: 60          `
@@ -5322,7 +5322,7 @@ cab36
     ldy #$21 // '!'                                                   // ab63: a0 21       .!
     sty l0d6b                                                         // ab65: 8c 6b 0d    .k.
     lda #0                                                            // ab68: a9 00       ..
-    tax                                                               // ab6a: aa          .
+    tax                                                               // ab6a: aa          .              // X=$00
     ldy l009f                                                         // ab6b: a4 9f       ..
     cli                                                               // ab6d: 58          X
     jsr sub_cac24                                                     // ab6e: 20 24 ac     $.
@@ -5518,7 +5518,7 @@ sub_cac98
     inc l009e                                                         // aca8: e6 9e       ..
     lda l0351                                                         // acaa: ad 51 03    .Q.
     pha                                                               // acad: 48          H
-    tya                                                               // acae: 98          .
+    tya                                                               // acae: 98          .              // A=$00
 // $acaf referenced 1 time by $acce
 loop_cacaf
     sta (l009e),y                                                     // acaf: 91 9e       ..
@@ -6145,7 +6145,7 @@ cb058
     jsr sub_cb0f6                                                     // b05e: 20 f6 b0     ..
     jsr sub_cb0ea                                                     // b061: 20 ea b0     ..
     lda #0                                                            // b064: a9 00       ..
-    tax                                                               // b066: aa          .
+    tax                                                               // b066: aa          .              // X=$00
     ldy #$20 // ' '                                                   // b067: a0 20       .
     sta (l009c),y                                                     // b069: 91 9c       ..
 // $b06b referenced 1 time by $b097
@@ -6307,8 +6307,8 @@ cb144
     lda l00aa                                                         // b14a: a5 aa       ..
     pha                                                               // b14c: 48          H
     lda #$0a                                                          // b14d: a9 0a       ..
-    tay                                                               // b14f: a8          .
-    tax                                                               // b150: aa          .
+    tay                                                               // b14f: a8          .              // Y=$0a
+    tax                                                               // b150: aa          .              // X=$0a
     sta l00b4                                                         // b151: 85 b4       ..
 // $b153 referenced 3 times by $b154, $b157, $b15b
 cb153
@@ -6812,7 +6812,7 @@ cb448
 // $b449 referenced 1 time by $8b75
 sub_cb449
     lda #0                                                            // b449: a9 00       ..
-    tay                                                               // b44b: a8          .
+    tay                                                               // b44b: a8          .              // Y=$00
 // $b44c referenced 1 time by $b450
 loop_cb44c
     sta l1000,y                                                       // b44c: 99 00 10    ...
@@ -6885,7 +6885,7 @@ cb4c1
     sta l0101                                                         // b4c3: 8d 01 01    ...
     lda #0                                                            // b4c6: a9 00       ..
     sta l0100                                                         // b4c8: 8d 00 01    ...
-    tax                                                               // b4cb: aa          .
+    tax                                                               // b4cb: aa          .              // X=$00
 // $b4cc referenced 1 time by $b4d3
 loop_cb4cc
     inx                                                               // b4cc: e8          .
@@ -7066,7 +7066,7 @@ sub_cb5d8
     sty l10cb                                                         // b5de: 8c cb 10    ...
     sty l10cf                                                         // b5e1: 8c cf 10    ...
     sty l10d6                                                         // b5e4: 8c d6 10    ...
-    tya                                                               // b5e7: 98          .
+    tya                                                               // b5e7: 98          .              // A=$00
     ldx #2                                                            // b5e8: a2 02       ..
 // $b5ea referenced 1 time by $b5ee
 loop_cb5ea
@@ -7498,7 +7498,7 @@ sub_cb98f
 
 sub_cb994
     lda #osfind_close                                                 // b994: a9 00       ..
-    tay                                                               // b996: a8          .
+    tay                                                               // b996: a8          .              // Y=$00
     jmp osfind                                                        // b997: 4c ce ff    L..            // Close all files (Y=0)
 
 sub_cb99a
@@ -7774,7 +7774,7 @@ sub_cbb0e
     tya                                                               // bb0e: 98          .
     tax                                                               // bb0f: aa          .
     lda #0                                                            // bb10: a9 00       ..
-    tay                                                               // bb12: a8          .
+    tay                                                               // bb12: a8          .              // Y=$00
 // $bb13 referenced 1 time by $bb18
 loop_cbb13
     sta (l00ae),y                                                     // bb13: 91 ae       ..
@@ -7810,7 +7810,7 @@ cbb39
 // $bb40 referenced 1 time by $bb56
 loop_cbb40
     ldy #0                                                            // bb40: a0 00       ..
-    tya                                                               // bb42: 98          .
+    tya                                                               // bb42: 98          .              // A=$00
 // $bb43 referenced 1 time by $bb4f
 loop_cbb43
     pha                                                               // bb43: 48          H
