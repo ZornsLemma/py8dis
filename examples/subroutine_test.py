@@ -4,7 +4,7 @@ import config
 
 config.set_label_references(False)
 
-load(0x2000, "subroutine_test.orig", "6502")
+load(0x2000, "orig/subroutine_test.orig", "6502")
 acorn.bbc()
 
 subroutine(0x2000, "start")

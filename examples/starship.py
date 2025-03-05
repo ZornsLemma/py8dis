@@ -16,7 +16,7 @@ config.set_show_cpu_state(False)
 config.set_show_char_literals(False)
 config.set_show_all_labels(False)
 
-load(0x1f00, "starship.orig", "6502")
+load(0x1f00, "orig/starship.orig", "6502")
 
 acorn.mos_labels()
 acorn.hardware_bbc()

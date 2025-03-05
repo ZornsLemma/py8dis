@@ -9,7 +9,7 @@ def mycom(addr, com):
 # Load the program to be disassembled into the debugger's memory.
 # The md5sum is optional but helps avoid confusion if there are multiple versions
 # of the same program.
-load(0x1100, "acorn_os_calls.orig", "6502")
+load(0x1100, "orig/acorn_os_calls.orig", "6502")
 acorn.master()
 
 label(0x70, "mem")

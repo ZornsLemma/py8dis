@@ -13,7 +13,7 @@ config.set_show_char_literals(False)
 config.set_show_all_labels(False)
 config.set_inline_comment_column(51)
 
-load(0x8000, "lisp406.orig", "6502")
+load(0x8000, "orig/lisp406.orig", "6502")
 entry(0x8000, "entry_point")
 
 acorn.bbc()

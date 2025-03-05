@@ -10,7 +10,7 @@ def patched_branch(base_label, offset_addr, target_label, label_only=False):
     f(base_addr + 2 + offset, target_label)
     expr(offset_addr, "%s-(%s+2)" % (target_label, base_label))
 
-load(0x2000, "dfs226.orig", "6502", "f083f49d6fe66344c650d7e74249cb96")
+load(0x2000, "orig/dfs226.orig", "6502", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
 
 acorn.bbc()

@@ -109,7 +109,7 @@ def picture_sprite(addr, lab, width, height):
     picture_binary(addr, height * bytes_per_line)
 
 set_label_maker_hook(my_label_maker)
-load(0x1210, "planb.orig", "6502")
+load(0x1210, "orig/planb.orig", "6502")
 
 acorn.mos_labels()
 acorn.hardware_bbc()

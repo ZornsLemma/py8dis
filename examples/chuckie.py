@@ -19,7 +19,7 @@ config.set_show_cpu_state(False)
 config.set_show_char_literals(False)
 config.set_show_all_labels(False)
 
-load(0x1100, "chuckie.orig", "6502")
+load(0x1100, "orig/chuckie.orig", "6502")
 
 acorn.bbc()
 
@@ -1154,61 +1154,61 @@ expr(0x299F, "hiscorenamebuffer_end - hiscorenamebuffer - 1")
 
 # Handle sprites
 sprites = OrderedDict()
-sprites[0] = "platform";
-sprites[8] = "ladder";
-sprites[16] = "egg";
-sprites[24] = "seed";
-sprites[32] = "lift";
-sprites[40] = "manright1";
-sprites[56] = "manright2";
-sprites[72] = "manright3";
-sprites[88] = "manleft1";
-sprites[104] = "manleft2";
-sprites[120] = "manleft3";
-sprites[136] = "manupdown1";
-sprites[152] = "manupdown2";
-sprites[170] = "manupdown3";
-sprites[188] = "bigbirdright1";
-sprites[236] = "bigbirdright2";
-sprites[284] = "bigbirdleft1";
-sprites[332] = "bigbirdleft2";
-sprites[380] = "cagewithhole";
-sprites[524] = "cage";
-sprites[668] = "birdright1";
-sprites[688] = "birdright2";
-sprites[708] = "birdleft1";
-sprites[728] = "birdleft2";
-sprites[748] = "birdupdown1";
-sprites[768] = "birdupdown2";
-sprites[790] = "birdeatright1";
-sprites[830] = "birdeatright2";
-sprites[870] = "birdeatleft1";
-sprites[910] = "birdeatleft2";
-sprites[950] = "digit0";
-sprites[957] = "digit1";
-sprites[964] = "digit2";
-sprites[971] = "digit3";
-sprites[978] = "digit4";
-sprites[985] = "digit5";
-sprites[992] = "digit6";
-sprites[999] = "digit7";
-sprites[1006] = "digit8";
-sprites[1013] = "digit9";
-sprites[1020] = "score";
-sprites[1047] = "highlightbox";
-sprites[1083] = "player";
-sprites[1119] = "level";
-sprites[1164] = "bonus";
-sprites[1218] = "time";
-sprites[1263] = "life";
-sprites[1266] = "bigc";
-sprites[1326] = "bigh";
-sprites[1386] = "bigu";
-sprites[1446] = "bigk";
-sprites[1506] = "bigi";
-sprites[1566] = "bige";
-sprites[1626] = "bigg";
-sprites[1686] = "";
+sprites[0] = "platform"
+sprites[8] = "ladder"
+sprites[16] = "egg"
+sprites[24] = "seed"
+sprites[32] = "lift"
+sprites[40] = "manright1"
+sprites[56] = "manright2"
+sprites[72] = "manright3"
+sprites[88] = "manleft1"
+sprites[104] = "manleft2"
+sprites[120] = "manleft3"
+sprites[136] = "manupdown1"
+sprites[152] = "manupdown2"
+sprites[170] = "manupdown3"
+sprites[188] = "bigbirdright1"
+sprites[236] = "bigbirdright2"
+sprites[284] = "bigbirdleft1"
+sprites[332] = "bigbirdleft2"
+sprites[380] = "cagewithhole"
+sprites[524] = "cage"
+sprites[668] = "birdright1"
+sprites[688] = "birdright2"
+sprites[708] = "birdleft1"
+sprites[728] = "birdleft2"
+sprites[748] = "birdupdown1"
+sprites[768] = "birdupdown2"
+sprites[790] = "birdeatright1"
+sprites[830] = "birdeatright2"
+sprites[870] = "birdeatleft1"
+sprites[910] = "birdeatleft2"
+sprites[950] = "digit0"
+sprites[957] = "digit1"
+sprites[964] = "digit2"
+sprites[971] = "digit3"
+sprites[978] = "digit4"
+sprites[985] = "digit5"
+sprites[992] = "digit6"
+sprites[999] = "digit7"
+sprites[1006] = "digit8"
+sprites[1013] = "digit9"
+sprites[1020] = "score"
+sprites[1047] = "highlightbox"
+sprites[1083] = "player"
+sprites[1119] = "level"
+sprites[1164] = "bonus"
+sprites[1218] = "time"
+sprites[1263] = "life"
+sprites[1266] = "bigc"
+sprites[1326] = "bigh"
+sprites[1386] = "bigu"
+sprites[1446] = "bigk"
+sprites[1506] = "bigi"
+sprites[1566] = "bige"
+sprites[1626] = "bigg"
+sprites[1686] = ""
 
 addr=0x1100
 label_with_comment(addr, "spritetable", "Sprite data table - width, height, address")

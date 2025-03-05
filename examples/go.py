@@ -37,7 +37,7 @@ def check_identical(file1: Path, file2: Path) -> bool:
 class Filepaths:
     def __init__(self, basename, assembler):
         self.control_file         = Path(f'{basename}.py')
-        self.binary_original_file = Path(f'{basename}.orig')
+        self.binary_original_file = Path('orig') / f'{basename}.orig'
         self.asm_output_file      = Path('build') / f'{basename}_{assembler}.asm'
         self.binary_output_file   = Path('build') / f'{basename}_{assembler}.dat'
         self.known_good_file      = Path('known_good') / f'{basename}_{assembler}.asm'

@@ -4,7 +4,7 @@ import acorn
 # Load the program to be disassembled into the debugger's memory.
 # The md5sum is optional but helps avoid confusion if there are
 # multiple versions of the same program.
-load(0xc000, "os12.orig", "6502")
+load(0xc000, "orig/os12.orig", "6502")
 
 acorn.bbc()
 

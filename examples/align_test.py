@@ -12,7 +12,7 @@ config.set_show_all_labels(False)
 # Load the program to be disassembled into the debugger's memory.
 # The md5sum is optional but helps avoid confusion if there are
 # multiple versions of the same program.
-load(0x2000, "align_test.orig", "6502", "ba85fca1feae301af81806d3102b0851")
+load(0x2000, "orig/align_test.orig", "6502", "ba85fca1feae301af81806d3102b0851")
 
 acorn.master()
 
