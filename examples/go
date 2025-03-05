@@ -4,9 +4,9 @@
 
 #set -e
 
-ext=""
-chk=""
-mkg=""
+EXT=""
+CHK=""
+MKG=""
 
 # Argument parsing
 while (( $# )); do
