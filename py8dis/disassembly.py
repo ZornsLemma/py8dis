@@ -145,7 +145,7 @@ def is_simple_name(s):
         return c.isalnum() or c == "_"
     return valid_first(s[0]) and all(valid_later(c) for c in s)
 
-def add_label(runtime_addr, s, move_id, *, definable_inline=True):
+def add_label(runtime_addr, s, move_id, *, definable_inline=True, priority=None):
     """Add a label at the given runtime address and move_id."""
 
     memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
@@ -154,7 +154,7 @@ def add_label(runtime_addr, s, move_id, *, definable_inline=True):
     label.definable_inline = label.definable_inline and definable_inline
     if s is not None:
         if is_simple_name(s):
-            label.add_explicit_name(s, move_id)
+            label.add_explicit_name(s, move_id, priority=priority)
         else:
             label.add_expression(s, move_id)
 

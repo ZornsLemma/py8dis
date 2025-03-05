@@ -8,9 +8,10 @@ from memorymanager import BinaryAddr, RuntimeAddr
 class Label(object):
     class Name(object):
         """Class for a label's name. Records whether it has been emitted yet."""
-        def __init__(self, name):
+        def __init__(self, name, *, priority=None):
             self.text = name
             self.emitted = False
+            self.priority = priority
 
         def __str__(self):
             return self.text + " (Emitted: " + str(self.emitted) + ")"
@@ -137,7 +138,7 @@ class Label(object):
             result = result[0:-2]
         return result
 
-    def add_explicit_name(self, name, move_id):
+    def add_explicit_name(self, name, move_id, priority=None):
         """Add a simple named label"""
 
         if move_id is None:
@@ -159,7 +160,7 @@ class Label(object):
         # contain "bne &905"; we don't want to generate one l0905 label
         # and put it in one move ID and leave the other one implicit.
         if name not in self.all_names():
-            self.explicit_names[move_id].append(self.Name(name))
+            self.explicit_names[move_id].append(self.Name(name, priority=priority))
 
     def add_local_label(self, name, start_addr, end_addr, move_id):
         """Add a local label"""
@@ -249,9 +250,11 @@ class Label(object):
         if not self.definable_inline:
             return result
 
-        for name in self.explicit_names[binary_loc.move_id]:
-            if name.emitted:
-                continue
+        filtered_and_sorted = sorted(
+            [item for item in self.explicit_names[binary_loc.move_id] if not item.emitted],
+            key=lambda x: float('inf') if x.priority is None else x.priority)
+
+        for name in filtered_and_sorted:
             if offset == 0:
                 if disassembly.is_simple_name(name.text):
                     result.append(assembler.inline_label(name.text))

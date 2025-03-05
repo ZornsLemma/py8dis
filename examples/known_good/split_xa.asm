@@ -5,8 +5,8 @@ osasci  = $ffe3
     * = $0900
 
 // $0900 referenced 1 time by $2006
-print_and_inc_zp
 pydis_start
+print_and_inc_zp
     lda l0070                                                         // 0900: a5 70       .p
     jsr sub_c0908                                                     // 0902: 20 08 09     ..
     sta l0070                                                         // 0905: 85 70       .p

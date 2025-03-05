@@ -148,11 +148,11 @@ oscli   = &fff7
     org &8000
 
 ; Standard language ROM header
+.pydis_start
 .entry_point
 .LISPST
 .LISVAL
 .ROMHDR
-.pydis_start
     jmp INITUR                                     ; 8000: 4c 3c 80    L<.
 
     jmp INITSE                                     ; 8003: 4c 34 81    L4.            ; Service entry

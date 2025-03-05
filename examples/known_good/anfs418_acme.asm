@@ -276,9 +276,9 @@ oscli                                   = $fff7
 
 ; Sideways ROM header
 ; $8000 referenced 1 time by $bfe6
+pydis_start
 rom_header
 language_entry
-pydis_start
 l8001 = rom_header+1
 l8002 = rom_header+2
     !byte 0, $42, $43                                                 ; 8000: 00 42 43    .BC

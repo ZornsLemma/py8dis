@@ -181,9 +181,9 @@ oscli       = $fff7
     * = $8000
 
 // Sideways ROM header
+pydis_start
 rom_header
 language_entry
-pydis_start
     jmp language_handler                                              // 8000: 4c e7 80    L..
 
 service_entry

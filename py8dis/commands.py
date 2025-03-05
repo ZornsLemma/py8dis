@@ -750,8 +750,8 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     pydis_start, pydis_end = memorymanager.get_entire_load_range()
 
     # Create start and end labels
-    label(int(pydis_start), "pydis_start", move_id=movemanager.BASE_MOVE_ID)
-    label(int(pydis_end), "pydis_end", move_id=movemanager.BASE_MOVE_ID)
+    disassembly.add_label(memorymanager.RuntimeAddr(int(pydis_start)), "pydis_start", move_id=movemanager.BASE_MOVE_ID, priority=1)
+    disassembly.add_label(memorymanager.RuntimeAddr(int(pydis_end)), "pydis_end", move_id=movemanager.BASE_MOVE_ID)
 
     # Trace where code lives
     trace.cpu.trace()

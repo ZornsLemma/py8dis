@@ -5,8 +5,8 @@ oswrch      = &ffee
     org &2000
 
 ; ***************************************************************************************
-.start
 .pydis_start
+.start
     jsr print_message                                                 ; 2000: 20 10 20     .             ; Print welcome message
     stx test_byte                                                     ; 2003: 86 70       .p             ; X=Length of the message just printed
     lda #&aa                                                          ; 2005: a9 aa       ..             ; A=number to print
