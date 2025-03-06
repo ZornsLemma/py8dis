@@ -60,6 +60,7 @@ python3 go.py "anfs418"         $OPT --assemblers acme beebasm xa       # Networ
 python3 go.py "lisp406"         $OPT --assemblers acme beebasm          # Lisp 4.06 (xa is excluded since it can't cope with: 'ldx #(>(LISPEN-LISVAL-1))+1')
 
 # Games
-python3 go.py "chuckie"         $OPT --assemblers acme beebasm xa       # Chuckie Egg
-python3 go.py "planb"           $OPT --assemblers acme beebasm xa       # Plan B
-python3 go.py "starship"        $OPT --assemblers acme beebasm xa       # Starship Command
+python3 go.py "chuckie"               $OPT --assemblers acme beebasm xa  # Chuckie Egg
+python3 go.py "planb"                 $OPT --assemblers acme beebasm xa  # Plan B
+python3 go.py "planb_new_label_maker" $OPT --assemblers acme beebasm xa  # Plan B with a new style label_maker function
+python3 go.py "starship"              $OPT --assemblers acme beebasm xa  # Starship Command
