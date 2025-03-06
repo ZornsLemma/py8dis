@@ -228,7 +228,7 @@ def run_tests(files: List[Path],
             name = f"{filename}_{assembler}: "
             print(name, end='', flush=True)
             result = single_test(filename, assembler, check_asm_against_known_good, make_known_good, make_extras)
-            spaces = 30 - len(name)
+            spaces = 31 - len(name)
             print(f"{' ' * spaces}", end='')
             if result == None:
                 print("passed. ")

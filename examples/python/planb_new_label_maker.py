@@ -73,7 +73,7 @@ def my_label_maker(d):
         d.replace("room_decode_rect_width", "current_room_door_info")
         d.replace("room_decode_sprite_height", "current_room_door_celly")
         d.replace("room_decode_sprite_width", "current_room_door_cellx")
-    if d.in_range(0x4600, 0x464f):
+    elif d.in_range(0x4600, 0x464f):
         d.replace("room_decode_sprite_width", "temp_sprite")
         d.replace("room_decode_rect_width", "temp_door_byte")
 
