@@ -119,9 +119,12 @@ class LazyString(object):
     def __init__(self, fmt, *args):
         self._fmt = fmt
         self._args = args
+        self.resolved = None
 
     def __str__(self):
-        return self._fmt % tuple(x() if callable(x) else x for x in self._args)
+        if self.resolved == None:
+            self.resolved = self._fmt % tuple(x() if callable(x) else x for x in self._args)
+        return self.resolved
 
     def __add__(self, other):
         if isinstance(other, LazyString):

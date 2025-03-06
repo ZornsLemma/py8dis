@@ -370,7 +370,7 @@ sub_c8074
     ldy #5                                                            ; 808e: a0 05       ..
 sub_c8090
     cpy #5                                                            ; 8090: c0 05       ..
-    bne c80bd                                                         ; 8092: d0 29       .)
+    bne return_1                                                      ; 8092: d0 29       .)
     ldy #$20 ; ' '                                                    ; 8094: a0 20       .
 ; $8096 referenced 1 time by $809d
 loop_c8096
@@ -390,7 +390,7 @@ loop_c8096
     sta l0d62                                                         ; 80b7: 8d 62 0d    .b.
     bit video_ula_control                                             ; 80ba: 2c 20 fe    , .
 ; $80bd referenced 1 time by $8092
-c80bd
+return_1
     rts                                                               ; 80bd: 60          `
 
 ; $80be referenced 1 time by $89b2
@@ -1275,16 +1275,16 @@ sub_c8b02
     sta l00bf                                                         ; 8b09: 85 bf       ..
     pla                                                               ; 8b0b: 68          h
 ; $8b0c referenced 2 times by $8b0f, $8b18
-c8b0c
+return_2
     rts                                                               ; 8b0c: 60          `
 
 sub_c8b0d
     cpy #5                                                            ; 8b0d: c0 05       ..
-    bne c8b0c                                                         ; 8b0f: d0 fb       ..
+    bne return_2                                                      ; 8b0f: d0 fb       ..
     lda #0                                                            ; 8b11: a9 00       ..
     sta l00a9                                                         ; 8b13: 85 a9       ..
     bit l0d6c                                                         ; 8b15: 2c 6c 0d    ,l.
-    bmi c8b0c                                                         ; 8b18: 30 f2       0.
+    bmi return_2                                                      ; 8b18: 30 f2       0.
 ; $8b1a referenced 1 time by $8ce0
 sub_c8b1a
     jsr sub_c8cb9                                                     ; 8b1a: 20 b9 8c     ..
@@ -1488,9 +1488,9 @@ c8c2f
 ; $8c33 referenced 2 times by $8bea, $8c1c
 sub_c8c33
     lda l0355                                                         ; 8c33: ad 55 03    .U.
-    beq c8c4d                                                         ; 8c36: f0 15       ..
+    beq return_3                                                      ; 8c36: f0 15       ..
     cmp #3                                                            ; 8c38: c9 03       ..
-    beq c8c4d                                                         ; 8c3a: f0 11       ..
+    beq return_3                                                      ; 8c3a: f0 11       ..
     tya                                                               ; 8c3c: 98          .
     pha                                                               ; 8c3d: 48          H
     jsr osnewl                                                        ; 8c3e: 20 e7 ff     ..            ; Write newline (characters 10 and 13)
@@ -1504,7 +1504,7 @@ loop_c8c45
     pla                                                               ; 8c4b: 68          h
     tay                                                               ; 8c4c: a8          .
 ; $8c4d referenced 2 times by $8c36, $8c3a
-c8c4d
+return_3
     rts                                                               ; 8c4d: 60          `
 
 sub_c8c4e
@@ -1585,7 +1585,7 @@ sub_c8cc0
     lda #0                                                            ; 8cc5: a9 00       ..
     sta l00cc                                                         ; 8cc7: 85 cc       ..
 ; $8cc9 referenced 1 time by $8ceb
-c8cc9
+return_4
     rts                                                               ; 8cc9: 60          `
 
 sub_c8cca
@@ -1608,7 +1608,7 @@ c8ce0
     jsr c8ff1                                                         ; 8ce3: 20 f1 8f     ..
     jsr osnewl                                                        ; 8ce6: 20 e7 ff     ..            ; Write newline (characters 10 and 13)
     ldx l00a8                                                         ; 8ce9: a6 a8       ..
-    bne c8cc9                                                         ; 8ceb: d0 dc       ..
+    bne return_4                                                      ; 8ceb: d0 dc       ..
     lda l1071                                                         ; 8ced: ad 71 10    .q.
     ora #4                                                            ; 8cf0: 09 04       ..
     sta l1071                                                         ; 8cf2: 8d 71 10    .q.
@@ -1653,17 +1653,17 @@ loop_c8d1b
 ; $8d26 referenced 1 time by $8d20
 c8d26
     cpx #$0d                                                          ; 8d26: e0 0d       ..
-    bne c8d37                                                         ; 8d28: d0 0d       ..
+    bne return_5                                                      ; 8d28: d0 0d       ..
     ldx #0                                                            ; 8d2a: a2 00       ..
 ; $8d2c referenced 1 time by $8d35
 loop_c8d2c
     lda l8d38,x                                                       ; 8d2c: bd 38 8d    .8.
-    beq c8d37                                                         ; 8d2f: f0 06       ..
+    beq return_5                                                      ; 8d2f: f0 06       ..
     jsr osasci                                                        ; 8d31: 20 e3 ff     ..            ; Write character
     inx                                                               ; 8d34: e8          .
     bne loop_c8d2c                                                    ; 8d35: d0 f5       ..
 ; $8d37 referenced 2 times by $8d28, $8d2f
-c8d37
+return_5
     rts                                                               ; 8d37: 60          `
 
 ; $8d38 referenced 2 times by $8d1d, $8d2c
@@ -1774,10 +1774,10 @@ c8dfa
 sub_c8e09
     jsr sub_ca865                                                     ; 8e09: 20 65 a8     e.
     eor l0e01                                                         ; 8e0c: 4d 01 0e    M..
-    bne c8e14                                                         ; 8e0f: d0 03       ..
+    bne return_6                                                      ; 8e0f: d0 03       ..
     sta l0e01                                                         ; 8e11: 8d 01 0e    ...
 ; $8e14 referenced 1 time by $8e0f
-c8e14
+return_6
     rts                                                               ; 8e14: 60          `
 
 ; $8e15 referenced 1 time by $9462
@@ -1862,7 +1862,7 @@ sub_c8e92
     lda l00ef                                                         ; 8e92: a5 ef       ..
     sbc #$31 ; '1'                                                    ; 8e94: e9 31       .1
     cmp #4                                                            ; 8e96: c9 04       ..
-    bcs c8eab                                                         ; 8e98: b0 11       ..
+    bcs return_7                                                      ; 8e98: b0 11       ..
     tax                                                               ; 8e9a: aa          .
     lda #0                                                            ; 8e9b: a9 00       ..
     sta l00a9                                                         ; 8e9d: 85 a9       ..
@@ -1872,10 +1872,10 @@ sub_c8e92
 
 service_handler_claim_absolute_workspace
     cpy #$16                                                          ; 8ea5: c0 16       ..
-    bcs c8eab                                                         ; 8ea7: b0 02       ..
+    bcs return_7                                                      ; 8ea7: b0 02       ..
     ldy #$16                                                          ; 8ea9: a0 16       ..
 ; $8eab referenced 2 times by $8e98, $8ea7
-c8eab
+return_7
     rts                                                               ; 8eab: 60          `
 
 ; $8eac referenced 1 time by $8edf
@@ -2028,7 +2028,7 @@ loop_c8f8e
 ; $8f99 referenced 1 time by $8f84
 sub_c8f99
     bit l0d6c                                                         ; 8f99: 2c 6c 0d    ,l.
-    bpl c8fca                                                         ; 8f9c: 10 2c       .,
+    bpl return_8                                                      ; 8f9c: 10 2c       .,
     ldy #0                                                            ; 8f9e: a0 00       ..
     jsr sub_cb799                                                     ; 8fa0: 20 99 b7     ..
     lda #osbyte_close_spool_exec                                      ; 8fa3: a9 77       .w
@@ -2057,7 +2057,7 @@ c8fbd
     and #$7f                                                          ; 8fc5: 29 7f       ).
     sta l0d6c                                                         ; 8fc7: 8d 6c 0d    .l.
 ; $8fca referenced 1 time by $8f9c
-c8fca
+return_8
     rts                                                               ; 8fca: 60          `
 
 ; $8fcb referenced 2 times by $9dee, $b5fb
@@ -2343,16 +2343,16 @@ c9244
 ; $9258 referenced 3 times by $8d93, $b005, $b1dc
 sub_c9258
     cmp #$26 ; '&'                                                    ; 9258: c9 26       .&
-    beq c9266                                                         ; 925a: f0 0a       ..
+    beq return_9                                                      ; 925a: f0 0a       ..
     cmp #$2e ; '.'                                                    ; 925c: c9 2e       ..
-    beq c9266                                                         ; 925e: f0 06       ..
+    beq return_9                                                      ; 925e: f0 06       ..
 ; $9260 referenced 1 time by $91b8
 sub_c9260
     cmp #$3a ; ':'                                                    ; 9260: c9 3a       .:
     bcs c9267                                                         ; 9262: b0 03       ..
     cmp #$30 ; '0'                                                    ; 9264: c9 30       .0
 ; $9266 referenced 2 times by $925a, $925e
-c9266
+return_9
     rts                                                               ; 9266: 60          `
 
 ; $9267 referenced 1 time by $9262
@@ -2418,11 +2418,11 @@ sub_c92a4
 loop_c92a6
     lda l00af,x                                                       ; 92a6: b5 af       ..
     eor l00b3,x                                                       ; 92a8: 55 b3       U.
-    bne c92af                                                         ; 92aa: d0 03       ..
+    bne return_10                                                     ; 92aa: d0 03       ..
     dex                                                               ; 92ac: ca          .
     bne loop_c92a6                                                    ; 92ad: d0 f7       ..
 ; $92af referenced 1 time by $92aa
-c92af
+return_10
     rts                                                               ; 92af: 60          `
 
 sub_c92b0
@@ -2504,7 +2504,7 @@ c933e
     pla                                                               ; 9346: 68          h
     tay                                                               ; 9347: a8          .
 ; $9348 referenced 1 time by $937d
-c9348
+return_11
     rts                                                               ; 9348: 60          `
 
 ; $9349 referenced 2 times by $92eb, $9393
@@ -2542,7 +2542,7 @@ c9371
     cmp #$0d                                                          ; 9376: c9 0d       ..
     bne c9363                                                         ; 9378: d0 e9       ..
     lda l10d8                                                         ; 937a: ad d8 10    ...
-    beq c9348                                                         ; 937d: f0 c9       ..
+    beq return_11                                                     ; 937d: f0 c9       ..
     lda l00fd                                                         ; 937f: a5 fd       ..
     jsr generate_error_inline                                         ; 9381: 20 b8 96     ..
     !text "string", 0                                                 ; 9384: 73 74 72... str
@@ -2784,14 +2784,14 @@ loop_c94f8
     iny                                                               ; 94f8: c8          .
     lda (l00c4),y                                                     ; 94f9: b1 c4       ..
     tax                                                               ; 94fb: aa          .
-    beq c9504                                                         ; 94fc: f0 06       ..
+    beq return_12                                                     ; 94fc: f0 06       ..
     bvc c9502                                                         ; 94fe: 50 02       P.
     adc #$2a ; '*'                                                    ; 9500: 69 2a       i*
 ; $9502 referenced 1 time by $94fe
 c9502
     bne c950e                                                         ; 9502: d0 0a       ..
 ; $9504 referenced 2 times by $94fc, $9574
-c9504
+return_12
     rts                                                               ; 9504: 60          `
 
 ; $9505 referenced 1 time by $94e9
@@ -2869,7 +2869,7 @@ loop_c955d
 sub_c9570
     lda l00ff                                                         ; 9570: a5 ff       ..
     and l0098                                                         ; 9572: 25 98       %.
-    bpl c9504                                                         ; 9574: 10 8e       ..
+    bpl return_12                                                     ; 9574: 10 8e       ..
 ; $9576 referenced 1 time by $b445
 c9576
     lda #osbyte_acknowledge_escape                                    ; 9576: a9 7e       .~
@@ -2970,10 +2970,10 @@ c9607
 ; $9611 referenced 6 times by $9627, $9660, $967c, $96a6, $96b8, $96d1
 sta_e09_if_d6c_b7_set
     bit l0d6c                                                         ; 9611: 2c 6c 0d    ,l.
-    bpl c9619                                                         ; 9614: 10 03       ..
+    bpl return_13                                                     ; 9614: 10 03       ..
     sta l0e09                                                         ; 9616: 8d 09 0e    ...
 ; $9619 referenced 1 time by $9614
-c9619
+return_13
     rts                                                               ; 9619: 60          `
 
 ; $961a referenced 1 time by $960e
@@ -3257,7 +3257,7 @@ loop_c9794
     txa                                                               ; 979d: 8a          .
     cmp #$30 ; '0'                                                    ; 979e: c9 30       .0
     bne c97a4                                                         ; 97a0: d0 02       ..
-    bvs c97ac                                                         ; 97a2: 70 08       p.
+    bvs return_14                                                     ; 97a2: 70 08       p.
 ; $97a4 referenced 1 time by $97a0
 c97a4
     clv                                                               ; 97a4: b8          .
@@ -3265,7 +3265,7 @@ c97a4
     sta l0101,x                                                       ; 97a7: 9d 01 01    ...
     inc l00b2                                                         ; 97aa: e6 b2       ..
 ; $97ac referenced 1 time by $97a2
-c97ac
+return_14
     rts                                                               ; 97ac: 60          `
 
 ; $97ad referenced 5 times by $961c, $965a, $9688, $969b, $9730
@@ -3544,7 +3544,7 @@ loop_c998c
 ; $9998 referenced 2 times by $9987, $9f52
 sub_c9998
     jsr sub_c92a4                                                     ; 9998: 20 a4 92     ..
-    beq c99c2                                                         ; 999b: f0 25       .%
+    beq return_15                                                     ; 999b: f0 25       .%
     lda #$92                                                          ; 999d: a9 92       ..
     sta l00c1                                                         ; 999f: 85 c1       ..
 ; $99a1 referenced 1 time by $99bd
@@ -3570,7 +3570,7 @@ loop_c99b7
     dey                                                               ; 99bf: 88          .
     bpl loop_c99b7                                                    ; 99c0: 10 f5       ..
 ; $99c2 referenced 1 time by $999b
-c99c2
+return_15
     rts                                                               ; 99c2: 60          `
 
     !byte $f0, 3, $4c, $ef, $9a                                       ; 99c3: f0 03 4c... ..L
@@ -3647,7 +3647,7 @@ c9a32
     cpy #$12                                                          ; 9a35: c0 12       ..
     bne loop_c9a2f                                                    ; 9a37: d0 f6       ..
     ldy l0e06                                                         ; 9a39: ac 06 0e    ...
-    beq c9a83                                                         ; 9a3c: f0 45       .E
+    beq return_16                                                     ; 9a3c: f0 45       .E
     ldy #$f4                                                          ; 9a3e: a0 f4       ..
 ; $9a40 referenced 1 time by $9a47
 loop_c9a40
@@ -3702,7 +3702,7 @@ sub_c9a7f
     iny                                                               ; 9a81: c8          .
     iny                                                               ; 9a82: c8          .
 ; $9a83 referenced 1 time by $9a3c
-c9a83
+return_16
     rts                                                               ; 9a83: 60          `
 
 ; $9a84 referenced 2 times by $9964, $9969
@@ -4303,11 +4303,11 @@ sub_ca0ce
     tay                                                               ; a0da: a8          .
     pla                                                               ; a0db: 68          h
     cmp #$48 ; 'H'                                                    ; a0dc: c9 48       .H
-    bcc ca0e3                                                         ; a0de: 90 03       ..
+    bcc return_17                                                     ; a0de: 90 03       ..
     ldy #0                                                            ; a0e0: a0 00       ..
     tya                                                               ; a0e2: 98          .              ; A=$00
 ; $a0e3 referenced 1 time by $a0de
-ca0e3
+return_17
     rts                                                               ; a0e3: 60          `
 
 sub_ca0e4
@@ -4811,7 +4811,7 @@ ca3b4
     txa                                                               ; a3cb: 8a          .              ; X has top bit set if 'CTRL' pressed
     bpl ca3e3                                                         ; a3cc: 10 15       ..
 ; $a3ce referenced 1 time by $a3e6
-loop_ca3ce
+return_18
     rts                                                               ; a3ce: 60          `
 
     !text "L.!BOOT"                                                   ; a3cf: 4c 2e 21... L.!
@@ -4825,7 +4825,7 @@ la3df
 ; $a3e3 referenced 2 times by $a3c2, $a3cc
 ca3e3
     ldy l0e05                                                         ; a3e3: ac 05 0e    ...
-    beq loop_ca3ce                                                    ; a3e6: f0 e6       ..
+    beq return_18                                                     ; a3e6: f0 e6       ..
 ; $a3e8 referenced 1 time by $a28e
 ca3e8
     ldx la3df,y                                                       ; a3e8: be df a3    ...
@@ -4948,9 +4948,9 @@ sub_ca4ee
     clc                                                               ; a4ee: 18          .
     lda l00ef                                                         ; a4ef: a5 ef       ..
     sbc #$0d                                                          ; a4f1: e9 0d       ..
-    bmi ca522                                                         ; a4f3: 30 2d       0-
+    bmi return_19                                                     ; a4f3: 30 2d       0-
     cmp #7                                                            ; a4f5: c9 07       ..
-    bcs ca522                                                         ; a4f7: b0 29       .)
+    bcs return_19                                                     ; a4f7: b0 29       .)
     tax                                                               ; a4f9: aa          .
     ldy #6                                                            ; a4fa: a0 06       ..
 ; $a4fc referenced 1 time by $a507
@@ -4980,7 +4980,7 @@ sub_ca516
     lda (l00ac),y                                                     ; a51e: b1 ac       ..
     sty l00a9                                                         ; a520: 84 a9       ..
 ; $a522 referenced 2 times by $a4f3, $a4f7
-ca522
+return_19
     rts                                                               ; a522: 60          `
 
 ; $a523 referenced 1 time by $a51a
@@ -5079,7 +5079,7 @@ la84d
 sub_ca865
     lda l0d71                                                         ; a865: ad 71 0d    .q.
     cmp #$ff                                                          ; a868: c9 ff       ..
-    bne ca8c4                                                         ; a86a: d0 58       .X
+    bne return_20                                                     ; a86a: d0 58       .X
     tya                                                               ; a86c: 98          .
     pha                                                               ; a86d: 48          H
     ldy #$18                                                          ; a86e: a0 18       ..
@@ -5131,10 +5131,10 @@ ca8b5
     lda l0d71                                                         ; a8bb: ad 71 0d    .q.
     tax                                                               ; a8be: aa          .
     eor #$ff                                                          ; a8bf: 49 ff       I.
-    beq ca8c4                                                         ; a8c1: f0 01       ..
+    beq return_20                                                     ; a8c1: f0 01       ..
     txa                                                               ; a8c3: 8a          .
 ; $a8c4 referenced 2 times by $a86a, $a8c1
-ca8c4
+return_20
     rts                                                               ; a8c4: 60          `
 
     !byte $c9, 1, $b0                                                 ; a8c5: c9 01 b0    ...
@@ -5836,13 +5836,13 @@ caed8
     pla                                                               ; aed8: 68          h
     tax                                                               ; aed9: aa          .
 ; $aeda referenced 3 times by $aedd, $aee4, $aeef
-caeda
+return_21
     rts                                                               ; aeda: 60          `
 
 ; $aedb referenced 1 time by $aeae
 caedb
     eor #$23 ; '#'                                                    ; aedb: 49 23       I#
-    beq caeda                                                         ; aedd: f0 fb       ..
+    beq return_21                                                     ; aedd: f0 fb       ..
 ; $aedf referenced 2 times by $aeb5, $af12
 caedf
     jmp c92fa                                                         ; aedf: 4c fa 92    L..
@@ -5850,12 +5850,12 @@ caedf
 ; $aee2 referenced 1 time by $ae9c
 caee2
     eor #$1c                                                          ; aee2: 49 1c       I.
-    bne caeda                                                         ; aee4: d0 f4       ..
+    bne return_21                                                     ; aee4: d0 f4       ..
     lda l0e32                                                         ; aee6: ad 32 0e    .2.
     eor #$2e ; '.'                                                    ; aee9: 49 2e       I.
     beq caef1                                                         ; aeeb: f0 04       ..
     eor #$23 ; '#'                                                    ; aeed: 49 23       I#
-    bne caeda                                                         ; aeef: d0 e9       ..
+    bne return_21                                                     ; aeef: d0 e9       ..
 ; $aef1 referenced 1 time by $aeeb
 caef1
     lda l1071                                                         ; aef1: ad 71 10    .q.
@@ -5908,7 +5908,7 @@ loop_caf1c
 caf2b
     lda #0                                                            ; af2b: a9 00       ..
 ; $af2d referenced 1 time by $af43
-loop_caf2d
+return_22
     rts                                                               ; af2d: 60          `
 
     !text "Load"                                                      ; af2e: 4c 6f 61... Loa
@@ -5927,7 +5927,7 @@ sub_caf3e
 ; $af40 referenced 1 time by $af60
 caf40
     lda l0f05,x                                                       ; af40: bd 05 0f    ...
-    bmi loop_caf2d                                                    ; af43: 30 e8       0.
+    bmi return_22                                                     ; af43: 30 e8       0.
     bne caf5c                                                         ; af45: d0 15       ..
 ; $af47 referenced 1 time by $ae78
 sub_caf47
@@ -6003,14 +6003,14 @@ loop_caf9d
     plp                                                               ; afa6: 28          (
     bvc cafad                                                         ; afa7: 50 04       P.
     cmp #$30 ; '0'                                                    ; afa9: c9 30       .0
-    beq cafb4                                                         ; afab: f0 07       ..
+    beq return_23                                                     ; afab: f0 07       ..
 ; $afad referenced 1 time by $afa7
 cafad
     ldx l00b8                                                         ; afad: a6 b8       ..
     jsr osasci                                                        ; afaf: 20 e3 ff     ..            ; Write character
     stx l00b8                                                         ; afb2: 86 b8       ..
 ; $afb4 referenced 1 time by $afab
-cafb4
+return_23
     rts                                                               ; afb4: 60          `
 
 ; $afb5 referenced 7 times by $a1c1, $ad34, $ad96, $af74, $b038, $b216, $b360
@@ -6032,7 +6032,7 @@ sub_cafc1
     cmp #$20 ; ' '                                                    ; afc3: c9 20       .
     beq cafcd                                                         ; afc5: f0 06       ..
     cmp #$0d                                                          ; afc7: c9 0d       ..
-    beq cafd4                                                         ; afc9: f0 09       ..
+    beq return_24                                                     ; afc9: f0 09       ..
     bne loop_cafc0                                                    ; afcb: d0 f3       ..             ; ALWAYS branch
 
 ; $afcd referenced 2 times by $afc5, $afd2
@@ -6042,7 +6042,7 @@ cafcd
     cmp #$20 ; ' '                                                    ; afd0: c9 20       .
     beq cafcd                                                         ; afd2: f0 f9       ..
 ; $afd4 referenced 1 time by $afc9
-cafd4
+return_24
     rts                                                               ; afd4: 60          `
 
 ; $afd5 referenced 2 times by $affb, $b1d2
@@ -6490,7 +6490,7 @@ cb261
 ; $b267 referenced 1 time by $b2dd
 cb267
     pla                                                               ; b267: 68          h
-    beq cb2df                                                         ; b268: f0 75       .u
+    beq return_25                                                     ; b268: f0 75       .u
     pha                                                               ; b26a: 48          H
     tay                                                               ; b26b: a8          .
     lda (l009e),y                                                     ; b26c: b1 9e       ..
@@ -6562,7 +6562,7 @@ cb2d7
     bne cb267                                                         ; b2dd: d0 88       ..             ; ALWAYS branch
 
 ; $b2df referenced 1 time by $b268
-cb2df
+return_25
     rts                                                               ; b2df: 60          `
 
 ; $b2e0 referenced 1 time by $b1cd
@@ -6802,11 +6802,11 @@ sub_cb431
     ldx #1                                                            ; b43b: a2 01       ..
     jsr osbyte                                                        ; b43d: 20 f4 ff     ..            ; Flush input buffers (X non-zero)
     jsr osrdch                                                        ; b440: 20 e0 ff     ..            ; Read a character from the current input stream
-    bcc cb448                                                         ; b443: 90 03       ..
+    bcc return_26                                                     ; b443: 90 03       ..
     jmp c9576                                                         ; b445: 4c 76 95    Lv.
 
 ; $b448 referenced 1 time by $b443
-cb448
+return_26
     rts                                                               ; b448: 60          `
 
 ; $b449 referenced 1 time by $8b75
@@ -6998,11 +6998,11 @@ cb577
 sub_cb586
     lda l1040,x                                                       ; b586: bd 40 10    .@.
     eor l0e00                                                         ; b589: 4d 00 0e    M..
-    bne cb594                                                         ; b58c: d0 06       ..
+    bne return_27                                                     ; b58c: d0 06       ..
     lda l1050,x                                                       ; b58e: bd 50 10    .P.
     eor l0e01                                                         ; b591: 4d 01 0e    M..
 ; $b594 referenced 1 time by $b58c
-cb594
+return_27
     rts                                                               ; b594: 60          `
 
 ; $b595 referenced 2 times by $b694, $b782
@@ -8106,10 +8106,10 @@ lbd94
 ; $be62 referenced 1 time by $8a3d
 service_handler_tube_service_calls
     cmp #$fe                                                          ; be62: c9 fe       ..
-    bcc cbec2                                                         ; be64: 90 5c       .\
+    bcc return_28                                                     ; be64: 90 5c       .\
     bne cbe83                                                         ; be66: d0 1b       ..
     cpy #0                                                            ; be68: c0 00       ..
-    beq cbec2                                                         ; be6a: f0 56       .V
+    beq return_28                                                     ; be6a: f0 56       .V
     ldx #6                                                            ; be6c: a2 06       ..
     lda #osbyte_explode_chars                                         ; be6e: a9 14       ..
     jsr osbyte                                                        ; be70: 20 f4 ff     ..            ; Explode character definition RAM (six extra pages), can redefine all characters 32-255 (X=6)
@@ -8157,7 +8157,7 @@ loop_cbeb8
 cbec0
     lda #0                                                            ; bec0: a9 00       ..
 ; $bec2 referenced 2 times by $be64, $be6a
-cbec2
+return_28
     rts                                                               ; bec2: 60          `
 
 ; $bec3 referenced 1 time by $beb8
@@ -8185,7 +8185,7 @@ c0406
     bcs c0428                                                         ; bf10: b0 1a       ..  :040c[1]
     ora #$40 ; '@'                                                    ; bf12: 09 40       .@  :040e[1]
     cmp l0015                                                         ; bf14: c5 15       ..  :0410[1]
-    bne c0434                                                         ; bf16: d0 20       .   :0412[1]
+    bne return_29                                                     ; bf16: d0 20       .   :0412[1]
 ; $bf18 referenced 1 time by $0471[1]
 sub_c0414
     php                                                               ; bf18: 08          .   :0414[1]
@@ -8207,7 +8207,7 @@ c0428
     asl l0014                                                         ; bf2c: 06 14       ..  :0428[1]
     bcs c0432                                                         ; bf2e: b0 06       ..  :042a[1]
     cmp l0015                                                         ; bf30: c5 15       ..  :042c[1]
-    beq c0434                                                         ; bf32: f0 04       ..  :042e[1]
+    beq return_29                                                     ; bf32: f0 04       ..  :042e[1]
     clc                                                               ; bf34: 18          .   :0430[1]
     rts                                                               ; bf35: 60          `   :0431[1]
 
@@ -8215,7 +8215,7 @@ c0428
 c0432
     sta l0015                                                         ; bf36: 85 15       ..  :0432[1]
 ; $bf38 referenced 2 times by $0412[1], $042e[1]
-c0434
+return_29
     rts                                                               ; bf38: 60          `   :0434[1]
 
 ; $bf39 referenced 1 time by $0408[1]
@@ -8490,7 +8490,6 @@ pydis_end
 ;     ca38e:                                    3
 ;     cab36:                                    3
 ;     cacdd:                                    3
-;     caeda:                                    3
 ;     caf88:                                    3
 ;     cb058:                                    3
 ;     cb153:                                    3
@@ -8528,6 +8527,7 @@ pydis_end
 ;     l10f3:                                    3
 ;     la3f1:                                    3
 ;     la3f2:                                    3
+;     return_21:                                3
 ;     sub_c8aa0:                                3
 ;     sub_c8b02:                                3
 ;     sub_c8e83:                                3
@@ -8541,7 +8541,6 @@ pydis_end
 ;     sub_cb559:                                3
 ;     sub_cb799:                                3
 ;     tube_data_register_3:                     3
-;     c0434:                                    2
 ;     c0482:                                    2
 ;     c83fb:                                    2
 ;     c8641:                                    2
@@ -8550,15 +8549,11 @@ pydis_end
 ;     c8988:                                    2
 ;     c8a38:                                    2
 ;     c8aba:                                    2
-;     c8b0c:                                    2
 ;     c8b98:                                    2
 ;     c8bab:                                    2
 ;     c8be0:                                    2
-;     c8c4d:                                    2
-;     c8d37:                                    2
 ;     c8dbc:                                    2
 ;     c8e24:                                    2
-;     c8eab:                                    2
 ;     c8f70:                                    2
 ;     c8fe4:                                    2
 ;     c8ff1:                                    2
@@ -8567,13 +8562,11 @@ pydis_end
 ;     c91fb:                                    2
 ;     c9229:                                    2
 ;     c9235:                                    2
-;     c9266:                                    2
 ;     c9322:                                    2
 ;     c9363:                                    2
 ;     c93bc:                                    2
 ;     c94ae:                                    2
 ;     c94d9:                                    2
-;     c9504:                                    2
 ;     c9551:                                    2
 ;     c9589:                                    2
 ;     c964e:                                    2
@@ -8601,9 +8594,7 @@ pydis_end
 ;     ca365:                                    2
 ;     ca38b:                                    2
 ;     ca3e3:                                    2
-;     ca522:                                    2
 ;     ca889:                                    2
-;     ca8c4:                                    2
 ;     caaa9:                                    2
 ;     caae2:                                    2
 ;     cac30:                                    2
@@ -8632,7 +8623,6 @@ pydis_end
 ;     cbba2:                                    2
 ;     cbbbc:                                    2
 ;     cbe73:                                    2
-;     cbec2:                                    2
 ;     cbfc0:                                    2
 ;     evntv:                                    2
 ;     l0000:                                    2
@@ -8678,6 +8668,16 @@ pydis_end
 ;     osrdch:                                   2
 ;     osrdsc_ptr:                               2
 ;     osword:                                   2
+;     return_12:                                2
+;     return_19:                                2
+;     return_2:                                 2
+;     return_20:                                2
+;     return_28:                                2
+;     return_29:                                2
+;     return_3:                                 2
+;     return_5:                                 2
+;     return_7:                                 2
+;     return_9:                                 2
 ;     romsel:                                   2
 ;     service_handler_common2:                  2
 ;     sub_c858c:                                2
@@ -8746,7 +8746,6 @@ pydis_end
 ;     c8032:                                    1
 ;     c805d:                                    1
 ;     c806c:                                    1
-;     c80bd:                                    1
 ;     c80be:                                    1
 ;     c80d6:                                    1
 ;     c80e9:                                    1
@@ -8795,7 +8794,6 @@ pydis_end
 ;     c8c73:                                    1
 ;     c8c7d:                                    1
 ;     c8c98:                                    1
-;     c8cc9:                                    1
 ;     c8cda:                                    1
 ;     c8ce0:                                    1
 ;     c8d08:                                    1
@@ -8805,7 +8803,6 @@ pydis_end
 ;     c8dbf:                                    1
 ;     c8deb:                                    1
 ;     c8dfa:                                    1
-;     c8e14:                                    1
 ;     c8e15:                                    1
 ;     c8e20:                                    1
 ;     c8eb3:                                    1
@@ -8813,7 +8810,6 @@ pydis_end
 ;     c8f40:                                    1
 ;     c8f4c:                                    1
 ;     c8fbd:                                    1
-;     c8fca:                                    1
 ;     c901e:                                    1
 ;     c9140:                                    1
 ;     c9153:                                    1
@@ -8829,9 +8825,7 @@ pydis_end
 ;     c9277:                                    1
 ;     c9283:                                    1
 ;     c929f:                                    1
-;     c92af:                                    1
 ;     c933e:                                    1
-;     c9348:                                    1
 ;     c9358:                                    1
 ;     c9371:                                    1
 ;     c93a2:                                    1
@@ -8855,7 +8849,6 @@ pydis_end
 ;     c9586:                                    1
 ;     c95ee:                                    1
 ;     c9607:                                    1
-;     c9619:                                    1
 ;     c961a:                                    1
 ;     c9636:                                    1
 ;     c9641:                                    1
@@ -8876,7 +8869,6 @@ pydis_end
 ;     c972c:                                    1
 ;     c9767:                                    1
 ;     c97a4:                                    1
-;     c97ac:                                    1
 ;     c9846:                                    1
 ;     c984f:                                    1
 ;     c9873:                                    1
@@ -8888,14 +8880,12 @@ pydis_end
 ;     c9902:                                    1
 ;     c9969:                                    1
 ;     c996f:                                    1
-;     c99c2:                                    1
 ;     c99c8:                                    1
 ;     c9a0c:                                    1
 ;     c9a19:                                    1
 ;     c9a1f:                                    1
 ;     c9a22:                                    1
 ;     c9a32:                                    1
-;     c9a83:                                    1
 ;     c9aa0:                                    1
 ;     c9ac9:                                    1
 ;     c9ad2:                                    1
@@ -8926,7 +8916,6 @@ pydis_end
 ;     ca0bd:                                    1
 ;     ca0c5:                                    1
 ;     ca0c9:                                    1
-;     ca0e3:                                    1
 ;     ca0f5:                                    1
 ;     ca109:                                    1
 ;     ca114:                                    1
@@ -8997,8 +8986,6 @@ pydis_end
 ;     caf5f:                                    1
 ;     caf72:                                    1
 ;     cafad:                                    1
-;     cafb4:                                    1
-;     cafd4:                                    1
 ;     caff8:                                    1
 ;     cb025:                                    1
 ;     cb028:                                    1
@@ -9020,7 +9007,6 @@ pydis_end
 ;     cb29c:                                    1
 ;     cb2ac:                                    1
 ;     cb2d7:                                    1
-;     cb2df:                                    1
 ;     cb2ed:                                    1
 ;     cb2ef:                                    1
 ;     cb316:                                    1
@@ -9036,7 +9022,6 @@ pydis_end
 ;     cb40e:                                    1
 ;     cb41d:                                    1
 ;     cb423:                                    1
-;     cb448:                                    1
 ;     cb475:                                    1
 ;     cb477:                                    1
 ;     cb483:                                    1
@@ -9044,7 +9029,6 @@ pydis_end
 ;     cb51a:                                    1
 ;     cb557:                                    1
 ;     cb563:                                    1
-;     cb594:                                    1
 ;     cb5a2:                                    1
 ;     cb5ac:                                    1
 ;     cb5b6:                                    1
@@ -9302,7 +9286,6 @@ pydis_end
 ;     loop_ca26c:                               1
 ;     loop_ca2a2:                               1
 ;     loop_ca2a8:                               1
-;     loop_ca3ce:                               1
 ;     loop_ca4fc:                               1
 ;     loop_ca50e:                               1
 ;     loop_ca875:                               1
@@ -9318,7 +9301,6 @@ pydis_end
 ;     loop_caec9:                               1
 ;     loop_caf07:                               1
 ;     loop_caf1c:                               1
-;     loop_caf2d:                               1
 ;     loop_caf9d:                               1
 ;     loop_cafc0:                               1
 ;     loop_cb01b:                               1
@@ -9388,6 +9370,24 @@ pydis_end
 ;     osfile:                                   1
 ;     osrdsc:                                   1
 ;     pydis_start:                              1
+;     return_1:                                 1
+;     return_10:                                1
+;     return_11:                                1
+;     return_13:                                1
+;     return_14:                                1
+;     return_15:                                1
+;     return_16:                                1
+;     return_17:                                1
+;     return_18:                                1
+;     return_22:                                1
+;     return_23:                                1
+;     return_24:                                1
+;     return_25:                                1
+;     return_26:                                1
+;     return_27:                                1
+;     return_4:                                 1
+;     return_6:                                 1
+;     return_8:                                 1
 ;     rom_header:                               1
 ;     rom_type:                                 1
 ;     service_entry:                            1
@@ -9468,7 +9468,6 @@ pydis_end
 ;     c0406
 ;     c0428
 ;     c0432
-;     c0434
 ;     c0435
 ;     c0463
 ;     c047a
@@ -9476,7 +9475,6 @@ pydis_end
 ;     c8032
 ;     c805d
 ;     c806c
-;     c80bd
 ;     c80be
 ;     c80d6
 ;     c80e9
@@ -9519,7 +9517,6 @@ pydis_end
 ;     c8acb
 ;     c8ad1
 ;     c8afb
-;     c8b0c
 ;     c8b34
 ;     c8b8d
 ;     c8b98
@@ -9536,29 +9533,24 @@ pydis_end
 ;     c8c24
 ;     c8c26
 ;     c8c2f
-;     c8c4d
 ;     c8c70
 ;     c8c73
 ;     c8c7d
 ;     c8c98
-;     c8cc9
 ;     c8cda
 ;     c8ce0
 ;     c8d08
 ;     c8d0a
 ;     c8d26
-;     c8d37
 ;     c8da7
 ;     c8dbc
 ;     c8dbf
 ;     c8dd2
 ;     c8deb
 ;     c8dfa
-;     c8e14
 ;     c8e15
 ;     c8e20
 ;     c8e24
-;     c8eab
 ;     c8eb3
 ;     c8f3d
 ;     c8f40
@@ -9566,7 +9558,6 @@ pydis_end
 ;     c8f70
 ;     c8f8c
 ;     c8fbd
-;     c8fca
 ;     c8fe4
 ;     c8ff1
 ;     c901e
@@ -9588,17 +9579,14 @@ pydis_end
 ;     c9229
 ;     c9235
 ;     c9244
-;     c9266
 ;     c9267
 ;     c9277
 ;     c9283
 ;     c929f
-;     c92af
 ;     c92fa
 ;     c9311
 ;     c9322
 ;     c933e
-;     c9348
 ;     c9358
 ;     c9363
 ;     c9371
@@ -9618,7 +9606,6 @@ pydis_end
 ;     c94d3
 ;     c94d9
 ;     c9502
-;     c9504
 ;     c9505
 ;     c950e
 ;     c951b
@@ -9631,7 +9618,6 @@ pydis_end
 ;     c95ee
 ;     c95f4
 ;     c9607
-;     c9619
 ;     c961a
 ;     c9636
 ;     c9641
@@ -9655,7 +9641,6 @@ pydis_end
 ;     c9740
 ;     c9767
 ;     c97a4
-;     c97ac
 ;     c9846
 ;     c984f
 ;     c986b
@@ -9672,7 +9657,6 @@ pydis_end
 ;     c9926
 ;     c9969
 ;     c996f
-;     c99c2
 ;     c99c8
 ;     c9a0c
 ;     c9a19
@@ -9680,7 +9664,6 @@ pydis_end
 ;     c9a22
 ;     c9a32
 ;     c9a64
-;     c9a83
 ;     c9a96
 ;     c9aa0
 ;     c9ac9
@@ -9719,7 +9702,6 @@ pydis_end
 ;     ca0bd
 ;     ca0c5
 ;     ca0c9
-;     ca0e3
 ;     ca0f5
 ;     ca0f7
 ;     ca109
@@ -9765,10 +9747,8 @@ pydis_end
 ;     ca3b4
 ;     ca3e3
 ;     ca3e8
-;     ca522
 ;     ca889
 ;     ca8b5
-;     ca8c4
 ;     caa8a
 ;     caa9f
 ;     caaa1
@@ -9805,7 +9785,6 @@ pydis_end
 ;     cae8f
 ;     caeb7
 ;     caed8
-;     caeda
 ;     caedb
 ;     caedf
 ;     caee2
@@ -9819,9 +9798,7 @@ pydis_end
 ;     caf72
 ;     caf88
 ;     cafad
-;     cafb4
 ;     cafcd
-;     cafd4
 ;     caff8
 ;     cb025
 ;     cb028
@@ -9849,7 +9826,6 @@ pydis_end
 ;     cb2ac
 ;     cb2d4
 ;     cb2d7
-;     cb2df
 ;     cb2ed
 ;     cb2ef
 ;     cb305
@@ -9868,7 +9844,6 @@ pydis_end
 ;     cb40e
 ;     cb41d
 ;     cb423
-;     cb448
 ;     cb475
 ;     cb477
 ;     cb483
@@ -9878,7 +9853,6 @@ pydis_end
 ;     cb55f
 ;     cb563
 ;     cb577
-;     cb594
 ;     cb59b
 ;     cb5a2
 ;     cb5ac
@@ -9939,7 +9913,6 @@ pydis_end
 ;     cbe73
 ;     cbe83
 ;     cbec0
-;     cbec2
 ;     cbf9f
 ;     cbfc0
 ;     cbffb
@@ -10301,7 +10274,6 @@ pydis_end
 ;     loop_ca26c
 ;     loop_ca2a2
 ;     loop_ca2a8
-;     loop_ca3ce
 ;     loop_ca4fc
 ;     loop_ca50e
 ;     loop_ca875
@@ -10317,7 +10289,6 @@ pydis_end
 ;     loop_caec9
 ;     loop_caf07
 ;     loop_caf1c
-;     loop_caf2d
 ;     loop_caf9d
 ;     loop_cafc0
 ;     loop_cb01b
@@ -10382,6 +10353,35 @@ pydis_end
 ;     loop_cbf95
 ;     loop_cbfaa
 ;     loop_cbfe5
+;     return_1
+;     return_10
+;     return_11
+;     return_12
+;     return_13
+;     return_14
+;     return_15
+;     return_16
+;     return_17
+;     return_18
+;     return_19
+;     return_2
+;     return_20
+;     return_21
+;     return_22
+;     return_23
+;     return_24
+;     return_25
+;     return_26
+;     return_27
+;     return_28
+;     return_29
+;     return_3
+;     return_4
+;     return_5
+;     return_6
+;     return_7
+;     return_8
+;     return_9
 ;     sub_c0414
 ;     sub_c0421
 ;     sub_c8028

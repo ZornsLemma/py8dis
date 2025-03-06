@@ -644,10 +644,10 @@ l8004 = service_entry+1
 ; &81b7 referenced 1 time by &8b54
 .sub_c81b7
     and #8                                                            ; 81b7: 29 08       ).
-    beq c81bd                                                         ; 81b9: f0 02       ..
+    beq return_1                                                      ; 81b9: f0 02       ..
     lda #3                                                            ; 81bb: a9 03       ..
 ; &81bd referenced 1 time by &81b9
-.c81bd
+.return_1
     rts                                                               ; 81bd: 60          `
 
 ; &81be referenced 3 times by &9cb3, &9d0c, &9e00
@@ -716,7 +716,7 @@ l8004 = service_entry+1
     adc l00b0                                                         ; 8217: 65 b0       e.
     sta l1098                                                         ; 8219: 8d 98 10    ...
 ; &821c referenced 1 time by &8228
-.loop_c821c
+.return_2
     rts                                                               ; 821c: 60          `
 
 ; &821d referenced 4 times by &825a, &8756, &8788, &879d
@@ -729,7 +729,7 @@ l8004 = service_entry+1
 ; &8225 referenced 4 times by &8220, &824e, &8bb7, &a478
 .c8225
     jsr sub_c8284                                                     ; 8225: 20 84 82     ..
-    bcs loop_c821c                                                    ; 8228: b0 f2       ..
+    bcs return_2                                                      ; 8228: b0 f2       ..
 ; &822a referenced 2 times by &89fd, &ab17
 .c822a
     jsr generate_error                                                ; 822a: 20 48 80     H.
@@ -842,7 +842,7 @@ l8004 = service_entry+1
 ; &82c7 referenced 1 time by &82cf
 .loop_c82c7
     jsr sub_c82bb                                                     ; 82c7: 20 bb 82     ..
-    bcs c82e7                                                         ; 82ca: b0 1b       ..
+    bcs return_3                                                      ; 82ca: b0 1b       ..
     iny                                                               ; 82cc: c8          .
     cpy #7                                                            ; 82cd: c0 07       ..
     bcc loop_c82c7                                                    ; 82cf: 90 f6       ..
@@ -866,15 +866,15 @@ l8004 = service_entry+1
 .c82e6
     clc                                                               ; 82e6: 18          .
 ; &82e7 referenced 1 time by &82ca
-.c82e7
+.return_3
     rts                                                               ; 82e7: 60          `
 
 ; &82e8 referenced 2 times by &82aa, &82dd
 .sub_c82e8
     cmp l10ce                                                         ; 82e8: cd ce 10    ...
-    beq c82fd                                                         ; 82eb: f0 10       ..
+    beq return_4                                                      ; 82eb: f0 10       ..
     cmp l10cd                                                         ; 82ed: cd cd 10    ...
-    beq c82fd                                                         ; 82f0: f0 0b       ..
+    beq return_4                                                      ; 82f0: f0 0b       ..
     jsr sub_c8327                                                     ; 82f2: 20 27 83     '.
     eor (l00b6),y                                                     ; 82f5: 51 b6       Q.
     bcs c82fb                                                         ; 82f7: b0 02       ..
@@ -883,7 +883,7 @@ l8004 = service_entry+1
 .c82fb
     and #&7f                                                          ; 82fb: 29 7f       ).
 ; &82fd referenced 2 times by &82eb, &82f0
-.c82fd
+.return_4
     rts                                                               ; 82fd: 60          `
 
 ; &82fe referenced 6 times by &8441, &8567, &857e, &858e, &aa2b, &aa3b
@@ -915,7 +915,7 @@ l8004 = service_entry+1
     sta l0f05                                                         ; 8322: 8d 05 0f    ...
     clc                                                               ; 8325: 18          .
 ; &8326 referenced 1 time by &8338
-.loop_c8326
+.return_5
     rts                                                               ; 8326: 60          `
 
 ; &8327 referenced 4 times by &82f2, &82ff, &8736, &98a8
@@ -937,7 +937,7 @@ l8004 = service_entry+1
 ; &8335 referenced 5 times by &878b, &884f, &8a0d, &8b04, &a2ad
 .sub_c8335
     bit l10c6                                                         ; 8335: 2c c6 10    ,..
-    bmi loop_c8326                                                    ; 8338: 30 ec       0.
+    bmi return_5                                                      ; 8338: 30 ec       0.
 ; &833a referenced 3 times by &825d, &a30f, &a482
 .sub_c833a
     jsr sub_c83e3                                                     ; 833a: 20 e3 83     ..
@@ -1052,10 +1052,10 @@ l8004 = service_entry+1
 ; &83dc referenced 4 times by &805b, &8064, &8086, &a9ab
 .inc16_ae
     inc l00ae                                                         ; 83dc: e6 ae       ..
-    bne c83e2                                                         ; 83de: d0 02       ..
+    bne return_6                                                      ; 83de: d0 02       ..
     inc l00af                                                         ; 83e0: e6 af       ..
 ; &83e2 referenced 1 time by &83de
-.c83e2
+.return_6
     rts                                                               ; 83e2: 60          `
 
 ; &83e3 referenced 29 times by &809f, &8174, &82bb, &833a, &8380, &8386, &8951, &8a32, &96c3, &97cd, &993b, &99f3, &9a0f, &9a32, &9a63, &9ac8, &9ad8, &9b51, &9bf2, &9c10, &9d9b, &9f7c, &9f82, &a06c, &a190, &a1b4, &a379, &a384, &ac72
@@ -1114,7 +1114,7 @@ l8004 = service_entry+1
 .sub_c841b
     jsr sub_c840c                                                     ; 841b: 20 0c 84     ..
     tay                                                               ; 841e: a8          .
-    beq c842b                                                         ; 841f: f0 0a       ..
+    beq return_7                                                      ; 841f: f0 0a       ..
     clc                                                               ; 8421: 18          .
     sed                                                               ; 8422: f8          .
     lda #0                                                            ; 8423: a9 00       ..
@@ -1125,7 +1125,7 @@ l8004 = service_entry+1
     bne loop_c8425                                                    ; 8428: d0 fb       ..
     cld                                                               ; 842a: d8          .
 ; &842b referenced 1 time by &841f
-.c842b
+.return_7
     rts                                                               ; 842b: 60          `
 
 ; &842c referenced 1 time by &abb1
@@ -1134,12 +1134,12 @@ l8004 = service_entry+1
     cmp #&7f                                                          ; 842e: c9 7f       ..
     beq c8436                                                         ; 8430: f0 04       ..
     cmp #&20 ; ' '                                                    ; 8432: c9 20       .
-    bcs c8438                                                         ; 8434: b0 02       ..
+    bcs return_8                                                      ; 8434: b0 02       ..
 ; &8436 referenced 1 time by &8430
 .c8436
     lda #&2e ; '.'                                                    ; 8436: a9 2e       ..
 ; &8438 referenced 1 time by &8434
-.c8438
+.return_8
     rts                                                               ; 8438: 60          `
 
 ; &8439 referenced 2 times by &8444, &8463
@@ -1152,14 +1152,14 @@ l8004 = service_entry+1
 
     jsr sub_c82fe                                                     ; 8441: 20 fe 82     ..
     jsr sub_c8439                                                     ; 8444: 20 39 84     9.
-    bcc c8453                                                         ; 8447: 90 0a       ..
+    bcc return_9                                                      ; 8447: 90 0a       ..
     sbc #7                                                            ; 8449: e9 07       ..
     bcc c8454                                                         ; 844b: 90 07       ..
     cmp #&0a                                                          ; 844d: c9 0a       ..
     bcc c8454                                                         ; 844f: 90 03       ..
     cmp #&10                                                          ; 8451: c9 10       ..
 ; &8453 referenced 1 time by &8447
-.c8453
+.return_9
     rts                                                               ; 8453: 60          `
 
 ; &8454 referenced 3 times by &843c, &844b, &844f
@@ -1171,7 +1171,7 @@ l8004 = service_entry+1
 .sub_c8456
     jsr clc_jmp_gsinit                                                ; 8456: 20 4c 87     L.
     sec                                                               ; 8459: 38          8
-    beq c8482                                                         ; 845a: f0 26       .&
+    beq return_10                                                     ; 845a: f0 26       .&
     php                                                               ; 845c: 08          .
     lda #0                                                            ; 845d: a9 00       ..
     sta l00b9                                                         ; 845f: 85 b9       ..
@@ -1203,7 +1203,7 @@ l8004 = service_entry+1
 .c8481
     plp                                                               ; 8481: 28          (
 ; &8482 referenced 1 time by &845a
-.c8482
+.return_10
     rts                                                               ; 8482: 60          `
 
     jsr sub_c8745                                                     ; 8483: 20 45 87     E.
@@ -1307,11 +1307,11 @@ l8004 = service_entry+1
 ; &8555 referenced 2 times by &8545, &8573
 .sub_c8555
     cpy l0f05                                                         ; 8555: cc 05 0f    ...
-    bcs c855f                                                         ; 8558: b0 05       ..
+    bcs return_11                                                     ; 8558: b0 05       ..
     lda l0e08,y                                                       ; 855a: b9 08 0e    ...
     bmi loop_c8552                                                    ; 855d: 30 f3       0.
 ; &855f referenced 1 time by &8558
-.c855f
+.return_11
     rts                                                               ; 855f: 60          `
 
 ; &8560 referenced 2 times by &8548, &8594
@@ -1707,7 +1707,7 @@ l8004 = service_entry+1
     jsr c8b8b                                                         ; 87f1: 20 8b 8b     ..
     sta l10ca                                                         ; 87f4: 8d ca 10    ...
     jsr sub_c8456                                                     ; 87f7: 20 56 84     V.
-    beq c8815                                                         ; 87fa: f0 19       ..
+    beq return_12                                                     ; 87fa: f0 19       ..
     cmp #&28 ; '('                                                    ; 87fc: c9 28       .(
     beq c8808                                                         ; 87fe: f0 08       ..
     cmp #&50 ; 'P'                                                    ; 8800: c9 50       .P
@@ -1725,7 +1725,7 @@ l8004 = service_entry+1
     ror a                                                             ; 8811: 6a          j
     sta l10de,x                                                       ; 8812: 9d de 10    ...
 ; &8815 referenced 1 time by &87fa
-.c8815
+.return_12
     rts                                                               ; 8815: 60          `
 
 ; &8816 referenced 8 times by &888f, &8985, &898d, &8b83, &8b9d, &9bef, &a475, &a4ce
@@ -2515,7 +2515,7 @@ l8004 = service_entry+1
     sta l00ce                                                         ; 8d0e: 85 ce       ..
     jsr c8f2a                                                         ; 8d10: 20 2a 8f     *.
 ; &8d13 referenced 2 times by &8d1d, &8d25
-.c8d13
+.return_13
     rts                                                               ; 8d13: 60          `
 
 ; &8d14 referenced 1 time by &8d29
@@ -2529,11 +2529,11 @@ l8004 = service_entry+1
 ; &8d1a referenced 1 time by &8c0f
 .sub_c8d1a
     jsr sub_c8eff                                                     ; 8d1a: 20 ff 8e     ..
-    bne c8d13                                                         ; 8d1d: d0 f4       ..
+    bne return_13                                                     ; 8d1d: d0 f4       ..
     ldy #6                                                            ; 8d1f: a0 06       ..
     lda (l00b0),y                                                     ; 8d21: b1 b0       ..
     cmp #&10                                                          ; 8d23: c9 10       ..
-    beq c8d13                                                         ; 8d25: f0 ec       ..
+    beq return_13                                                     ; 8d25: f0 ec       ..
     cmp #&c0                                                          ; 8d27: c9 c0       ..
     beq loop_c8d14                                                    ; 8d29: f0 e9       ..
     cmp #&e0                                                          ; 8d2b: c9 e0       ..
@@ -2559,7 +2559,7 @@ l8004 = service_entry+1
     lda l00b4                                                         ; 8d4f: a5 b4       ..
     bne c8d74                                                         ; 8d51: d0 21       .!
     lda l00b3                                                         ; 8d53: a5 b3       ..
-    beq c8d91                                                         ; 8d55: f0 3a       .:
+    beq return_14                                                     ; 8d55: f0 3a       .:
     cmp l00a5                                                         ; 8d57: c5 a5       ..
     beq c8d5d                                                         ; 8d59: f0 02       ..
     bcs c8d74                                                         ; 8d5b: b0 17       ..
@@ -2586,14 +2586,14 @@ l8004 = service_entry+1
     sbc #0                                                            ; 8d7d: e9 00       ..
     sta l00b4                                                         ; 8d7f: 85 b4       ..
     jsr c8e0e                                                         ; 8d81: 20 0e 8e     ..
-    bne c8d91                                                         ; 8d84: d0 0b       ..
+    bne return_14                                                     ; 8d84: d0 0b       ..
     lda l00b3                                                         ; 8d86: a5 b3       ..
     ora l00b4                                                         ; 8d88: 05 b4       ..
-    beq c8d91                                                         ; 8d8a: f0 05       ..
+    beq return_14                                                     ; 8d8a: f0 05       ..
     jsr c8ecc                                                         ; 8d8c: 20 cc 8e     ..
     beq c8d41                                                         ; 8d8f: f0 b0       ..
 ; &8d91 referenced 4 times by &8d55, &8d84, &8d8a, &8d9d
-.c8d91
+.return_14
     rts                                                               ; 8d91: 60          `
 
 ; &8d92 referenced 1 time by &8d35
@@ -2603,7 +2603,7 @@ l8004 = service_entry+1
     ldy #9                                                            ; 8d97: a0 09       ..
     lda (l00b0),y                                                     ; 8d99: b1 b0       ..
     and #&1f                                                          ; 8d9b: 29 1f       ).
-    beq c8d91                                                         ; 8d9d: f0 f2       ..
+    beq return_14                                                     ; 8d9d: f0 f2       ..
     sta l00a5                                                         ; 8d9f: 85 a5       ..
     bit l00a1                                                         ; 8da1: 24 a1       $.
     bvs c8e0e                                                         ; 8da3: 70 69       pi
@@ -2661,7 +2661,7 @@ l8004 = service_entry+1
 .loop_c8df0
     lda l00a2                                                         ; 8df0: a5 a2       ..
     bmi loop_c8df0                                                    ; 8df2: 30 fc       0.
-    bne c8e0d                                                         ; 8df4: d0 17       ..
+    bne return_15                                                     ; 8df4: d0 17       ..
     lda l00a5                                                         ; 8df6: a5 a5       ..
     beq c8e03                                                         ; 8df8: f0 09       ..
     dec l00b7                                                         ; 8dfa: c6 b7       ..
@@ -2674,11 +2674,11 @@ l8004 = service_entry+1
 .c8e03
     lda l00b6                                                         ; 8e03: a5 b6       ..
     eor #&fb                                                          ; 8e05: 49 fb       I.
-    beq c8e0d                                                         ; 8e07: f0 04       ..
+    beq return_15                                                     ; 8e07: f0 04       ..
     lda #&20 ; ' '                                                    ; 8e09: a9 20       .
     sta l00a2                                                         ; 8e0b: 85 a2       ..
 ; &8e0d referenced 2 times by &8df4, &8e07
-.c8e0d
+.return_15
     rts                                                               ; 8e0d: 60          `
 
 ; &8e0e referenced 4 times by &8d81, &8da3, &8da8, &8ec2
@@ -2762,7 +2762,7 @@ l8004 = service_entry+1
 ; &8e85 referenced 1 time by &8e8b
 .loop_c8e85
     lda l00a2                                                         ; 8e85: a5 a2       ..
-    bpl c8e9e                                                         ; 8e87: 10 15       ..
+    bpl return_16                                                     ; 8e87: 10 15       ..
     lda l00ff                                                         ; 8e89: a5 ff       ..
     bpl loop_c8e85                                                    ; 8e8b: 10 f8       ..
     lda #opcode_rti                                                   ; 8e8d: a9 40       .@
@@ -2773,7 +2773,7 @@ l8004 = service_entry+1
     sta l1082                                                         ; 8e99: 8d 82 10    ...
     sta l00a2                                                         ; 8e9c: 85 a2       ..
 ; &8e9e referenced 1 time by &8e87
-.c8e9e
+.return_16
     rts                                                               ; 8e9e: 60          `
 
 ; &8e9f referenced 2 times by &8e5c, &8ea3
@@ -2802,17 +2802,17 @@ l8004 = service_entry+1
     lda #4                                                            ; 8ebe: a9 04       ..
     sta l00a6                                                         ; 8ec0: 85 a6       ..
     jsr c8e0e                                                         ; 8ec2: 20 0e 8e     ..
-    bne c8ecb                                                         ; 8ec5: d0 04       ..
+    bne return_17                                                     ; 8ec5: d0 04       ..
     dec l00b3                                                         ; 8ec7: c6 b3       ..
     bne c8eb7                                                         ; 8ec9: d0 ec       ..
 ; &8ecb referenced 1 time by &8ec5
-.c8ecb
+.return_17
     rts                                                               ; 8ecb: 60          `
 
 ; &8ecc referenced 3 times by &8d8c, &8ee2, &8ee7
 .c8ecc
     jsr sub_c8eec                                                     ; 8ecc: 20 ec 8e     ..
-    bne c8eeb                                                         ; 8ecf: d0 1a       ..
+    bne return_18                                                     ; 8ecf: d0 1a       ..
     lda l00cd                                                         ; 8ed1: a5 cd       ..
     and #1                                                            ; 8ed3: 29 01       ).
     asl a                                                             ; 8ed5: 0a          .
@@ -2829,7 +2829,7 @@ l8004 = service_entry+1
     beq c8ecc                                                         ; 8ee7: f0 e3       ..
     lda #0                                                            ; 8ee9: a9 00       ..
 ; &8eeb referenced 2 times by &8ecf, &8ef6
-.c8eeb
+.return_18
     rts                                                               ; 8eeb: 60          `
 
 ; &8eec referenced 1 time by &8ecc
@@ -2838,7 +2838,7 @@ l8004 = service_entry+1
     bpl c8ef8                                                         ; 8eef: 10 07       ..
     lda #&40 ; '@'                                                    ; 8ef1: a9 40       .@
     jsr sub_c8efa                                                     ; 8ef3: 20 fa 8e     ..
-    bne c8eeb                                                         ; 8ef6: d0 f3       ..
+    bne return_18                                                     ; 8ef6: d0 f3       ..
 ; &8ef8 referenced 1 time by &8eef
 .c8ef8
     lda #&50 ; 'P'                                                    ; 8ef8: a9 50       .P
@@ -2873,7 +2873,7 @@ l8004 = service_entry+1
 ; &8f21 referenced 1 time by &8f15
 .c8f21
     jsr c8e12                                                         ; 8f21: 20 12 8e     ..
-    bne c8f3e                                                         ; 8f24: d0 18       ..
+    bne return_19                                                     ; 8f24: d0 18       ..
     ldy #7                                                            ; 8f26: a0 07       ..
     lda (l00b0),y                                                     ; 8f28: b1 b0       ..
 ; &8f2a referenced 3 times by &8c44, &8d10, &8f30
@@ -2890,10 +2890,10 @@ l8004 = service_entry+1
 ; &8f37 referenced 1 time by &8f33
 .sub_c8f37
     cmp l108b,x                                                       ; 8f37: dd 8b 10    ...
-    bcc c8f3e                                                         ; 8f3a: 90 02       ..
+    bcc return_19                                                     ; 8f3a: 90 02       ..
     adc #0                                                            ; 8f3c: 69 00       i.
 ; &8f3e referenced 2 times by &8f24, &8f3a
-.c8f3e
+.return_19
     rts                                                               ; 8f3e: 60          `
 
 ; &8f3f referenced 5 times by &8c95, &8f75, &92b0, &932b, &9628
@@ -2940,7 +2940,7 @@ l8004 = service_entry+1
 ; &8f75 referenced 1 time by &8071
 .sub_c8f75
     jsr sub_c8f3f                                                     ; 8f75: 20 3f 8f     ?.
-    bmi c8f81                                                         ; 8f78: 30 07       0.
+    bmi return_20                                                     ; 8f78: 30 07       0.
 ; &8f7a referenced 3 times by &8c4b, &9364, &97e3
 .sub_c8f7a
     pha                                                               ; 8f7a: 48          H
@@ -2948,7 +2948,7 @@ l8004 = service_entry+1
     jsr tube_entry                                                    ; 8f7d: 20 06 04     ..
     pla                                                               ; 8f80: 68          h
 ; &8f81 referenced 1 time by &8f78
-.c8f81
+.return_20
     rts                                                               ; 8f81: 60          `
 
 ; &8f82 referenced 1 time by &8c68
@@ -3559,14 +3559,14 @@ nmi_XXX5 = l0d1f+1
     ldx #0                                                            ; 9279: a2 00       ..
     lda l00c1                                                         ; 927b: a5 c1       ..
     cmp #&12                                                          ; 927d: c9 12       ..
-    beq c9289                                                         ; 927f: f0 08       ..
+    beq return_21                                                     ; 927f: f0 08       ..
     inx                                                               ; 9281: e8          .              ; X=&01
     cmp #&1a                                                          ; 9282: c9 1a       ..
-    beq c9289                                                         ; 9284: f0 03       ..
+    beq return_21                                                     ; 9284: f0 03       ..
     lda #&fe                                                          ; 9286: a9 fe       ..
     clc                                                               ; 9288: 18          .
 ; &9289 referenced 2 times by &927f, &9284
-.c9289
+.return_21
     rts                                                               ; 9289: 60          `
 
 ; &928a referenced 2 times by &921f, &923f
@@ -3575,7 +3575,7 @@ nmi_XXX5 = l0d1f+1
     and #&f6                                                          ; 928c: 29 f6       ).
     cmp #&10                                                          ; 928e: c9 10       ..
     sec                                                               ; 9290: 38          8
-    bne c929c                                                         ; 9291: d0 09       ..
+    bne return_22                                                     ; 9291: d0 09       ..
     lda l00c1                                                         ; 9293: a5 c1       ..
     lsr a                                                             ; 9295: 4a          J
     lsr a                                                             ; 9296: 4a          J
@@ -3583,7 +3583,7 @@ nmi_XXX5 = l0d1f+1
     and #3                                                            ; 9299: 29 03       ).
     tax                                                               ; 929b: aa          .
 ; &929c referenced 1 time by &9291
-.c929c
+.return_22
     rts                                                               ; 929c: 60          `
 
 ; &929d referenced 1 time by &920a
@@ -3772,7 +3772,7 @@ nmi_XXX5 = l0d1f+1
 ; &93b4 referenced 1 time by &9388
 .sub_c93b4
     jsr sub_c93c5                                                     ; 93b4: 20 c5 93     ..
-    beq c93c4                                                         ; 93b7: f0 0b       ..
+    beq return_23                                                     ; 93b7: f0 0b       ..
     stx l00b7                                                         ; 93b9: 86 b7       ..
     ldx #0                                                            ; 93bb: a2 00       ..
 ; &93bd referenced 1 time by &93c2
@@ -3781,7 +3781,7 @@ nmi_XXX5 = l0d1f+1
     dec l00b7                                                         ; 93c0: c6 b7       ..
     bne loop_c93bd                                                    ; 93c2: d0 f9       ..
 ; &93c4 referenced 1 time by &93b7
-.c93c4
+.return_23
     rts                                                               ; 93c4: 60          `
 
 ; &93c5 referenced 2 times by &93b4, &93d3
@@ -3800,7 +3800,7 @@ nmi_XXX5 = l0d1f+1
 ; &93d3 referenced 2 times by &9328, &938d
 .sub_c93d3
     jsr sub_c93c5                                                     ; 93d3: 20 c5 93     ..
-    beq c93e5                                                         ; 93d6: f0 0d       ..
+    beq return_24                                                     ; 93d6: f0 0d       ..
 ; &93d8 referenced 1 time by &93bd
 .sub_c93d8
     ldy #0                                                            ; 93d8: a0 00       ..
@@ -3815,7 +3815,7 @@ nmi_XXX5 = l0d1f+1
     dex                                                               ; 93e2: ca          .
     bne loop_c93da                                                    ; 93e3: d0 f5       ..
 ; &93e5 referenced 1 time by &93d6
-.c93e5
+.return_24
     rts                                                               ; 93e5: 60          `
 
 ; &93e6 referenced 10 times by &8772, &8791, &87cb, &89d7, &8a6b, &8b12, &8bf3, &9bbc, &9fff, &a30a
@@ -3876,7 +3876,7 @@ nmi_XXX5 = l0d1f+1
 ; &9432 referenced 2 times by &944d, &a6f9
 .sub_c9432
     bit l00ff                                                         ; 9432: 24 ff       $.
-    bpl c9444                                                         ; 9434: 10 0e       ..
+    bpl return_25                                                     ; 9434: 10 0e       ..
 ; &9436 referenced 4 times by &946c, &a411, &a65d, &abc2
 .c9436
     jsr sub_c9ad8                                                     ; 9436: 20 d8 9a     ..
@@ -3886,7 +3886,7 @@ nmi_XXX5 = l0d1f+1
     equb 0                                                            ; 9443: 00          .
 
 ; &9444 referenced 3 times by &9434, &946a, &947a
-.c9444
+.return_25
     rts                                                               ; 9444: 60          `
 
 ; &9445 referenced 2 times by &886a, &9429
@@ -3911,7 +3911,7 @@ nmi_XXX5 = l0d1f+1
     ldy #&10                                                          ; 9464: a0 10       ..
     jsr sub_c8bf6                                                     ; 9466: 20 f6 8b     ..
     tay                                                               ; 9469: a8          .
-    beq c9444                                                         ; 946a: f0 d8       ..
+    beq return_25                                                     ; 946a: f0 d8       ..
     bmi c9436                                                         ; 946c: 30 c8       0.
     cmp #&12                                                          ; 946e: c9 12       ..
     beq c94c6                                                         ; 9470: f0 54       .T
@@ -3919,7 +3919,7 @@ nmi_XXX5 = l0d1f+1
     bne c948d                                                         ; 9474: d0 17       ..
     lda l1096                                                         ; 9476: ad 96 10    ...
     ror a                                                             ; 9479: 6a          j
-    bcs c9444                                                         ; 947a: b0 c8       ..
+    bcs return_25                                                     ; 947a: b0 c8       ..
     jsr generate_error                                                ; 947c: 20 48 80     H.
     equb &bc                                                          ; 947f: bc          .
     equs "Execute only"                                               ; 9480: 45 78 65... Exe
@@ -4011,7 +4011,7 @@ nmi_XXX5 = l0d1f+1
 .sub_c9516
     lda l1096                                                         ; 9516: ad 96 10    ...
     cmp #&a0                                                          ; 9519: c9 a0       ..
-    bcc c9535                                                         ; 951b: 90 18       ..
+    bcc return_26                                                     ; 951b: 90 18       ..
     ldx l1090                                                         ; 951d: ae 90 10    ...
     lda l10de,x                                                       ; 9520: bd de 10    ...
     bmi c94c6                                                         ; 9523: 30 a1       0.
@@ -4029,7 +4029,7 @@ nmi_XXX5 = l0d1f+1
     sta l0100,x                                                       ; 9531: 9d 00 01    ...
     inx                                                               ; 9534: e8          .
 ; &9535 referenced 1 time by &951b
-.c9535
+.return_26
     rts                                                               ; 9535: 60          `
 
 ; &9536 referenced 1 time by &940e
@@ -4170,7 +4170,7 @@ nmi_XXX5 = l0d1f+1
 .c9628
     jsr sub_c8f3f                                                     ; 9628: 20 3f 8f     ?.
     pla                                                               ; 962b: 68          h
-    bne c9649                                                         ; 962c: d0 1b       ..
+    bne return_27                                                     ; 962c: d0 1b       ..
     lda #4                                                            ; 962e: a9 04       ..
     ora l10de                                                         ; 9630: 0d de 10    ...
     sta l10de                                                         ; 9633: 8d de 10    ...
@@ -4182,7 +4182,7 @@ nmi_XXX5 = l0d1f+1
     jsr sub_c81bf                                                     ; 9644: 20 bf 81     ..
     bne c964a                                                         ; 9647: d0 01       ..
 ; &9649 referenced 1 time by &962c
-.c9649
+.return_27
     rts                                                               ; 9649: 60          `
 
 ; &964a referenced 1 time by &9647
@@ -4223,10 +4223,10 @@ nmi_XXX5 = l0d1f+1
 .c967a
     lda #service_claim_absolute_workspace                             ; 967a: a9 01       ..
     cpy #&17                                                          ; 967c: c0 17       ..
-    bcs c9682                                                         ; 967e: b0 02       ..
+    bcs return_28                                                     ; 967e: b0 02       ..
     ldy #&17                                                          ; 9680: a0 17       ..
 ; &9682 referenced 1 time by &967e
-.c9682
+.return_28
     rts                                                               ; 9682: 60          `
 
 ; &9683 referenced 1 time by &9669
@@ -4274,7 +4274,7 @@ nmi_XXX5 = l0d1f+1
 .pla_rts
     pla                                                               ; 96c1: 68          h
 ; &96c2 referenced 1 time by &96df
-.loop_c96c2
+.return_29
     rts                                                               ; 96c2: 60          `
 
 ; &96c3 referenced 1 time by &9685
@@ -4292,7 +4292,7 @@ nmi_XXX5 = l0d1f+1
     cmp #&32 ; '2'                                                    ; 96d9: c9 32       .2
     beq c96e4                                                         ; 96db: f0 07       ..
     cmp #&61 ; 'a'                                                    ; 96dd: c9 61       .a
-    bne loop_c96c2                                                    ; 96df: d0 e1       ..
+    bne return_29                                                     ; 96df: d0 e1       ..
     jsr sub_cac72                                                     ; 96e1: 20 72 ac     r.
 ; &96e4 referenced 1 time by &96db
 .c96e4
@@ -4316,7 +4316,7 @@ nmi_XXX5 = l0d1f+1
     cmp #service_select_filing_system                                 ; 96f5: c9 12       ..
     bne c9700                                                         ; 96f7: d0 07       ..
     cpy #4                                                            ; 96f9: c0 04       ..
-    bne c973c                                                         ; 96fb: d0 3f       .?
+    bne return_30                                                     ; 96fb: d0 3f       .?
     jmp c956d                                                         ; 96fd: 4c 6d 95    Lm.
 
 ; &9700 referenced 1 time by &96f7
@@ -4359,7 +4359,7 @@ nmi_XXX5 = l0d1f+1
     tsx                                                               ; 9738: ba          .
     sta l0105,x                                                       ; 9739: 9d 05 01    ...
 ; &973c referenced 1 time by &96fb
-.c973c
+.return_30
     rts                                                               ; 973c: 60          `
 
 ; &973d referenced 1 time by &9719
@@ -4450,12 +4450,12 @@ nmi_XXX5 = l0d1f+1
     txa                                                               ; 97c5: 8a          .
     ldx l00b5                                                         ; 97c6: a6 b5       ..
 ; &97c8 referenced 1 time by &97cb
-.loop_c97c8
+.return_31
     rts                                                               ; 97c8: 60          `
 
 .sub_c97c9
     cmp #9                                                            ; 97c9: c9 09       ..
-    bcs loop_c97c8                                                    ; 97cb: b0 fb       ..
+    bcs return_31                                                     ; 97cb: b0 fb       ..
     jsr sub_c83e3                                                     ; 97cd: 20 e3 83     ..
     jsr zero_stacked_XXX                                              ; 97d0: 20 8e 9d     ..
     stx l107d                                                         ; 97d3: 8e 7d 10    .}.
@@ -4682,12 +4682,12 @@ nmi_XXX5 = l0d1f+1
 ; &9942 referenced 1 time by &9949
 .loop_c9942
     inc l1060,x                                                       ; 9942: fe 60 10    .`.
-    bne c994b                                                         ; 9945: d0 04       ..
+    bne return_32                                                     ; 9945: d0 04       ..
     inx                                                               ; 9947: e8          .
     dey                                                               ; 9948: 88          .
     bne loop_c9942                                                    ; 9949: d0 f7       ..
 ; &994b referenced 1 time by &9945
-.c994b
+.return_32
     rts                                                               ; 994b: 60          `
 
 ; Invert the 32-bit value at l1065
@@ -4710,7 +4710,7 @@ nmi_XXX5 = l0d1f+1
     lda l107e                                                         ; 995f: ad 7e 10    .~.
     sta l00b5                                                         ; 9962: 85 b5       ..
 ; &9964 referenced 1 time by &996c
-.loop_c9964
+.return_33
     rts                                                               ; 9964: 60          `
 
 ; &9965 referenced 4 times by &9906, &9911, &9919, &9924
@@ -4719,7 +4719,7 @@ nmi_XXX5 = l0d1f+1
     bne c996e                                                         ; 9967: d0 05       ..             ; ALWAYS branch
 
     jsr sub_c9e94                                                     ; 9969: 20 94 9e     ..
-    bcs loop_c9964                                                    ; 996c: b0 f6       ..
+    bcs return_33                                                     ; 996c: b0 f6       ..
 ; &996e referenced 11 times by &98bc, &98c4, &98df, &98f0, &98fe, &9903, &990e, &9917, &9921, &992a, &9967
 .c996e
     bit l1081                                                         ; 996e: 2c 81 10    ,..
@@ -4862,7 +4862,7 @@ nmi_XXX5 = l0d1f+1
 ; &9a50 referenced 2 times by &9a60, &9c55
 .sub_c9a50
     lda l0e0f,y                                                       ; 9a50: b9 0f 0e    ...
-    bpl c9a77                                                         ; 9a53: 10 22       ."
+    bpl return_34                                                     ; 9a53: 10 22       ."
 ; &9a55 referenced 1 time by &9f6b
 .generate_error_precheck_locked
     jsr generate_error_precheck                                       ; 9a55: 20 38 80     8.
@@ -4877,27 +4877,27 @@ nmi_XXX5 = l0d1f+1
 .sub_c9a63
     jsr sub_c83e3                                                     ; 9a63: 20 e3 83     ..
     jsr sub_c9d1e                                                     ; 9a66: 20 1e 9d     ..
-    bcc c9a8c                                                         ; 9a69: 90 21       .!
+    bcc return_35                                                     ; 9a69: 90 21       .!
     jmp generate_error_precheck_open                                  ; 9a6b: 4c 82 9c    L..
 
 ; &9a6e referenced 5 times by &99b5, &99c9, &99d4, &99dc, &99e4
 .sub_c9a6e
     jsr sub_c9a78                                                     ; 9a6e: 20 78 9a     x.
-    bcs c9a8c                                                         ; 9a71: b0 19       ..
+    bcs return_35                                                     ; 9a71: b0 19       ..
 ; &9a73 referenced 1 time by &9a4e
 .c9a73
     pla                                                               ; 9a73: 68          h
     pla                                                               ; 9a74: 68          h
     lda #0                                                            ; 9a75: a9 00       ..
 ; &9a77 referenced 1 time by &9a53
-.c9a77
+.return_34
     rts                                                               ; 9a77: 60          `
 
 ; &9a78 referenced 2 times by &9a4b, &9a6e
 .sub_c9a78
     jsr sub_c80f3                                                     ; 9a78: 20 f3 80     ..
     jsr sub_c8284                                                     ; 9a7b: 20 84 82     ..
-    bcc c9a8c                                                         ; 9a7e: 90 0c       ..
+    bcc return_35                                                     ; 9a7e: 90 0c       ..
     tya                                                               ; 9a80: 98          .
     tax                                                               ; 9a81: aa          .
 ; &9a82 referenced 2 times by &881e, &885c
@@ -4907,7 +4907,7 @@ nmi_XXX5 = l0d1f+1
     lda l10dc                                                         ; 9a87: ad dc 10    ...
     sta l00b1                                                         ; 9a8a: 85 b1       ..
 ; &9a8c referenced 3 times by &9a69, &9a71, &9a7e
-.c9a8c
+.return_35
     rts                                                               ; 9a8c: 60          `
 
 ; &9a8d referenced 4 times by &929d, &a267, &a34a, &a64f
@@ -5026,7 +5026,7 @@ nmi_XXX5 = l0d1f+1
     equb 4, 2, 3, 6, 7, 4, 4, 4, 4, &a2, &11, &a0, &15                ; 9b43: 04 02 03... ...
 
 ; &9b50 referenced 1 time by &9b66
-.loop_c9b50
+.return_36
     rts                                                               ; 9b50: 60          `
 
 ; &9b51 referenced 1 time by &9b5e
@@ -5048,7 +5048,7 @@ nmi_XXX5 = l0d1f+1
 .loop_c9b63
     clc                                                               ; 9b63: 18          .
     adc #&20 ; ' '                                                    ; 9b64: 69 20       i
-    beq loop_c9b50                                                    ; 9b66: f0 e8       ..
+    beq return_36                                                     ; 9b66: f0 e8       ..
     tay                                                               ; 9b68: a8          .
     jsr sub_c9b79                                                     ; 9b69: 20 79 9b     y.
     bne loop_c9b63                                                    ; 9b6c: d0 f5       ..
@@ -5116,7 +5116,7 @@ nmi_XXX5 = l0d1f+1
     sty l10c3                                                         ; 9bde: 8c c3 10    ...
     ldy l10c2                                                         ; 9be1: ac c2 10    ...
 ; &9be4 referenced 1 time by &9bfe
-.loop_c9be4
+.return_37
     rts                                                               ; 9be4: 60          `
 
 ; &9be5 referenced 3 times by &9bca, &9eb8, &9f93
@@ -5133,7 +5133,7 @@ nmi_XXX5 = l0d1f+1
     lda l0f04                                                         ; 9bf5: ad 04 0f    ...
     jsr sub_c8380                                                     ; 9bf8: 20 80 83     ..
     cmp l0f04                                                         ; 9bfb: cd 04 0f    ...
-    beq loop_c9be4                                                    ; 9bfe: f0 e4       ..
+    beq return_37                                                     ; 9bfe: f0 e4       ..
 ; &9c00 referenced 1 time by &9bdc
 .generate_error_precheck_disc_changed
     jsr generate_error_precheck_disc                                  ; 9c00: 20 23 80     #.
@@ -5351,10 +5351,10 @@ nmi_XXX5 = l0d1f+1
     tax                                                               ; 9d68: aa          .
     ldy l00b3                                                         ; 9d69: a4 b3       ..
     lda l00b5                                                         ; 9d6b: a5 b5       ..
-    bcs c9d71                                                         ; 9d6d: b0 02       ..
+    bcs return_38                                                     ; 9d6d: b0 02       ..
     bne c9d2b                                                         ; 9d6f: d0 ba       ..
 ; &9d71 referenced 1 time by &9d6d
-.c9d71
+.return_38
     rts                                                               ; 9d71: 60          `
 
 ; &9d72 referenced 1 time by &9da0
@@ -5399,7 +5399,7 @@ nmi_XXX5 = l0d1f+1
     cpy #0                                                            ; 9da2: c0 00       ..
     beq c9db4                                                         ; 9da4: f0 0e       ..
     cmp #3                                                            ; 9da6: c9 03       ..
-    bcs c9dcd                                                         ; 9da8: b0 23       .#
+    bcs return_39                                                     ; 9da8: b0 23       .#
     jsr zero_stacked_XXX                                              ; 9daa: 20 8e 9d     ..
     cmp #1                                                            ; 9dad: c9 01       ..
     bne c9dd5                                                         ; 9daf: d0 24       .$
@@ -5408,7 +5408,7 @@ nmi_XXX5 = l0d1f+1
 ; &9db4 referenced 1 time by &9da4
 .c9db4
     cmp #2                                                            ; 9db4: c9 02       ..
-    bcs c9dcd                                                         ; 9db6: b0 15       ..
+    bcs return_39                                                     ; 9db6: b0 15       ..
     jsr zero_stacked_XXX                                              ; 9db8: 20 8e 9d     ..
     beq c9dce                                                         ; 9dbb: f0 11       ..
     lda #&ff                                                          ; 9dbd: a9 ff       ..
@@ -5419,7 +5419,7 @@ nmi_XXX5 = l0d1f+1
     lda l10da                                                         ; 9dc8: ad da 10    ...
     sta l0001,x                                                       ; 9dcb: 95 01       ..
 ; &9dcd referenced 2 times by &9da8, &9db6
-.c9dcd
+.return_39
     rts                                                               ; 9dcd: 60          `
 
 ; &9dce referenced 1 time by &9dbb
@@ -5514,7 +5514,7 @@ nmi_XXX5 = l0d1f+1
     lda #osbyte_read_write_spool_file_handle                          ; 9e41: a9 c7       ..
     jsr osbyte_read                                                   ; 9e43: 20 e5 9a     ..
     jsr sub_c9e54                                                     ; 9e46: 20 54 9e     T.
-    bne c9e5c                                                         ; 9e49: d0 11       ..
+    bne return_40                                                     ; 9e49: d0 11       ..
     lda #&c7                                                          ; 9e4b: a9 c7       ..
 ; &9e4d referenced 1 time by &9e3f
 .osbyte_write_0
@@ -5529,7 +5529,7 @@ nmi_XXX5 = l0d1f+1
     jsr sub_c9e1e                                                     ; 9e56: 20 1e 9e     ..
     cpy l10c2                                                         ; 9e59: cc c2 10    ...
 ; &9e5c referenced 1 time by &9e49
-.c9e5c
+.return_40
     rts                                                               ; 9e5c: 60          `
 
     pha                                                               ; 9e5d: 48          H
@@ -5553,14 +5553,14 @@ nmi_XXX5 = l0d1f+1
     tay                                                               ; 9e72: a8          .
     pla                                                               ; 9e73: 68          h
 ; &9e74 referenced 1 time by &9e7b
-.loop_c9e74
+.return_41
     rts                                                               ; 9e74: 60          `
 
 ; &9e75 referenced 6 times by &9b76, &9dd5, &9e62, &9e97, &9f85, &a06f
 .sub_c9e75
     jsr sub_c9e1e                                                     ; 9e75: 20 1e 9e     ..
     jsr sub_c9df4                                                     ; 9e78: 20 f4 9d     ..
-    bcc loop_c9e74                                                    ; 9e7b: 90 f7       ..
+    bcc return_41                                                     ; 9e7b: 90 f7       ..
     jsr sub_c9e30                                                     ; 9e7d: 20 30 9e     0.
     jsr generate_error_precheck                                       ; 9e80: 20 38 80     8.
     equb &de                                                          ; 9e83: de          .
@@ -5663,7 +5663,7 @@ nmi_XXX5 = l0d1f+1
 .sub_c9f1e
     lda l1117,y                                                       ; 9f1e: b9 17 11    ...
     and #&40 ; '@'                                                    ; 9f21: 29 40       )@
-    beq c9f6a                                                         ; 9f23: f0 45       .E
+    beq return_42                                                     ; 9f23: f0 45       .E
     clc                                                               ; 9f25: 18          .
 ; &9f26 referenced 2 times by &9ebf, &a01e
 .sub_c9f26
@@ -5700,7 +5700,7 @@ nmi_XXX5 = l0d1f+1
     dec l10dd                                                         ; 9f64: ce dd 10    ...
     ldy l10c2                                                         ; 9f67: ac c2 10    ...
 ; &9f6a referenced 1 time by &9f23
-.c9f6a
+.return_42
     rts                                                               ; 9f6a: 60          `
 
 ; &9f6b referenced 1 time by &9f91
@@ -5825,7 +5825,7 @@ nmi_XXX5 = l0d1f+1
 .ca054
     tya                                                               ; a054: 98          .
     jsr sub_ca0de                                                     ; a055: 20 de a0     ..
-    bcc ca06b                                                         ; a058: 90 11       ..
+    bcc return_43                                                     ; a058: 90 11       ..
     lda #&20 ; ' '                                                    ; a05a: a9 20       .
     jsr sub_c9f0f                                                     ; a05c: 20 0f 9f     ..
     ldx #2                                                            ; a05f: a2 02       ..
@@ -5837,7 +5837,7 @@ nmi_XXX5 = l0d1f+1
     dex                                                               ; a068: ca          .
     bpl loop_ca061                                                    ; a069: 10 f6       ..
 ; &a06b referenced 3 times by &a058, &a0d1, &a0d9
-.ca06b
+.return_43
     rts                                                               ; a06b: 60          `
 
 ; &a06c referenced 2 times by &9849, &9db1
@@ -5891,10 +5891,10 @@ nmi_XXX5 = l0d1f+1
     and #3                                                            ; a0c9: 29 03       ).
     adc l1112,y                                                       ; a0cb: 79 12 11    y..
     cmp l111d,y                                                       ; a0ce: d9 1d 11    ...
-    bne ca06b                                                         ; a0d1: d0 98       ..
+    bne return_43                                                     ; a0d1: d0 98       ..
     lda l10c4                                                         ; a0d3: ad c4 10    ...
     cmp l111c,y                                                       ; a0d6: d9 1c 11    ...
-    bne ca06b                                                         ; a0d9: d0 90       ..
+    bne return_43                                                     ; a0d9: d0 90       ..
     jmp c9f0d                                                         ; a0db: 4c 0d 9f    L..
 
 ; &a0de referenced 5 times by &9e66, &9e9b, &9f9a, &a013, &a055
@@ -5902,14 +5902,14 @@ nmi_XXX5 = l0d1f+1
     tax                                                               ; a0de: aa          .
     lda l1112,y                                                       ; a0df: b9 12 11    ...
     cmp l1116,x                                                       ; a0e2: dd 16 11    ...
-    bne ca0f5                                                         ; a0e5: d0 0e       ..
+    bne return_44                                                     ; a0e5: d0 0e       ..
     lda l1111,y                                                       ; a0e7: b9 11 11    ...
     cmp l1115,x                                                       ; a0ea: dd 15 11    ...
-    bne ca0f5                                                         ; a0ed: d0 06       ..
+    bne return_44                                                     ; a0ed: d0 06       ..
     lda l1110,y                                                       ; a0ef: b9 10 11    ...
     cmp l1114,x                                                       ; a0f2: dd 14 11    ...
 ; &a0f5 referenced 2 times by &a0e5, &a0ed
-.ca0f5
+.return_44
     rts                                                               ; a0f5: 60          `
 
 ; &a0f6 referenced 1 time by &a075
@@ -5958,7 +5958,7 @@ nmi_XXX5 = l0d1f+1
     bne ca10b                                                         ; a13c: d0 cd       ..             ; ALWAYS branch
 
     jsr clc_jmp_gsinit                                                ; a13e: 20 4c 87     L.
-    beq ca1c0                                                         ; a141: f0 7d       .}
+    beq return_45                                                     ; a141: f0 7d       .}
 ; &a143 referenced 1 time by &a146
 .loop_ca143
     jsr sub_c8149                                                     ; a143: 20 49 81     I.
@@ -5968,7 +5968,7 @@ nmi_XXX5 = l0d1f+1
 ; &a14a referenced 13 times by &8257, &8753, &8785, &879a, &87ee, &89b7, &89e9, &8baf, &8bc1, &a324, &a32d, &a469, &a5cb
 .sub_ca14a
     jsr clc_jmp_gsinit                                                ; a14a: 20 4c 87     L.
-    bne ca1c0                                                         ; a14d: d0 71       .q
+    bne return_45                                                     ; a14d: d0 71       .q
 ; &a14f referenced 3 times by &8805, &a5e2, &ac25
 .ca14f
     jsr generate_error                                                ; a14f: 20 48 80     H.
@@ -6012,7 +6012,7 @@ nmi_XXX5 = l0d1f+1
 .sub_ca190
     jsr sub_c83e3                                                     ; a190: 20 e3 83     ..
     and #&0f                                                          ; a193: 29 0f       ).
-    beq ca1c0                                                         ; a195: f0 29       .)
+    beq return_45                                                     ; a195: f0 29       .)
     tay                                                               ; a197: a8          .
     lda #&20 ; ' '                                                    ; a198: a9 20       .
     jsr sub_ca1b4                                                     ; a19a: 20 b4 a1     ..
@@ -6041,7 +6041,7 @@ nmi_XXX5 = l0d1f+1
     inc l00b9                                                         ; a1bb: e6 b9       ..
     sta l0100,x                                                       ; a1bd: 9d 00 01    ...
 ; &a1c0 referenced 3 times by &a141, &a14d, &a195
-.ca1c0
+.return_45
     rts                                                               ; a1c0: 60          `
 
 ; &a1c1 referenced 1 time by &a1b9
@@ -6052,7 +6052,7 @@ nmi_XXX5 = l0d1f+1
 ; &a1c6 referenced 2 times by &a123, &a180
 .sub_ca1c6
     lda l00b9                                                         ; a1c6: a5 b9       ..
-    bne ca1d2                                                         ; a1c8: d0 08       ..
+    bne return_46                                                     ; a1c8: d0 08       ..
     lda #&20 ; ' '                                                    ; a1ca: a9 20       .
 ; &a1cc referenced 1 time by &a1d0
 .loop_ca1cc
@@ -6060,7 +6060,7 @@ nmi_XXX5 = l0d1f+1
     dey                                                               ; a1cf: 88          .
     bne loop_ca1cc                                                    ; a1d0: d0 fa       ..
 ; &a1d2 referenced 1 time by &a1c8
-.ca1d2
+.return_46
     rts                                                               ; a1d2: 60          `
 
 ; &a1d3 referenced 2 times by &a1a0, &a1ae
@@ -6188,7 +6188,7 @@ nmi_XXX5 = l0d1f+1
 ; &a315 referenced 3 times by &8794, &a41a, &a64c
 .sub_ca315
     bit l10c7                                                         ; a315: 2c c7 10    ,..
-    bpl ca378                                                         ; a318: 10 5e       .^
+    bpl return_47                                                     ; a318: 10 5e       .^
     jsr sub_ca3ec                                                     ; a31a: 20 ec a3     ..
     beq ca321                                                         ; a31d: f0 02       ..
     pla                                                               ; a31f: 68          h
@@ -6233,14 +6233,14 @@ nmi_XXX5 = l0d1f+1
     tay                                                               ; a376: a8          .
     clc                                                               ; a377: 18          .
 ; &a378 referenced 1 time by &a318
-.ca378
+.return_47
     rts                                                               ; a378: 60          `
 
 ; &a379 referenced 4 times by &a429, &a46f, &a4c8, &a55b
 .sub_ca379
     jsr sub_c83e3                                                     ; a379: 20 e3 83     ..
     bit l00a9                                                         ; a37c: 24 a9       $.
-    bpl ca38b                                                         ; a37e: 10 0b       ..
+    bpl return_48                                                     ; a37e: 10 0b       ..
     lda #0                                                            ; a380: a9 00       ..
     beq ca38e                                                         ; a382: f0 0a       ..             ; ALWAYS branch
 
@@ -6250,7 +6250,7 @@ nmi_XXX5 = l0d1f+1
     bit l00a9                                                         ; a387: 24 a9       $.
     bmi ca38c                                                         ; a389: 30 01       0.
 ; &a38b referenced 2 times by &a37e, &a390
-.ca38b
+.return_48
     rts                                                               ; a38b: 60          `
 
 ; &a38c referenced 1 time by &a389
@@ -6259,7 +6259,7 @@ nmi_XXX5 = l0d1f+1
 ; &a38e referenced 1 time by &a382
 .ca38e
     cmp l00aa                                                         ; a38e: c5 aa       ..
-    beq ca38b                                                         ; a390: f0 f9       ..
+    beq return_48                                                     ; a390: f0 f9       ..
     sta l00aa                                                         ; a392: 85 aa       ..
     jsr print_inline_l809f_top_bit_clear                              ; a394: 20 77 80     w.
     equs "Insert "                                                    ; a397: 49 6e 73... Ins
@@ -6809,10 +6809,10 @@ nmi_XXX5 = l0d1f+1
     clc                                                               ; a77b: 18          .
     adc l0f07                                                         ; a77c: 6d 07 0f    m..
     sta l0f07                                                         ; a77f: 8d 07 0f    ...
-    bcc ca787                                                         ; a782: 90 03       ..
+    bcc return_49                                                     ; a782: 90 03       ..
     inc l0f06                                                         ; a784: ee 06 0f    ...
 ; &a787 referenced 1 time by &a782
-.ca787
+.return_49
     rts                                                               ; a787: 60          `
 
 ; &a788 referenced 1 time by &a6d5
@@ -6893,10 +6893,10 @@ nmi_XXX5 = l0d1f+1
     tya                                                               ; a7ec: 98          .
     tax                                                               ; a7ed: aa          .
     pla                                                               ; a7ee: 68          h
-    beq ca7f2                                                         ; a7ef: f0 01       ..
+    beq return_50                                                     ; a7ef: f0 01       ..
     inx                                                               ; a7f1: e8          .
 ; &a7f2 referenced 1 time by &a7ef
-.ca7f2
+.return_50
     rts                                                               ; a7f2: 60          `
 
 .sub_ca7f3
@@ -6986,7 +6986,7 @@ nmi_XXX5 = l0d1f+1
     ldy l00bd                                                         ; a887: a4 bd       ..
     bne ca845                                                         ; a889: d0 ba       ..
     bit l00c6                                                         ; a88b: 24 c6       $.
-    bpl ca8bd                                                         ; a88d: 10 2e       ..
+    bpl return_51                                                     ; a88d: 10 2e       ..
     tay                                                               ; a88f: a8          .
     ldx l00bf                                                         ; a890: a6 bf       ..
     lda #&f8                                                          ; a892: a9 f8       ..
@@ -7010,7 +7010,7 @@ nmi_XXX5 = l0d1f+1
 
     nop                                                               ; a8bc: ea          .
 ; &a8bd referenced 1 time by &a88d
-.ca8bd
+.return_51
     rts                                                               ; a8bd: 60          `
 
 ; &a8be referenced 1 time by &a877
@@ -7053,10 +7053,10 @@ nmi_XXX5 = l0d1f+1
     clc                                                               ; a902: 18          .
     adc l0f07,y                                                       ; a903: 79 07 0f    y..
     sta l00bb                                                         ; a906: 85 bb       ..
-    bcc ca90c                                                         ; a908: 90 02       ..
+    bcc return_52                                                     ; a908: 90 02       ..
     inc l00bc                                                         ; a90a: e6 bc       ..
 ; &a90c referenced 1 time by &a908
-.ca90c
+.return_52
     rts                                                               ; a90c: 60          `
 
 ; &a90d referenced 2 times by &a898, &a8b1
@@ -7334,12 +7334,12 @@ nmi_XXX5 = l0d1f+1
     inc osrdsc_ptr                                                    ; aaa7: e6 f6       ..
     ldy #&1e                                                          ; aaa9: a0 1e       ..
     jsr sub_caac2                                                     ; aaab: 20 c2 aa     ..
-    bcs caab7                                                         ; aaae: b0 07       ..
+    bcs return_53                                                     ; aaae: b0 07       ..
     jsr cac0f                                                         ; aab0: 20 0f ac     ..
     dey                                                               ; aab3: 88          .
     jsr sub_caac2                                                     ; aab4: 20 c2 aa     ..
 ; &aab7 referenced 1 time by &aaae
-.caab7
+.return_53
     rts                                                               ; aab7: 60          `
 
 ; &aab8 referenced 1 time by &aacb
@@ -7355,12 +7355,12 @@ nmi_XXX5 = l0d1f+1
 .sub_caac2
     lda osrdsc_ptr                                                    ; aac2: a5 f6       ..
     cmp l00ae                                                         ; aac4: c5 ae       ..
-    bcs caace                                                         ; aac6: b0 06       ..
+    bcs return_54                                                     ; aac6: b0 06       ..
     jsr sub_caacf                                                     ; aac8: 20 cf aa     ..
     bne loop_caab8                                                    ; aacb: d0 eb       ..
     clc                                                               ; aacd: 18          .
 ; &aace referenced 1 time by &aac6
-.caace
+.return_54
     rts                                                               ; aace: 60          `
 
 ; &aacf referenced 4 times by &aa30, &aa44, &aaa2, &aac8
@@ -7618,10 +7618,10 @@ nmi_XXX5 = l0d1f+1
     clc                                                               ; ac3c: 18          .
     adc os_text_ptr                                                   ; ac3d: 65 f2       e.
     sta os_text_ptr                                                   ; ac3f: 85 f2       ..
-    bcc cac45                                                         ; ac41: 90 02       ..
+    bcc return_55                                                     ; ac41: 90 02       ..
     inc os_text_ptr                                                   ; ac43: e6 f2       ..
 ; &ac45 referenced 1 time by &ac41
-.cac45
+.return_55
     rts                                                               ; ac45: 60          `
 
 ; &ac46 referenced 1 time by &ac4b
@@ -8222,7 +8222,7 @@ jump_address_low = sub_c0050+1
 ; This is a call to release the tube.
     ora #&40 ; '@'                                                    ; af87: 09 40       .@  :040e[1]
     cmp l0015                                                         ; af89: c5 15       ..  :0410[1]
-    bne c0434                                                         ; af8b: d0 20       .   :0412[1]
+    bne return_56                                                     ; af8b: d0 20       .   :0412[1]
 ; &af8d referenced 1 time by &0471[1]
 .sub_c0414
     php                                                               ; af8d: 08          .   :0414[1]
@@ -8244,7 +8244,7 @@ jump_address_low = sub_c0050+1
     asl l0014                                                         ; afa1: 06 14       ..  :0428[1]
     bcs c0432                                                         ; afa3: b0 06       ..  :042a[1]
     cmp l0015                                                         ; afa5: c5 15       ..  :042c[1]
-    beq c0434                                                         ; afa7: f0 04       ..  :042e[1]
+    beq return_56                                                     ; afa7: f0 04       ..  :042e[1]
     clc                                                               ; afa9: 18          .   :0430[1]
     rts                                                               ; afaa: 60          `   :0431[1]
 
@@ -8252,7 +8252,7 @@ jump_address_low = sub_c0050+1
 .c0432
     sta l0015                                                         ; afab: 85 15       ..  :0432[1]
 ; &afad referenced 2 times by &0412[1], &042e[1]
-.c0434
+.return_56
     rts                                                               ; afad: 60          `   :0434[1]
 
 ; &afae referenced 1 time by &0408[1]
@@ -9079,11 +9079,11 @@ jump_address_low = sub_c0050+1
 .sub_cb58b
     lda l0001,x                                                       ; b58b: b5 01       ..
     cmp l0001,y                                                       ; b58d: d9 01 00    ...
-    bne cb597                                                         ; b590: d0 05       ..
+    bne return_57                                                     ; b590: d0 05       ..
     lda l0000,x                                                       ; b592: b5 00       ..
     cmp l0000,y                                                       ; b594: d9 00 00    ...
 ; &b597 referenced 1 time by &b590
-.cb597
+.return_57
     rts                                                               ; b597: 60          `
 
 ; &b598 referenced 2 times by &b4b1, &b52b
@@ -9151,7 +9151,7 @@ jump_address_low = sub_c0050+1
     jsr cb82b                                                         ; b5e8: 20 2b b8     +.
     sta (l00b8),y                                                     ; b5eb: 91 b8       ..
 ; &b5ed referenced 1 time by &b5f6
-.loop_cb5ed
+.return_58
     rts                                                               ; b5ed: 60          `
 
 ; &b5ee referenced 2 times by &b375, &b4d8
@@ -9163,7 +9163,7 @@ jump_address_low = sub_c0050+1
 .sub_cb5f2
     ldy #&fa                                                          ; b5f2: a0 fa       ..
     lda (l00b8),y                                                     ; b5f4: b1 b8       ..
-    beq loop_cb5ed                                                    ; b5f6: f0 f5       ..
+    beq return_58                                                     ; b5f6: f0 f5       ..
     pha                                                               ; b5f8: 48          H
     lda #0                                                            ; b5f9: a9 00       ..
     sta (l00b8),y                                                     ; b5fb: 91 b8       ..
@@ -9209,7 +9209,7 @@ jump_address_low = sub_c0050+1
     sta (l00b8),y                                                     ; b635: 91 b8       ..
     sta l00bb                                                         ; b637: 85 bb       ..
     ora l00ba                                                         ; b639: 05 ba       ..
-    beq cb65e                                                         ; b63b: f0 21       .!
+    beq return_59                                                     ; b63b: f0 21       .!
     ldx l00bc                                                         ; b63d: a6 bc       ..
     jsr sub_cb85d                                                     ; b63f: 20 5d b8     ].
     bvc cb655                                                         ; b642: 50 11       P.
@@ -9228,7 +9228,7 @@ jump_address_low = sub_c0050+1
     jsr sub_cb850                                                     ; b659: 20 50 b8     P.
     lda #&ff                                                          ; b65c: a9 ff       ..
 ; &b65e referenced 1 time by &b63b
-.cb65e
+.return_59
     rts                                                               ; b65e: 60          `
 
 ; &b65f referenced 2 times by &b34f, &b37f
@@ -9377,10 +9377,10 @@ lb6ce = sub_cb6cd+1
     txa                                                               ; b71e: 8a          .
     tay                                                               ; b71f: a8          .
     pla                                                               ; b720: 68          h
-    beq cb725                                                         ; b721: f0 02       ..
+    beq return_60                                                     ; b721: f0 02       ..
     lda #&ff                                                          ; b723: a9 ff       ..
 ; &b725 referenced 1 time by &b721
-.cb725
+.return_60
     rts                                                               ; b725: 60          `
 
 ; &b726 referenced 6 times by &b703, &b898, &b8c8, &b8db, &bc56, &bca1
@@ -9467,7 +9467,7 @@ lb6ce = sub_cb6cd+1
 .sub_cb7b6
     lda l00b5                                                         ; b7b6: a5 b5       ..
     ora l00b6                                                         ; b7b8: 05 b6       ..
-    beq cb7ec                                                         ; b7ba: f0 30       .0
+    beq return_61                                                     ; b7ba: f0 30       .0
     ldx #&20 ; ' '                                                    ; b7bc: a2 20       .
 ; &b7be referenced 1 time by &b7c3
 .loop_cb7be
@@ -9508,7 +9508,7 @@ lb6ce = sub_cb6cd+1
     dex                                                               ; b7e9: ca          .
     bpl loop_cb7dd                                                    ; b7ea: 10 f1       ..
 ; &b7ec referenced 1 time by &b7ba
-.cb7ec
+.return_61
     rts                                                               ; b7ec: 60          `
 
 ; &b7ed referenced 2 times by &b7aa, &b828
@@ -9611,7 +9611,7 @@ lb6ce = sub_cb6cd+1
     jmp (fscv)                                                        ; b86f: 6c 1e 02    l..
 
 ; &b872 referenced 2 times by &b9c7, &bc70
-.lb872
+.return_62
     equb &60, 0, 0, &60, 0, 0, 2, &0c, &ff                            ; b872: 60 00 00... `..
     equs "RAM"                                                        ; b87b: 52 41 4d    RAM
 ; &b87e referenced 1 time by &b9a3
@@ -9775,7 +9775,7 @@ lb6ce = sub_cb6cd+1
     tay                                                               ; b9c1: a8          .              ; Y=ROM number
     jsr osrdsc                                                        ; b9c2: 20 b9 ff     ..            ; Read byte from ROM Y or screen
     ldx osrdsc_ptr                                                    ; b9c5: a6 f6       ..
-    cmp lb872,x                                                       ; b9c7: dd 72 b8    .r.
+    cmp return_62,x                                                   ; b9c7: dd 72 b8    .r.
     bne cb9d9                                                         ; b9ca: d0 0d       ..
 ; &b9cc referenced 1 time by &b9e5
 .loop_cb9cc
@@ -9854,7 +9854,7 @@ lb6ce = sub_cb6cd+1
 ; &ba1a referenced 1 time by &ba20
 .loop_cba1a
     inx                                                               ; ba1a: e8          .
-    lda cba2f,x                                                       ; ba1b: bd 2f ba    ./.
+    lda return_63,x                                                   ; ba1b: bd 2f ba    ./.
     beq cba2e                                                         ; ba1e: f0 0e       ..
     bpl loop_cba1a                                                    ; ba20: 10 f8       ..
     bcs cba27                                                         ; ba22: b0 03       ..
@@ -9875,7 +9875,7 @@ lb6ce = sub_cb6cd+1
 .cba2e
     sec                                                               ; ba2e: 38          8
 ; &ba2f referenced 1 time by &ba1b
-.cba2f
+.return_63
     rts                                                               ; ba2f: 60          `
 
 ; &ba30 referenced 3 times by &b234, &ba05, &ba10
@@ -10293,7 +10293,7 @@ lb6ce = sub_cb6cd+1
     sta l00bb                                                         ; bc6e: 85 bb       ..
 ; &bc70 referenced 1 time by &bc7e
 .loop_cbc70
-    lda lb872,x                                                       ; bc70: bd 72 b8    .r.
+    lda return_62,x                                                   ; bc70: bd 72 b8    .r.
     cpx #1                                                            ; bc73: e0 01       ..
     bne cbc78                                                         ; bc75: d0 01       ..
     tya                                                               ; bc77: 98          .
@@ -10440,7 +10440,7 @@ lb6ce = sub_cb6cd+1
     lda l00bf                                                         ; bd4d: a5 bf       ..
     bne cbd7e                                                         ; bd4f: d0 2d       .-
     ldx l00be                                                         ; bd51: a6 be       ..
-    beq cbdb9                                                         ; bd53: f0 64       .d
+    beq return_64                                                     ; bd53: f0 64       .d
     lda #0                                                            ; bd55: a9 00       ..
     sta (l00b8),y                                                     ; bd57: 91 b8       ..
     inc l00b9                                                         ; bd59: e6 b9       ..
@@ -10497,7 +10497,7 @@ lb6ce = sub_cb6cd+1
     jmp cbd46                                                         ; bdb6: 4c 46 bd    LF.
 
 ; &bdb9 referenced 2 times by &bd53, &bdcd
-.cbdb9
+.return_64
     rts                                                               ; bdb9: 60          `
 
 ; &bdba referenced 1 time by &bd3d
@@ -10514,7 +10514,7 @@ lb6ce = sub_cb6cd+1
     lda l00bf                                                         ; bdc7: a5 bf       ..
     bne cbdd3                                                         ; bdc9: d0 08       ..
     ldx l00be                                                         ; bdcb: a6 be       ..
-    beq cbdb9                                                         ; bdcd: f0 ea       ..
+    beq return_64                                                     ; bdcd: f0 ea       ..
     lda #1                                                            ; bdcf: a9 01       ..
     bne cbddd                                                         ; bdd1: d0 0a       ..             ; ALWAYS branch
 
@@ -10603,23 +10603,23 @@ lb6ce = sub_cb6cd+1
     lda (l00b8),y                                                     ; be54: b1 b8       ..
     sec                                                               ; be56: 38          8
     sbc #1                                                            ; be57: e9 01       ..
-    bcc cbe7a                                                         ; be59: 90 1f       ..
+    bcc return_65                                                     ; be59: 90 1f       ..
     sta (l00b8),y                                                     ; be5b: 91 b8       ..
     jsr sub_cb616                                                     ; be5d: 20 16 b6     ..
-    beq cbe7a                                                         ; be60: f0 18       ..
+    beq return_65                                                     ; be60: f0 18       ..
     ldx l00b7                                                         ; be62: a6 b7       ..
     jsr sub_cb85d                                                     ; be64: 20 5d b8     ].
-    bvc cbe7a                                                         ; be67: 50 11       P.
+    bvc return_65                                                     ; be67: 50 11       P.
     lda l00b1,x                                                       ; be69: b5 b1       ..
     cmp #&c0                                                          ; be6b: c9 c0       ..
-    bcc cbe7a                                                         ; be6d: 90 0b       ..
+    bcc return_65                                                     ; be6d: 90 0b       ..
     lda #&10                                                          ; be6f: a9 10       ..
     sta l00b0,x                                                       ; be71: 95 b0       ..
     lda #&80                                                          ; be73: a9 80       ..
     sta l00b1,x                                                       ; be75: 95 b1       ..
     jsr sub_cb68f                                                     ; be77: 20 8f b6     ..
 ; &be7a referenced 4 times by &be59, &be60, &be67, &be6d
-.cbe7a
+.return_65
     rts                                                               ; be7a: 60          `
 
 ; &be7b referenced 5 times by &bd5b, &bd88, &be00, &be23, &be80
@@ -10659,8 +10659,8 @@ lb6ce = sub_cb6cd+1
 ; &be9d referenced 2 times by &b338, &bcf1
 .sub_cbe9d
     jsr sub_cb85d                                                     ; be9d: 20 5d b8     ].
-    bpl cbec1                                                         ; bea0: 10 1f       ..
-    bvs cbec1                                                         ; bea2: 70 1d       p.
+    bpl return_66                                                     ; bea0: 10 1f       ..
+    bvs return_66                                                     ; bea2: 70 1d       p.
     lda #0                                                            ; bea4: a9 00       ..
     pha                                                               ; bea6: 48          H
     ldy #&f1                                                          ; bea7: a0 f1       ..
@@ -10680,7 +10680,7 @@ lb6ce = sub_cb6cd+1
     pla                                                               ; bebe: 68          h
     sta (l00ba),y                                                     ; bebf: 91 ba       ..
 ; &bec1 referenced 2 times by &bea0, &bea2
-.cbec1
+.return_66
     rts                                                               ; bec1: 60          `
 
 ; &bec2 referenced 2 times by &bc64, &bcae
@@ -10744,7 +10744,7 @@ lb6ce = sub_cb6cd+1
     ldy #&30 ; '0'                                                    ; bf1a: a0 30       .0
 ; &bf1c referenced 1 time by &bf21
 .loop_cbf1c
-    lda cbf8a,y                                                       ; bf1c: b9 8a bf    ...
+    lda return_67,y                                                   ; bf1c: b9 8a bf    ...
     pha                                                               ; bf1f: 48          H
     dey                                                               ; bf20: 88          .
     bne loop_cbf1c                                                    ; bf21: d0 f9       ..
@@ -10813,7 +10813,7 @@ lb6ce = sub_cb6cd+1
     jsr osbyte                                                        ; bf86: 20 f4 ff     ..
     txa                                                               ; bf89: 8a          .
 ; &bf8a referenced 1 time by &bf1c
-.cbf8a
+.return_67
     rts                                                               ; bf8a: 60          `
 
     lda romsel_copy                                                   ; bf8b: a5 f4       ..
@@ -11042,7 +11042,6 @@ lb6ce = sub_cb6cd+1
 ;     c81a7:                                              4
 ;     c8225:                                              4
 ;     c8d74:                                              4
-;     c8d91:                                              4
 ;     c8e0e:                                              4
 ;     c8e12:                                              4
 ;     c8e64:                                              4
@@ -11054,7 +11053,6 @@ lb6ce = sub_cb6cd+1
 ;     ca5e5:                                              4
 ;     cb446:                                              4
 ;     cb68c:                                              4
-;     cbe7a:                                              4
 ;     cbee8:                                              4
 ;     fdc_1770_sector:                                    4
 ;     fdc_1770_track:                                     4
@@ -11088,6 +11086,8 @@ lb6ce = sub_cb6cd+1
 ;     osbput:                                             4
 ;     osfile:                                             4
 ;     osrdch:                                             4
+;     return_14:                                          4
+;     return_65:                                          4
 ;     romsel:                                             4
 ;     sub_c80c8:                                          4
 ;     sub_c8174:                                          4
@@ -11120,15 +11120,11 @@ lb6ce = sub_cb6cd+1
 ;     c8f2a:                                              3
 ;     c91af:                                              3
 ;     c9214:                                              3
-;     c9444:                                              3
 ;     c94bc:                                              3
 ;     c9738:                                              3
 ;     c99ed:                                              3
-;     c9a8c:                                              3
 ;     c9d5d:                                              3
-;     ca06b:                                              3
 ;     ca14f:                                              3
-;     ca1c0:                                              3
 ;     ca660:                                              3
 ;     caa42:                                              3
 ;     caa44:                                              3
@@ -11171,6 +11167,10 @@ lb6ce = sub_cb6cd+1
 ;     nmi_sta_abs2+1:                                     3
 ;     oscli:                                              3
 ;     osword:                                             3
+;     return_25:                                          3
+;     return_35:                                          3
+;     return_43:                                          3
+;     return_45:                                          3
 ;     sram_table:                                         3
 ;     sub_c0582:                                          3
 ;     sub_c81be:                                          3
@@ -11198,7 +11198,6 @@ lb6ce = sub_cb6cd+1
 ;     sub_cbac4:                                          3
 ;     sub_cbf7c:                                          3
 ;     tube_data_register_1:                               3
-;     c0434:                                              2
 ;     c0482:                                              2
 ;     c0491:                                              2
 ;     c04bc:                                              2
@@ -11209,7 +11208,6 @@ lb6ce = sub_cb6cd+1
 ;     c815d:                                              2
 ;     c822a:                                              2
 ;     c825d:                                              2
-;     c82fd:                                              2
 ;     c8543:                                              2
 ;     c8560:                                              2
 ;     c85bc:                                              2
@@ -11229,16 +11227,11 @@ lb6ce = sub_cb6cd+1
 ;     c8c12:                                              2
 ;     c8cb2:                                              2
 ;     c8d0d:                                              2
-;     c8d13:                                              2
-;     c8e0d:                                              2
 ;     c8e32:                                              2
 ;     c8e9f:                                              2
 ;     c8ea5:                                              2
 ;     c8eb7:                                              2
-;     c8eeb:                                              2
-;     c8f3e:                                              2
 ;     c91df:                                              2
-;     c9289:                                              2
 ;     c9367:                                              2
 ;     c94a9:                                              2
 ;     c94c6:                                              2
@@ -11249,17 +11242,14 @@ lb6ce = sub_cb6cd+1
 ;     c97b3:                                              2
 ;     c9b6e:                                              2
 ;     c9bc5:                                              2
-;     c9dcd:                                              2
 ;     c9dd5:                                              2
 ;     c9e41:                                              2
 ;     ca01d:                                              2
 ;     ca021:                                              2
 ;     ca06c:                                              2
-;     ca0f5:                                              2
 ;     ca10b:                                              2
 ;     ca19f:                                              2
 ;     ca2f2:                                              2
-;     ca38b:                                              2
 ;     ca411:                                              2
 ;     ca414:                                              2
 ;     ca5ab:                                              2
@@ -11295,8 +11285,6 @@ lb6ce = sub_cb6cd+1
 ;     cbc13:                                              2
 ;     cbc3a:                                              2
 ;     cbcb9:                                              2
-;     cbdb9:                                              2
-;     cbec1:                                              2
 ;     cbf8e:                                              2
 ;     fscv:                                               2
 ;     general_service_handler_indirect:                   2
@@ -11355,7 +11343,6 @@ lb6ce = sub_cb6cd+1
 ;     l110f:                                              2
 ;     l111b:                                              2
 ;     la1d3:                                              2
-;     lb872:                                              2
 ;     nmi_XXX7:                                           2
 ;     nmi_handler_ram:                                    2
 ;     nmi_lda_abs+1:                                      2
@@ -11366,6 +11353,19 @@ lb6ce = sub_cb6cd+1
 ;     nmi_sta_abs2+2:                                     2
 ;     osargs:                                             2
 ;     osgbpb:                                             2
+;     return_13:                                          2
+;     return_15:                                          2
+;     return_18:                                          2
+;     return_19:                                          2
+;     return_21:                                          2
+;     return_39:                                          2
+;     return_4:                                           2
+;     return_44:                                          2
+;     return_48:                                          2
+;     return_56:                                          2
+;     return_62:                                          2
+;     return_64:                                          2
+;     return_66:                                          2
 ;     sub_c04ce:                                          2
 ;     sub_c809a:                                          2
 ;     sub_c80e3:                                          2
@@ -11476,30 +11476,22 @@ lb6ce = sub_cb6cd+1
 ;     c8184:                                              1
 ;     c818a:                                              1
 ;     c81a2:                                              1
-;     c81bd:                                              1
 ;     c8243:                                              1
 ;     c8286:                                              1
 ;     c828b:                                              1
 ;     c82be:                                              1
 ;     c82d9:                                              1
-;     c82e7:                                              1
 ;     c82fb:                                              1
 ;     c8306:                                              1
 ;     c8332:                                              1
 ;     c8333:                                              1
 ;     c83ab:                                              1
 ;     c83cd:                                              1
-;     c83e2:                                              1
-;     c842b:                                              1
 ;     c8436:                                              1
-;     c8438:                                              1
-;     c8453:                                              1
 ;     c8477:                                              1
 ;     c8481:                                              1
-;     c8482:                                              1
 ;     c849d:                                              1
 ;     c853e:                                              1
-;     c855f:                                              1
 ;     c8573:                                              1
 ;     c859b:                                              1
 ;     c85c5:                                              1
@@ -11510,7 +11502,6 @@ lb6ce = sub_cb6cd+1
 ;     c87ab:                                              1
 ;     c87b8:                                              1
 ;     c87c6:                                              1
-;     c8815:                                              1
 ;     c8837:                                              1
 ;     c8864:                                              1
 ;     c8867:                                              1
@@ -11551,14 +11542,11 @@ lb6ce = sub_cb6cd+1
 ;     c8e4d:                                              1
 ;     c8e6f:                                              1
 ;     c8e72:                                              1
-;     c8e9e:                                              1
 ;     c8eaf:                                              1
-;     c8ecb:                                              1
 ;     c8edf:                                              1
 ;     c8ef8:                                              1
 ;     c8f12:                                              1
 ;     c8f21:                                              1
-;     c8f81:                                              1
 ;     c8fb5:                                              1
 ;     c8fc7:                                              1
 ;     c9060:                                              1
@@ -11578,7 +11566,6 @@ lb6ce = sub_cb6cd+1
 ;     c925a:                                              1
 ;     c926a:                                              1
 ;     c9276:                                              1
-;     c929c:                                              1
 ;     c92bd:                                              1
 ;     c92c4:                                              1
 ;     c92c7:                                              1
@@ -11591,9 +11578,7 @@ lb6ce = sub_cb6cd+1
 ;     c9390:                                              1
 ;     c93a8:                                              1
 ;     c93b1:                                              1
-;     c93c4:                                              1
 ;     c93e2:                                              1
-;     c93e5:                                              1
 ;     c93ff:                                              1
 ;     c9450:                                              1
 ;     c945c:                                              1
@@ -11602,17 +11587,14 @@ lb6ce = sub_cb6cd+1
 ;     c94c2:                                              1
 ;     c94d4:                                              1
 ;     c9504:                                              1
-;     c9535:                                              1
 ;     c9556:                                              1
 ;     c956d:                                              1
 ;     c956f:                                              1
 ;     c95e4:                                              1
 ;     c95e7:                                              1
-;     c9649:                                              1
 ;     c964a:                                              1
 ;     c9658:                                              1
 ;     c967a:                                              1
-;     c9682:                                              1
 ;     c9683:                                              1
 ;     c969e:                                              1
 ;     c96c3:                                              1
@@ -11623,7 +11605,6 @@ lb6ce = sub_cb6cd+1
 ;     c9700:                                              1
 ;     c9714:                                              1
 ;     c9736:                                              1
-;     c973c:                                              1
 ;     c973d:                                              1
 ;     c975b:                                              1
 ;     c976c:                                              1
@@ -11640,14 +11621,12 @@ lb6ce = sub_cb6cd+1
 ;     c98cd:                                              1
 ;     c98ed:                                              1
 ;     c98f0:                                              1
-;     c994b:                                              1
 ;     c9978:                                              1
 ;     c9993:                                              1
 ;     c99ea:                                              1
 ;     c9a2a:                                              1
 ;     c9a3f:                                              1
 ;     c9a73:                                              1
-;     c9a77:                                              1
 ;     c9ad4:                                              1
 ;     c9bc2:                                              1
 ;     c9c16:                                              1
@@ -11661,7 +11640,6 @@ lb6ce = sub_cb6cd+1
 ;     c9d2b:                                              1
 ;     c9d57:                                              1
 ;     c9d67:                                              1
-;     c9d71:                                              1
 ;     c9d72:                                              1
 ;     c9d86:                                              1
 ;     c9d89:                                              1
@@ -11671,7 +11649,6 @@ lb6ce = sub_cb6cd+1
 ;     c9e16:                                              1
 ;     c9e28:                                              1
 ;     c9e2a:                                              1
-;     c9e5c:                                              1
 ;     c9e6f:                                              1
 ;     c9e71:                                              1
 ;     c9eb3:                                              1
@@ -11681,7 +11658,6 @@ lb6ce = sub_cb6cd+1
 ;     c9f19:                                              1
 ;     c9f5e:                                              1
 ;     c9f64:                                              1
-;     c9f6a:                                              1
 ;     c9f6b:                                              1
 ;     c9f88:                                              1
 ;     c9fd9:                                              1
@@ -11693,13 +11669,11 @@ lb6ce = sub_cb6cd+1
 ;     ca17a:                                              1
 ;     ca183:                                              1
 ;     ca1c1:                                              1
-;     ca1d2:                                              1
 ;     ca27a:                                              1
 ;     ca2ab:                                              1
 ;     ca30d:                                              1
 ;     ca321:                                              1
 ;     ca34a:                                              1
-;     ca378:                                              1
 ;     ca38c:                                              1
 ;     ca38e:                                              1
 ;     ca3ae:                                              1
@@ -11734,17 +11708,13 @@ lb6ce = sub_cb6cd+1
 ;     ca721:                                              1
 ;     ca728:                                              1
 ;     ca73a:                                              1
-;     ca787:                                              1
 ;     ca7a4:                                              1
-;     ca7f2:                                              1
 ;     ca7f7:                                              1
 ;     ca818:                                              1
 ;     ca82f:                                              1
 ;     ca856:                                              1
-;     ca8bd:                                              1
 ;     ca8fa:                                              1
 ;     ca902:                                              1
-;     ca90c:                                              1
 ;     ca95d:                                              1
 ;     ca96c:                                              1
 ;     ca970:                                              1
@@ -11756,9 +11726,7 @@ lb6ce = sub_cb6cd+1
 ;     caa78:                                              1
 ;     caa7a:                                              1
 ;     caa86:                                              1
-;     caab7:                                              1
 ;     caabe:                                              1
-;     caace:                                              1
 ;     cab09:                                              1
 ;     cab17:                                              1
 ;     cab2e:                                              1
@@ -11770,7 +11738,6 @@ lb6ce = sub_cb6cd+1
 ;     cabcf:                                              1
 ;     cabfb:                                              1
 ;     cac28:                                              1
-;     cac45:                                              1
 ;     cacc7:                                              1
 ;     caed7:                                              1
 ;     cb1dd:                                              1
@@ -11806,21 +11773,17 @@ lb6ce = sub_cb6cd+1
 ;     cb4ee:                                              1
 ;     cb502:                                              1
 ;     cb534:                                              1
-;     cb597:                                              1
 ;     cb5d0:                                              1
 ;     cb5e6:                                              1
-;     cb65e:                                              1
 ;     cb6a6:                                              1
 ;     cb6c2:                                              1
 ;     cb6d2:                                              1
 ;     cb6eb:                                              1
 ;     cb6f5:                                              1
-;     cb725:                                              1
 ;     cb736:                                              1
 ;     cb7ae:                                              1
 ;     cb7b2:                                              1
 ;     cb7e8:                                              1
-;     cb7ec:                                              1
 ;     cb898:                                              1
 ;     cb8e6:                                              1
 ;     cb8f5:                                              1
@@ -11834,7 +11797,6 @@ lb6ce = sub_cb6cd+1
 ;     cba27:                                              1
 ;     cba28:                                              1
 ;     cba2e:                                              1
-;     cba2f:                                              1
 ;     cba78:                                              1
 ;     cba8c:                                              1
 ;     cba9e:                                              1
@@ -11878,7 +11840,6 @@ lb6ce = sub_cb6cd+1
 ;     cbeee:                                              1
 ;     cbf33:                                              1
 ;     cbf46:                                              1
-;     cbf8a:                                              1
 ;     cbfa3:                                              1
 ;     cbfb2:                                              1
 ;     command_table+1:                                    1
@@ -11994,12 +11955,10 @@ lb6ce = sub_cb6cd+1
 ;     loop_c818c:                                         1
 ;     loop_c820c:                                         1
 ;     loop_c820d:                                         1
-;     loop_c821c:                                         1
 ;     loop_c826f:                                         1
 ;     loop_c82c7:                                         1
 ;     loop_c82d1:                                         1
 ;     loop_c830d:                                         1
-;     loop_c8326:                                         1
 ;     loop_c8370:                                         1
 ;     loop_c8390:                                         1
 ;     loop_c8397:                                         1
@@ -12064,10 +12023,8 @@ lb6ce = sub_cb6cd+1
 ;     loop_c95d9:                                         1
 ;     loop_c95ec:                                         1
 ;     loop_c9618:                                         1
-;     loop_c96c2:                                         1
 ;     loop_c96f2:                                         1
 ;     loop_c979d:                                         1
-;     loop_c97c8:                                         1
 ;     loop_c9803:                                         1
 ;     loop_c9837:                                         1
 ;     loop_c9851:                                         1
@@ -12078,13 +12035,10 @@ lb6ce = sub_cb6cd+1
 ;     loop_c98e4:                                         1
 ;     loop_c9942:                                         1
 ;     loop_c994e:                                         1
-;     loop_c9964:                                         1
 ;     loop_c99a8:                                         1
-;     loop_c9b50:                                         1
 ;     loop_c9b5e:                                         1
 ;     loop_c9b63:                                         1
 ;     loop_c9bcf:                                         1
-;     loop_c9be4:                                         1
 ;     loop_c9c38:                                         1
 ;     loop_c9c5d:                                         1
 ;     loop_c9c90:                                         1
@@ -12092,7 +12046,6 @@ lb6ce = sub_cb6cd+1
 ;     loop_c9d03:                                         1
 ;     loop_c9d43:                                         1
 ;     loop_c9e07:                                         1
-;     loop_c9e74:                                         1
 ;     loop_c9e8c:                                         1
 ;     loop_c9f6e:                                         1
 ;     loop_ca061:                                         1
@@ -12135,7 +12088,6 @@ lb6ce = sub_cb6cd+1
 ;     loop_cb55e:                                         1
 ;     loop_cb578:                                         1
 ;     loop_cb5c6:                                         1
-;     loop_cb5ed:                                         1
 ;     loop_cb6b3:                                         1
 ;     loop_cb75a:                                         1
 ;     loop_cb7be:                                         1
@@ -12184,6 +12136,54 @@ lb6ce = sub_cb6cd+1
 ;     osbyte_write_0:                                     1
 ;     pla_rts:                                            1
 ;     pydis_start:                                        1
+;     return_1:                                           1
+;     return_10:                                          1
+;     return_11:                                          1
+;     return_12:                                          1
+;     return_16:                                          1
+;     return_17:                                          1
+;     return_2:                                           1
+;     return_20:                                          1
+;     return_22:                                          1
+;     return_23:                                          1
+;     return_24:                                          1
+;     return_26:                                          1
+;     return_27:                                          1
+;     return_28:                                          1
+;     return_29:                                          1
+;     return_3:                                           1
+;     return_30:                                          1
+;     return_31:                                          1
+;     return_32:                                          1
+;     return_33:                                          1
+;     return_34:                                          1
+;     return_36:                                          1
+;     return_37:                                          1
+;     return_38:                                          1
+;     return_40:                                          1
+;     return_41:                                          1
+;     return_42:                                          1
+;     return_46:                                          1
+;     return_47:                                          1
+;     return_49:                                          1
+;     return_5:                                           1
+;     return_50:                                          1
+;     return_51:                                          1
+;     return_52:                                          1
+;     return_53:                                          1
+;     return_54:                                          1
+;     return_55:                                          1
+;     return_57:                                          1
+;     return_58:                                          1
+;     return_59:                                          1
+;     return_6:                                           1
+;     return_60:                                          1
+;     return_61:                                          1
+;     return_63:                                          1
+;     return_67:                                          1
+;     return_7:                                           1
+;     return_8:                                           1
+;     return_9:                                           1
 ;     rom_header:                                         1
 ;     rom_type:                                           1
 ;     service_entry:                                      1
@@ -12309,7 +12309,6 @@ lb6ce = sub_cb6cd+1
 ;     c0041
 ;     c0400
 ;     c0432
-;     c0434
 ;     c0463
 ;     c047a
 ;     c0482
@@ -12350,7 +12349,6 @@ lb6ce = sub_cb6cd+1
 ;     c818a
 ;     c81a2
 ;     c81a7
-;     c81bd
 ;     c8225
 ;     c822a
 ;     c8243
@@ -12361,27 +12359,19 @@ lb6ce = sub_cb6cd+1
 ;     c82be
 ;     c82d9
 ;     c82e6
-;     c82e7
 ;     c82fb
-;     c82fd
 ;     c8306
 ;     c8332
 ;     c8333
 ;     c83ab
 ;     c83cd
-;     c83e2
-;     c842b
 ;     c8436
-;     c8438
-;     c8453
 ;     c8454
 ;     c8477
 ;     c8481
-;     c8482
 ;     c849d
 ;     c853e
 ;     c8543
-;     c855f
 ;     c8560
 ;     c8573
 ;     c859b
@@ -12398,7 +12388,6 @@ lb6ce = sub_cb6cd+1
 ;     c87b8
 ;     c87c6
 ;     c8808
-;     c8815
 ;     c8816
 ;     c8837
 ;     c883f
@@ -12447,16 +12436,13 @@ lb6ce = sub_cb6cd+1
 ;     c8cfc
 ;     c8d03
 ;     c8d0d
-;     c8d13
 ;     c8d41
 ;     c8d5d
 ;     c8d74
-;     c8d91
 ;     c8d92
 ;     c8dd2
 ;     c8de2
 ;     c8e03
-;     c8e0d
 ;     c8e0e
 ;     c8e12
 ;     c8e32
@@ -12465,21 +12451,16 @@ lb6ce = sub_cb6cd+1
 ;     c8e64
 ;     c8e6f
 ;     c8e72
-;     c8e9e
 ;     c8e9f
 ;     c8ea5
 ;     c8eaf
 ;     c8eb7
-;     c8ecb
 ;     c8ecc
 ;     c8edf
-;     c8eeb
 ;     c8ef8
 ;     c8f12
 ;     c8f21
 ;     c8f2a
-;     c8f3e
-;     c8f81
 ;     c8fb5
 ;     c8fc7
 ;     c9060
@@ -12503,8 +12484,6 @@ lb6ce = sub_cb6cd+1
 ;     c925a
 ;     c926a
 ;     c9276
-;     c9289
-;     c929c
 ;     c92bd
 ;     c92c4
 ;     c92c7
@@ -12518,15 +12497,12 @@ lb6ce = sub_cb6cd+1
 ;     c9390
 ;     c93a8
 ;     c93b1
-;     c93c4
 ;     c93e2
-;     c93e5
 ;     c93e6
 ;     c93ff
 ;     c940c
 ;     c940e
 ;     c9436
-;     c9444
 ;     c9450
 ;     c945c
 ;     c948d
@@ -12537,7 +12513,6 @@ lb6ce = sub_cb6cd+1
 ;     c94c6
 ;     c94d4
 ;     c9504
-;     c9535
 ;     c9556
 ;     c956d
 ;     c956f
@@ -12545,12 +12520,10 @@ lb6ce = sub_cb6cd+1
 ;     c95e7
 ;     c95fd
 ;     c9628
-;     c9649
 ;     c964a
 ;     c9658
 ;     c965a
 ;     c967a
-;     c9682
 ;     c9683
 ;     c969e
 ;     c96b7
@@ -12563,7 +12536,6 @@ lb6ce = sub_cb6cd+1
 ;     c9714
 ;     c9736
 ;     c9738
-;     c973c
 ;     c973d
 ;     c975b
 ;     c976c
@@ -12582,7 +12554,6 @@ lb6ce = sub_cb6cd+1
 ;     c98ed
 ;     c98f0
 ;     c993b
-;     c994b
 ;     c996e
 ;     c9978
 ;     c9993
@@ -12592,8 +12563,6 @@ lb6ce = sub_cb6cd+1
 ;     c9a2a
 ;     c9a3f
 ;     c9a73
-;     c9a77
-;     c9a8c
 ;     c9ad4
 ;     c9adf
 ;     c9ae9
@@ -12612,12 +12581,10 @@ lb6ce = sub_cb6cd+1
 ;     c9d57
 ;     c9d5d
 ;     c9d67
-;     c9d71
 ;     c9d72
 ;     c9d86
 ;     c9d89
 ;     c9db4
-;     c9dcd
 ;     c9dce
 ;     c9dd5
 ;     c9e13
@@ -12625,7 +12592,6 @@ lb6ce = sub_cb6cd+1
 ;     c9e28
 ;     c9e2a
 ;     c9e41
-;     c9e5c
 ;     c9e6f
 ;     c9e71
 ;     c9eb3
@@ -12635,7 +12601,6 @@ lb6ce = sub_cb6cd+1
 ;     c9f19
 ;     c9f5e
 ;     c9f64
-;     c9f6a
 ;     c9f6b
 ;     c9f88
 ;     c9fd9
@@ -12644,27 +12609,21 @@ lb6ce = sub_cb6cd+1
 ;     ca01d
 ;     ca021
 ;     ca054
-;     ca06b
 ;     ca06c
 ;     ca075
 ;     ca0a9
-;     ca0f5
 ;     ca10b
 ;     ca14f
 ;     ca17a
 ;     ca183
 ;     ca19f
-;     ca1c0
 ;     ca1c1
-;     ca1d2
 ;     ca27a
 ;     ca2ab
 ;     ca2f2
 ;     ca30d
 ;     ca321
 ;     ca34a
-;     ca378
-;     ca38b
 ;     ca38c
 ;     ca38e
 ;     ca3ae
@@ -12706,9 +12665,7 @@ lb6ce = sub_cb6cd+1
 ;     ca721
 ;     ca728
 ;     ca73a
-;     ca787
 ;     ca7a4
-;     ca7f2
 ;     ca7f7
 ;     ca818
 ;     ca82f
@@ -12716,10 +12673,8 @@ lb6ce = sub_cb6cd+1
 ;     ca856
 ;     ca86b
 ;     ca87a
-;     ca8bd
 ;     ca8fa
 ;     ca902
-;     ca90c
 ;     ca95d
 ;     ca96c
 ;     ca970
@@ -12737,9 +12692,7 @@ lb6ce = sub_cb6cd+1
 ;     caa78
 ;     caa7a
 ;     caa86
-;     caab7
 ;     caabe
-;     caace
 ;     cab09
 ;     cab17
 ;     cab1a
@@ -12756,7 +12709,6 @@ lb6ce = sub_cb6cd+1
 ;     cabfb
 ;     cac0f
 ;     cac28
-;     cac45
 ;     cacc4
 ;     cacc7
 ;     caed3
@@ -12804,11 +12756,9 @@ lb6ce = sub_cb6cd+1
 ;     cb4ee
 ;     cb502
 ;     cb534
-;     cb597
 ;     cb5d0
 ;     cb5e6
 ;     cb655
-;     cb65e
 ;     cb684
 ;     cb68c
 ;     cb6a6
@@ -12818,13 +12768,11 @@ lb6ce = sub_cb6cd+1
 ;     cb6eb
 ;     cb6f5
 ;     cb718
-;     cb725
 ;     cb736
 ;     cb795
 ;     cb7ae
 ;     cb7b2
 ;     cb7e8
-;     cb7ec
 ;     cb7ed
 ;     cb82b
 ;     cb898
@@ -12844,7 +12792,6 @@ lb6ce = sub_cb6cd+1
 ;     cba27
 ;     cba28
 ;     cba2e
-;     cba2f
 ;     cba78
 ;     cba8c
 ;     cba9e
@@ -12886,7 +12833,6 @@ lb6ce = sub_cb6cd+1
 ;     cbd46
 ;     cbd7e
 ;     cbda3
-;     cbdb9
 ;     cbdba
 ;     cbdc0
 ;     cbdd3
@@ -12895,17 +12841,14 @@ lb6ce = sub_cb6cd+1
 ;     cbe3c
 ;     cbe47
 ;     cbe52
-;     cbe7a
 ;     cbe7b
 ;     cbe89
 ;     cbe8d
-;     cbec1
 ;     cbee0
 ;     cbee8
 ;     cbeee
 ;     cbf33
 ;     cbf46
-;     cbf8a
 ;     cbf8e
 ;     cbfa3
 ;     cbfb2
@@ -13164,7 +13107,6 @@ lb6ce = sub_cb6cd+1
 ;     lb6ce
 ;     lb726
 ;     lb774
-;     lb872
 ;     lb87e
 ;     lb924
 ;     lb979
@@ -13203,12 +13145,10 @@ lb6ce = sub_cb6cd+1
 ;     loop_c818c
 ;     loop_c820c
 ;     loop_c820d
-;     loop_c821c
 ;     loop_c826f
 ;     loop_c82c7
 ;     loop_c82d1
 ;     loop_c830d
-;     loop_c8326
 ;     loop_c8370
 ;     loop_c8390
 ;     loop_c8397
@@ -13273,10 +13213,8 @@ lb6ce = sub_cb6cd+1
 ;     loop_c95d9
 ;     loop_c95ec
 ;     loop_c9618
-;     loop_c96c2
 ;     loop_c96f2
 ;     loop_c979d
-;     loop_c97c8
 ;     loop_c9803
 ;     loop_c9837
 ;     loop_c9851
@@ -13287,13 +13225,10 @@ lb6ce = sub_cb6cd+1
 ;     loop_c98e4
 ;     loop_c9942
 ;     loop_c994e
-;     loop_c9964
 ;     loop_c99a8
-;     loop_c9b50
 ;     loop_c9b5e
 ;     loop_c9b63
 ;     loop_c9bcf
-;     loop_c9be4
 ;     loop_c9c38
 ;     loop_c9c5d
 ;     loop_c9c90
@@ -13301,7 +13236,6 @@ lb6ce = sub_cb6cd+1
 ;     loop_c9d03
 ;     loop_c9d43
 ;     loop_c9e07
-;     loop_c9e74
 ;     loop_c9e8c
 ;     loop_c9f6e
 ;     loop_ca061
@@ -13344,7 +13278,6 @@ lb6ce = sub_cb6cd+1
 ;     loop_cb55e
 ;     loop_cb578
 ;     loop_cb5c6
-;     loop_cb5ed
 ;     loop_cb6b3
 ;     loop_cb75a
 ;     loop_cb7be
@@ -13373,6 +13306,73 @@ lb6ce = sub_cb6cd+1
 ;     loop_cbeab
 ;     loop_cbf1c
 ;     loop_cbf78
+;     return_1
+;     return_10
+;     return_11
+;     return_12
+;     return_13
+;     return_14
+;     return_15
+;     return_16
+;     return_17
+;     return_18
+;     return_19
+;     return_2
+;     return_20
+;     return_21
+;     return_22
+;     return_23
+;     return_24
+;     return_25
+;     return_26
+;     return_27
+;     return_28
+;     return_29
+;     return_3
+;     return_30
+;     return_31
+;     return_32
+;     return_33
+;     return_34
+;     return_35
+;     return_36
+;     return_37
+;     return_38
+;     return_39
+;     return_4
+;     return_40
+;     return_41
+;     return_42
+;     return_43
+;     return_44
+;     return_45
+;     return_46
+;     return_47
+;     return_48
+;     return_49
+;     return_5
+;     return_50
+;     return_51
+;     return_52
+;     return_53
+;     return_54
+;     return_55
+;     return_56
+;     return_57
+;     return_58
+;     return_59
+;     return_6
+;     return_60
+;     return_61
+;     return_62
+;     return_63
+;     return_64
+;     return_65
+;     return_66
+;     return_67
+;     return_7
+;     return_8
+;     return_9
 ;     sub_c0050
 ;     sub_c0414
 ;     sub_c0421

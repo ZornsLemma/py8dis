@@ -4919,7 +4919,7 @@ apply_delta_to_score1
     cmp score_delta_low                                               ; 3ef1: cd 63 2d    .c- :2df1[1]
     bne zero_score_delate                                             ; 3ef4: d0 05       ..  :2df4[1]
     cmp score_delta_high                                              ; 3ef6: cd 64 2d    .d- :2df6[1]
-    beq c2e5e                                                         ; 3ef9: f0 63       .c  :2df9[1]
+    beq return_1                                                      ; 3ef9: f0 63       .c  :2df9[1]
 zero_score_delate
     sta score_delta_low                                               ; 3efb: 8d 63 2d    .c- :2dfb[1]
     sta score_delta_high                                              ; 3efe: 8d 64 2d    .d- :2dfe[1]
@@ -4976,7 +4976,7 @@ leading_zero
     jsr oswrch                                                        ; 3f58: 20 ee ff     .. :2e58[1]   ; Write character
     dey                                                               ; 3f5b: 88          .   :2e5b[1]
     bpl plot_score_loop                                               ; 3f5c: 10 ec       ..  :2e5c[1]
-c2e5e
+return_1
     rts                                                               ; 3f5e: 60          `   :2e5e[1]
 
 unused75
