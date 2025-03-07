@@ -196,7 +196,7 @@ def call_z80asm(basename: Path,
                 make_known_good: bool = False,
                 make_extras: bool = False) -> bool:
     """Test z88dk-z80asm assembler for 8080 tests."""
-    f = Filepaths(basename, "8080")
+    f = Filepaths(basename, "z88dk-8080")
 
     if not shutil.which('z88dk-z80asm'):
         return "skipped"
