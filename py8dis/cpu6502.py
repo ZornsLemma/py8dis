@@ -12,6 +12,7 @@ import trace
 import utils
 import sys
 from align import Align
+from binaryaddrtype import BinaryAddrType
 
 memory_binary = memorymanager.memory_binary
 
@@ -920,7 +921,8 @@ class Cpu6502(cpu.Cpu):
                 self.update(binary_addr, state)
 
         def as_string(self, binary_addr):
-            return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self.target(binary_addr), binary_addr))
+            label = disassembly.get_label(self.target(binary_addr), binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
+            return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), label)
 
 
     class RegState(object):

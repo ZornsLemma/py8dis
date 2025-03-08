@@ -47,6 +47,7 @@ import utils
 import memorymanager
 from memorymanager import BinaryAddr, RuntimeAddr
 from format import Format
+from binaryaddrtype import BinaryAddrType
 
 expressions   = {}
 memory_binary = memorymanager.memory_binary
@@ -254,7 +255,7 @@ def get_address8(binary_addr):
 
     operand = memory_binary[binary_addr]
     if binary_addr not in expressions:
-        return disassembly.get_label(operand, binary_addr)
+        return disassembly.get_label(operand, binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
     return get_expression(binary_addr, operand)
 
 def get_address16(binary_addr):
@@ -267,7 +268,7 @@ def get_address16(binary_addr):
 
     operand = memorymanager.get_u16_binary(binary_addr)
     if binary_addr not in expressions:
-        return disassembly.get_label(operand, binary_addr)
+        return disassembly.get_label(operand, binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
 
     assert isinstance(disassembly.get_classification(binary_addr), Word) or (isinstance(disassembly.get_classification(binary_addr - 1), trace.cpu.Opcode) and disassembly.get_classification(binary_addr - 1).length() == 3), "Address: %s" % hex(binary_addr)
     return get_expression(binary_addr, operand)
@@ -384,7 +385,9 @@ def stringn(runtime_addr):
     binary_loc = movemanager.r2b_checked(runtime_addr)
     disassembly.add_classification(binary_loc.binary_addr, Byte(1))
     length = memory_binary[binary_loc.binary_addr]
-    add_expression(binary_loc.binary_addr, utils.LazyString("%s - %s", disassembly.get_label(runtime_addr + 1 + length, binary_loc.binary_addr), disassembly.get_label(runtime_addr + 1, binary_loc.binary_addr)))
+    label_start = disassembly.get_label(runtime_addr + 1, binary_loc.binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
+    label_end   = disassembly.get_label(runtime_addr + 1 + length, binary_loc.binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
+    add_expression(binary_loc.binary_addr, utils.LazyString("%s - %s", label_end, label_start))
     return string(runtime_addr + 1, length)
 
 def autostring(min_length=3):

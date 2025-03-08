@@ -112,7 +112,8 @@ class Cpu65C02(Cpu6502):
             return [None] + trace.cpu.get_target_binary_addr_preferring_given_move_id(self.target(binary_loc.binary_addr), binary_loc.move_id)
 
         def as_string(self, binary_addr):
-            return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self.target(binary_addr), binary_addr))
+            label = disassembly.get_label(self.target(binary_addr), binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
+            return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), label)
 
 
     class OpcodeJmpAbsX(Cpu6502.OpcodeAbs):

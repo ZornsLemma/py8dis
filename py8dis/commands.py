@@ -65,6 +65,7 @@ from disassembly import get_label
 from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary, get_u16_be_runtime
 from align import Align
 from format import Format
+from binaryaddrtype import BinaryAddrType
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
@@ -431,7 +432,7 @@ def entry(runtime_addr, label=None, warn=True):
 
     trace.cpu.add_entry(binary_loc.binary_addr, runtime_addr, binary_loc.move_id, label)
 
-    result = disassembly.get_label(runtime_addr, binary_loc.binary_addr, binary_loc.move_id)
+    result = disassembly.get_label(runtime_addr, binary_loc.binary_addr, move_id=binary_loc.move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
 
     return result
 

@@ -11,6 +11,7 @@ import cpu
 import trace
 import utils
 from memorymanager import BinaryAddr, RuntimeAddr
+from binaryaddrtype import BinaryAddrType
 
 memory_binary = memorymanager.memory_binary
 
@@ -492,8 +493,8 @@ class Cpu8080(cpu.Cpu):
             state.clear()
 
         def as_string(self, binary_addr):
-            #print("XXX", hex(binary_addr), movemanager.move_id_for_binary_addr[binary_addr])
-            return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self._target(binary_addr), binary_addr))
+            label = disassembly.get_label(self._target(binary_addr), binary_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
+            return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), label)
 
     class OpcodeCall(Opcode):
         def __init__(self, mnemonic, update=None):

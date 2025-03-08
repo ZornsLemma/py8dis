@@ -5,6 +5,7 @@ import disassembly
 import config
 import utils
 from memorymanager import BinaryAddr, RuntimeAddr
+from binaryaddrtype import BinaryAddrType
 
 class Label(object):
     class Name(object):
@@ -236,12 +237,12 @@ class Label(object):
             key=lambda x: float('inf') if x.priority is None else x.priority)
 
         for name in filtered_and_sorted:
-            if offset == 0:
-                if disassembly.is_simple_name(name.text):
+            if disassembly.is_simple_name(name.text):
+                if offset == 0:
                     result.append(assembler.inline_label(name.text))
-            else:
-                if disassembly.is_simple_name(name.text):
-                    result.append(assembler.explicit_label(name.text, disassembly.get_label(emit_addr, binary_loc.binary_addr, move_id=binary_loc.move_id), offset))
+                else:
+                    label = disassembly.get_label(emit_addr, binary_loc.binary_addr, move_id=binary_loc.move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
+                    result.append(assembler.explicit_label(name.text, label, offset))
             name.emitted = True
         return result
 

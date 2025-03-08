@@ -12,6 +12,7 @@ import mainformatter
 import memorymanager
 import movemanager
 import utils
+from binaryaddrtype import BinaryAddrType
 
 class Beebasm(assembler.Assembler):
     """This class encapsulates beebasm-specific syntax and features."""
@@ -159,9 +160,9 @@ class Beebasm(assembler.Assembler):
         # which is both more readable and necessary in some cases to
         # avoid assembly problems where a label is not forward
         # declared. It isn't working quite right yet.
-        disassembly.get_label(dest, source, move_id)
-        disassembly.get_label(dest + length, source, move_id)
-        disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id)
+        disassembly.get_label(dest, source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
+        disassembly.get_label(dest + length, source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
+        disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)
         return result
 
     # TODO: General comment - I've currently given up on generating
@@ -189,8 +190,8 @@ class Beebasm(assembler.Assembler):
         # Output COPYBLOCK command
         result.append("%s%s %s, *, %s" % (utils.make_indent(1),
             utils.force_case("copyblock"),
-            disassembly.get_label(dest,                                 source, move_id),
-            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id)))
+            disassembly.get_label(dest,                                 source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION),
+            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)))
 
         # Output CLEAR command
         result.append("")
@@ -226,8 +227,8 @@ class Beebasm(assembler.Assembler):
         result.append(self.format_comment(comment_prefix + "Set the program counter to the next position in the binary file."))
         result.append("%s%s %s + (* - %s)" % (utils.make_indent(1),
             utils.force_case("org"),
-            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id),
-            disassembly.get_label(dest,          source, move_id)))
+            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION),
+            disassembly.get_label(dest,          source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)))
 
         result.append("")
         return result

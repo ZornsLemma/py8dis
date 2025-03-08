@@ -76,8 +76,8 @@ def get_label(addr):
 def ldxy(addr):
     test_addr = memory[addr+1] + 256 * memory[addr+3]
     lab = get_label(test_addr)
-    expr(addr + 1, "<" + lab)
-    expr(addr + 3, ">" + lab)
+    expr(addr + 1, make_lo(lab))
+    expr(addr + 3, make_hi(lab))
 
 def label_skip(addr):
     global global_skip

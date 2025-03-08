@@ -19,7 +19,7 @@ def xy_addr(x_addr, y_addr):
         assert isinstance(y_addr, BinaryAddr)
         if (memory_binary[x_addr] is None) or (memory_binary[y_addr] is None):
             return None
-        label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
+        label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
         x_runtime_addr = None if x_addr is None else movemanager.b2r(x_addr)
         y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
 
