@@ -9,12 +9,12 @@ acorn.is_sideways_rom()
 
 wordentry(0x8826, 117) # XXX: table size is a guess
 
-# This is pointless as used, but notice that a label maker can
-# introduce a label independently of the standard label() command.
-def our_label_maker(addr, context, suggestion):
-    if addr == 0x80b6:
-        return "copy_to_stack_loop"
-    return suggestion
+# Label maker can change the label name referenced at a given address
+# (But in this case could to use a local_label() instead)
+def our_label_maker(d):
+    if d.binary_addr == 0x80bd:
+        d.name="copy_to_stack_loop"
+
 set_label_maker_hook(our_label_maker)
 
 # ENHANCE: Add a brk() hook? This would allow us to disassemble OS

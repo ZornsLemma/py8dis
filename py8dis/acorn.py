@@ -2423,7 +2423,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
                 com = "Master and Compact: Write to the " + name_of_byte + " byte from CMOS RAM/EEPROM (X=" + str(by) + ")"
             else:
                 com = "Master and Compact: Write to CMOS RAM/EEPROM byte X=" + str(by)
-            # TODO: Decode which byte to read an what it means, NUAG P357
+            # TODO: Decode which byte to read and what it means, NUAG P357
         com += " with value Y"
         if y_addr is not None:
             by = memory_binary[y_addr]

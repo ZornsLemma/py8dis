@@ -69,22 +69,14 @@ def hook(subroutine_addr, addr):
 def get_u8(addr):
     return memory_binary[addr]
 
-def my_label_maker(addr, context, suggestion):
-    global return_index
-
-    if (context >= 0x4192) and (context < 0x4200):
-        if suggestion[0] == "room_decode_rect_width":
-            return "current_room_door_info"
-        if suggestion[0] == "room_decode_sprite_height":
-            return "current_room_door_celly"
-        if suggestion[0] == "room_decode_sprite_width":
-            return "current_room_door_cellx"
-    if (context >= 0x4600) and (context < 0x464f):
-        if suggestion[0] == "room_decode_sprite_width":
-            return "temp_sprite"
-        if suggestion[0] == "room_decode_rect_width":
-            return "temp_door_byte"
-    return suggestion
+def my_label_maker(d):
+    if d.in_range(0x4192, 0x4200):
+        d.replace("room_decode_rect_width", "current_room_door_info")
+        d.replace("room_decode_sprite_height", "current_room_door_celly")
+        d.replace("room_decode_sprite_width", "current_room_door_cellx")
+    if d.in_range(0x4600, 0x464f):
+        d.replace("room_decode_sprite_width", "temp_sprite")
+        d.replace("room_decode_rect_width", "temp_door_byte")
 
 def inkey_expr(addr):
     key = get_u8(addr)

@@ -24,36 +24,6 @@ acorn.hardware_bbc()
 label_dict = {}
 label_names_used = {}
 
-substitute_labels = {
-#    (0x0900, 0x0ab1): {
-#        "keys":  "keycounter",
-#        "score": "disallowedkeytab",
-#        "read":  "keytranstab",
-#        "temp1": "internalkeynum",
-#        "temp2": "inkeynum",
-#        "temp4": "keyrownum",
-#        "temp5": "keycolumnnum",
-#        "temp6": "numrowclashes",
-#        "temp7": "numcolumnclashes",
-#    },
-#    (0x1a26, 0x1a3a): {
-#        "write": "string",
-#        "write + 1": "string + 1",
-#    },
-#    (0x2733, 0x2734): {
-#        "birddata": "birdpixelx",
-#    },
-#    (0x277c, 0x293e): {
-#        "read": "hiscoreaddr",
-#        "read + 1": "hiscoreaddr + 1",
-#    },
-}
-
-
-replacement_labels = {
-#    0x901a: "keycounter",
-}
-
 global_skip = 1
 line_break = "----------------------------------------------------------------------------------"
 
@@ -117,20 +87,6 @@ def sound_block(addr, lab):
     word(addr + 4, 1)
     mylabel(addr + 6, lab + "_length")
     word(addr + 6, 1)
-
-def my_label_maker(addr, context, suggestion):
-
-    for pair in substitute_labels:
-        if context in range(pair[0], pair[1]):
-            dict = substitute_labels[pair]
-            if suggestion in dict:
-                return dict[suggestion]
-
-    if context in replacement_labels:
-        return replacement_labels[context]
-    return suggestion
-
-set_label_maker_hook(my_label_maker)
 
 # Relocate code: move(dets, source, length)
 move(0x0e00, 0x1f00, 0x42b1)

@@ -25,36 +25,6 @@ acorn.bbc()
 
 label_dict = {}
 
-substitute_labels = {
-    (0x0900, 0x0ab1): {
-        "keys":  "keycounter",
-        "score": "disallowedkeytab",
-        "read":  "keytranstab",
-        "temp1": "internalkeynum",
-        "temp2": "inkeynum",
-        "temp4": "keyrownum",
-        "temp5": "keycolumnnum",
-        "temp6": "numrowclashes",
-        "temp7": "numcolumnclashes",
-    },
-    (0x1a26, 0x1a3a): {
-        "write": "string",
-        "write + 1": "string + 1",
-    },
-    (0x2733, 0x2734): {
-        "birddata": "birdpixelx",
-    },
-    (0x277c, 0x293e): {
-        "read": "hiscoreaddr",
-        "read + 1": "hiscoreaddr + 1",
-    },
-}
-
-
-replacement_labels = {
-#    0x901a: "keycounter",
-}
-
 global_skip = 1
 line_break = "----------------------------------------------------------------------------------"
 
@@ -172,17 +142,27 @@ def declare_stringn(addr, lab):
     mylabel(addr + 1 + length, end_str)
     decimal(addr + 1, length)
 
-def my_label_maker(addr, context, suggestion):
-
-    for pair in substitute_labels:
-        if context in range(pair[0], pair[1]):
-            dict = substitute_labels[pair]
-            if suggestion in dict:
-                return dict[suggestion]
-
-    if context in replacement_labels:
-        return replacement_labels[context]
-    return suggestion
+def my_label_maker(d):
+    # This example replaces any instances of one label name with another,
+    # when found between a range of binary addresses.
+    if d.in_range(0x0900, 0x0ab1):
+        d.replace("keys", "keycounter")
+        d.replace("score", "disallowedkeytab")
+        d.replace("read", "keytranstab")
+        d.replace("temp1", "internalkeynum")
+        d.replace("temp2", "inkeynum")
+        d.replace("temp4", "keyrownum")
+        d.replace("temp5", "keycolumnnum")
+        d.replace("temp6", "numrowclashes")
+        d.replace("temp7", "numcolumnclashes")
+    elif d.in_range(0x1a26, 0x1a3a):
+        d.replace("write", "string")
+        d.replace("write + 1", "string + 1")
+    elif d.in_range(0x2733, 0x2734):
+        d.replace("birddata", "birdpixelx")
+    elif d.in_range(0x277c, 0x293e):
+        d.replace("read", "hiscoreaddr")
+        d.replace("read + 1", "hiscoreaddr + 1")
 
 set_label_maker_hook(my_label_maker)
 

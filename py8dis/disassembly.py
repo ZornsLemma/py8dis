@@ -214,7 +214,7 @@ def get_label(runtime_addr, binary_addr, *, binary_addr_type: BinaryAddrType, mo
 
     `binary_addr` is the binary address where the label is being used, or the binary address of the label definition.
     `binary_addr_type` says which type of binary_addr we have: a usage or the definition.
-    `move_id` is for the active move."""
+    `move_id` is the move, for the definition."""
 
     runtime_addr = RuntimeAddr(runtime_addr)
     binary_addr = BinaryAddr(binary_addr)
@@ -508,7 +508,7 @@ def label_maker(runtime_addr, binary_addr, move_id, binary_addr_type: BinaryAddr
             # New style hook function
             user_label_maker_hook(lmd)
         else:
-            # Handle legacy hook function
+            # Handle *legacy* hook function
             user_suggestion = user_label_maker_hook(lmd.defined_as_runtime_addr, binary_addr, (lmd.name, move_id))
             if user_suggestion:
                 if utils.is_string_type(user_suggestion):
