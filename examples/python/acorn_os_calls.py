@@ -10,6 +10,8 @@ def mycom(addr, com):
 # The md5sum is optional but helps avoid confusion if there are multiple versions
 # of the same program.
 load(0x1100, "orig/acorn_os_calls.orig", "6502")
+
+# Add labels specific to the Master
 acorn.master()
 
 label(0x70, "mem")

@@ -96,8 +96,9 @@ def picture_sprite(addr, lab, width, height):
 set_label_maker_hook(my_label_maker)
 load(0x1210, "orig/planb.orig", "6502")
 
-acorn.mos_labels()
-acorn.hardware_bbc()
+# Add labels specific to the BBC Micro
+acorn.bbc()
+
 no_automatic_comment(0x533b)
 
 constant(0x07, "osword_sound")

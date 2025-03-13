@@ -21,6 +21,7 @@ config.set_show_all_labels(False)
 
 load(0x1100, "orig/chuckie.orig", "6502")
 
+# Add labels specific to the BBC Micro
 acorn.bbc()
 
 label_dict = {}

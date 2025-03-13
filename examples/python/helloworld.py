@@ -8,7 +8,7 @@ load(0x2000, "orig/helloworld.orig", "6502", "ba85fca1feae301af81806d3102b0851")
 # Start tracing instructions at 0x2000.
 entry(0x2000)
 
-# Add extra stuff here as the disassembly progresses...
+# Add extra commands here as the disassembly progresses...
 
 # Use all the information provided to actually disassemble the program.
 go()

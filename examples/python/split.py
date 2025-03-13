@@ -1,6 +1,7 @@
 from commands import *
 import acorn
 
+# Add labels specific to the BBC Micro
 acorn.bbc()
 
 # Load the program to be disassembled into the debugger's memory.

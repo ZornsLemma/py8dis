@@ -6,6 +6,7 @@ import acorn
 # multiple versions of the same program.
 load(0xc000, "orig/os12.orig", "6502")
 
+# Add labels specific to the BBC Micro
 acorn.bbc()
 
 # Entry points

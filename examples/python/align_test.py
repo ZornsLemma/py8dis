@@ -14,6 +14,7 @@ config.set_show_all_labels(False)
 # multiple versions of the same program.
 load(0x2000, "orig/align_test.orig", "6502", "ba85fca1feae301af81806d3102b0851")
 
+# Add labels specific to the Master
 acorn.master()
 
 # Start tracing instructions at 0x2000.

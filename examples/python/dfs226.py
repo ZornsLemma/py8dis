@@ -13,7 +13,10 @@ def patched_branch(base_label, offset_addr, target_label, label_only=False):
 load(0x8000, "orig/dfs226.orig", "6502", "f083f49d6fe66344c650d7e74249cb96")
 #set_output_filename("dfs226.rom")
 
+# Add labels specific to the BBC Micro
 acorn.bbc()
+
+# This is a sideways ROM, so it has a header and standard entry points we can label.
 acorn.is_sideways_rom()
 
 # TODO: Would we in fact get away with just moving 0x100 bytes at each of 0x400/500/600 as the actual assembler code does? I am going to be as precise as I can for now, but it would be interesting to try this.

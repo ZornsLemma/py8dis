@@ -18,8 +18,8 @@ config.set_show_all_labels(False)
 
 load(0x1f00, "orig/starship.orig", "6502")
 
-acorn.mos_labels()
-acorn.hardware_bbc()
+# Add labels specific to the BBC Micro
+acorn.bbc()
 
 label_dict = {}
 label_names_used = {}

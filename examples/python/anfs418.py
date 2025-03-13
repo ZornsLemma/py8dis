@@ -4,7 +4,10 @@ import acorn
 load(0x8000, "orig/anfs418.orig", "6502", "0926bcb6f47458f8c4aed5364ff1122d")
 #set_output_filename("anfs418.rom")
 
+# Add labels specific to the BBC Micro
 acorn.bbc()
+
+# This is a sideways ROM, so it has a header and standard entry points we can label.
 acorn.is_sideways_rom()
 
 move(0x400, 0xbf04, 0xbf95-0xbf04) # XXX: length is a guess
@@ -93,12 +96,6 @@ nonentry(0xaefb) # preceding BNE is always taken
 entry(0x89a7)
 entry(0x89b5)
 
-#entry(0xbf04)
-#entry(0xbf07)
-#entry(0xbf0a)
-#entry(0xbf2c)
-#entry(0xbf88)
-#entry(0xbf90)
 entry(0xbfd2)
 entry(0xbf95)
 
