@@ -302,7 +302,6 @@ entry(0x999b) # XXX: how is this code reached?
 entry(0x99be) # XXX: how is this code reached?
 entry(0x9c0c) # XXX: how is this code reached?
 entry(0x9d72) # XXX: how is this code reached?
-#entry(0x9d9b) # XXX: how is this code reached?
 entry(0x9e5d) # XXX: how is this code reached?
 entry(0xac3b) # XXX: how is this code reached?
 entry(0xacb2) # XXX: how is this code reached?
@@ -346,12 +345,10 @@ char(0xa981)
 char(0x80d1)
 char(0x810e)
 uint(0x8104)
-padded_uint(0x86b7, 3)
 binary(0x82fa)
 picture_binary(0x8041) # TODO: silly use of picture_binary(), just to test
 decimal(0x8150) # TODO: slightly silly (at least inconsistent) use, just to test
 hexadecimal(0x8208) # TODO: slightly silly use, just to test
 byte(0x9146, 32, cols=3) # TODO: slightly silly use, just to test
-padded_uint(0x9156, 16) # TODO: slightly silly use, just to test
 
 go()

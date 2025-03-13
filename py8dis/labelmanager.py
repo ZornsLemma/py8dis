@@ -74,6 +74,9 @@ import utils
 from memorymanager import BinaryAddr, RuntimeAddr
 from label import Label
 
+# A runtime address is the key of this dictionary whose value is
+# a single Label (which can hold multiple label names and expressions
+# as required).
 labels = utils.keydefaultdict(Label)
 
 def addr(label_name):
@@ -84,10 +87,12 @@ def addr(label_name):
             for name in name_list:
                 if label_name == name.text:
                     return addr
-        # Check local labels
-        for label_list in label.local_labels.values():
-            for label_entry in label_list:
-                if label_name == label_entry[0]:
+
+        # Check for local labels
+        for local_labels in label.local_labels.values():
+            # for each local label in the list
+            for local_label in local_labels:
+                if label_name == local_label.name:
                     return addr
     return None
 

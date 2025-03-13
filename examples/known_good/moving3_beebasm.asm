@@ -1,6 +1,4 @@
 ; Memory locations
-l2f01   = &2f01
-l3001   = &3001
 
     org &3000
 
@@ -12,10 +10,10 @@ l3001   = &3001
     ; at it's runtime address. First we temporarily copy the existing code/data that
     ; overlaps out of the way while we do so.
     ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
-    copyblock &3000, &3001, &fffe
+    copyblock pydis_start, &3001, &fffe
 
     ; 2. Clear the existing code area so that we are allowed to assemble there again.
-    clear &3000, &3001
+    clear pydis_start, &3001
 
     ; 3. Assemble the new block at it's runtime address.
     org &2f01
@@ -40,27 +38,23 @@ l3001   = &3001
     ; 4. Copy the newly assembled block of code back to it's proper place in the binary
     ; file.
     ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
-    copyblock l2f01, *, l3001
+    copyblock &2f01, *, &3001
 
-    ; 4. Clear the area of memory we just temporarily used to assemble the new block,
+    ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
     clear &2f01, &3001
 
     ; 5. Copy the previous existing code back to it's proper place in the binary file.
     ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
-    copyblock &fffe, &ffff, &3000
+    copyblock &fffe, &ffff, pydis_start
 
     ; 6. Clear the temporary code area so we can assemble there in the future if
     ; needed.
     clear &fffe, &ffff
 
     ; 7. Set the program counter to the next position in the binary file.
-    org l3001 + (* - l2f01)
+    org &3001 + (* - &2f01)
 
 .pydis_end
-
-; Automatically generated labels:
-;     l2f01
-;     l3001
 
 save pydis_start, pydis_end

@@ -67,12 +67,12 @@ constants = []
 # annotation type.
 annotations = collections.defaultdict(list)
 
-# `inside_a_classification` is an arbitrary constant value.
+# `INSIDE_A_CLASSIFICATION` is an arbitrary constant value.
 #
 # We assign this value to the second and subsequent bytes of a multi-byte
 # classification (e.g. the operands of an instruction). Its actual value doesn't
 # matter, as long as it's not None so we know these bytes have been classified.
-inside_a_classification = 0
+INSIDE_A_CLASSIFICATION = 0
 
 def init():
     user_label_maker_hook = None
@@ -82,7 +82,7 @@ def init():
     optional_labels = {}
     constants = []
     annotations = collections.defaultdict(list)
-    inside_a_classification = 0
+    INSIDE_A_CLASSIFICATION = 0
 
 def set_user_label_maker_hook(hook):
     """Set the user supplied 'hook' function that makes label names."""
@@ -234,12 +234,34 @@ def get_label(runtime_addr, binary_addr, *, binary_addr_type: BinaryAddrType, mo
 
     return utils.LazyString("%s", lambda: get_final_label(runtime_addr, binary_addr, move_id, binary_addr_type=binary_addr_type))
 
+def get_emitted_label(runtime_addr):
+    """Get the name of an existing, emitted label name for the given runtime address, or just
+    return the address as a string.
+
+    `binary_addr` is the binary address where the label is being used, or the binary address of the label definition.
+    `binary_addr_type` says which type of binary_addr we have: a usage or the definition.
+    `move_id` is for the active move."""
+
+    runtime_addr = RuntimeAddr(runtime_addr)
+
+    assert memorymanager.is_valid_runtime_addr(runtime_addr, True) # 0x10000 is valid for labels
+
+    # if the label exists, get a name that has already been emitted
+    if runtime_addr in labelmanager.labels:
+        label = labelmanager.labels[runtime_addr]
+        emitted_name = label.get_already_emitted_name()
+        if emitted_name:
+            return emitted_name
+
+    # No label name found, output the address as a hex literal
+    return mainformatter.uint_formatter(runtime_addr, 16)
+
 # TODO: May want to expose this to user as it may be useful in a user label maker hook
 def is_code(binary_addr):
     """Is the given `binary_addr` classified as an instruction opcode?"""
 
     classification = classifications[binary_addr]
-    if classification is None or classification == inside_a_classification:
+    if classification is None or classification == INSIDE_A_CLASSIFICATION:
         return False
     return classification.is_code(binary_addr)
 
@@ -299,9 +321,9 @@ def suggest_label_name(runtime_addr, binary_addr, move_id, binary_addr_type: Bin
         for candidate_move_id in candidate_move_ids:
             # Rule 3: Local labels
             if candidate_move_id in label.local_labels:
-                for (name, start_addr, end_addr) in label.local_labels[candidate_move_id]:
-                    if start_addr <= binary_addr < end_addr:
-                        lmd.name = name
+                for local_label in label.local_labels[candidate_move_id]:
+                    if local_label.start_addr <= binary_addr < local_label.end_addr:
+                        lmd.name = local_label.name
                         lmd.defined_in_move_id = candidate_move_id
                         return lmd
 
@@ -344,9 +366,9 @@ def suggest_label_name(runtime_addr, binary_addr, move_id, binary_addr_type: Bin
 
     # We look for a local label, explicit label or expression in the
     # current move_id, or failing that in the BASE_MOVE_ID.
-    for (name, start_addr, end_addr) in label.local_labels[move_id]:
-        if start_addr <= binary_addr < end_addr:
-            lmd.name = name
+    for local_label in label.local_labels[move_id]:
+        if local_label.start_addr <= binary_addr < local_label.end_addr:
+            lmd.name = local_label.name
             lmd.defined_in_move_id = move_id
             return lmd
 
@@ -364,9 +386,9 @@ def suggest_label_name(runtime_addr, binary_addr, move_id, binary_addr_type: Bin
         return lmd
 
     # Now do the same again, but with the BASE_MOVE_ID
-    for (name, start_addr, end_addr) in label.local_labels[movemanager.BASE_MOVE_ID]:
-        if start_addr <= binary_addr < end_addr:
-            lmd.name = name
+    for local_label in label.local_labels[movemanager.BASE_MOVE_ID]:
+        if local_label.start_addr <= binary_addr < local_label.end_addr:
+            lmd.name = local_label.name
             lmd.defined_in_move_id = move_id
             return lmd
 
@@ -532,16 +554,16 @@ def add_classification(binary_addr, classification):
 
     A classification has a length in bytes. The first byte is
     classified with the given classification and all following bytes
-    are marked with `inside_a_classification`.
+    are marked with `INSIDE_A_CLASSIFICATION`.
     """
 
     binary_addr = BinaryAddr(binary_addr)
     assert classification is not None
-    assert not is_classified(binary_addr, classification.length()), "Binary address {0} is already classified: {1}".format(hex(binary_addr), classification)
+    assert not is_classified(binary_addr, classification.length()), "Binary address {0} is already classified as {1}".format(hex(binary_addr), classification)
 
     classifications[binary_addr] = classification
     for i in range(1, classification.length()):
-        classifications[binary_addr+i] = inside_a_classification
+        classifications[binary_addr+i] = INSIDE_A_CLASSIFICATION
 
 def get_classification(binary_addr):
     return classifications[binary_addr]
@@ -603,6 +625,8 @@ def constant_value_to_string(value, format):
 
     if (format == Format.DECIMAL) or ((format == Format.DEFAULT) and config.get_constants_are_decimal()):
         return str(value)
+    elif format == Format.DECIMAL_SIGNED:
+        return str(value) if value<128 else str(value-256)
     elif (format == Format.HEX) or ((format == Format.DEFAULT) and not config.get_constants_are_decimal()):
         formatter = config.get_assembler()
         return formatter.hex(value)
@@ -794,6 +818,8 @@ def emit(print_output=True):
     # Add the explicit label names (aligned) to the output
     for addr in sorted(labelmanager.labels):
         output.extend(labelmanager.labels[addr].explicit_definition_string_list(align_name_length))
+        output.extend(labelmanager.labels[addr].local_definition_string_list(align_name_length))
+
 
     # Add the main disassembly to the output
     output.extend(d)
@@ -825,13 +851,13 @@ def split_classification(binary_addr):
 
     if binary_addr >= 0x10000:
         return
-    if classifications[binary_addr] != inside_a_classification:
+    if classifications[binary_addr] != INSIDE_A_CLASSIFICATION:
         return
 
     # TODO: Do we need to check and not warn if this is just an automatic string/byte classification?
     utils.warn("move boundary at binary address {0} splits a classification".format(config.get_assembler().hex(binary_addr)))
     split_addr = binary_addr
-    while classifications[binary_addr] == inside_a_classification:
+    while classifications[binary_addr] == INSIDE_A_CLASSIFICATION:
         binary_addr -= 1
     first_split_length = split_addr - binary_addr
     classifications[split_addr] = classification.Byte(classifications[binary_addr].length() - first_split_length)
@@ -846,7 +872,7 @@ def isolate_range(start_addr, end_addr):
     split_classification(start_addr)
     split_classification(end_addr)
 
-def emit_labels(binary_loc, output_annotations=True):
+def emit_labels(binary_loc, output_annotations):
     """Emit labels and non-inline annotations for the given address"""
 
     binary_loc = movemanager.make_binloc(binary_loc)
@@ -860,7 +886,7 @@ def emit_labels(binary_loc, output_annotations=True):
             if annotation.align == Align.BEFORE_LABEL:
                 result.append(annotation.as_string(binary_loc.binary_addr))
 
-    result.extend(labelmanager.labels[runtime_addr].definition_string_list(runtime_addr, binary_loc))
+    result.extend(labelmanager.labels[runtime_addr].gather_inline_label_definitions(runtime_addr, binary_loc))
 
     if output_annotations:
         for annotation in utils.sorted_annotations(annotations[binary_loc]):
@@ -883,11 +909,11 @@ def emit_addr(binary_loc):
         runtime_addr = movemanager.b2r(binary_loc.binary_addr + i)
         if runtime_addr in labelmanager.labels:
             if labelmanager.labels[runtime_addr].definable_inline:
-                label_list = labelmanager.labels[runtime_addr].definition_string_list(movemanager.b2r(binary_loc.binary_addr), binary_loc)
+                label_list = labelmanager.labels[runtime_addr].gather_inline_label_definitions(movemanager.b2r(binary_loc.binary_addr), binary_loc)
                 pending_labels.extend(label_list)
 
     # Emit label definitions for this address.
-    result.extend(emit_labels(binary_loc))
+    result.extend(emit_labels(binary_loc, True))
 
     # Emit any label definitions for addresses within the classification.
     result.extend(pending_labels)

@@ -7824,7 +7824,7 @@ osbyte                                  = &fff4
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0e00, &1f00
+    clear unused_copyright_string1, pydis_start
 
     ; Set the program counter to the next position in the binary file.
     org pydis_start + (* - unused_copyright_string1)

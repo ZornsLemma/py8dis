@@ -51,7 +51,7 @@ lffe3   = &ffe3
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0900, &090f
+    clear print_and_inc_zp, &090f
 
     ; Set the program counter to the next position in the binary file.
     org c201e + (* - print_and_inc_zp)

@@ -6152,7 +6152,7 @@ osbyte                  = &fff4
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0900, &1100
+    clear showkeys, spritetable
 
     ; Set the program counter to the next position in the binary file.
     org codemain_end + (* - showkeys)

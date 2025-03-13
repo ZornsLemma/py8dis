@@ -8278,7 +8278,7 @@ lb487 = sub_cb485+2
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0400, &0491
+    clear l0400, &0491
 
     ; Set the program counter to the next position in the binary file.
     org lbf04 + (* - l0400)

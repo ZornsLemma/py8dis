@@ -60,7 +60,6 @@ import argparse
 import memorymanager
 
 # These functions are directly exposed to the user.
-from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
 from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary, get_u16_be_runtime
 from align import Align
@@ -93,7 +92,7 @@ cpu_names = { "6502"  : lambda : cpu6502.Cpu6502(),
 memory_binary = memorymanager.memory_binary
 memory        = memorymanager.memory
 
-def load(binary_load_addr, filename, cpu_name, md5sum=None):
+def load(binary_load_addr, filename, cpu_name="6502", md5sum=None):
     """Loads a binary file to analyse at the given address.
 
     Load a binary file and optionally verify the checksum of the data."""
@@ -608,6 +607,11 @@ def uint(runtime_addr, n=1):
     # immediate constants will be disabled for this address.
     set_formatter(runtime_addr, n, mainformatter.uint_formatter)
 
+def sint(runtime_addr, n=1):
+    """Specifies signed int formatting for data in the given block"""
+
+    set_formatter(runtime_addr, n, mainformatter.sint_formatter)
+
 def padded_uint(runtime_addr, n=1):
     """Specifies padded uint formatting for data in the given block"""
 
@@ -643,6 +647,72 @@ def is_assembler(s):
     if config.get_assembler().get_name().lower() == s.lower():
         return True
     return False
+
+##############################################################################
+# String functions
+##############################################################################
+def string(runtime_addr, n=None):
+    """Classifies a part of the binary as a string of given length or
+    up to the next non-printable character.
+
+    Returns the next available memory address after the string."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return classification.string_binary(binary_loc.binary_addr, n=n)
+
+def stringterm(runtime_addr, terminator, exclude_terminator=False):
+    """Classifies part of the binary as a string followed by a given
+    terminator byte.
+
+    Returns the next available memory address after the string."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return classification.stringterm_binary(binary_loc.binary_addr, terminator=terminator, exclude_terminator=exclude_terminator)
+
+def stringcr(runtime_addr, exclude_terminator=False):
+    """Classifies part of the binary as a string followed by ASCII 13.
+
+    Returns the next available memory address after the string."""
+
+    return stringterm(runtime_addr, 13, exclude_terminator)
+
+def stringz(runtime_addr, exclude_terminator=False):
+    """Classifies part of the binary as a string followed by ASCII 0.
+
+    Returns the next available memory address after the string."""
+
+    return stringterm(runtime_addr, 0, exclude_terminator)
+
+def stringhi(runtime_addr, include_terminator_fn=None):
+    """Classifies a part of the binary as a string up to the next bit 7 set character.
+
+    The string may or may not include the terminator character without
+    the top bit.
+
+    Returns the next available memory address after the string."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return classification.stringhi_binary(binary_loc.binary_addr, include_terminator_fn=include_terminator_fn)
+
+def stringhiz(runtime_addr, include_terminator_fn=None):
+    """Classifies a part of the binary as a string up to the next bit 7 set character or zero character."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return classification.stringhiz_binary(binary_loc.binary_addr, include_terminator_fn=include_terminator_fn)
+
+def stringn(runtime_addr):
+    """Classifies a part of the binary as a string with the first byte
+    giving the length.
+
+    Returns the next available memory address after the string."""
+
+    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    return classification.stringn_binary(binary_loc.binary_addr)
 
 #
 # Assembler specific expression strings can be built using these functions:

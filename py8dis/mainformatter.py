@@ -153,6 +153,20 @@ def uint_formatter(n, bits, pad=False):
         return config.get_assembler().hex2(n)
     return config.get_assembler().hex4(n)
 
+def sint_formatter(n, bits):
+    """Format an 8 or 16 bit number as a signed decimal."""
+
+    assert bits in (8, 16)
+    assert 0 <= n < (1<<bits)
+
+    if bits == 8:
+        signedn = n if n < 128 else n-256
+    elif bits == 16:
+        signedn = n if n < 32768 else n-65536
+
+    s = "%d" % signedn
+    return s
+
 def char_formatter(n, bits):
     """Format a quoted character.
 

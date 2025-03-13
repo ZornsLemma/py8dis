@@ -1503,7 +1503,7 @@ command_table
     .asc "WIPE"                                                       // 86b1: 57 49 50... WIP
     .byt >(sub_c8750-1)                                               // 86b5: 87          .
     .byt <(sub_c8750-1)                                               // 86b6: 4f          O
-    .byt   2, $88, $72                                                // 86b7: 02 88 72    ..r
+    .byt 2, $88, $72                                                  // 86b7: 02 88 72    ..r
     .asc "BUILD"                                                      // 86ba: 42 55 49... BUI
     .byt >(sub_cabc5-1)                                               // 86bf: ab          .
     .byt <(sub_cabc5-1)                                               // 86c0: c4          .
@@ -9538,7 +9538,7 @@ sub_cb86f
     jmp (fscv)                                                        // b86f: 6c 1e 02    l..
 
 // $b872 referenced 2 times by $b9c7, $bc70
-return_62
+lb872
     .byt $60, 0, 0, $60, 0, 0, 2, $0c, $ff                            // b872: 60 00 00... `..
     .asc "RAM"                                                        // b87b: 52 41 4d    RAM
 // $b87e referenced 1 time by $b9a3
@@ -9702,7 +9702,7 @@ loop_cb9bd
     tay                                                               // b9c1: a8          .              // Y=ROM number
     jsr osrdsc                                                        // b9c2: 20 b9 ff     ..            // Read byte from ROM Y or screen
     ldx osrdsc_ptr                                                    // b9c5: a6 f6       ..
-    cmp return_62,x                                                   // b9c7: dd 72 b8    .r.
+    cmp lb872,x                                                       // b9c7: dd 72 b8    .r.
     bne cb9d9                                                         // b9ca: d0 0d       ..
 // $b9cc referenced 1 time by $b9e5
 loop_cb9cc
@@ -9781,7 +9781,7 @@ cba19
 // $ba1a referenced 1 time by $ba20
 loop_cba1a
     inx                                                               // ba1a: e8          .
-    lda return_63,x                                                   // ba1b: bd 2f ba    ./.
+    lda return_62,x                                                   // ba1b: bd 2f ba    ./.
     beq cba2e                                                         // ba1e: f0 0e       ..
     bpl loop_cba1a                                                    // ba20: 10 f8       ..
     bcs cba27                                                         // ba22: b0 03       ..
@@ -9802,7 +9802,7 @@ cba28
 cba2e
     sec                                                               // ba2e: 38          8
 // $ba2f referenced 1 time by $ba1b
-return_63
+return_62
     rts                                                               // ba2f: 60          `
 
 // $ba30 referenced 3 times by $b234, $ba05, $ba10
@@ -10220,7 +10220,7 @@ sub_cbc68
     sta l00bb                                                         // bc6e: 85 bb       ..
 // $bc70 referenced 1 time by $bc7e
 loop_cbc70
-    lda return_62,x                                                   // bc70: bd 72 b8    .r.
+    lda lb872,x                                                       // bc70: bd 72 b8    .r.
     cpx #1                                                            // bc73: e0 01       ..
     bne cbc78                                                         // bc75: d0 01       ..
     tya                                                               // bc77: 98          .
@@ -10367,7 +10367,7 @@ cbd46
     lda l00bf                                                         // bd4d: a5 bf       ..
     bne cbd7e                                                         // bd4f: d0 2d       .-
     ldx l00be                                                         // bd51: a6 be       ..
-    beq return_64                                                     // bd53: f0 64       .d
+    beq return_63                                                     // bd53: f0 64       .d
     lda #0                                                            // bd55: a9 00       ..
     sta (l00b8),y                                                     // bd57: 91 b8       ..
     inc l00b9                                                         // bd59: e6 b9       ..
@@ -10424,7 +10424,7 @@ cbda3
     jmp cbd46                                                         // bdb6: 4c 46 bd    LF.
 
 // $bdb9 referenced 2 times by $bd53, $bdcd
-return_64
+return_63
     rts                                                               // bdb9: 60          `
 
 // $bdba referenced 1 time by $bd3d
@@ -10441,7 +10441,7 @@ cbdc0
     lda l00bf                                                         // bdc7: a5 bf       ..
     bne cbdd3                                                         // bdc9: d0 08       ..
     ldx l00be                                                         // bdcb: a6 be       ..
-    beq return_64                                                     // bdcd: f0 ea       ..
+    beq return_63                                                     // bdcd: f0 ea       ..
     lda #1                                                            // bdcf: a9 01       ..
     bne cbddd                                                         // bdd1: d0 0a       ..             // ALWAYS branch
 
@@ -10530,23 +10530,23 @@ cbe52
     lda (l00b8),y                                                     // be54: b1 b8       ..
     sec                                                               // be56: 38          8
     sbc #1                                                            // be57: e9 01       ..
-    bcc return_65                                                     // be59: 90 1f       ..
+    bcc return_64                                                     // be59: 90 1f       ..
     sta (l00b8),y                                                     // be5b: 91 b8       ..
     jsr sub_cb616                                                     // be5d: 20 16 b6     ..
-    beq return_65                                                     // be60: f0 18       ..
+    beq return_64                                                     // be60: f0 18       ..
     ldx l00b7                                                         // be62: a6 b7       ..
     jsr sub_cb85d                                                     // be64: 20 5d b8     ].
-    bvc return_65                                                     // be67: 50 11       P.
+    bvc return_64                                                     // be67: 50 11       P.
     lda l00b1,x                                                       // be69: b5 b1       ..
     cmp #$c0                                                          // be6b: c9 c0       ..
-    bcc return_65                                                     // be6d: 90 0b       ..
+    bcc return_64                                                     // be6d: 90 0b       ..
     lda #$10                                                          // be6f: a9 10       ..
     sta l00b0,x                                                       // be71: 95 b0       ..
     lda #$80                                                          // be73: a9 80       ..
     sta l00b1,x                                                       // be75: 95 b1       ..
     jsr sub_cb68f                                                     // be77: 20 8f b6     ..
 // $be7a referenced 4 times by $be59, $be60, $be67, $be6d
-return_65
+return_64
     rts                                                               // be7a: 60          `
 
 // $be7b referenced 5 times by $bd5b, $bd88, $be00, $be23, $be80
@@ -10586,8 +10586,8 @@ sub_cbe91
 // $be9d referenced 2 times by $b338, $bcf1
 sub_cbe9d
     jsr sub_cb85d                                                     // be9d: 20 5d b8     ].
-    bpl return_66                                                     // bea0: 10 1f       ..
-    bvs return_66                                                     // bea2: 70 1d       p.
+    bpl return_65                                                     // bea0: 10 1f       ..
+    bvs return_65                                                     // bea2: 70 1d       p.
     lda #0                                                            // bea4: a9 00       ..
     pha                                                               // bea6: 48          H
     ldy #$f1                                                          // bea7: a0 f1       ..
@@ -10607,7 +10607,7 @@ loop_cbeab
     pla                                                               // bebe: 68          h
     sta (l00ba),y                                                     // bebf: 91 ba       ..
 // $bec1 referenced 2 times by $bea0, $bea2
-return_66
+return_65
     rts                                                               // bec1: 60          `
 
 // $bec2 referenced 2 times by $bc64, $bcae
@@ -10671,7 +10671,7 @@ cbeee
     ldy #$30 // '0'                                                   // bf1a: a0 30       .0
 // $bf1c referenced 1 time by $bf21
 loop_cbf1c
-    lda return_67,y                                                   // bf1c: b9 8a bf    ...
+    lda return_66,y                                                   // bf1c: b9 8a bf    ...
     pha                                                               // bf1f: 48          H
     dey                                                               // bf20: 88          .
     bne loop_cbf1c                                                    // bf21: d0 f9       ..
@@ -10740,7 +10740,7 @@ sub_cbf84
     jsr osbyte                                                        // bf86: 20 f4 ff     ..
     txa                                                               // bf89: 8a          .
 // $bf8a referenced 1 time by $bf1c
-return_67
+return_66
     rts                                                               // bf8a: 60          `
 
     lda romsel_copy                                                   // bf8b: a5 f4       ..
@@ -11014,7 +11014,7 @@ pydis_end
 //     osfile:                                             4
 //     osrdch:                                             4
 //     return_14:                                          4
-//     return_65:                                          4
+//     return_64:                                          4
 //     romsel:                                             4
 //     sub_c80c8:                                          4
 //     sub_c8174:                                          4
@@ -11269,6 +11269,7 @@ pydis_end
 //     l110f:                                              2
 //     l111b:                                              2
 //     la1d3:                                              2
+//     lb872:                                              2
 //     nmi_XXX7:                                           2
 //     nmi_handler_ram:                                    2
 //     nmi_lda_abs+1:                                      2
@@ -11289,9 +11290,8 @@ pydis_end
 //     return_44:                                          2
 //     return_48:                                          2
 //     return_56:                                          2
-//     return_62:                                          2
-//     return_64:                                          2
-//     return_66:                                          2
+//     return_63:                                          2
+//     return_65:                                          2
 //     sub_c04ce:                                          2
 //     sub_c809a:                                          2
 //     sub_c80e3:                                          2
@@ -12105,8 +12105,8 @@ pydis_end
 //     return_6:                                           1
 //     return_60:                                          1
 //     return_61:                                          1
-//     return_63:                                          1
-//     return_67:                                          1
+//     return_62:                                          1
+//     return_66:                                          1
 //     return_7:                                           1
 //     return_8:                                           1
 //     return_9:                                           1
@@ -13032,6 +13032,7 @@ pydis_end
 //     lb6ce
 //     lb726
 //     lb774
+//     lb872
 //     lb87e
 //     lb924
 //     lb979
@@ -13294,7 +13295,6 @@ pydis_end
 //     return_64
 //     return_65
 //     return_66
-//     return_67
 //     return_7
 //     return_8
 //     return_9

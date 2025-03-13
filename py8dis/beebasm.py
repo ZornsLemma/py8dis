@@ -129,7 +129,7 @@ class Beebasm(assembler.Assembler):
             area_to_clear_start = max(dest, source + length)
             area_to_clear_end   = dest + length
 
-        return temp_start, overlap_start, overlap_length, area_to_clear_start, area_to_clear_end
+        return int(temp_start), int(overlap_start), int(overlap_length), int(area_to_clear_start), int(area_to_clear_end)
 
     def pseudopc_start(self, dest, source, length, move_id):
         """Used when assembling code at a different address to where it will
@@ -142,11 +142,11 @@ class Beebasm(assembler.Assembler):
         if overlap_length > 0:
             result.append(self.format_comment("1. We want to move to a lower memory address to assemble the next block of code at it's runtime address. First we temporarily copy the existing code/data that overlaps out of the way while we do so."))
             result.append(self.format_comment("(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
-            result.append(utils.make_indent(1) + utils.force_case("copyblock %s, %s, %s" % (self.hex(overlap_start), self.hex(overlap_start + overlap_length), self.hex(temp_start))))
+            result.append(utils.make_indent(1) + utils.force_case("copyblock %s, %s, %s" % (disassembly.get_emitted_label(overlap_start), disassembly.get_emitted_label(overlap_start + overlap_length), disassembly.get_emitted_label(temp_start))))
 
             result.append("")
             result.append(self.format_comment("2. Clear the existing code area so that we are allowed to assemble there again."))
-            result.append(utils.make_indent(1) + utils.force_case("clear %s, %s" % (self.hex(overlap_start), self.hex(overlap_start + overlap_length))))
+            result.append(utils.make_indent(1) + utils.force_case("clear %s, %s" % (disassembly.get_emitted_label(overlap_start), disassembly.get_emitted_label(overlap_start + overlap_length))))
 
             result.append("")
             result.append(self.format_comment("3. Assemble the new block at it's runtime address."))
@@ -190,16 +190,16 @@ class Beebasm(assembler.Assembler):
         # Output COPYBLOCK command
         result.append("%s%s %s, *, %s" % (utils.make_indent(1),
             utils.force_case("copyblock"),
-            disassembly.get_label(dest,                                 source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION),
-            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)))
+            disassembly.get_emitted_label(dest),
+            disassembly.get_emitted_label(int(source))))
 
         # Output CLEAR command
         result.append("")
-        result.append(self.format_comment(comment_prefix + "Clear the area of memory we just temporarily used to assemble the new block, allowing us to assemble there again if needed"))
+        result.append(self.format_comment("Clear the area of memory we just temporarily used to assemble the new block, allowing us to assemble there again if needed"))
         result.append("%s%s %s, %s" % (utils.make_indent(1),
             utils.force_case("clear"),
-            self.hex(area_to_clear_start),
-            self.hex(area_to_clear_end)))
+            disassembly.get_emitted_label(area_to_clear_start),
+            disassembly.get_emitted_label(area_to_clear_end)))
 
         if overlap_length > 0:
             # Output COPYBLOCK command
@@ -208,15 +208,15 @@ class Beebasm(assembler.Assembler):
             result.append(self.format_comment("(Note the parameter order: 'copyblock <start>,<end>,<dest>')"))
             result.append("%s%s %s, %s, %s" % (utils.make_indent(1),
                 utils.force_case("copyblock"),
-                self.hex(temp_start),
-                self.hex(temp_start + overlap_length),
-                self.hex(overlap_start)))
+                disassembly.get_emitted_label(temp_start),
+                disassembly.get_emitted_label(temp_start + overlap_length),
+                disassembly.get_emitted_label(overlap_start)))
             result.append("")
             result.append(self.format_comment("6. Clear the temporary code area so we can assemble there in the future if needed."))
             result.append("%s%s %s, %s" % (utils.make_indent(1),
                 utils.force_case("clear"),
-                self.hex(temp_start),
-                self.hex(temp_start + overlap_length)))
+                disassembly.get_emitted_label(temp_start),
+                disassembly.get_emitted_label(temp_start + overlap_length)))
 
         # Output ORG command
         result.append("")
@@ -227,8 +227,8 @@ class Beebasm(assembler.Assembler):
         result.append(self.format_comment(comment_prefix + "Set the program counter to the next position in the binary file."))
         result.append("%s%s %s + (* - %s)" % (utils.make_indent(1),
             utils.force_case("org"),
-            disassembly.get_label(movemanager.RuntimeAddr(int(source)), source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION),
-            disassembly.get_label(dest,          source, move_id=move_id, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_DEFINITION)))
+            disassembly.get_emitted_label(int(source)),
+            disassembly.get_emitted_label(dest)))
 
         result.append("")
         return result

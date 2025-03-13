@@ -1,6 +1,4 @@
 ; Memory locations
-l3001   = &3001
-l3002   = &3002
 
     org &3000
 
@@ -39,9 +37,9 @@ l3002   = &3002
     ; 4. Copy the newly assembled block of code back to it's proper place in the binary
     ; file.
     ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
-    copyblock l3001, *, l3002
+    copyblock &3001, *, &3002
 
-    ; 4. Clear the area of memory we just temporarily used to assemble the new block,
+    ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
     clear &3001, &3002
 
@@ -54,12 +52,8 @@ l3002   = &3002
     clear &fffe, &ffff
 
     ; 7. Set the program counter to the next position in the binary file.
-    org l3002 + (* - l3001)
+    org &3002 + (* - &3001)
 
 .pydis_end
-
-; Automatically generated labels:
-;     l3001
-;     l3002
 
 save pydis_start, pydis_end
