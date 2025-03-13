@@ -75,12 +75,6 @@ with move(0x8000, 0x2000, 0x4000):
     entry(0x680, "tube_host_osword_0_no_escape")
     entry(0x687, "tube_host_osword_0_no_escape_loop")
 
-    # These two options default to True (on) and are probably helpful during the
-    # initial stages of a disassembly, but you might want to turn them off
-    # eventually, particularly the hex dump.
-    # config.set_bytes_as_ascii(False) # True => show "equb" data as ASCII in a comment
-    # config.set_hex_dump(False) # True => show code/equs data as hex in a comment
-
     constant(0x01, "service_claim_absolute_workspace")
     constant(0x02, "service_claim_private_workspace")
     constant(0x03, "service_boot")
