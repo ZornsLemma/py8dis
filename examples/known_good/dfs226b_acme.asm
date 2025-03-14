@@ -2505,7 +2505,8 @@ c8ce7
     bpl c8d0d                                                         ; 2cf3: 10 18       ..  :8cf3[1]
     sty l1088                                                         ; 2cf5: 8c 88 10    ... :8cf5[1]
     and #$7f                                                          ; 2cf8: 29 7f       ).  :8cf8[1]
-    bpl c8d03                                                         ; 2cfa: 10 07       ..  :8cfa[1]
+    bpl c8d03                                                         ; 2cfa: 10 07       ..  :8cfa[1]   ; ALWAYS branch
+
 ; $2cfc referenced 1 time by $8cf1[1]
 c8cfc
     bvc c8d0d                                                         ; 2cfc: 50 0f       P.  :8cfc[1]
@@ -4789,7 +4790,8 @@ sub_c99f3
     asl                                                               ; 3a07: 0a          .   :9a07[1]
     eor l0f0e,x                                                       ; 3a08: 5d 0e 0f    ].. :9a08[1]
     and #$0c                                                          ; 3a0b: 29 0c       ).  :9a0b[1]
-    bpl c9a2a                                                         ; 3a0d: 10 1b       ..  :9a0d[1]
+    bpl c9a2a                                                         ; 3a0d: 10 1b       ..  :9a0d[1]   ; ALWAYS branch
+
 ; $3a0f referenced 2 times by $99cf[1], $99d7[1]
 sub_c9a0f
     jsr sub_c83e3                                                     ; 3a0f: 20 e3 83     .. :9a0f[1]

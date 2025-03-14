@@ -4327,7 +4327,8 @@ skip_retreating_because_of_damage
     bcs skip_retreating_because_of_angle                              ; 3bc8: b0 15       ..  :2ac8[1]
     tya                                                               ; 3bca: 98          .   :2aca[1]
     ora #$40                                                          ; 3bcb: 09 40       .@  :2acb[1]
-    bne set_temporary_behaviour_flags                                 ; 3bcd: d0 11       ..  :2acd[1]
+    bne set_temporary_behaviour_flags                                 ; 3bcd: d0 11       ..  :2acd[1]   ; ALWAYS branch
+
 already_retreating_because_of_angle
     lda enemy_ship_desired_angle_divided_by_eight                     ; 3bcf: ad 55 26    .U& :2acf[1]
     clc                                                               ; 3bd2: 18          .   :2ad2[1]

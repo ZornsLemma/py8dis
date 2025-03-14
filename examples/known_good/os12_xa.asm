@@ -5892,7 +5892,8 @@ osbyte139EntryPoint
     asl                                                               // e034: 0a          .
 osbyte127EntryPoint
     and #1                                                            // e035: 29 01       ).
-    bpl ce031                                                         // e037: 10 f8       ..
+    bpl ce031                                                         // e037: 10 f8       ..             // ALWAYS branch
+
 // $e039 referenced 2 times by $dfa0, $e03e
 ce039
     iny                                                               // e039: c8          .
@@ -6045,7 +6046,8 @@ ce13a
     sta user_via_pcr                                                  // e15a: 8d 6c fe    .l.
     ora #$0e                                                          // e15d: 09 0e       ..
     sta user_via_pcr                                                  // e15f: 8d 6c fe    .l.
-    bne return_30                                                     // e162: d0 2c       .,
+    bne return_30                                                     // e162: d0 2c       .,             // ALWAYS branch
+
 // $e164 referenced 1 time by $e141
 ce164
     cmp #2                                                            // e164: c9 02       ..
@@ -7311,7 +7313,8 @@ osbyte5EntryPoint
 osbyte1EntryPoint
 osbyte6EntryPoint
     ora #$f0                                                          // e988: 09 f0       ..
-    bne ce99a                                                         // e98a: d0 0e       ..
+    bne ce99a                                                         // e98a: d0 0e       ..             // ALWAYS branch
+
 osbyte12EntryPoint
     bne osbyte11EntryPoint                                            // e98c: d0 07       ..
     ldx #$32 // '2'                                                   // e98e: a2 32       .2
@@ -7924,7 +7927,8 @@ cecdb
     jsr osbyte152EntryPoint                                           // ecf1: 20 5b e4     [.
     and #3                                                            // ecf4: 29 03       ).
     sta l0838                                                         // ecf6: 8d 38 08    .8.
-    bpl cecfe                                                         // ecf9: 10 03       ..
+    bpl cecfe                                                         // ecf9: 10 03       ..             // ALWAYS branch
+
 // $ecfb referenced 1 time by $ecef
 cecfb
     dec l0838                                                         // ecfb: ce 38 08    .8.

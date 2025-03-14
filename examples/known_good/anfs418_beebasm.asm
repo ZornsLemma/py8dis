@@ -4580,7 +4580,8 @@ error_template_minus_1 = sub_c96b3+1
     jsr sub_caf32                                                     ; a250: 20 32 af     2.
     ora #&80                                                          ; a253: 09 80       ..
     sta l1071                                                         ; a255: 8d 71 10    .q.
-    bne loop_ca241                                                    ; a258: d0 e7       ..
+    bne loop_ca241                                                    ; a258: d0 e7       ..             ; ALWAYS branch
+
 ; &a25a referenced 1 time by &a213
 .ca25a
     jsr sub_caf32                                                     ; a25a: 20 32 af     2.
@@ -5861,7 +5862,8 @@ lad43 = sub_cad41+2
     lda l1071                                                         ; aef1: ad 71 10    .q.
     ora #&40 ; '@'                                                    ; aef4: 09 40       .@
     sta l1071                                                         ; aef6: 8d 71 10    .q.
-    bne caeb7                                                         ; aef9: d0 bc       ..
+    bne caeb7                                                         ; aef9: d0 bc       ..             ; ALWAYS branch
+
 ; &aefb referenced 1 time by &ae19
 .laefb
     equb 0                                                            ; aefb: 00          .

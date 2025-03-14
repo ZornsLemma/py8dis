@@ -2496,7 +2496,8 @@ c8ce7
     bpl c8d0d                                                         // 8cf3: 10 18       ..
     sty l1088                                                         // 8cf5: 8c 88 10    ...
     and #$7f                                                          // 8cf8: 29 7f       ).
-    bpl c8d03                                                         // 8cfa: 10 07       ..
+    bpl c8d03                                                         // 8cfa: 10 07       ..             // ALWAYS branch
+
 // $8cfc referenced 1 time by $8cf1
 c8cfc
     bvc c8d0d                                                         // 8cfc: 50 0f       P.
@@ -4778,7 +4779,8 @@ sub_c99f3
     asl                                                               // 9a07: 0a          .
     eor l0f0e,x                                                       // 9a08: 5d 0e 0f    ]..
     and #$0c                                                          // 9a0b: 29 0c       ).
-    bpl c9a2a                                                         // 9a0d: 10 1b       ..
+    bpl c9a2a                                                         // 9a0d: 10 1b       ..             // ALWAYS branch
+
 // $9a0f referenced 2 times by $99cf, $99d7
 sub_c9a0f
     jsr sub_c83e3                                                     // 9a0f: 20 e3 83     ..

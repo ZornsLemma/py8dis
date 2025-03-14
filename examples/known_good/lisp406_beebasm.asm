@@ -1333,7 +1333,8 @@ oscli   = &fff7
     lda LSCHAR                                     ; 8770: ad 30 04    .0.            ; From file
     bpl RENEW                                      ; 8773: 10 04       ..
     and #&7f                                       ; 8775: 29 7f       ).
-    bpl REOLD                                      ; 8777: 10 03       ..
+    bpl REOLD                                      ; 8777: 10 03       ..             ; ALWAYS branch
+
 .RENEW
     jsr osbget                                     ; 8779: 20 d7 ff     ..            ; Read a single byte from an open file Y
 .REOLD
