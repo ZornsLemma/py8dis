@@ -196,11 +196,11 @@ def my_label_maker(d):
 
 :pencil:`constant(value, name, comment=None, align=Align.INLINE, format=Format.DEFAULT)`
 
-Define a constant `name` with value `value`; think of this as being passed straight through to the output as `name = value`. The optional comment text can be `align`ed and the value can be specified as Format.DECIMAL, .HEX, .BINARY, or .CHAR.
+Define a constant `name` with value `value`; think of this as being passed straight through to the output as `name = value`. The optional comment text can be `align`ed and the value can be defined as Format.DECIMAL, .DECIMAL_SIGNED, .BINARY, .HEX, .BINARY, .PICTURE_BINARY, .CHAR, .STRING, and .DEFAULT.
 
 To illustrate the difference between labels and constants:
 - If you say `label(42, "meaning_of_life")`, an `lda 42` instruction will be disassembled as `lda meaning_of_life`.
-- If you say `constant(42, "meaning_of_life")`, an `lda 42` instruction will be disassembled as `lda 42`. Use ``expr()`` (see below) to use a constant. Example: You could use `expr()` to change `lda #42` into `lda #meaning_of_life`.
+- If you say `constant(42, "meaning_of_life")`, an `lda 42` instruction will be disassembled as `lda 42`. Instead use ``expr()`` (see below) to use a constant. Example: You could use `expr()` to change `lda #42` into `lda #meaning_of_life`.
 
 Simple rule of thumb: use `label` only for addresses, use `constant()` for everything else.
 
