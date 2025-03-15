@@ -803,6 +803,19 @@ temp4:
 savstk:
     dw 0                                                              ; 06ab: 00 00       ..
 pydis_end:
+
 ; ASSERT ((cpu_error_message) == $018b)
 ; ASSERT ((cpu_ok_message) == $0174)
 ; ASSERT ((temp0) == $06a6)
+
+; Stats:
+;     Total size (Code + Data) = 1453 bytes
+;     Code                     = 1323 bytes (91%)
+;     Data                     = 130 bytes (9%)
+;
+;     Number of instructions   = 692
+;     Number of data bytes     = 11 bytes
+;     Number of data words     = 4 bytes
+;     Number of string bytes   = 115 bytes
+;     Number of strings        = 3
+

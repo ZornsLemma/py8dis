@@ -25,6 +25,7 @@ return_1:
 
 pydis_end:
 
+
 ; Label references by decreasing frequency:
 ;     loop_c1006:   1
 ;     return_1:     1
@@ -32,3 +33,15 @@ pydis_end:
 ; Automatically generated labels:
 ;     loop_c1006
 ;     return_1
+
+; Stats:
+;     Total size (Code + Data) = 18 bytes
+;     Code                     = 18 bytes (100%)
+;     Data                     = 0 bytes (0%)
+;
+;     Number of instructions   = 14
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 0 bytes
+;     Number of strings        = 0
+

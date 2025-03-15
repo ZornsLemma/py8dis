@@ -7862,3 +7862,16 @@ c61f6
 
     .byt 0, 0, 0, 0, 0, 0                                             // 61f9: 00 00 00... ...
 pydis_end
+
+
+// Stats:
+//     Total size (Code + Data) = 17151 bytes
+//     Code                     = 11046 bytes (64%)
+//     Data                     = 6105 bytes (36%)
+//
+//     Number of instructions   = 5145
+//     Number of data bytes     = 4129 bytes
+//     Number of data words     = 2 bytes
+//     Number of string bytes   = 1974 bytes
+//     Number of strings        = 84
+

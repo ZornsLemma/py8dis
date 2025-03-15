@@ -8341,6 +8341,7 @@ cbffb
 
 pydis_end
 
+
 // Label references by decreasing frequency:
 //     l009e:                                   64
 //     l0f05:                                   48
@@ -10591,3 +10592,15 @@ pydis_end
 //     sub_cbc86
 //     sub_cbc89
 //     sub_cbc8c
+
+// Stats:
+//     Total size (Code + Data) = 16384 bytes
+//     Code                     = 9990 bytes (61%)
+//     Data                     = 6394 bytes (39%)
+//
+//     Number of instructions   = 4981
+//     Number of data bytes     = 5093 bytes
+//     Number of data words     = 60 bytes
+//     Number of string bytes   = 1241 bytes
+//     Number of strings        = 170
+

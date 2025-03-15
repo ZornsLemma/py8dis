@@ -6160,6 +6160,7 @@ osbyte                  = &fff4
     org codemain_end + (* - showkeys)
 
 .pydis_end
+
     assert ((map0ladder_end - map0ladder_start) / 3) == &04
     assert ((map0platform_end - map0platform_start) / 3) == &0d
     assert ((map0seed_end - map0seed_start) / 2) == &0a
@@ -6373,3 +6374,15 @@ osbyte                  = &fff4
     assert string_uparrow_end - string_uparrow_start == &08
 
 save pydis_start, pydis_end
+
+; Stats:
+;     Total size (Code + Data) = 9984 bytes
+;     Code                     = 6148 bytes (62%)
+;     Data                     = 3836 bytes (38%)
+;
+;     Number of instructions   = 3053
+;     Number of data bytes     = 3368 bytes
+;     Number of data words     = 160 bytes
+;     Number of string bytes   = 308 bytes
+;     Number of strings        = 35
+

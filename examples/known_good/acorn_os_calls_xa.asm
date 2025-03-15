@@ -5847,6 +5847,7 @@ osfind_block
     .asc "!BOOT"                                                      // 41c7: 21 42 4f... !BO
 pydis_end
 
+
 // Label references by decreasing frequency:
 //     osbyte:       803
 //     mem:          735
@@ -5866,3 +5867,15 @@ pydis_end
 //     oswrch:         1
 //     oswrcr:         1
 //     oswrsc:         1
+
+// Stats:
+//     Total size (Code + Data) = 12492 bytes
+//     Code                     = 11067 bytes (89%)
+//     Data                     = 1425 bytes (11%)
+//
+//     Number of instructions   = 4982
+//     Number of data bytes     = 1420 bytes
+//     Number of data words     = 0 bytes
+//     Number of string bytes   = 5 bytes
+//     Number of strings        = 1
+

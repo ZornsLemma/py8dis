@@ -10948,6 +10948,131 @@ lbefe = sub_cbefd+1
     equs "fff"                                                        ; bffd: 66 66 66    fff
 .pydis_end
 
+    assert <(l002a) == &2a
+    assert <(l0037) == &37
+    assert <(l0600) == &00
+    assert >(l002a) == &00
+    assert >(l0037) == &00
+    assert >(l0600) == &06
+    assert c9073 == &9073
+    assert c95f9 == &95f9
+    assert c97d2 == &97d2
+    assert c98dc == &98dc
+    assert cac2b == &ac2b
+    assert cac38 == &ac38
+    assert cb522 == &b522
+    assert cb9ad == &b9ad
+    assert copyright - rom_header == &13
+    assert sub_c834b == &834b
+    assert sub_c8984 == &8984
+    assert sub_c8fc0 == &8fc0
+    assert sub_c8fc5 == &8fc5
+    assert sub_c8fd7 == &8fd7
+    assert sub_c8fe5 == &8fe5
+    assert sub_c8fea == &8fea
+    assert sub_c9042 == &9042
+    assert sub_c910d == &910d
+    assert sub_c9149 == &9149
+    assert sub_c9250 == &9250
+    assert sub_c9381 == &9381
+    assert sub_c93da == &93da
+    assert sub_c9447 == &9447
+    assert sub_c954c == &954c
+    assert sub_c96d4 == &96d4
+    assert sub_c96e5 == &96e5
+    assert sub_c96f9 == &96f9
+    assert sub_c9703 == &9703
+    assert sub_c970b == &970b
+    assert sub_c973e == &973e
+    assert sub_c97a9 == &97a9
+    assert sub_c9810 == &9810
+    assert sub_c9824 == &9824
+    assert sub_c982e == &982e
+    assert sub_c9871 == &9871
+    assert sub_c9875 == &9875
+    assert sub_c9880 == &9880
+    assert sub_c98af == &98af
+    assert sub_c98b6 == &98b6
+    assert sub_c98c3 == &98c3
+    assert sub_c9c5e == &9c5e
+    assert sub_c9ccc == &9ccc
+    assert sub_ca6fc == &a6fc
+    assert sub_ca7ac == &a7ac
+    assert sub_ca808 == &a808
+    assert sub_ca901 == &a901
+    assert sub_ca919 == &a919
+    assert sub_ca94f == &a94f
+    assert sub_ca954 == &a954
+    assert sub_ca96b == &a96b
+    assert sub_ca9b5 == &a9b5
+    assert sub_ca9bc == &a9bc
+    assert sub_ca9ca == &a9ca
+    assert sub_caa17 == &aa17
+    assert sub_caacb == &aacb
+    assert sub_caaeb == &aaeb
+    assert sub_caafb == &aafb
+    assert sub_cab01 == &ab01
+    assert sub_cab14 == &ab14
+    assert sub_cab1d == &ab1d
+    assert sub_cab21 == &ab21
+    assert sub_cab2f == &ab2f
+    assert sub_cab37 == &ab37
+    assert sub_cab3b == &ab3b
+    assert sub_cab3f == &ab3f
+    assert sub_cab54 == &ab54
+    assert sub_cab5c == &ab5c
+    assert sub_caba0 == &aba0
+    assert sub_cabe1 == &abe1
+    assert sub_cac03 == &ac03
+    assert sub_cac12 == &ac12
+    assert sub_cac1f == &ac1f
+    assert sub_cac46 == &ac46
+    assert sub_cac5d == &ac5d
+    assert sub_cac7f == &ac7f
+    assert sub_cad00 == &ad00
+    assert sub_cae34 == &ae34
+    assert sub_cae41 == &ae41
+    assert sub_cae50 == &ae50
+    assert sub_cae59 == &ae59
+    assert sub_cae6d == &ae6d
+    assert sub_cae71 == &ae71
+    assert sub_cae77 == &ae77
+    assert sub_cae7d == &ae7d
+    assert sub_cae83 == &ae83
+    assert sub_cae87 == &ae87
+    assert sub_cae8c == &ae8c
+    assert sub_caeb1 == &aeb1
+    assert sub_caebb == &aebb
+    assert sub_caebc == &aebc
+    assert sub_caefb == &aefb
+    assert sub_caf0a == &af0a
+    assert sub_caf61 == &af61
+    assert sub_caf8b == &af8b
+    assert sub_cb055 == &b055
+    assert sub_cb269 == &b269
+    assert sub_cb302 == &b302
+    assert sub_cb326 == &b326
+    assert sub_cb351 == &b351
+    assert sub_cb3c8 == &b3c8
+    assert sub_cb412 == &b412
+    assert sub_cb649 == &b649
+    assert sub_cb709 == &b709
+    assert sub_cb737 == &b737
+    assert sub_cb74d == &b74d
+    assert sub_cb78b == &b78b
+    assert sub_cb896 == &b896
+    assert sub_cb8e6 == &b8e6
+    assert sub_cb97d == &b97d
+    assert sub_cba47 == &ba47
+    assert sub_cba88 == &ba88
+    assert sub_cbe95 == &be95
+    assert sub_cbec7 == &bec7
+    assert sub_cbed7 == &bed7
+    assert sub_cbeee == &beee
+    assert sub_cbefd == &befd
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     l002a:              206
 ;     l0037:              133
@@ -13899,127 +14024,15 @@ lbefe = sub_cbefd+1
 ;     sub_cbf2f
 ;     sub_cbf3e
 ;     sub_cbf66
-    assert <(l002a) == &2a
-    assert <(l0037) == &37
-    assert <(l0600) == &00
-    assert >(l002a) == &00
-    assert >(l0037) == &00
-    assert >(l0600) == &06
-    assert c9073 == &9073
-    assert c95f9 == &95f9
-    assert c97d2 == &97d2
-    assert c98dc == &98dc
-    assert cac2b == &ac2b
-    assert cac38 == &ac38
-    assert cb522 == &b522
-    assert cb9ad == &b9ad
-    assert copyright - rom_header == &13
-    assert sub_c834b == &834b
-    assert sub_c8984 == &8984
-    assert sub_c8fc0 == &8fc0
-    assert sub_c8fc5 == &8fc5
-    assert sub_c8fd7 == &8fd7
-    assert sub_c8fe5 == &8fe5
-    assert sub_c8fea == &8fea
-    assert sub_c9042 == &9042
-    assert sub_c910d == &910d
-    assert sub_c9149 == &9149
-    assert sub_c9250 == &9250
-    assert sub_c9381 == &9381
-    assert sub_c93da == &93da
-    assert sub_c9447 == &9447
-    assert sub_c954c == &954c
-    assert sub_c96d4 == &96d4
-    assert sub_c96e5 == &96e5
-    assert sub_c96f9 == &96f9
-    assert sub_c9703 == &9703
-    assert sub_c970b == &970b
-    assert sub_c973e == &973e
-    assert sub_c97a9 == &97a9
-    assert sub_c9810 == &9810
-    assert sub_c9824 == &9824
-    assert sub_c982e == &982e
-    assert sub_c9871 == &9871
-    assert sub_c9875 == &9875
-    assert sub_c9880 == &9880
-    assert sub_c98af == &98af
-    assert sub_c98b6 == &98b6
-    assert sub_c98c3 == &98c3
-    assert sub_c9c5e == &9c5e
-    assert sub_c9ccc == &9ccc
-    assert sub_ca6fc == &a6fc
-    assert sub_ca7ac == &a7ac
-    assert sub_ca808 == &a808
-    assert sub_ca901 == &a901
-    assert sub_ca919 == &a919
-    assert sub_ca94f == &a94f
-    assert sub_ca954 == &a954
-    assert sub_ca96b == &a96b
-    assert sub_ca9b5 == &a9b5
-    assert sub_ca9bc == &a9bc
-    assert sub_ca9ca == &a9ca
-    assert sub_caa17 == &aa17
-    assert sub_caacb == &aacb
-    assert sub_caaeb == &aaeb
-    assert sub_caafb == &aafb
-    assert sub_cab01 == &ab01
-    assert sub_cab14 == &ab14
-    assert sub_cab1d == &ab1d
-    assert sub_cab21 == &ab21
-    assert sub_cab2f == &ab2f
-    assert sub_cab37 == &ab37
-    assert sub_cab3b == &ab3b
-    assert sub_cab3f == &ab3f
-    assert sub_cab54 == &ab54
-    assert sub_cab5c == &ab5c
-    assert sub_caba0 == &aba0
-    assert sub_cabe1 == &abe1
-    assert sub_cac03 == &ac03
-    assert sub_cac12 == &ac12
-    assert sub_cac1f == &ac1f
-    assert sub_cac46 == &ac46
-    assert sub_cac5d == &ac5d
-    assert sub_cac7f == &ac7f
-    assert sub_cad00 == &ad00
-    assert sub_cae34 == &ae34
-    assert sub_cae41 == &ae41
-    assert sub_cae50 == &ae50
-    assert sub_cae59 == &ae59
-    assert sub_cae6d == &ae6d
-    assert sub_cae71 == &ae71
-    assert sub_cae77 == &ae77
-    assert sub_cae7d == &ae7d
-    assert sub_cae83 == &ae83
-    assert sub_cae87 == &ae87
-    assert sub_cae8c == &ae8c
-    assert sub_caeb1 == &aeb1
-    assert sub_caebb == &aebb
-    assert sub_caebc == &aebc
-    assert sub_caefb == &aefb
-    assert sub_caf0a == &af0a
-    assert sub_caf61 == &af61
-    assert sub_caf8b == &af8b
-    assert sub_cb055 == &b055
-    assert sub_cb269 == &b269
-    assert sub_cb302 == &b302
-    assert sub_cb326 == &b326
-    assert sub_cb351 == &b351
-    assert sub_cb3c8 == &b3c8
-    assert sub_cb412 == &b412
-    assert sub_cb649 == &b649
-    assert sub_cb709 == &b709
-    assert sub_cb737 == &b737
-    assert sub_cb74d == &b74d
-    assert sub_cb78b == &b78b
-    assert sub_cb896 == &b896
-    assert sub_cb8e6 == &b8e6
-    assert sub_cb97d == &b97d
-    assert sub_cba47 == &ba47
-    assert sub_cba88 == &ba88
-    assert sub_cbe95 == &be95
-    assert sub_cbec7 == &bec7
-    assert sub_cbed7 == &bed7
-    assert sub_cbeee == &beee
-    assert sub_cbefd == &befd
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 14391 bytes (88%)
+;     Data                     = 1993 bytes (12%)
+;
+;     Number of instructions   = 7238
+;     Number of data bytes     = 780 bytes
+;     Number of data words     = 234 bytes
+;     Number of string bytes   = 979 bytes
+;     Number of strings        = 184
+

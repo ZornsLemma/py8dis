@@ -10794,6 +10794,7 @@ lbfff
 * = $6000
 pydis_end
 
+
 // Label references by decreasing frequency:
 //     l00b8:                                            125
 //     l00b0:                                            105
@@ -13612,3 +13613,15 @@ pydis_end
 //     sub_cbf7c
 //     sub_cbf82
 //     sub_cbf84
+
+// Stats:
+//     Total size (Code + Data) = 16384 bytes
+//     Code                     = 14446 bytes (88%)
+//     Data                     = 1938 bytes (12%)
+//
+//     Number of instructions   = 6996
+//     Number of data bytes     = 616 bytes
+//     Number of data words     = 38 bytes
+//     Number of string bytes   = 1284 bytes
+//     Number of strings        = 150
+

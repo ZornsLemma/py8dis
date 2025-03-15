@@ -6148,3 +6148,16 @@ unused3
     .asc "UB(4): E"                                                   // 37f8: 55 42 28... UB( :10f8[1]
 * = $3800
 pydis_end
+
+
+// Stats:
+//     Total size (Code + Data) = 9984 bytes
+//     Code                     = 6148 bytes (62%)
+//     Data                     = 3836 bytes (38%)
+//
+//     Number of instructions   = 3053
+//     Number of data bytes     = 3368 bytes
+//     Number of data words     = 160 bytes
+//     Number of string bytes   = 308 bytes
+//     Number of strings        = 35
+

@@ -8027,6 +8027,7 @@ unused4
     !byte   0,   0                                 ; bffe: 00 00       ..
 ROMTOP
 pydis_end
+
 !if ($80+$0d) != $8d {
     !error "Assertion failed: $80+$0d == $8d"
 }
@@ -9659,3 +9660,15 @@ pydis_end
 !if (XTNDL) != $74 {
     !error "Assertion failed: XTNDL == $74"
 }
+
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 7881 bytes (48%)
+;     Data                     = 8503 bytes (52%)
+;
+;     Number of instructions   = 3931
+;     Number of data bytes     = 5404 bytes
+;     Number of data words     = 1836 bytes
+;     Number of string bytes   = 1263 bytes
+;     Number of strings        = 185
+

@@ -59,3 +59,16 @@ crtc_substitution_test
     rts                                                               ; 202b: 60          `
 
 pydis_end
+
+
+; Stats:
+;     Total size (Code + Data) = 44 bytes
+;     Code                     = 44 bytes (100%)
+;     Data                     = 0 bytes (0%)
+;
+;     Number of instructions   = 23
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 0 bytes
+;     Number of strings        = 0
+

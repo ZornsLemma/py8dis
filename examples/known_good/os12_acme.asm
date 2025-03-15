@@ -10637,6 +10637,283 @@ oscli
     !byte 0, $0d, $cd, $d9, $1c, $dc                                  ; fffa: 00 0d cd... ...
 pydis_end
 
+!if (<(lead2)) != $d2 {
+    !error "Assertion failed: <(lead2) == $d2"
+}
+!if (<plotLine0) != $6a {
+    !error "Assertion failed: <plotLine0 == $6a"
+}
+!if (<plotLine1) != $74 {
+    !error "Assertion failed: <plotLine1 == $74"
+}
+!if (<plotLine2) != $42 {
+    !error "Assertion failed: <plotLine2 == $42"
+}
+!if (<plotLine3) != $4b {
+    !error "Assertion failed: <plotLine3 == $4b"
+}
+!if (>(lead2)) != $ea {
+    !error "Assertion failed: >(lead2) == $ea"
+}
+!if (>plotLine0) != $d3 {
+    !error "Assertion failed: >plotLine0 == $d3"
+}
+!if (>plotLine1) != $d3 {
+    !error "Assertion failed: >plotLine1 == $d3"
+}
+!if (>plotLine2) != $d3 {
+    !error "Assertion failed: >plotLine2 == $d3"
+}
+!if (>plotLine3) != $d3 {
+    !error "Assertion failed: >plotLine3 == $d3"
+}
+!if (osbyte0EntryPoint) != $e821 {
+    !error "Assertion failed: osbyte0EntryPoint == $e821"
+}
+!if (osbyte10EntryPoint) != $e6b2 {
+    !error "Assertion failed: osbyte10EntryPoint == $e6b2"
+}
+!if (osbyte117EntryPoint) != $e86c {
+    !error "Assertion failed: osbyte117EntryPoint == $e86c"
+}
+!if (osbyte118EntryPoint) != $e9d9 {
+    !error "Assertion failed: osbyte118EntryPoint == $e9d9"
+}
+!if (osbyte119EntryPoint) != $e275 {
+    !error "Assertion failed: osbyte119EntryPoint == $e275"
+}
+!if (osbyte11EntryPoint) != $e995 {
+    !error "Assertion failed: osbyte11EntryPoint == $e995"
+}
+!if (osbyte120EntryPoint) != $f045 {
+    !error "Assertion failed: osbyte120EntryPoint == $f045"
+}
+!if (osbyte121EntryPoint) != $f0cf {
+    !error "Assertion failed: osbyte121EntryPoint == $f0cf"
+}
+!if (osbyte122EntryPoint) != $f0cd {
+    !error "Assertion failed: osbyte122EntryPoint == $f0cd"
+}
+!if (osbyte123EntryPoint) != $e197 {
+    !error "Assertion failed: osbyte123EntryPoint == $e197"
+}
+!if (osbyte124EntryPoint) != $e673 {
+    !error "Assertion failed: osbyte124EntryPoint == $e673"
+}
+!if (osbyte125EntryPoint) != $e674 {
+    !error "Assertion failed: osbyte125EntryPoint == $e674"
+}
+!if (osbyte126EntryPoint) != $e65c {
+    !error "Assertion failed: osbyte126EntryPoint == $e65c"
+}
+!if (osbyte127EntryPoint) != $e035 {
+    !error "Assertion failed: osbyte127EntryPoint == $e035"
+}
+!if (osbyte128EntryPoint) != $e74f {
+    !error "Assertion failed: osbyte128EntryPoint == $e74f"
+}
+!if (osbyte129EntryPoint) != $e713 {
+    !error "Assertion failed: osbyte129EntryPoint == $e713"
+}
+!if (osbyte12EntryPoint) != $e98c {
+    !error "Assertion failed: osbyte12EntryPoint == $e98c"
+}
+!if (osbyte130EntryPoint) != $e729 {
+    !error "Assertion failed: osbyte130EntryPoint == $e729"
+}
+!if (osbyte131EntryPoint) != $f085 {
+    !error "Assertion failed: osbyte131EntryPoint == $f085"
+}
+!if (osbyte132EntryPoint) != $d923 {
+    !error "Assertion failed: osbyte132EntryPoint == $d923"
+}
+!if (osbyte133EntryPoint) != $d926 {
+    !error "Assertion failed: osbyte133EntryPoint == $d926"
+}
+!if (osbyte134EntryPoint) != $d647 {
+    !error "Assertion failed: osbyte134EntryPoint == $d647"
+}
+!if (osbyte135EntryPoint) != $d7c2 {
+    !error "Assertion failed: osbyte135EntryPoint == $d7c2"
+}
+!if (osbyte136EntryPoint) != $e657 {
+    !error "Assertion failed: osbyte136EntryPoint == $e657"
+}
+!if (osbyte137EntryPoint) != $e67f {
+    !error "Assertion failed: osbyte137EntryPoint == $e67f"
+}
+!if (osbyte138EntryPoint) != $e4af {
+    !error "Assertion failed: osbyte138EntryPoint == $e4af"
+}
+!if (osbyte139EntryPoint) != $e034 {
+    !error "Assertion failed: osbyte139EntryPoint == $e034"
+}
+!if (osbyte13EntryPoint) != $e6f9 {
+    !error "Assertion failed: osbyte13EntryPoint == $e6f9"
+}
+!if (osbyte140EntryPoint) != $f135 {
+    !error "Assertion failed: osbyte140EntryPoint == $f135"
+}
+!if (osbyte141EntryPoint) != $f135 {
+    !error "Assertion failed: osbyte141EntryPoint == $f135"
+}
+!if (osbyte142EntryPoint) != $dbe7 {
+    !error "Assertion failed: osbyte142EntryPoint == $dbe7"
+}
+!if (osbyte143EntryPoint) != $f168 {
+    !error "Assertion failed: osbyte143EntryPoint == $f168"
+}
+!if (osbyte144EntryPoint) != $eae3 {
+    !error "Assertion failed: osbyte144EntryPoint == $eae3"
+}
+!if (osbyte145EntryPoint) != $e460 {
+    !error "Assertion failed: osbyte145EntryPoint == $e460"
+}
+!if (osbyte146EntryPoint) != $ffaa {
+    !error "Assertion failed: osbyte146EntryPoint == $ffaa"
+}
+!if (osbyte147EntryPoint) != $eaf4 {
+    !error "Assertion failed: osbyte147EntryPoint == $eaf4"
+}
+!if (osbyte148EntryPoint) != $ffae {
+    !error "Assertion failed: osbyte148EntryPoint == $ffae"
+}
+!if (osbyte149EntryPoint) != $eaf9 {
+    !error "Assertion failed: osbyte149EntryPoint == $eaf9"
+}
+!if (osbyte14EntryPoint) != $e6fa {
+    !error "Assertion failed: osbyte14EntryPoint == $e6fa"
+}
+!if (osbyte150EntryPoint) != $ffb2 {
+    !error "Assertion failed: osbyte150EntryPoint == $ffb2"
+}
+!if (osbyte151EntryPoint) != $eafe {
+    !error "Assertion failed: osbyte151EntryPoint == $eafe"
+}
+!if (osbyte152EntryPoint) != $e45b {
+    !error "Assertion failed: osbyte152EntryPoint == $e45b"
+}
+!if (osbyte153EntryPoint) != $e4f3 {
+    !error "Assertion failed: osbyte153EntryPoint == $e4f3"
+}
+!if (osbyte154EntryPoint) != $e9ff {
+    !error "Assertion failed: osbyte154EntryPoint == $e9ff"
+}
+!if (osbyte155EntryPoint) != $ea10 {
+    !error "Assertion failed: osbyte155EntryPoint == $ea10"
+}
+!if (osbyte156EntryPoint) != $e17c {
+    !error "Assertion failed: osbyte156EntryPoint == $e17c"
+}
+!if (osbyte157EntryPoint) != $ffa7 {
+    !error "Assertion failed: osbyte157EntryPoint == $ffa7"
+}
+!if (osbyte158EntryPoint) != $ee6d {
+    !error "Assertion failed: osbyte158EntryPoint == $ee6d"
+}
+!if (osbyte159EntryPoint) != $ee7f {
+    !error "Assertion failed: osbyte159EntryPoint == $ee7f"
+}
+!if (osbyte15EntryPoint) != $f0a8 {
+    !error "Assertion failed: osbyte15EntryPoint == $f0a8"
+}
+!if (osbyte160EntryPoint) != $e9c0 {
+    !error "Assertion failed: osbyte160EntryPoint == $e9c0"
+}
+!if (osbyte166to255EntryPoint) != $e99c {
+    !error "Assertion failed: osbyte166to255EntryPoint == $e99c"
+}
+!if (osbyte16EntryPoint) != $e706 {
+    !error "Assertion failed: osbyte16EntryPoint == $e706"
+}
+!if (osbyte17EntryPoint) != $de8c {
+    !error "Assertion failed: osbyte17EntryPoint == $de8c"
+}
+!if (osbyte18EntryPoint) != $e9c8 {
+    !error "Assertion failed: osbyte18EntryPoint == $e9c8"
+}
+!if (osbyte19EntryPoint) != $e9b6 {
+    !error "Assertion failed: osbyte19EntryPoint == $e9b6"
+}
+!if (osbyte1EntryPoint) != $e988 {
+    !error "Assertion failed: osbyte1EntryPoint == $e988"
+}
+!if (osbyte20EntryPoint) != $cd07 {
+    !error "Assertion failed: osbyte20EntryPoint == $cd07"
+}
+!if (osbyte21EntryPoint) != $f0b4 {
+    !error "Assertion failed: osbyte21EntryPoint == $f0b4"
+}
+!if (osbyte2EntryPoint) != $e6d3 {
+    !error "Assertion failed: osbyte2EntryPoint == $e6d3"
+}
+!if (osbyte3EntryPoint) != $e997 {
+    !error "Assertion failed: osbyte3EntryPoint == $e997"
+}
+!if (osbyte4EntryPoint) != $e997 {
+    !error "Assertion failed: osbyte4EntryPoint == $e997"
+}
+!if (osbyte5EntryPoint) != $e976 {
+    !error "Assertion failed: osbyte5EntryPoint == $e976"
+}
+!if (osbyte6EntryPoint) != $e988 {
+    !error "Assertion failed: osbyte6EntryPoint == $e988"
+}
+!if (osbyte7EntryPoint) != $e68b {
+    !error "Assertion failed: osbyte7EntryPoint == $e68b"
+}
+!if (osbyte8EntryPoint) != $e689 {
+    !error "Assertion failed: osbyte8EntryPoint == $e689"
+}
+!if (osbyte9EntryPoint) != $e6b0 {
+    !error "Assertion failed: osbyte9EntryPoint == $e6b0"
+}
+!if (osword0EntryPoint) != $e902 {
+    !error "Assertion failed: osword0EntryPoint == $e902"
+}
+!if (osword10EntryPoint) != $cbf3 {
+    !error "Assertion failed: osword10EntryPoint == $cbf3"
+}
+!if (osword11EntryPoint) != $c748 {
+    !error "Assertion failed: osword11EntryPoint == $c748"
+}
+!if (osword12EntryPoint) != $c8e0 {
+    !error "Assertion failed: osword12EntryPoint == $c8e0"
+}
+!if (osword13EntryPoint) != $d5ce {
+    !error "Assertion failed: osword13EntryPoint == $d5ce"
+}
+!if (osword1EntryPoint) != $e8d5 {
+    !error "Assertion failed: osword1EntryPoint == $e8d5"
+}
+!if (osword2EntryPoint) != $e8e8 {
+    !error "Assertion failed: osword2EntryPoint == $e8e8"
+}
+!if (osword3EntryPoint) != $e8d1 {
+    !error "Assertion failed: osword3EntryPoint == $e8d1"
+}
+!if (osword4EntryPoint) != $e8e4 {
+    !error "Assertion failed: osword4EntryPoint == $e8e4"
+}
+!if (osword5EntryPoint) != $e803 {
+    !error "Assertion failed: osword5EntryPoint == $e803"
+}
+!if (osword6EntryPoint) != $e80b {
+    !error "Assertion failed: osword6EntryPoint == $e80b"
+}
+!if (osword7EntryPoint) != $e82d {
+    !error "Assertion failed: osword7EntryPoint == $e82d"
+}
+!if (osword8EntryPoint) != $e8ae {
+    !error "Assertion failed: osword8EntryPoint == $e8ae"
+}
+!if (osword9EntryPoint) != $c735 {
+    !error "Assertion failed: osword9EntryPoint == $c735"
+}
+!if (uservJumper) != $e659 {
+    !error "Assertion failed: uservJumper == $e659"
+}
+
 ; Label references by decreasing frequency:
 ;     l00da:                                   63
 ;     l00fa:                                   35
@@ -13767,279 +14044,15 @@ pydis_end
 ;     sub_cfbbd
 ;     sub_cfbd3
 ;     sub_cfbe2
-!if (<(lead2)) != $d2 {
-    !error "Assertion failed: <(lead2) == $d2"
-}
-!if (<plotLine0) != $6a {
-    !error "Assertion failed: <plotLine0 == $6a"
-}
-!if (<plotLine1) != $74 {
-    !error "Assertion failed: <plotLine1 == $74"
-}
-!if (<plotLine2) != $42 {
-    !error "Assertion failed: <plotLine2 == $42"
-}
-!if (<plotLine3) != $4b {
-    !error "Assertion failed: <plotLine3 == $4b"
-}
-!if (>(lead2)) != $ea {
-    !error "Assertion failed: >(lead2) == $ea"
-}
-!if (>plotLine0) != $d3 {
-    !error "Assertion failed: >plotLine0 == $d3"
-}
-!if (>plotLine1) != $d3 {
-    !error "Assertion failed: >plotLine1 == $d3"
-}
-!if (>plotLine2) != $d3 {
-    !error "Assertion failed: >plotLine2 == $d3"
-}
-!if (>plotLine3) != $d3 {
-    !error "Assertion failed: >plotLine3 == $d3"
-}
-!if (osbyte0EntryPoint) != $e821 {
-    !error "Assertion failed: osbyte0EntryPoint == $e821"
-}
-!if (osbyte10EntryPoint) != $e6b2 {
-    !error "Assertion failed: osbyte10EntryPoint == $e6b2"
-}
-!if (osbyte117EntryPoint) != $e86c {
-    !error "Assertion failed: osbyte117EntryPoint == $e86c"
-}
-!if (osbyte118EntryPoint) != $e9d9 {
-    !error "Assertion failed: osbyte118EntryPoint == $e9d9"
-}
-!if (osbyte119EntryPoint) != $e275 {
-    !error "Assertion failed: osbyte119EntryPoint == $e275"
-}
-!if (osbyte11EntryPoint) != $e995 {
-    !error "Assertion failed: osbyte11EntryPoint == $e995"
-}
-!if (osbyte120EntryPoint) != $f045 {
-    !error "Assertion failed: osbyte120EntryPoint == $f045"
-}
-!if (osbyte121EntryPoint) != $f0cf {
-    !error "Assertion failed: osbyte121EntryPoint == $f0cf"
-}
-!if (osbyte122EntryPoint) != $f0cd {
-    !error "Assertion failed: osbyte122EntryPoint == $f0cd"
-}
-!if (osbyte123EntryPoint) != $e197 {
-    !error "Assertion failed: osbyte123EntryPoint == $e197"
-}
-!if (osbyte124EntryPoint) != $e673 {
-    !error "Assertion failed: osbyte124EntryPoint == $e673"
-}
-!if (osbyte125EntryPoint) != $e674 {
-    !error "Assertion failed: osbyte125EntryPoint == $e674"
-}
-!if (osbyte126EntryPoint) != $e65c {
-    !error "Assertion failed: osbyte126EntryPoint == $e65c"
-}
-!if (osbyte127EntryPoint) != $e035 {
-    !error "Assertion failed: osbyte127EntryPoint == $e035"
-}
-!if (osbyte128EntryPoint) != $e74f {
-    !error "Assertion failed: osbyte128EntryPoint == $e74f"
-}
-!if (osbyte129EntryPoint) != $e713 {
-    !error "Assertion failed: osbyte129EntryPoint == $e713"
-}
-!if (osbyte12EntryPoint) != $e98c {
-    !error "Assertion failed: osbyte12EntryPoint == $e98c"
-}
-!if (osbyte130EntryPoint) != $e729 {
-    !error "Assertion failed: osbyte130EntryPoint == $e729"
-}
-!if (osbyte131EntryPoint) != $f085 {
-    !error "Assertion failed: osbyte131EntryPoint == $f085"
-}
-!if (osbyte132EntryPoint) != $d923 {
-    !error "Assertion failed: osbyte132EntryPoint == $d923"
-}
-!if (osbyte133EntryPoint) != $d926 {
-    !error "Assertion failed: osbyte133EntryPoint == $d926"
-}
-!if (osbyte134EntryPoint) != $d647 {
-    !error "Assertion failed: osbyte134EntryPoint == $d647"
-}
-!if (osbyte135EntryPoint) != $d7c2 {
-    !error "Assertion failed: osbyte135EntryPoint == $d7c2"
-}
-!if (osbyte136EntryPoint) != $e657 {
-    !error "Assertion failed: osbyte136EntryPoint == $e657"
-}
-!if (osbyte137EntryPoint) != $e67f {
-    !error "Assertion failed: osbyte137EntryPoint == $e67f"
-}
-!if (osbyte138EntryPoint) != $e4af {
-    !error "Assertion failed: osbyte138EntryPoint == $e4af"
-}
-!if (osbyte139EntryPoint) != $e034 {
-    !error "Assertion failed: osbyte139EntryPoint == $e034"
-}
-!if (osbyte13EntryPoint) != $e6f9 {
-    !error "Assertion failed: osbyte13EntryPoint == $e6f9"
-}
-!if (osbyte140EntryPoint) != $f135 {
-    !error "Assertion failed: osbyte140EntryPoint == $f135"
-}
-!if (osbyte141EntryPoint) != $f135 {
-    !error "Assertion failed: osbyte141EntryPoint == $f135"
-}
-!if (osbyte142EntryPoint) != $dbe7 {
-    !error "Assertion failed: osbyte142EntryPoint == $dbe7"
-}
-!if (osbyte143EntryPoint) != $f168 {
-    !error "Assertion failed: osbyte143EntryPoint == $f168"
-}
-!if (osbyte144EntryPoint) != $eae3 {
-    !error "Assertion failed: osbyte144EntryPoint == $eae3"
-}
-!if (osbyte145EntryPoint) != $e460 {
-    !error "Assertion failed: osbyte145EntryPoint == $e460"
-}
-!if (osbyte146EntryPoint) != $ffaa {
-    !error "Assertion failed: osbyte146EntryPoint == $ffaa"
-}
-!if (osbyte147EntryPoint) != $eaf4 {
-    !error "Assertion failed: osbyte147EntryPoint == $eaf4"
-}
-!if (osbyte148EntryPoint) != $ffae {
-    !error "Assertion failed: osbyte148EntryPoint == $ffae"
-}
-!if (osbyte149EntryPoint) != $eaf9 {
-    !error "Assertion failed: osbyte149EntryPoint == $eaf9"
-}
-!if (osbyte14EntryPoint) != $e6fa {
-    !error "Assertion failed: osbyte14EntryPoint == $e6fa"
-}
-!if (osbyte150EntryPoint) != $ffb2 {
-    !error "Assertion failed: osbyte150EntryPoint == $ffb2"
-}
-!if (osbyte151EntryPoint) != $eafe {
-    !error "Assertion failed: osbyte151EntryPoint == $eafe"
-}
-!if (osbyte152EntryPoint) != $e45b {
-    !error "Assertion failed: osbyte152EntryPoint == $e45b"
-}
-!if (osbyte153EntryPoint) != $e4f3 {
-    !error "Assertion failed: osbyte153EntryPoint == $e4f3"
-}
-!if (osbyte154EntryPoint) != $e9ff {
-    !error "Assertion failed: osbyte154EntryPoint == $e9ff"
-}
-!if (osbyte155EntryPoint) != $ea10 {
-    !error "Assertion failed: osbyte155EntryPoint == $ea10"
-}
-!if (osbyte156EntryPoint) != $e17c {
-    !error "Assertion failed: osbyte156EntryPoint == $e17c"
-}
-!if (osbyte157EntryPoint) != $ffa7 {
-    !error "Assertion failed: osbyte157EntryPoint == $ffa7"
-}
-!if (osbyte158EntryPoint) != $ee6d {
-    !error "Assertion failed: osbyte158EntryPoint == $ee6d"
-}
-!if (osbyte159EntryPoint) != $ee7f {
-    !error "Assertion failed: osbyte159EntryPoint == $ee7f"
-}
-!if (osbyte15EntryPoint) != $f0a8 {
-    !error "Assertion failed: osbyte15EntryPoint == $f0a8"
-}
-!if (osbyte160EntryPoint) != $e9c0 {
-    !error "Assertion failed: osbyte160EntryPoint == $e9c0"
-}
-!if (osbyte166to255EntryPoint) != $e99c {
-    !error "Assertion failed: osbyte166to255EntryPoint == $e99c"
-}
-!if (osbyte16EntryPoint) != $e706 {
-    !error "Assertion failed: osbyte16EntryPoint == $e706"
-}
-!if (osbyte17EntryPoint) != $de8c {
-    !error "Assertion failed: osbyte17EntryPoint == $de8c"
-}
-!if (osbyte18EntryPoint) != $e9c8 {
-    !error "Assertion failed: osbyte18EntryPoint == $e9c8"
-}
-!if (osbyte19EntryPoint) != $e9b6 {
-    !error "Assertion failed: osbyte19EntryPoint == $e9b6"
-}
-!if (osbyte1EntryPoint) != $e988 {
-    !error "Assertion failed: osbyte1EntryPoint == $e988"
-}
-!if (osbyte20EntryPoint) != $cd07 {
-    !error "Assertion failed: osbyte20EntryPoint == $cd07"
-}
-!if (osbyte21EntryPoint) != $f0b4 {
-    !error "Assertion failed: osbyte21EntryPoint == $f0b4"
-}
-!if (osbyte2EntryPoint) != $e6d3 {
-    !error "Assertion failed: osbyte2EntryPoint == $e6d3"
-}
-!if (osbyte3EntryPoint) != $e997 {
-    !error "Assertion failed: osbyte3EntryPoint == $e997"
-}
-!if (osbyte4EntryPoint) != $e997 {
-    !error "Assertion failed: osbyte4EntryPoint == $e997"
-}
-!if (osbyte5EntryPoint) != $e976 {
-    !error "Assertion failed: osbyte5EntryPoint == $e976"
-}
-!if (osbyte6EntryPoint) != $e988 {
-    !error "Assertion failed: osbyte6EntryPoint == $e988"
-}
-!if (osbyte7EntryPoint) != $e68b {
-    !error "Assertion failed: osbyte7EntryPoint == $e68b"
-}
-!if (osbyte8EntryPoint) != $e689 {
-    !error "Assertion failed: osbyte8EntryPoint == $e689"
-}
-!if (osbyte9EntryPoint) != $e6b0 {
-    !error "Assertion failed: osbyte9EntryPoint == $e6b0"
-}
-!if (osword0EntryPoint) != $e902 {
-    !error "Assertion failed: osword0EntryPoint == $e902"
-}
-!if (osword10EntryPoint) != $cbf3 {
-    !error "Assertion failed: osword10EntryPoint == $cbf3"
-}
-!if (osword11EntryPoint) != $c748 {
-    !error "Assertion failed: osword11EntryPoint == $c748"
-}
-!if (osword12EntryPoint) != $c8e0 {
-    !error "Assertion failed: osword12EntryPoint == $c8e0"
-}
-!if (osword13EntryPoint) != $d5ce {
-    !error "Assertion failed: osword13EntryPoint == $d5ce"
-}
-!if (osword1EntryPoint) != $e8d5 {
-    !error "Assertion failed: osword1EntryPoint == $e8d5"
-}
-!if (osword2EntryPoint) != $e8e8 {
-    !error "Assertion failed: osword2EntryPoint == $e8e8"
-}
-!if (osword3EntryPoint) != $e8d1 {
-    !error "Assertion failed: osword3EntryPoint == $e8d1"
-}
-!if (osword4EntryPoint) != $e8e4 {
-    !error "Assertion failed: osword4EntryPoint == $e8e4"
-}
-!if (osword5EntryPoint) != $e803 {
-    !error "Assertion failed: osword5EntryPoint == $e803"
-}
-!if (osword6EntryPoint) != $e80b {
-    !error "Assertion failed: osword6EntryPoint == $e80b"
-}
-!if (osword7EntryPoint) != $e82d {
-    !error "Assertion failed: osword7EntryPoint == $e82d"
-}
-!if (osword8EntryPoint) != $e8ae {
-    !error "Assertion failed: osword8EntryPoint == $e8ae"
-}
-!if (osword9EntryPoint) != $c735 {
-    !error "Assertion failed: osword9EntryPoint == $c735"
-}
-!if (uservJumper) != $e659 {
-    !error "Assertion failed: uservJumper == $e659"
-}
+
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 12605 bytes (77%)
+;     Data                     = 3779 bytes (23%)
+;
+;     Number of instructions   = 6079
+;     Number of data bytes     = 2466 bytes
+;     Number of data words     = 164 bytes
+;     Number of string bytes   = 1149 bytes
+;     Number of strings        = 69
+

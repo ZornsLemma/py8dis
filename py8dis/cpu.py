@@ -1,3 +1,4 @@
+import classification
 import collections
 import copy
 import config
@@ -200,8 +201,8 @@ class Cpu(object):
 
             disassembly.comment_binary(binary_loc, comment, word_wrap=False, align=Align.BEFORE_LABEL, auto_generated=True)
 
-    def add_reference_histogram(self):
-        """Output a histogram of label references."""
+    def add_reference_frequency_table(self):
+        """Output a frequency table of label references."""
 
         if len(trace.references) == 0:
             return []

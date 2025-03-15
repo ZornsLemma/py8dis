@@ -40,13 +40,14 @@ import collections
 import config
 import disassembly
 import labelmanager
-import movemanager
 import mainformatter
-import traceback
-import trace
-import utils
 import memorymanager
+import movemanager
 import pprint
+import stats
+import trace
+import traceback
+import utils
 from memorymanager import BinaryAddr, RuntimeAddr
 from format import Format
 from binaryaddrtype import BinaryAddrType
@@ -54,6 +55,13 @@ from binaryaddrtype import BinaryAddrType
 expressions   = {}
 memory_binary = memorymanager.memory_binary
 assembler     = config.get_assembler
+
+# `INSIDE_A_CLASSIFICATION` is an arbitrary constant value.
+#
+# We assign this value to the second and subsequent bytes of a multi-byte
+# classification (e.g. the operands of an instruction). Its actual value doesn't
+# matter, as long as it's not None so we know these bytes have been classified.
+INSIDE_A_CLASSIFICATION = 0
 
 # ENHANCE: At the moment there's no support for wrapping round at the top of
 # memory and we might just crash (probably with an out-of-bounds error) if
@@ -185,7 +193,7 @@ def add_expression(binary_addr, s):
     """Add an expression for the given binary address."""
 
     assert not isinstance(s, labelmanager.Label) # TODO!?
-    # TODO: Warn/assert if addr already in expressions? Allow overriding this via an optional bool argument?
+    # TODO: Warn/assert if binary_addr already in expressions? Allow overriding this via an optional bool argument?
     if binary_addr not in expressions:
         expressions[binary_addr] = s
 
@@ -397,13 +405,47 @@ def autostring(min_length=3):
 def classify_leftovers():
     """Classify everything not already classified, as bytes."""
 
-    addr = BinaryAddr(0)
-    while addr < len(memory_binary):
+    binary_addr = BinaryAddr(0)
+    while binary_addr < len(memory_binary):
         i = 0
-        while (addr + i) < len(memory_binary) and memory_binary[addr + i] is not None and not disassembly.is_classified(addr + i, 1):
+        while (binary_addr + i) < len(memory_binary) and memory_binary[binary_addr + i] is not None and not disassembly.is_classified(binary_addr + i, 1):
             i += 1
-            if (addr + i) >= len(memory_binary) or movemanager.b2r(addr + i) in labelmanager.labels:
+            if (binary_addr + i) >= len(memory_binary) or movemanager.b2r(binary_addr + i) in labelmanager.labels:
                 break
         if i > 0:
-            disassembly.add_classification(addr, Byte(i))
-        addr += max(1, i)
+            disassembly.add_classification(binary_addr, Byte(i))
+        binary_addr += max(1, i)
+
+def get_stats():
+    result = stats.Stats()
+    binary_addr = BinaryAddr(0)
+    oldc = None
+    while binary_addr < len(memory_binary):
+        if disassembly.is_classified(binary_addr, 1):
+            result.num_total_bytes += 1
+            c = disassembly.get_classification(binary_addr)
+            if isinstance(c, Byte):
+                result.num_data_bytes += 1
+            elif isinstance(c, Word):
+                result.num_data_words += 1
+            elif isinstance(c, String):
+                result.num_strings += 1
+                result.num_string_bytes += 1
+            elif isinstance(c, trace.cpu.Opcode):
+                result.num_instructions += 1
+                result.num_code_bytes += 1
+            elif c == INSIDE_A_CLASSIFICATION:
+                if isinstance(oldc, Byte):
+                    result.num_data_bytes += 1
+                elif isinstance(oldc, Word):
+                    result.num_data_words += 1
+                elif isinstance(oldc, String):
+                    result.num_string_bytes += 1
+                elif isinstance(oldc, trace.cpu.Opcode):
+                    result.num_code_bytes += 1
+
+            if c != INSIDE_A_CLASSIFICATION:
+                oldc = c
+
+        binary_addr += 1
+    return result

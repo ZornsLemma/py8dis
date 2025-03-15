@@ -26,3 +26,16 @@ pydis_start
     .byt $f7, $f8, $f9, $fa, $fb, $fc, $fd, $fe, $ff,   0             // 30f7: f7 f8 f9... ... :30f6[1]
 * = $3101
 pydis_end
+
+
+// Stats:
+//     Total size (Code + Data) = 257 bytes
+//     Code                     = 0 bytes (0%)
+//     Data                     = 257 bytes (100%)
+//
+//     Number of instructions   = 0
+//     Number of data bytes     = 162 bytes
+//     Number of data words     = 0 bytes
+//     Number of string bytes   = 95 bytes
+//     Number of strings        = 1
+

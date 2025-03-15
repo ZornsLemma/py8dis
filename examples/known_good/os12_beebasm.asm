@@ -10637,6 +10637,101 @@ lffb3 = osbyte150EntryPoint+1
     equb 0, &0d, &cd, &d9, &1c, &dc                                   ; fffa: 00 0d cd... ...
 .pydis_end
 
+    assert <(lead2) == &d2
+    assert <plotLine0 == &6a
+    assert <plotLine1 == &74
+    assert <plotLine2 == &42
+    assert <plotLine3 == &4b
+    assert >(lead2) == &ea
+    assert >plotLine0 == &d3
+    assert >plotLine1 == &d3
+    assert >plotLine2 == &d3
+    assert >plotLine3 == &d3
+    assert osbyte0EntryPoint == &e821
+    assert osbyte10EntryPoint == &e6b2
+    assert osbyte117EntryPoint == &e86c
+    assert osbyte118EntryPoint == &e9d9
+    assert osbyte119EntryPoint == &e275
+    assert osbyte11EntryPoint == &e995
+    assert osbyte120EntryPoint == &f045
+    assert osbyte121EntryPoint == &f0cf
+    assert osbyte122EntryPoint == &f0cd
+    assert osbyte123EntryPoint == &e197
+    assert osbyte124EntryPoint == &e673
+    assert osbyte125EntryPoint == &e674
+    assert osbyte126EntryPoint == &e65c
+    assert osbyte127EntryPoint == &e035
+    assert osbyte128EntryPoint == &e74f
+    assert osbyte129EntryPoint == &e713
+    assert osbyte12EntryPoint == &e98c
+    assert osbyte130EntryPoint == &e729
+    assert osbyte131EntryPoint == &f085
+    assert osbyte132EntryPoint == &d923
+    assert osbyte133EntryPoint == &d926
+    assert osbyte134EntryPoint == &d647
+    assert osbyte135EntryPoint == &d7c2
+    assert osbyte136EntryPoint == &e657
+    assert osbyte137EntryPoint == &e67f
+    assert osbyte138EntryPoint == &e4af
+    assert osbyte139EntryPoint == &e034
+    assert osbyte13EntryPoint == &e6f9
+    assert osbyte140EntryPoint == &f135
+    assert osbyte141EntryPoint == &f135
+    assert osbyte142EntryPoint == &dbe7
+    assert osbyte143EntryPoint == &f168
+    assert osbyte144EntryPoint == &eae3
+    assert osbyte145EntryPoint == &e460
+    assert osbyte146EntryPoint == &ffaa
+    assert osbyte147EntryPoint == &eaf4
+    assert osbyte148EntryPoint == &ffae
+    assert osbyte149EntryPoint == &eaf9
+    assert osbyte14EntryPoint == &e6fa
+    assert osbyte150EntryPoint == &ffb2
+    assert osbyte151EntryPoint == &eafe
+    assert osbyte152EntryPoint == &e45b
+    assert osbyte153EntryPoint == &e4f3
+    assert osbyte154EntryPoint == &e9ff
+    assert osbyte155EntryPoint == &ea10
+    assert osbyte156EntryPoint == &e17c
+    assert osbyte157EntryPoint == &ffa7
+    assert osbyte158EntryPoint == &ee6d
+    assert osbyte159EntryPoint == &ee7f
+    assert osbyte15EntryPoint == &f0a8
+    assert osbyte160EntryPoint == &e9c0
+    assert osbyte166to255EntryPoint == &e99c
+    assert osbyte16EntryPoint == &e706
+    assert osbyte17EntryPoint == &de8c
+    assert osbyte18EntryPoint == &e9c8
+    assert osbyte19EntryPoint == &e9b6
+    assert osbyte1EntryPoint == &e988
+    assert osbyte20EntryPoint == &cd07
+    assert osbyte21EntryPoint == &f0b4
+    assert osbyte2EntryPoint == &e6d3
+    assert osbyte3EntryPoint == &e997
+    assert osbyte4EntryPoint == &e997
+    assert osbyte5EntryPoint == &e976
+    assert osbyte6EntryPoint == &e988
+    assert osbyte7EntryPoint == &e68b
+    assert osbyte8EntryPoint == &e689
+    assert osbyte9EntryPoint == &e6b0
+    assert osword0EntryPoint == &e902
+    assert osword10EntryPoint == &cbf3
+    assert osword11EntryPoint == &c748
+    assert osword12EntryPoint == &c8e0
+    assert osword13EntryPoint == &d5ce
+    assert osword1EntryPoint == &e8d5
+    assert osword2EntryPoint == &e8e8
+    assert osword3EntryPoint == &e8d1
+    assert osword4EntryPoint == &e8e4
+    assert osword5EntryPoint == &e803
+    assert osword6EntryPoint == &e80b
+    assert osword7EntryPoint == &e82d
+    assert osword8EntryPoint == &e8ae
+    assert osword9EntryPoint == &c735
+    assert uservJumper == &e659
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     l00da:                                   63
 ;     l00fa:                                   35
@@ -13767,97 +13862,15 @@ lffb3 = osbyte150EntryPoint+1
 ;     sub_cfbbd
 ;     sub_cfbd3
 ;     sub_cfbe2
-    assert <(lead2) == &d2
-    assert <plotLine0 == &6a
-    assert <plotLine1 == &74
-    assert <plotLine2 == &42
-    assert <plotLine3 == &4b
-    assert >(lead2) == &ea
-    assert >plotLine0 == &d3
-    assert >plotLine1 == &d3
-    assert >plotLine2 == &d3
-    assert >plotLine3 == &d3
-    assert osbyte0EntryPoint == &e821
-    assert osbyte10EntryPoint == &e6b2
-    assert osbyte117EntryPoint == &e86c
-    assert osbyte118EntryPoint == &e9d9
-    assert osbyte119EntryPoint == &e275
-    assert osbyte11EntryPoint == &e995
-    assert osbyte120EntryPoint == &f045
-    assert osbyte121EntryPoint == &f0cf
-    assert osbyte122EntryPoint == &f0cd
-    assert osbyte123EntryPoint == &e197
-    assert osbyte124EntryPoint == &e673
-    assert osbyte125EntryPoint == &e674
-    assert osbyte126EntryPoint == &e65c
-    assert osbyte127EntryPoint == &e035
-    assert osbyte128EntryPoint == &e74f
-    assert osbyte129EntryPoint == &e713
-    assert osbyte12EntryPoint == &e98c
-    assert osbyte130EntryPoint == &e729
-    assert osbyte131EntryPoint == &f085
-    assert osbyte132EntryPoint == &d923
-    assert osbyte133EntryPoint == &d926
-    assert osbyte134EntryPoint == &d647
-    assert osbyte135EntryPoint == &d7c2
-    assert osbyte136EntryPoint == &e657
-    assert osbyte137EntryPoint == &e67f
-    assert osbyte138EntryPoint == &e4af
-    assert osbyte139EntryPoint == &e034
-    assert osbyte13EntryPoint == &e6f9
-    assert osbyte140EntryPoint == &f135
-    assert osbyte141EntryPoint == &f135
-    assert osbyte142EntryPoint == &dbe7
-    assert osbyte143EntryPoint == &f168
-    assert osbyte144EntryPoint == &eae3
-    assert osbyte145EntryPoint == &e460
-    assert osbyte146EntryPoint == &ffaa
-    assert osbyte147EntryPoint == &eaf4
-    assert osbyte148EntryPoint == &ffae
-    assert osbyte149EntryPoint == &eaf9
-    assert osbyte14EntryPoint == &e6fa
-    assert osbyte150EntryPoint == &ffb2
-    assert osbyte151EntryPoint == &eafe
-    assert osbyte152EntryPoint == &e45b
-    assert osbyte153EntryPoint == &e4f3
-    assert osbyte154EntryPoint == &e9ff
-    assert osbyte155EntryPoint == &ea10
-    assert osbyte156EntryPoint == &e17c
-    assert osbyte157EntryPoint == &ffa7
-    assert osbyte158EntryPoint == &ee6d
-    assert osbyte159EntryPoint == &ee7f
-    assert osbyte15EntryPoint == &f0a8
-    assert osbyte160EntryPoint == &e9c0
-    assert osbyte166to255EntryPoint == &e99c
-    assert osbyte16EntryPoint == &e706
-    assert osbyte17EntryPoint == &de8c
-    assert osbyte18EntryPoint == &e9c8
-    assert osbyte19EntryPoint == &e9b6
-    assert osbyte1EntryPoint == &e988
-    assert osbyte20EntryPoint == &cd07
-    assert osbyte21EntryPoint == &f0b4
-    assert osbyte2EntryPoint == &e6d3
-    assert osbyte3EntryPoint == &e997
-    assert osbyte4EntryPoint == &e997
-    assert osbyte5EntryPoint == &e976
-    assert osbyte6EntryPoint == &e988
-    assert osbyte7EntryPoint == &e68b
-    assert osbyte8EntryPoint == &e689
-    assert osbyte9EntryPoint == &e6b0
-    assert osword0EntryPoint == &e902
-    assert osword10EntryPoint == &cbf3
-    assert osword11EntryPoint == &c748
-    assert osword12EntryPoint == &c8e0
-    assert osword13EntryPoint == &d5ce
-    assert osword1EntryPoint == &e8d5
-    assert osword2EntryPoint == &e8e8
-    assert osword3EntryPoint == &e8d1
-    assert osword4EntryPoint == &e8e4
-    assert osword5EntryPoint == &e803
-    assert osword6EntryPoint == &e80b
-    assert osword7EntryPoint == &e82d
-    assert osword8EntryPoint == &e8ae
-    assert osword9EntryPoint == &c735
-    assert uservJumper == &e659
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 12605 bytes (77%)
+;     Data                     = 3779 bytes (23%)
+;
+;     Number of instructions   = 6079
+;     Number of data bytes     = 2466 bytes
+;     Number of data words     = 164 bytes
+;     Number of string bytes   = 1149 bytes
+;     Number of strings        = 69
+

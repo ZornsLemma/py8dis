@@ -13110,42 +13110,6 @@ initial_highscore_table
     !text "0000000"                                                   ; 5550: 30 30 30... 000
 pydis_end
 
-; Automatically generated labels:
-;     l0f00
-;     l1000
-;     l1100
-;     l110c
-;     return_1
-;     return_10
-;     return_11
-;     return_12
-;     return_13
-;     return_14
-;     return_15
-;     return_16
-;     return_17
-;     return_18
-;     return_19
-;     return_2
-;     return_20
-;     return_21
-;     return_22
-;     return_23
-;     return_24
-;     return_25
-;     return_26
-;     return_27
-;     return_28
-;     return_29
-;     return_3
-;     return_30
-;     return_31
-;     return_4
-;     return_5
-;     return_6
-;     return_7
-;     return_8
-;     return_9
 !if ($80+$00) != $80 {
     !error "Assertion failed: $80+$00 == $80"
 }
@@ -13962,3 +13926,52 @@ pydis_end
 !if (score_digits_0 - 1) != $27 {
     !error "Assertion failed: score_digits_0 - 1 == $27"
 }
+
+; Automatically generated labels:
+;     l0f00
+;     l1000
+;     l1100
+;     l110c
+;     return_1
+;     return_10
+;     return_11
+;     return_12
+;     return_13
+;     return_14
+;     return_15
+;     return_16
+;     return_17
+;     return_18
+;     return_19
+;     return_2
+;     return_20
+;     return_21
+;     return_22
+;     return_23
+;     return_24
+;     return_25
+;     return_26
+;     return_27
+;     return_28
+;     return_29
+;     return_3
+;     return_30
+;     return_31
+;     return_4
+;     return_5
+;     return_6
+;     return_7
+;     return_8
+;     return_9
+
+; Stats:
+;     Total size (Code + Data) = 17223 bytes
+;     Code                     = 5012 bytes (29%)
+;     Data                     = 12211 bytes (71%)
+;
+;     Number of instructions   = 2452
+;     Number of data bytes     = 10546 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 1665 bytes
+;     Number of strings        = 84
+

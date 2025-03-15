@@ -8027,6 +8027,7 @@ MOVE_OFFSET = HILISP-LISVAL
     equb   0,   0                                  ; bffe: 00 00       ..
 .ROMTOP
 .pydis_end
+
     assert &80+&0d == &8d
     assert &80+' ' == &a0
     assert &80+'#' == &a3
@@ -8573,3 +8574,15 @@ MOVE_OFFSET = HILISP-LISVAL
     assert XTNDL == &74
 
 save pydis_start, pydis_end
+
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 7881 bytes (48%)
+;     Data                     = 8503 bytes (52%)
+;
+;     Number of instructions   = 3931
+;     Number of data bytes     = 5404 bytes
+;     Number of data words     = 1836 bytes
+;     Number of string bytes   = 1263 bytes
+;     Number of strings        = 185
+

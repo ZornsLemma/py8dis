@@ -8353,6 +8353,119 @@ lb487 = sub_cb485+2
 
 .pydis_end
 
+    assert (255 - inkey_key_ctrl) EOR 128 == &81
+    assert <((c86e3)-1) == &e2
+    assert <((sub_c8689)-1) == &88
+    assert <((sub_c868d)-1) == &8c
+    assert <((sub_c8691)-1) == &90
+    assert <((sub_c86d3)-1) == &d2
+    assert <(ca114-1) == &13
+    assert <(ca1c1-1) == &c0
+    assert <(ca2f4-1) == &f3
+    assert <(just_rts-1) == &57
+    assert <(l00b4) == &b4
+    assert <(l0601) == &01
+    assert <(l0a00) == &00
+    assert <(l0a81) == &81
+    assert <(l0e00) == &00
+    assert <(l0e81) == &81
+    assert <(service_handler_claim_absolute_workspace-1) == &a4
+    assert <(service_handler_claim_private_workspace-1) == &b7
+    assert <(sub_c8028-1) == &27
+    assert <(sub_c8090-1) == &8f
+    assert <(sub_c8983-1) == &82
+    assert <(sub_c8b0d-1) == &0c
+    assert <(sub_c8c4e-1) == &4d
+    assert <(sub_c8c5d-1) == &5c
+    assert <(sub_c8cca-1) == &c9
+    assert <(sub_c8e92-1) == &91
+    assert <(sub_c8f99-1) == &98
+    assert <(sub_c92b0-1) == &af
+    assert <(sub_c9580-1) == &7f
+    assert <(sub_c95ae-1) == &ad
+    assert <(sub_c95be-1) == &bd
+    assert <(sub_c95ce-1) == &cd
+    assert <(sub_c9dc8-1) == &c7
+    assert <(sub_c9dee-1) == &ed
+    assert <(sub_ca0e4-1) == &e3
+    assert <(sub_ca0ea-1) == &e9
+    assert <(sub_ca0fa-1) == &f9
+    assert <(sub_ca2fa-1) == &f9
+    assert <(sub_ca391-1) == &90
+    assert <(sub_ca39b-1) == &9a
+    assert <(sub_ca4ee-1) == &ed
+    assert <(sub_cac98-1) == &97
+    assert <(sub_cad80-1) == &7f
+    assert <(sub_caf3e-1) == &3d
+    assert >(ca114-1) == &a1
+    assert >(ca1c1-1) == &a1
+    assert >(ca2f4-1) == &a2
+    assert >(just_rts-1) == &8e
+    assert >(l00b4) == &00
+    assert >(l0601) == &06
+    assert >(l0a00) == &0a
+    assert >(l0a81) == &0a
+    assert >(l0e00) == &0e
+    assert >(l0e81) == &0e
+    assert >(service_handler_claim_absolute_workspace-1) == &8e
+    assert >(service_handler_claim_private_workspace-1) == &8e
+    assert >(sub_c8028-1) == &80
+    assert >(sub_c8090-1) == &80
+    assert >(sub_c8983-1) == &89
+    assert >(sub_c8b0d-1) == &8b
+    assert >(sub_c8c4e-1) == &8c
+    assert >(sub_c8c5d-1) == &8c
+    assert >(sub_c8cca-1) == &8c
+    assert >(sub_c8e92-1) == &8e
+    assert >(sub_c8f99-1) == &8f
+    assert >(sub_c92b0-1) == &92
+    assert >(sub_c9580-1) == &95
+    assert >(sub_c95ae-1) == &95
+    assert >(sub_c95be-1) == &95
+    assert >(sub_c95ce-1) == &95
+    assert >(sub_c9dc8-1) == &9d
+    assert >(sub_c9dee-1) == &9d
+    assert >(sub_ca0e4-1) == &a0
+    assert >(sub_ca0ea-1) == &a0
+    assert >(sub_ca0fa-1) == &a0
+    assert >(sub_ca2fa-1) == &a2
+    assert >(sub_ca391-1) == &a3
+    assert >(sub_ca39b-1) == &a3
+    assert >(sub_ca4ee-1) == &a4
+    assert >(sub_cac98-1) == &ac
+    assert >(sub_cad80-1) == &ad
+    assert >(sub_caf3e-1) == &af
+    assert c8dbc-1 == &8dbb
+    assert c8e15-1 == &8e14
+    assert copyright - rom_header == &19
+    assert sub_c8ad4-1 == &8ad3
+    assert sub_c8b1a-1 == &8b19
+    assert sub_c8b92-1 == &8b91
+    assert sub_c8b96-1 == &8b95
+    assert sub_c8d79-1 == &8d78
+    assert sub_c92e6-1 == &92e5
+    assert sub_c938b-1 == &938a
+    assert sub_c93dd-1 == &93dc
+    assert sub_c949e-1 == &949d
+    assert sub_ca07b-1 == &a07a
+    assert sub_ca356-1 == &a355
+    assert sub_cad10-1 == &ad0f
+    assert sub_cad5f-1 == &ad5e
+    assert sub_cad65-1 == &ad64
+    assert sub_cad6b-1 == &ad6a
+    assert sub_caf66-1 == &af65
+    assert sub_cafee-1 == &afed
+    assert sub_cb1c3-1 == &b1c2
+    assert sub_cb30c-1 == &b30b
+    assert sub_cb33d-1 == &b33c
+    assert sub_cb359-1 == &b358
+    assert sub_cb994-1 == &b993
+    assert sub_cb99a-1 == &b999
+    assert sub_cb99d-1 == &b99c
+    assert sub_cba1b-1 == &ba1a
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     l009e:                                   64
 ;     l0f05:                                   48
@@ -10603,115 +10716,15 @@ lb487 = sub_cb485+2
 ;     sub_cbc86
 ;     sub_cbc89
 ;     sub_cbc8c
-    assert (255 - inkey_key_ctrl) EOR 128 == &81
-    assert <((c86e3)-1) == &e2
-    assert <((sub_c8689)-1) == &88
-    assert <((sub_c868d)-1) == &8c
-    assert <((sub_c8691)-1) == &90
-    assert <((sub_c86d3)-1) == &d2
-    assert <(ca114-1) == &13
-    assert <(ca1c1-1) == &c0
-    assert <(ca2f4-1) == &f3
-    assert <(just_rts-1) == &57
-    assert <(l00b4) == &b4
-    assert <(l0601) == &01
-    assert <(l0a00) == &00
-    assert <(l0a81) == &81
-    assert <(l0e00) == &00
-    assert <(l0e81) == &81
-    assert <(service_handler_claim_absolute_workspace-1) == &a4
-    assert <(service_handler_claim_private_workspace-1) == &b7
-    assert <(sub_c8028-1) == &27
-    assert <(sub_c8090-1) == &8f
-    assert <(sub_c8983-1) == &82
-    assert <(sub_c8b0d-1) == &0c
-    assert <(sub_c8c4e-1) == &4d
-    assert <(sub_c8c5d-1) == &5c
-    assert <(sub_c8cca-1) == &c9
-    assert <(sub_c8e92-1) == &91
-    assert <(sub_c8f99-1) == &98
-    assert <(sub_c92b0-1) == &af
-    assert <(sub_c9580-1) == &7f
-    assert <(sub_c95ae-1) == &ad
-    assert <(sub_c95be-1) == &bd
-    assert <(sub_c95ce-1) == &cd
-    assert <(sub_c9dc8-1) == &c7
-    assert <(sub_c9dee-1) == &ed
-    assert <(sub_ca0e4-1) == &e3
-    assert <(sub_ca0ea-1) == &e9
-    assert <(sub_ca0fa-1) == &f9
-    assert <(sub_ca2fa-1) == &f9
-    assert <(sub_ca391-1) == &90
-    assert <(sub_ca39b-1) == &9a
-    assert <(sub_ca4ee-1) == &ed
-    assert <(sub_cac98-1) == &97
-    assert <(sub_cad80-1) == &7f
-    assert <(sub_caf3e-1) == &3d
-    assert >(ca114-1) == &a1
-    assert >(ca1c1-1) == &a1
-    assert >(ca2f4-1) == &a2
-    assert >(just_rts-1) == &8e
-    assert >(l00b4) == &00
-    assert >(l0601) == &06
-    assert >(l0a00) == &0a
-    assert >(l0a81) == &0a
-    assert >(l0e00) == &0e
-    assert >(l0e81) == &0e
-    assert >(service_handler_claim_absolute_workspace-1) == &8e
-    assert >(service_handler_claim_private_workspace-1) == &8e
-    assert >(sub_c8028-1) == &80
-    assert >(sub_c8090-1) == &80
-    assert >(sub_c8983-1) == &89
-    assert >(sub_c8b0d-1) == &8b
-    assert >(sub_c8c4e-1) == &8c
-    assert >(sub_c8c5d-1) == &8c
-    assert >(sub_c8cca-1) == &8c
-    assert >(sub_c8e92-1) == &8e
-    assert >(sub_c8f99-1) == &8f
-    assert >(sub_c92b0-1) == &92
-    assert >(sub_c9580-1) == &95
-    assert >(sub_c95ae-1) == &95
-    assert >(sub_c95be-1) == &95
-    assert >(sub_c95ce-1) == &95
-    assert >(sub_c9dc8-1) == &9d
-    assert >(sub_c9dee-1) == &9d
-    assert >(sub_ca0e4-1) == &a0
-    assert >(sub_ca0ea-1) == &a0
-    assert >(sub_ca0fa-1) == &a0
-    assert >(sub_ca2fa-1) == &a2
-    assert >(sub_ca391-1) == &a3
-    assert >(sub_ca39b-1) == &a3
-    assert >(sub_ca4ee-1) == &a4
-    assert >(sub_cac98-1) == &ac
-    assert >(sub_cad80-1) == &ad
-    assert >(sub_caf3e-1) == &af
-    assert c8dbc-1 == &8dbb
-    assert c8e15-1 == &8e14
-    assert copyright - rom_header == &19
-    assert sub_c8ad4-1 == &8ad3
-    assert sub_c8b1a-1 == &8b19
-    assert sub_c8b92-1 == &8b91
-    assert sub_c8b96-1 == &8b95
-    assert sub_c8d79-1 == &8d78
-    assert sub_c92e6-1 == &92e5
-    assert sub_c938b-1 == &938a
-    assert sub_c93dd-1 == &93dc
-    assert sub_c949e-1 == &949d
-    assert sub_ca07b-1 == &a07a
-    assert sub_ca356-1 == &a355
-    assert sub_cad10-1 == &ad0f
-    assert sub_cad5f-1 == &ad5e
-    assert sub_cad65-1 == &ad64
-    assert sub_cad6b-1 == &ad6a
-    assert sub_caf66-1 == &af65
-    assert sub_cafee-1 == &afed
-    assert sub_cb1c3-1 == &b1c2
-    assert sub_cb30c-1 == &b30b
-    assert sub_cb33d-1 == &b33c
-    assert sub_cb359-1 == &b358
-    assert sub_cb994-1 == &b993
-    assert sub_cb99a-1 == &b999
-    assert sub_cb99d-1 == &b99c
-    assert sub_cba1b-1 == &ba1a
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 9990 bytes (61%)
+;     Data                     = 6394 bytes (39%)
+;
+;     Number of instructions   = 4981
+;     Number of data bytes     = 5093 bytes
+;     Number of data words     = 60 bytes
+;     Number of string bytes   = 1241 bytes
+;     Number of strings        = 170
+

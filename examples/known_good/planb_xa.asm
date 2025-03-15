@@ -13111,6 +13111,7 @@ initial_highscore_table
     .asc "0000000"                                                    // 5550: 30 30 30... 000
 pydis_end
 
+
 // Automatically generated labels:
 //     l0f00
 //     l1000
@@ -13147,3 +13148,15 @@ pydis_end
 //     return_7
 //     return_8
 //     return_9
+
+// Stats:
+//     Total size (Code + Data) = 17223 bytes
+//     Code                     = 5012 bytes (29%)
+//     Data                     = 12211 bytes (71%)
+//
+//     Number of instructions   = 2452
+//     Number of data bytes     = 10546 bytes
+//     Number of data words     = 0 bytes
+//     Number of string bytes   = 1665 bytes
+//     Number of strings        = 84
+

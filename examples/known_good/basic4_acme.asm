@@ -10948,6 +10948,373 @@ lbf71
     !text "fff"                                                       ; bffd: 66 66 66    fff
 pydis_end
 
+!if (<(l002a)) != $2a {
+    !error "Assertion failed: <(l002a) == $2a"
+}
+!if (<(l0037)) != $37 {
+    !error "Assertion failed: <(l0037) == $37"
+}
+!if (<(l0600)) != $00 {
+    !error "Assertion failed: <(l0600) == $00"
+}
+!if (>(l002a)) != $00 {
+    !error "Assertion failed: >(l002a) == $00"
+}
+!if (>(l0037)) != $00 {
+    !error "Assertion failed: >(l0037) == $00"
+}
+!if (>(l0600)) != $06 {
+    !error "Assertion failed: >(l0600) == $06"
+}
+!if (c9073) != $9073 {
+    !error "Assertion failed: c9073 == $9073"
+}
+!if (c95f9) != $95f9 {
+    !error "Assertion failed: c95f9 == $95f9"
+}
+!if (c97d2) != $97d2 {
+    !error "Assertion failed: c97d2 == $97d2"
+}
+!if (c98dc) != $98dc {
+    !error "Assertion failed: c98dc == $98dc"
+}
+!if (cac2b) != $ac2b {
+    !error "Assertion failed: cac2b == $ac2b"
+}
+!if (cac38) != $ac38 {
+    !error "Assertion failed: cac38 == $ac38"
+}
+!if (cb522) != $b522 {
+    !error "Assertion failed: cb522 == $b522"
+}
+!if (cb9ad) != $b9ad {
+    !error "Assertion failed: cb9ad == $b9ad"
+}
+!if (copyright - rom_header) != $13 {
+    !error "Assertion failed: copyright - rom_header == $13"
+}
+!if (sub_c834b) != $834b {
+    !error "Assertion failed: sub_c834b == $834b"
+}
+!if (sub_c8984) != $8984 {
+    !error "Assertion failed: sub_c8984 == $8984"
+}
+!if (sub_c8fc0) != $8fc0 {
+    !error "Assertion failed: sub_c8fc0 == $8fc0"
+}
+!if (sub_c8fc5) != $8fc5 {
+    !error "Assertion failed: sub_c8fc5 == $8fc5"
+}
+!if (sub_c8fd7) != $8fd7 {
+    !error "Assertion failed: sub_c8fd7 == $8fd7"
+}
+!if (sub_c8fe5) != $8fe5 {
+    !error "Assertion failed: sub_c8fe5 == $8fe5"
+}
+!if (sub_c8fea) != $8fea {
+    !error "Assertion failed: sub_c8fea == $8fea"
+}
+!if (sub_c9042) != $9042 {
+    !error "Assertion failed: sub_c9042 == $9042"
+}
+!if (sub_c910d) != $910d {
+    !error "Assertion failed: sub_c910d == $910d"
+}
+!if (sub_c9149) != $9149 {
+    !error "Assertion failed: sub_c9149 == $9149"
+}
+!if (sub_c9250) != $9250 {
+    !error "Assertion failed: sub_c9250 == $9250"
+}
+!if (sub_c9381) != $9381 {
+    !error "Assertion failed: sub_c9381 == $9381"
+}
+!if (sub_c93da) != $93da {
+    !error "Assertion failed: sub_c93da == $93da"
+}
+!if (sub_c9447) != $9447 {
+    !error "Assertion failed: sub_c9447 == $9447"
+}
+!if (sub_c954c) != $954c {
+    !error "Assertion failed: sub_c954c == $954c"
+}
+!if (sub_c96d4) != $96d4 {
+    !error "Assertion failed: sub_c96d4 == $96d4"
+}
+!if (sub_c96e5) != $96e5 {
+    !error "Assertion failed: sub_c96e5 == $96e5"
+}
+!if (sub_c96f9) != $96f9 {
+    !error "Assertion failed: sub_c96f9 == $96f9"
+}
+!if (sub_c9703) != $9703 {
+    !error "Assertion failed: sub_c9703 == $9703"
+}
+!if (sub_c970b) != $970b {
+    !error "Assertion failed: sub_c970b == $970b"
+}
+!if (sub_c973e) != $973e {
+    !error "Assertion failed: sub_c973e == $973e"
+}
+!if (sub_c97a9) != $97a9 {
+    !error "Assertion failed: sub_c97a9 == $97a9"
+}
+!if (sub_c9810) != $9810 {
+    !error "Assertion failed: sub_c9810 == $9810"
+}
+!if (sub_c9824) != $9824 {
+    !error "Assertion failed: sub_c9824 == $9824"
+}
+!if (sub_c982e) != $982e {
+    !error "Assertion failed: sub_c982e == $982e"
+}
+!if (sub_c9871) != $9871 {
+    !error "Assertion failed: sub_c9871 == $9871"
+}
+!if (sub_c9875) != $9875 {
+    !error "Assertion failed: sub_c9875 == $9875"
+}
+!if (sub_c9880) != $9880 {
+    !error "Assertion failed: sub_c9880 == $9880"
+}
+!if (sub_c98af) != $98af {
+    !error "Assertion failed: sub_c98af == $98af"
+}
+!if (sub_c98b6) != $98b6 {
+    !error "Assertion failed: sub_c98b6 == $98b6"
+}
+!if (sub_c98c3) != $98c3 {
+    !error "Assertion failed: sub_c98c3 == $98c3"
+}
+!if (sub_c9c5e) != $9c5e {
+    !error "Assertion failed: sub_c9c5e == $9c5e"
+}
+!if (sub_c9ccc) != $9ccc {
+    !error "Assertion failed: sub_c9ccc == $9ccc"
+}
+!if (sub_ca6fc) != $a6fc {
+    !error "Assertion failed: sub_ca6fc == $a6fc"
+}
+!if (sub_ca7ac) != $a7ac {
+    !error "Assertion failed: sub_ca7ac == $a7ac"
+}
+!if (sub_ca808) != $a808 {
+    !error "Assertion failed: sub_ca808 == $a808"
+}
+!if (sub_ca901) != $a901 {
+    !error "Assertion failed: sub_ca901 == $a901"
+}
+!if (sub_ca919) != $a919 {
+    !error "Assertion failed: sub_ca919 == $a919"
+}
+!if (sub_ca94f) != $a94f {
+    !error "Assertion failed: sub_ca94f == $a94f"
+}
+!if (sub_ca954) != $a954 {
+    !error "Assertion failed: sub_ca954 == $a954"
+}
+!if (sub_ca96b) != $a96b {
+    !error "Assertion failed: sub_ca96b == $a96b"
+}
+!if (sub_ca9b5) != $a9b5 {
+    !error "Assertion failed: sub_ca9b5 == $a9b5"
+}
+!if (sub_ca9bc) != $a9bc {
+    !error "Assertion failed: sub_ca9bc == $a9bc"
+}
+!if (sub_ca9ca) != $a9ca {
+    !error "Assertion failed: sub_ca9ca == $a9ca"
+}
+!if (sub_caa17) != $aa17 {
+    !error "Assertion failed: sub_caa17 == $aa17"
+}
+!if (sub_caacb) != $aacb {
+    !error "Assertion failed: sub_caacb == $aacb"
+}
+!if (sub_caaeb) != $aaeb {
+    !error "Assertion failed: sub_caaeb == $aaeb"
+}
+!if (sub_caafb) != $aafb {
+    !error "Assertion failed: sub_caafb == $aafb"
+}
+!if (sub_cab01) != $ab01 {
+    !error "Assertion failed: sub_cab01 == $ab01"
+}
+!if (sub_cab14) != $ab14 {
+    !error "Assertion failed: sub_cab14 == $ab14"
+}
+!if (sub_cab1d) != $ab1d {
+    !error "Assertion failed: sub_cab1d == $ab1d"
+}
+!if (sub_cab21) != $ab21 {
+    !error "Assertion failed: sub_cab21 == $ab21"
+}
+!if (sub_cab2f) != $ab2f {
+    !error "Assertion failed: sub_cab2f == $ab2f"
+}
+!if (sub_cab37) != $ab37 {
+    !error "Assertion failed: sub_cab37 == $ab37"
+}
+!if (sub_cab3b) != $ab3b {
+    !error "Assertion failed: sub_cab3b == $ab3b"
+}
+!if (sub_cab3f) != $ab3f {
+    !error "Assertion failed: sub_cab3f == $ab3f"
+}
+!if (sub_cab54) != $ab54 {
+    !error "Assertion failed: sub_cab54 == $ab54"
+}
+!if (sub_cab5c) != $ab5c {
+    !error "Assertion failed: sub_cab5c == $ab5c"
+}
+!if (sub_caba0) != $aba0 {
+    !error "Assertion failed: sub_caba0 == $aba0"
+}
+!if (sub_cabe1) != $abe1 {
+    !error "Assertion failed: sub_cabe1 == $abe1"
+}
+!if (sub_cac03) != $ac03 {
+    !error "Assertion failed: sub_cac03 == $ac03"
+}
+!if (sub_cac12) != $ac12 {
+    !error "Assertion failed: sub_cac12 == $ac12"
+}
+!if (sub_cac1f) != $ac1f {
+    !error "Assertion failed: sub_cac1f == $ac1f"
+}
+!if (sub_cac46) != $ac46 {
+    !error "Assertion failed: sub_cac46 == $ac46"
+}
+!if (sub_cac5d) != $ac5d {
+    !error "Assertion failed: sub_cac5d == $ac5d"
+}
+!if (sub_cac7f) != $ac7f {
+    !error "Assertion failed: sub_cac7f == $ac7f"
+}
+!if (sub_cad00) != $ad00 {
+    !error "Assertion failed: sub_cad00 == $ad00"
+}
+!if (sub_cae34) != $ae34 {
+    !error "Assertion failed: sub_cae34 == $ae34"
+}
+!if (sub_cae41) != $ae41 {
+    !error "Assertion failed: sub_cae41 == $ae41"
+}
+!if (sub_cae50) != $ae50 {
+    !error "Assertion failed: sub_cae50 == $ae50"
+}
+!if (sub_cae59) != $ae59 {
+    !error "Assertion failed: sub_cae59 == $ae59"
+}
+!if (sub_cae6d) != $ae6d {
+    !error "Assertion failed: sub_cae6d == $ae6d"
+}
+!if (sub_cae71) != $ae71 {
+    !error "Assertion failed: sub_cae71 == $ae71"
+}
+!if (sub_cae77) != $ae77 {
+    !error "Assertion failed: sub_cae77 == $ae77"
+}
+!if (sub_cae7d) != $ae7d {
+    !error "Assertion failed: sub_cae7d == $ae7d"
+}
+!if (sub_cae83) != $ae83 {
+    !error "Assertion failed: sub_cae83 == $ae83"
+}
+!if (sub_cae87) != $ae87 {
+    !error "Assertion failed: sub_cae87 == $ae87"
+}
+!if (sub_cae8c) != $ae8c {
+    !error "Assertion failed: sub_cae8c == $ae8c"
+}
+!if (sub_caeb1) != $aeb1 {
+    !error "Assertion failed: sub_caeb1 == $aeb1"
+}
+!if (sub_caebb) != $aebb {
+    !error "Assertion failed: sub_caebb == $aebb"
+}
+!if (sub_caebc) != $aebc {
+    !error "Assertion failed: sub_caebc == $aebc"
+}
+!if (sub_caefb) != $aefb {
+    !error "Assertion failed: sub_caefb == $aefb"
+}
+!if (sub_caf0a) != $af0a {
+    !error "Assertion failed: sub_caf0a == $af0a"
+}
+!if (sub_caf61) != $af61 {
+    !error "Assertion failed: sub_caf61 == $af61"
+}
+!if (sub_caf8b) != $af8b {
+    !error "Assertion failed: sub_caf8b == $af8b"
+}
+!if (sub_cb055) != $b055 {
+    !error "Assertion failed: sub_cb055 == $b055"
+}
+!if (sub_cb269) != $b269 {
+    !error "Assertion failed: sub_cb269 == $b269"
+}
+!if (sub_cb302) != $b302 {
+    !error "Assertion failed: sub_cb302 == $b302"
+}
+!if (sub_cb326) != $b326 {
+    !error "Assertion failed: sub_cb326 == $b326"
+}
+!if (sub_cb351) != $b351 {
+    !error "Assertion failed: sub_cb351 == $b351"
+}
+!if (sub_cb3c8) != $b3c8 {
+    !error "Assertion failed: sub_cb3c8 == $b3c8"
+}
+!if (sub_cb412) != $b412 {
+    !error "Assertion failed: sub_cb412 == $b412"
+}
+!if (sub_cb649) != $b649 {
+    !error "Assertion failed: sub_cb649 == $b649"
+}
+!if (sub_cb709) != $b709 {
+    !error "Assertion failed: sub_cb709 == $b709"
+}
+!if (sub_cb737) != $b737 {
+    !error "Assertion failed: sub_cb737 == $b737"
+}
+!if (sub_cb74d) != $b74d {
+    !error "Assertion failed: sub_cb74d == $b74d"
+}
+!if (sub_cb78b) != $b78b {
+    !error "Assertion failed: sub_cb78b == $b78b"
+}
+!if (sub_cb896) != $b896 {
+    !error "Assertion failed: sub_cb896 == $b896"
+}
+!if (sub_cb8e6) != $b8e6 {
+    !error "Assertion failed: sub_cb8e6 == $b8e6"
+}
+!if (sub_cb97d) != $b97d {
+    !error "Assertion failed: sub_cb97d == $b97d"
+}
+!if (sub_cba47) != $ba47 {
+    !error "Assertion failed: sub_cba47 == $ba47"
+}
+!if (sub_cba88) != $ba88 {
+    !error "Assertion failed: sub_cba88 == $ba88"
+}
+!if (sub_cbe95) != $be95 {
+    !error "Assertion failed: sub_cbe95 == $be95"
+}
+!if (sub_cbec7) != $bec7 {
+    !error "Assertion failed: sub_cbec7 == $bec7"
+}
+!if (sub_cbed7) != $bed7 {
+    !error "Assertion failed: sub_cbed7 == $bed7"
+}
+!if (sub_cbeee) != $beee {
+    !error "Assertion failed: sub_cbeee == $beee"
+}
+!if (sub_cbefd) != $befd {
+    !error "Assertion failed: sub_cbefd == $befd"
+}
+
 ; Label references by decreasing frequency:
 ;     l002a:              206
 ;     l0037:              133
@@ -13899,369 +14266,15 @@ pydis_end
 ;     sub_cbf2f
 ;     sub_cbf3e
 ;     sub_cbf66
-!if (<(l002a)) != $2a {
-    !error "Assertion failed: <(l002a) == $2a"
-}
-!if (<(l0037)) != $37 {
-    !error "Assertion failed: <(l0037) == $37"
-}
-!if (<(l0600)) != $00 {
-    !error "Assertion failed: <(l0600) == $00"
-}
-!if (>(l002a)) != $00 {
-    !error "Assertion failed: >(l002a) == $00"
-}
-!if (>(l0037)) != $00 {
-    !error "Assertion failed: >(l0037) == $00"
-}
-!if (>(l0600)) != $06 {
-    !error "Assertion failed: >(l0600) == $06"
-}
-!if (c9073) != $9073 {
-    !error "Assertion failed: c9073 == $9073"
-}
-!if (c95f9) != $95f9 {
-    !error "Assertion failed: c95f9 == $95f9"
-}
-!if (c97d2) != $97d2 {
-    !error "Assertion failed: c97d2 == $97d2"
-}
-!if (c98dc) != $98dc {
-    !error "Assertion failed: c98dc == $98dc"
-}
-!if (cac2b) != $ac2b {
-    !error "Assertion failed: cac2b == $ac2b"
-}
-!if (cac38) != $ac38 {
-    !error "Assertion failed: cac38 == $ac38"
-}
-!if (cb522) != $b522 {
-    !error "Assertion failed: cb522 == $b522"
-}
-!if (cb9ad) != $b9ad {
-    !error "Assertion failed: cb9ad == $b9ad"
-}
-!if (copyright - rom_header) != $13 {
-    !error "Assertion failed: copyright - rom_header == $13"
-}
-!if (sub_c834b) != $834b {
-    !error "Assertion failed: sub_c834b == $834b"
-}
-!if (sub_c8984) != $8984 {
-    !error "Assertion failed: sub_c8984 == $8984"
-}
-!if (sub_c8fc0) != $8fc0 {
-    !error "Assertion failed: sub_c8fc0 == $8fc0"
-}
-!if (sub_c8fc5) != $8fc5 {
-    !error "Assertion failed: sub_c8fc5 == $8fc5"
-}
-!if (sub_c8fd7) != $8fd7 {
-    !error "Assertion failed: sub_c8fd7 == $8fd7"
-}
-!if (sub_c8fe5) != $8fe5 {
-    !error "Assertion failed: sub_c8fe5 == $8fe5"
-}
-!if (sub_c8fea) != $8fea {
-    !error "Assertion failed: sub_c8fea == $8fea"
-}
-!if (sub_c9042) != $9042 {
-    !error "Assertion failed: sub_c9042 == $9042"
-}
-!if (sub_c910d) != $910d {
-    !error "Assertion failed: sub_c910d == $910d"
-}
-!if (sub_c9149) != $9149 {
-    !error "Assertion failed: sub_c9149 == $9149"
-}
-!if (sub_c9250) != $9250 {
-    !error "Assertion failed: sub_c9250 == $9250"
-}
-!if (sub_c9381) != $9381 {
-    !error "Assertion failed: sub_c9381 == $9381"
-}
-!if (sub_c93da) != $93da {
-    !error "Assertion failed: sub_c93da == $93da"
-}
-!if (sub_c9447) != $9447 {
-    !error "Assertion failed: sub_c9447 == $9447"
-}
-!if (sub_c954c) != $954c {
-    !error "Assertion failed: sub_c954c == $954c"
-}
-!if (sub_c96d4) != $96d4 {
-    !error "Assertion failed: sub_c96d4 == $96d4"
-}
-!if (sub_c96e5) != $96e5 {
-    !error "Assertion failed: sub_c96e5 == $96e5"
-}
-!if (sub_c96f9) != $96f9 {
-    !error "Assertion failed: sub_c96f9 == $96f9"
-}
-!if (sub_c9703) != $9703 {
-    !error "Assertion failed: sub_c9703 == $9703"
-}
-!if (sub_c970b) != $970b {
-    !error "Assertion failed: sub_c970b == $970b"
-}
-!if (sub_c973e) != $973e {
-    !error "Assertion failed: sub_c973e == $973e"
-}
-!if (sub_c97a9) != $97a9 {
-    !error "Assertion failed: sub_c97a9 == $97a9"
-}
-!if (sub_c9810) != $9810 {
-    !error "Assertion failed: sub_c9810 == $9810"
-}
-!if (sub_c9824) != $9824 {
-    !error "Assertion failed: sub_c9824 == $9824"
-}
-!if (sub_c982e) != $982e {
-    !error "Assertion failed: sub_c982e == $982e"
-}
-!if (sub_c9871) != $9871 {
-    !error "Assertion failed: sub_c9871 == $9871"
-}
-!if (sub_c9875) != $9875 {
-    !error "Assertion failed: sub_c9875 == $9875"
-}
-!if (sub_c9880) != $9880 {
-    !error "Assertion failed: sub_c9880 == $9880"
-}
-!if (sub_c98af) != $98af {
-    !error "Assertion failed: sub_c98af == $98af"
-}
-!if (sub_c98b6) != $98b6 {
-    !error "Assertion failed: sub_c98b6 == $98b6"
-}
-!if (sub_c98c3) != $98c3 {
-    !error "Assertion failed: sub_c98c3 == $98c3"
-}
-!if (sub_c9c5e) != $9c5e {
-    !error "Assertion failed: sub_c9c5e == $9c5e"
-}
-!if (sub_c9ccc) != $9ccc {
-    !error "Assertion failed: sub_c9ccc == $9ccc"
-}
-!if (sub_ca6fc) != $a6fc {
-    !error "Assertion failed: sub_ca6fc == $a6fc"
-}
-!if (sub_ca7ac) != $a7ac {
-    !error "Assertion failed: sub_ca7ac == $a7ac"
-}
-!if (sub_ca808) != $a808 {
-    !error "Assertion failed: sub_ca808 == $a808"
-}
-!if (sub_ca901) != $a901 {
-    !error "Assertion failed: sub_ca901 == $a901"
-}
-!if (sub_ca919) != $a919 {
-    !error "Assertion failed: sub_ca919 == $a919"
-}
-!if (sub_ca94f) != $a94f {
-    !error "Assertion failed: sub_ca94f == $a94f"
-}
-!if (sub_ca954) != $a954 {
-    !error "Assertion failed: sub_ca954 == $a954"
-}
-!if (sub_ca96b) != $a96b {
-    !error "Assertion failed: sub_ca96b == $a96b"
-}
-!if (sub_ca9b5) != $a9b5 {
-    !error "Assertion failed: sub_ca9b5 == $a9b5"
-}
-!if (sub_ca9bc) != $a9bc {
-    !error "Assertion failed: sub_ca9bc == $a9bc"
-}
-!if (sub_ca9ca) != $a9ca {
-    !error "Assertion failed: sub_ca9ca == $a9ca"
-}
-!if (sub_caa17) != $aa17 {
-    !error "Assertion failed: sub_caa17 == $aa17"
-}
-!if (sub_caacb) != $aacb {
-    !error "Assertion failed: sub_caacb == $aacb"
-}
-!if (sub_caaeb) != $aaeb {
-    !error "Assertion failed: sub_caaeb == $aaeb"
-}
-!if (sub_caafb) != $aafb {
-    !error "Assertion failed: sub_caafb == $aafb"
-}
-!if (sub_cab01) != $ab01 {
-    !error "Assertion failed: sub_cab01 == $ab01"
-}
-!if (sub_cab14) != $ab14 {
-    !error "Assertion failed: sub_cab14 == $ab14"
-}
-!if (sub_cab1d) != $ab1d {
-    !error "Assertion failed: sub_cab1d == $ab1d"
-}
-!if (sub_cab21) != $ab21 {
-    !error "Assertion failed: sub_cab21 == $ab21"
-}
-!if (sub_cab2f) != $ab2f {
-    !error "Assertion failed: sub_cab2f == $ab2f"
-}
-!if (sub_cab37) != $ab37 {
-    !error "Assertion failed: sub_cab37 == $ab37"
-}
-!if (sub_cab3b) != $ab3b {
-    !error "Assertion failed: sub_cab3b == $ab3b"
-}
-!if (sub_cab3f) != $ab3f {
-    !error "Assertion failed: sub_cab3f == $ab3f"
-}
-!if (sub_cab54) != $ab54 {
-    !error "Assertion failed: sub_cab54 == $ab54"
-}
-!if (sub_cab5c) != $ab5c {
-    !error "Assertion failed: sub_cab5c == $ab5c"
-}
-!if (sub_caba0) != $aba0 {
-    !error "Assertion failed: sub_caba0 == $aba0"
-}
-!if (sub_cabe1) != $abe1 {
-    !error "Assertion failed: sub_cabe1 == $abe1"
-}
-!if (sub_cac03) != $ac03 {
-    !error "Assertion failed: sub_cac03 == $ac03"
-}
-!if (sub_cac12) != $ac12 {
-    !error "Assertion failed: sub_cac12 == $ac12"
-}
-!if (sub_cac1f) != $ac1f {
-    !error "Assertion failed: sub_cac1f == $ac1f"
-}
-!if (sub_cac46) != $ac46 {
-    !error "Assertion failed: sub_cac46 == $ac46"
-}
-!if (sub_cac5d) != $ac5d {
-    !error "Assertion failed: sub_cac5d == $ac5d"
-}
-!if (sub_cac7f) != $ac7f {
-    !error "Assertion failed: sub_cac7f == $ac7f"
-}
-!if (sub_cad00) != $ad00 {
-    !error "Assertion failed: sub_cad00 == $ad00"
-}
-!if (sub_cae34) != $ae34 {
-    !error "Assertion failed: sub_cae34 == $ae34"
-}
-!if (sub_cae41) != $ae41 {
-    !error "Assertion failed: sub_cae41 == $ae41"
-}
-!if (sub_cae50) != $ae50 {
-    !error "Assertion failed: sub_cae50 == $ae50"
-}
-!if (sub_cae59) != $ae59 {
-    !error "Assertion failed: sub_cae59 == $ae59"
-}
-!if (sub_cae6d) != $ae6d {
-    !error "Assertion failed: sub_cae6d == $ae6d"
-}
-!if (sub_cae71) != $ae71 {
-    !error "Assertion failed: sub_cae71 == $ae71"
-}
-!if (sub_cae77) != $ae77 {
-    !error "Assertion failed: sub_cae77 == $ae77"
-}
-!if (sub_cae7d) != $ae7d {
-    !error "Assertion failed: sub_cae7d == $ae7d"
-}
-!if (sub_cae83) != $ae83 {
-    !error "Assertion failed: sub_cae83 == $ae83"
-}
-!if (sub_cae87) != $ae87 {
-    !error "Assertion failed: sub_cae87 == $ae87"
-}
-!if (sub_cae8c) != $ae8c {
-    !error "Assertion failed: sub_cae8c == $ae8c"
-}
-!if (sub_caeb1) != $aeb1 {
-    !error "Assertion failed: sub_caeb1 == $aeb1"
-}
-!if (sub_caebb) != $aebb {
-    !error "Assertion failed: sub_caebb == $aebb"
-}
-!if (sub_caebc) != $aebc {
-    !error "Assertion failed: sub_caebc == $aebc"
-}
-!if (sub_caefb) != $aefb {
-    !error "Assertion failed: sub_caefb == $aefb"
-}
-!if (sub_caf0a) != $af0a {
-    !error "Assertion failed: sub_caf0a == $af0a"
-}
-!if (sub_caf61) != $af61 {
-    !error "Assertion failed: sub_caf61 == $af61"
-}
-!if (sub_caf8b) != $af8b {
-    !error "Assertion failed: sub_caf8b == $af8b"
-}
-!if (sub_cb055) != $b055 {
-    !error "Assertion failed: sub_cb055 == $b055"
-}
-!if (sub_cb269) != $b269 {
-    !error "Assertion failed: sub_cb269 == $b269"
-}
-!if (sub_cb302) != $b302 {
-    !error "Assertion failed: sub_cb302 == $b302"
-}
-!if (sub_cb326) != $b326 {
-    !error "Assertion failed: sub_cb326 == $b326"
-}
-!if (sub_cb351) != $b351 {
-    !error "Assertion failed: sub_cb351 == $b351"
-}
-!if (sub_cb3c8) != $b3c8 {
-    !error "Assertion failed: sub_cb3c8 == $b3c8"
-}
-!if (sub_cb412) != $b412 {
-    !error "Assertion failed: sub_cb412 == $b412"
-}
-!if (sub_cb649) != $b649 {
-    !error "Assertion failed: sub_cb649 == $b649"
-}
-!if (sub_cb709) != $b709 {
-    !error "Assertion failed: sub_cb709 == $b709"
-}
-!if (sub_cb737) != $b737 {
-    !error "Assertion failed: sub_cb737 == $b737"
-}
-!if (sub_cb74d) != $b74d {
-    !error "Assertion failed: sub_cb74d == $b74d"
-}
-!if (sub_cb78b) != $b78b {
-    !error "Assertion failed: sub_cb78b == $b78b"
-}
-!if (sub_cb896) != $b896 {
-    !error "Assertion failed: sub_cb896 == $b896"
-}
-!if (sub_cb8e6) != $b8e6 {
-    !error "Assertion failed: sub_cb8e6 == $b8e6"
-}
-!if (sub_cb97d) != $b97d {
-    !error "Assertion failed: sub_cb97d == $b97d"
-}
-!if (sub_cba47) != $ba47 {
-    !error "Assertion failed: sub_cba47 == $ba47"
-}
-!if (sub_cba88) != $ba88 {
-    !error "Assertion failed: sub_cba88 == $ba88"
-}
-!if (sub_cbe95) != $be95 {
-    !error "Assertion failed: sub_cbe95 == $be95"
-}
-!if (sub_cbec7) != $bec7 {
-    !error "Assertion failed: sub_cbec7 == $bec7"
-}
-!if (sub_cbed7) != $bed7 {
-    !error "Assertion failed: sub_cbed7 == $bed7"
-}
-!if (sub_cbeee) != $beee {
-    !error "Assertion failed: sub_cbeee == $beee"
-}
-!if (sub_cbefd) != $befd {
-    !error "Assertion failed: sub_cbefd == $befd"
-}
+
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 14391 bytes (88%)
+;     Data                     = 1993 bytes (12%)
+;
+;     Number of instructions   = 7238
+;     Number of data bytes     = 780 bytes
+;     Number of data words     = 234 bytes
+;     Number of string bytes   = 979 bytes
+;     Number of strings        = 184
+

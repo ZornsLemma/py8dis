@@ -94,6 +94,9 @@ l090d = l090c+1
 
 .pydis_end
 
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     lffee:       3
 ;     low_a:       3
@@ -118,4 +121,14 @@ l090d = l090c+1
 ;     sub_c2022
 ;     sub_c2039
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 64 bytes
+;     Code                     = 61 bytes (95%)
+;     Data                     = 3 bytes (5%)
+;
+;     Number of instructions   = 27
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 3 bytes
+;     Number of strings        = 1
+

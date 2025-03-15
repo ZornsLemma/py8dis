@@ -10637,6 +10637,7 @@ oscli
     .byt 0, $0d, $cd, $d9, $1c, $dc                                   // fffa: 00 0d cd... ...
 pydis_end
 
+
 // Label references by decreasing frequency:
 //     l00da:                                   63
 //     l00fa:                                   35
@@ -13767,3 +13768,15 @@ pydis_end
 //     sub_cfbbd
 //     sub_cfbd3
 //     sub_cfbe2
+
+// Stats:
+//     Total size (Code + Data) = 16384 bytes
+//     Code                     = 12605 bytes (77%)
+//     Data                     = 3779 bytes (23%)
+//
+//     Number of instructions   = 6079
+//     Number of data bytes     = 2466 bytes
+//     Number of data words     = 164 bytes
+//     Number of string bytes   = 1149 bytes
+//     Number of strings        = 69
+

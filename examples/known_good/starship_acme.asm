@@ -7863,6 +7863,7 @@ c61f6
 
     !byte 0, 0, 0, 0, 0, 0                                            ; 61f9: 00 00 00... ...
 pydis_end
+
 !if ('0') != $30 {
     !error "Assertion failed: '0' == $30"
 }
@@ -8178,3 +8179,15 @@ pydis_end
 !if (input_buffer) != $44d3 {
     !error "Assertion failed: input_buffer == $44d3"
 }
+
+; Stats:
+;     Total size (Code + Data) = 17151 bytes
+;     Code                     = 11046 bytes (64%)
+;     Data                     = 6105 bytes (36%)
+;
+;     Number of instructions   = 5145
+;     Number of data bytes     = 4129 bytes
+;     Number of data words     = 2 bytes
+;     Number of string bytes   = 1974 bytes
+;     Number of strings        = 84
+

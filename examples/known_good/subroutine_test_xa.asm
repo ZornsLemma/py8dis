@@ -96,3 +96,16 @@ print_hex_digit
     jmp oswrch                                                        // 2056: 4c ee ff    L..            // Write character
 
 pydis_end
+
+
+// Stats:
+//     Total size (Code + Data) = 89 bytes
+//     Code                     = 75 bytes (84%)
+//     Data                     = 14 bytes (16%)
+//
+//     Number of instructions   = 41
+//     Number of data bytes     = 6 bytes
+//     Number of data words     = 0 bytes
+//     Number of string bytes   = 8 bytes
+//     Number of strings        = 1
+

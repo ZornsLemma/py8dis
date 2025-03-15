@@ -20,6 +20,7 @@ l200e
     !byte $0d                                                         ; 201b: 0d          .
 pydis_end
 
+
 ; Label references by decreasing frequency:
 ;     l200e:        1
 ;     lffe3:        1
@@ -29,3 +30,15 @@ pydis_end
 ;     l200e
 ;     lffe3
 ;     loop_c2002
+
+; Stats:
+;     Total size (Code + Data) = 28 bytes
+;     Code                     = 14 bytes (50%)
+;     Data                     = 14 bytes (50%)
+;
+;     Number of instructions   = 7
+;     Number of data bytes     = 1 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 13 bytes
+;     Number of strings        = 1
+

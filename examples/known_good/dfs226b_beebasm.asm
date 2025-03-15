@@ -10926,6 +10926,129 @@ lb6ce = sub_cb6cd+1
 
 .pydis_end
 
+    assert <(c956d-1) == &6c
+    assert <(l0128) == &28
+    assert <(l1000) == &00
+    assert <(sub_c8238-1) == &37
+    assert <(sub_c8254-1) == &53
+    assert <(sub_c8750-1) == &4f
+    assert <(sub_c8782-1) == &81
+    assert <(sub_c8794-1) == &93
+    assert <(sub_c87ee-1) == &ed
+    assert <(sub_c893f-1) == &3e
+    assert <(sub_c8943-1) == &42
+    assert <(sub_c89b7-1) == &b6
+    assert <(sub_c89e6-1) == &e5
+    assert <(sub_c8b47-1) == &46
+    assert <(sub_c8bac-1) == &ab
+    assert <(sub_c9b59-1) == &58
+    assert <(sub_ca106-1) == &05
+    assert <(sub_ca137-1) == &36
+    assert <(sub_ca244-1) == &43
+    assert <(sub_ca417-1) == &16
+    assert <(sub_ca463-1) == &62
+    assert <(sub_ca5bb-1) == &ba
+    assert <(sub_ca5bf-1) == &be
+    assert <(sub_ca7f3-1) == &f2
+    assert <(sub_ca7f6-1) == &f5
+    assert <(sub_ca9d0-1) == &cf
+    assert <(sub_caafd-1) == &fc
+    assert <(sub_cab04-1) == &03
+    assert <(sub_cab46-1) == &45
+    assert <(sub_cabc5-1) == &c4
+    assert <(sub_cbb46-1) == &45
+    assert <(sub_cbb4a-1) == &49
+    assert <(sub_cbbd3-1) == &d2
+    assert <(sub_cbbd7-1) == &d6
+    assert <(sub_cbc37-1) == &36
+    assert <(sub_cbc81-1) == &80
+    assert <tube_brkv_handler == &16
+    assert <tube_evntv_handler == &ad
+    assert >(c956d-1) == &95
+    assert >(l0128) == &01
+    assert >(l1000) == &10
+    assert >(sub_c8238-1) == &82
+    assert >(sub_c8254-1) == &82
+    assert >(sub_c8750-1) == &87
+    assert >(sub_c8782-1) == &87
+    assert >(sub_c8794-1) == &87
+    assert >(sub_c87ee-1) == &87
+    assert >(sub_c893f-1) == &89
+    assert >(sub_c8943-1) == &89
+    assert >(sub_c89b7-1) == &89
+    assert >(sub_c89e6-1) == &89
+    assert >(sub_c8b47-1) == &8b
+    assert >(sub_c8bac-1) == &8b
+    assert >(sub_c9b59-1) == &9b
+    assert >(sub_ca106-1) == &a1
+    assert >(sub_ca137-1) == &a1
+    assert >(sub_ca244-1) == &a2
+    assert >(sub_ca417-1) == &a4
+    assert >(sub_ca463-1) == &a4
+    assert >(sub_ca5bb-1) == &a5
+    assert >(sub_ca5bf-1) == &a5
+    assert >(sub_ca7f3-1) == &a7
+    assert >(sub_ca7f6-1) == &a7
+    assert >(sub_ca9d0-1) == &a9
+    assert >(sub_caafd-1) == &aa
+    assert >(sub_cab04-1) == &ab
+    assert >(sub_cab46-1) == &ab
+    assert >(sub_cabc5-1) == &ab
+    assert >(sub_cbb46-1) == &bb
+    assert >(sub_cbb4a-1) == &bb
+    assert >(sub_cbbd3-1) == &bb
+    assert >(sub_cbbd7-1) == &bb
+    assert >(sub_cbc37-1) == &bc
+    assert >(sub_cbc81-1) == &bc
+    assert >tube_brkv_handler == &00
+    assert >tube_evntv_handler == &06
+    assert copyright - rom_header == &11
+    assert jump_address_low == &51
+    assert nmi3_handler_rom_end-nmi3_handler_rom_start == &0e
+    assert nmi_XXX1-(nmi_beq+2) == &48
+    assert nmi_XXX10-(nmi_bcs+2) == &32
+    assert nmi_XXX11-(nmi_bcs+2) == &3b
+    assert nmi_XXX12-(nmi_bcs+2) == &3f
+    assert nmi_XXX13-(nmi_bcs+2) == &49
+    assert nmi_XXX14-(nmi_bcs+2) == &4d
+    assert nmi_XXX15-(nmi_bcs+2) == &55
+    assert nmi_XXX16-(nmi_bcs+2) == &5d
+    assert nmi_XXX17-(nmi_bcs+2) == &06
+    assert nmi_XXX18-(nmi_bcs+2) == &11
+    assert nmi_XXX19-(nmi_bcs+2) == &7b
+    assert nmi_XXX2-(nmi_beq+2) == &2f
+    assert nmi_XXX2-1 == &0d38
+    assert nmi_XXX20-(nmi_bcs+2) == &7f
+    assert nmi_XXX21-(nmi_bcs+2) == &26
+    assert nmi_XXX22-(nmi_bcs+2) == &77
+    assert nmi_XXX23-(nmi_bcs+2) == &24
+    assert nmi_XXX5-(nmi_cmp_imm_or_bcs+2) == &06
+    assert nmi_XXX7-(nmi_XXX6+2) == &06
+    assert nmi_XXX8-(nmi_beq+2) == &4d
+    assert nmi_handler2_rom_end-nmi_handler2_rom_start == &94
+    assert nmi_handler_rom_end-nmi_handler_rom_start-1 == &5d
+    assert sub_c0520 == &0520
+    assert sub_c052d == &052d
+    assert sub_c0537 == &0537
+    assert sub_c0542 == &0542
+    assert sub_c055e == &055e
+    assert sub_c0596 == &0596
+    assert sub_c05a9 == &05a9
+    assert sub_c05d1 == &05d1
+    assert sub_c05f2 == &05f2
+    assert sub_c0607 == &0607
+    assert sub_c0627 == &0627
+    assert sub_c9785 == &9785
+    assert sub_c97b6 == &97b6
+    assert sub_c97c9 == &97c9
+    assert sub_c9c0c == &9c0c
+    assert sub_c9d9b == &9d9b
+    assert sub_c9e94 == &9e94
+    assert sub_c9f82 == &9f82
+    assert tube_host_osword_0 == &0668
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     l00b8:                                            125
 ;     l00b0:                                            105
@@ -13744,125 +13867,15 @@ lb6ce = sub_cb6cd+1
 ;     sub_cbf7c
 ;     sub_cbf82
 ;     sub_cbf84
-    assert <(c956d-1) == &6c
-    assert <(l0128) == &28
-    assert <(l1000) == &00
-    assert <(sub_c8238-1) == &37
-    assert <(sub_c8254-1) == &53
-    assert <(sub_c8750-1) == &4f
-    assert <(sub_c8782-1) == &81
-    assert <(sub_c8794-1) == &93
-    assert <(sub_c87ee-1) == &ed
-    assert <(sub_c893f-1) == &3e
-    assert <(sub_c8943-1) == &42
-    assert <(sub_c89b7-1) == &b6
-    assert <(sub_c89e6-1) == &e5
-    assert <(sub_c8b47-1) == &46
-    assert <(sub_c8bac-1) == &ab
-    assert <(sub_c9b59-1) == &58
-    assert <(sub_ca106-1) == &05
-    assert <(sub_ca137-1) == &36
-    assert <(sub_ca244-1) == &43
-    assert <(sub_ca417-1) == &16
-    assert <(sub_ca463-1) == &62
-    assert <(sub_ca5bb-1) == &ba
-    assert <(sub_ca5bf-1) == &be
-    assert <(sub_ca7f3-1) == &f2
-    assert <(sub_ca7f6-1) == &f5
-    assert <(sub_ca9d0-1) == &cf
-    assert <(sub_caafd-1) == &fc
-    assert <(sub_cab04-1) == &03
-    assert <(sub_cab46-1) == &45
-    assert <(sub_cabc5-1) == &c4
-    assert <(sub_cbb46-1) == &45
-    assert <(sub_cbb4a-1) == &49
-    assert <(sub_cbbd3-1) == &d2
-    assert <(sub_cbbd7-1) == &d6
-    assert <(sub_cbc37-1) == &36
-    assert <(sub_cbc81-1) == &80
-    assert <tube_brkv_handler == &16
-    assert <tube_evntv_handler == &ad
-    assert >(c956d-1) == &95
-    assert >(l0128) == &01
-    assert >(l1000) == &10
-    assert >(sub_c8238-1) == &82
-    assert >(sub_c8254-1) == &82
-    assert >(sub_c8750-1) == &87
-    assert >(sub_c8782-1) == &87
-    assert >(sub_c8794-1) == &87
-    assert >(sub_c87ee-1) == &87
-    assert >(sub_c893f-1) == &89
-    assert >(sub_c8943-1) == &89
-    assert >(sub_c89b7-1) == &89
-    assert >(sub_c89e6-1) == &89
-    assert >(sub_c8b47-1) == &8b
-    assert >(sub_c8bac-1) == &8b
-    assert >(sub_c9b59-1) == &9b
-    assert >(sub_ca106-1) == &a1
-    assert >(sub_ca137-1) == &a1
-    assert >(sub_ca244-1) == &a2
-    assert >(sub_ca417-1) == &a4
-    assert >(sub_ca463-1) == &a4
-    assert >(sub_ca5bb-1) == &a5
-    assert >(sub_ca5bf-1) == &a5
-    assert >(sub_ca7f3-1) == &a7
-    assert >(sub_ca7f6-1) == &a7
-    assert >(sub_ca9d0-1) == &a9
-    assert >(sub_caafd-1) == &aa
-    assert >(sub_cab04-1) == &ab
-    assert >(sub_cab46-1) == &ab
-    assert >(sub_cabc5-1) == &ab
-    assert >(sub_cbb46-1) == &bb
-    assert >(sub_cbb4a-1) == &bb
-    assert >(sub_cbbd3-1) == &bb
-    assert >(sub_cbbd7-1) == &bb
-    assert >(sub_cbc37-1) == &bc
-    assert >(sub_cbc81-1) == &bc
-    assert >tube_brkv_handler == &00
-    assert >tube_evntv_handler == &06
-    assert copyright - rom_header == &11
-    assert jump_address_low == &51
-    assert nmi3_handler_rom_end-nmi3_handler_rom_start == &0e
-    assert nmi_XXX1-(nmi_beq+2) == &48
-    assert nmi_XXX10-(nmi_bcs+2) == &32
-    assert nmi_XXX11-(nmi_bcs+2) == &3b
-    assert nmi_XXX12-(nmi_bcs+2) == &3f
-    assert nmi_XXX13-(nmi_bcs+2) == &49
-    assert nmi_XXX14-(nmi_bcs+2) == &4d
-    assert nmi_XXX15-(nmi_bcs+2) == &55
-    assert nmi_XXX16-(nmi_bcs+2) == &5d
-    assert nmi_XXX17-(nmi_bcs+2) == &06
-    assert nmi_XXX18-(nmi_bcs+2) == &11
-    assert nmi_XXX19-(nmi_bcs+2) == &7b
-    assert nmi_XXX2-(nmi_beq+2) == &2f
-    assert nmi_XXX2-1 == &0d38
-    assert nmi_XXX20-(nmi_bcs+2) == &7f
-    assert nmi_XXX21-(nmi_bcs+2) == &26
-    assert nmi_XXX22-(nmi_bcs+2) == &77
-    assert nmi_XXX23-(nmi_bcs+2) == &24
-    assert nmi_XXX5-(nmi_cmp_imm_or_bcs+2) == &06
-    assert nmi_XXX7-(nmi_XXX6+2) == &06
-    assert nmi_XXX8-(nmi_beq+2) == &4d
-    assert nmi_handler2_rom_end-nmi_handler2_rom_start == &94
-    assert nmi_handler_rom_end-nmi_handler_rom_start-1 == &5d
-    assert sub_c0520 == &0520
-    assert sub_c052d == &052d
-    assert sub_c0537 == &0537
-    assert sub_c0542 == &0542
-    assert sub_c055e == &055e
-    assert sub_c0596 == &0596
-    assert sub_c05a9 == &05a9
-    assert sub_c05d1 == &05d1
-    assert sub_c05f2 == &05f2
-    assert sub_c0607 == &0607
-    assert sub_c0627 == &0627
-    assert sub_c9785 == &9785
-    assert sub_c97b6 == &97b6
-    assert sub_c97c9 == &97c9
-    assert sub_c9c0c == &9c0c
-    assert sub_c9d9b == &9d9b
-    assert sub_c9e94 == &9e94
-    assert sub_c9f82 == &9f82
-    assert tube_host_osword_0 == &0668
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 16384 bytes
+;     Code                     = 14446 bytes (88%)
+;     Data                     = 1938 bytes (12%)
+;
+;     Number of instructions   = 6996
+;     Number of data bytes     = 616 bytes
+;     Number of data words     = 38 bytes
+;     Number of string bytes   = 1284 bytes
+;     Number of strings        = 150
+
