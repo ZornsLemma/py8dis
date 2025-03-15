@@ -72,11 +72,6 @@ def single_test(basename: Path,
     if result:
         return result
 
-    if check_asm_against_known_good:
-        result = check_identical(f.asm_output_file, f.known_good_file)
-        if result:
-            return result
-
     if assembler == "acme":
         # Test Acme assembler
         result = call_acme(basename, check_asm_against_known_good, make_known_good, make_extras)
@@ -97,6 +92,11 @@ def single_test(basename: Path,
     result = check_identical(f.binary_output_file, f.binary_original_file)
     if result:
         return result
+
+    if check_asm_against_known_good:
+        result = check_identical(f.asm_output_file, f.known_good_file)
+        if result:
+            return result
 
     if make_known_good:
         shutil.copy2(f.asm_output_file, f.known_good_file)
