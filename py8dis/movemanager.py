@@ -224,38 +224,41 @@ def r2b_checked(runtime_addr):
 
 # Unit testing for moves
 if __name__ == "__main__":
-    id1 = add_move(0x70, 0x1900, 10)
-    id2 = add_move(0x70, 0x2000, 8)
-    id3 = add_move(0x900, 0x2100, 256)
+    def add_move_test(runtime_addr, binary_addr, length):
+        return add_move(RuntimeAddr(runtime_addr), BinaryAddr(binary_addr), length)
+
+    id1 = add_move_test(0x70, 0x1900, 10)
+    id2 = add_move_test(0x70, 0x2000, 8)
+    id3 = add_move_test(0x900, 0x2100, 256)
 
     assert move_id_for_binary_addr[0x70] == BASE_MOVE_ID
     assert move_id_for_binary_addr[0x1900] == id1
     assert move_id_for_binary_addr[0x2000] == id2
     assert move_id_for_binary_addr[0x2000 + 8] == BASE_MOVE_ID
 
-    assert b2r(0x70) == 0x70
-    assert b2r(0x1900) == 0x70
-    assert b2r(0x2000) == 0x70
-    assert b2r(0x2000 + 8) == 0x2000 + 8
-    assert b2r(0x2100) == 0x900
+    assert b2r(BinaryAddr(0x70)) == 0x70
+    assert b2r(BinaryAddr(0x1900)) == 0x70
+    assert b2r(BinaryAddr(0x2000)) == 0x70
+    assert b2r(BinaryAddr(0x2000 + 8)) == 0x2000 + 8
+    assert b2r(BinaryAddr(0x2100)) == 0x900
 
     assert active_move_ids == []
-    assert r2b(0x70) == (None, None)
-    assert r2b(0x900) == (0x2100, id3)
-    with moved(id2):
+    assert r2b(RuntimeAddr(0x70)) == (None, None)
+    assert r2b(RuntimeAddr(0x900)) == (0x2100, id3)
+    with id2:
         assert active_move_ids == [id2]
-        assert r2b(0x70) == (0x2000, id2)
-        assert r2b(0x900) == (0x2100, id3)
-        assert r2b(0x2008) == (0x2008, BASE_MOVE_ID)
-        with moved(id1):
+        assert r2b(RuntimeAddr(0x70)) == (0x2000, id2)
+        assert r2b(RuntimeAddr(0x900)) == (0x2100, id3)
+        assert r2b(RuntimeAddr(0x2008)) == (0x2008, BASE_MOVE_ID)
+        with id1:
             assert active_move_ids == [id2, id1]
-            assert r2b(0x70) == (0x1900, id1)
-            assert r2b(0x900) == (0x2100, id3)
-            assert r2b(0x2008) == (0x2008, BASE_MOVE_ID)
+            assert r2b(RuntimeAddr(0x70)) == (0x1900, id1)
+            assert r2b(RuntimeAddr(0x900)) == (0x2100, id3)
+            assert r2b(RuntimeAddr(0x2008)) == (0x2008, BASE_MOVE_ID)
         assert active_move_ids == [id2]
-        assert r2b(0x70) == (0x2000, id2)
-        assert r2b(0x900) == (0x2100, id3)
-        assert r2b(0x2008) == (0x2008, BASE_MOVE_ID)
+        assert r2b(RuntimeAddr(0x70)) == (0x2000, id2)
+        assert r2b(RuntimeAddr(0x900)) == (0x2100, id3)
+        assert r2b(RuntimeAddr(0x2008)) == (0x2008, BASE_MOVE_ID)
     assert active_move_ids == []
-    assert r2b(0x70) == (None, None)
-    assert r2b(0x900) == (0x2100, id3)
+    assert r2b(RuntimeAddr(0x70)) == (None, None)
+    assert r2b(RuntimeAddr(0x900)) == (0x2100, id3)
