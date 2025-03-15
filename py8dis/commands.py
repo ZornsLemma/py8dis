@@ -872,7 +872,7 @@ parser.add_argument("-8", "--z88dk-8080", action="store_true", help="generate z8
 parser.add_argument("-l", "--lower", action="store_true", help="generate lower-case output (default)")
 parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output")
 parser.add_argument("-o", "--output", help="output asm file")
-args = parser.parse_args()
+args = parser.parse_known_args()[0]
 
 assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa, args.z88dk_8080) if x)
 if assembler_count > 1:
