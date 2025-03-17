@@ -161,9 +161,9 @@ Why is this useful? Example 1: Labels at addresses that just 'rts' to early out 
 
 ### Constants
 
-:pencil:`constant(value, name)`
+:pencil:`constant(value, name, comment, align=Align.INLINE, format=Format.DEFAULT)`
 
-Define a constant `name` with value `value`; think of this as being passed straight through to the output as `name = value`.
+Define a constant `name` with value `value`; think of this as being passed straight through to the output as `name = value`. The optional comment text can be `align`ed and the value can be specified as Format.DECIMAL, .HEX, .BINARY, or .CHAR.
 
 To illustrate the difference between labels and constants:
 - If you say `label(42, "meaning_of_life")`, an `lda 42` instruction will be disassembled as `lda meaning_of_life`.
@@ -244,7 +244,7 @@ There are convenience functions for common uses of the above:
 | :pencil:`make_xor(expr1, expr2)`          | bitwise xor                                                   |
 | :pencil:`make_modulo(expr1, expr2)`       | remainder after division                                      |
 
-Calls can be strung together: `make_lo(make_add('level_data', 1))` 
+Calls can be strung together: `make_lo(make_add('level_data', 1))`
 
 
 ### Marking data
@@ -282,7 +282,7 @@ Specifies that there is code at the given address `addr`. When `go()` is called,
 
 Marks a sequence of `n` words as being (16-bit little endian) addresses of subroutines. This categorises the data as being words and also adds the addresses as entry points for tracing code.
 
-:pencil:`code_ptr(addr, addr_high=None, offset=0)`
+:pencil:`code_ptr(addr, addr_high=None, offset=0, label=None)`
 
 Marks two bytes of data as being the address of a subroutine. The low and high bytes do not need to be stored adjacently since their addresses can be specified separately as `addr` and `addr_high`. If `addr_high` is None, then `addr_high` is assumed to be the byte after `addr`. This function can be used to handle jump tables where the low and high bytes are stored in separate tables.
 
@@ -359,23 +359,23 @@ Define a subroutine. All parameters except the address are optional. These are u
 
 The `on_entry` and `on_exit` optional parameters are dictionaries that specify a comment for each register as required. e.g. `on_entry={ 'a': "number to print" }`. If a parameter description is in brackets, it is not used when decorating calls to this routine. This allows for `{ 'x': '(preserved)' }` style descriptions.
 
-The `is_entry_point` parameter adds the address as an entry point for code. 
+The `is_entry_point` parameter adds the address as an entry point for code.
 
-The `hook` parameter is a callback to allow for the decoration of the calling code. 
+The `hook` parameter is a callback to allow for the decoration of the calling code.
 
 :pencil:`no_automatic_comment(addr)`
 
 Disables the automatic commentary at the given address, to allow the user to write their own.
 
-:pencil:`comment(addr, text, inline=False, indent=0, word_wrap=True)`
+:pencil:`comment(addr, text, align=Align.BEFORE_LABEL, indent=0, word_wrap=True)`
 
-Insert `text` as a comment at address `addr` in the disassembly on it's own separate line. If `inline` is true, then add it to the end of the current line instead. If not inline, the number of indents is applied and the comment is word wrapped by default.
+Insert `text` as a comment at address `addr` in the disassembly. If the line has a label, it can be added before or after the Label using Align.BEFORE_LABEL or Align.AFTER_LABEL. If a line of disassembly is output at the address, the comment can be positioned before or after the line, using Align.BEFORE_LINE or Align.AFTER_LINE. If `align` is Align.INLINE, then the comment is added to the end of the line instead. If not inline, the number of indents is applied and the comment is word wrapped by default.
 
-:pencil:`formatted_comment(addr, text, inline=False, indent=0)`
+:pencil:`formatted_comment(addr, text, align=Align.BEFORE_LABEL, indent=0)`
 
 As `comment` but the text is assumed to be pre-formatted and is therefore not word wrapped. Equivalent to `comment()` with `word_wrap=False`.
 
-:pencil:`blank(addr, priority=None)`
+:pencil:`blank(addr, align=Align.BEFORE_LABEL, priority=None)`
 
 Add a new blank line to the output at the given address. The `priority` helps order multiple items at the same address.
 

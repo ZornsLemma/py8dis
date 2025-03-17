@@ -1,5 +1,5 @@
 ; Constants
-crtc_vert_total_adjust   = 5
+crtc_vert_total_adjust  = 5
 
 ; Memory locations
 bit_value               = $70
@@ -23,6 +23,7 @@ oswrch                  = $ffee
 ; 
 ; On Exit:
 ;     X: Holds the number of bits set.
+; ***************************************************************************************
 test_for_local_labels
 pydis_start
     lda #5                                                            ; 2000: a9 05       ..
@@ -58,6 +59,3 @@ crtc_substitution_test
     rts                                                               ; 202b: 60          `
 
 pydis_end
-!if (crtc_vert_total_adjust) != $05 {
-    !error "Assertion failed: crtc_vert_total_adjust == $05"
-}

@@ -7,144 +7,14 @@ import mainformatter
 import memorymanager
 import movemanager
 import re
+import cpu
 import trace
 import utils
 import sys
+from align import Align
 
 memory_binary = memorymanager.memory_binary
 
-def parse_instruction(instruction):
-    instruction = instruction.strip()
-    r = re.match(Cpu6502.implied_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = ""
-        operand_length  = 0
-        prefix          = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_implied]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.immediate_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1
-        prefix          = "#"
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_immediate]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.accumulator_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = ""
-        operand_length  = 0
-        if config.get_assembler().explicit_a:
-            prefix = "A"
-        else:
-            prefix = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_accumulator]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.offset_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1
-        prefix          = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_offset]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.indexed_indirect_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        prefix          = "("
-        suffix          = ",X)"
-
-        if mnemonic == "JMP":
-            operand_length = 2
-            addr_mode      = [Cpu6502.mode_indexed_abs]
-        else:
-            operand_length  = 1
-            addr_mode       = [Cpu6502.mode_indexed_indirect]
-
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.indirect_indexed_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1
-        prefix          = "("
-        suffix          = "),Y"
-        addr_mode       = [Cpu6502.mode_indirect_indexed]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.abs_or_zp_indexed_x_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = [1, 2]
-        prefix          = ""
-        suffix          = ",X"
-        addr_mode       = [Cpu6502.mode_zp_indexed_x, Cpu6502.mode_abs_indexed_x]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.abs_or_zp_indexed_y_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1 # Could be two, updated later
-        prefix          = ""
-        suffix          = ",Y"
-        addr_mode       = [Cpu6502.mode_zp_indexed_y, Cpu6502.mode_abs_indexed_y]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.indirect_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1 # Could be two, updated later
-        prefix          = "("
-        suffix          = ")"
-        addr_mode       = [Cpu6502.mode_indirect_zp, Cpu6502.mode_indirect_addr]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    r = re.match(Cpu6502.zp_or_addr_pattern, instruction)
-    if r:
-        mnemonic        = r.groups(1)[0]
-        operand         = r.groups(1)[1]
-        operand_length  = 1 # Could be two, updated later
-        prefix          = ""
-        suffix          = ""
-        addr_mode       = [Cpu6502.mode_zp, Cpu6502.mode_addr]
-        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
-
-    utils.die("Could not understand instruction: %s" % (instruction))
-    return None
-
-def parse_instruction_template(instruction):
-    mnemonic, operand, operand_length, prefix, suffix, addr_mode = parse_instruction(instruction)
-
-    if len(addr_mode) == 1:
-        addr_mode = addr_mode[0]
-    elif len(addr_mode) > 1:
-        # Resolve zp vs addr addressing modes
-        if operand == "zp":
-            operand_length = 1
-            addr_mode = addr_mode[0]
-        elif operand == "addr":
-            operand_length = 2
-            addr_mode = addr_mode[1]
-        else:
-            utils.warn("%s, %s, %s, %s, %s, %s" % (mnemonic, operand, operand_length, prefix, suffix, addr_mode))
-            utils.die("Could not understand instruction template %s" % (instruction))
-
-    return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
 
 class SubConst(object):
     """Data about a constant substitution.
@@ -152,7 +22,7 @@ class SubConst(object):
     These are stored in substitute_constant_list"""
 
     def __init__(self, instruction, reg, constants_dict, define_constant):
-        mnemonic, operand, operand_length, prefix, suffix, addr_modes = parse_instruction(instruction)
+        mnemonic, operand, operand_length, prefix, suffix, addr_modes = Cpu6502.parse_instruction(instruction)
         self.mnemonic       = mnemonic
         self.addr_modes     = addr_modes        # There can be two possible addressing modes, a zp and addr version
         self.operand        = operand           # This is a label
@@ -196,7 +66,7 @@ class SubConst(object):
             result = result[1:]
         return int(result, 16)
 
-class Cpu6502(trace.Cpu):
+class Cpu6502(cpu.Cpu):
     """Singleton class representing a 6502 CPU"""
 
     # Addressing modes
@@ -217,16 +87,16 @@ class Cpu6502(trace.Cpu):
     mode_indexed_abs       = 14     # for the 65C02: JMP (addr,X)
 
     # Regex patterns that help identify the addressing modes
-    implied_pattern             = re.compile("([A-Z][A-Z][A-Z])$", re.IGNORECASE)
-    immediate_pattern           = re.compile("([A-Z][A-Z][A-Z])[ \t]+#(.+)$", re.IGNORECASE)
-    accumulator_pattern         = re.compile("([A-Z][A-Z][A-Z])[ \t]+A$", re.IGNORECASE)
-    offset_pattern              = re.compile("(BPL|BMI|BVC|BVS|BCC|BCS|BNE|BEQ|BRA)[ \t]+(.+)$", re.IGNORECASE)
-    indexed_indirect_pattern    = re.compile("([A-Z][A-Z][A-Z])[ \t]+\((.*),X\)$", re.IGNORECASE)
-    indirect_indexed_pattern    = re.compile("([A-Z][A-Z][A-Z])[ \t]+\((.*)\),Y$", re.IGNORECASE)
-    abs_or_zp_indexed_x_pattern = re.compile("([A-Z][A-Z][A-Z])[ \t]+(.+),X$", re.IGNORECASE)
-    abs_or_zp_indexed_y_pattern = re.compile("([A-Z][A-Z][A-Z])[ \t]+(.+),Y$", re.IGNORECASE)
-    indirect_pattern            = re.compile("([A-Z][A-Z][A-Z])[ \t]+\((.*)\)$", re.IGNORECASE)
-    zp_or_addr_pattern          = re.compile("([A-Z][A-Z][A-Z])[ \t]+(.+)$", re.IGNORECASE)
+    implied_pattern             = re.compile(r"([A-Z][A-Z][A-Z])$", re.IGNORECASE)
+    immediate_pattern           = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+#(.+)$", re.IGNORECASE)
+    accumulator_pattern         = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+A$", re.IGNORECASE)
+    offset_pattern              = re.compile(r"(BPL|BMI|BVC|BVS|BCC|BCS|BNE|BEQ|BRA)[ \t]+(.+)$", re.IGNORECASE)
+    indexed_indirect_pattern    = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+\((.*),X\)$", re.IGNORECASE)
+    indirect_indexed_pattern    = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+\((.*)\),Y$", re.IGNORECASE)
+    abs_or_zp_indexed_x_pattern = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+(.+),X$", re.IGNORECASE)
+    abs_or_zp_indexed_y_pattern = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+(.+),Y$", re.IGNORECASE)
+    indirect_pattern            = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+\((.*)\)$", re.IGNORECASE)
+    zp_or_addr_pattern          = re.compile(r"([A-Z][A-Z][A-Z])[ \t]+(.+)$", re.IGNORECASE)
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
@@ -240,7 +110,9 @@ class Cpu6502(trace.Cpu):
         self.code_analysis_fns.append(self.substitute_constants)
         self.code_analysis_fns.append(self.find_subroutine_calls)
 
-        # TODO: indent_level is a bit of a hack (after all, arguably
+        # indent_level_dict has binary addresses as the keys, and indent values as the values.
+
+        # TODO: indent_level_dict is a bit of a hack (after all, arguably
         # byte/word directives etc should have it too) and should
         # probably be handled at a higher level by the code controlling
         # emission of text disassembly output
@@ -256,7 +128,7 @@ class Cpu6502(trace.Cpu):
         # ...and similarly for the X and Y registers.
         self.opcodes = {
             0x00: self.OpcodeReturn(            "BRK",        "---", cycles="7"),
-            0x01: self.OpcodeZp(                "ORA (zp,X)", "AU-", cycles="6", update=self.update_nz),
+            0x01: self.OpcodeZp(                "ORA (zp,X)", "AU-", cycles="6", has_abs_version=False, update=self.update_nz),
             0x05: self.OpcodeZp(                "ORA zp",     "A--", cycles="3", update=self.update_nz),
             0x06: self.OpcodeZp(                "ASL zp",     "---", cycles="5", update=self.update_nzc),
             0x08: self.OpcodeImplied(           "PHP",        "---", cycles="3", update=self.neutral),
@@ -265,7 +137,7 @@ class Cpu6502(trace.Cpu):
             0x0d: self.OpcodeDataAbs(           "ORA addr",   "A--", cycles="4", update=self.update_nz),
             0x0e: self.OpcodeDataAbs(           "ASL addr",   "---", cycles="6", update=self.update_nzc),
             0x10: self.OpcodeConditionalBranch( "BPL offset", "---", cycles="2a"),
-            0x11: self.OpcodeZp(                "ORA (zp),Y", "A-U", cycles="5b", update=self.update_nz),
+            0x11: self.OpcodeZp(                "ORA (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_nz),
             0x15: self.OpcodeZp(                "ORA zp,X",   "AU-", cycles="4",  update=self.update_nz),
             0x16: self.OpcodeZp(                "ASL zp,X",   "-U-", cycles="6",  update=self.update_nzc),
             0x18: self.OpcodeImplied(           "CLC",        "---", cycles="2",  update=self.make_update_flag('c', False)),
@@ -273,7 +145,7 @@ class Cpu6502(trace.Cpu):
             0x1d: self.OpcodeDataAbs(           "ORA addr,X", "AU-", cycles="4f", update=self.update_nz),
             0x1e: self.OpcodeDataAbs(           "ASL addr,X", "-U-", cycles="7",  update=self.update_nzc),
             0x20: self.OpcodeJsr(               "JSR addr",   "---", cycles="6"),
-            0x21: self.OpcodeZp(                "AND (zp,X)", "AU-", cycles="6",  update=self.update_nzc),
+            0x21: self.OpcodeZp(                "AND (zp,X)", "AU-", cycles="6",  has_abs_version=False, update=self.update_nzc),
             0x24: self.OpcodeZp(                "BIT zp",     "---", cycles="3",  update=self.update_bit),
             0x25: self.OpcodeZp(                "AND zp",     "A--", cycles="3",  update=self.update_nz),
             0x26: self.OpcodeZp(                "ROL zp",     "---", cycles="5",  update=self.update_nzc),
@@ -284,7 +156,7 @@ class Cpu6502(trace.Cpu):
             0x2d: self.OpcodeDataAbs(           "AND addr",   "A--", cycles="4",  update=self.update_nz),
             0x2e: self.OpcodeDataAbs(           "ROL addr",   "---", cycles="6",  update=self.update_nzc),
             0x30: self.OpcodeConditionalBranch( "BMI offset", "---", cycles="2a"),
-            0x31: self.OpcodeZp(                "AND (zp),Y", "A-U", cycles="5b", update=self.update_nz),
+            0x31: self.OpcodeZp(                "AND (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_nz),
             0x35: self.OpcodeZp(                "AND zp,X",   "AU-", cycles="4",  update=self.update_nz),
             0x36: self.OpcodeZp(                "ROL zp,X",   "-U-", cycles="6",  update=self.update_nzc),
             0x38: self.OpcodeImplied(           "SEC",        "---", cycles="2",  update=self.make_update_flag('c', True)),
@@ -292,7 +164,7 @@ class Cpu6502(trace.Cpu):
             0x3d: self.OpcodeDataAbs(           "AND addr,X", "AU-", cycles="4f", update=self.update_nz),
             0x3e: self.OpcodeDataAbs(           "ROL addr,X", "-U-", cycles="7",  update=self.update_nzc),
             0x40: self.OpcodeReturn(            "RTI",        "---", cycles="6"),
-            0x41: self.OpcodeZp(                "EOR (zp,X)", "AU-", cycles="6",  update=self.update_nz),
+            0x41: self.OpcodeZp(                "EOR (zp,X)", "AU-", cycles="6",  has_abs_version=False, update=self.update_nz),
             0x45: self.OpcodeZp(                "EOR zp",     "A--", cycles="3",  update=self.update_nz),
             0x46: self.OpcodeZp(                "LSR zp",     "---", cycles="5",  update=self.update_nzc),
             0x48: self.OpcodeImplied(           "PHA",        "U--", cycles="3",  update=self.neutral),
@@ -302,7 +174,7 @@ class Cpu6502(trace.Cpu):
             0x4d: self.OpcodeDataAbs(           "EOR addr",   "A--", cycles="4",  update=self.update_nz),
             0x4e: self.OpcodeDataAbs(           "LSR addr",   "---", cycles="6",  update=self.update_nzc),
             0x50: self.OpcodeConditionalBranch( "BVC offset", "---", cycles="2a"),
-            0x51: self.OpcodeZp(                "EOR (zp),Y", "A-U", cycles="5b", update=self.update_nz),
+            0x51: self.OpcodeZp(                "EOR (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_nz),
             0x55: self.OpcodeZp(                "EOR zp,X",   "AU-", cycles="4",  update=self.update_nz),
             0x56: self.OpcodeZp(                "LSR zp,X",   "-U-", cycles="6",  update=self.update_nzc),
             0x58: self.OpcodeImplied(           "CLI",        "---", cycles="2",  update=self.make_update_flag('i', False)),
@@ -310,7 +182,7 @@ class Cpu6502(trace.Cpu):
             0x5d: self.OpcodeDataAbs(           "EOR addr,X", "AU-", cycles="4f", update=self.update_nz),
             0x5e: self.OpcodeDataAbs(           "LSR addr,X", "-U-", cycles="7",  update=self.update_nzc),
             0x60: self.OpcodeReturn(            "RTS",        "---", cycles="6"),
-            0x61: self.OpcodeZp(                "ADC (zp,X)", "AU-", cycles="6",  update=self.update_adc_sbc),
+            0x61: self.OpcodeZp(                "ADC (zp,X)", "AU-", cycles="6",  has_abs_version=False, update=self.update_adc_sbc),
             0x65: self.OpcodeZp(                "ADC zp",     "A--", cycles="3",  update=self.update_adc_sbc),
             0x66: self.OpcodeZp(                "ROR zp",     "---", cycles="5",  update=self.update_nzc),
             0x68: self.OpcodeImplied(           "PLA",        "O--", cycles="4",  update=self.update_nz),
@@ -320,14 +192,14 @@ class Cpu6502(trace.Cpu):
             0x6d: self.OpcodeDataAbs(           "ADC addr",   "A--", cycles="4",  update=self.update_adc_sbc),
             0x6e: self.OpcodeDataAbs(           "ROR addr",   "---", cycles="6",  update=self.update_nzc),
             0x70: self.OpcodeConditionalBranch( "BVS offset", "---", cycles="2a"),
-            0x71: self.OpcodeZp(                "ADC (zp),Y", "A-U", cycles="5b", update=self.update_adc_sbc),
+            0x71: self.OpcodeZp(                "ADC (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_adc_sbc),
             0x75: self.OpcodeZp(                "ADC zp,X",   "AU-", cycles="4",  update=self.update_adc_sbc),
             0x76: self.OpcodeZp(                "ROR zp,X",   "-U-", cycles="6",  update=self.update_nzc),
             0x78: self.OpcodeImplied(           "SEI",        "---", cycles="2",  update=self.make_update_flag('i', True)),
             0x79: self.OpcodeDataAbs(           "ADC addr,Y", "A-U", cycles="4f", has_zp_version=False, update=self.update_adc_sbc),
             0x7d: self.OpcodeDataAbs(           "ADC addr,X", "AU-", cycles="4f", update=self.update_adc_sbc),
             0x7e: self.OpcodeDataAbs(           "ROR addr,X", "-U-", cycles="7",  update=self.update_nzc),
-            0x81: self.OpcodeZp(                "STA (zp,X)", "UU-", cycles="6",  update=self.neutral),
+            0x81: self.OpcodeZp(                "STA (zp,X)", "UU-", cycles="6",  has_abs_version=False, update=self.neutral),
             0x84: self.OpcodeZp(                "STY zp",     "--U", cycles="3",  update=self.neutral),
             0x85: self.OpcodeZp(                "STA zp",     "U--", cycles="3",  update=self.neutral),
             0x86: self.OpcodeZp(                "STX zp",     "-U-", cycles="3",  update=self.neutral),
@@ -337,7 +209,7 @@ class Cpu6502(trace.Cpu):
             0x8d: self.OpcodeDataAbs(           "STA addr",   "U--", cycles="4",  update=self.neutral),
             0x8e: self.OpcodeDataAbs(           "STX addr",   "-U-", cycles="4",  update=self.neutral),
             0x90: self.OpcodeConditionalBranch( "BCC offset", "---", cycles="2a"),
-            0x91: self.OpcodeZp(                "STA (zp),Y", "U-U", cycles="6",  update=self.neutral),
+            0x91: self.OpcodeZp(                "STA (zp),Y", "U-U", cycles="6",  has_abs_version=False, update=self.neutral),
             0x94: self.OpcodeZp(                "STY zp,X",   "-UU", cycles="4",  update=self.neutral),
             0x95: self.OpcodeZp(                "STA zp,X",   "UU-", cycles="4",  update=self.neutral),
             0x96: self.OpcodeZp(                "STX zp,Y",   "-UU", cycles="4",  update=self.neutral),
@@ -346,7 +218,7 @@ class Cpu6502(trace.Cpu):
             0x9a: self.OpcodeImplied(           "TXS",        "-U-", cycles="2",  update=self.neutral), # we don't model S at all
             0x9d: self.OpcodeDataAbs(           "STA addr,X", "UU-", cycles="5",  update=self.neutral),
             0xa0: self.OpcodeImmediate(         "LDY #imm",   "--O", cycles="2",  update=self.make_load_immediate('y')),
-            0xa1: self.OpcodeZp(                "LDA (zp,X)", "OU-", cycles="6",  update=self.update_nz),
+            0xa1: self.OpcodeZp(                "LDA (zp,X)", "OU-", cycles="6",  has_abs_version=False, update=self.update_nz),
             0xa2: self.OpcodeImmediate(         "LDX #imm",   "-O-", cycles="2",  update=self.make_load_immediate('x')),
             0xa4: self.OpcodeZp(                "LDY zp",     "--O", cycles="3",  update=self.update_nz),
             0xa5: self.OpcodeZp(                "LDA zp",     "O--", cycles="3",  update=self.update_nz),
@@ -358,7 +230,7 @@ class Cpu6502(trace.Cpu):
             0xad: self.OpcodeDataAbs(           "LDA addr",   "O--", cycles="4",  update=self.update_nz),
             0xae: self.OpcodeDataAbs(           "LDX addr",   "-O-", cycles="4",  update=self.update_nz),
             0xb0: self.OpcodeConditionalBranch( "BCS offset", "---", cycles="2a"),
-            0xb1: self.OpcodeZp(                "LDA (zp),Y", "O-U", cycles="5b", update=self.update_nz),
+            0xb1: self.OpcodeZp(                "LDA (zp),Y", "O-U", cycles="5b", has_abs_version=False, update=self.update_nz),
             0xb4: self.OpcodeZp(                "LDY zp,X",   "-UO", cycles="4",  update=self.update_nz),
             0xb5: self.OpcodeZp(                "LDA zp,X",   "OU-", cycles="4",  update=self.update_nz),
             0xb6: self.OpcodeZp(                "LDX zp,Y",   "-OU", cycles="4",  update=self.update_nz),
@@ -369,7 +241,7 @@ class Cpu6502(trace.Cpu):
             0xbd: self.OpcodeDataAbs(           "LDA addr,X", "OU-", cycles="4f", update=self.update_nz),
             0xbe: self.OpcodeDataAbs(           "LDX addr,Y", "-OU", cycles="4f", update=self.update_nz),
             0xc0: self.OpcodeImmediate(         "CPY #imm",   "--U", cycles="2",  update=self.update_nzc),
-            0xc1: self.OpcodeZp(                "CMP (zp,X)", "UU-", cycles="6",  update=self.update_nzc),
+            0xc1: self.OpcodeZp(                "CMP (zp,X)", "UU-", cycles="6",  has_abs_version=False, update=self.update_nzc),
             0xc4: self.OpcodeZp(                "CPY zp",     "--U", cycles="3",  update=self.update_nzc),
             0xc5: self.OpcodeZp(                "CMP zp",     "U--", cycles="3",  update=self.update_nzc),
             0xc6: self.OpcodeZp(                "DEC zp",     "---", cycles="5",  update=self.update_nz),
@@ -380,7 +252,7 @@ class Cpu6502(trace.Cpu):
             0xcd: self.OpcodeDataAbs(           "CMP addr",   "U--", cycles="4",  update=self.update_nzc),
             0xce: self.OpcodeDataAbs(           "DEC addr",   "---", cycles="6",  update=self.update_nz),
             0xd0: self.OpcodeConditionalBranch( "BNE offset", "---", cycles="2a"),
-            0xd1: self.OpcodeZp(                "CMP (zp),Y", "U-U", cycles="5b", update=self.update_nzc),
+            0xd1: self.OpcodeZp(                "CMP (zp),Y", "U-U", cycles="5b", has_abs_version=False, update=self.update_nzc),
             0xd5: self.OpcodeZp(                "CMP zp,X",   "UU-", cycles="4",  update=self.update_nzc),
             0xd6: self.OpcodeZp(                "DEC zp,X",   "-U-", cycles="6",  update=self.update_nz),
             0xd8: self.OpcodeImplied(           "CLD",        "---", cycles="2",  update=self.make_update_flag('d', False)),
@@ -388,7 +260,7 @@ class Cpu6502(trace.Cpu):
             0xdd: self.OpcodeDataAbs(           "CMP addr,X", "-U-", cycles="4f", update=self.update_nzc),
             0xde: self.OpcodeDataAbs(           "DEC addr,X", "-U-", cycles="7",  update=self.update_nz),
             0xe0: self.OpcodeImmediate(         "CPX #imm",   "-U-", cycles="2",  update=self.update_nzc),
-            0xe1: self.OpcodeZp(                "SBC (zp,X)", "AU-", cycles="6",  update=self.update_adc_sbc),
+            0xe1: self.OpcodeZp(                "SBC (zp,X)", "AU-", cycles="6",  has_abs_version=False, update=self.update_adc_sbc),
             0xe4: self.OpcodeZp(                "CPX zp",     "-U-", cycles="3",  update=self.update_nzc),
             0xe5: self.OpcodeZp(                "SBC zp",     "A--", cycles="3",  update=self.update_adc_sbc),
             0xe6: self.OpcodeZp(                "INC zp",     "---", cycles="5",  update=self.update_nz),
@@ -399,7 +271,7 @@ class Cpu6502(trace.Cpu):
             0xed: self.OpcodeDataAbs(           "SBC addr",   "A--", cycles="4",  update=self.update_adc_sbc),
             0xee: self.OpcodeDataAbs(           "INC addr",   "---", cycles="6",  update=self.update_nz),
             0xf0: self.OpcodeConditionalBranch( "BEQ offset", "---", cycles="2a"),
-            0xf1: self.OpcodeZp(                "SBC (zp),Y", "A-U", cycles="5b", update=self.update_adc_sbc),
+            0xf1: self.OpcodeZp(                "SBC (zp),Y", "A-U", cycles="5b", has_abs_version=False, update=self.update_adc_sbc),
             0xf5: self.OpcodeZp(                "SBC zp,X",   "AU-", cycles="4",  update=self.update_adc_sbc),
             0xf6: self.OpcodeZp(                "INC zp,X",   "---", cycles="6",  update=self.update_nz),
             0xf8: self.OpcodeImplied(           "SED",        "---", cycles="2",  update=self.make_update_flag('d', True)),
@@ -408,42 +280,173 @@ class Cpu6502(trace.Cpu):
             0xfe: self.OpcodeDataAbs(           "INC addr,X", "-U-", cycles="7",  update=self.update_nz),
         }
 
-
-    # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
-    # TODO: This returns a list so it can return an empty list when it wants to say "give up" and this "just works" when appending the result to other lists
-    def apply_move(self, runtime_addr):
-        # TODO: This is a re-implementation using movemanager, may want to get rid of apply_move() fn later
-        binary_addr, _ = movemanager.r2b(runtime_addr)
+    def get_target_binary_addr_preferring_given_move_id(self, runtime_addr, specific_move_id):
+        # Try the specific move id first...
+        binary_addr, _ = movemanager.r2b(runtime_addr, specific_move_id)
         if binary_addr is None:
-            return []
+            # If that doesn't work, try without a specific move id...
+            binary_addr, _ = movemanager.r2b(runtime_addr)
+            if binary_addr is None:
+                assert False
+                return []
         return [binary_addr]
 
-    # TODO: Perhaps rename this function to make its behaviour more obvious, once I understand it myself...
-    def apply_move2(self, target, context):
-        # TODO: Rewritten in terms of movemanager - change this eventually? I think the rewrite does the same thing, but it may not, or it may do but not be right anyway...
-        with movemanager.move_id_for_binary_addr[context]:
-            #if context in (0x8fda, 0x2fda):
-            #    print("XAL", hex(target), movemanager.r2b(target))
-            return self.apply_move(target)
+    def parse_instruction(instruction):
+        instruction = instruction.strip()
+        r = re.match(Cpu6502.implied_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = ""
+            operand_length  = 0
+            prefix          = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_implied]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
 
+        r = re.match(Cpu6502.immediate_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1
+            prefix          = "#"
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_immediate]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.accumulator_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = ""
+            operand_length  = 0
+            if config.get_assembler().explicit_a:
+                prefix = "A"
+            else:
+                prefix = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_accumulator]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.offset_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1
+            prefix          = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_offset]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.indexed_indirect_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            prefix          = "("
+            suffix          = ",X)"
+
+            if mnemonic == "JMP":
+                operand_length = 2
+                addr_mode      = [Cpu6502.mode_indexed_abs]
+            else:
+                operand_length  = 1
+                addr_mode       = [Cpu6502.mode_indexed_indirect]
+
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.indirect_indexed_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1
+            prefix          = "("
+            suffix          = "),Y"
+            addr_mode       = [Cpu6502.mode_indirect_indexed]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.abs_or_zp_indexed_x_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = [1, 2]
+            prefix          = ""
+            suffix          = ",X"
+            addr_mode       = [Cpu6502.mode_zp_indexed_x, Cpu6502.mode_abs_indexed_x]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.abs_or_zp_indexed_y_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1 # Could be two, updated later
+            prefix          = ""
+            suffix          = ",Y"
+            addr_mode       = [Cpu6502.mode_zp_indexed_y, Cpu6502.mode_abs_indexed_y]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.indirect_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1 # Could be two, updated later
+            prefix          = "("
+            suffix          = ")"
+            addr_mode       = [Cpu6502.mode_indirect_zp, Cpu6502.mode_indirect_addr]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        r = re.match(Cpu6502.zp_or_addr_pattern, instruction)
+        if r:
+            mnemonic        = r.groups(1)[0]
+            operand         = r.groups(1)[1]
+            operand_length  = 1 # Could be two, updated later
+            prefix          = ""
+            suffix          = ""
+            addr_mode       = [Cpu6502.mode_zp, Cpu6502.mode_addr]
+            return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
+
+        utils.die("Could not understand instruction: %s" % (instruction))
+        return None
+
+    def parse_instruction_template(instruction):
+        mnemonic, operand, operand_length, prefix, suffix, addr_mode = Cpu6502.parse_instruction(instruction)
+
+        if len(addr_mode) == 1:
+            addr_mode = addr_mode[0]
+        elif len(addr_mode) > 1:
+            # Resolve zp vs addr addressing modes
+            if operand == "zp":
+                operand_length = 1
+                addr_mode = addr_mode[0]
+            elif operand == "addr":
+                operand_length = 2
+                addr_mode = addr_mode[1]
+            else:
+                utils.warn("%s, %s, %s, %s, %s, %s" % (mnemonic, operand, operand_length, prefix, suffix, addr_mode))
+                utils.die("Could not understand instruction template %s" % (instruction))
+
+        return (mnemonic, operand, operand_length, prefix, suffix, addr_mode)
 
     def hook_subroutine(self, runtime_addr, name, hook, warn=True):
         runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-        binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
-        memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
-        self.add_entry(binary_addr, name, move_id)
+        binary_loc = movemanager.r2b_checked(runtime_addr)
+        memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, 1, warn)
+        self.add_entry(binary_loc.binary_addr, runtime_addr, binary_loc.move_id, name)
         self.subroutine_hooks[runtime_addr] = hook
 
     def default_subroutine_hook(self, runtime_addr, state, subroutine):
+        _, move_id = movemanager.r2b(runtime_addr)
+        runtime_loc = memorymanager.RuntimeLocation(runtime_addr, move_id)
+
+        # Look for where we set up registers before the subroutine call
         for reg in ('a', 'x', 'y'):
             reg_addr = state.get_previous_adjust(reg)
             if reg_addr is not None:
                 if reg in subroutine.on_entry:
-                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], inline=True, word_wrap=False)
-        if subroutine.title and subroutine.runtime_addr != runtime_addr:
-            disassembly.comment(runtime_addr, subroutine.title, inline=True, word_wrap=False)
+                    disassembly.comment_binary(reg_addr, reg.upper() + "=" + subroutine.on_entry[reg], align=Align.INLINE, word_wrap=False, auto_generated=True)
 
-        # Post exit
+        # Add subroutine title comment
+        if subroutine.title and subroutine.runtime_addr != runtime_addr:
+            disassembly.comment(runtime_addr, subroutine.title, align=Align.INLINE, word_wrap=False)
+
+        # After the subroutine, check for results in registers being used
         if subroutine.on_exit:
             if subroutine.runtime_addr != runtime_addr:
                 for reg in ('a', 'x', 'y'):
@@ -455,7 +458,7 @@ class Cpu6502(trace.Cpu):
                             if com:
                                 is_private_comment = com.startswith("()") and com.endswith(")")
                                 if not is_private_comment:
-                                    disassembly.comment(reg_runtime_addr, reg.upper() + "=" + subroutine.on_exit[reg], inline=True)
+                                    disassembly.comment(reg_runtime_addr, reg.upper() + "=" + subroutine.on_exit[reg], align=Align.INLINE)
 
 
 
@@ -464,7 +467,7 @@ class Cpu6502(trace.Cpu):
 
             self.instruction_template = instruction_template
 
-            mnemonic, operand, operand_length, prefix, suffix, addr_mode = parse_instruction_template(instruction_template)
+            mnemonic, operand, operand_length, prefix, suffix, addr_mode = Cpu6502.parse_instruction_template(instruction_template)
 
             self.mnemonic       = mnemonic
             self.operand        = operand
@@ -577,7 +580,8 @@ class Cpu6502(trace.Cpu):
 
             if letter == "c":
                 result = int(self.cycles[:-1])
-                result = str(result) + "/" + str(result+1) + "/" + str(result+2)
+                return str(result) + "/" + str(result+1) + "/" + str(result+2)
+
             if letter == "d":
                 result = int(self.cycles[:-1])
 
@@ -602,9 +606,9 @@ class Cpu6502(trace.Cpu):
         def is_unconditional_branch(self):
             return False
 
-        def as_string_list(self, binary_addr, annotations):
-            lazy_string = utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_addr, 0)) + "%s", self.as_string(binary_addr))
-            result = [mainformatter.add_inline_comment(binary_addr, self.length(), self.cycles_description(binary_addr), annotations, lazy_string)]
+        def as_string_list(self, binary_loc, annotations):
+            lazy_string = utils.LazyString(utils.make_indent(trace.cpu.indent_level_dict.get(binary_loc.binary_addr, 0)) + "%s", self.as_string(binary_loc.binary_addr))
+            result = [mainformatter.add_inline_comment_including_hexdump(binary_loc, self.length(), self.cycles_description(binary_loc.binary_addr), annotations, lazy_string)]
             if self.is_block_end() and config.get_blank_line_at_block_end():
                 result.append("")
             return result
@@ -614,10 +618,10 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeReturn, self).__init__(instruction_template, reg_change, cycles=cycles)
 
-        def update_references(self, binary_addr):
+        def update_references(self, binary_loc):
             pass
 
-        def disassemble(self, binary_addr):
+        def disassemble(self, binary_loc):
             return [None]
 
         def is_block_end(self):
@@ -631,11 +635,11 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???", update=None):
             super(Cpu6502.OpcodeImplied, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
 
-        def update_references(self, binary_addr):
+        def update_references(self, binary_loc):
             pass
 
-        def disassemble(self, binary_addr):
-            return [binary_addr + 1]
+        def disassemble(self, binary_loc):
+            return [binary_loc.binary_addr + 1]
 
         def as_string(self, binary_addr):
             mnemonic = self.mnemonic
@@ -648,11 +652,11 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???", update=None):
             super(Cpu6502.OpcodeImmediate, self).__init__(instruction_template, reg_change, cycles=cycles, update=update)
 
-        def update_references(self, binary_addr):
+        def update_references(self, binary_loc):
             pass
 
-        def disassemble(self, binary_addr):
-            return [binary_addr + 2]
+        def disassemble(self, binary_loc):
+            return [binary_loc.binary_addr + 2]
 
         def as_string(self, binary_addr):
             s = "%s%s #%s" % (utils.make_indent(1), utils.force_case(self.mnemonic), classification.get_constant8(binary_addr + 1))
@@ -664,23 +668,36 @@ class Cpu6502(trace.Cpu):
 
 
     class OpcodeZp(Opcode):
-        def __init__(self, instruction_template, reg_change, cycles="???", update=None):
+        def __init__(self, instruction_template, reg_change, has_abs_version=True, cycles="???", update=None):
             super(Cpu6502.OpcodeZp, self).__init__(instruction_template, reg_change, update=update, cycles=cycles)
+            self._has_abs_version = has_abs_version
 
         def abs_operand(self, binary_addr):
-            return memory_binary[binary_addr + 1]
+            return memorymanager.RuntimeAddr(memory_binary[binary_addr + 1])
 
         def target(self, binary_addr):
             return memorymanager.RuntimeAddr(self.abs_operand(binary_addr))
 
-        def update_references(self, binary_addr):
-            trace.cpu.labels[self.abs_operand(binary_addr)].add_reference(binary_addr)
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.abs_operand(binary_loc.binary_addr)].add_reference(binary_loc)
 
-        def disassemble(self, binary_addr):
-            return [binary_addr + 2]
+        def disassemble(self, binary_loc):
+            return [binary_loc.binary_addr + 2]
 
         def as_string(self, binary_addr):
-            return utils.LazyString("%s%s %s%s%s", utils.make_indent(1), utils.force_case(self.mnemonic), self.prefix, classification.get_address8(binary_addr + 1), utils.force_case(self.suffix))
+            address_string = classification.get_address8(binary_addr + 1)
+            # TODO: We should avoid misassembly of a zp instruction by mistakenly
+            # using a label with an absolute address. But we don't have the
+            # technology to fix it automatically.
+            # If the address string is a label name that has not yet been output,
+            # then it's a forward reference, but we can't tell which label name
+            # is to be used until the LazyStrings have been evaluated to the final
+            # label name.
+            return utils.LazyString("%s%s %s%s%s", utils.make_indent(1),
+                utils.force_case(self.mnemonic),
+                self.prefix,
+                address_string,
+                utils.force_case(self.suffix))
 
 
     class OpcodeAbs(Opcode):
@@ -689,7 +706,7 @@ class Cpu6502(trace.Cpu):
             self._has_zp_version = has_zp_version
 
         def abs_operand(self, binary_addr):
-            return memorymanager.get_u16_binary(binary_addr + 1)
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
 
         def target(self, binary_addr):
             return memorymanager.RuntimeAddr(self.abs_operand(binary_addr))
@@ -699,15 +716,16 @@ class Cpu6502(trace.Cpu):
 
         def as_string(self, binary_addr):
             # We need to avoid misassembly of absolute instructions with zero-page
-            # operands. These are relatively rare in real code, but apart from the
+            # operands. (These are relatively rare in real code, but apart from the
             # fact we should still handle them even if they're rare, they can also
             # happen when the disassembly is imperfect and data is interpreted as
             # code. If we don't cope with them, bytes get lost and the disassembly
-            # can't be correctly reassembled into a binary matching the input.
-            # TODO: If we could evaluate expressions, *and* (unlikely) we don't
-            # fail at disassembly time when we spot the mismatch, we should force
-            # absolute addressing if the expression is a zero page value and the
-            # value in the input is not.
+            # can't be correctly reassembled into a binary matching the input.)
+
+            # ENHANCE: If we could evaluate expressions, *and*
+            # (unlikely) we don't fail at disassembly time when we spot the
+            # mismatch, we should force absolute addressing if the expression is a
+            # zero page value and the value in the input is not.
             result1 = utils.force_case(self.mnemonic)
             result2 = utils.LazyString("%s%s%s", self.prefix, classification.get_address16(binary_addr + 1), utils.force_case(self.suffix))
             if not self.has_zp_version() or memorymanager.get_u16_binary(binary_addr + 1) >= 0x100:
@@ -731,22 +749,20 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, has_zp_version=True, cycles="???", update=None):
             super(Cpu6502.OpcodeDataAbs, self).__init__(instruction_template, reg_change, has_zp_version, cycles=cycles, update=update)
 
-        def update_references(self, binary_addr):
-            ref = self.abs_operand(binary_addr)
+        def update_references(self, binary_loc):
+            ref = self.abs_operand(binary_loc.binary_addr)
+            trace.cpu.labels[ref].add_reference(binary_loc)
 
-            trace.cpu.labels[ref].add_reference(binary_addr)
-
-        def disassemble(self, binary_addr):
-            return [binary_addr + 3]
+        def disassemble(self, binary_loc):
+            return [binary_loc.binary_addr + 3]
 
 
     class OpcodeJmpAbs(OpcodeAbs):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeJmpAbs, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        # TODO: Might want to rename this function to reflect the fact it creates labels as well/instead as updating trace.references
-        def update_references(self, binary_addr):
-            trace.cpu.labels[self.target(binary_addr)].add_reference(binary_addr)
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.target(binary_loc.binary_addr)].add_reference(binary_loc)
 
         def is_block_end(self):
             return True
@@ -754,19 +770,23 @@ class Cpu6502(trace.Cpu):
         def could_be_call_to_subroutine(self):
             return True
 
-        def disassemble(self, binary_addr):
-            #print("PCC %s" % apply_move(self.target(binary_addr)))
-            # TODO: Should the apply_move() call be inside target and/or abs_operand? Still feeling my way here...
-            return [None] + trace.cpu.apply_move2(self.target(binary_addr), binary_addr)
-            #return [None] + trace.cpu.apply_move(self.target(binary_addr))
+        def disassemble(self, binary_loc):
+            # Get the destination location of the JMP
+            target_runtime_addr = self.target(binary_loc.binary_addr)
+            target_binary_addr, target_move_id = movemanager.r2b(target_runtime_addr)
+
+            return [None, target_binary_addr]
 
 
     class OpcodeJmpInd(OpcodeAbs):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeJmpInd, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        def update_references(self, binary_addr):
-            trace.cpu.labels[memorymanager.get_u16_binary(binary_addr + 1)].add_reference(binary_addr)
+        def abs_operand(self, binary_addr):
+            return memorymanager.RuntimeAddr(memorymanager.get_u16_binary(binary_addr + 1))
+
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.abs_operand(binary_loc.binary_addr)].add_reference(binary_loc)
 
         def is_block_end(self):
             return True
@@ -774,7 +794,7 @@ class Cpu6502(trace.Cpu):
         def is_unconditional_branch(self):
             return True
 
-        def disassemble(self, binary_addr):
+        def disassemble(self, binary_loc):
             return [None]
 
 
@@ -782,8 +802,8 @@ class Cpu6502(trace.Cpu):
         def __init__(self, instruction_template, reg_change, cycles="???"):
             super(Cpu6502.OpcodeJsr, self).__init__(instruction_template, reg_change, has_zp_version=False, cycles=cycles)
 
-        def update_references(self, binary_addr):
-            trace.cpu.labels[self.target(binary_addr)].add_reference(binary_addr)
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.target(binary_loc.binary_addr)].add_reference(binary_loc)
 
         def could_be_call_to_subroutine(self):
             return True
@@ -791,45 +811,48 @@ class Cpu6502(trace.Cpu):
         def is_unconditional_branch(self):
             return True
 
-        def disassemble(self, binary_addr):
-            assert isinstance(binary_addr, memorymanager.BinaryAddr)
+        def disassemble(self, binary_loc):
+            assert isinstance(binary_loc.binary_addr, memorymanager.BinaryAddr)
+
+            # Get the destination location of the JSR
+            target_runtime_addr = self.target(binary_loc.binary_addr)
+            target_binary_addr, target_move_id = movemanager.r2b(target_runtime_addr)
+
             # A hook only gets to return the "straight line" address to continue
             # tracing from (if there is one; it can return None if it wishes). Some
             # subroutines (e.g. jsr is_yx_zero:equw target_if_true, target_if_false)
             # might have no "straight line" case and want to return some labelled
             # entry points. This is supported by having the hook simply return None
             # and call entry() itself for the labelled entry points.
-            # TODO: Do we need to apply_move() here or in target() or in abs_operand() or before/after subroutine_hooks.get()?
-            target_runtime_addr = self.target(binary_addr)
+
             def simple_subroutine_hook(target_runtime_addr, caller_runtime_addr):
                 assert isinstance(target_runtime_addr, memorymanager.RuntimeAddr)
                 assert isinstance(caller_runtime_addr, memorymanager.RuntimeAddr)
-                # TODO: It might be possible the following assertion fails if the moves
-                # in effect are sufficiently tricky, but I'll leave it for now as it
-                # may catch bugs - once the code is more trusted it can be removed
-                # if it's technically incorrect.
-                assert movemanager.r2b_checked(caller_runtime_addr)[0] == binary_addr
+
                 return caller_runtime_addr + 3
+
             subroutine_hook = trace.cpu.subroutine_hooks.get(target_runtime_addr, simple_subroutine_hook)
-            caller_runtime_addr = movemanager.b2r(binary_addr)
-            with movemanager.move_id_for_binary_addr[binary_addr]:
+            caller_runtime_addr = movemanager.b2r(binary_loc.binary_addr)
+
+            with movemanager.move_id_for_binary_addr[binary_loc.binary_addr]:
                 return_runtime_addr = subroutine_hook(target_runtime_addr, caller_runtime_addr)
+
             if return_runtime_addr is not None:
                 return_runtime_addr = memorymanager.RuntimeAddr(return_runtime_addr)
-                result = trace.cpu.apply_move(return_runtime_addr)
+                result = trace.cpu.get_target_binary_addr_preferring_given_move_id(return_runtime_addr, binary_loc.move_id)
                 if len(result) == 0:
                     # The return runtime address could not be unambiguously converted into a binary
                     # address. It's highly likely the JSR is returning to the immediately following
                     # instruction, so if binary_addr+3 maps to the return runtime address, use that,
                     # otherwise give up and don't trace anything "after" the JSR.
-                    simple_return_binary_addr = binary_addr + 3
-                    if return_runtime_addr == movemanager.b2r(simple_return_binary_addr):
+                    simple_return_binary_addr = binary_loc.binary_addr + 3
+                    if return_runtime_addr == movemanager.b2r(simple_return_binary_addr, binary_loc.move_id):
                         result = [simple_return_binary_addr]
                     else:
                         result = [None]
             else:
                 result = [None]
-            result += trace.cpu.apply_move(target_runtime_addr)
+            result += [target_binary_addr]
             return result
 
 
@@ -839,17 +862,16 @@ class Cpu6502(trace.Cpu):
 
         def target(self, binary_addr):
             base = movemanager.b2r(binary_addr)
-            return base + 2 + utils.signed8(memorymanager.get_u8_binary(binary_addr + 1))
+            return memorymanager.RuntimeAddr(base + 2 + utils.signed8(memorymanager.get_u8_binary(binary_addr + 1)))
 
         def abs_operand(self, binary_addr):
             return self.target(binary_addr)
 
-        def update_references(self, binary_addr):
-            trace.cpu.labels[self.target(binary_addr)].add_reference(binary_addr)
+        def update_references(self, binary_loc):
+            trace.cpu.labels[self.target(binary_loc.binary_addr)].add_reference(binary_loc)
 
-        def disassemble(self, binary_addr):
-            # TODO: As elsewhere where exactly do we need to apply_move()? Perhaps we don't need it  here given it's relative, feeling my way..
-            return [binary_addr + 2] + trace.cpu.apply_move2(self.target(binary_addr), binary_addr)
+        def disassemble(self, binary_loc):
+            return [binary_loc.binary_addr + 2] + trace.cpu.get_target_binary_addr_preferring_given_move_id(self.target(binary_loc.binary_addr), binary_loc.move_id)
 
         def could_be_call_to_subroutine(self):
             return True
@@ -862,7 +884,6 @@ class Cpu6502(trace.Cpu):
             state.clear()
 
         def as_string(self, binary_addr):
-            #print("XXX", hex(binary_addr), movemanager.move_id_for_binary_addr[binary_addr])
             return utils.LazyString("%s%s %s", utils.make_indent(1), utils.force_case(self.mnemonic), disassembly.get_label(self.target(binary_addr), binary_addr))
 
 
@@ -958,13 +979,6 @@ class Cpu6502(trace.Cpu):
             state[flag] = b
         return update_flag
 
-    # TODO: make_decrement() and make_increment() are probably not that useful -
-    # it's all very well knowing the value of a register, but without an address to
-    # use with expr() it doesn't help that much. If they *are* useful, we should
-    # probably make adc # and sbc # update the value where possible.
-    #
-    # Also, when they are a loop counter being decremented, we can't keep track of
-    # the value each time around the loop, so the value is not helpful.
     def make_decrement(self, reg):
         def decrement(addr, state):
             v = state[reg].value
@@ -1037,35 +1051,35 @@ class Cpu6502(trace.Cpu):
         return transfer
 
     def neutral(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         pass
 
     def update_nz(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         state['n'] = None
         state['z'] = None
 
     def update_nzc(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         state['n'] = None
         state['z'] = None
         state['c'] = None
 
     def update_bit(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         state['n'] = None
         state['v'] = None
         state['z'] = None
 
     def update_adc_sbc(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         state['n'] = None
         state['v'] = None
         state['z'] = None
         state['c'] = None
 
     def update_all_flags(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         state['n'] = None
         state['v'] = None
         state['d'] = None
@@ -1074,12 +1088,13 @@ class Cpu6502(trace.Cpu):
         state['c'] = None
 
     def is_subroutine_call(self, binary_addr):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         c = disassembly.classifications[binary_addr]
-        return isinstance(c, trace.cpu.Opcode) and c.mnemonic == "JSR"
+        result = isinstance(c, trace.cpu.Opcode) and c.mnemonic == "JSR"
+        return result
 
     def is_branch_to(self, binary_addr, target_runtime_addr):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
 
         c = disassembly.classifications[binary_addr]
 
@@ -1125,7 +1140,7 @@ class Cpu6502(trace.Cpu):
                 addr += 1
 
     def scan_ahead_for_post_exit_state(self, binary_addr, state):
-        assert(binary_addr is not None)
+        assert binary_addr is not None
         scanning_for_register_usage = {'a': True, 'x': True, 'y': True }
 
         state.next_instruction = None

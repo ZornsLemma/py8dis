@@ -59,13 +59,12 @@ go()                    Classifies code and data and emits assembly.
 import argparse
 import memorymanager
 
-# These functions/objects are directly exposed to the user.
-# TODO: I think we need to do something re runtime-vs-binary addresses
-# here - at the moment these functions work with binary addresses but
-# if they are directly user exposed they need to use runtime addresses
+# These functions are directly exposed to the user.
 from classification import string, stringterm, stringcr, stringz, stringhi, stringhiz, stringn
 from disassembly import get_label
-from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary
+from memorymanager import get_u8_binary, get_u16_binary, get_u16_be_binary, get_u16_be_runtime
+from align import Align
+from format import Format
 
 # These modules are used to implement things in this file and aren't so directly
 # exposed to the user. The user can still access them using the qualified names
@@ -76,16 +75,18 @@ import disassembly
 import labelmanager
 import movemanager
 import mainformatter
+import align
 import trace
 import utils
 
-from cpu65C02 import *
-from cpu6502 import *
-from cpu8080 import *
+import cpu
+import cpu65C02
+import cpu6502
+import cpu8080
 
-cpu_names = { "6502"  : lambda : Cpu6502(),
-              "65c02" : lambda : Cpu65C02(),
-              "8080"  : lambda : Cpu8080(),
+cpu_names = { "6502"  : lambda : cpu6502.Cpu6502(),
+              "65c02" : lambda : cpu65C02.Cpu65C02(),
+              "8080"  : lambda : cpu8080.Cpu8080(),
             }
 
 memory_binary = memorymanager.memory_binary
@@ -101,7 +102,7 @@ def load(binary_load_addr, filename, cpu_name, md5sum=None):
     if cpu_name is None:
         utils.die("No CPU type selected in call to load().")
 
-    if isinstance(cpu_name, trace.Cpu):
+    if isinstance(cpu_name, cpu.Cpu):
         # Set the CPU
         trace.cpu = cpu_name
     else:
@@ -126,7 +127,7 @@ def load(binary_load_addr, filename, cpu_name, md5sum=None):
     # Clear the no-automatic comments, for lack of a better place to clear them
     trace.no_auto_comment_set = set()
 
-def move(dest, src, length):
+def move(dest_runtime_addr, src_binary_addr, length):
     """Indicates that a block of memory is copied at runtime.
 
     Often a block of code or data is moved (relocated) after loading
@@ -144,39 +145,34 @@ def move(dest, src, length):
     load().
     """
 
-    dest = memorymanager.RuntimeAddr(dest)
-    src = memorymanager.BinaryAddr(src)
+    dest_runtime_addr = memorymanager.RuntimeAddr(dest_runtime_addr)
+    src_binary_addr = memorymanager.BinaryAddr(src_binary_addr)
 
     # You can't move from a region that hasn't been populated with data.
-    assert all(memory_binary[i] is not None for i in range(src, src+length))
-    return movemanager.add_move(dest, src, length)
+    assert all(memory_binary[i] is not None for i in range(src_binary_addr, src_binary_addr+length))
+    return movemanager.add_move(dest_runtime_addr, src_binary_addr, length)
 
-def constant(value, name):
+def constant(value, name, comment=None, *, align=Align.INLINE, format=Format.DEFAULT):
     """Give a name to a constant value for use in the assembly.
 
     These names can then be used in subsequent calls to expr().
     """
+    assert((comment == None) or (isinstance(comment, str)))
 
-    disassembly.add_constant(value, name)
+    disassembly.add_constant(value, name, comment, align, format)
 
 def label(runtime_addr, name, move_id=None):
     """Define a label name for a runtime address."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    if move_id is None: # TODO: not super happy with this
-        # We don't care about the equivalent binary address, but the process of looking
-        # it up gives us a move ID to associate with this label.
+    assert isinstance(name, str)
+    assert (move_id == None) or isinstance(move_id, int)
+    if move_id is None:
+        # Look up the associated binary address, just to get the best move_id
         _, move_id = movemanager.r2b(runtime_addr)
-    #if name == "nmi_handler_rom_start":
-    #    print("XAP", move_id)
-    #if name == "nmi_handler_rom_start":
-    #    print("PXX", move_id)
-    #    print("PXY", movemanager.move_ids_for_runtime_addr(runtime_addr))
-    #    print("PXZ", movemanager.active_move_ids)
+
     disassembly.add_label(runtime_addr, name, move_id)
 
-# TODO: Should probably take an optional move_id?
-# TODO: This isn't working - see "command_table+1" in dfs226.py for example
 def expr_label(runtime_addr, s):
     """Define an expression for a runtime address.
 
@@ -194,10 +190,6 @@ def expr_label(runtime_addr, s):
     Assembler assertions output at the end of the assembly code ensure
     that the expressions evaluate to the expected constants."""
 
-    runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    # TODO: If this continues to just forward to label() perhaps make that behavuour
-    # official and just provide both names for backwards compatibility/documenting the
-    # difference for users who want to??
     return label(runtime_addr, s)
 
 def optional_label(runtime_addr, name, base_runtime_addr=None):
@@ -208,13 +200,15 @@ def optional_label(runtime_addr, name, base_runtime_addr=None):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     if base_runtime_addr is not None:
         base_runtime_addr = memorymanager.RuntimeAddr(base_runtime_addr)
-    disassembly.add_optional_label(runtime_addr, name, base_runtime_addr)
+    disassembly.add_optional_label(runtime_addr, name, base_addr=base_runtime_addr)
 
 def local_label(runtime_addr, name, start_addr, end_addr, move_id=None):
     disassembly.add_local_label(runtime_addr, name, start_addr, end_addr, move_id)
 
 def substitute_constants(instruction, reg, constants_dict, define_all_constants=None):
-    """When loading a register with an immediate value somewhere before the given instruction, fill in a constant or expression from a dictionary
+    """When loading a register with an immediate value somewhere
+    before the given instruction, fill in a constant or expression
+    from the given dictionary.
 
     `define_all_constants` has three possible values:
         None    - define no constants (the default)
@@ -227,7 +221,7 @@ def substitute_constants(instruction, reg, constants_dict, define_all_constants=
             if disassembly.is_simple_name(constants_dict[entry]):
                 constant(entry, constants_dict[entry])
 
-    trace.substitute_constant_list.append(SubConst(instruction, reg, constants_dict, define_all_constants != None))
+    trace.substitute_constant_list.append(cpu6502.SubConst(instruction, reg, constants_dict, define_all_constants != None))
 
 def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=None, on_exit=None, hook=False, move_id=None, is_entry_point=True):
     """
@@ -251,10 +245,10 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
         hook = trace.cpu.default_subroutine_hook
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
 
     # if the subroutine in within the binary, output a header comment for it.
-    if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
+    if memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr):
         # Format a comment for the subroutine header
         if config.get_subroutine_header() is not None:
             auto_comment(runtime_addr, config.get_subroutine_header(), word_wrap=False)
@@ -282,7 +276,18 @@ def subroutine(runtime_addr, name=None, title=None, description=None, on_entry=N
                 auto_comment(runtime_addr, config.get_subroutine_footer(), word_wrap=False)
     trace.add_subroutine(runtime_addr, name, title, description, on_entry, on_exit, hook, move_id)
 
-def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
+def _convert_inline_to_align_internal(inline, align):
+    # If no 'align' value is specified, convert the old True/False 'inline' values into the modern 'Align' type
+    if align == None:
+        if inline:
+            align = Align.INLINE
+        else:
+            align = Align.BEFORE_LABEL
+
+    assert isinstance(align, Align)
+    return align
+
+def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True, *, align=None):
     """Add a comment.
 
     Define a comment string to appear in the assembly code at the
@@ -290,22 +295,35 @@ def comment(runtime_addr, text, inline=False, indent=0, word_wrap=True):
     to the end of the line), or standalone (a separate line of output).
     The comment is word wrapped by default.
     """
+    assert isinstance(inline, bool)
+    assert isinstance(indent, int)
+    assert isinstance(word_wrap, bool)
+    assert (align == None) or isinstance(align, Align)
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=word_wrap, indent=indent)
+    # Convert the old True/False values into the modern 'Align' type as needed
+    align = _convert_inline_to_align_internal(inline, align)
 
-def formatted_comment(runtime_addr, text, inline=False, indent=0):
+    disassembly.comment(runtime_addr, text, word_wrap=word_wrap, indent=indent, align=align, auto_generated=False)
+
+def formatted_comment(runtime_addr, text, inline=False, align=None, indent=0):
     """Add a comment without word wrapping."""
 
-    disassembly.comment(runtime_addr, text, inline, word_wrap=False, indent=indent)
+    # Convert the old True/False values into the modern 'Align' type as needed
+    align = _convert_inline_to_align_internal(inline, align)
+
+    disassembly.comment(runtime_addr, text, word_wrap=False, indent=indent, align=align)
 
 def no_automatic_comment(runtime_addr):
     trace.no_auto_comment_set.add(runtime_addr)
 
-def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, word_wrap=True):
+def auto_comment(runtime_addr, text, inline=False, align=None, indent=0, show_blank=False, word_wrap=True):
     """For internal use only. Generates a comment if not inhibited."""
 
     if runtime_addr == None:
         return
+
+    # Convert the old True/False values into the modern 'Align' type as needed
+    align = _convert_inline_to_align_internal(inline, align)
 
     if not (runtime_addr in trace.no_auto_comment_set):
         # Make sure we are within the binary
@@ -315,19 +333,18 @@ def auto_comment(runtime_addr, text, inline=False, indent=0, show_blank=False, w
             if memorymanager.is_data_loaded_at_binary_addr(binary_addr):
                 if show_blank:
                     blank(runtime_addr)
-                comment(runtime_addr, text, inline=inline, indent=indent, word_wrap=word_wrap)
+                disassembly.comment(runtime_addr, text, word_wrap=word_wrap, indent=indent, align=align, auto_generated=True)
 
-def annotate(runtime_addr, s, priority=None):
+def annotate(runtime_addr, s, *, align=Align.BEFORE_LABEL, priority=None):
     """Add a raw string directly to the assembly code output at the
     given address."""
 
-    # TODO: Maybe this should accept a string or a sequence; if given a sequence we'd join the components with newlines.
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    disassembly.add_raw_annotation(binary_addr, s, priority)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    disassembly.add_raw_annotation(binary_loc, s, align=align, priority=priority)
 
-def blank(runtime_addr, priority=None):
-    annotate(runtime_addr, "", priority)
+def blank(runtime_addr, *, align=Align.BEFORE_LABEL, priority=None):
+    annotate(runtime_addr, "", align=align, priority=priority)
 
 def expr(runtime_addr, s):
     """Define a string expression for an address.
@@ -348,16 +365,16 @@ def expr(runtime_addr, s):
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr)
 
     if isinstance(s, dict):
         # Dictionary supplied.
         # Look up value in binary, and use that as key in dictionary
-        val = get_u8_binary(binary_addr)
-        classification.add_expression(binary_addr, s[val])
+        val = get_u8_binary(binary_loc.binary_addr)
+        classification.add_expression(binary_loc.binary_addr, s[val])
     else:
-        classification.add_expression(binary_addr, s)
+        classification.add_expression(binary_loc.binary_addr, s)
 
 def auto_expr(runtime_addr, s):
     """For internal use only. Generates an expression if not inhibited."""
@@ -377,20 +394,26 @@ def byte(runtime_addr, n=1, cols=None):
     """Categorise a number of bytes at the given address as byte data."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    if not memorymanager.check_data_loaded_at_binary_addr(binary_addr, n, True):
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    if not memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, n, True):
         return
-    disassembly.add_classification(binary_addr, classification.Byte(n, cols=cols))
+    disassembly.add_classification(binary_loc.binary_addr, classification.Byte(n, cols=cols))
 
-# TODO: byte()/word() should probably optionally (via an optional arg or a variant function) allow the user to specify a format hint for the range without having to make a separate call to the relevant formatter function with the same arguments. Just maybe an optional argument "format_command=None" where we do "if format_command is not None: format_command(runtime_addr, n)" would work, then you could do "word(0x432, 4, picture_binary)" (if we squeezed formatter in before warn=True argument; this is all getting a smidge messy, especially if the user is forced to specify 1 for the n argument) - anyway, think about it...
+# TODO: byte()/word() should probably optionally (via an optional arg or a variant function)
+# allow the user to specify a format hint for the range without having to make a separate call
+# to the relevant formatter function with the same arguments. Just maybe an optional argument
+# "format_command=None" where we do "if format_command is not None: format_command(runtime_addr, n)"
+# would work, then you could do "word(0x432, 4, picture_binary)" (if we squeezed formatter in before
+# warn=True argument; this is all getting a smidge messy, especially if the user is forced to specify
+# 1 for the n argument) - anyway, think about it...
 def word(runtime_addr, n=1, cols=None):
     """Categorise a number of 16 bit words at the given address as word data."""
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    if not memorymanager.check_data_loaded_at_binary_addr(binary_addr, n * 2, True):
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    if not memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, n * 2, True):
         return
-    disassembly.add_classification(binary_addr, classification.Word(n * 2, cols=cols))
+    disassembly.add_classification(binary_loc.binary_addr, classification.Word(n * 2, cols=cols))
 
 def entry(runtime_addr, label=None, warn=True):
     """
@@ -402,16 +425,16 @@ def entry(runtime_addr, label=None, warn=True):
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, move_id = movemanager.r2b_checked(runtime_addr)
-    # TODO: Should probably warn rather than assert in other fns too
-    memorymanager.check_data_loaded_at_binary_addr(binary_addr, 1, warn)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
 
-    trace.cpu.add_entry(binary_addr, label, move_id)
-    if utils.is_string_type(label):
-        return label
-    return disassembly.get_label(runtime_addr, binary_addr, move_id)
+    memorymanager.check_data_loaded_at_binary_addr(binary_loc.binary_addr, 1, warn)
 
-# TODO: Should byte()/word()/string() implicitly call nonentry()? Does the fact these add a classification implicitly stop tracing, or does the "overlapping" support I kludged in mean that isn't true? Not checked just now...
+    trace.cpu.add_entry(binary_loc.binary_addr, runtime_addr, binary_loc.move_id, label)
+
+    result = disassembly.get_label(runtime_addr, binary_loc.binary_addr, binary_loc.move_id)
+
+    return result
+
 def nonentry(runtime_addr):
     """
     Marks an address as 'not to be traced as code'.
@@ -424,10 +447,10 @@ def nonentry(runtime_addr):
     """
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
-    binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-    assert memorymanager.is_data_loaded_at_binary_addr(binary_addr)
+    binary_loc = movemanager.r2b_checked(runtime_addr)
+    assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr)
 
-    trace.cpu.traced_entry_points.add(binary_addr)
+    trace.cpu.traced_entry_points.add(binary_loc.binary_addr)
 
 def wordentry(runtime_addr, n=1):
     """
@@ -441,13 +464,16 @@ def wordentry(runtime_addr, n=1):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     word(runtime_addr, n)
     for i in range(n):
-        binary_addr, _ = movemanager.r2b_checked(runtime_addr)
-        assert memorymanager.is_data_loaded_at_binary_addr(binary_addr, 2)
-        expr(runtime_addr, entry(get_u16_binary(binary_addr)))
+        binary_loc = movemanager.r2b_checked(runtime_addr)
+        assert memorymanager.is_data_loaded_at_binary_addr(binary_loc.binary_addr, 2)
+        entry_runtime_addr = get_u16_binary(binary_loc.binary_addr)
+        entry_label = entry(entry_runtime_addr)
+        expr(runtime_addr, entry_label)
+
         runtime_addr += 2
+
     return runtime_addr
 
-# TODO: This is a user command, it should possibly take an optional move_id or respect the "current move ID"
 def hook_subroutine(runtime_addr, name, hook, warn=True):
     """
     Add a hook function for a subroutine at the given address.
@@ -483,7 +509,7 @@ def stringz_hook(target, addr):
 def stringn_hook(target, addr):
     return stringn(addr + 3)
 
-def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
+def code_ptr(runtime_addr, runtime_addr_high=None, offset=0, label_name=None):
     """
     Marks two bytes of data as being the address of a subroutine.
 
@@ -506,7 +532,7 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
     assert memorymanager.is_data_loaded_at_binary_addr(binary_addr_high)
     code_at_runtime_addr = ((memory_binary[binary_addr_high] << 8) | memory_binary[binary_addr]) + offset
     # Label and trace the code at code_at
-    label = entry(code_at_runtime_addr, warn=False) # ENHANCE: allow optional user-specified label?
+    label = entry(code_at_runtime_addr, label=label_name, warn=False)
     # Reference that label at addr/addr_high.
     offset_string = "" if offset == 0 else ("%+d" % -offset)
     if binary_addr_high == binary_addr + 1:
@@ -514,11 +540,9 @@ def code_ptr(runtime_addr, runtime_addr_high=None, offset=0):
         # well, but since the assembler has support for emitting a little-endian
         # 16-bit word it's nice to use it when we can.
         assert runtime_addr_high == runtime_addr + 1
-        # TODO: Use word()/expr() variants which take a binary addr directly?
         word(runtime_addr)
         expr(runtime_addr, utils.LazyString("%s%s", label, offset_string))
     else:
-        # TODO: Use byte()/expr() variants which take a binary addr directly?
         byte(runtime_addr)
         expr(runtime_addr, make_lo(utils.LazyString("%s%s", label, offset_string)))
         byte(runtime_addr_high)
@@ -572,8 +596,8 @@ def set_formatter(runtime_addr, n, formatter):
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     assert n > 0
     for i in range(n):
-        binary_addr, _ = movemanager.r2b_checked(runtime_addr + i)
-        disassembly.format_hint[binary_addr] = formatter
+        binary_loc = movemanager.r2b_checked(runtime_addr + i)
+        disassembly.format_hint[binary_loc.binary_addr] = formatter
 
 def uint(runtime_addr, n=1):
     """Specifies uint formatting for data in the given block"""
@@ -619,32 +643,9 @@ def is_assembler(s):
         return True
     return False
 
-def get_assembler_index():
-    assembler_index = 0
-    for a in ["acme", "beebasm", "xa", "z88dk_8080"]:
-        if is_assembler(a):
-            return assembler_index
-        assembler_index += 1
-    return None
-
 #
 # Assembler specific expression strings can be built using these functions:
 #
-
-#          generic name: ( acme,  beebasm,   xa,   z88dk )
-_trans = {          'OR': ( '|',     'OR',    '|',  None  ),
-                     '|': ( '|',     'OR',    '|',  None  ),
-                   'AND': ( '&',     'AND',   '&',  None  ),
-                     '&': ( '&',     'AND',   '&',  None  ),
-                   'EOR': ( 'XOR',   'EOR',   '^',  None  ),
-                   'XOR': ( 'XOR',   'EOR',   '^',  None  ),
-                     '^': ( 'XOR',   'EOR',   '^',  None  ),
-                   'DIV': ( 'DIV',   'DIV',   '/',  None  ),
-                     '/': ( 'DIV',   'DIV',   '/',  None  ),
-                   'MOD': ( '%',     'MOD',   None, None  ),
-                     '%': ( '%',     'MOD',   None, None  ),
-                    '!=': ( '!=',    '!=',    '<>', None  ),
-}
 
 def is_simple_name(s):
     return disassembly.is_simple_name(s)
@@ -662,10 +663,9 @@ def bracket(expr):
 def assembler_op_name(s):
     """Translate an operator name into one that is assembler specific"""
 
-    global _assembler_index
-
-    if s in _trans:
-        result = _trans[s][_assembler_index]
+    trans = config.get_assembler().translate_binary_operator_names()
+    if s in trans:
+        result = trans[s]
         if result == None:
             utils.error("Assembler can't handle operator " + s)
         return result
@@ -678,12 +678,12 @@ def make_op1(op, expr):
     if (op == None) or (expr == None):
         return None
 
-    if op == 'NOT':
-        op = '!'
-    if is_assembler('beebasm') and (op == '!'):
-        if isinstance(expr, utils.LazyString):
-            return utils.LazyString("NOT(%s)", expr)
-        return 'NOT(' + expr + ')'
+    trans = config.get_assembler().translate_unary_operator_names()
+    if op in trans:
+        op = trans[op]
+        if result == None:
+            utils.error("Assembler can't handle operator " + op)
+
     if isinstance(expr, utils.LazyString):
         return utils.LazyString("%s%s", op, bracket(expr))
     return op + bracket(expr)
@@ -750,22 +750,24 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     pydis_start, pydis_end = memorymanager.get_entire_load_range()
 
     # Create start and end labels
-    label(int(pydis_start), "pydis_start", move_id=movemanager.base_move_id)
-    label(int(pydis_end), "pydis_end", move_id=movemanager.base_move_id)
+    label(int(pydis_start), "pydis_start", move_id=movemanager.BASE_MOVE_ID)
+    label(int(pydis_end), "pydis_end", move_id=movemanager.BASE_MOVE_ID)
 
     # Trace where code lives
     trace.cpu.trace()
+
+    # Generate all the references
     trace.cpu.generate_references()
 
-    # Fix up label names
+    # Fix up the final label names (evaluating LazyStrings into actual strings)
     disassembly.fix_label_names()
+
+    # Output all the references
     if config.get_label_references():
         trace.cpu.add_references_comments()
 
     # Scan the binary for strings (or allow a user function to do it)
-    # autostring() really needs to be invoked after trace() has done
-    # its classification, so we wrap it up in here by default rather
-    # than expecting the user to call it.
+    # We do this after tracing so we have the classifications.
     if post_trace_steps is None:
         def post_trace_steps():
             classification.autostring(autostring_min_length)
@@ -774,8 +776,21 @@ def go(print_output=True, post_trace_steps=None, autostring_min_length=3):
     # Mark everything remaining as bytes
     classification.classify_leftovers()
 
-    # Output assembly code
-    return disassembly.emit(print_output=print_output)
+    # Get the final assembly as a string
+    result = disassembly.emit()
+
+    # Output assembly code if wanted
+    global args
+
+    # Write to a file if specified
+    if args.output:
+        with open(args.output, 'w') as file:
+            file.write(result)
+    elif print_output:
+        print(result)
+
+    # Return assembly code as a string
+    return result
 
 # Command line parsing
 parser = argparse.ArgumentParser()
@@ -785,6 +800,7 @@ parser.add_argument("-x", "--xa", action="store_true", help="generate xa-style o
 parser.add_argument("-8", "--z88dk-8080", action="store_true", help="generate z88dk style output for the 8080 processor")
 parser.add_argument("-l", "--lower", action="store_true", help="generate lower-case output (default)")
 parser.add_argument("-u", "--upper", action="store_true", help="generate upper-case output")
+parser.add_argument("-o", "--output", help="output asm file")
 args = parser.parse_args()
 
 assembler_count = sum(1 for x in (args.beebasm, args.acme, args.xa, args.z88dk_8080) if x)
@@ -802,17 +818,9 @@ elif args.z88dk_8080:
 else:
     import beebasm
 
-_assembler_index = get_assembler_index()
 set_output_filename = config.get_assembler().set_output_filename
 
 if args.upper:
     config.set_lower_case(False)
 else:
     config.set_lower_case(True)
-
-# TODO: General point - when the code is finally tidied up, it might be
-# helpful (perhaps using wrapper functions to avoid repeating things
-# everywhere and perhaps to show an actual error message, even if we
-# also output a backtrace, rather than raw python assertion failures)
-# to do thinks like assert memory[addr] is not None rather than letting
-# subsequent code fail confusingly when it tries to use that None.

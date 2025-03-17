@@ -31,23 +31,23 @@ entry(0x406, "tube_entry")
 entry(0x06ad, "tube_evntv_handler")
 expr(0xaef9, make_lo("tube_evntv_handler"))
 expr(0xaefe, make_hi("tube_evntv_handler"))
-# ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. I'm not sure we can handle this automatically, but perhaps we could.
+# ENHANCE: We have tube_brkv_handler_fwd to stop beebasm failing (acme too, I haven't tried other assemblers) when tube_brkv_handler is a zero-page address but we don't realise before it is first used and the two passes get out of sync. Beebasm can't handle this (https://www.stardot.org.uk/forums/viewtopic.php?p=448155#p448155). acme has syntax e.g. 'LDA+1 addr,Y' where the +1 means 'addr' should be treated as zero page address.
 constant(0x0016, "tube_brkv_handler_fwd")
 expr(0xaf31, "tube_brkv_handler_fwd")
 entry(0x0016, "tube_brkv_handler") # TODO: This is breaking beebasm because it gets emitted "inline" too late for other code to realise on the first pass it is a zero page label (and we can't declare it *also* as a constant, as we then get a redefinition error)
 expr(0xaf03, make_lo("tube_brkv_handler"))
 expr(0xaf08, make_hi("tube_brkv_handler"))
-comment(0xaf70, "Patch the following JMP so we effectively do JMP (&500,X)")
-blank(0xaf70) # TODO: silly, just to test
-comment(0xaf70, "Extra comment after a blank line") # TODO: silly, just to test
-annotate(0xaf70, "; manually-created comment") # TODO: silly, just to test
+comment(0x004e, "Patch the following JMP so we effectively do JMP (&500,X)")
+blank(0x004e) # TODO: silly, just to test
+comment(0x004e, "Extra comment after a blank line") # TODO: silly, just to test
+annotate(0x004e, "; manually-created comment") # TODO: silly, just to test
 
 label(0x51, "jump_address_low")
 expr(0x4f, config.get_assembler().force_zp_label_prefix() + "jump_address_low")     # Forces the reference to the label to be 8-bit, so the correct addressing mode is used.
 
 entry(0x435, "tube_entry_small_a")
 entry(0x428, "tube_entry_claim_tube")
-comment(0xaf87, "This is a call to release the tube.")
+comment(0x040e, "This is a call to release the tube.")
 comment(0x695, "Wait for register 2 to have space and write A to it.")
 entry(0x695, "write_tube_r2_data")
 comment(0x69e, "Wait for register 4 to have space and write A to it.")
@@ -58,7 +58,6 @@ comment(0x6c5, "Wait for register 2 to have data and read A from it.")
 entry(0x6c5, "read_tube_r2_data")
 comment(0x518, "Table of flags used by tube_entry_small_a to set up registers 1/4 for the\nselected operation.")
 label(0x518, "tube_entry_flags")
-# TODO: Not sure if it's a bug or just a quirk, but we get duplicate "referenced by" lines at e.g. tube_host_code2 and l0500
 entry(0x668, "tube_host_osword_0")
 entry(0x66a, "tube_host_osword_0_loop")
 entry(0x680, "tube_host_osword_0_no_escape")
@@ -182,7 +181,7 @@ for i in range(7):
     # which doesn't correspond to a valid address. (We could obviously cope with
     # this in other ways, such as disassembling the first part of the table
     # separately.)
-    code_at = memorymanager.get_u16_be_binary(pc) + 1
+    code_at = get_u16_be_runtime(pc) + 1
     if code_at <= 0xffff:
         rts_code_ptr(pc + 1, pc)
     pc += 2
