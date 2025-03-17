@@ -3,10 +3,12 @@ Acorn specific functions.
 """
 
 from commands import *
+from classification import INSIDE_A_CLASSIFICATION
 import config
 import trace
 import utils
 import classification
+import machinetype
 from memorymanager import BinaryAddr, RuntimeAddr
 
 def xy_addr(x_addr, y_addr):
@@ -18,7 +20,7 @@ def xy_addr(x_addr, y_addr):
         assert isinstance(y_addr, BinaryAddr)
         if (memory_binary[x_addr] is None) or (memory_binary[y_addr] is None):
             return None
-        label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr)
+        label = get_label((memory_binary[y_addr] << 8) | memory_binary[x_addr], x_addr, binary_addr_type=BinaryAddrType.BINARY_ADDR_IS_AT_LABEL_USAGE)
         x_runtime_addr = None if x_addr is None else movemanager.b2r(x_addr)
         y_runtime_addr = None if y_addr is None else movemanager.b2r(y_addr)
 
@@ -26,10 +28,10 @@ def xy_addr(x_addr, y_addr):
             # If memory is classified as Word, we can have the expression be for the whole address
             auto_expr(x_runtime_addr, label)
         else:
-            # If memory is classified as a byte or 'inside_a_classification' (e.g. an operand of an instruction) then code them as individual bytes
-            if isinstance(disassembly.get_classification(x_addr), classification.Byte) or (disassembly.get_classification(x_addr) == disassembly.inside_a_classification):
+            # If memory is classified as a byte or 'INSIDE_A_CLASSIFICATION' (e.g. an operand of an instruction) then code them as individual bytes
+            if isinstance(disassembly.get_classification(x_addr), classification.Byte) or (disassembly.get_classification(x_addr) == INSIDE_A_CLASSIFICATION):
                 auto_expr(x_runtime_addr, make_lo(label))
-            if isinstance(disassembly.get_classification(y_addr), classification.Byte) or (disassembly.get_classification(y_addr) == disassembly.inside_a_classification):
+            if isinstance(disassembly.get_classification(y_addr), classification.Byte) or (disassembly.get_classification(y_addr) == INSIDE_A_CLASSIFICATION):
                 auto_expr(y_runtime_addr, make_hi(label))
 
         return RuntimeAddr((memory_binary[y_addr] << 8) | memory_binary[x_addr])
@@ -2422,7 +2424,7 @@ def osbyte_hook(runtime_addr, state, subroutine):
                 com = "Master and Compact: Write to the " + name_of_byte + " byte from CMOS RAM/EEPROM (X=" + str(by) + ")"
             else:
                 com = "Master and Compact: Write to CMOS RAM/EEPROM byte X=" + str(by)
-            # TODO: Decode which byte to read an what it means, NUAG P357
+            # TODO: Decode which byte to read and what it means, NUAG P357
         com += " with value Y"
         if y_addr is not None:
             by = memory_binary[y_addr]
@@ -2588,7 +2590,6 @@ def mos_labels():
     optional_label(0xffc2, "gsinit")
     optional_label(0xffc5, "gsread")
 
-    subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=False)
     subroutine(0xffb9, "osrdsc", None, None, hook=osrdsc_hook, is_entry_point=False)
     subroutine(0xffbc, "vduchr", None, None, hook=oswrch_hook, is_entry_point=False)
     subroutine(0xffbf, "oseven", None, None, hook=oseven_hook, is_entry_point=False)
@@ -2608,10 +2609,6 @@ def mos_labels():
     subroutine(0xfff1, "osword", None, None, hook=osword_hook, is_entry_point=False)
     subroutine(0xffdd, "osfile", None, None, hook=osfile_hook, is_entry_point=False)
     subroutine(0xfff7, "oscli",  None, None, hook=oscli_hook,  is_entry_point=False)
-
-    trace.substitute_constant_list.append(cpu6502.SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
-    trace.substitute_constant_list.append(cpu6502.SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
-    trace.substitute_constant_list.append(cpu6502.SubConst("sty crtc_address_register", 'y', crtc_registers_enum, True))
 
 def is_sideways_rom():
     auto_comment(0x8000, "Sideways ROM header")
@@ -2642,56 +2639,529 @@ def is_sideways_rom():
     # ENHANCE: We could recognise tube transfer/relocation data in header
 
 def label_tube(base, name):
-    optional_label(base + 0, "tube_%s_r1_status" % name)
-    optional_label(base + 1, "tube_%s_r1_data" % name)
-    optional_label(base + 2, "tube_%s_r2_status" % name)
-    optional_label(base + 3, "tube_%s_r2_data" % name)
-    optional_label(base + 4, "tube_%s_r3_status" % name)
-    optional_label(base + 5, "tube_%s_r3_data" % name)
-    optional_label(base + 6, "tube_%s_r4_status" % name)
-    optional_label(base + 7, "tube_%s_r4_data" % name)
+    optional_label(base + 0, "tube_%s_r1_status" % name, definable_inline=False)
+    optional_label(base + 1, "tube_%s_r1_data" % name, definable_inline=False)
+    optional_label(base + 2, "tube_%s_r2_status" % name, definable_inline=False)
+    optional_label(base + 3, "tube_%s_r2_data" % name, definable_inline=False)
+    optional_label(base + 4, "tube_%s_r3_status" % name, definable_inline=False)
+    optional_label(base + 5, "tube_%s_r3_data" % name, definable_inline=False)
+    optional_label(base + 6, "tube_%s_r4_status" % name, definable_inline=False)
+    optional_label(base + 7, "tube_%s_r4_data" % name, definable_inline=False)
+
+def hardware(machine):
+    if machine == machinetype.MachineType.MACHINE_6502SP:
+        label_tube(0xfef8, "parasite")
+        return
+
+    #######################################################################
+    # FRED: see p404 of NAUG and https://mdfs.net/Docs/Comp/BBC/Hardware/FREDAddrs
+    # Some addresses conflict between different hardware, we make some fairly arbitrary
+    # decisions about how to decode these addresses.
+    #######################################################################
+
+    optional_label(0xfc00, "fred", definable_inline=False)
+
+    # FC00-03 Byte-Wide Expansion RAM
+    #optional_label(0xfc00, "fred_bytewide_expansion_ram_addr_b0_b7", definable_inline=False)
+    #optional_label(0xfc01, "fred_bytewide_expansion_ram_addr_b8_b15", definable_inline=False)
+    #optional_label(0xfc02, "fred_bytewide_expansion_ram_addr_b16_b23", definable_inline=False)
+    #optional_label(0xfc03, "fred_bytewide_expansion_ram_data", definable_inline=False)
+
+    # FC04-05 BeebOPL (FM Synthsiser for the BBC Micro)
+    optional_label(0xfc04, "fred_beebopl0", definable_inline=False)
+    optional_label(0xfc05, "fred_beebopl1", definable_inline=False)
+
+    # FC08-0F Ample M2000/EMR/EE MIDI Interface (see also FCF0)
+    optional_label(0xfc08, "fred_midi_port1_6850_control_or_status", definable_inline=False)
+    optional_label(0xfc09, "fred_midi_port1_6850_data", definable_inline=False)
+    optional_label(0xfc0a, "fred_midi_port2_6850_control_or_status", definable_inline=False)
+    optional_label(0xfc0b, "fred_midi_port2_6850_data", definable_inline=False)
+    optional_label(0xfc0c, "fred_midi_port3_6850_control_or_status", definable_inline=False)
+    optional_label(0xfc0d, "fred_midi_port3_6850_data", definable_inline=False)
+    optional_label(0xfc0e, "fred_output_latch0", definable_inline=False)
+    optional_label(0xfc0f, "fred_output_latch1", definable_inline=False)
+
+    # FC10-13 Teletext Hardware
+    for i in range(0,4):
+        optional_label(0xfc10+i, "fred_teletext_{0}".format(i), definable_inline=False)
+
+    # FC14-1F Prestel Hardware
+    for i in range(0,8):
+        optional_label(0xfc14+i, "fred_prestel_{0}".format(i), definable_inline=False)
+
+    # FC1C-FC1F Teletext display expansion
+    optional_label(0xfc1c, "fred_jafa_6845_write_addr".format(i), definable_inline=False)
+    optional_label(0xfc1d, "fred_jafa_6845_write_data".format(i), definable_inline=False)
+    optional_label(0xfc1e, "fred_jafa_6845_read_status".format(i), definable_inline=False)
+    optional_label(0xfc1f, "fred_jafa_6845_read_data".format(i), definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FC28-2F Electron Econet
+        optional_label(0xFC28, "electron_econet_fc28", definable_inline=False)
+        optional_label(0xFC29, "electron_econet_fc29", definable_inline=False)
+        optional_label(0xFC2A, "electron_econet_fc2a", definable_inline=False)
+        optional_label(0xFC2B, "electron_econet_fc2b", definable_inline=False)
+        optional_label(0xFC2C, "electron_econet_fc2c", definable_inline=False)
+        optional_label(0xFC2D, "electron_econet_fc2d", definable_inline=False)
+        optional_label(0xFC2E, "electron_econet_fc2e", definable_inline=False)
+        optional_label(0xFC2F, "electron_econet_fc2f", definable_inline=False)
+    else:
+        # FC20-3F SID Interface (6581 Sound Interface Device)
+        optional_label(0xfc20, "sid_voice1_frequency_low", definable_inline=False)
+        optional_label(0xfc21, "sid_voice1_frequency_high", definable_inline=False)
+        optional_label(0xfc22, "sid_voice1_pw_low", definable_inline=False)
+        optional_label(0xfc23, "sid_voice1_pw_high", definable_inline=False)
+        optional_label(0xfc24, "sid_voice1_control_register", definable_inline=False)
+        optional_label(0xfc25, "sid_voice1_attack_slash_decay", definable_inline=False)
+        optional_label(0xfc26, "sid_voice1_sustain_slash_release", definable_inline=False)
+
+        optional_label(0xfc27, "sid_voice2_frequency_low", definable_inline=False)
+        optional_label(0xfc28, "sid_voice2_frequency_high", definable_inline=False)
+        optional_label(0xfc29, "sid_voice2_pw_low", definable_inline=False)
+        optional_label(0xfc2a, "sid_voice2_pw_high", definable_inline=False)
+        optional_label(0xfc2b, "sid_voice2_control_register", definable_inline=False)
+        optional_label(0xfc2c, "sid_voice2_attack_slash_decay", definable_inline=False)
+        optional_label(0xfc2d, "sid_voice2_sustain_slash_release", definable_inline=False)
+
+        optional_label(0xfc2e, "sid_voice3_frequency_low", definable_inline=False)
+        optional_label(0xfc2f, "sid_voice3_frequency_high", definable_inline=False)
+        optional_label(0xfc30, "sid_voice3_pw_low", definable_inline=False)
+        optional_label(0xfc31, "sid_voice3_pw_high", definable_inline=False)
+        optional_label(0xfc32, "sid_voice3_control_register", definable_inline=False)
+        optional_label(0xfc33, "sid_voice3_attack_slash_decay", definable_inline=False)
+        optional_label(0xfc34, "sid_voice3_sustain_slash_release", definable_inline=False)
+
+        optional_label(0xfc35, "sid_filter_fc_low", definable_inline=False)
+        optional_label(0xfc36, "sid_filter_fc_high", definable_inline=False)
+        optional_label(0xfc37, "sid_filter_reset_slash_filter", definable_inline=False)
+        optional_label(0xfc38, "sid_filter_mode_slash_volume", definable_inline=False)
+
+        optional_label(0xfc39, "sid_potx", definable_inline=False)
+        optional_label(0xfc3a, "sid_poty", definable_inline=False)
+        optional_label(0xfc3b, "sid_osc3_slash_random", definable_inline=False)
+        optional_label(0xfc3c, "sid_env3", definable_inline=False)
+
+    # FC20-27 IEEE Interface (TMS 9914A)
+    #for i in range(0,8):
+    #    optional_label(0xfc20+i, "fred_IEE488_{0}".format(i), definable_inline=False)
+
+    # FC30-3F Cambridge Ring interface
+    #for i in range(0,16):
+    #    optional_label(0xfc30+i, "fred_cambridge_ring_{0}".format(i), definable_inline=False)
+
+    # FC30-3F WiFi interface 16C2552 UART
+    #optional_label(0xfc30, "wifi_data", definable_inline=False)
+    #optional_label(0xfc31, "wifi_interrupt_enable", definable_inline=False)
+    #optional_label(0xfc32, "wifi_fifo_control_or_interrupt_id", definable_inline=False)
+    #optional_label(0xfc33, "wifi_line_control", definable_inline=False)
+    #optional_label(0xfc34, "wifi_modem_control", definable_inline=False)
+    #optional_label(0xfc35, "wifi_line_status", definable_inline=False)
+    #optional_label(0xfc36, "wifi_modem_status", definable_inline=False)
+    #optional_label(0xfc37, "wifi_scratchpad", definable_inline=False)
+
+    # FC40-4F Hard Drive Access
+    for i in range(0,16):
+        optional_label(0xfc40+i, "fred_hard_drive_{0}".format(i), definable_inline=False)
+    for i in range(0,16):
+        optional_label(0xfc50+i, "fred_undefinedA_{0}".format(i), definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FC60-6F Electron Serial controller (2681 ACIA Serial controller)
+        optional_label(0xfc60, "electron_serial_mode_register_A", definable_inline=False)
+        optional_label(0xfc61, "electron_serial_clock_select_A_or_status_register_A", definable_inline=False)
+        optional_label(0xfc62, "electron_serial_command_register_A", definable_inline=False)
+        optional_label(0xfc63, "electron_serial_data_A", definable_inline=False)
+        optional_label(0xfc64, "electron_serial_aux_control_or_input_port_changed", definable_inline=False)
+        optional_label(0xfc65, "electron_serial_interupt_mask_or_status", definable_inline=False)
+        optional_label(0xfc66, "electron_serial_counter_or_timer_upper_register", definable_inline=False)
+        optional_label(0xfc67, "electron_serial_counter_or_timer_lower_register", definable_inline=False)
+        optional_label(0xfc68, "electron_serial_mode_register_B", definable_inline=False)
+        optional_label(0xfc69, "electron_serial_clock_select_B_or_status_register_B", definable_inline=False)
+        optional_label(0xfc6A, "electron_serial_command_register_B", definable_inline=False)
+        optional_label(0xfc6B, "electron_serial_data_B", definable_inline=False)
+        optional_label(0xfc6C, "electron_serial_reserved", definable_inline=False)
+        optional_label(0xfc6D, "electron_serial_io_port_data", definable_inline=False)
+        optional_label(0xfc6E, "electron_serial_set_output_port_bits_or_start_counter", definable_inline=False)
+        optional_label(0xfc6F, "electron_serial_reset_output_port_bits_or_stop_counter", definable_inline=False)
+
+        # FC70-73 Electron Plus 1 expansion
+        optional_label(0xfc70, "electron_expansion_atod_convertor_control_or_data")
+        optional_label(0xfc71, "electron_expansion_centronics_parallel_data")
+        optional_label(0xfc72, "electron_expansion_status")
+        optional_label(0xfc73, "electron_expansion_romstrobe")
+        optional_label(0xfc78, "electron_laserdisc_0")
+        optional_label(0xfc79, "electron_laserdisc_1")
+        optional_label(0xfc7a, "electron_laserdisc_2")
+        optional_label(0xfc7b, "electron_laserdisc_3")
+        optional_label(0xfc7c, "electron_laserdisc_4")
+        optional_label(0xfc7d, "electron_laserdisc_5")
+        optional_label(0xfc7e, "electron_laserdisc_6")
+        #optional_label(0xfc7f, "electron_laserdisc_7")
+        optional_label(0xfc7f, "electron_shadow_ram_paging_register", definable_inline=False)
+    else:
+        # FC60-6F Additional/External Serial ports
+        optional_label(0xfc60, "fred_port1_6850_control_or_status", definable_inline=False)
+        optional_label(0xfc61, "fred_port1_6850_data", definable_inline=False)
+        optional_label(0xfc62, "fred_port1_baud_rate_control", definable_inline=False)
+        optional_label(0xfc64, "fred_port2_6850_control_or_status", definable_inline=False)
+        optional_label(0xfc65, "fred_port2_6850_data", definable_inline=False)
+        optional_label(0xfc66, "fred_port2_baud_rate_control", definable_inline=False)
+        optional_label(0xfc68, "fred_port3_6850_control_or_status", definable_inline=False)
+        optional_label(0xfc69, "fred_port3_6850_data", definable_inline=False)
+        optional_label(0xfc6a, "fred_port3_baud_rate_control", definable_inline=False)
+        optional_label(0xfc6c, "fred_port4_6850_control_or_status", definable_inline=False)
+        optional_label(0xfc6d, "fred_port4_6850_data", definable_inline=False)
+        optional_label(0xfc6e, "fred_port4_baud_rate_control", definable_inline=False)
+
+        # FC7C-7F Watford Video Digitiser
+        optional_label(0xfc7c, "fred_6821_register_0", definable_inline=False)
+        optional_label(0xfc7d, "fred_6821_register_1", definable_inline=False)
+        optional_label(0xfc7e, "fred_6821_register_2", definable_inline=False)
+        optional_label(0xfc7f, "fred_6821_register_3", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        #FC84-85 Electron external sound
+        optional_label(0xfc84, "external_sound_support_0", definable_inline=False)
+        optional_label(0xfc85, "external_sound_support_1", definable_inline=False)
+    else:
+        # FC80-87 LCD Display Control
+        for i in range(0,4):
+            optional_label(0xfc80+2*i, "fred_lcd_bank{0}_display_control_or_status".format(i), definable_inline=False)
+            optional_label(0xfc81+2*i, "fred_lcd_bank{0}_display_data".format(i), definable_inline=False)
+
+    # FC88-8B HostFS+TubeTCP
+    optional_label(0xfc88, "hostfs_and_tube_tcp0", definable_inline=False)
+    optional_label(0xfc89, "hostfs_and_tube_tcp1", definable_inline=False)
+    optional_label(0xfc8A, "hostfs_and_tube_tcp2", definable_inline=False)
+    optional_label(0xfc8B, "hostfs_and_tube_tcp3", definable_inline=False)
+    optional_label(0xfc8C, "hostfs_and_tube_tcp4", definable_inline=False)
+    optional_label(0xfc8D, "hostfs_and_tube_tcp5", definable_inline=False)
+    optional_label(0xfc8E, "hostfs_and_tube_tcp6", definable_inline=False)
+    optional_label(0xfc8F, "hostfs_and_tube_tcp7", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FC90-9F Electron sound and speech cartridge
+        for i in range(0,16):
+            optional_label(0xfc90+i, "electron_sound_and_speech_{0}".format(i), definable_inline=False)
+    else:
+        # FC90-9F CTS Recognition Plus palette expander additional 6522 VIA
+        optional_label(0xfc90, "cts_palette_io_register_B", definable_inline=False)
+        optional_label(0xfc91, "cts_palette_io_register_A", definable_inline=False)
+        optional_label(0xfc92, "cts_palette_ddr_B", definable_inline=False)
+        optional_label(0xfc93, "cts_palette_ddr_A", definable_inline=False)
+        optional_label(0xfc94, "cts_palette_T1_low_order_counter_or_latches", definable_inline=False)
+        optional_label(0xfc95, "cts_palette_T1_high_order_counter", definable_inline=False)
+        optional_label(0xfc96, "cts_palette_T1_low_order_latches", definable_inline=False)
+        optional_label(0xfc97, "cts_palette_T1_high_order_latches", definable_inline=False)
+        optional_label(0xfc98, "cts_palette_T2_low_order_counter_or_latches", definable_inline=False)
+        optional_label(0xfc99, "cts_palette_T2_high_order_counter", definable_inline=False)
+        optional_label(0xfc9a, "cts_palette_shift_register", definable_inline=False)
+        optional_label(0xfc9b, "cts_palette_auxilary_control_register", definable_inline=False)
+        optional_label(0xfc9c, "cts_palette_peripheral_control_register", definable_inline=False)
+        optional_label(0xfc9d, "cts_palette_interrupt_flag_register", definable_inline=False)
+        optional_label(0xfc9e, "cts_palette_interrupt_enable_register", definable_inline=False)
+        optional_label(0xfc9f, "cts_palette_io_register_A_no_handshake", definable_inline=False)
+
+    # FCA0-B7 CTS Recognition Plus palette expander
+    #for i in range(0,24):
+    #    optional_label(0xfca0+i, "fred_cts_{0}_colour_{1}".format(["red","green","blue"][i // 8], i & 7), definable_inline=False)
+
+    # FCB0-BF PRISMA video system
+    optional_label(0xfcb0, "prisma_reserved", definable_inline=False)
+    optional_label(0xfcb1, "prisma_horizontal_line_phase", definable_inline=False)
+    optional_label(0xfcb2, "prisma_frame_grab_black_level_and_gain", definable_inline=False)
+    optional_label(0xfcb3, "prisma_frame_grab_and_control_output_register", definable_inline=False)
+    optional_label(0xfcb4, "prisma_palette_control", definable_inline=False)
+    optional_label(0xfcb5, "prisma_palette_address", definable_inline=False)
+    optional_label(0xfcb6, "prisma_window_or_background_delay_trims", definable_inline=False)
+    optional_label(0xfcb7, "prisma_overlay_or_NVM_page_paged_into_JIM_at_FDxx", definable_inline=False)
+    optional_label(0xfcb8, "prisma_HD63484_ACRTC_address_or_status", definable_inline=False)
+    optional_label(0xfcb9, "prisma_HD63484_ACRTC_data", definable_inline=False)
+    optional_label(0xfcba, "prisma_control_or_status", definable_inline=False)
+    optional_label(0xfcbb, "prisma_palette_data", definable_inline=False)
+    optional_label(0xfcbc, "prisma_overlay_data", definable_inline=False)
+    optional_label(0xfcbd, "prisma_overlay_address_or_ACRTC_data_read", definable_inline=False)
+    optional_label(0xfcbe, "prisma_NVR_data", definable_inline=False)
+    optional_label(0xfcbf, "prisma_reserved_for_control_in_multiple_PRISMA_systems", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FCC0    Electron digital joystick option C (see also FCD0)
+        # optional_label(0xfcc0, "electron_joystickC_state", definable_inline=False)
+
+        # FCC0-C7 Electron 1770 floppy disk expansion (Plus 3)
+        optional_label(0xfcc0, "electron_1770_control_port", definable_inline=False)
+        optional_label(0xfcc4, "electron_1770_command_or_status_register", definable_inline=False)
+        optional_label(0xfcc5, "electron_1770_track_register", definable_inline=False)
+        optional_label(0xfcc6, "electron_1770_sector_register", definable_inline=False)
+        optional_label(0xfcc7, "electron_1770_data_register", definable_inline=False)
+
+    # FCCC-CF Morley Electronics RAMdisc - paged into JIM at &FDxx
+    optional_label(0xfccc, "morley_ramdisc_bank_select_b8_b15", definable_inline=False)
+    optional_label(0xfccd, "morley_ramdisc_bank_select_b16_b23", definable_inline=False)
+    optional_label(0xfcce, "morley_ramdisc_bank_select_b24_b31", definable_inline=False)
+    optional_label(0xfccf, "morley_ramdisc_control_register", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FCD0    Electron digital joystick option D
+        optional_label(0xfcd0, "electron_digital_joystickD_state", definable_inline=False)
+        optional_label(0xfcd6, "electron_ii2c_control", definable_inline=False)
+
+    # FCD8-DF PRES Advanced Battery-Backed RAM
+    optional_label(0xfcd8, "pres_battery_backed_ram_unlock_AP7_lower_bank", definable_inline=False)
+    optional_label(0xfcd9, "pres_battery_backed_ram_lock_AP7_lower_bank", definable_inline=False)
+    optional_label(0xfcda, "pres_battery_backed_ram_unlock_AP7_upper_bank", definable_inline=False)
+    optional_label(0xfcdb, "pres_battery_backed_ram_lock_AP7_upper_bank", definable_inline=False)
+    optional_label(0xfcdc, "pres_battery_backed_ram_unlock_ABR_RAM_bank_0_and_2", definable_inline=False)
+    optional_label(0xfcdd, "pres_battery_backed_ram_lock_ABR_RAM_bank_0_and_2", definable_inline=False)
+    optional_label(0xfcde, "pres_battery_backed_ram_unlock_ABR_RAM_bank_1_and_3", definable_inline=False)
+    optional_label(0xfcdf, "pres_battery_backed_ram_lock_ABR_RAM_bank_1_and_3", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FCE0    Electron digital joystick option E
+        # optional_label(0xfce0, "electron_digital_joystickE_state", definable_inline=False)
+
+        # FCE0-EF Electron Tube control
+        optional_label(0xfce0, "electron_tube_setup_or_status_register", definable_inline=False)
+        optional_label(0xfce1, "electron_tube_vdu_transfer_port", definable_inline=False)
+        optional_label(0xfce2, "electron_tube_command_status_register", definable_inline=False)
+        optional_label(0xfce3, "electron_tube_command_transfer_port", definable_inline=False)
+        optional_label(0xfce4, "electron_tube_data_status_register", definable_inline=False)
+        optional_label(0xfce5, "electron_tube_data_transfer_port", definable_inline=False)
+        optional_label(0xfce6, "electron_tube_interrupt_status_register_slash_CPU", definable_inline=False)
+        optional_label(0xfce7, "electron_tube_interrupt_transfer_port", definable_inline=False)
+    else:
+        # FCE0-EF Watford hand scanner
+        optional_label(0xfce0, "watford_hand_scanner_data_byte", definable_inline=False)
+        optional_label(0xfce1, "watford_hand_scanner_data_ready", definable_inline=False)
+        optional_label(0xfce2, "watford_hand_scanner_start_of_line", definable_inline=False)
+        optional_label(0xfce3, "watford_hand_scanner_vertical_pulse", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FCF0    Electron digital joystick option F
+        optional_label(0xfcf0, "electron_digital_joystickF_state", definable_inline=False)
+    else:
+        # FCF0-F7 JGH/ETI/EE/EMR MIDI Interface (see also FC08)
+        optional_label(0xfcf0, "fred_MIDI_port_1_6850_control_or_status", definable_inline=False)
+        optional_label(0xfcf1, "fred_MIDI_port_1_6850_data", definable_inline=False)
+        optional_label(0xfcf2, "fred_MIDI_port_2_6850_control_or_status", definable_inline=False)
+        optional_label(0xfcf3, "fred_MIDI_port_2_6850_data", definable_inline=False)
+        optional_label(0xfcf4, "fred_MIDI_port_3_6850_control_or_status", definable_inline=False)
+        optional_label(0xfcf5, "fred_MIDI_port_3_6850_data", definable_inline=False)
+        optional_label(0xfcf6, "fred_MIDI_port_4_6850_control_or_status", definable_inline=False)
+        optional_label(0xfcf7, "fred_MIDI_port_4_6850_data", definable_inline=False)
+
+    # FCF8-F9 USB Port
+    #optional_label(0xfcf8, "fred_USB_data", definable_inline=False)
+    #optional_label(0xfcf9, "fred_USB_control_or_status", definable_inline=False)
+
+    # FCFA-FD DataCentre non-volatile RAM control
+    optional_label(0xfcf8, "datacentre_vnc_data_port", definable_inline=False)
+    optional_label(0xfcf9, "datacentre_vnc_control_port", definable_inline=False)
+    optional_label(0xfcfa, "datacentre_nvram_data", definable_inline=False)
+    optional_label(0xfcfb, "datacentre_nvram_data_direction_register", definable_inline=False)
+
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        # FCFC-FF Electron Advanced Quarter Meg RAM ('AQR')
+        optional_label(0xfcfc, "electron_aqr_ram_bank select", definable_inline=False)
+        optional_label(0xfcfd, "electron_aqr_ram_disable_write_protect", definable_inline=False)
+        optional_label(0xfcfe, "electron_aqr_ram_write_protect", definable_inline=False)
+    else:
+        # FCFC-FF Page-Wide Expansion RAM
+        optional_label(0xfcfc, "page_ram_bank_select_b32_b39", definable_inline=False)
+        optional_label(0xfcfd, "page_ram_bank_select_b24_b31", definable_inline=False)
+        optional_label(0xfcfe, "page_ram_bank_select_b16_b23", definable_inline=False)
+        optional_label(0xfcff, "page_ram_bank_select_b8_b15", definable_inline=False)
+
+    #######################################################################
+    # JIM, see https://mdfs.net/Docs/Comp/BBC/Hardware/JIMAddrs
+    #######################################################################
+    optional_label(0xfd00, "jim", definable_inline=False)
+
+    # FDF0-F7 Torch SASI/SCSI Hard Drive Access
+    optional_label(0xfdf0, "torch_sasi_slash_scsi_data")
+    optional_label(0xfdf1, "torch_sasi_slash_scsi_status_or_reset")
+    optional_label(0xfdf2, "torch_sasi_slash_scsi_set_ack_or_select_1")
+    optional_label(0xfdf3, "torch_sasi_slash_scsi_select_0")
+
+    optional_label(0xfdfe, "jim_reset_address_low", definable_inline=False)
+    optional_label(0xfdff, "jim_reset_address_high", definable_inline=False)
+
+    #######################################################################
+    # SHEILA, see https://mdfs.net/Docs/Comp/BBC/Hardware/SHEILAddrs
+    #######################################################################
+    if machine == machinetype.MachineType.MACHINE_ELECTRON:
+        optional_label(0xfe00, "electron_interrupt_control_or_status", definable_inline=False)
+        optional_label(0xfe02, "electron_screen_start_div2_low", definable_inline=False)
+        optional_label(0xfe03, "electron_screen_start_div2_high", definable_inline=False)
+        optional_label(0xfe04, "electron_cassette_data_shift_io", definable_inline=False)
+        optional_label(0xfe05, "electron_romsel_and_interrupt_clear", definable_inline=False)
+        optional_label(0xfe06, "electron_counter_plus_cassette_control", definable_inline=False)
+        optional_label(0xfe07, "electron_cassette_and_mode_and_sound_and_caps_led", definable_inline=False)
+        optional_label(0xfe08, "electron_palette_0", definable_inline=False)
+        optional_label(0xfe09, "electron_palette_1", definable_inline=False)
+        optional_label(0xfe0a, "electron_palette_2", definable_inline=False)
+        optional_label(0xfe0b, "electron_palette_3", definable_inline=False)
+        optional_label(0xfe0c, "electron_palette_4", definable_inline=False)
+        optional_label(0xfe0d, "electron_palette_5", definable_inline=False)
+        optional_label(0xfe0e, "electron_palette_6", definable_inline=False)
+        optional_label(0xfe0f, "electron_palette_7", definable_inline=False)
+    else:
+        optional_label(0xfe00, "crtc_address_register", definable_inline=False)
+        trace.substitute_constant_list.append(cpu6502.SubConst("sta crtc_address_register", 'a', crtc_registers_enum, True))
+        trace.substitute_constant_list.append(cpu6502.SubConst("stx crtc_address_register", 'x', crtc_registers_enum, True))
+        trace.substitute_constant_list.append(cpu6502.SubConst("sty crtc_address_register", 'y', crtc_registers_enum, True))
+
+        optional_label(0xfe01, "crtc_register_data", definable_inline=False)
+
+        # FE08-0F 6850 ACIA Serial controller
+        optional_label(0xfe08, "acia_control_or_status", definable_inline=False)
+        optional_label(0xfe09, "acia_data", definable_inline=False)
+
+        optional_label(0xfe10, "serial_ula_set_baud_cassette_and_motor", definable_inline=False)
+
+        if (machine == machinetype.MachineType.MACHINE_BBC) or (machine == machinetype.MachineType.MACHINE_BPLUS):
+            # FE18-1F Station ID/NMI Control (BBC B, B+)
+            optional_label(0xfe18, "station_id_disable_net_nmis",  definable_inline=False)
+        elif machine == machinetype.MachineType.MACHINE_MASTER:
+            # FE18-1F Analogue-to-Digital Convertor (Master)
+            optional_label(0xfe18, "a2d_start_conversion_or_read_status",  definable_inline=False)
+            optional_label(0xfe19, "a2d_read_data_high_byte",  definable_inline=False)
+            optional_label(0xfe1a, "a2d_read_data_low_byte",  definable_inline=False)
+
+        # FE20-2F Video ULA
+        optional_label(0xfe20, "video_ula_control", definable_inline=False)
+        optional_label(0xfe21, "video_ula_palette", definable_inline=False)
+        optional_label(0xfe22, "video_ula_border_colour_and_palette_control", definable_inline=False)
+        optional_label(0xfe23, "video_ula_palette_selection", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_MASTER:
+            # FE24-27 Disk control (Master)
+            optional_label(0xfe24, "disk_drive_control_register", definable_inline=False)
+
+            # FE28-2B 1770 Floppy Disk Controller (Master)
+            optional_label(0xfe28, "fdc_command_or_status", definable_inline=False)
+            optional_label(0xfe29, "fdc_track", definable_inline=False)
+            optional_label(0xfe2a, "fdc_sector", definable_inline=False)
+            optional_label(0xfe2b, "fdc_data", definable_inline=False)
+
+        optional_label(0xfe30, "romsel", definable_inline=False)
+
+        if (machine == machinetype.MachineType.MACHINE_BPLUS) or (machine == machinetype.MachineType.MACHINE_MASTER):
+            optional_label(0xfe34, "acccon", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_MASTER:
+            optional_label(0xfe38, "disable_network_nmis", definable_inline=False)
+            optional_label(0xfe3c, "enable_network_nmis", definable_inline=False)
+
+
+        def label_via(base, name):
+            optional_label(base +  0, name + "_via_orb_irb", definable_inline=False)
+            optional_label(base +  1, name + "_via_ora_ira", definable_inline=False)
+            optional_label(base +  2, name + "_via_ddrb", definable_inline=False)
+            optional_label(base +  3, name + "_via_ddra", definable_inline=False)
+            optional_label(base +  4, name + "_via_t1c_l", definable_inline=False)
+            optional_label(base +  5, name + "_via_t1c_h", definable_inline=False)
+            optional_label(base +  6, name + "_via_t1l_l", definable_inline=False)
+            optional_label(base +  7, name + "_via_t1l_h", definable_inline=False)
+            optional_label(base +  8, name + "_via_t2c_l", definable_inline=False)
+            optional_label(base +  9, name + "_via_t2c_h", definable_inline=False)
+            optional_label(base + 10, name + "_via_sr", definable_inline=False)
+            optional_label(base + 11, name + "_via_acr", definable_inline=False)
+            optional_label(base + 12, name + "_via_pcr", definable_inline=False)
+            optional_label(base + 13, name + "_via_ifr", definable_inline=False)
+            optional_label(base + 14, name + "_via_ier", definable_inline=False)
+            optional_label(base + 15, name + "_via_ora_ira", definable_inline=False)
+        label_via(0xfe40, "system")
+        label_via(0xfe60, "user")
+
+        if (machine == machinetype.MachineType.MACHINE_BBC) or (machine == machinetype.MachineType.MACHINE_BPLUS):
+            # FE80-9F 8271 Floppy disk controller (BBC B, B+)
+            # FE80-9F 1770 Floppy disk controller (BBC B, B+)
+            optional_label(0xfe80, "fdc_8271_command_or_status_or_1770_drive_control", definable_inline=False)
+            optional_label(0xfe81, "fdc_8271_parameter_or_result", definable_inline=False)
+            optional_label(0xfe82, "fdc_8271_reset", definable_inline=False)
+            optional_label(0xfe84, "fdc_8271_data_or_1770_command_or_status", definable_inline=False)
+
+            optional_label(0xfe85, "fdc_1770_track", definable_inline=False)
+            optional_label(0xfe86, "fdc_1770_sector", definable_inline=False)
+            optional_label(0xfe87, "fdc_1770_data", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_MASTER:
+            # FE80-9F Master internal expansion port (PL12)
+            for i in range(0,16):
+                optional_label(0xfe80+i, "internal_expansion_port_{0}".format(i), definable_inline=False)
+
+            # FE80-8F Videodisc SCSI controller (Master)
+            #optional_label(0xfe80, "videodisc_data", definable_inline=False)
+            #optional_label(0xfe81, "videodisc_status", definable_inline=False)
+            #optional_label(0xfe82, "videodisc_select", definable_inline=False)
+            #optional_label(0xfe83, "videodisc_int_enable", definable_inline=False)
+
+        # FEA0-BF 6854 ALDC Econet controller
+        optional_label(0xfea0, "econet_control1_or_status1", definable_inline=False)
+        optional_label(0xfea1, "econet_control23_or_status2", definable_inline=False)
+        optional_label(0xfea2, "econet_data_continue_frame", definable_inline=False)
+        optional_label(0xfea3, "econet_data_terminate_frame", definable_inline=False)
+
+        if (machine == machinetype.MachineType.MACHINE_BBC) or (machine == machinetype.MachineType.MACHINE_BPLUS):
+            # FEC0-DF Analogue-to-digital convertor (B/B+)
+            optional_label(0xfec0, "adc_start_conversion_or_status", definable_inline=False)
+            optional_label(0xfec1, "adc_read_data_high_byte", definable_inline=False)
+            optional_label(0xfec2, "adc_read_data_low_byte", definable_inline=False)
+
+        if machine == machinetype.MachineType.MACHINE_MASTER:
+            # FEC0-DF "Network interface" (Master)
+            for i in range(0, 32):
+                optional_label(0xfec0+i, "network_interface_{0}".format(i))
+
+            # FEDF    Eureka memory control
+            #optional_label(0xfedf, "eureka_memory_control", definable_inline=False)
+
+        # FEE0-FF Tube control
+        optional_label(0xfee0, "tube_status_1_and_tube_control", definable_inline=False)
+        optional_label(0xfee1, "tube_data_register_1", definable_inline=False)
+        optional_label(0xfee2, "tube_status_register_2", definable_inline=False)
+        optional_label(0xfee3, "tube_data_register_2", definable_inline=False)
+        optional_label(0xfee4, "tube_status_register_3", definable_inline=False)
+        optional_label(0xfee5, "tube_data_register_3", definable_inline=False)
+        optional_label(0xfee6, "tube_status_register_4_and_cpu_control", definable_inline=False)
+        optional_label(0xfee7, "tube_data_register_4", definable_inline=False)
+
+        # Torch Tube control
+        # FEE0-EF 6522 VIA access to Torch 8255, release Torch reset line
+        #optional_label(0xfee0, "torch_tube_data_out_from_host", definable_inline=False)
+        #optional_label(0xfee1, "torch_tube_data_in_to_host", definable_inline=False)
+        #optional_label(0xfeed, "torch_tube_status", definable_inline=False)
+        #for i in range(0,16):
+        #    optional_label(0xfef0+i, "torch_tube_via_access_{0}_assert_reset_line".format(i))
+
+        # CUBE Tube control (may also be mirrored at &FEE0)
+        # FEF0-FF 6522 VIA access to CUBE 8255
+        optional_label(0xfef0, "cube_tube_data_out_from_host", definable_inline=False)
+        optional_label(0xfef1, "cube_tube_data_in_to_host", definable_inline=False)
+        optional_label(0xfefd, "cube_tube_status", definable_inline=False)
+
+def add_oswrsc():
+    subroutine(0xffb3, "oswrsc", None, None, hook=oswrsc_hook, is_entry_point=False)
 
 def hardware_bbc():
-    optional_label(0xfe00, "crtc_address_register")
-    optional_label(0xfe01, "crtc_address_write")
-
-    optional_label(0xfe20, "video_ula_control")
-    optional_label(0xfe21, "video_ula_palette")
-
-    optional_label(0xfe30, "romsel")
-
-    def label_via(base, name):
-        optional_label(base +  0, name + "_via_orb_irb")
-        optional_label(base +  1, name + "_via_ora_ira")
-        optional_label(base +  2, name + "_via_ddrb")
-        optional_label(base +  3, name + "_via_ddra")
-        optional_label(base +  4, name + "_via_t1c_l")
-        optional_label(base +  5, name + "_via_t1c_h")
-        optional_label(base +  6, name + "_via_t1l_l")
-        optional_label(base +  7, name + "_via_t1l_h")
-        optional_label(base +  8, name + "_via_t2c_l")
-        optional_label(base +  9, name + "_via_t2c_h")
-        optional_label(base + 10, name + "_via_sr")
-        optional_label(base + 11, name + "_via_acr")
-        optional_label(base + 12, name + "_via_pcr")
-        optional_label(base + 13, name + "_via_ifr")
-        optional_label(base + 14, name + "_via_ier")
-        optional_label(base + 15, name + "_via_ora_ira")
-    label_via(0xfe40, "system")
-    label_via(0xfe60, "user")
-
-    label_tube(0xfee0, "host")
+    hardware(machinetype.MachineType.MACHINE_BBC)
 
 def hardware_b_plus():
-    hardware_bbc()
-    optional_label(0xfe34, "acccon")
+    hardware(machinetype.MachineType.MACHINE_BPLUS)
 
 def hardware_master():
-    hardware_bbc()
-    optional_label(0xfe34, "acccon")
+    hardware(machinetype.MachineType.MACHINE_MASTER)
+
+def hardware_electron():
+    hardware(machinetype.MachineType.MACHINE_ELECTRON)
 
 def hardware_6502sp():
-    label_tube(0xfef8, "parasite")
+    hardware(machinetype.MachineType.MACHINE_6502SP)
+
+def electron():
+    mos_labels()
+    hardware_electron()
 
 def bbc():
     mos_labels()
@@ -2699,10 +3169,10 @@ def bbc():
 
 def b_plus():
     mos_labels()
+    add_oswrsc()
     hardware_b_plus()
 
 def master():
     mos_labels()
+    add_oswrsc()
     hardware_master()
-
-# TODO: Maybe have a "throw everything in" function for getting started quickly?

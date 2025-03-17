@@ -51,7 +51,7 @@ LogoColour                      = 2
 MapId_Egg                       = %00000100
 MapId_Ladder                    = %00000010
 MapId_Platform                  = %00000001
-MapId_Seed                      = %00001000
+MapId_Seed                      = %....#...
 osbyte_clear_escape             = 124
 osbyte_flush_buffer_class       = 15
 osbyte_inkey                    = 129
@@ -187,11 +187,13 @@ keynum_down             = $63
 keynum_up               = $64
 keynum_jump             = $65
 rndseed                 = $66
+string                  = $70
 write                   = $70
 spriteline              = $72
 spritecolumn            = $73
 spritetemp              = $74
 stringlength            = $75
+hiscoreaddr             = $76
 read                    = $76
 spriteheight            = $78
 spritewidthpixels       = $79
@@ -234,8 +236,8 @@ osbyte                  = $fff4
 ; ----------------------------------------------------------------------------------
 ; Sprite data table - width, height, address
 ; ----------------------------------------------------------------------------------
-spritetable
 pydis_start
+spritetable
     !byte 150, 24                                                     ; 1100: 96 18       ..
     !word $3600                                                       ; 1102: 00 36       .6
     !byte 8, 8                                                        ; 1104: 08 08       ..
@@ -1512,13 +1514,13 @@ getspritedata
     lsr                                                               ; 19f7: 4a          J
     lsr                                                               ; 19f8: 4a          J
     sta spritewidth                                                   ; 19f9: 85 7a       .z
-    iny                                                               ; 19fb: c8          .
+    iny                                                               ; 19fb: c8          .              ; Y=$01
     lda (read),y                                                      ; 19fc: b1 76       .v
     sta spriteheight                                                  ; 19fe: 85 78       .x
-    iny                                                               ; 1a00: c8          .
+    iny                                                               ; 1a00: c8          .              ; Y=$02
     lda (read),y                                                      ; 1a01: b1 76       .v
     tax                                                               ; 1a03: aa          .
-    iny                                                               ; 1a04: c8          .
+    iny                                                               ; 1a04: c8          .              ; Y=$03
     lda (read),y                                                      ; 1a05: b1 76       .v
     stx read                                                          ; 1a07: 86 76       .v
     sta read + 1                                                      ; 1a09: 85 77       .w
@@ -1555,14 +1557,14 @@ plotspriteatcharpos
 ; 	?YYXX = string length
 ; ----------------------------------------------------------------------------------
 printstring
-    stx write                                                         ; 1a26: 86 70       .p
-    sty write + 1                                                     ; 1a28: 84 71       .q
+    stx string                                                        ; 1a26: 86 70       .p
+    sty string + 1                                                    ; 1a28: 84 71       .q
     ldy #0                                                            ; 1a2a: a0 00       ..
-    lda (write),y                                                     ; 1a2c: b1 70       .p
+    lda (string),y                                                    ; 1a2c: b1 70       .p
     sta stringlength                                                  ; 1a2e: 85 75       .u
 printstringloop
     iny                                                               ; 1a30: c8          .
-    lda (write),y                                                     ; 1a31: b1 70       .p
+    lda (string),y                                                    ; 1a31: b1 70       .p
     jsr oswrch                                                        ; 1a33: 20 ee ff     ..            ; Write character
     cpy stringlength                                                  ; 1a36: c4 75       .u
     bne printstringloop                                               ; 1a38: d0 f6       ..
@@ -1759,20 +1761,20 @@ initmap
     ldy #0                                                            ; 1b4a: a0 00       ..
     lda (mapdataptr),y                                                ; 1b4c: b1 51       .Q
     sta numplatforms                                                  ; 1b4e: 85 53       .S
-    iny                                                               ; 1b50: c8          .
+    iny                                                               ; 1b50: c8          .              ; Y=$01
     lda (mapdataptr),y                                                ; 1b51: b1 51       .Q
     sta numladders                                                    ; 1b53: 85 54       .T
-    iny                                                               ; 1b55: c8          .
+    iny                                                               ; 1b55: c8          .              ; Y=$02
     lda (mapdataptr),y                                                ; 1b56: b1 51       .Q
     sta liftflag                                                      ; 1b58: 85 55       .U
-    iny                                                               ; 1b5a: c8          .
+    iny                                                               ; 1b5a: c8          .              ; Y=$03
     lda (mapdataptr),y                                                ; 1b5b: b1 51       .Q
     sta numseeds                                                      ; 1b5d: 85 56       .V
-    iny                                                               ; 1b5f: c8          .
+    iny                                                               ; 1b5f: c8          .              ; Y=$04
     lda (mapdataptr),y                                                ; 1b60: b1 51       .Q
     sta numbirds                                                      ; 1b62: 85 57       .W
     lda #0                                                            ; 1b64: a9 00       ..
-    tax                                                               ; 1b66: aa          .
+    tax                                                               ; 1b66: aa          .              ; X=$00
 clearmaploop
     sta mapdata,x                                                     ; 1b67: 9d 00 06    ...
     sta mapdata + $0100,x                                             ; 1b6a: 9d 00 07    ...
@@ -1948,7 +1950,7 @@ alreadycollectedseed
     ldx #SpriteId_CageWithHole                                        ; 1c9f: a2 13       ..
     lda bigbirdflag                                                   ; 1ca1: a5 35       .5
     beq birdincage                                                    ; 1ca3: f0 01       ..
-    inx                                                               ; 1ca5: e8          .
+    inx                                                               ; 1ca5: e8          .              ; X=$14
 birdincage
     txa                                                               ; 1ca6: 8a          .
     jsr getspritedata                                                 ; 1ca7: 20 db 19     ..
@@ -2264,7 +2266,8 @@ attemptclimbup
     jsr getmapblock                                                   ; 1eb8: 20 c8 23     .#
     and #MapId_Ladder                                                 ; 1ebb: 29 02       ).
     beq nottryingclimb                                                ; 1ebd: f0 19       ..
-    bne doclimb                                                       ; 1ebf: d0 0c       ..
+    bne doclimb                                                       ; 1ebf: d0 0c       ..             ; ALWAYS branch
+
 attemptclimbdown
     ldx playercharx                                                   ; 1ec1: a6 42       .B
     ldy playerchary                                                   ; 1ec3: a4 43       .C
@@ -2902,7 +2905,8 @@ trylefttestblock
     jsr getmapblock                                                   ; 22b4: 20 c8 23     .#
     cmp #MapId_Platform                                               ; 22b7: c9 01       ..
     beq horizmovefailed                                               ; 22b9: f0 41       .A
-    bne horizmovesucceeded                                            ; 22bb: d0 3d       .=
+    bne horizmovesucceeded                                            ; 22bb: d0 3d       .=             ; ALWAYS branch
+
 tryrightmovement
     lda playerx                                                       ; 22bd: a5 40       .@
     cmp #$98                                                          ; 22bf: c9 98       ..
@@ -3660,7 +3664,7 @@ checkcollisions
     sta temp3                                                         ; 272e: 85 8a       ..
 checkcollisionbirdloop
     ldx temp3                                                         ; 2730: a6 8a       ..
-    lda birddata,x                                                    ; 2732: bd 00 04    ...
+    lda birdpixelx,x                                                  ; 2732: bd 00 04    ...
     sec                                                               ; 2735: 38          8
     sbc playerx                                                       ; 2736: e5 40       .@
     clc                                                               ; 2738: 18          .
@@ -3711,21 +3715,21 @@ exitcheckcollisions
 ; ----------------------------------------------------------------------------------
 gethiscoreaddr
     lda #0                                                            ; 277c: a9 00       ..
-    sta read + 1                                                      ; 277e: 85 77       .w
+    sta hiscoreaddr + 1                                               ; 277e: 85 77       .w
     dex                                                               ; 2780: ca          .
     txa                                                               ; 2781: 8a          .
     asl                                                               ; 2782: 0a          .
     asl                                                               ; 2783: 0a          .
     asl                                                               ; 2784: 0a          .
-    rol read + 1                                                      ; 2785: 26 77       &w
+    rol hiscoreaddr + 1                                               ; 2785: 26 77       &w
     asl                                                               ; 2787: 0a          .
-    rol read + 1                                                      ; 2788: 26 77       &w
+    rol hiscoreaddr + 1                                               ; 2788: 26 77       &w
     clc                                                               ; 278a: 18          .
     adc #<hiscoretab                                                  ; 278b: 69 30       i0
-    sta read                                                          ; 278d: 85 76       .v
-    lda read + 1                                                      ; 278f: a5 77       .w
+    sta hiscoreaddr                                                   ; 278d: 85 76       .v
+    lda hiscoreaddr + 1                                               ; 278f: a5 77       .w
     adc #>hiscoretab                                                  ; 2791: 69 04       i.
-    sta read + 1                                                      ; 2793: 85 77       .w
+    sta hiscoreaddr + 1                                               ; 2793: 85 77       .w
     rts                                                               ; 2795: 60          `
 
 ; ----------------------------------------------------------------------------------
@@ -3740,27 +3744,27 @@ resethiscoretabloop
     ldy #$0f                                                          ; 279f: a0 0f       ..
     lda #' '                                                          ; 27a1: a9 20       .
 clearhiscorenameloop
-    sta (read),y                                                      ; 27a3: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27a3: 91 76       .v
     dey                                                               ; 27a5: 88          .
     cpy #$0a                                                          ; 27a6: c0 0a       ..
     bne clearhiscorenameloop                                          ; 27a8: d0 f9       ..
     lda #'F'                                                          ; 27aa: a9 46       .F
-    sta (read),y                                                      ; 27ac: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27ac: 91 76       .v
     dey                                                               ; 27ae: 88          .
     lda #char_ampersand                                               ; 27af: a9 26       .&
-    sta (read),y                                                      ; 27b1: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27b1: 91 76       .v
     dey                                                               ; 27b3: 88          .
     lda #'A'                                                          ; 27b4: a9 41       .A
-    sta (read),y                                                      ; 27b6: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27b6: 91 76       .v
     dey                                                               ; 27b8: 88          .
     lda #0                                                            ; 27b9: a9 00       ..
 clearhiscoreloop
-    sta (read),y                                                      ; 27bb: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27bb: 91 76       .v
     dey                                                               ; 27bd: 88          .
     bpl clearhiscoreloop                                              ; 27be: 10 fb       ..
     lda #1                                                            ; 27c0: a9 01       ..
     ldy #4                                                            ; 27c2: a0 04       ..
-    sta (read),y                                                      ; 27c4: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27c4: 91 76       .v
     dec temp3                                                         ; 27c6: c6 8a       ..
     bne resethiscoretabloop                                           ; 27c8: d0 d0       ..
     rts                                                               ; 27ca: 60          `
@@ -3777,7 +3781,7 @@ checknewhiscoreloop
     jsr gethiscoreaddr                                                ; 27d1: 20 7c 27     |'
     ldy #0                                                            ; 27d4: a0 00       ..
 comparescoreloop
-    lda (read),y                                                      ; 27d6: b1 76       .v
+    lda (hiscoreaddr),y                                               ; 27d6: b1 76       .v
     cmp score,y                                                       ; 27d8: d9 28 00    .(.
     bmi inserthiscore                                                 ; 27db: 30 10       0.
     bne checknexthiscore                                              ; 27dd: d0 05       ..
@@ -3796,13 +3800,13 @@ inserthiscore
     ldy #7                                                            ; 27f0: a0 07       ..
 inserthiscoreloop
     lda score,y                                                       ; 27f2: b9 28 00    .(.
-    sta (read),y                                                      ; 27f5: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27f5: 91 76       .v
     dey                                                               ; 27f7: 88          .
     bpl inserthiscoreloop                                             ; 27f8: 10 f8       ..
     ldy #$0f                                                          ; 27fa: a0 0f       ..
     lda #' '                                                          ; 27fc: a9 20       .
 insertblanknameloop
-    sta (read),y                                                      ; 27fe: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 27fe: 91 76       .v
     dey                                                               ; 2800: 88          .
     cpy #7                                                            ; 2801: c0 07       ..
     bne insertblanknameloop                                           ; 2803: d0 f9       ..
@@ -3821,7 +3825,7 @@ shuffleloop
     jsr gethiscoreaddr                                                ; 2810: 20 7c 27     |'
     ldy #$0f                                                          ; 2813: a0 0f       ..
 readhiscoreloop
-    lda (read),y                                                      ; 2815: b1 76       .v
+    lda (hiscoreaddr),y                                               ; 2815: b1 76       .v
     sta bigbirdxpos,y                                                 ; 2817: 99 30 00    .0.
     dey                                                               ; 281a: 88          .
     bpl readhiscoreloop                                               ; 281b: 10 f8       ..
@@ -3831,7 +3835,7 @@ readhiscoreloop
     ldy #$0f                                                          ; 2823: a0 0f       ..
 writehiscoreloop
     lda bigbirdxpos,y                                                 ; 2825: b9 30 00    .0.
-    sta (read),y                                                      ; 2828: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 2828: 91 76       .v
     dey                                                               ; 282a: 88          .
     bpl writehiscoreloop                                              ; 282b: 10 f8       ..
     dec temp4                                                         ; 282d: c6 8b       ..
@@ -3878,7 +3882,7 @@ nothiscore10
     ldy #0                                                            ; 2874: a0 00       ..
     sty temp4                                                         ; 2876: 84 8b       ..
 hiscoredigitsloop
-    lda (read),y                                                      ; 2878: b1 76       .v
+    lda (hiscoreaddr),y                                               ; 2878: b1 76       .v
     bne printhighscoredigit                                           ; 287a: d0 09       ..
     ldx temp4                                                         ; 287c: a6 8b       ..
     bne printhighscoredigit                                           ; 287e: d0 05       ..
@@ -3897,7 +3901,7 @@ printhighscorechar
     lda #' '                                                          ; 2892: a9 20       .
     jsr oswrch                                                        ; 2894: 20 ee ff     ..            ; Write character 32
 hiscorenameloop
-    lda (read),y                                                      ; 2897: b1 76       .v
+    lda (hiscoreaddr),y                                               ; 2897: b1 76       .v
     jsr oswrch                                                        ; 2899: 20 ee ff     ..            ; Write character
     iny                                                               ; 289c: c8          .
     cpy #$10                                                          ; 289d: c0 10       ..
@@ -3982,7 +3986,7 @@ copynewhiscorenameloop
     lda hiscorenamebuffer-8,y                                         ; 2930: b9 9a 29    ..)
     cmp #$0d                                                          ; 2933: c9 0d       ..
     beq exitgethiscorename                                            ; 2935: f0 07       ..
-    sta (read),y                                                      ; 2937: 91 76       .v
+    sta (hiscoreaddr),y                                               ; 2937: 91 76       .v
     iny                                                               ; 2939: c8          .
     cpy #$10                                                          ; 293a: c0 10       ..
     bcc copynewhiscorenameloop                                        ; 293c: 90 f2       ..
@@ -6145,6 +6149,7 @@ unused3
 }
 
 pydis_end
+
 !if (((map0ladder_end - map0ladder_start) / 3)) != $04 {
     !error "Assertion failed: ((map0ladder_end - map0ladder_start) / 3) == $04"
 }
@@ -6778,3 +6783,15 @@ pydis_end
 !if (string_uparrow_end - string_uparrow_start) != $08 {
     !error "Assertion failed: string_uparrow_end - string_uparrow_start == $08"
 }
+
+; Stats:
+;     Total size (Code + Data) = 9984 bytes
+;     Code                     = 6148 bytes (62%)
+;     Data                     = 3836 bytes (38%)
+;
+;     Number of instructions   = 3053
+;     Number of data bytes     = 3368 bytes
+;     Number of data words     = 160 bytes
+;     Number of string bytes   = 308 bytes
+;     Number of strings        = 35
+

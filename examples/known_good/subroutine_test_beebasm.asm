@@ -5,8 +5,8 @@ oswrch      = &ffee
     org &2000
 
 ; ***************************************************************************************
-.start
 .pydis_start
+.start
     jsr print_message                                                 ; 2000: 20 10 20     .             ; Print welcome message
     stx test_byte                                                     ; 2003: 86 70       .p             ; X=Length of the message just printed
     lda #&aa                                                          ; 2005: a9 aa       ..             ; A=number to print
@@ -97,4 +97,17 @@ oswrch      = &ffee
 
 .pydis_end
 
+
 save pydis_start, pydis_end
+
+; Stats:
+;     Total size (Code + Data) = 89 bytes
+;     Code                     = 75 bytes (84%)
+;     Data                     = 14 bytes (16%)
+;
+;     Number of instructions   = 41
+;     Number of data bytes     = 6 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 8 bytes
+;     Number of strings        = 1
+

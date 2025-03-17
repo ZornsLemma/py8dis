@@ -2,8 +2,8 @@
 crtc_vert_total_adjust  = 5
 
 ; Memory locations
-bit_value               = $70
 char_to_print           = $70
+bit_value               = $70
 crtc_address_register   = $fe00
 oswrch                  = $ffee
 
@@ -24,8 +24,8 @@ oswrch                  = $ffee
 ; On Exit:
 ;     X: Holds the number of bits set.
 ; ***************************************************************************************
-test_for_local_labels
 pydis_start
+test_for_local_labels
     lda #5                                                            ; 2000: a9 05       ..
     sta char_to_print                                                 ; 2002: 85 70       .p
 ; output some characters
@@ -59,3 +59,16 @@ crtc_substitution_test
     rts                                                               ; 202b: 60          `
 
 pydis_end
+
+
+; Stats:
+;     Total size (Code + Data) = 44 bytes
+;     Code                     = 44 bytes (100%)
+;     Data                     = 0 bytes (0%)
+;
+;     Number of instructions   = 23
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 0 bytes
+;     Number of strings        = 0
+

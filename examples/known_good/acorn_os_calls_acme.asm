@@ -5847,25 +5847,6 @@ osfind_block
     !text "!BOOT"                                                     ; 41c7: 21 42 4f... !BO
 pydis_end
 
-; Label references by decreasing frequency:
-;     osbyte:       803
-;     mem:          735
-;     osword:       256
-;     osgbpb:        11
-;     osfile:        10
-;     osargs:         8
-;     osfind:         6
-;     osrdch:         2
-;     buffer_empty:   1
-;     nvrdch:         1
-;     osbget:         1
-;     osbput:         1
-;     oseven:         1
-;     osnewl:         1
-;     osrdsc:         1
-;     oswrch:         1
-;     oswrcr:         1
-;     oswrsc:         1
 !if ((255 - inkey_key_shift) XOR 128) != $80 {
     !error "Assertion failed: (255 - inkey_key_shift) XOR 128 == $80"
 }
@@ -6010,3 +5991,35 @@ pydis_end
 !if (>(osword9block)) != $40 {
     !error "Assertion failed: >(osword9block) == $40"
 }
+
+; Label references by decreasing frequency:
+;     osbyte:       803
+;     mem:          735
+;     osword:       256
+;     osgbpb:        11
+;     osfile:        10
+;     osargs:         8
+;     osfind:         6
+;     osrdch:         2
+;     buffer_empty:   1
+;     nvrdch:         1
+;     osbget:         1
+;     osbput:         1
+;     oseven:         1
+;     osnewl:         1
+;     osrdsc:         1
+;     oswrch:         1
+;     oswrcr:         1
+;     oswrsc:         1
+
+; Stats:
+;     Total size (Code + Data) = 12492 bytes
+;     Code                     = 11067 bytes (89%)
+;     Data                     = 1425 bytes (11%)
+;
+;     Number of instructions   = 4982
+;     Number of data bytes     = 1420 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 5 bytes
+;     Number of strings        = 1
+

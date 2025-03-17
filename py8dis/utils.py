@@ -4,11 +4,16 @@ Utility functions
 
 from __future__ import print_function
 import collections
+import inspect
+import os
 import re
 import sys
 import traceback
 
 import config
+
+# Path to this library
+library_path = os.path.dirname(os.path.abspath(__file__))
 
 def die(s):
     """Print an error message and halt execution."""
@@ -119,9 +124,12 @@ class LazyString(object):
     def __init__(self, fmt, *args):
         self._fmt = fmt
         self._args = args
+        self.resolved = None
 
     def __str__(self):
-        return self._fmt % tuple(x() if callable(x) else x for x in self._args)
+        if self.resolved == None:
+            self.resolved = self._fmt % tuple(x() if callable(x) else x for x in self._args)
+        return self.resolved
 
     def __add__(self, other):
         if isinstance(other, LazyString):
@@ -231,3 +239,42 @@ def format_strings_in_a_table(strings, max_width, items_per_line_already_known, 
 
     # If no arrangement works, format one item per line. Should never happen.
     return formatter_for_line(strings[0], 0, 1)
+
+class StackEntry:
+    def __init__(self, index, function, filename, lineno, code, positions):
+        self.index = index
+        self.function = function
+        self.filename = filename
+        self.lineno = lineno
+        self.code = code
+        self.positions = positions
+
+    def __str__(self):
+        return "{0}({1},{2}): In function {3}(): line '{4}'".format(self.filename, self.positions.lineno, self.positions.col_offset, self.function, self.code)
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+def analyze_callstack(library_path, depth=None):
+    """
+    Analyzes the current callstack and identifies frames from your library.
+
+    Args:
+        library_path: Path to your library's root directory or module name
+        depth: Maximum depth to analyze, None for full stack
+
+    Returns:
+        list: Information about frames from your library
+    """
+    frames = inspect.stack()[0:depth]  # Skip this function's frame
+    library_frames = []
+
+    for i, frame_info in enumerate(frames):
+        code = frame_info.code_context[0].strip() if frame_info.code_context else None
+        library_frames.append(StackEntry(i, frame_info.function, frame_info.filename, frame_info.lineno, code, frame_info.positions))
+
+    return library_frames
+
+def find_external_callstack():
+    frames = analyze_callstack(library_path)
+    return [f for f in frames if library_path not in f.filename]

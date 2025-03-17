@@ -17,6 +17,12 @@ class Annotation(object):
     def as_string(self, binary_addr):
         return str(self.text)
 
+    def __str__(self):
+        return str(self.text)
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 class Comment(Annotation):
     """A comment, either inline or standalone.
 

@@ -60,7 +60,8 @@ l090a
 ; $2035 referenced 1 time by $090f[1]
 low_b_baz
     ldx #2                                                            ; 2035: a2 02       ..  :090d[2]
-    bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]
+    bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]   ; ALWAYS branch
+
 }
 
 sub_c2039
@@ -70,6 +71,7 @@ sub_c2039
     rts                                                               ; 203f: 60          `
 
 pydis_end
+
 
 ; Label references by decreasing frequency:
 ;     lffee:       3
@@ -94,3 +96,15 @@ pydis_end
 ;     lffee
 ;     sub_c2022
 ;     sub_c2039
+
+; Stats:
+;     Total size (Code + Data) = 64 bytes
+;     Code                     = 61 bytes (95%)
+;     Data                     = 3 bytes (5%)
+;
+;     Number of instructions   = 27
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 3 bytes
+;     Number of strings        = 1
+

@@ -51,12 +51,15 @@ lffe3   = &ffe3
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0900, &090f
+    clear print_and_inc_zp, &090f
 
     ; Set the program counter to the next position in the binary file.
     org c201e + (* - print_and_inc_zp)
 
 .pydis_end
+
+
+save pydis_start, pydis_end
 
 ; Label references by decreasing frequency:
 ;     l0070:              3
@@ -75,4 +78,14 @@ lffe3   = &ffe3
 ;     loop_c2013
 ;     sub_c0908
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 45 bytes
+;     Code                     = 45 bytes (100%)
+;     Data                     = 0 bytes (0%)
+;
+;     Number of instructions   = 22
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 0 bytes
+;     Number of strings        = 0
+

@@ -36,8 +36,8 @@ def check_identical(file1: Path, file2: Path) -> bool:
 ##################################################################################################
 class Filepaths:
     def __init__(self, basename, assembler):
-        self.control_file         = Path(f'{basename}.py')
-        self.binary_original_file = Path(f'{basename}.orig')
+        self.control_file         = Path('python') / f'{basename}.py'
+        self.binary_original_file = Path('orig') / f'{basename}.orig'
         self.asm_output_file      = Path('build') / f'{basename}_{assembler}.asm'
         self.binary_output_file   = Path('build') / f'{basename}_{assembler}.dat'
         self.known_good_file      = Path('known_good') / f'{basename}_{assembler}.asm'
@@ -48,12 +48,14 @@ class Filepaths:
 def run_py8dis(f, assembler):
     cmd = ['python3', str(f.control_file), '--'+assembler]
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     except subprocess.CalledProcessError as e:
         return "{0}\nstderr: {1}".format(e, e.stderr)
     except FileNotFoundError as e:
         return "File not found: {0}".format(e)
-    f.asm_output_file.write_text(result)
+    f.asm_output_file.write_text(result.stdout)
+    if result.stderr:
+        print(result.stderr)
     return None
 
 ##################################################################################################
@@ -69,11 +71,6 @@ def single_test(basename: Path,
     result = run_py8dis(f, assembler)
     if result:
         return result
-
-    if check_asm_against_known_good:
-        result = check_identical(f.asm_output_file, f.known_good_file)
-        if result:
-            return result
 
     if assembler == "acme":
         # Test Acme assembler
@@ -95,6 +92,11 @@ def single_test(basename: Path,
     result = check_identical(f.binary_output_file, f.binary_original_file)
     if result:
         return result
+
+    if check_asm_against_known_good:
+        result = check_identical(f.asm_output_file, f.known_good_file)
+        if result:
+            return result
 
     if make_known_good:
         shutil.copy2(f.asm_output_file, f.known_good_file)
@@ -194,7 +196,7 @@ def call_z80asm(basename: Path,
                 make_known_good: bool = False,
                 make_extras: bool = False) -> bool:
     """Test z88dk-z80asm assembler for 8080 tests."""
-    f = Filepaths(basename, "8080")
+    f = Filepaths(basename, "z88dk-8080")
 
     if not shutil.which('z88dk-z80asm'):
         return "skipped"
@@ -226,7 +228,7 @@ def run_tests(files: List[Path],
             name = f"{filename}_{assembler}: "
             print(name, end='', flush=True)
             result = single_test(filename, assembler, check_asm_against_known_good, make_known_good, make_extras)
-            spaces = 30 - len(name)
+            spaces = 31 - len(name)
             print(f"{' ' * spaces}", end='')
             if result == None:
                 print("passed. ")

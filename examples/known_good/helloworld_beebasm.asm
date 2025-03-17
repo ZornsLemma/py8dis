@@ -20,6 +20,9 @@ lffe3   = &ffe3
     equb &0d                                                          ; 201b: 0d          .
 .pydis_end
 
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     l200e:        1
 ;     lffe3:        1
@@ -30,4 +33,14 @@ lffe3   = &ffe3
 ;     lffe3
 ;     loop_c2002
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 28 bytes
+;     Code                     = 14 bytes (50%)
+;     Data                     = 14 bytes (50%)
+;
+;     Number of instructions   = 7
+;     Number of data bytes     = 1 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 13 bytes
+;     Number of strings        = 1
+
