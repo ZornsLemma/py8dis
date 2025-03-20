@@ -254,18 +254,17 @@ class StackEntry:
     def __repr__(self) -> str:
         return self.__str__()
 
-def analyze_callstack(library_path, depth=None):
+def get_callstack():
     """
-    Analyzes the current callstack and identifies frames from your library.
+    Gathers the current callstack, up to an optional maximum depth.
 
     Args:
-        library_path: Path to your library's root directory or module name
         depth: Maximum depth to analyze, None for full stack
 
     Returns:
-        list: Information about frames from your library
+        list of call stack information where each entry is a 'StackEntry' object
     """
-    frames = inspect.stack()[0:depth]  # Skip this function's frame
+    frames = inspect.stack()
     library_frames = []
 
     for i, frame_info in enumerate(frames):
@@ -275,5 +274,8 @@ def analyze_callstack(library_path, depth=None):
     return library_frames
 
 def find_external_callstack():
-    frames = analyze_callstack(library_path)
+    """
+    Return the callstack as a list of 'StackEntry' objects, taking out any calls within this library
+    """
+    frames = get_callstack()
     return [f for f in frames if library_path not in f.filename]
