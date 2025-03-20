@@ -247,10 +247,9 @@ class StackEntry:
         self.filename = filename
         self.lineno = lineno
         self.code = code
-        self.positions = positions
 
     def __str__(self):
-        return "{0}({1},{2}): In function {3}(): line '{4}'".format(self.filename, self.positions.lineno, self.positions.col_offset, self.function, self.code)
+        return "{0}({1}): In function {2}(): line '{3}'".format(self.filename, self.lineno, self.function, self.code)
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -271,7 +270,7 @@ def analyze_callstack(library_path, depth=None):
 
     for i, frame_info in enumerate(frames):
         code = frame_info.code_context[0].strip() if frame_info.code_context else None
-        library_frames.append(StackEntry(i, frame_info.function, frame_info.filename, frame_info.lineno, code, frame_info.positions))
+        library_frames.append(StackEntry(i, frame_info.function, frame_info.filename, frame_info.lineno, code, frame_info.lineno))
 
     return library_frames
 
