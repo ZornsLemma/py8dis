@@ -1,4 +1,4 @@
 *.pyc
 examples/build/
 test/
-py8dis.bbprojectd/
+*.bbprojectd/

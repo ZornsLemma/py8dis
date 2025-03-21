@@ -46,6 +46,7 @@ sub_c0908
 * = $202d
 pydis_end
 
+
 // Label references by decreasing frequency:
 //     l0070:              3
 //     lffe3:              2
@@ -62,3 +63,15 @@ pydis_end
 //     loop_c2002
 //     loop_c2013
 //     sub_c0908
+
+// Stats:
+//     Total size (Code + Data) = 45 bytes
+//     Code                     = 45 bytes (100%)
+//     Data                     = 0 bytes (0%)
+//
+//     Number of instructions   = 22
+//     Number of data bytes     = 0 bytes
+//     Number of data words     = 0 bytes
+//     Number of string bytes   = 0 bytes
+//     Number of strings        = 0
+

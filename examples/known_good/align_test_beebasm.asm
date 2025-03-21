@@ -26,4 +26,17 @@ osasci  = &ffe3
     equb newline                                                      ; 201b: 0d          .
 .pydis_end
 
+
 save pydis_start, pydis_end
+
+; Stats:
+;     Total size (Code + Data) = 28 bytes
+;     Code                     = 14 bytes (50%)
+;     Data                     = 14 bytes (50%)
+;
+;     Number of instructions   = 7
+;     Number of data bytes     = 1 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 13 bytes
+;     Number of strings        = 1
+

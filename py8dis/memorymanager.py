@@ -54,7 +54,7 @@ def is_valid_binary_addr(binary_addr, allow_final_address = False):
 def get_u8_binary(binary_addr):
     """Get 8 bit number given a binary address"""
 
-    assert memory_binary[binary_addr] is not None
+    assert memory_binary[binary_addr] is not None, "Bad address {0}".format(hex(binary_addr))
     return memory_binary[binary_addr]
 
 def get_u16_binary(binary_addr):

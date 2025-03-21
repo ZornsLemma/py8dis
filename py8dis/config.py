@@ -24,6 +24,8 @@ _show_cycles                = False
 _subroutine_header          = "*"*87
 _subroutine_footer          = "*"*87
 _include_assertions         = True
+_label_return_instructions_numerically = True
+_show_stats                 = True
 
 def get_lower_case():
     return _lower_case
@@ -177,6 +179,20 @@ def set_include_assertions(b):
     global _include_assertions
     _include_assertions = b
 
+def get_label_return_instructions_numerically():
+    return _label_return_instructions_numerically
+
+def set_label_return_instructions_numerically(b):
+    global _label_return_instructions_numerically
+    _label_return_instructions_numerically = b
+
+def get_show_stats():
+    global _show_stats
+    return _show_stats
+
+def set_show_stats(b):
+    global _show_stats
+    _show_stats = b
 
 # For internal use only:
 _assembler                  = None      # Internal variable holding the assembler object used to emit disassembly, e.g. beebasm.py, acme.py etc
@@ -197,3 +213,4 @@ def get_cmos():
 def set_cmos(b):
     global _cmos
     _cmos = b
+

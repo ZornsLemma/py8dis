@@ -5,8 +5,8 @@ osasci  = &ffe3
     org &0900
 
 ; &0900 referenced 1 time by &2006
-.print_and_inc_zp
 .pydis_start
+.print_and_inc_zp
     lda l0070                                                         ; 0900: a5 70       .p
     jsr sub_c0908                                                     ; 0902: 20 08 09     ..
     sta l0070                                                         ; 0905: 85 70       .p
@@ -35,6 +35,9 @@ osasci  = &ffe3
 
 .pydis_end
 
+
+save pydis_start, pydis_end
+
 ; Label references by decreasing frequency:
 ;     l0070:              3
 ;     osasci:             2
@@ -48,4 +51,14 @@ osasci  = &ffe3
 ;     loop_c2006
 ;     sub_c0908
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 32 bytes
+;     Code                     = 32 bytes (100%)
+;     Data                     = 0 bytes (0%)
+;
+;     Number of instructions   = 16
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 0 bytes
+;     Number of strings        = 0
+

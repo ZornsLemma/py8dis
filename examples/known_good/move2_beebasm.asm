@@ -1,7 +1,5 @@
 ; Memory locations
-sub_c2010   = &2010
-sub_c2029   = &2029
-lffee       = &ffee
+lffee   = &ffee
 
     org &2000
 
@@ -38,14 +36,14 @@ l090d = l090c+1
     ; Copy the newly assembled block of code back to it's proper place in the binary
     ; file.
     ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
-    copyblock low_a, *, sub_c2010
+    copyblock low_a, *, &2010
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0900, &0912
+    clear low_a, &0912
 
     ; Set the program counter to the next position in the binary file.
-    org sub_c2010 + (* - low_a)
+    org &2010 + (* - low_a)
 
 .sub_c2022
 ; &2022 referenced 1 time by &2005
@@ -73,19 +71,20 @@ l090d = l090c+1
 ; &2035 referenced 1 time by &090f[1]
 .low_b_baz
     ldx #2                                                            ; 2035: a2 02       ..  :090d[2]
-    bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]
+    bne l0903                                                         ; 2037: d0 f2       ..  :090f[2]   ; ALWAYS branch
+
 
     ; Copy the newly assembled block of code back to it's proper place in the binary
     ; file.
     ; (Note the parameter order: 'copyblock <start>,<end>,<dest>')
-    copyblock low_b, *, sub_c2029
+    copyblock low_b, *, &2029
 
     ; Clear the area of memory we just temporarily used to assemble the new block,
     ; allowing us to assemble there again if needed
-    clear &0901, &0911
+    clear low_b, &0911
 
     ; Set the program counter to the next position in the binary file.
-    org sub_c2029 + (* - low_b)
+    org &2029 + (* - low_b)
 
 .sub_c2039
 ; &2039 referenced 1 time by &090c[1]
@@ -94,6 +93,9 @@ l090d = l090c+1
     rts                                                               ; 203f: 60          `
 
 .pydis_end
+
+
+save pydis_start, pydis_end
 
 ; Label references by decreasing frequency:
 ;     lffee:       3
@@ -116,9 +118,17 @@ l090d = l090c+1
 ;     l090c
 ;     l090d
 ;     lffee
-;     sub_c2010
 ;     sub_c2022
-;     sub_c2029
 ;     sub_c2039
 
-save pydis_start, pydis_end
+; Stats:
+;     Total size (Code + Data) = 64 bytes
+;     Code                     = 61 bytes (95%)
+;     Data                     = 3 bytes (5%)
+;
+;     Number of instructions   = 27
+;     Number of data bytes     = 0 bytes
+;     Number of data words     = 0 bytes
+;     Number of string bytes   = 3 bytes
+;     Number of strings        = 1
+
