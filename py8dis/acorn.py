@@ -2962,7 +2962,7 @@ def hardware(machine):
 
     if machine == machinetype.MachineType.MACHINE_ELECTRON:
         # FCFC-FF Electron Advanced Quarter Meg RAM ('AQR')
-        optional_label(0xfcfc, "electron_aqr_ram_bank select", definable_inline=False)
+        optional_label(0xfcfc, "electron_aqr_ram_bank_select", definable_inline=False)
         optional_label(0xfcfd, "electron_aqr_ram_disable_write_protect", definable_inline=False)
         optional_label(0xfcfe, "electron_aqr_ram_write_protect", definable_inline=False)
     else:
