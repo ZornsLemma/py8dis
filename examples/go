@@ -40,6 +40,7 @@ python3 go.py "char_literals"   $OPT --assemblers acme beebasm xa       # tests 
 python3 go.py "align_test"      $OPT --assemblers acme beebasm xa       # tests for formatting
 python3 go.py "string_stuff1"   $OPT --assemblers acme beebasm          # xa omitted since it can't do string constants e.g. 'page = "1900"'
 python3 go.py "string_stuff2"   $OPT --assemblers beebasm               # testing the beebasm specific expression 'STR$~(page)'
+python3 go.py "string_stuff3"   $OPT --assemblers acme beebasm xa       # testing py8dis string commands
 python3 go.py "moving1"         $OPT --assemblers acme beebasm xa       # tests for the move() command
 python3 go.py "moving2"         $OPT --assemblers acme beebasm xa       # tests for the move() command
 python3 go.py "moving3"         $OPT --assemblers acme beebasm xa       # tests for the move() command
