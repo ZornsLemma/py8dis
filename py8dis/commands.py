@@ -712,7 +712,7 @@ def stringn(runtime_addr):
 
     runtime_addr = memorymanager.RuntimeAddr(runtime_addr)
     binary_loc = movemanager.r2b_checked(runtime_addr)
-    return classification.stringn_binary(binary_loc.binary_addr)
+    return classification.stringn_binary(runtime_addr, binary_loc.binary_addr)
 
 #
 # Assembler specific expression strings can be built using these functions:

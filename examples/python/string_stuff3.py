@@ -10,5 +10,6 @@ config.set_show_all_labels(False)
 load(0x0e00, "orig/string_stuff3.orig", "6502")
 
 stringn(0xe00)
+stringn(0xe06)
 
 go()
