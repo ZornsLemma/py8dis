@@ -144,7 +144,7 @@ class String(object):
             return result
 
         for i in range(self._length):
-            c = memory_binary[binary_loc.binary_addr + i]
+            c = memorymanager.get_u8_binary(binary_loc.binary_addr + i)
             c_in_string = assembler().string_chr(c)
             if c_in_string is not None:
                 if state == 0:
