@@ -34,7 +34,7 @@ There is a trivial "Hello, world!" program in the `examples` subdirectory which 
 If your PYTHONPATH is correct, you should be able to do:
 ``` sh
 cd examples
-python helloworld.py
+python3 python/helloworld.py
 
 ```
 
